@@ -1,0 +1,353 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2023-05",
+  "messages": [
+    {
+      "id": "msg-27a819d9b5b9",
+      "message_id": "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-05-16T13:01:10Z",
+      "subject": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen fixing bug #1035428 I realised test suite issues with\n\n  r-cran-thematic [1]\n   -> Error in `svglite_(filename, bg, width, height, pointsize, standalone, \n      always_valid)`: Graphics API version mismatch\n\n  r-cran-treescape [2]\n  r-cran-treespace [3]\n   -> error is given if lambda is outside of [0,1] ---\n      `medTree(trees, -1)` did not throw an error.\n\nAs far as I can guess at least the first type of error (Graphics API\nversion mismatch) is caused by the fact that a new upstream version of\nr-base (4.3.0-1) was uploaded to unstable (changelog[4] says to\nexperimental so it seems by accident).\n\nI wonder what might be the most sensible strategy to fix this.  Since\nan epoch is considered ugly I've seen some kind of\n    4.3.0+really+4.2.2.20221110\nversion number.  However, in case of R it might not be the best idea\nto use this kind of fake version in a stable release.\n\nKind regards\n    Andreas.\n\n[1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n[3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n[4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen fixing bug #1035428 I realised test suite issues with\n\n  r-cran-thematic [1]\n   -> Error in `svglite_(filename, bg, width, height, pointsize, standalone, \n      always_valid)`: Graphics API ",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 0,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-50d0c490cb70",
+      "message_id": "<25699.33917.528310.687221@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-05-16T13:26:21Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>"
+      ],
+      "body_plain": "On 16 May 2023 at 15:01, Andreas Tille wrote:\n| Hi,\n| \n| when fixing bug #1035428 I realised test suite issues with\n| \n|   r-cran-thematic [1]\n|    -> Error in `svglite_(filename, bg, width, height, pointsize, standalone, \n|       always_valid)`: Graphics API version mismatch\n| \n|   r-cran-treescape [2]\n|   r-cran-treespace [3]\n|    -> error is given if lambda is outside of [0,1] ---\n|       `medTree(trees, -1)` did not throw an error.\n| \n| As far as I can guess at least the first type of error (Graphics API\n| version mismatch) is caused by the fact that a new upstream version of\n| r-base (4.3.0-1) was uploaded to unstable (changelog[4] says to\n| experimental so it seems by accident).\n\nYes. It was very much by accident, and my bad.\n\nWhen the freeze hardened and I switched uploading from unstable to\nexperimental (on March 15 per my mail folder of installer replies, and\ncoincidentally with the R 4.2.3-1 upload), I managed to update the\ndistribution field (often using 'C-x d' in the handy Emacs mode) in the\ndebian/changelog file each and every time --- with the one exception of\nthe next update of r-base to the 4.3.0 release :-/\n \n| I wonder what might be the most sensible strategy to fix this.  Since\n| an epoch is considered ugly I've seen some kind of\n|     4.3.0+really+4.2.2.20221110\n| version number.  However, in case of R it might not be the best idea\n| to use this kind of fake version in a stable release.\n\nI think we shouldn't. Apart from this test issue, the binary sits in unstable\nand will remain in unstable.\n\nThe change is graphics format is a repeat of previous micro-API changes from\nupstream where Paul Murrell (who is the one taking care of the graphics\ndevice) enhances its capabilities (often in quite meaningful ways).  The R\nCore team does not consider this a breaking change, and does recommend or\nmandate rebuilds of the nearly 20k CRAN packages. I happen to concur.\n\nHowever, when a package built with such a graphics api version 'A' is loaded\nby R of version 'B' (and it usually happens to us the other way) the package\nload simply errors out with a message.  This is not fatal -- it is just a\nhint to rebuild the package under the R version used.  I have always been of\nthe pragmatic view that is indeed good enough. (Johannes of the back-porters\nteam disagrees, he reminded me of a simple search for the one code line doing\nthe check. Running that at the GitHub mirror of CRAN (which is a superset as\nit includes packages that once were on CRAN but are no longer) I identified\nten packages of which about half or more are no longer on CRAN.  For us it is\nlikely `ragg` and `svglite`. I can dig out the details from my reply to\nJohannes.)\n\nNote that none of this affects the release. My recommendation is temporarily\nsuspend the autopkgtest in those affected packages.  They did their job and\nfound the mismatch with the R 4.3.0 in unstable that shouldn't have been\nuploaded there. Out the about fifty package uploads I made since I switched\nto experimental, one went to wrong repo. That was not intentional but I think\nwe can manage.\n\nBest, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 16 May 2023 at 15:01, Andreas Tille wrote:\n| Hi,\n| \n| when fixing bug #1035428 I realised test suite issues with\n| \n|   r-cran-thematic [1]\n|    -> Error in `svglite_(filename, bg, width, height, p",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 1,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-54b43326d3d8",
+      "message_id": "<ZGOF8nRwRw9aAea3@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-05-16T13:32:34Z",
+      "subject": "Re: r-cran-kableextra status?",
+      "subject_clean": "r-cran-kableextra status?",
+      "in_reply_to": "<25655.17333.936684.505254@rob.eddelbuettel.com>",
+      "references": [
+        "<25655.17333.936684.505254@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nsorry for the late response - I've somehow lost track to your mail.\n\nAm Wed, Apr 12, 2023 at 06:50:13PM -0500 schrieb Dirk Eddelbuettel:\n> \n> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=989092 details a wnpp from\n> not-quite two years ago, and a follow-up four months later, and then nothing.\n> r-cran-rms (aka 'rms' upstream) now needs r-cran-kableextra (aka 'kableExtra').\n> \n> Shall I consider this a blocker?\n\nDefinitely not.  It seems that there was another reject after my second\nupload (to busy to verify).  I'm perfectl fine if you do a team upload\n(as everybody is kindly invited to upload team maintained packages).\nHope you are more lucky with passing ftpmaster inspection.\n\nKind regards\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nsorry for the late response - I've somehow lost track to your mail.\n\nAm Wed, Apr 12, 2023 at 06:50:13PM -0500 schrieb Dirk Eddelbuettel:\n> \n> https://bugs.debian.org/cgi-bin/bugreport.cgi?bu",
+      "thread_id": "thread-54b43326d3d8",
+      "thread_depth": 0,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-75101ee40661",
+      "message_id": "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-05-16T13:55:15Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>"
+      ],
+      "body_plain": "Hi\n\nOn Tue, May 16, 2023 at 03:01:10PM +0200, Andreas Tille wrote:\n> when fixing bug #1035428 I realised test suite issues with\n> \n>   r-cran-thematic [1]\n>    -> Error in `svglite_(filename, bg, width, height, pointsize, standalone, \n>       always_valid)`: Graphics API version mismatch\n> \n>   r-cran-treescape [2]\n>   r-cran-treespace [3]\n>    -> error is given if lambda is outside of [0,1] ---\n>       `medTree(trees, -1)` did not throw an error.\n> \n> As far as I can guess at least the first type of error (Graphics API\n> version mismatch) is caused by the fact that a new upstream version of\n> r-base (4.3.0-1) was uploaded to unstable (changelog[4] says to\n> experimental so it seems by accident).\n\nI can think of two ways:\n\n1. r-cran-shiny is an arch:all package, so the package itself being\nbuilt against r-base 4.3.0 is not an issue. The issue is the\n\"r-base-core (>= 4.3.0-1)\" that dh-r injects, which is being pulled in\nthe autopkgtests of its reverse-depends.\nChanging that to \"r-base-core (>= 4.2.2.20221110-2)\" manually should do\nthe trick.\n\nSomething on the lines of:\n\noverride_dh_gencontrol:\n\tdh_gencontrol\n\tsed \"s/r-base-core (>= 4.3.0-1)/r-base-core (>= 4.2.2.20221110-2)\" -i debian/r-cran-shiny/DEBIAN/control\n\nOfcourse, the hard-coding of 4.3.0-1 can be converted to some better\nregular expression.\n\n2. It makes a valid and strong case to use t-p-u (see here[5])\nfor such an upload, as it isn't a possibility to build against R in\ntesting.\nYou might want to ask release team about it, by filing a bug for\nrelease.d.o pseudo-package and/or asking in #debian-release on OFTC.\n\nI personally prefer \"1\" over 2 as it is less noise (and effort).\n\nLet me know what you think.\n\n> [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n[5] https://wiki.debian.org/TestingProposedUpdates\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi\n\nOn Tue, May 16, 2023 at 03:01:10PM +0200, Andreas Tille wrote:\n> when fixing bug #1035428 I realised test suite issues with\n> \n>   r-cran-thematic [1]\n>    -> Error in `svglite_(filename, bg, widt",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 1,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-5791dca0c38c",
+      "message_id": "<25699.35662.756662.941071@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-05-16T13:55:26Z",
+      "subject": "Re: r-cran-kableextra status?",
+      "subject_clean": "r-cran-kableextra status?",
+      "in_reply_to": "<ZGOF8nRwRw9aAea3@an3as.eu>",
+      "references": [
+        "<25655.17333.936684.505254@rob.eddelbuettel.com>",
+        "<ZGOF8nRwRw9aAea3@an3as.eu>"
+      ],
+      "body_plain": "On 16 May 2023 at 15:32, Andreas Tille wrote:\n| Hi Dirk,\n| \n| sorry for the late response - I've somehow lost track to your mail.\n| \n| Am Wed, Apr 12, 2023 at 06:50:13PM -0500 schrieb Dirk Eddelbuettel:\n| > \n| > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=989092 details a wnpp from\n| > not-quite two years ago, and a follow-up four months later, and then nothing.\n| > r-cran-rms (aka 'rms' upstream) now needs r-cran-kableextra (aka 'kableExtra').\n| > \n| > Shall I consider this a blocker?\n| \n| Definitely not.  It seems that there was another reject after my second\n| upload (to busy to verify).  I'm perfectl fine if you do a team upload\n| (as everybody is kindly invited to upload team maintained packages).\n| Hope you are more lucky with passing ftpmaster inspection.\n\nI went the other way and patched it out in the initial upload.\n\nAnd also pointed it out to upstream (with whom I have a good working\nrelationship) who fully concurred that a Suggests: was appropriate.  So the\npackage _depending_ on kableExtra now has a mere Suggests:.\n\nHence I did not do anything further on this, and won't, as I have no need for\nkableExtra.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 16 May 2023 at 15:32, Andreas Tille wrote:\n| Hi Dirk,\n| \n| sorry for the late response - I've somehow lost track to your mail.\n| \n| Am Wed, Apr 12, 2023 at 06:50:13PM -0500 schrieb Dirk Eddelbuette",
+      "thread_id": "thread-54b43326d3d8",
+      "thread_depth": 1,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-2641c9c169d8",
+      "message_id": "<20230516135748.4hiayvoxjhiqybyu@office.mailbox.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-05-16T13:57:48Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<25699.33917.528310.687221@rob.eddelbuettel.com>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<25699.33917.528310.687221@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Tue, May 16, 2023 at 08:26:21AM -0500, Dirk Eddelbuettel wrote:\n> Note that none of this affects the release. My recommendation is temporarily\n> suspend the autopkgtest in those affected packages. \n\nNo, don't do that as they indicate a new r-base being pulled as one of\nthe dependencies (which would be incorrect for a package). In this case,\nr-cran-shiny has a hard-dependency on r-base.\n\nOnce that is fixed, rest of the things should be sorted out.\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, May 16, 2023 at 08:26:21AM -0500, Dirk Eddelbuettel wrote:\n> Note that none of this affects the release. My recommendation is temporarily\n> suspend the autopkgtest in those affected packages. ",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 2,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-7df0dcde459a",
+      "message_id": "<25699.36573.457919.257680@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-05-16T14:10:37Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>"
+      ],
+      "body_plain": "On 16 May 2023 at 19:25, Nilesh Patra wrote:\n| On Tue, May 16, 2023 at 03:01:10PM +0200, Andreas Tille wrote:\n| > when fixing bug #1035428 I realised test suite issues with\n| > \n| >   r-cran-thematic [1]\n| >    -> Error in `svglite_(filename, bg, width, height, pointsize, standalone, \n| >       always_valid)`: Graphics API version mismatch\n| > \n| >   r-cran-treescape [2]\n| >   r-cran-treespace [3]\n| >    -> error is given if lambda is outside of [0,1] ---\n| >       `medTree(trees, -1)` did not throw an error.\n| > \n| > As far as I can guess at least the first type of error (Graphics API\n| > version mismatch) is caused by the fact that a new upstream version of\n| > r-base (4.3.0-1) was uploaded to unstable (changelog[4] says to\n| > experimental so it seems by accident).\n| \n| I can think of two ways:\n| \n| 1. r-cran-shiny is an arch:all package, so the package itself being\n| built against r-base 4.3.0 is not an issue. The issue is the\n| \"r-base-core (>= 4.3.0-1)\" that dh-r injects, which is being pulled in\n| the autopkgtests of its reverse-depends.\n| Changing that to \"r-base-core (>= 4.2.2.20221110-2)\" manually should do\n| the trick.\n| \n| Something on the lines of:\n| \n| override_dh_gencontrol:\n| \tdh_gencontrol\n| \tsed \"s/r-base-core (>= 4.3.0-1)/r-base-core (>= 4.2.2.20221110-2)\" -i debian/r-cran-shiny/DEBIAN/control\n|\n| Ofcourse, the hard-coding of 4.3.0-1 can be converted to some better\n| regular expression.\n\nNice catch and suggestion!  \n\nOn 16 May 2023 at 19:27, Nilesh Patra wrote:\n| On Tue, May 16, 2023 at 08:26:21AM -0500, Dirk Eddelbuettel wrote:\n| > Note that none of this affects the release. My recommendation is temporarily\n| > suspend the autopkgtest in those affected packages. \n| \n| No, don't do that as they indicate a new r-base being pulled as one of\n| the dependencies (which would be incorrect for a package). In this case,\n| r-cran-shiny has a hard-dependency on r-base.\n| \n| Once that is fixed, rest of the things should be sorted out.\n\nI agree.  Thanks for pointing that out.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 16 May 2023 at 19:25, Nilesh Patra wrote:\n| On Tue, May 16, 2023 at 03:01:10PM +0200, Andreas Tille wrote:\n| > when fixing bug #1035428 I realised test suite issues with\n| > \n| >   r-cran-thematic ",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 2,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-051ec82c5db5",
+      "message_id": "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-05-16T14:19:55Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>"
+      ],
+      "body_plain": "On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> I personally prefer \"1\" over 2 as it is less noise (and effort).\n\nOn second thoughts, I think sending it via testing-proposed-updates\nwould be a better thing to do, as this case perfectly fits the problem.\n\nIt's be same effort in both cases (one upload + filing a bug with release team).\n\n> Let me know what you think.\n\n> > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> > [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> > [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> > [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n> [5] https://wiki.debian.org/TestingProposedUpdates\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> I personally prefer \"1\" over 2 as it is less noise (and effort).\n\nOn second thoughts, I think sending it via testing-proposed-updates\nwo",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 2,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-10156c31b33e",
+      "message_id": "<25699.37816.667475.836327@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-05-16T14:31:20Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>"
+      ],
+      "body_plain": "On 16 May 2023 at 19:49, Nilesh Patra wrote:\n| On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n| > I personally prefer \"1\" over 2 as it is less noise (and effort).\n| \n| On second thoughts, I think sending it via testing-proposed-updates\n| would be a better thing to do, as this case perfectly fits the problem.\n| \n| It's be same effort in both cases (one upload + filing a bug with release team).\n\nReading 'https://wiki.debian.org/TestingProposedUpdates' does indeed suggest\nthat this may be one of those situations.  I can easily prepare a 4.3.0-2\nwith that destination but would prefer if someone from the release could\n'nod', maybe in reply to this email.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 16 May 2023 at 19:49, Nilesh Patra wrote:\n| On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n| > I personally prefer \"1\" over 2 as it is less noise (and effort).\n| \n| On second thought",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 3,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-753ef23600bf",
+      "message_id": "<ZGOTyXzdrgmtcB+q@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-05-16T14:31:37Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>"
+      ],
+      "body_plain": "Am Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > I personally prefer \"1\" over 2 as it is less noise (and effort).\n> \n> On second thoughts, I think sending it via testing-proposed-updates\n> would be a better thing to do, as this case perfectly fits the problem.\n\nSeems to be an appropriate solution - given we should stick to smallest\nchanges in packaging if possible.\n \n> It's be same effort in both cases (one upload + filing a bug with release team).\n\nSince I will not manage to do so in the next 16 hours I'd be happy if\nsomeone might beat me in doing so.  Otherwise I can catch up tomorrow.\n\nThanks a lot for your hint\n   Andreas.\n \n> > Let me know what you think.\n> \n> > > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> > > [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> > > [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> > > [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n> > [5] https://wiki.debian.org/TestingProposedUpdates\n> \n> -- \n> Best,\n> Nilesh\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > I personally prefer \"1\" over 2 as it is less noise (and effort).\n> \n>",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 3,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-fcf25e8b3715",
+      "message_id": "<20230516144350.bawgf6nm2cup564s@office.mailbox.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-05-16T14:43:50Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<25699.37816.667475.836327@rob.eddelbuettel.com>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+        "<25699.37816.667475.836327@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Tue, May 16, 2023 at 09:31:20AM -0500, Dirk Eddelbuettel wrote:\n> \n> On 16 May 2023 at 19:49, Nilesh Patra wrote:\n> | On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> | > I personally prefer \"1\" over 2 as it is less noise (and effort).\n> | \n> | On second thoughts, I think sending it via testing-proposed-updates\n> | would be a better thing to do, as this case perfectly fits the problem.\n> | \n> | It's be same effort in both cases (one upload + filing a bug with release team).\n> \n> Reading 'https://wiki.debian.org/TestingProposedUpdates' does indeed suggest\n> that this may be one of those situations.  I can easily prepare a 4.3.0-2\n> with that destination but would prefer if someone from the release could\n> 'nod', maybe in reply to this email.\n\nUh, no. Maybe you misunderstood my suggestion. The t-p-u way was for\nr-cran-shiny not the r-base package.\nThis is because r-cran-shiny would want to build against r-base in\ntesting (and not unstable).\n\nUploading a 4.3.0-2 of r-base would mean uploading a new r-base to\ntesting without a proper transition and without re-compilation of\nAPI-incompatible graphics related packages -- that'd be quite the havoc\nin testing (and eventually next stable). It also violates some of the\nrules of t-p-u -- more details here[1] in case\nyou are interested.\n\nr-base can continue to stay where it already is at the moment :)\n\n[1]: https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#t-p-u\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, May 16, 2023 at 09:31:20AM -0500, Dirk Eddelbuettel wrote:\n> \n> On 16 May 2023 at 19:49, Nilesh Patra wrote:\n> | On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> | > I personall",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 4,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-0b0194550afe",
+      "message_id": "<25699.57343.463192.188626@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-05-16T19:56:47Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516144350.bawgf6nm2cup564s@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+        "<25699.37816.667475.836327@rob.eddelbuettel.com>",
+        "<20230516144350.bawgf6nm2cup564s@office.mailbox.org>"
+      ],
+      "body_plain": "On 16 May 2023 at 20:13, Nilesh Patra wrote:\n| Uh, no. Maybe you misunderstood my suggestion. The t-p-u way was for\n\nIndeed!\n\n| r-base can continue to stay where it already is at the moment :)\n\nYep.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 16 May 2023 at 20:13, Nilesh Patra wrote:\n| Uh, no. Maybe you misunderstood my suggestion. The t-p-u way was for\n\nIndeed!\n\n| r-base can continue to stay where it already is at the moment :)\n\nYep.\n\n",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 5,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-18e148509305",
+      "message_id": "<ZGR7MpS9xCA9eD1I@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2023-05-17T06:58:58Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>"
+      ],
+      "body_plain": "Hi again,\n\nAm Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > I personally prefer \"1\" over 2 as it is less noise (and effort).\n> \n> On second thoughts, I think sending it via testing-proposed-updates\n> would be a better thing to do, as this case perfectly fits the problem.\n\nI hope I was following developers reference about t-p-u[6] correctly\nand pushed\n\n$ git diff HEAD^\ndiff --git a/debian/changelog b/debian/changelog\nindex 21d12c3..a2b6c26 100644\n--- a/debian/changelog\n+++ b/debian/changelog\n@@ -1,3 +1,10 @@\n+r-cran-shiny (1.7.4+dfsg-3~deb12u1) bookworm; urgency=medium\n+\n+  * Upload to testing-proposed-updates \"bookworm\" due to the fact that\n+    there was an accidental upload of a new version of r-base to unstable\n+\n+ -- Andreas Tille <tille at debian.org>  Wed, 17 May 2023 07:56:25 +0200\n+\n r-cran-shiny (1.7.4+dfsg-3) unstable; urgency=medium\n \n   * Fix link for normalize.css\n\nto git.  I've choosen the version 1.7.4+dfsg-3~deb12u1 to match\nthe requirement that the version is lower than in unstable\n\n$ if dpkg --compare-versions 1.7.4+dfsg-3 gt 1.7.4+dfsg-3~deb12u1 ; then echo \"OK\" ; else echo \"hmmm\" ; fi\nOK\n\nI wonder whether dput is working with target distribution bookworm since\nlintian  throws an error.  Release team is in CC - do you think I should\nfile a bug right now or just after an upload?\n\nKind regards\n    Andreas. \n \n> > > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> > > [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> > > [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> > > [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n> > [5] https://wiki.debian.org/TestingProposedUpdates\n[6] https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#t-p-u\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again,\n\nAm Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > I personally prefer \"1\" over 2 as it is less noise (and ef",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 3,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-a20a864f3276",
+      "message_id": "<20230517083722.wnsriouryy7zauqc@office.mailbox.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-05-17T08:37:22Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<ZGR7MpS9xCA9eD1I@an3as.eu>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+        "<ZGR7MpS9xCA9eD1I@an3as.eu>"
+      ],
+      "body_plain": "On Wed, May 17, 2023 at 08:58:58AM +0200, Andreas Tille wrote:\n> Am Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> > On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > > I personally prefer \"1\" over 2 as it is less noise (and effort).\n> > \n> > On second thoughts, I think sending it via testing-proposed-updates\n> > would be a better thing to do, as this case perfectly fits the problem.\n> \n> I hope I was following developers reference about t-p-u[6] correctly\n> and pushed\n> I've choosen the version 1.7.4+dfsg-3~deb12u1 to match\n> the requirement that the version is lower than in unstable\n\nI guess this should be alright. But as per devref, you may want to choose\n\"1.7.4+dfsg-2+deb12u1\".\n\n> I wonder whether dput is working with target distribution bookworm since\n> lintian  throws an error. \n\nIt probably should. There's a d/ch entry I found for argon2 package\nhere[7] in case that helps you.\n\n> Release team is in CC - do you think I should\n> file a bug right now or just after an upload?\n\ndevref says \"Ask for authorization for uploading from the release\nmanagers.\"\n\nSo I suppose it makes sense to file a bug before you upload and ping\nthem back again once you upload as per\n\n\"After uploading and successful build on all platforms, contact the\nrelease team at debian-release at lists.debian.org and ask them to approve\nyour upload.\"\n\n> > > > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> > > > [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> > > > [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> > > > [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n> > > [5] https://wiki.debian.org/TestingProposedUpdates\n> [6] https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#t-p-u\n[7] https://tracker.debian.org/news/1429925/accepted-argon2-020171227-03deb12u1-source-into-testing-proposed-updates/\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Wed, May 17, 2023 at 08:58:58AM +0200, Andreas Tille wrote:\n> Am Tue, May 16, 2023 at 07:49:55PM +0530 schrieb Nilesh Patra:\n> > On Tue, May 16, 2023 at 07:25:15PM +0530, Nilesh Patra wrote:\n> > > ",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 4,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-47040d31867f",
+      "message_id": "<ZGSlUomBeyAceBwm@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2023-05-17T09:58:42Z",
+      "subject": "Re: Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "subject_clean": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "in_reply_to": "<20230517083722.wnsriouryy7zauqc@office.mailbox.org>",
+      "references": [
+        "<ZGN+lnrSK9iOhAPZ@an3as.eu>",
+        "<20230516135515.l6j5jknrsgxdd6hd@office.mailbox.org>",
+        "<20230516141955.yl23w3bqr7em4gmh@office.mailbox.org>",
+        "<ZGR7MpS9xCA9eD1I@an3as.eu>",
+        "<20230517083722.wnsriouryy7zauqc@office.mailbox.org>"
+      ],
+      "body_plain": "Am Wed, May 17, 2023 at 02:07:22PM +0530 schrieb Nilesh Patra:\n> On Wed, May 17, 2023 at 08:58:58AM +0200, Andreas Tille wrote:\n> > I hope I was following developers reference about t-p-u[6] correctly\n> > and pushed\n> > I've choosen the version 1.7.4+dfsg-3~deb12u1 to match\n> > the requirement that the version is lower than in unstable\n> \n> I guess this should be alright. But as per devref, you may want to choose\n> \"1.7.4+dfsg-2+deb12u1\".\n\nThis was my first consideration.  However, the changes simply fit to\n1.7.4+dfsg-3 and by using the '~' separator the \"smaller version than in\nunstable\" is fulfilled as well.  I don't mind much actually - just to\nexplain my choice.\n \n> > I wonder whether dput is working with target distribution bookworm since\n> > lintian  throws an error. \n> \n> It probably should. There's a d/ch entry I found for argon2 package\n> here[7] in case that helps you.\n\nThanks for confirming.\n \n> > Release team is in CC - do you think I should\n> > file a bug right now or just after an upload?\n> \n> devref says \"Ask for authorization for uploading from the release\n> managers.\"\n> \n> So I suppose it makes sense to file a bug before you upload and ping\n> them back again once you upload as per\n\nYepp, I'll do so and will ask what they consider the more sensible\nversion number.\n \n> \"After uploading and successful build on all platforms, contact the\n> release team at debian-release at lists.debian.org and ask them to approve\n> your upload.\"\n\nWill do so.\n\nKind regards\n   Andreas.\n\n> > > > > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-thematic/33619891/log.gz\n> > > > > [2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treescape/33619892/log.gz\n> > > > > [3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-treespace/33619893/log.gz\n> > > > > [4] https://tracker.debian.org/news/1429562/accepted-r-base-430-1-source-into-unstable/\n> > > > [5] https://wiki.debian.org/TestingProposedUpdates\n> > [6] https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#t-p-u\n> [7] https://tracker.debian.org/news/1429925/accepted-argon2-020171227-03deb12u1-source-into-testing-proposed-updates/\n> \n> -- \n> Best,\n> Nilesh\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Wed, May 17, 2023 at 02:07:22PM +0530 schrieb Nilesh Patra:\n> On Wed, May 17, 2023 at 08:58:58AM +0200, Andreas Tille wrote:\n> > I hope I was following developers reference about t-p-u[6] correctly",
+      "thread_id": "thread-27a819d9b5b9",
+      "thread_depth": 5,
+      "month": "2023-05"
+    },
+    {
+      "id": "msg-a27a7328107e",
+      "message_id": "<168434572131.2632552.15530998611359527736.reportbug@energija.fam-tille.de>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-05-17T17:48:41Z",
+      "subject": "Bug#1036227: bookworm-pu: package r-cran-shiny/1.7.4+dfsg-3~deb12u1",
+      "subject_clean": "Bug#1036227: bookworm-pu: package r-cran-shiny/1.7.4+dfsg-3~deb12u1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nTags: bookworm\nUser: release.debian.org at packages.debian.org\nUsertags: pu\nX-Debbugs-Cc: r-cran-shiny at packages.debian.org, 1035428 at bugs.debian.org, debian-r at lists.debian.org\nControl: affects -1 + src:r-cran-shiny\n\nI'd like to announce an upload to testing-proposed-updates\n\n[ Reason ]\nAs discussed on the mailing list debian-release at l.d.o[1] the\naccidental upload of r-base prevents r-cran-shiny from migrating\nto testing since it has some failing tests due to the r-base\nversion conflict.  Thus an upload to testing-proposed-updates\nseems an appropriate solution for this and this bug report is\nabout asking you for confirmation about this solution.\n\n[ Impact ]\nR-cran-shiny has an RC bug and is in danger to be not released\nwith bookworm.  It has quite some dependencies that would be\naffected.\n\n[ Tests ]\nThere is just a fixed symlink in the upload to fix the RC bug.\nAll tests are passing as usual.\n\n[ Risks ]\nThe change to the package is minimal.\n\n[ Checklist ]\n  [x] *all* changes are documented in the d/changelog\n  [x] I reviewed all changes and I approve them\n  [ ] attach debdiff against the package in (old)stable\n      --> will be attached once uploaded\n  [x] the issue is verified as fixed in unstable\n\n[ Changes ]\n\nI propose to upload the following change to t-p-u:\n\n$ git diff HEAD^\ndiff --git a/debian/changelog b/debian/changelog\nindex 21d12c3..a2b6c26 100644\n--- a/debian/changelog\n+++ b/debian/changelog\n@@ -1,3 +1,10 @@\n+r-cran-shiny (1.7.4+dfsg-3~deb12u1) bookworm; urgency=medium\n+\n+  * Upload to testing-proposed-updates \"bookworm\" due to the fact that\n+    there was an accidental upload of a new version of r-base to unstable\n+\n+ -- Andreas Tille <tille at debian.org>  Wed, 17 May 2023 07:56:25 +0200\n+\n r-cran-shiny (1.7.4+dfsg-3) unstable; urgency=medium\n\nNilesh Patra suggested to use version 1.7.4+dfsg-2+deb12u1 but I\npersonally regard my version suggestion more logical (long explanation\ngiven in [2]).\n\n[ Other info ]\n\nPlease confirm that I should upload to t-p-u (and raise your opinion\nabout the most sensible version in your eyes).\n\nKind regards and thanks for working as release team\n   Andreas.\n\n[1] https://lists.debian.org/debian-release/2023/05/msg00623.html",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nTags: bookworm\nUser: release.debian.org at packages.debian.org\nUsertags: pu\nX-Debbugs-Cc: r-cran-shiny at packages.debian.org, 1035428 at bugs.debian.org, ",
+      "thread_id": "thread-a27a7328107e",
+      "thread_depth": 0,
+      "month": "2023-05"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-27a819d9b5b9",
+      "subject": "Test suite issues due to new upstream version of r-core in unstable (Was: r-cran-shiny: broken symlink: ...)",
+      "message_count": 13,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Nilesh Patra"
+      ],
+      "started": "2023-05-16T13:01:10Z",
+      "last_reply": "2023-05-17T09:58:42Z",
+      "root_message_id": "msg-27a819d9b5b9"
+    },
+    {
+      "id": "thread-54b43326d3d8",
+      "subject": "r-cran-kableextra status?",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2023-05-16T13:32:34Z",
+      "last_reply": "2023-05-16T13:55:26Z",
+      "root_message_id": "msg-54b43326d3d8"
+    },
+    {
+      "id": "thread-a27a7328107e",
+      "subject": "Bug#1036227: bookworm-pu: package r-cran-shiny/1.7.4+dfsg-3~deb12u1",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2023-05-17T17:48:41Z",
+      "last_reply": "2023-05-17T17:48:41Z",
+      "root_message_id": "msg-a27a7328107e"
+    }
+  ]
+}

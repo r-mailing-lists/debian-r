@@ -1,0 +1,2013 @@
+From eb at ericebrown.com  Sun Apr  3 18:34:10 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Sun, 3 Apr 2022 14:34:10 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <YjZX83ZG+oqJ6eoK@an3as.eu>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu>
+Message-ID: <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com>
+
+Hi,
+
+Since this is a pretty important package, I grep'd the package to see
+what fonts are included. It looks like some of them are already in
+Debian:
+
+Roboto          https://packages.debian.org/bullseye/fonts-roboto
+Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+Open Sans       https://packages.debian.org/sid/fonts-open-sans
+Lato            https://packages.debian.org/sid/fonts-lato
+Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+
+The rest are all SIL OFL licence (Debian compatible). I was able to find
+sources for all but two:
+
+Montserrat      https://github.com/JulietaUla/Montserrat
+Nunito Sans     https://github.com/googlefonts/NunitoSans
+Nunito          https://github.com/googlefonts/nunito
+Inter           https://github.com/rsms/inter/
+News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+Raleway         https://github.com/impallari/Raleway/
+Neucha          ?
+Source Sans Pro ?
+
+Best,
+Eric
+
+From andreas at an3as.eu  Mon Apr  4 07:15:22 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 4 Apr 2022 09:15:22 +0200
+Subject: =?utf-8?q?GenABEL_fails_to_build_=28Was=3A_Bug=231008356=3A_r-cran-genabel=3A_FTBFS=3A_fexact=2Ec=3A1025=3A13=3A_error=3A_=E2=80=98PROBLEM=E2=80=99_undeclared_=28first_use_in_this_function=29=29?=
+In-Reply-To: <Yj9794/01U9hprnl@xanadu.blop.info>
+References: <Yj9794/01U9hprnl@xanadu.blop.info>
+Message-ID: <YkqbCi4/WElK7oxc@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 yurii at bionet.nsc.ru
+Control: tags -1 pending
+
+Hi,
+
+the Debian packaged version of GenABEL received a bug report once we
+switched from R 4.1.2 to 4.1.3  The following patch solves this issue:
+
+   https://salsa.debian.org/r-pkg-team/r-cran-genabel/-/blob/master/debian/patches/fix_PROBLEM.patch
+
+Kind regards
+
+     Andreas.
+
+Am Sat, Mar 26, 2022 at 09:47:51PM +0100 schrieb Lucas Nussbaum:
+> Source: r-cran-genabel
+> Version: 1.8-0-5
+> Severity: serious
+> Justification: FTBFS
+> Tags: bookworm sid ftbfs
+> User: lucas at debian.org
+> Usertags: ftbfs-20220326 ftbfs-bookworm
+> 
+> Hi,
+> 
+> During a rebuild of all packages in sid, your package failed to build
+> on amd64.
+> 
+> 
+> Relevant part (hopefully):
+> > gcc -I"/usr/share/R/include" -DNDEBUG      -fpic  -g -O2 -ffile-prefix-map=/build/r-base-yTleYq/r-base-4.1.3.20220324=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c fexact.c -o fexact.o
+> > fexact.c: In function ‘f3xact’:
+> > fexact.c:1025:13: error: ‘PROBLEM’ undeclared (first use in this function)
+> >  1025 |             PROBLEM "Bug in FEXACT: gave negative key" RECOVER(NULL_ENTRY);
+> >       |             ^~~~~~~
+> > fexact.c:1025:13: note: each undeclared identifier is reported only once for each function it appears in
+> > fexact.c:1025:20: error: expected ‘;’ before string constant
+> >  1025 |             PROBLEM "Bug in FEXACT: gave negative key" RECOVER(NULL_ENTRY);
+> >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >       |                    ;
+> > fexact.c: In function ‘prterr’:
+> > fexact.c:1806:5: error: ‘PROBLEM’ undeclared (first use in this function)
+> >  1806 |     PROBLEM "FEXACT error %d.\n%s", icode, mes RECOVER(NULL_ENTRY);
+> >       |     ^~~~~~~
+> > fexact.c:1806:12: error: expected ‘;’ before string constant
+> >  1806 |     PROBLEM "FEXACT error %d.\n%s", icode, mes RECOVER(NULL_ENTRY);
+> >       |            ^~~~~~~~~~~~~~~~~~~~~~~
+> >       |            ;
+> > make[1]: *** [/usr/lib/R/etc/Makeconf:168: fexact.o] Error 1
+> 
+> 
+> The full build log is available from:
+> http://qa-logs.debian.net/2022/03/26/r-cran-genabel_1.8-0-5_unstable.log
+> 
+> A list of current common problems and possible solutions is available at
+> http://wiki.debian.org/qa.debian.org/FTBFS . You're welcome to contribute!
+> 
+> If you reassign this bug to another package, please marking it as 'affects'-ing
+> this package. See https://www.debian.org/Bugs/server-control#affects
+> 
+> If you fail to reproduce this, please provide a build log and diff it with mine
+> so that we can identify if something relevant changed in the meantime.
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From eb at ericebrown.com  Mon Apr  4 10:42:59 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Mon, 4 Apr 2022 06:42:59 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com>
+Message-ID: <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com>
+
+To update, I found that a few more are packaged in texlive-fonts-extra (https://packages.debian.org/buster/texlive-fonts-extra)
+
+Roboto          https://packages.debian.org/bullseye/fonts-robotoUbuntu          https://packages.debian.org/bullseye/fonts-ubuntuOpen Sans       https://packages.debian.org/sid/fonts-open-sansLato            https://packages.debian.org/sid/fonts-latoCabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+This leaves 4 which I could not find in Debian:Nunito Sans     https://github.com/googlefonts/NunitoSansInter           https://github.com/rsms/inter/News Cycle      https://bazaar.launchpad.net/~n8/newscycle/Neucha          ?
+
+Best,
+Eric
+
+On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+
+> Hi,
+>
+>
+>
+> Since this is a pretty important package, I grep'd the package to see
+>
+> what fonts are included. It looks like some of them are already in
+>
+> Debian:
+>
+>
+>
+> Roboto          https://packages.debian.org/bullseye/fonts-roboto
+>
+> Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+>
+> Open Sans       https://packages.debian.org/sid/fonts-open-sans
+>
+> Lato            https://packages.debian.org/sid/fonts-lato
+>
+> Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+>
+>
+>
+> The rest are all SIL OFL licence (Debian compatible). I was able to find
+>
+> sources for all but two:
+>
+>
+>
+> Montserrat      https://github.com/JulietaUla/Montserrat
+>
+> Nunito Sans     https://github.com/googlefonts/NunitoSans
+>
+> Nunito          https://github.com/googlefonts/nunito
+>
+> Inter           https://github.com/rsms/inter/
+>
+> News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+>
+> Raleway         https://github.com/impallari/Raleway/
+>
+> Neucha          ?
+>
+> Source Sans Pro ?
+>
+>
+>
+> Best,
+>
+> Eric
+
+-- 
+Eric Brown MD MSc FRCPC
+
+For encryption, OpenPGP public key available on request.
+
+From andreas at fam-tille.de  Tue Apr  5 13:44:16 2022
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 5 Apr 2022 15:44:16 +0200
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com>
+Message-ID: <YkxHsFjEnyKGnu5d@an3as.eu>
+
+Hi Eric,
+
+Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> To update, I found that a few more are packaged in texlive-fonts-extra (
+> https://packages.debian.org/buster/texlive-fonts-extra)
+> 
+> Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> Lato            https://packages.debian.org/sid/fonts-lato
+> Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> 
+> This leaves 4 which I could not find in Debian:
+> 
+> Nunito Sans     https://github.com/googlefonts/NunitoSans
+> Inter           https://github.com/rsms/inter/
+> News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> Neucha          ?
+
+Thanks a lot for this very helpful investigation.  The problem now is
+how to know which of the 60 inst/fonts/*.woff files we can remove from
+the source package since these are not needed and whether the fonts
+you said are found by bslib if we simply set the dependencies you
+mentioned above (and how to test this).  The names of these *.woff
+files are absolutely cryptic and I need to admit I have no idea about
+all this fonts stuff.
+
+Kind regards
+
+      Andreas.
+
+> Best,
+> Eric
+> 
+> On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> 
+> > Hi,
+> >
+> > Since this is a pretty important package, I grep'd the package to see
+> > what fonts are included. It looks like some of them are already in
+> > Debian:
+> >
+> > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > Lato            https://packages.debian.org/sid/fonts-lato
+> > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> >
+> > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > sources for all but two:
+> >
+> > Montserrat      https://github.com/JulietaUla/Montserrat
+> > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > Nunito          https://github.com/googlefonts/nunito
+> > Inter           https://github.com/rsms/inter/
+> > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > Raleway         https://github.com/impallari/Raleway/
+> > Neucha          ?
+> > Source Sans Pro ?
+> >
+> > Best,
+> > Eric
+> >
+> -- 
+> Eric Brown MD MSc FRCPC
+> For encryption, OpenPGP public key available on request.
+
+-- 
+http://fam-tille.de
+
+From eb at ericebrown.com  Tue Apr  5 15:39:11 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Tue, 5 Apr 2022 11:39:11 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <YkxHsFjEnyKGnu5d@an3as.eu>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu>
+Message-ID: <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com>
+
+Hi Andreas,
+
+I can at least identify which .woff files correspond to which fonts,
+that is possible with grep. Here's the output:
+https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+
+I think deleting the .woff files and seeing if the fonts render
+properly when they are installed at the system level is reasonable but
+I too am not sure exactly how to try out all the fonts.
+
+If that doesn't work, I guess it would be a matter of symlinking files
+to replace the .woff files. This might require a step to derive the
+.woff wiles in the format expected by bslib.
+
+On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+>
+> Hi Eric,
+>
+> Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > https://packages.debian.org/buster/texlive-fonts-extra)
+> >
+> > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > Lato            https://packages.debian.org/sid/fonts-lato
+> > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> >
+> > This leaves 4 which I could not find in Debian:
+> >
+> > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > Inter           https://github.com/rsms/inter/
+> > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > Neucha          ?
+>
+> Thanks a lot for this very helpful investigation.  The problem now is
+> how to know which of the 60 inst/fonts/*.woff files we can remove from
+> the source package since these are not needed and whether the fonts
+> you said are found by bslib if we simply set the dependencies you
+> mentioned above (and how to test this).  The names of these *.woff
+> files are absolutely cryptic and I need to admit I have no idea about
+> all this fonts stuff.
+>
+> Kind regards
+>
+>       Andreas.
+>
+> > Best,
+> > Eric
+> >
+> > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> >
+> > > Hi,
+> > >
+> > > Since this is a pretty important package, I grep'd the package to see
+> > > what fonts are included. It looks like some of them are already in
+> > > Debian:
+> > >
+> > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > >
+> > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > sources for all but two:
+> > >
+> > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > Nunito          https://github.com/googlefonts/nunito
+> > > Inter           https://github.com/rsms/inter/
+> > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > Raleway         https://github.com/impallari/Raleway/
+> > > Neucha          ?
+> > > Source Sans Pro ?
+> > >
+> > > Best,
+> > > Eric
+> > >
+> > --
+> > Eric Brown MD MSc FRCPC
+> > For encryption, OpenPGP public key available on request.
+>
+> --
+> http://fam-tille.de
+
+-- 
+Eric Brown MD MSc FRCPC
+For encryption, OpenPGP public key available on request.
+
+From eb at ericebrown.com  Wed Apr  6 00:50:08 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Tue, 5 Apr 2022 20:50:08 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu> <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com>
+Message-ID: <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com>
+
+Hi again,
+
+I tried to see what happens when the woff files are deleted from bslib.
+
+I cloned the bslib git, deleted the contents of the font folder, built
+the R package locally, then tried to render an R markdown document
+that uses a bslib theme (minty).
+It fails with an error message (below).
+
+pandoc: /tmp/Rtmp1sYpTM/bslib-ca23be8b2c03436a7d75cedd4667b7ed/fonts/JTUSjIg1_i6t8kCHKm45xW0.woff:
+openBinaryFile: does not exist (No such file or directory)
+Error : pandoc document conversion failed with error 1
+Error: callr subprocess failed: pandoc document conversion failed with error 1
+Type .Last.error.trace to see where the error occurred
+
+Best,
+Eric
+
+On Tue, Apr 5, 2022 at 11:39 AM Eric Brown <eb at ericebrown.com> wrote:
+>
+> Hi Andreas,
+>
+> I can at least identify which .woff files correspond to which fonts,
+> that is possible with grep. Here's the output:
+> https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+>
+> I think deleting the .woff files and seeing if the fonts render
+> properly when they are installed at the system level is reasonable but
+> I too am not sure exactly how to try out all the fonts.
+>
+> If that doesn't work, I guess it would be a matter of symlinking files
+> to replace the .woff files. This might require a step to derive the
+> .woff wiles in the format expected by bslib.
+>
+>
+> On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> >
+> > Hi Eric,
+> >
+> > Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > > https://packages.debian.org/buster/texlive-fonts-extra)
+> > >
+> > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> > >
+> > > This leaves 4 which I could not find in Debian:
+> > >
+> > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > Inter           https://github.com/rsms/inter/
+> > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > Neucha          ?
+> >
+> > Thanks a lot for this very helpful investigation.  The problem now is
+> > how to know which of the 60 inst/fonts/*.woff files we can remove from
+> > the source package since these are not needed and whether the fonts
+> > you said are found by bslib if we simply set the dependencies you
+> > mentioned above (and how to test this).  The names of these *.woff
+> > files are absolutely cryptic and I need to admit I have no idea about
+> > all this fonts stuff.
+> >
+> > Kind regards
+> >
+> >       Andreas.
+> >
+> > > Best,
+> > > Eric
+> > >
+> > > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> > >
+> > > > Hi,
+> > > >
+> > > > Since this is a pretty important package, I grep'd the package to see
+> > > > what fonts are included. It looks like some of them are already in
+> > > > Debian:
+> > > >
+> > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > >
+> > > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > > sources for all but two:
+> > > >
+> > > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > Nunito          https://github.com/googlefonts/nunito
+> > > > Inter           https://github.com/rsms/inter/
+> > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > Raleway         https://github.com/impallari/Raleway/
+> > > > Neucha          ?
+> > > > Source Sans Pro ?
+> > > >
+> > > > Best,
+> > > > Eric
+> > > >
+> > > --
+> > > Eric Brown MD MSc FRCPC
+> > > For encryption, OpenPGP public key available on request.
+> >
+> > --
+> > http://fam-tille.de
+>
+>
+>
+> --
+> Eric Brown MD MSc FRCPC
+> For encryption, OpenPGP public key available on request.
+
+-- 
+Eric Brown MD MSc FRCPC
+For encryption, OpenPGP public key available on request.
+
+From andreas at fam-tille.de  Wed Apr  6 11:13:19 2022
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 6 Apr 2022 13:13:19 +0200
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu> <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com> <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com>
+Message-ID: <Yk11z1RVL2fELN5G@an3as.eu>
+
+Hi Eric,
+
+thanks a lot for your investigation.  This is extremely helpful.
+
+Am Tue, Apr 05, 2022 at 08:50:08PM -0400 schrieb Eric Brown:
+> Hi again,
+> 
+> I tried to see what happens when the woff files are deleted from bslib.
+> 
+> I cloned the bslib git, deleted the contents of the font folder, built
+> the R package locally, then tried to render an R markdown document
+> that uses a bslib theme (minty).
+> It fails with an error message (below).
+> 
+> pandoc: /tmp/Rtmp1sYpTM/bslib-ca23be8b2c03436a7d75cedd4667b7ed/fonts/JTUSjIg1_i6t8kCHKm45xW0.woff:
+> openBinaryFile: does not exist (No such file or directory)
+> Error : pandoc document conversion failed with error 1
+> Error: callr subprocess failed: pandoc document conversion failed with error 1
+> Type .Last.error.trace to see where the error occurred
+
+Seems we need the Montserrat font from texlive-fonts-extra.  But there
+are no *.woff files.  Thus I guess we need to convert the proper font
+from there to woff format - but I have no idea at all how to do this.
+
+Kind regards
+
+      Andreas.
+
+> 
+> Best,
+> Eric
+> 
+> On Tue, Apr 5, 2022 at 11:39 AM Eric Brown <eb at ericebrown.com> wrote:
+> >
+> > Hi Andreas,
+> >
+> > I can at least identify which .woff files correspond to which fonts,
+> > that is possible with grep. Here's the output:
+> > https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+> >
+> > I think deleting the .woff files and seeing if the fonts render
+> > properly when they are installed at the system level is reasonable but
+> > I too am not sure exactly how to try out all the fonts.
+> >
+> > If that doesn't work, I guess it would be a matter of symlinking files
+> > to replace the .woff files. This might require a step to derive the
+> > .woff wiles in the format expected by bslib.
+> >
+> >
+> > On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> > >
+> > > Hi Eric,
+> > >
+> > > Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > > > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > > > https://packages.debian.org/buster/texlive-fonts-extra)
+> > > >
+> > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> > > >
+> > > > This leaves 4 which I could not find in Debian:
+> > > >
+> > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > Inter           https://github.com/rsms/inter/
+> > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > Neucha          ?
+> > >
+> > > Thanks a lot for this very helpful investigation.  The problem now is
+> > > how to know which of the 60 inst/fonts/*.woff files we can remove from
+> > > the source package since these are not needed and whether the fonts
+> > > you said are found by bslib if we simply set the dependencies you
+> > > mentioned above (and how to test this).  The names of these *.woff
+> > > files are absolutely cryptic and I need to admit I have no idea about
+> > > all this fonts stuff.
+> > >
+> > > Kind regards
+> > >
+> > >       Andreas.
+> > >
+> > > > Best,
+> > > > Eric
+> > > >
+> > > > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> > > >
+> > > > > Hi,
+> > > > >
+> > > > > Since this is a pretty important package, I grep'd the package to see
+> > > > > what fonts are included. It looks like some of them are already in
+> > > > > Debian:
+> > > > >
+> > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > >
+> > > > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > > > sources for all but two:
+> > > > >
+> > > > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > Nunito          https://github.com/googlefonts/nunito
+> > > > > Inter           https://github.com/rsms/inter/
+> > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > Raleway         https://github.com/impallari/Raleway/
+> > > > > Neucha          ?
+> > > > > Source Sans Pro ?
+> > > > >
+> > > > > Best,
+> > > > > Eric
+> > > > >
+> > > > --
+> > > > Eric Brown MD MSc FRCPC
+> > > > For encryption, OpenPGP public key available on request.
+> > >
+> > > --
+> > > http://fam-tille.de
+> >
+> >
+> >
+> > --
+> > Eric Brown MD MSc FRCPC
+> > For encryption, OpenPGP public key available on request.
+> 
+> 
+> 
+> -- 
+> Eric Brown MD MSc FRCPC
+> For encryption, OpenPGP public key available on request.
+> 
+
+-- 
+http://fam-tille.de
+
+From eb at ericebrown.com  Wed Apr 13 17:56:56 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Wed, 13 Apr 2022 13:56:56 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <Yk11z1RVL2fELN5G@an3as.eu>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu> <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com> <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com> <Yk11z1RVL2fELN5G@an3as.eu>
+Message-ID: <CAL-m-c1M0Wrq4ZOaD4R72bxBYqdTbZ8dwzdzte-bEqLmUzGgtQ@mail.gmail.com>
+
+Minor update with source:
+
+In Debian:
+
+Roboto          https://packages.debian.org/bullseye/fonts-roboto
+Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+Open Sans       https://packages.debian.org/sid/fonts-open-sans
+Lato            https://packages.debian.org/sid/fonts-lato
+Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+
+In Debian but should ideally be packaged separately due to large size
+of texlive-fonts-extra and current policy:
+
+Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+
+Need Debian package (all have open licences):
+
+Nunito Sans     https://github.com/googlefonts/NunitoSans
+Inter           https://github.com/rsms/inter/
+News Cycle      https://launchpad.net/newscycle
+Neucha          https://typetype.org/wp-content/uploads/neucha.zip
+
+On Wed, Apr 6, 2022 at 7:13 AM Andreas Tille <andreas at fam-tille.de> wrote:
+>
+> Hi Eric,
+>
+> thanks a lot for your investigation.  This is extremely helpful.
+>
+> Am Tue, Apr 05, 2022 at 08:50:08PM -0400 schrieb Eric Brown:
+> > Hi again,
+> >
+> > I tried to see what happens when the woff files are deleted from bslib.
+> >
+> > I cloned the bslib git, deleted the contents of the font folder, built
+> > the R package locally, then tried to render an R markdown document
+> > that uses a bslib theme (minty).
+> > It fails with an error message (below).
+> >
+> > pandoc: /tmp/Rtmp1sYpTM/bslib-ca23be8b2c03436a7d75cedd4667b7ed/fonts/JTUSjIg1_i6t8kCHKm45xW0.woff:
+> > openBinaryFile: does not exist (No such file or directory)
+> > Error : pandoc document conversion failed with error 1
+> > Error: callr subprocess failed: pandoc document conversion failed with error 1
+> > Type .Last.error.trace to see where the error occurred
+>
+> Seems we need the Montserrat font from texlive-fonts-extra.  But there
+> are no *.woff files.  Thus I guess we need to convert the proper font
+> from there to woff format - but I have no idea at all how to do this.
+>
+> Kind regards
+>
+>       Andreas.
+>
+> >
+> > Best,
+> > Eric
+> >
+> > On Tue, Apr 5, 2022 at 11:39 AM Eric Brown <eb at ericebrown.com> wrote:
+> > >
+> > > Hi Andreas,
+> > >
+> > > I can at least identify which .woff files correspond to which fonts,
+> > > that is possible with grep. Here's the output:
+> > > https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+> > >
+> > > I think deleting the .woff files and seeing if the fonts render
+> > > properly when they are installed at the system level is reasonable but
+> > > I too am not sure exactly how to try out all the fonts.
+> > >
+> > > If that doesn't work, I guess it would be a matter of symlinking files
+> > > to replace the .woff files. This might require a step to derive the
+> > > .woff wiles in the format expected by bslib.
+> > >
+> > >
+> > > On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> > > >
+> > > > Hi Eric,
+> > > >
+> > > > Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > > > > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > > > > https://packages.debian.org/buster/texlive-fonts-extra)
+> > > > >
+> > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> > > > >
+> > > > > This leaves 4 which I could not find in Debian:
+> > > > >
+> > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > Inter           https://github.com/rsms/inter/
+> > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > Neucha          ?
+> > > >
+> > > > Thanks a lot for this very helpful investigation.  The problem now is
+> > > > how to know which of the 60 inst/fonts/*.woff files we can remove from
+> > > > the source package since these are not needed and whether the fonts
+> > > > you said are found by bslib if we simply set the dependencies you
+> > > > mentioned above (and how to test this).  The names of these *.woff
+> > > > files are absolutely cryptic and I need to admit I have no idea about
+> > > > all this fonts stuff.
+> > > >
+> > > > Kind regards
+> > > >
+> > > >       Andreas.
+> > > >
+> > > > > Best,
+> > > > > Eric
+> > > > >
+> > > > > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > Since this is a pretty important package, I grep'd the package to see
+> > > > > > what fonts are included. It looks like some of them are already in
+> > > > > > Debian:
+> > > > > >
+> > > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > >
+> > > > > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > > > > sources for all but two:
+> > > > > >
+> > > > > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > > Nunito          https://github.com/googlefonts/nunito
+> > > > > > Inter           https://github.com/rsms/inter/
+> > > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > > Raleway         https://github.com/impallari/Raleway/
+> > > > > > Neucha          ?
+> > > > > > Source Sans Pro ?
+> > > > > >
+> > > > > > Best,
+> > > > > > Eric
+> > > > > >
+> > > > > --
+> > > > > Eric Brown MD MSc FRCPC
+> > > > > For encryption, OpenPGP public key available on request.
+> > > >
+> > > > --
+> > > > http://fam-tille.de
+> > >
+> > >
+> > >
+> > > --
+> > > Eric Brown MD MSc FRCPC
+> > > For encryption, OpenPGP public key available on request.
+> >
+> >
+> >
+> > --
+> > Eric Brown MD MSc FRCPC
+> > For encryption, OpenPGP public key available on request.
+> >
+>
+> --
+> http://fam-tille.de
+
+-- 
+Eric Brown MD MSc FRCPC
+For encryption, OpenPGP public key available on request.
+
+From andreas at an3as.eu  Wed Apr 13 19:39:41 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 13 Apr 2022 21:39:41 +0200
+Subject: Re: [Bioconductor/Biostrings] S.h seems to be deprecated (Issue #66)
+In-Reply-To: <Bioconductor/Biostrings/issues/66/1098269986@github.com>
+References: <Bioconductor/Biostrings/issues/66@github.com> <Bioconductor/Biostrings/issues/66/1098269986@github.com>
+Message-ID: <Ylcm/Wbl9iPgx0Tk@an3as.eu>
+
+Hi Hervé,
+
+Am Wed, Apr 13, 2022 at 09:46:59AM -0700 schrieb Hervé Pagès:
+> @tillea And most importantly, it seems that Debian is building the wrong version of Bioconductor. The `S.h` file was removed from R 4.2 and they are reporting a bug for **Biostrings** 2.62.0, which belongs to Bioconductor 3.14 (the current release). BioC 3.14 should only be used with R 4.1: it has been expressly designed and tested against this version of R.
+
+Thanks a lot for this hint.  The R-pkg team is always heading for the latest stable release of any R / BioC package.  The maintainer of r-core obviously does the same but without any warning about bumping to a potentially incompatible R version.  (Debian has the distribution "experimental" for this kind of migrations but it was not used unfortunately.)
+ 
+> If you are using R 4.2, you should build Bioconductor 3.15, which is still in development and [will be released on April 27](https://bioconductor.org/developers/release-schedule/). **Biostrings** is currently at version 2.63.3. This version belongs to BioC 3.15 and works with R 4.2.
+
+I'm afraid we simply need to wait for Bioconductor 3.15 in this case since there are more Bioconductor packages with this issue and trying to patch all these and assuming that everything will work as expected is probably nanaive.  This will cause some noise amongst all Bioconductor packages which will removed from the testing distribution.  Users of Debian stable will not be affected.
+
+Kind regards, Andreas.
+
+From eb at ericebrown.com  Fri Apr 15 18:44:11 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Fri, 15 Apr 2022 14:44:11 -0400
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c1M0Wrq4ZOaD4R72bxBYqdTbZ8dwzdzte-bEqLmUzGgtQ@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu> <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com> <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com> <Yk11z1RVL2fELN5G@an3as.eu> <CAL-m-c1M0Wrq4ZOaD4R72bxBYqdTbZ8dwzdzte-bEqLmUzGgtQ@mail.gmail.com>
+Message-ID: <CAL-m-c2BwDpyPsdvkaadNr+uT-hxE-3FHMD7KP-3NbanyL=7eA@mail.gmail.com>
+
+Hi Nilesh and Andreas,
+
+It looks like conversion to .woff from .ttf or .otf is straightforward
+with woff-tools, e.g. install fonts-roboto, then the appropriate file
+can be converted by, e.g. `sfnt2woff Roboto-Regular.ttf` which creates
+Roboto-Regular.woff.
+
+I also found that fonts-inter is in Debian. So it appears only 3 fonts
+would need to be packaged. I've opened RFP bugs for them:
+
+Nunito Sans https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009730
+Neucha https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009729
+News Cycle  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009707
+
+Best,
+Eric
+
+On Wed, Apr 13, 2022 at 1:56 PM Eric Brown <eb at ericebrown.com> wrote:
+>
+> Minor update with source:
+>
+> In Debian:
+>
+> Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> Lato            https://packages.debian.org/sid/fonts-lato
+> Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+>
+> In Debian but should ideally be packaged separately due to large size
+> of texlive-fonts-extra and current policy:
+>
+> Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+>
+> Need Debian package (all have open licences):
+>
+> Nunito Sans     https://github.com/googlefonts/NunitoSans
+> Inter           https://github.com/rsms/inter/
+> News Cycle      https://launchpad.net/newscycle
+> Neucha          https://typetype.org/wp-content/uploads/neucha.zip
+>
+> On Wed, Apr 6, 2022 at 7:13 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> >
+> > Hi Eric,
+> >
+> > thanks a lot for your investigation.  This is extremely helpful.
+> >
+> > Am Tue, Apr 05, 2022 at 08:50:08PM -0400 schrieb Eric Brown:
+> > > Hi again,
+> > >
+> > > I tried to see what happens when the woff files are deleted from bslib.
+> > >
+> > > I cloned the bslib git, deleted the contents of the font folder, built
+> > > the R package locally, then tried to render an R markdown document
+> > > that uses a bslib theme (minty).
+> > > It fails with an error message (below).
+> > >
+> > > pandoc: /tmp/Rtmp1sYpTM/bslib-ca23be8b2c03436a7d75cedd4667b7ed/fonts/JTUSjIg1_i6t8kCHKm45xW0.woff:
+> > > openBinaryFile: does not exist (No such file or directory)
+> > > Error : pandoc document conversion failed with error 1
+> > > Error: callr subprocess failed: pandoc document conversion failed with error 1
+> > > Type .Last.error.trace to see where the error occurred
+> >
+> > Seems we need the Montserrat font from texlive-fonts-extra.  But there
+> > are no *.woff files.  Thus I guess we need to convert the proper font
+> > from there to woff format - but I have no idea at all how to do this.
+> >
+> > Kind regards
+> >
+> >       Andreas.
+> >
+> > >
+> > > Best,
+> > > Eric
+> > >
+> > > On Tue, Apr 5, 2022 at 11:39 AM Eric Brown <eb at ericebrown.com> wrote:
+> > > >
+> > > > Hi Andreas,
+> > > >
+> > > > I can at least identify which .woff files correspond to which fonts,
+> > > > that is possible with grep. Here's the output:
+> > > > https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+> > > >
+> > > > I think deleting the .woff files and seeing if the fonts render
+> > > > properly when they are installed at the system level is reasonable but
+> > > > I too am not sure exactly how to try out all the fonts.
+> > > >
+> > > > If that doesn't work, I guess it would be a matter of symlinking files
+> > > > to replace the .woff files. This might require a step to derive the
+> > > > .woff wiles in the format expected by bslib.
+> > > >
+> > > >
+> > > > On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> > > > >
+> > > > > Hi Eric,
+> > > > >
+> > > > > Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > > > > > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > > > > > https://packages.debian.org/buster/texlive-fonts-extra)
+> > > > > >
+> > > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> > > > > >
+> > > > > > This leaves 4 which I could not find in Debian:
+> > > > > >
+> > > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > > Inter           https://github.com/rsms/inter/
+> > > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > > Neucha          ?
+> > > > >
+> > > > > Thanks a lot for this very helpful investigation.  The problem now is
+> > > > > how to know which of the 60 inst/fonts/*.woff files we can remove from
+> > > > > the source package since these are not needed and whether the fonts
+> > > > > you said are found by bslib if we simply set the dependencies you
+> > > > > mentioned above (and how to test this).  The names of these *.woff
+> > > > > files are absolutely cryptic and I need to admit I have no idea about
+> > > > > all this fonts stuff.
+> > > > >
+> > > > > Kind regards
+> > > > >
+> > > > >       Andreas.
+> > > > >
+> > > > > > Best,
+> > > > > > Eric
+> > > > > >
+> > > > > > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> > > > > >
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > Since this is a pretty important package, I grep'd the package to see
+> > > > > > > what fonts are included. It looks like some of them are already in
+> > > > > > > Debian:
+> > > > > > >
+> > > > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > > >
+> > > > > > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > > > > > sources for all but two:
+> > > > > > >
+> > > > > > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > > > Nunito          https://github.com/googlefonts/nunito
+> > > > > > > Inter           https://github.com/rsms/inter/
+> > > > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > > > Raleway         https://github.com/impallari/Raleway/
+> > > > > > > Neucha          ?
+> > > > > > > Source Sans Pro ?
+> > > > > > >
+> > > > > > > Best,
+> > > > > > > Eric
+> > > > > > >
+> > > > > > --
+> > > > > > Eric Brown MD MSc FRCPC
+> > > > > > For encryption, OpenPGP public key available on request.
+> > > > >
+> > > > > --
+> > > > > http://fam-tille.de
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > Eric Brown MD MSc FRCPC
+> > > > For encryption, OpenPGP public key available on request.
+> > >
+> > >
+> > >
+> > > --
+> > > Eric Brown MD MSc FRCPC
+> > > For encryption, OpenPGP public key available on request.
+> > >
+> >
+> > --
+> > http://fam-tille.de
+>
+>
+>
+> --
+> Eric Brown MD MSc FRCPC
+> For encryption, OpenPGP public key available on request.
+
+--
+Eric Brown MD MSc FRCPC
+For encryption, OpenPGP public key available on request.
+
+From andreas at fam-tille.de  Sat Apr 16 04:07:49 2022
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sat, 16 Apr 2022 06:07:49 +0200
+Subject: Re: bslib and rmarkdown update
+In-Reply-To: <CAL-m-c2BwDpyPsdvkaadNr+uT-hxE-3FHMD7KP-3NbanyL=7eA@mail.gmail.com>
+References: <YjZA8K1O1jHdAQZA@debian> <YjZX83ZG+oqJ6eoK@an3as.eu> <CAL-m-c2xVJ-0oVSBCwCPW3HNtb8wYOwaTo3T4W4DwXAHiKdzTw@mail.gmail.com> <CAL-m-c3n5U3otij2ZOMe-8rbSBcGDZy1aizpx6J9m6Edg6ApLQ@mail.gmail.com> <YkxHsFjEnyKGnu5d@an3as.eu> <CAL-m-c3iYt4uW_i-qR5+hgJKHvxvr0B7aGzoBBMkFQWFyNakWA@mail.gmail.com> <CAL-m-c31h9jORJsF1jeeE+T=1Y7NRpa6QGFUGZCt2HBqyTcyNA@mail.gmail.com> <Yk11z1RVL2fELN5G@an3as.eu> <CAL-m-c1M0Wrq4ZOaD4R72bxBYqdTbZ8dwzdzte-bEqLmUzGgtQ@mail.gmail.com> <CAL-m-c2BwDpyPsdvkaadNr+uT-hxE-3FHMD7KP-3NbanyL=7eA@mail.gmail.com>
+Message-ID: <YlpBFXqwVvKg+cYT@an3as.eu>
+
+Hi Eric,
+
+Am Fri, Apr 15, 2022 at 02:44:11PM -0400 schrieb Eric Brown:
+> It looks like conversion to .woff from .ttf or .otf is straightforward
+> with woff-tools, e.g. install fonts-roboto, then the appropriate file
+> can be converted by, e.g. `sfnt2woff Roboto-Regular.ttf` which creates
+> Roboto-Regular.woff.
+> 
+> I also found that fonts-inter is in Debian. So it appears only 3 fonts
+> would need to be packaged. I've opened RFP bugs for them:
+
+I agree that the conversion to woff format is possible. I've managed
+this myself last week.  The reason why I did not reported this here and
+rather decided to simply try uploading the fonts as they are is, that I
+have no idea how to find out a relation between those fonts and the
+cryptic (random???) font files names that are used in bslib.  So even if
+we could convert existing font files - how should we maintain these
+conversions to move them to the file names that are obviously used
+inside the css files?
+ 
+> Nunito Sans https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009730
+> Neucha https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009729
+> News Cycle  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009707
+
+Thanks a lot for your investigation which is extremely welcome.
+
+Kind regards
+     Andreas.
+ 
+> 
+> On Wed, Apr 13, 2022 at 1:56 PM Eric Brown <eb at ericebrown.com> wrote:
+> >
+> > Minor update with source:
+> >
+> > In Debian:
+> >
+> > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > Lato            https://packages.debian.org/sid/fonts-lato
+> > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> >
+> > In Debian but should ideally be packaged separately due to large size
+> > of texlive-fonts-extra and current policy:
+> >
+> > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> >
+> > Need Debian package (all have open licences):
+> >
+> > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > Inter           https://github.com/rsms/inter/
+> > News Cycle      https://launchpad.net/newscycle
+> > Neucha          https://typetype.org/wp-content/uploads/neucha.zip
+> >
+> > On Wed, Apr 6, 2022 at 7:13 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> > >
+> > > Hi Eric,
+> > >
+> > > thanks a lot for your investigation.  This is extremely helpful.
+> > >
+> > > Am Tue, Apr 05, 2022 at 08:50:08PM -0400 schrieb Eric Brown:
+> > > > Hi again,
+> > > >
+> > > > I tried to see what happens when the woff files are deleted from bslib.
+> > > >
+> > > > I cloned the bslib git, deleted the contents of the font folder, built
+> > > > the R package locally, then tried to render an R markdown document
+> > > > that uses a bslib theme (minty).
+> > > > It fails with an error message (below).
+> > > >
+> > > > pandoc: /tmp/Rtmp1sYpTM/bslib-ca23be8b2c03436a7d75cedd4667b7ed/fonts/JTUSjIg1_i6t8kCHKm45xW0.woff:
+> > > > openBinaryFile: does not exist (No such file or directory)
+> > > > Error : pandoc document conversion failed with error 1
+> > > > Error: callr subprocess failed: pandoc document conversion failed with error 1
+> > > > Type .Last.error.trace to see where the error occurred
+> > >
+> > > Seems we need the Montserrat font from texlive-fonts-extra.  But there
+> > > are no *.woff files.  Thus I guess we need to convert the proper font
+> > > from there to woff format - but I have no idea at all how to do this.
+> > >
+> > > Kind regards
+> > >
+> > >       Andreas.
+> > >
+> > > >
+> > > > Best,
+> > > > Eric
+> > > >
+> > > > On Tue, Apr 5, 2022 at 11:39 AM Eric Brown <eb at ericebrown.com> wrote:
+> > > > >
+> > > > > Hi Andreas,
+> > > > >
+> > > > > I can at least identify which .woff files correspond to which fonts,
+> > > > > that is possible with grep. Here's the output:
+> > > > > https://gist.github.com/eebrown/95615fc35af364bd0fae09a69273dbdf
+> > > > >
+> > > > > I think deleting the .woff files and seeing if the fonts render
+> > > > > properly when they are installed at the system level is reasonable but
+> > > > > I too am not sure exactly how to try out all the fonts.
+> > > > >
+> > > > > If that doesn't work, I guess it would be a matter of symlinking files
+> > > > > to replace the .woff files. This might require a step to derive the
+> > > > > .woff wiles in the format expected by bslib.
+> > > > >
+> > > > >
+> > > > > On Tue, Apr 5, 2022 at 9:44 AM Andreas Tille <andreas at fam-tille.de> wrote:
+> > > > > >
+> > > > > > Hi Eric,
+> > > > > >
+> > > > > > Am Mon, Apr 04, 2022 at 06:42:59AM -0400 schrieb Eric Brown:
+> > > > > > > To update, I found that a few more are packaged in texlive-fonts-extra (
+> > > > > > > https://packages.debian.org/buster/texlive-fonts-extra)
+> > > > > > >
+> > > > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > > > Montserrat, Nunito, Raleway, Source Sans Pro: texlive-fonts-extra
+> > > > > > >
+> > > > > > > This leaves 4 which I could not find in Debian:
+> > > > > > >
+> > > > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > > > Inter           https://github.com/rsms/inter/
+> > > > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > > > Neucha          ?
+> > > > > >
+> > > > > > Thanks a lot for this very helpful investigation.  The problem now is
+> > > > > > how to know which of the 60 inst/fonts/*.woff files we can remove from
+> > > > > > the source package since these are not needed and whether the fonts
+> > > > > > you said are found by bslib if we simply set the dependencies you
+> > > > > > mentioned above (and how to test this).  The names of these *.woff
+> > > > > > files are absolutely cryptic and I need to admit I have no idea about
+> > > > > > all this fonts stuff.
+> > > > > >
+> > > > > > Kind regards
+> > > > > >
+> > > > > >       Andreas.
+> > > > > >
+> > > > > > > Best,
+> > > > > > > Eric
+> > > > > > >
+> > > > > > > On Sun, Apr 3, 2022 at 14:34 Eric Brown <eb at ericebrown.com> wrote:
+> > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > Since this is a pretty important package, I grep'd the package to see
+> > > > > > > > what fonts are included. It looks like some of them are already in
+> > > > > > > > Debian:
+> > > > > > > >
+> > > > > > > > Roboto          https://packages.debian.org/bullseye/fonts-roboto
+> > > > > > > > Ubuntu          https://packages.debian.org/bullseye/fonts-ubuntu
+> > > > > > > > Open Sans       https://packages.debian.org/sid/fonts-open-sans
+> > > > > > > > Lato            https://packages.debian.org/sid/fonts-lato
+> > > > > > > > Cabin Sketch    https://packages.debian.org/sid/fonts-cabinsketch
+> > > > > > > >
+> > > > > > > > The rest are all SIL OFL licence (Debian compatible). I was able to find
+> > > > > > > > sources for all but two:
+> > > > > > > >
+> > > > > > > > Montserrat      https://github.com/JulietaUla/Montserrat
+> > > > > > > > Nunito Sans     https://github.com/googlefonts/NunitoSans
+> > > > > > > > Nunito          https://github.com/googlefonts/nunito
+> > > > > > > > Inter           https://github.com/rsms/inter/
+> > > > > > > > News Cycle      https://bazaar.launchpad.net/~n8/newscycle/
+> > > > > > > > Raleway         https://github.com/impallari/Raleway/
+> > > > > > > > Neucha          ?
+> > > > > > > > Source Sans Pro ?
+> > > > > > > >
+> > > > > > > > Best,
+> > > > > > > > Eric
+> > > > > > > >
+> > > > > > > --
+> > > > > > > Eric Brown MD MSc FRCPC
+> > > > > > > For encryption, OpenPGP public key available on request.
+> > > > > >
+> > > > > > --
+> > > > > > http://fam-tille.de
+> > > > >
+> > > > >
+> > > > >
+> > > > > --
+> > > > > Eric Brown MD MSc FRCPC
+> > > > > For encryption, OpenPGP public key available on request.
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > Eric Brown MD MSc FRCPC
+> > > > For encryption, OpenPGP public key available on request.
+> > > >
+> > >
+> > > --
+> > > http://fam-tille.de
+> >
+> >
+> >
+> > --
+> > Eric Brown MD MSc FRCPC
+> > For encryption, OpenPGP public key available on request.
+> 
+> 
+> 
+> --
+> Eric Brown MD MSc FRCPC
+> For encryption, OpenPGP public key available on request.
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sat Apr 23 15:15:01 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 23 Apr 2022 10:15:01 -0500
+Subject: R 4.2.0 suggests a rebuild of graphics packages
+Message-ID: <25188.6133.155978.426646@rob.eddelbuettel.com>
+
+R 4.2.0 was released yesterday as scheduled.
+
+Per the NEWS.Rd file [1] in the second section 'Grahphics' the first point is
+
+  GRAPHICS
+
+  The graphics engine version, R_GE_version, has been bumped to 15 and so
+  packages that provide graphics devices should be reinstalled.
+
+so packages providing a graphics device should be rebuilt. We discussed this
+previously (as R 4.1.0 also updated the graphics device capabilities) and I
+still think it is not worth defining a new r-api-* alike tag for this as it
+really only affects a good handful of packages.
+
+Dirk
+
+[1] The web version is still at 4.1.3 as I just reported to r-devel so here is the
+snippet via the GitHub mirror of the SVN sources:
+https://github.com/r-devel/r-svn/blob/master/doc/NEWS.Rd#L372-L376
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From eb at ericebrown.com  Sat Apr 23 20:27:00 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Sat, 23 Apr 2022 16:27:00 -0400
+Subject: r-cran-xlsx r-cran-xlsxjars r-cran-skimr
+Message-ID: <CAL-m-c2-BD=P2vRwFXwD_ryL55XnNd7dQPMkrkgV_y3AuD7izA@mail.gmail.com>
+
+Hello,
+
+I was hoping that someone, at their convenience, could review
+following new CRAN packages, for feedback to upload if appropriate:
+
+https://salsa.debian.org/r-pkg-team/r-cran-xlsx
+https://salsa.debian.org/r-pkg-team/r-cran-xlsxjars
+https://salsa.debian.org/r-pkg-team/r-cran-skimr
+
+The first two I packaged because they are currently among the top 100
+packages downloaded from RStudio's CRAN repo. I created a small script
+to identify which of the top 100 packages are not in Debian
+(https://salsa.debian.org/ericeb/top-cran-packages).
+
+Many thanks in advance,
+Eric
+
+From eb at ericebrown.com  Sat Apr 23 23:13:29 2022
+From: eb at ericebrown.com (Eric Brown)
+Date: Sat, 23 Apr 2022 19:13:29 -0400
+Subject: Re: r-cran-xlsx r-cran-xlsxjars r-cran-skimr
+In-Reply-To: <CAL-m-c2-BD=P2vRwFXwD_ryL55XnNd7dQPMkrkgV_y3AuD7izA@mail.gmail.com>
+References: <CAL-m-c2-BD=P2vRwFXwD_ryL55XnNd7dQPMkrkgV_y3AuD7izA@mail.gmail.com>
+Message-ID: <CAL-m-c1AGpk9W1jFHa0WKmKJGVqKYVG0xjKdCfHREov2wZABXQ@mail.gmail.com>
+
+Hi again,
+Sorry I realize now that likely xlsxjars cannot be uploaded as is
+because it contains binary .jar files. xlsx needs xlsxjars as a
+dependency. I will investigate further for these ones.
+Thanks,
+Eric
+
+On Sat, Apr 23, 2022 at 4:27 PM Eric Brown <eb at ericebrown.com> wrote:
+>
+> Hello,
+>
+> I was hoping that someone, at their convenience, could review
+> following new CRAN packages, for feedback to upload if appropriate:
+>
+> https://salsa.debian.org/r-pkg-team/r-cran-xlsx
+> https://salsa.debian.org/r-pkg-team/r-cran-xlsxjars
+> https://salsa.debian.org/r-pkg-team/r-cran-skimr
+>
+> The first two I packaged because they are currently among the top 100
+> packages downloaded from RStudio's CRAN repo. I created a small script
+> to identify which of the top 100 packages are not in Debian
+> (https://salsa.debian.org/ericeb/top-cran-packages).
+>
+> Many thanks in advance,
+> Eric
+
+-- 
+Eric Brown MD MSc FRCPC
+For encryption, OpenPGP public key available on request.
+
+From ginggs at debian.org  Sun Apr 24 11:47:35 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 24 Apr 2022 13:47:35 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <25188.6133.155978.426646@rob.eddelbuettel.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQvsh2d945nKUHXrHMitPWVACzmQcq8oY9AqFV3LiNxmxg@mail.gmail.com>
+
+Hi Dirk
+
+On Sat, 23 Apr 2022 at 17:15, Dirk Eddelbuettel <edd at debian.org> wrote:
+> R 4.2.0 was released yesterday as scheduled.
+
+Thanks for the update!
+
+> so packages providing a graphics device should be rebuilt. We discussed this
+> previously (as R 4.1.0 also updated the graphics device capabilities) and I
+> still think it is not worth defining a new r-api-* alike tag for this as it
+> really only affects a good handful of packages.
+
+Please provide a list of the affected packages.
+
+On the r-base tracker page [1], I see:
+
+[2022-04-22] Accepted r-base 4.2.0-1 (source) into unstable (Dirk Eddelbuettel)
+[2022-04-19] Accepted r-base 4.1.3.20220415-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-04-16] Accepted r-base 4.1.3.20220413-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-04-11] Accepted r-base 4.1.3.20220408-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-04-06] Accepted r-base 4.1.3.20220405-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-04-02] Accepted r-base 4.1.3.20220401-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-03-29] Accepted r-base 4.1.3.20220328-1 (source) into unstable
+(Dirk Eddelbuettel)
+[2022-03-25] Accepted r-base 4.1.3.20220324-1 (source) into unstable
+(Dirk Eddelbuettel)
+
+In future, please upload these pre-releases to experimental.  Also, it
+would be good to communicate changes like the graphic engine bump to
+debian-r and the release team **before** uploading the final release
+to unstable.
+
+The r-base 4.2.0-1 upload is now entangled with the ongoing icu transition [2].
+
+Regards
+Graham
+
+[1] https://tracker.debian.org/pkg/r-base
+[2] https://release.debian.org/transitions/html/icu71.html
+
+From edd at debian.org  Sun Apr 24 14:26:53 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 24 Apr 2022 09:26:53 -0500
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <CAM8zJQvsh2d945nKUHXrHMitPWVACzmQcq8oY9AqFV3LiNxmxg@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <CAM8zJQvsh2d945nKUHXrHMitPWVACzmQcq8oY9AqFV3LiNxmxg@mail.gmail.com>
+Message-ID: <25189.24109.795707.527124@rob.eddelbuettel.com>
+
+On 24 April 2022 at 13:47, Graham Inggs wrote:
+| On Sat, 23 Apr 2022 at 17:15, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > so packages providing a graphics device should be rebuilt. We discussed this
+| > previously (as R 4.1.0 also updated the graphics device capabilities) and I
+| > still think it is not worth defining a new r-api-* alike tag for this as it
+| > really only affects a good handful of packages.
+| 
+| Please provide a list of the affected packages.
+
+I would if I had one.
+ 
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From jeroenooms at gmail.com  Sun Apr 24 20:07:17 2022
+From: jeroenooms at gmail.com (Jeroen Ooms)
+Date: Sun, 24 Apr 2022 22:07:17 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <25189.24109.795707.527124@rob.eddelbuettel.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <CAM8zJQvsh2d945nKUHXrHMitPWVACzmQcq8oY9AqFV3LiNxmxg@mail.gmail.com> <25189.24109.795707.527124@rob.eddelbuettel.com>
+Message-ID: <CABFfbXsDqPQLZZJ_Oy+mhy+FGZ5YbYWr0KmJ+Cugx6TJzS1WVw@mail.gmail.com>
+
+On Sun, Apr 24, 2022 at 4:27 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+>
+>
+> On 24 April 2022 at 13:47, Graham Inggs wrote:
+> | On Sat, 23 Apr 2022 at 17:15, Dirk Eddelbuettel <edd at debian.org> wrote:
+> | > so packages providing a graphics device should be rebuilt. We discussed this
+> | > previously (as R 4.1.0 also updated the graphics device capabilities) and I
+> | > still think it is not worth defining a new r-api-* alike tag for this as it
+> | > really only affects a good handful of packages.
+> |
+> | Please provide a list of the affected packages.
+>
+> I would if I had one.
+
+Easiest way to find out is to grep for calls to
+R_GE_checkVersionOrDie:
+https://github.com/search?q=org%3Acran+R_GE_checkVersionOrDie&type=code
+
+From edd at debian.org  Sun Apr 24 22:37:15 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 24 Apr 2022 17:37:15 -0500
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <CABFfbXsDqPQLZZJ_Oy+mhy+FGZ5YbYWr0KmJ+Cugx6TJzS1WVw@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <CAM8zJQvsh2d945nKUHXrHMitPWVACzmQcq8oY9AqFV3LiNxmxg@mail.gmail.com> <25189.24109.795707.527124@rob.eddelbuettel.com> <CABFfbXsDqPQLZZJ_Oy+mhy+FGZ5YbYWr0KmJ+Cugx6TJzS1WVw@mail.gmail.com>
+Message-ID: <25189.53531.376967.198456@rob.eddelbuettel.com>
+
+On 24 April 2022 at 22:07, Jeroen Ooms wrote:
+| On Sun, Apr 24, 2022 at 4:27 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+| >
+| >
+| > On 24 April 2022 at 13:47, Graham Inggs wrote:
+| > | On Sat, 23 Apr 2022 at 17:15, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > | > so packages providing a graphics device should be rebuilt. We discussed this
+| > | > previously (as R 4.1.0 also updated the graphics device capabilities) and I
+| > | > still think it is not worth defining a new r-api-* alike tag for this as it
+| > | > really only affects a good handful of packages.
+| > |
+| > | Please provide a list of the affected packages.
+| >
+| > I would if I had one.
+| 
+| Easiest way to find out is to grep for calls to
+| R_GE_checkVersionOrDie:
+| https://github.com/search?q=org%3Acran+R_GE_checkVersionOrDie&type=code
+
++1
+
+I had a similar though that it should be discoverable from code use but
+didn't know that call.  Nice.  (And as a maintainer of packages I do of
+course have some idea about which of those are providing graphics devices.)
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From johannes.ranke at jrwb.de  Mon Apr 25 03:13:10 2022
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Mon, 25 Apr 2022 05:13:10 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <25189.53531.376967.198456@rob.eddelbuettel.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <CABFfbXsDqPQLZZJ_Oy+mhy+FGZ5YbYWr0KmJ+Cugx6TJzS1WVw@mail.gmail.com> <25189.53531.376967.198456@rob.eddelbuettel.com>
+Message-ID: <3072255.vBos9q0QgU@ryz>
+
+Am Montag, 25. April 2022, 00:37:15 CEST schrieb Dirk Eddelbuettel:
+> On 24 April 2022 at 22:07, Jeroen Ooms wrote:
+> | On Sun, Apr 24, 2022 at 4:27 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+> | > On 24 April 2022 at 13:47, Graham Inggs wrote:
+> | > | On Sat, 23 Apr 2022 at 17:15, Dirk Eddelbuettel <edd at debian.org> 
+wrote:
+> | > | > so packages providing a graphics device should be rebuilt. We
+> | > | > discussed this previously (as R 4.1.0 also updated the graphics
+> | > | > device capabilities) and I still think it is not worth defining a
+> | > | > new r-api-* alike tag for this as it really only affects a good
+> | > | > handful of packages.
+> | > | 
+> | > | Please provide a list of the affected packages.
+> | > 
+> | > I would if I had one.
+> | 
+> | Easiest way to find out is to grep for calls to
+> | R_GE_checkVersionOrDie:
+> | https://github.com/search?q=org%3Acran+R_GE_checkVersionOrDie&type=code
+> 
+> +1
+> 
+> I had a similar though that it should be discoverable from code use but
+> didn't know that call.  Nice.  (And as a maintainer of packages I do of
+> course have some idea about which of those are providing graphics devices.)
+
+Yes, very nice indeed! We can use this on codesearch.debian.net [1] and get a 
+succinct list:
+
+r-cran-ragg, r-cran-vdiffr, r-cran-svglite, r-cran-magick, r-cran-tikzdevice, 
+r-cran-cairo
+
+Johannes
+
+[1] https://codesearch.debian.net/search?q=R_GE_checkVersionOrDie&perpkg=1 
+
+From tille at debian.org  Mon Apr 25 05:12:33 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 25 Apr 2022 07:12:33 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <25188.6133.155978.426646@rob.eddelbuettel.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com>
+Message-ID: <YmYtwd/8nbIiY27G@an3as.eu>
+
+Hi,
+
+Am Sat, Apr 23, 2022 at 10:15:01AM -0500 schrieb Dirk Eddelbuettel:
+> 
+> R 4.2.0 was released yesterday as scheduled.
+> 
+> Per the NEWS.Rd file [1] in the second section 'Grahphics' the first point is
+> 
+>   GRAPHICS
+> 
+>   The graphics engine version, R_GE_version, has been bumped to 15 and so
+>   packages that provide graphics devices should be reinstalled.
+> 
+> so packages providing a graphics device should be rebuilt. We discussed this
+> previously (as R 4.1.0 also updated the graphics device capabilities) and I
+> still think it is not worth defining a new r-api-* alike tag for this as it
+> really only affects a good handful of packages.
+ 
+Sorry, but its more than a good handful of packages.  Due to the removal
+of S.h the API has changed which breaks nearly all BioConductor packages
+(see bug #1009467 of r-bioc-biostrings).
+
+Please bump r-api-* since it was invented for purposes like this.
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Apr 25 07:02:26 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Apr 2022 09:02:26 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <YmYtwd/8nbIiY27G@an3as.eu>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <YmYtwd/8nbIiY27G@an3as.eu>
+Message-ID: <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com>
+
+Hi Andreas
+
+On Mon, 25 Apr 2022 at 07:12, Andreas Tille <tille at debian.org> wrote:
+> Please bump r-api-* since it was invented for purposes like this.
+
+That would require rebuilding everything.  What about adding a new
+r-ge-api-15 that can be bumped independently of r-api-*?
+
+Regards
+Graham
+
+From andreas at an3as.eu  Mon Apr 25 07:07:50 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 09:07:50 +0200
+Subject: Re: r-cran-xlsx r-cran-xlsxjars r-cran-skimr
+In-Reply-To: <CAL-m-c1AGpk9W1jFHa0WKmKJGVqKYVG0xjKdCfHREov2wZABXQ@mail.gmail.com>
+References: <CAL-m-c2-BD=P2vRwFXwD_ryL55XnNd7dQPMkrkgV_y3AuD7izA@mail.gmail.com> <CAL-m-c1AGpk9W1jFHa0WKmKJGVqKYVG0xjKdCfHREov2wZABXQ@mail.gmail.com>
+Message-ID: <YmZIxlzs46rxK3Tl@an3as.eu>
+
+Hi Eric,
+
+Am Sat, Apr 23, 2022 at 07:13:29PM -0400 schrieb Eric Brown:
+> Hi again,
+> Sorry I realize now that likely xlsxjars cannot be uploaded as is
+> because it contains binary .jar files. xlsx needs xlsxjars as a
+> dependency. I will investigate further for these ones.
+
+OK, I just realised that also xlsx contains a *.jar file.
+
+> > I was hoping that someone, at their convenience, could review
+> > following new CRAN packages, for feedback to upload if appropriate:
+> >
+> > https://salsa.debian.org/r-pkg-team/r-cran-xlsx
+> > https://salsa.debian.org/r-pkg-team/r-cran-xlsxjars
+> > https://salsa.debian.org/r-pkg-team/r-cran-skimr
+
+I've just uploaded r-cran-skimr to new after removing one documentation
+file which contains compressed JS and did some slight polishing.  Please
+inspect my commits.
+
+> > The first two I packaged because they are currently among the top 100
+> > packages downloaded from RStudio's CRAN repo. I created a small script
+> > to identify which of the top 100 packages are not in Debian
+> > (https://salsa.debian.org/ericeb/top-cran-packages).
+
+Nice.  I've added
+
+  install.packages("cranlogs")
+
+which works when called via
+
+  R_LIBS_USER="/tmp" R --no-save < top_CRAN_in_debian.R
+
+(so we do not need to package cranlogs).  I wonder whether you want to
+move that script to r-pkg-team/maintenance-utilities.
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From johannes.ranke at jrwb.de  Mon Apr 25 07:32:49 2022
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Mon, 25 Apr 2022 09:32:49 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <YmYtwd/8nbIiY27G@an3as.eu> <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com>
+Message-ID: <3051201.BFvPtcGkD5@ryz>
+
+Hi Graham,
+
+Am Montag, 25. April 2022, 09:02:26 CEST schrieb Graham Inggs:
+> Hi Andreas
+> 
+> On Mon, 25 Apr 2022 at 07:12, Andreas Tille <tille at debian.org> wrote:
+> > Please bump r-api-* since it was invented for purposes like this.
+> 
+> That would require rebuilding everything.  What about adding a new
+> r-ge-api-15 that can be bumped independently of r-api-*?
+
+there are two issues: The R Graphic API which we are discussing in this 
+thread, and the removal of S.h from r-base, which Andreas reported in another 
+thread already (and which should be discussed separately I think).
+
+Regarding graphics packages, adding a new tag has been discussed a bit on 
+another list (r-sig-debian) - maybe now is a good time that we have a list of 
+affected packages.
+
+Kind regards,
+
+Johannes
+
+From andreas at an3as.eu  Mon Apr 25 07:33:06 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 09:33:06 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <YmYtwd/8nbIiY27G@an3as.eu> <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com>
+Message-ID: <YmZOsr3nKpGq7O76@an3as.eu>
+
+Am Mon, Apr 25, 2022 at 09:02:26AM +0200 schrieb Graham Inggs:
+> On Mon, 25 Apr 2022 at 07:12, Andreas Tille <tille at debian.org> wrote:
+> > Please bump r-api-* since it was invented for purposes like this.
+> 
+> That would require rebuilding everything.  What about adding a new
+> r-ge-api-15 that can be bumped independently of r-api-*?
+
+My point was that it makes sense to do a proper transition (=
+rebuild everything) if the API is changed.
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Apr 25 08:35:57 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 10:35:57 +0200
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <3051201.BFvPtcGkD5@ryz>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <YmYtwd/8nbIiY27G@an3as.eu> <CAM8zJQutuU2pwBvTJuurAbbDC+GkyqOrWXcgo_AB0R8c=APr4g@mail.gmail.com> <3051201.BFvPtcGkD5@ryz>
+Message-ID: <YmZdbWtbFot8uCR8@an3as.eu>
+
+Hi,
+
+Am Mon, Apr 25, 2022 at 09:32:49AM +0200 schrieb Johannes Ranke:
+> 
+> > That would require rebuilding everything.  What about adding a new
+> > r-ge-api-15 that can be bumped independently of r-api-*?
+> 
+> there are two issues: The R Graphic API which we are discussing in this 
+> thread, and the removal of S.h from r-base, which Andreas reported in another 
+> thread already (and which should be discussed separately I think).
+
+I agree that we have two different issues.  However, since we need an
+r-api-* bump anyway (IMHO) we can delay the creation of r-ge-api-*
+which might be discussed if this and only this is needed.
+ 
+> Regarding graphics packages, adding a new tag has been discussed a bit on 
+> another list (r-sig-debian) - maybe now is a good time that we have a list of 
+> affected packages.
+
+That's definitely good to have anyway.
+
+Kind regards
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From johannes.ranke at jrwb.de  Mon Apr 25 09:22:11 2022
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Mon, 25 Apr 2022 11:22:11 +0200
+Subject: Removal of S.h (was: Re: R 4.2.0 suggests a rebuild of graphics packages)
+In-Reply-To: <YmZdbWtbFot8uCR8@an3as.eu>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <3051201.BFvPtcGkD5@ryz> <YmZdbWtbFot8uCR8@an3as.eu>
+Message-ID: <3440310.HGLq8k5zTr@ryz>
+
+Am Montag, 25. April 2022, 10:35:57 CEST schrieb Andreas Tille:
+> Hi,
+> 
+> Am Mon, Apr 25, 2022 at 09:32:49AM +0200 schrieb Johannes Ranke:
+> > > That would require rebuilding everything.  What about adding a new
+> > > r-ge-api-15 that can be bumped independently of r-api-*?
+> > 
+> > there are two issues: The R Graphic API which we are discussing in this
+> > thread, and the removal of S.h from r-base, which Andreas reported in
+> > another thread already (and which should be discussed separately I
+> > think).
+> I agree that we have two different issues.  However, since we need an
+> r-api-* bump anyway (IMHO) 
+
+I was not aware that you are suggesting an API bump for R 4.2.0, for me this 
+was not clear from your mail from your 13 April to debian-r.
+
+Regarding the removal of S.h, the R 4.2.0 NEWS file states:
+
+* The header S.h which has been unsupported since Jan 2016 has been
+      removed.  Use R.h instead.
+
+This suggests that R core sees this as a bug in (bioconductor) packages still 
+using S.h, and not as an API change.
+
+It seems to me, the situation being as it is, the easiest way to fix 
+bioconductor in unstable and testing is to upload the new versions scheduled 
+for April 27 before r-base migrates to testing. Not exactly clean, but bumping 
+the API now would require managing a transition and rebuilding hundreds of 
+packages that do not have an issue, right?
+
+As you mentioned, stable users will not be affected by the removal of S.h. 
+Unless they install backports from CRAN (which most R users on stable probably 
+do) and have bioconductor packages from Debian installed (which I need to 
+deprecate on the CRAN page obviously).
+
+Kind regards,
+
+Johannes
+
+> we can delay the creation of r-ge-api-*
+> which might be discussed if this and only this is needed.
+> 
+> > Regarding graphics packages, adding a new tag has been discussed a bit on
+> > another list (r-sig-debian) - maybe now is a good time that we have a list
+> > of affected packages.
+> 
+> That's definitely good to have anyway.
+> 
+> Kind regards
+> 
+>       Andreas.
+
+From andreas at an3as.eu  Mon Apr 25 09:52:42 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 11:52:42 +0200
+Subject: Re: Removal of S.h (was: Re: R 4.2.0 suggests a rebuild of graphics packages)
+In-Reply-To: <3440310.HGLq8k5zTr@ryz>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <3051201.BFvPtcGkD5@ryz> <YmZdbWtbFot8uCR8@an3as.eu> <3440310.HGLq8k5zTr@ryz>
+Message-ID: <YmZvaiePWX3f/3Kv@an3as.eu>
+
+Hi Johannes,
+
+Am Mon, Apr 25, 2022 at 11:22:11AM +0200 schrieb Johannes Ranke:
+> Am Montag, 25. April 2022, 10:35:57 CEST schrieb Andreas Tille:
+> > I agree that we have two different issues.  However, since we need an
+> > r-api-* bump anyway (IMHO) 
+> 
+> I was not aware that you are suggesting an API bump for R 4.2.0, for me this 
+> was not clear from your mail from your 13 April to debian-r.
+
+I admit I was on semi-vac and thus may be a bit sloppy with my wording.
+ 
+> Regarding the removal of S.h, the R 4.2.0 NEWS file states:
+> 
+> * The header S.h which has been unsupported since Jan 2016 has been
+>       removed.  Use R.h instead.
+> 
+> This suggests that R core sees this as a bug in (bioconductor) packages still 
+> using S.h, and not as an API change.
+
+I confirm that I see the bug in the bioconductor packages.  However, it is
+a given fact that the version bump of R to 4.2.0 makes (at least) 4 packages
+FTBFS and we have > 150 rdepends of these packages.
+
+> It seems to me, the situation being as it is, the easiest way to fix 
+> bioconductor in unstable and testing is to upload the new versions scheduled 
+> for April 27 before r-base migrates to testing. Not exactly clean, but bumping 
+> the API now would require managing a transition and rebuilding hundreds of 
+> packages that do not have an issue, right?
+
+Yes.  However, codesearch uncovers at least one non-BioC package:
+
+r-cran-locfit_1.5-9.5-1/src/local.h
+
+#ifdef SVERSION
+#include <S.h>
+typedef long int Sint;
+typedef s_object * SEXP;
+
+This is dealt with by `#ifdef SVERSION` which seems to be not set on Debian
+but I'm not sure whether this has catched all occurences.  I'm not sure what
+side effects we might meet if we do not rebuild.
+
+Kind regards 
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Apr 25 10:16:27 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Apr 2022 12:16:27 +0200
+Subject: Re: Removal of S.h (was: Re: R 4.2.0 suggests a rebuild of graphics packages)
+In-Reply-To: <3440310.HGLq8k5zTr@ryz>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <3051201.BFvPtcGkD5@ryz> <YmZdbWtbFot8uCR8@an3as.eu> <3440310.HGLq8k5zTr@ryz>
+Message-ID: <CAM8zJQtAOBN6qqvEg0N1Tejb1U9gmqaj-zzgaYGEutT-XjPPdg@mail.gmail.com>
+
+Hi Johannes
+
+On Mon, 25 Apr 2022 at 11:22, Johannes Ranke <johannes.ranke at jrwb.de> wrote:
+> Regarding the removal of S.h, the R 4.2.0 NEWS file states:
+>
+> * The header S.h which has been unsupported since Jan 2016 has been
+>       removed.  Use R.h instead.
+>
+> This suggests that R core sees this as a bug in (bioconductor) packages still
+> using S.h, and not as an API change.
+>
+> It seems to me, the situation being as it is, the easiest way to fix
+> bioconductor in unstable and testing is to upload the new versions scheduled
+> for April 27 before r-base migrates to testing. Not exactly clean, but bumping
+> the API now would require managing a transition and rebuilding hundreds of
+> packages that do not have an issue, right?
+
+Agreed, I don't think we want or need an r-api-* bump for this change.
+Besides, r-base will not be allowed to migrate due to autopkgtest
+failures anyway, so we will just have to wait for the r-bioc-*
+transition.
+
+> > we can delay the creation of r-ge-api-*
+> > which might be discussed if this and only this is needed.
+
+Why delay the creation of r-ge-api-*?  If it will help future
+transitions, I think now would be a good time to add it, seeing we
+already have to investigate which packages will need it.
+
+Regards
+Graham
+
+From andreas at an3as.eu  Mon Apr 25 10:24:53 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 12:24:53 +0200
+Subject: Re: Removal of S.h (was: Re: R 4.2.0 suggests a rebuild of graphics packages)
+In-Reply-To: <CAM8zJQtAOBN6qqvEg0N1Tejb1U9gmqaj-zzgaYGEutT-XjPPdg@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <3051201.BFvPtcGkD5@ryz> <YmZdbWtbFot8uCR8@an3as.eu> <3440310.HGLq8k5zTr@ryz> <CAM8zJQtAOBN6qqvEg0N1Tejb1U9gmqaj-zzgaYGEutT-XjPPdg@mail.gmail.com>
+Message-ID: <YmZ29RRK1Ksra28B@an3as.eu>
+
+Hi Graham,
+
+Am Mon, Apr 25, 2022 at 12:16:27PM +0200 schrieb Graham Inggs:
+> > It seems to me, the situation being as it is, the easiest way to fix
+> > bioconductor in unstable and testing is to upload the new versions scheduled
+> > for April 27 before r-base migrates to testing. Not exactly clean, but bumping
+> > the API now would require managing a transition and rebuilding hundreds of
+> > packages that do not have an issue, right?
+> 
+> Agreed, I don't think we want or need an r-api-* bump for this change.
+> Besides, r-base will not be allowed to migrate due to autopkgtest
+> failures anyway, so we will just have to wait for the r-bioc-*
+> transition.
+
+Fine for me.
+ 
+> > > we can delay the creation of r-ge-api-*
+> > > which might be discussed if this and only this is needed.
+> 
+> Why delay the creation of r-ge-api-*?  If it will help future
+> transitions, I think now would be a good time to add it, seeing we
+> already have to investigate which packages will need it.
+
+Good point.  I'd like to stress that I'm not against the r-ge-api-* ...
+specifically if we decide that we do not want to bump r-api-* it seems
+to be sensible to do it right now. 
+
+Kind regards
+
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Apr 25 10:26:40 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Apr 2022 12:26:40 +0200
+Subject: Upcoming BioC transition (Was: Removal of S.h)
+In-Reply-To: <CAM8zJQtAOBN6qqvEg0N1Tejb1U9gmqaj-zzgaYGEutT-XjPPdg@mail.gmail.com>
+References: <25188.6133.155978.426646@rob.eddelbuettel.com> <3051201.BFvPtcGkD5@ryz> <YmZdbWtbFot8uCR8@an3as.eu> <3440310.HGLq8k5zTr@ryz> <CAM8zJQtAOBN6qqvEg0N1Tejb1U9gmqaj-zzgaYGEutT-XjPPdg@mail.gmail.com>
+Message-ID: <YmZ3YF+NUTRjaXvV@an3as.eu>
+
+Hi Dylan,
+
+would you mind organising the transition as in previous cases?
+
+Kind regards
+
+      Andreas.
+
+Am Mon, Apr 25, 2022 at 12:16:27PM +0200 schrieb Graham Inggs:
+> Hi Johannes
+> 
+> On Mon, 25 Apr 2022 at 11:22, Johannes Ranke <johannes.ranke at jrwb.de> wrote:
+> > Regarding the removal of S.h, the R 4.2.0 NEWS file states:
+> >
+> > * The header S.h which has been unsupported since Jan 2016 has been
+> >       removed.  Use R.h instead.
+> >
+> > This suggests that R core sees this as a bug in (bioconductor) packages still
+> > using S.h, and not as an API change.
+> >
+> > It seems to me, the situation being as it is, the easiest way to fix
+> > bioconductor in unstable and testing is to upload the new versions scheduled
+> > for April 27 before r-base migrates to testing. Not exactly clean, but bumping
+> > the API now would require managing a transition and rebuilding hundreds of
+> > packages that do not have an issue, right?
+> 
+> Agreed, I don't think we want or need an r-api-* bump for this change.
+> Besides, r-base will not be allowed to migrate due to autopkgtest
+> failures anyway, so we will just have to wait for the r-bioc-*
+> transition.
+> 
+> > > we can delay the creation of r-ge-api-*
+> > > which might be discussed if this and only this is needed.
+> 
+> Why delay the creation of r-ge-api-*?  If it will help future
+> transitions, I think now would be a good time to add it, seeing we
+> already have to investigate which packages will need it.
+> 
+> Regards
+> Graham
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Sat Apr 30 07:31:08 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sat, 30 Apr 2022 13:01:08 +0530
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+Message-ID: <YmzlvJoAs1yEzWo3@debian>
+
+Dirk wrote:
+> R 4.2.0 was released yesterday as scheduled.
+>
+> Per the NEWS.Rd file [1] in the second section 'Grahphics' the first point is
+>
+>  GRAPHICS
+>
+>  The graphics engine version, R_GE_version, has been bumped to 15 and so
+>  packages that provide graphics devices should be reinstalled.
+>
+> so packages providing a graphics device should be rebuilt.
+
+I will try to get stuff rebuilt and help complete the transition.
+If you have plans to upload a new revsion of R meanwhile, give a
+heads up before you do so, it'd otherwise get stuck in the middle of
+ongoing rebuilds.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+

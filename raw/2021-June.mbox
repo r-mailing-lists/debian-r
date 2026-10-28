@@ -1,0 +1,449 @@
+From plessy at debian.org  Wed Jun  9 13:08:42 2021
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 9 Jun 2021 22:08:42 +0900
+Subject: License of gpclib
+In-Reply-To: <20210518190959.GF6897@an3as.eu>
+References: <20210518190959.GF6897@an3as.eu>
+Message-ID: <20210609130842.GA2726@bubu.plessy.net>
+
+Dear Toby,
+
+I am contacting you as you were involved in commercial licensing of the
+GPC library.
+
+https://web.archive.org/web/20200131020441/http://www.cs.man.ac.uk/~toby/alan/software/
+
+Although the University of Manchester does not distribute it anymore, it
+is still used in the R package gpclib, where the University is listed
+as copyright holder with a license that prohibits commercial use.
+
+This is unfortunate for Free software projects such as Debian, as we
+require that Free software licenses do not discriminate fields of
+endeavor, including commercial use.  However, we would be keen to
+redistribute the gpclib if it were Free, and it would allow us to
+package some software that depend on it.
+
+Is there a way you could help us to get the gpclib relicensed by the
+University of Mancheter under a Free license ?
+
+(CCed: the Debian R mailing list.  Please note it is publicly archived.)
+
+Best regards,
+
+Charles Plessy
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,           https://mastodon.technology/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From dtorrance at piedmont.edu  Mon Jun 14 11:32:56 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Mon, 14 Jun 2021 11:32:56 +0000
+Subject: Interested in joining R team
+Message-ID: <87eed4d6la.fsf@piedmont.edu>
+
+Hello!
+
+I would like to join the R team, as I'm interested in packaging m2r [1] and its dependencies for Debian.  I've requested access on Salsa.  My username is "dtorrance".
+
+Thanks!
+Doug
+
+[1] https://github.com/coneill-math/m2r
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at nileshpatra.info  Mon Jun 14 13:25:13 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Mon, 14 Jun 2021 18:55:13 +0530
+Subject: Re: Interested in joining R team
+In-Reply-To: <87eed4d6la.fsf@piedmont.edu>
+References: <87eed4d6la.fsf@piedmont.edu>
+Message-ID: <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info>
+
+Hi Doug,
+
+On 6/14/21 5:02 PM, Torrance, Douglas wrote:
+> Hello!
+> 
+> I would like to join the R team, as I'm interested in packaging m2r [1] and its dependencies for Debian.  I've requested access on Salsa.  My username is "dtorrance".
+
+Added, welcome! :-)
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From dtorrance at piedmont.edu  Mon Jun 14 14:25:10 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Mon, 14 Jun 2021 14:25:10 +0000
+Subject: Re: Interested in joining R team
+In-Reply-To: <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info>
+Message-ID: <87bl88cym2.fsf@piedmont.edu>
+
+On Mon 14 Jun 2021 09:25:13 AM EDT, Nilesh Patra wrote:
+> Hi Doug,
+>
+> On 6/14/21 5:02 PM, Torrance, Douglas wrote:
+> > Hello!
+> >
+> > I would like to join the R team, as I'm interested in packaging m2r [1] and its dependencies for Debian.  I've requested access on Salsa.  My username is "dtorrance".
+>
+>
+> Added, welcome! :-)
+
+Wonderful, thank you!
+
+I've pushed my first two R packages to Salsa:
+
+https://salsa.debian.org/r-pkg-team/r-cran-sets
+https://salsa.debian.org/r-pkg-team/r-cran-orthopolynom
+
+Would anyone be able to review/sponsor?  Both are NEW.
+
+Thanks!
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at nileshpatra.info  Mon Jun 14 19:47:51 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Tue, 15 Jun 2021 01:17:51 +0530
+Subject: Re: Interested in joining R team
+In-Reply-To: <87bl88cym2.fsf@piedmont.edu>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu>
+Message-ID: <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info>
+
+On 6/14/21 7:55 PM, Torrance, Douglas wrote:
+> I've pushed my first two R packages to Salsa:
+> 
+> https://salsa.debian.org/r-pkg-team/r-cran-sets
+
+There's a sets.pdf in inst/doc
+I do not feel too good about this, and my hunch is that FTP masters might not like it.
+Since it seems to be generated from inst/doc/sets.Rnw, can you repack the pdf and generate during build?
+
+> https://salsa.debian.org/r-pkg-team/r-cran-orthopolynom
+
+Why is the Architecture set to :any in d/control?
+I do not see any compilation during build, nor does DESCRIPTION file give any hints about compilation
+Should this be all instead?
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From dtorrance at piedmont.edu  Tue Jun 15 11:43:41 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Tue, 15 Jun 2021 11:43:41 +0000
+Subject: Re: Interested in joining R team
+In-Reply-To: <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu> <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info>
+Message-ID: <87zgvrbbfh.fsf@piedmont.edu>
+
+On Mon 14 Jun 2021 03:47:51 PM EDT, Nilesh Patra wrote:
+> On 6/14/21 7:55 PM, Torrance, Douglas wrote:
+> > I've pushed my first two R packages to Salsa:
+> >
+> > https://salsa.debian.org/r-pkg-team/r-cran-sets
+>
+>
+> There's a sets.pdf in inst/doc
+> I do not feel too good about this, and my hunch is that FTP masters might not like it.
+> Since it seems to be generated from inst/doc/sets.Rnw, can you repack the pdf and generate during build?
+
+Done -- the pdf is now re-generated during build using dh_vignette.
+
+By "repack", did you also mean to remove it from the tarball using d/copyright?  Is that necessary since the source is present?
+
+> > https://salsa.debian.org/r-pkg-team/r-cran-orthopolynom
+>
+>
+> Why is the Architecture set to :any in d/control?
+> I do not see any compilation during build, nor does DESCRIPTION file give any hints about compilation
+> Should this be all instead?
+
+Indeed, it should be!  It's fixed now.
+
+Thanks for the reviews!
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at nileshpatra.info  Tue Jun 15 13:25:49 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Tue, 15 Jun 2021 18:55:49 +0530
+Subject: Re: Interested in joining R team
+In-Reply-To: <87zgvrbbfh.fsf@piedmont.edu>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu> <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info> <87zgvrbbfh.fsf@piedmont.edu>
+Message-ID: <7b901038-9e49-9707-78b5-19bcdefe5e12@nileshpatra.info>
+
+On 6/15/21 5:13 PM, Torrance, Douglas wrote:
+> On Mon 14 Jun 2021 03:47:51 PM EDT, Nilesh Patra wrote:
+>> On 6/14/21 7:55 PM, Torrance, Douglas wrote:
+>>> I've pushed my first two R packages to Salsa:
+>>>
+>>> https://salsa.debian.org/r-pkg-team/r-cran-sets
+>>
+>> There's a sets.pdf in inst/doc
+>> I do not feel too good about this, and my hunch is that FTP masters might not like it.
+>> Since it seems to be generated from inst/doc/sets.Rnw, can you repack the pdf and generate during build?
+> 
+> Done -- the pdf is now re-generated during build using dh_vignette.
+
+Awesome!
+
+> By "repack", did you also mean to remove it from the tarball using d/copyright?
+
+Right
+
+> Is that necessary since the source is present?
+
+Not necessary, but since you aren't installing the vendored pdf, and you are generating the pdf on your own and installing that one,
+the vendored pdf (332K in space) in the source package is useless, and it is better if we remove unwanted source binaries.
+
+Maintaining it should be cheap, and I'd recommend getting rid of it simply, what do you think?
+ 
+>>> https://salsa.debian.org/r-pkg-team/r-cran-orthopolynom
+>>
+>> Why is the Architecture set to :any in d/control?
+>> I do not see any compilation during build, nor does DESCRIPTION file give any hints about compilation
+>> Should this be all instead?
+> 
+> Indeed, it should be!  It's fixed now.
+
+Uploaded this :-)
+ 
+> Thanks for the reviews!
+
+Thanks for your work!
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From dtorrance at piedmont.edu  Wed Jun 16 10:09:56 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Wed, 16 Jun 2021 10:09:56 +0000
+Subject: Re: Interested in joining R team
+In-Reply-To: <7b901038-9e49-9707-78b5-19bcdefe5e12@nileshpatra.info>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu> <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info> <87zgvrbbfh.fsf@piedmont.edu> <7b901038-9e49-9707-78b5-19bcdefe5e12@nileshpatra.info>
+Message-ID: <87o8c6aznx.fsf@piedmont.edu>
+
+On Tue 15 Jun 2021 09:25:49 AM EDT, Nilesh Patra wrote:
+> On 6/15/21 5:13 PM, Torrance, Douglas wrote:
+> > On Mon 14 Jun 2021 03:47:51 PM EDT, Nilesh Patra wrote:
+> > > On 6/14/21 7:55 PM, Torrance, Douglas wrote:
+> > > > I've pushed my first two R packages to Salsa:
+> > > >
+> > > > https://salsa.debian.org/r-pkg-team/r-cran-sets
+> > >
+> > >
+> > > There's a sets.pdf in inst/doc
+> > > I do not feel too good about this, and my hunch is that FTP masters might not like it.
+> > > Since it seems to be generated from inst/doc/sets.Rnw, can you repack the pdf and generate during build?
+> >
+> >
+> > Done -- the pdf is now re-generated during build using dh_vignette.
+>
+>
+> Awesome!
+>
+> > By "repack", did you also mean to remove it from the tarball using d/copyright?
+>
+>
+> Right
+>
+> > Is that necessary since the source is present?
+>
+>
+> Not necessary, but since you aren't installing the vendored pdf, and you are generating the pdf on your own and installing that one,
+> the vendored pdf (332K in space) in the source package is useless, and it is better if we remove unwanted source binaries.
+>
+> Maintaining it should be cheap, and I'd recommend getting rid of it simply, what do you think?
+
+That makes sense.  I've pushed a few more commits that do this.
+
+> > > > https://salsa.debian.org/r-pkg-team/r-cran-orthopolynom
+> > >
+> > >
+> > > Why is the Architecture set to :any in d/control?
+> > > I do not see any compilation during build, nor does DESCRIPTION file give any hints about compilation
+> > > Should this be all instead?
+> >
+> >
+> > Indeed, it should be!  It's fixed now.
+>
+>
+> Uploaded this :-)
+
+Thank you!
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at nileshpatra.info  Wed Jun 16 13:27:42 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Wed, 16 Jun 2021 18:57:42 +0530
+Subject: Re: Interested in joining R team
+In-Reply-To: <87o8c6aznx.fsf@piedmont.edu>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu> <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info> <87zgvrbbfh.fsf@piedmont.edu> <7b901038-9e49-9707-78b5-19bcdefe5e12@nileshpatra.info> <87o8c6aznx.fsf@piedmont.edu>
+Message-ID: <4f5100fe-34fa-d8d7-0862-a87dfba8cf30@nileshpatra.info>
+
+On 6/16/21 3:39 PM, Torrance, Douglas wrote:
+> [..]
+>> Not necessary, but since you aren't installing the vendored pdf, and you are generating the pdf on your own and installing that one,
+>> the vendored pdf (332K in space) in the source package is useless, and it is better if we remove unwanted source binaries.
+>>
+>> Maintaining it should be cheap, and I'd recommend getting rid of it simply, what do you think?
+> 
+> That makes sense.  I've pushed a few more commits that do this.
+
+Great stuff, uploaded.
+
+Thank you for your work :-))
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Thu Jun 17 11:58:51 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 17 Jun 2021 13:58:51 +0200
+Subject: Re: Interested in joining R team
+In-Reply-To: <87o8c6aznx.fsf@piedmont.edu>
+References: <87eed4d6la.fsf@piedmont.edu> <cab6908d-333d-203e-3fcb-c6b9a4ce301f@nileshpatra.info> <87bl88cym2.fsf@piedmont.edu> <3e6a7236-09bd-f8ee-4e13-f96a8d8d1e78@nileshpatra.info> <87zgvrbbfh.fsf@piedmont.edu> <7b901038-9e49-9707-78b5-19bcdefe5e12@nileshpatra.info> <87o8c6aznx.fsf@piedmont.edu>
+Message-ID: <20210617115850.GC881@an3as.eu>
+
+On Wed, Jun 16, 2021 at 10:09:56AM +0000, Torrance, Douglas wrote:
+> > > By "repack", did you also mean to remove it from the tarball using d/copyright?
+> > 
+> > Right
+> > 
+> > > Is that necessary since the source is present?
+
+I usually recommend this in general since it simplifies ftpmaster work /
+discussion with ftpmaster.
+
+Thanks also from me for your work
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From dtorrance at piedmont.edu  Fri Jun 18 14:42:31 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Fri, 18 Jun 2021 14:42:31 +0000
+Subject: RFS: r-cran-mathjaxr
+Message-ID: <87czsjb5f2.fsf@piedmont.edu>
+
+Control: tags -1 pending
+
+I've finished packaging mathjaxr, which lets R package authors use MathJax for displaying math in html documentation.  I patched it to use the Debian libjs-mathjax package instead of upstream's embedded copy of MathJax.
+
+Would anyone be able to review/sponsor?
+https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr
+
+Thanks!
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at nileshpatra.info  Fri Jun 18 16:57:22 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Fri, 18 Jun 2021 22:27:22 +0530
+Subject: Re: RFS: r-cran-mathjaxr
+In-Reply-To: <87czsjb5f2.fsf@piedmont.edu>
+References: <87czsjb5f2.fsf@piedmont.edu>
+Message-ID: <02007764-0b7a-6492-5dd6-763e7d7b30b5@nileshpatra.info>
+
+Hi Doug,
+
+On 6/18/21 8:12 PM, Torrance, Douglas wrote:
+> Control: tags -1 pending
+> 
+> I've finished packaging mathjaxr, which lets R package authors use MathJax for displaying math in html documentation.  I patched it to use the Debian libjs-mathjax package instead of upstream's embedded copy of MathJax.
+> 
+> Would anyone be able to review/sponsor?
+> https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr
+
+Argh! Looks like this is already in the archive, see here[1]
+and the original ITP[2]
+Looks like we had a redundant packaging effort unfortunately, but no worries :)
+Please consider to close your ITP for this one, and let me know if it is OK for me
+to remove the corresponding repository from salsa
+
+[1]: https://tracker.debian.org/pkg/r-cran-mathjaxr
+[2]: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=975611
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From dtorrance at piedmont.edu  Sat Jun 19 10:42:44 2021
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Sat, 19 Jun 2021 10:42:44 +0000
+Subject: Re: RFS: r-cran-mathjaxr
+In-Reply-To: <02007764-0b7a-6492-5dd6-763e7d7b30b5@nileshpatra.info>
+References: <87czsjb5f2.fsf@piedmont.edu> <02007764-0b7a-6492-5dd6-763e7d7b30b5@nileshpatra.info>
+Message-ID: <87v96a9lus.fsf@piedmont.edu>
+
+On Fri 18 Jun 2021 12:57:22 PM EDT, Nilesh Patra wrote:
+> On 6/18/21 8:12 PM, Torrance, Douglas wrote:
+> > I've finished packaging mathjaxr, which lets R package authors use MathJax for displaying math in html documentation.  I patched it to use the Debian libjs-mathjax package instead of upstream's embedded copy of MathJax.
+> >
+> > Would anyone be able to review/sponsor?
+> > https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr
+>
+>
+> Argh! Looks like this is already in the archive, see here[1]
+> and the original ITP[2]
+
+Oh my goodness -- how embarrassing!  I must have added this to my TODO list before the original was uploaded and never bothered to double check before I started working on it...
+
+> Looks like we had a redundant packaging effort unfortunately, but no worries :)
+> Please consider to close your ITP for this one, and let me know if it is OK for me
+> to remove the corresponding repository from salsa
+
+Yes, please do.  Thank you!
+
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+

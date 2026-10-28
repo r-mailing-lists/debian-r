@@ -1,0 +1,771 @@
+From merkys at debian.org  Wed Mar  3 13:57:33 2021
+From: merkys at debian.org (Andrius Merkys)
+Date: Wed, 3 Mar 2021 15:57:33 +0200
+Subject: Joining the r-pkg-team
+Message-ID: <25d804a7-0a65-2390-eeb3-4c4d09cea969@debian.org>
+
+Hello,
+
+I would like to package some R packages, and maintain them in the
+r-pkg-team. I would need Salsa access for handle 'merkys' to create new
+repositories (request pending). I am familiar with package maintenance
+in Debian Med and Debian Science teams, and have skimmed through the RFC
+for Debian R Policy [1].
+
+Please CC me, I am not subscribed.
+
+[1] https://lists.debian.org/debian-devel/2003/12/msg02332.html
+
+Best wishes,
+Andrius
+
+From tille at debian.org  Wed Mar  3 14:56:27 2021
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 3 Mar 2021 15:56:27 +0100
+Subject: Re: Joining the r-pkg-team
+In-Reply-To: <25d804a7-0a65-2390-eeb3-4c4d09cea969@debian.org>
+References: <25d804a7-0a65-2390-eeb3-4c4d09cea969@debian.org>
+Message-ID: <20210303145627.GX12373@an3as.eu>
+
+Hi Andrius,
+
+On Wed, Mar 03, 2021 at 03:57:33PM +0200, Andrius Merkys wrote:
+> I would like to package some R packages, and maintain them in the
+> r-pkg-team. I would need Salsa access for handle 'merkys' to create new
+> repositories (request pending).
+
+Welcome on board. ;-)
+
+> I am familiar with package maintenance
+> in Debian Med and Debian Science teams, and have skimmed through the RFC
+> for Debian R Policy [1].
+
+I guess this RFC is a bit outdated and we are lacking a good starting
+howto.  You are kindly invited to read throught this thread:
+
+    https://lists.debian.org/debian-r/2021/02/msg00010.html
+
+It contains some discusion about semi-automated tools which I would
+strongly recommend to use for R packages.
+
+> Please CC me, I am not subscribed.
+
+CCed but I would recommend subscribing this relatively low volume list.
+
+Kind regards
+
+      Andreas.
+ 
+> [1] https://lists.debian.org/debian-devel/2003/12/msg02332.html
+ 
+
+-- 
+http://fam-tille.de
+
+From merkys at debian.org  Wed Mar  3 15:23:42 2021
+From: merkys at debian.org (Andrius Merkys)
+Date: Wed, 3 Mar 2021 17:23:42 +0200
+Subject: Re: Joining the r-pkg-team
+In-Reply-To: <20210303145627.GX12373@an3as.eu>
+References: <25d804a7-0a65-2390-eeb3-4c4d09cea969@debian.org> <20210303145627.GX12373@an3as.eu>
+Message-ID: <d20c5801-f176-e4e1-2d33-0277bbfddb94@debian.org>
+
+Hi Andreas,
+
+On 2021-03-03 16:56, Andreas Tille wrote:
+> On Wed, Mar 03, 2021 at 03:57:33PM +0200, Andrius Merkys wrote:
+>> I would like to package some R packages, and maintain them in the
+>> r-pkg-team. I would need Salsa access for handle 'merkys' to create new
+>> repositories (request pending).
+> 
+> Welcome on board. ;-)
+
+Thanks! :)
+
+>> I am familiar with package maintenance
+>> in Debian Med and Debian Science teams, and have skimmed through the RFC
+>> for Debian R Policy [1].
+> 
+> I guess this RFC is a bit outdated and we are lacking a good starting
+> howto.  You are kindly invited to read throught this thread:
+> 
+>     https://lists.debian.org/debian-r/2021/02/msg00010.html
+> 
+> It contains some discusion about semi-automated tools which I would
+> strongly recommend to use for R packages.
+
+Thanks for a pointer - my original intent was already to use dh-r for
+packaging, happy to read more about it.
+
+>> Please CC me, I am not subscribed.
+> 
+> CCed but I would recommend subscribing this relatively low volume list.
+
+Subscribed!
+
+>> [1] https://lists.debian.org/debian-devel/2003/12/msg02332.html
+
+Best,
+Andrius
+
+From andreas at an3as.eu  Mon Mar  8 15:43:26 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 8 Mar 2021 16:43:26 +0100
+Subject: Re: Bug#984702: r-cran-effectsize: autopkgtest regression
+In-Reply-To: <CAM8zJQuX0mgkP6JaMFfzW_A3pqpyiUkfNB1yF0iT6sQDOy9_1g@mail.gmail.com>
+References: <CAM8zJQuX0mgkP6JaMFfzW_A3pqpyiUkfNB1yF0iT6sQDOy9_1g@mail.gmail.com>
+Message-ID: <20210308154326.GV12373@an3as.eu>
+
+Hi,
+
+it would be great if someone could have a look at this.
+
+I can not work on this issue until next week.
+
+Kind regards
+
+        Andreas.
+
+On Sun, Mar 07, 2021 at 02:28:17PM +0200, Graham Inggs wrote:
+> Source: r-cran-effectsize
+> Version: 0.4.3-1
+> Severity: serious
+> Tags: bullseye sid
+> X-Debbugs-CC: debian-ci at lists.debian.org
+> User: debian-ci at lists.debian.org
+> Usertags: regression
+> 
+> Hi Maintainer
+> 
+> Since r-cran-rstanarm has migrated to testing, the autopkgtests of
+> r-cran-effectsize are succeeding again on amd64 and armhf.
+> Unfortunately they have regressed on arm64, i386, ppc64el and s390x
+> [1], where they succeeded in the past.  I've copied the output below,
+> which is the same on all affected architectures.
+> 
+> Regards
+> Graham
+> 
+> 
+> [1] https://ci.debian.net/packages/r/r-cran-effectsize/
+> 
+> 
+> ══ Failed tests ════════════════════════════════════════════════════════════════
+> ── Failure (test-standardize_parameters.R:94:5):
+> standardize_parameters (lm with ci) ──
+> standardize_parameters(m0, method = "refit")[[2]][-1] (`actual`) not
+> equal to standardize_parameters(m0, method = "smart")[[2]][-1]
+> (`expected`).
+> 
+>   `actual`: -0.74 0.43
+> `expected`: -0.74 0.42
+> ── Failure (test-standardize_parameters.R:98:5):
+> standardize_parameters (lm with ci) ──
+> standardize_parameters(m0, method = "refit", two_sd = TRUE)[[2]][-1]
+> (`actual`) not equal to standardize_parameters(m0, method = "smart",
+> two_sd = TRUE)[[2]][-1] (`expected`).
+> 
+>   `actual`: -1.48 0.43
+> `expected`: -1.48 0.42
+> 
+> [ FAIL 2 | WARN 7 | SKIP 5 | PASS 427 ]
+> Error: Test failures
+> Execution halted
+> autopkgtest [15:53:57]: test run-unit-test: -----------------------]
+> autopkgtest [15:53:57]: test run-unit-test:  - - - - - - - - - -
+> results - - - - - - - - - -
+> run-unit-test        FAIL non-zero exit status 1
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Tue Mar  9 08:50:24 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 9 Mar 2021 10:50:24 +0200
+Subject: Re: Bug#984702: r-cran-effectsize: autopkgtest regression
+In-Reply-To: <20210308154326.GV12373@an3as.eu>
+References: <CAM8zJQuX0mgkP6JaMFfzW_A3pqpyiUkfNB1yF0iT6sQDOy9_1g@mail.gmail.com> <20210308154326.GV12373@an3as.eu>
+Message-ID: <CAM8zJQsGsF3mCRsvKfTH33JSb2ZSV1U4sbY9Wx=uLKmd4U_inQ@mail.gmail.com>
+
+Hi Andreas
+
+On Mon, 8 Mar 2021 at 17:43, Andreas Tille <andreas at an3as.eu> wrote:
+> it would be great if someone could have a look at this.
+
+I have a fix.  I will upload shortly.
+
+Regards
+Graham
+
+From tille at debian.org  Mon Mar 15 12:32:16 2021
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 15 Mar 2021 13:32:16 +0100
+Subject: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+Message-ID: <20210315123216.GH28055@an3as.eu>
+
+Hi,
+
+the Debian R packaging team has created Debian packages of oligoClasses.
+When running the test suite I get:
+
+...
+Executing test function test_CopyNumberSet_construction  ... Loading required package: pd.mapping50k.hind240
+Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+Checking to see if your internet connection works...
+You do not have write access to '/usr/local/lib/R/site-library'.
+Timing stopped at: 0.077 0.019 0.899
+Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+ done successfully.
+Executing test function test_dataExamples  ...  done successfully.
+Executing test function test_GenomeAnnotatedDataFrame_construction  ... Loading required package: pd.mapping50k.hind240
+ done successfully.
+Executing test function test_GenomeAnnotatedDataFrameWithFF  ... Loading required package: pd.mapping50k.hind240
+Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+Checking to see if your internet connection works...
+You do not have write access to '/usr/local/lib/R/site-library'.
+Timing stopped at: 0.148 0.001 0.566
+Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+In addition: Warning message:
+In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
+  there is no package called ‘pd.mapping50k.hind240’
+ done successfully.
+Executing test function test_oligoSnpSet_construction  ... Loading required package: pd.mapping50k.hind240
+...
+
+When running the test as root it passes successfully but I think
+tests should not touch /usr in general.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From merkys at debian.org  Mon Mar 15 13:18:21 2021
+From: merkys at debian.org (Andrius Merkys)
+Date: Mon, 15 Mar 2021 15:18:21 +0200
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <20210315123216.GH28055@an3as.eu>
+References: <20210315123216.GH28055@an3as.eu>
+Message-ID: <98029a4d-c060-ed40-bc43-090cc58d8153@debian.org>
+
+Hi,
+
+On 2021-03-15 14:32, Andreas Tille wrote:
+> Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+> Checking to see if your internet connection works...
+
+[snip]
+
+> In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
+>   there is no package called ‘pd.mapping50k.hind240’
+
+Is it OK for test suites to download R libraries from network and
+install them? Maybe this could be replaced by Debian-packaged R library?
+
+Best,
+Andrius
+
+From andreas at an3as.eu  Mon Mar 15 16:32:45 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 15 Mar 2021 17:32:45 +0100
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com>
+References: <20210315123216.GH28055@an3as.eu> <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com>
+Message-ID: <20210315163245.GJ28055@an3as.eu>
+
+Hi Benilton,
+
+thank you for your quick response.
+
+On Mon, Mar 15, 2021 at 11:46:39AM -0300, Benilton Carvalho wrote:
+> Hi Andreas,
+> 
+> It seems to me that the only reason the code attempts to write on
+> /usr/local/lib/R/site-library is because that's where the package (is
+> being/was) installed and that's an option made by the user.
+
+That's correct in some way:  Debian packages will install packages under
+/usr.  If a user installs the R package manually for sure permissions
+for the target location exist automatically.  But this is not the case
+if the sysadmin installs the Debian package.  IMHO it is not a good idea
+to mix test data with production code - no matter whether it is
+technically possible by user permissions or not.
+
+> I might be
+> wrong though, given that this is code that has been stable for almost 10
+> years now.
+
+May be since the setup that the user who wants to run the test suite
+has not permissions to write to the installation location was never
+tested.
+
+> What's the common practice among the packages that pass the
+> tests under the Debian framework?
+
+I have no experience with RUnit tests that are downloading data from
+remote.  For tests based on testthat the whole test suite is copied to
+/tmp/SOME_TEST_DIR and there the user is free to create new files.  If
+there is an option to copy the testsuite somewhere else and run RUnit
+there this would be an option.
+
+> Thank you so much for reaching out,
+
+You are welcome and thanks for your quick response
+
+    Andreas.
+ 
+> benilton
+> 
+> Em seg., 15 de mar. de 2021 às 09:32, Andreas Tille <tille at debian.org>
+> escreveu:
+> 
+> > Hi,
+> >
+> > the Debian R packaging team has created Debian packages of oligoClasses.
+> > When running the test suite I get:
+> >
+> > ...
+> > Executing test function test_CopyNumberSet_construction  ... Loading
+> > required package: pd.mapping50k.hind240
+> > Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+> > Checking to see if your internet connection works...
+> > You do not have write access to '/usr/local/lib/R/site-library'.
+> > Timing stopped at: 0.077 0.019 0.899
+> > Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+> >  done successfully.
+> > Executing test function test_dataExamples  ...  done successfully.
+> > Executing test function test_GenomeAnnotatedDataFrame_construction  ...
+> > Loading required package: pd.mapping50k.hind240
+> >  done successfully.
+> > Executing test function test_GenomeAnnotatedDataFrameWithFF  ... Loading
+> > required package: pd.mapping50k.hind240
+> > Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+> > Checking to see if your internet connection works...
+> > You do not have write access to '/usr/local/lib/R/site-library'.
+> > Timing stopped at: 0.148 0.001 0.566
+> > Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+> > In addition: Warning message:
+> > In library(package, lib.loc = lib.loc, character.only = TRUE,
+> > logical.return = TRUE,  :
+> >   there is no package called ‘pd.mapping50k.hind240’
+> >  done successfully.
+> > Executing test function test_oligoSnpSet_construction  ... Loading
+> > required package: pd.mapping50k.hind240
+> > ...
+> >
+> >
+> > When running the test as root it passes successfully but I think
+> > tests should not touch /usr in general.
+> >
+> > Kind regards
+> >
+> >       Andreas.
+> >
+> >
+> > --
+> > http://fam-tille.de
+> >
+
+-- 
+http://fam-tille.de
+
+From benilton at unicamp.br  Mon Mar 15 17:44:36 2021
+From: benilton at unicamp.br (Benilton Carvalho)
+Date: Mon, 15 Mar 2021 14:44:36 -0300
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <20210315163245.GJ28055@an3as.eu>
+References: <20210315123216.GH28055@an3as.eu> <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com> <20210315163245.GJ28055@an3as.eu>
+Message-ID: <CANcD+Y1+Run0yUwanEkq+NhVrmpF3Boy+66ZfSEd0szxOrFB7g@mail.gmail.com>
+
+Andreas,
+
+I understand your point and I'll analyze the code looking for a solution...
+
+The issue seems to come from the fact that the test depends on the pd.mapping50k.hind240 bioc package, which wasn't available... Then, an automatic download process starts and doesn't write to the user-specific libpath, but to the system-wide libpath, instead. When we wrote this code, we expected that the user would be able to write to .libPaths()[1] . Maybe there is a canonical way of handling this?
+
+If you have suggestions, please let me know... In the meantime, I'll try to solve this without a circular dependency...
+
+benilton
+
+Em seg., 15 de mar. de 2021 às 13:32, Andreas Tille <andreas at an3as.eu> escreveu:
+
+> Hi Benilton,
+>
+>
+>
+> thank you for your quick response.
+>
+>
+>
+> On Mon, Mar 15, 2021 at 11:46:39AM -0300, Benilton Carvalho wrote:
+>
+> > Hi Andreas,
+>
+> >
+>
+> > It seems to me that the only reason the code attempts to write on
+>
+> > /usr/local/lib/R/site-library is because that's where the package (is
+>
+> > being/was) installed and that's an option made by the user.
+>
+>
+>
+> That's correct in some way:  Debian packages will install packages under
+>
+> /usr.  If a user installs the R package manually for sure permissions
+>
+> for the target location exist automatically.  But this is not the case
+>
+> if the sysadmin installs the Debian package.  IMHO it is not a good idea
+>
+> to mix test data with production code - no matter whether it is
+>
+> technically possible by user permissions or not.
+>
+>
+>
+> > I might be
+>
+> > wrong though, given that this is code that has been stable for almost 10
+>
+> > years now.
+>
+>
+>
+> May be since the setup that the user who wants to run the test suite
+>
+> has not permissions to write to the installation location was never
+>
+> tested.
+>
+>
+>
+> > What's the common practice among the packages that pass the
+>
+> > tests under the Debian framework?
+>
+>
+>
+> I have no experience with RUnit tests that are downloading data from
+>
+> remote.  For tests based on testthat the whole test suite is copied to
+>
+> /tmp/SOME_TEST_DIR and there the user is free to create new files.  If
+>
+> there is an option to copy the testsuite somewhere else and run RUnit
+>
+> there this would be an option.
+>
+>
+>
+> > Thank you so much for reaching out,
+>
+>
+>
+> You are welcome and thanks for your quick response
+>
+>
+>
+>     Andreas.
+>
+>
+>
+> > benilton
+>
+> >
+>
+> > Em seg., 15 de mar. de 2021 às 09:32, Andreas Tille <tille at debian.org>
+>
+> > escreveu:
+>
+> >
+>
+> > > Hi,
+>
+> > >
+>
+> > > the Debian R packaging team has created Debian packages of oligoClasses.
+>
+> > > When running the test suite I get:
+>
+> > >
+>
+> > > ...
+>
+> > > Executing test function test_CopyNumberSet_construction  ... Loading
+>
+> > > required package: pd.mapping50k.hind240
+>
+> > > Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+>
+> > > Checking to see if your internet connection works...
+>
+> > > You do not have write access to '/usr/local/lib/R/site-library'.
+>
+> > > Timing stopped at: 0.077 0.019 0.899
+>
+> > > Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+>
+> > >  done successfully.
+>
+> > > Executing test function test_dataExamples  ...  done successfully.
+>
+> > > Executing test function test_GenomeAnnotatedDataFrame_construction  ...
+>
+> > > Loading required package: pd.mapping50k.hind240
+>
+> > >  done successfully.
+>
+> > > Executing test function test_GenomeAnnotatedDataFrameWithFF  ... Loading
+>
+> > > required package: pd.mapping50k.hind240
+>
+> > > Attempting to obtain 'pd.mapping50k.hind240' from BioConductor website.
+>
+> > > Checking to see if your internet connection works...
+>
+> > > You do not have write access to '/usr/local/lib/R/site-library'.
+>
+> > > Timing stopped at: 0.148 0.001 0.566
+>
+> > > Error in get(annotation) : object 'pd.mapping50k.hind240' not found
+>
+> > > In addition: Warning message:
+>
+> > > In library(package, lib.loc = lib.loc, character._only_ = TRUE,
+>
+> > > logical.return = TRUE,  :
+>
+> > >   there is no package called ‘pd.mapping50k.hind240’
+>
+> > >  done successfully.
+>
+> > > Executing test function test_oligoSnpSet_construction  ... Loading
+>
+> > > required package: pd.mapping50k.hind240
+>
+> > > ...
+>
+> > >
+>
+> > >
+>
+> > > When running the test as root it passes successfully but I think
+>
+> > > tests should not touch /usr in general.
+>
+> > >
+>
+> > > Kind regards
+>
+> > >
+>
+> > >       Andreas.
+>
+> > >
+>
+> > >
+>
+> > > --
+>
+> > > http://fam-tille.de
+>
+> > >
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From andreas at an3as.eu  Mon Mar 15 21:00:45 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 15 Mar 2021 22:00:45 +0100
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <98029a4d-c060-ed40-bc43-090cc58d8153@debian.org>
+References: <20210315123216.GH28055@an3as.eu> <98029a4d-c060-ed40-bc43-090cc58d8153@debian.org>
+Message-ID: <20210315210045.GM28055@an3as.eu>
+
+Hi Andrius,
+
+On Mon, Mar 15, 2021 at 03:18:21PM +0200, Andrius Merkys wrote:
+> On 2021-03-15 14:32, Andreas Tille wrote:
+> 
+> > In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
+> >   there is no package called ‘pd.mapping50k.hind240’
+> 
+> Is it OK for test suites to download R libraries from network and
+> install them?
+
+Sometimes we are packaging also R data packages but some are quite big.
+Sometimes the solution is to just ignore those tests.
+
+> Maybe this could be replaced by Debian-packaged R library?
+
+In that actual case a tarball is downloaded and not an R package.
+
+Kind regards
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Mar 19 20:38:09 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 19 Mar 2021 15:38:09 -0500
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <CANcD+Y1+Run0yUwanEkq+NhVrmpF3Boy+66ZfSEd0szxOrFB7g@mail.gmail.com>
+References: <20210315123216.GH28055@an3as.eu> <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com> <20210315163245.GJ28055@an3as.eu> <CANcD+Y1+Run0yUwanEkq+NhVrmpF3Boy+66ZfSEd0szxOrFB7g@mail.gmail.com>
+Message-ID: <24661.2993.820667.951531@rob.eddelbuettel.com>
+
+A fairly standard way around this is to make the package a Suggests: and to
+condition the use in code (or tests) via
+
+   if (requireNamespace(pkageNameHere, quietly = TRUE) {
+      ....
+   }
+
+That method is described in Writing R Extensions too, and followed by a
+(very) large nunber of packages.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Mar 19 20:51:41 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 19 Mar 2021 15:51:41 -0500
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <CANcD+Y3KdPrMWLy2TGS-SD3n6Ji7+-Jjuybiei_jg8TSnEPgDA@mail.gmail.com>
+References: <20210315123216.GH28055@an3as.eu> <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com> <20210315163245.GJ28055@an3as.eu> <CANcD+Y1+Run0yUwanEkq+NhVrmpF3Boy+66ZfSEd0szxOrFB7g@mail.gmail.com> <24661.2993.820667.951531@rob.eddelbuettel.com> <CANcD+Y3KdPrMWLy2TGS-SD3n6Ji7+-Jjuybiei_jg8TSnEPgDA@mail.gmail.com>
+Message-ID: <24661.3805.978847.762375@rob.eddelbuettel.com>
+
+On 19 March 2021 at 17:42, Benilton Carvalho wrote:
+| Thank you,
+
+My pleasure, and sorry that I didn't get to the debian-r folder for a few days.
+
+Also:
+
+| On Fri, Mar 19, 2021, 5:38 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+| > A fairly standard way around this is to make the package a Suggests: and to
+| > condition the use in code (or tests) via
+| >
+| >    if (requireNamespace(pkageNameHere, quietly = TRUE) {
+
+Lacks a second ) as usual, I often type that wrong...
+
+| >       ....
+| >    }
+| >
+| > That method is described in Writing R Extensions too, and followed by a
+| > (very) large nunber of packages.
+
+Here is an example from RcppArmadillo which only needs and uses Matrix to
+create some sparse matrices for tests. If Matrix were not present, the test
+exists at line 20.
+
+https://sources.debian.org/src/r-cran-rcpparmadillo/0.10.2.2.0-1/inst/tinytest/test_sparse.R/
+
+(This used to use RUnit, but I moved most of my packages to tinytest, and
+recently talked about tinytest at the BioConductor Developer Forum if you're
+curious, there is now a video in the BioC YouTube channel).
+
+Best, Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From benilton at unicamp.br  Fri Mar 19 20:42:29 2021
+From: benilton at unicamp.br (Benilton Carvalho)
+Date: Fri, 19 Mar 2021 17:42:29 -0300
+Subject: Re: Unittest of oligoClasses tries to write data to /usr/local/lib/R/site-library
+In-Reply-To: <24661.2993.820667.951531@rob.eddelbuettel.com>
+References: <20210315123216.GH28055@an3as.eu> <CAO-arWMMoZYVzjo4OZT7CdQuL33_TjTrCFxrj2PWkJD4quhk2A@mail.gmail.com> <20210315163245.GJ28055@an3as.eu> <CANcD+Y1+Run0yUwanEkq+NhVrmpF3Boy+66ZfSEd0szxOrFB7g@mail.gmail.com> <24661.2993.820667.951531@rob.eddelbuettel.com>
+Message-ID: <CANcD+Y3KdPrMWLy2TGS-SD3n6Ji7+-Jjuybiei_jg8TSnEPgDA@mail.gmail.com>
+
+Hi Dirk, 
+
+Thank you,
+
+Benilton 
+
+On Fri, Mar 19, 2021, 5:38 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+
+> A fairly standard way around this is to make the package a Suggests: and to
+>
+> condition the use in code (or tests) via
+>
+>
+>
+>    if (requireNamespace(pkageNameHere, quietly = TRUE) {
+>
+>       ....
+>
+>    }
+>
+>
+>
+> That method is described in Writing R Extensions too, and followed by a
+>
+> (very) large nunber of packages.
+>
+>
+>
+> Dirk
+>
+>
+>
+> --
+>
+> https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From etienne.mollier at mailoo.org  Sat Mar 27 22:32:07 2021
+From: etienne.mollier at mailoo.org (=?utf-8?q?=C3=89tienne_Mollier?=)
+Date: Sat, 27 Mar 2021 23:32:07 +0100
+Subject: Contribution to R packages
+Message-ID: <YF+yZ+moAeMNVaV8@fusion>
+
+Greetings,
+
+since Andreas granted me git repository permissions earlier
+today to work on #985281[0] affecting r-cran-dt, I thought it
+would be polite to introduce myself to the R mailing list.
+
+I am a DM, having essentially taken care of Debian Med packages
+until then, and occasionnal interventions in other areas
+(sciences, perl).  I begin to have a bit of experience in
+packaging, but haven't had much opportunity to use R until then
+to be honest.
+
+I took knowledge of the R packaging team home page[1],
+subscribed to the main R development mainling list[2], and
+subscribed to the team packaging list[3] for keeping track of
+bugs (and maybe even try to fix some :).
+
+[0]: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=985281
+[1]: https://wiki.debian.org/Teams/r-pkg-team
+[2]: mailto:debian-r at lists.debian.org
+[3]: mailto:r-pkg-team at alioth-lists.debian.net
+
+Kind Regards,
+-- 
+Étienne Mollier <etienne.mollier at mailoo.org>
+Fingerprint:  8f91 b227 c7d6 f2b1 948c  8236 793c f67e 8f0d 11da
+Sent from /dev/pts/3, please excuse my verbosity.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+

@@ -1,0 +1,121 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2024-04",
+  "messages": [
+    {
+      "id": "msg-69e5660ef278",
+      "message_id": "<ZjCTCYEnodsiKJrU@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2024-04-30T06:43:21Z",
+      "subject": "Re: Bug#1070009: r-cran-data.table: Update to current upstream",
+      "subject_clean": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "in_reply_to": "<87il01bn4z.fsf@rob.eddelbuettel.com>",
+      "references": [
+        "<87il01bn4z.fsf@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nthanks for the bug report.  I even tried to upgrade to 1.15.0 in Februar\nbut stumbled about a test suite error[1] of the Debian package which\nprevented me from uploading.\n\nAm Sun, Apr 28, 2024 at 09:03:08AM -0500 schrieb Dirk Eddelbuettel:\n> \n> This should likely reduce some autopkgtest noise too in both data.table\n> itself and some of the packages depending on it.\n\nThe autopkgtest of current version 1.15.4 has[2]:\n\n> test.data.table()  # runs the main test suite of 5,000+ tests in /inst/tests/tests.Rraw\ngetDTthreads(verbose=TRUE):\n  OpenMP version (_OPENMP)       201511\n  omp_get_num_procs()            2\n  R_DATATABLE_NUM_PROCS_PERCENT  unset (default 50)\n  R_DATATABLE_NUM_THREADS        unset\n  R_DATATABLE_THROTTLE           unset (default 1024)\n  omp_get_thread_limit()         2147483647\n  omp_get_max_threads()          2\n  OMP_THREAD_LIMIT               unset\n  OMP_NUM_THREADS                unset\n  RestoreAfterFork               true\n  data.table is using 1 threads with throttle==1024. See ?setDTthreads.\ntest.data.table() running: /usr/lib/R/site-library/data.table/tests/tests.Rraw.bz2\nTest 2194.7 produced 0 errors but expected 1\nExpected: Internal error.*types or lengths incorrect\nObserved: \nTue Apr 30 05:47:51 2024  endian==little, sizeof(long double)==16, longdouble.digits==64, sizeof(pointer)==8, TZ==unset, Sys.timezone()=='Etc/UTC', Sys.getlocale()=='C', l10n_info()=='MBCS=FALSE; UTF-8=FALSE; Latin-1=FALSE; codeset=ANSI_X3.4-1968', getDTthreads()=='OpenMP version (_OPENMP)==201511; omp_get_num_procs()==2; R_DATATABLE_NUM_PROCS_PERCENT==unset (default 50); R_DATATABLE_NUM_THREADS==unset; R_DATATABLE_THROTTLE==unset (default 1024); omp_get_thread_limit()==2147483647; omp_get_max_threads()==2; OMP_THREAD_LIMIT==unset; OMP_NUM_THREADS==unset; RestoreAfterFork==true; data.table is using 1 threads with throttle==1024. See ?setDTthreads.', zlibVersion()==1.3 ZLIB_VERSION==1.3\nError: 1 error(s) out of 11067. Search tests/tests.Rraw.bz2 for test number(s) 2194.7. Duration: 42.5s elapsed (41.9s cpu).\nIn addition: Warning message:\nIn readLines(testDir(\"issue_563_fread.txt\")) :\n  invalid input found on input connection '/usr/lib/R/site-library/data.table/tests/issue_563_fread.txt'\nExecution halted\n\nI've checked the two files \n\n   /usr/lib/R/site-library/data.table/tests/tests.Rraw.bz2\n   /usr/lib/R/site-library/data.table/tests/issue_563_fread.txt\n\nwhich do not look suspicious in any way.\n\nAny hint how to fix this test would be welcome.\n\nKind regards\n    Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-data.table/-/jobs/5291564\n[2] https://salsa.debian.org/r-pkg-team/r-cran-data.table/-/jobs/5660288 \n\n-- \nhttps://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nthanks for the bug report.  I even tried to upgrade to 1.15.0 in Februar\nbut stumbled about a test suite error[1] of the Debian package which\nprevented me from uploading.\n\nAm Sun, Apr 28, 20",
+      "thread_id": "thread-69e5660ef278",
+      "thread_depth": 0,
+      "month": "2024-04"
+    },
+    {
+      "id": "msg-895997b27cc8",
+      "message_id": "<26160.49384.794615.480064@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2024-04-30T09:59:04Z",
+      "subject": "Re: Bug#1070009: r-cran-data.table: Update to current upstream",
+      "subject_clean": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "in_reply_to": "<ZjCTCYEnodsiKJrU@an3as.eu>",
+      "references": [
+        "<87il01bn4z.fsf@rob.eddelbuettel.com>",
+        "<ZjCTCYEnodsiKJrU@an3as.eu>"
+      ],
+      "body_plain": "The package is pristine at CRAN\n  https://cran.r-project.org/web/checks/check_results_data.table.html\n(apart from some new warnings several packages now get about interal R API\nheaders, nothing to do with tests)\n\nMaybe you can sort this with upstream -- data.table is effectively holding up\nr-base (and has been for months since the R 4.3.3 release) which is not\nexactly ideal.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "The package is pristine at CRAN\n  https://cran.r-project.org/web/checks/check_results_data.table.html\n(apart from some new warnings several packages now get about interal R API\nheaders, nothing to do ",
+      "thread_id": "thread-69e5660ef278",
+      "thread_depth": 1,
+      "month": "2024-04"
+    },
+    {
+      "id": "msg-1e994ffc1044",
+      "message_id": "<26160.50486.4543.723373@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2024-04-30T10:17:26Z",
+      "subject": "Re: Bug#1070009: r-cran-data.table: Update to current upstream",
+      "subject_clean": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "in_reply_to": "<26160.49384.794615.480064@rob.eddelbuettel.com>",
+      "references": [
+        "<87il01bn4z.fsf@rob.eddelbuettel.com>",
+        "<ZjCTCYEnodsiKJrU@an3as.eu>",
+        "<26160.49384.794615.480064@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "The file 'issue_563_fread.txt' appears to be an input to data.table::fread()\nfor a test on encodings, glancing at the context.\n\nI can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1] here\nwithout any failing tests (and I have no locale or anything set). It's not my\npackage but if I were you the natural step would be a combination of pausing\nthe offending tests and filing an upstream issue notifying upstream that you\nhad to do so. It is now a pretty active team so you may get some help from them.\n\nDirk\n\n[1] I also have a local R env.vars set to report timing issues at lower thresholds\nthan CRAN itself (to be aware for the packages I (co-)author so I get a bit\nmore line noise:\n\n## ... earlier lines omitted, this is on x86_64 with Ubuntu 23.10\n##\n* checking tests ...\n  Running ‘autoprint.R’\nRunning R code in ‘autoprint.R’ had CPU time 4.2 times elapsed time\n  Comparing ‘autoprint.Rout’ to ‘autoprint.Rout.save’ ... OK\n  Running ‘froll.R’ [9s/9s]\n  Running ‘knitr.R’\nRunning R code in ‘knitr.R’ had CPU time 3.7 times elapsed time\n  Comparing ‘knitr.Rout’ to ‘knitr.Rout.save’ ... OK\n  Running ‘main.R’ [30s/25s]\n  Running ‘nafill.R’\nRunning R code in ‘nafill.R’ had CPU time 3.2 times elapsed time\n  Running ‘other.R’\n  Running ‘programming.R’\nRunning R code in ‘programming.R’ had CPU time 2.5 times elapsed time\n  Running ‘types.R’\nRunning R code in ‘types.R’ had CPU time 4.4 times elapsed time\n [47s/35s] NOTE\n* checking for unstated dependencies in vignettes ... OK\n* checking package vignettes ... OK\n* checking re-building of vignette outputs ... [76s/20s] OK\n* checking PDF version of manual ... [5s/4s] OK\n* checking HTML version of manual ... [2s/2s] OK\n* checking for non-standard things in the check directory ... OK\n* checking for detritus in the temp directory ... OK\n* DONE\n\nStatus: 1 NOTE\nSee\n  ‘/tmp/r/data.table.Rcheck/00check.log’\nfor details.\n\nedd@rob:/tmp/r$ \n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "The file 'issue_563_fread.txt' appears to be an input to data.table::fread()\nfor a test on encodings, glancing at the context.\n\nI can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1]",
+      "thread_id": "thread-69e5660ef278",
+      "thread_depth": 2,
+      "month": "2024-04"
+    },
+    {
+      "id": "msg-e8c6d5ec45bb",
+      "message_id": "<ZjExjv2TDbqLPMjF@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2024-04-30T17:59:42Z",
+      "subject": "Re: Bug#1070009: r-cran-data.table: Update to current upstream",
+      "subject_clean": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "in_reply_to": "<26160.50486.4543.723373@rob.eddelbuettel.com>",
+      "references": [
+        "<87il01bn4z.fsf@rob.eddelbuettel.com>",
+        "<ZjCTCYEnodsiKJrU@an3as.eu>",
+        "<26160.49384.794615.480064@rob.eddelbuettel.com>",
+        "<26160.50486.4543.723373@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Am Tue, Apr 30, 2024 at 05:17:26AM -0500 schrieb Dirk Eddelbuettel:\n> \n> I can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1] here\n> without any failing tests (and I have no locale or anything set). It's not my\n> package but if I were you the natural step would be a combination of pausing\n> the offending tests and filing an upstream issue notifying upstream that you\n> had to do so. It is now a pretty active team so you may get some help from them.\n\nSome\n\n   s/C/C.UTF-8/\n\ndid the trick.\n\nThanks for the hint\n\n      Andreas.\n\n-- \nhttps://fam-tille.de",
+      "body_snippet": "Am Tue, Apr 30, 2024 at 05:17:26AM -0500 schrieb Dirk Eddelbuettel:\n> \n> I can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1] here\n> without any failing tests (and I have no locale",
+      "thread_id": "thread-69e5660ef278",
+      "thread_depth": 3,
+      "month": "2024-04"
+    },
+    {
+      "id": "msg-1422461cec9c",
+      "message_id": "<26161.13796.244632.38144@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2024-04-30T18:18:12Z",
+      "subject": "Re: Bug#1070009: r-cran-data.table: Update to current upstream",
+      "subject_clean": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "in_reply_to": "<ZjExjv2TDbqLPMjF@an3as.eu>",
+      "references": [
+        "<87il01bn4z.fsf@rob.eddelbuettel.com>",
+        "<ZjCTCYEnodsiKJrU@an3as.eu>",
+        "<26160.49384.794615.480064@rob.eddelbuettel.com>",
+        "<26160.50486.4543.723373@rob.eddelbuettel.com>",
+        "<ZjExjv2TDbqLPMjF@an3as.eu>"
+      ],
+      "body_plain": "On 30 April 2024 at 19:59, Andreas Tille wrote:\n| Am Tue, Apr 30, 2024 at 05:17:26AM -0500 schrieb Dirk Eddelbuettel:\n| > \n| > I can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1] here\n| > without any failing tests (and I have no locale or anything set). It's not my\n| > package but if I were you the natural step would be a combination of pausing\n| > the offending tests and filing an upstream issue notifying upstream that you\n| > had to do so. It is now a pretty active team so you may get some help from them.\n| \n| Some\n| \n|    s/C/C.UTF-8/\n| \n| did the trick.\n\nNice -- saw the BTS ack of this being fixed, and looked for the commit. \n \n| Thanks for the hint\n\nThanks for unblocking this.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 30 April 2024 at 19:59, Andreas Tille wrote:\n| Am Tue, Apr 30, 2024 at 05:17:26AM -0500 schrieb Dirk Eddelbuettel:\n| > \n| > I can run 'R CMD check --as-cran data.table_1.15.4.tar.gz' just fine [1] ",
+      "thread_id": "thread-69e5660ef278",
+      "thread_depth": 4,
+      "month": "2024-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-69e5660ef278",
+      "subject": "Bug#1070009: r-cran-data.table: Update to current upstream",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2024-04-30T06:43:21Z",
+      "last_reply": "2024-04-30T18:18:12Z",
+      "root_message_id": "msg-69e5660ef278"
+    }
+  ]
+}

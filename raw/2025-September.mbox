@@ -1,0 +1,465 @@
+From charles.plessy at oist.jp  Wed Sep 10 00:20:02 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Wed, 10 Sep 2025 00:20:02 +0000
+Subject: Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)
+Message-ID: <OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>
+
+Hi Release team,
+
+thanks for Trixie, I enjoy it at home and at work, from where I send this email.
+
+I am sorry that we could not fix for #1111758 on time for Trixie. I wonder what is the next step.  Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload? One more solution is just to ignore the issue, since the patch
+ is basically putting the dust under the carpet…
+
+Here is the debdiff.
+
+diff -Nru r-bioc-beachmat-2.22.0+ds/debian/changelog r-bioc-beachmat-2.22.0+ds/debian/changelog
+
+--- r-bioc-beachmat-2.22.0+ds/debian/changelog  2025-01-13 05:38:05.000000000 +0900
+
++++ r-bioc-beachmat-2.22.0+ds/debian/changelog  2025-08-28 01:16:33.000000000 +0900
+
+@@ -1,3 +1,11 @@
+
++r-bioc-beachmat (2.22.0+ds-3) unstable; urgency=medium
+
++
+
++  * Team upload.
+
++  * Patch up part of a test that depends on the "beachmat.hdf5" R
+
++    package, which is not yet in Debian. Closes: #1111758
+
++
+
++ -- Michael R. Crusoe <crusoe at debian.org>  Wed, 27 Aug 2025 18:16:33 +0200
+
++
+
+ r-bioc-beachmat (2.22.0+ds-2) unstable; urgency=medium
+
+ 
+
+   * Team upload.
+
+diff -Nru r-bioc-beachmat-2.22.0+ds/debian/patches/series r-bioc-beachmat-2.22.0+ds/debian/patches/series
+
+--- r-bioc-beachmat-2.22.0+ds/debian/patches/series   1970-01-01 09:00:00.000000000 +0900
+
++++ r-bioc-beachmat-2.22.0+ds/debian/patches/series   2025-08-27 22:43:00.000000000 +0900
+
+@@ -0,0 +1 @@
+
++skip-missing-beachmat.hdf5
+
+diff -Nru r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5
+
+--- r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 1970-01-01 09:00:00.000000000 +0900
+
++++ r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 2025-08-27 22:44:00.000000000 +0900
+
+@@ -0,0 +1,15 @@
+
++Author: Michael R. Crusoe <crusoe at debian.org>
+
++Description: skip part of a test that depends on the unpackaged beachmat.hdf5
+
++Forwarded: not-needed
+
++--- r-bioc-beachmat.orig/tests/testthat/test-initializeCpp-other.R
+
+++++ r-bioc-beachmat/tests/testthat/test-initializeCpp-other.R
+
++@@ -150,9 +150,6 @@
+
++ 
+
++     ptr <- initializeCpp(mat2)
+
++     am_i_ok(mat, ptr)
+
++-
+
++-    # Package is automatically loaded to expose the specialized methods. 
+
++-    expect_true(isNamespaceLoaded("beachmat.hdf5"))
+
++ })
+
++ 
+
++ test_that("initialization works correctly with an unknown DelayedArray", {
+
+Have a nice day,
+
+Charles
+
+From pochu at debian.org  Wed Sep 10 07:36:41 2025
+From: pochu at debian.org (Emilio Pozuelo Monfort)
+Date: Wed, 10 Sep 2025 09:36:41 +0200
+Subject: Re: Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)
+In-Reply-To: <OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>
+References: <OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>
+Message-ID: <a3619b17-fd5b-4480-ab98-b5ff6bc91f42@debian.org>
+
+Hi Charles,
+
+On 10/09/2025 02:20, Charles Plessy wrote:
+> Hi Release team,
+>
+> thanks for Trixie, I enjoy it at home and at work, from where I send this email.
+>
+> I am sorry that we could not fix for #1111758 on time for Trixie. I wonder what is the next step.  Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload? One more solution is just to ignore the issue, since the patch is basically putting the dust under the carpet…
+>
+> Here is the debdiff.
+
+Please file this as a trixie-pu bug, following the template from `reportbug 
+release.debian.org', and attaching the debdiff there.
+
+Cheers,
+Emilio
+
+From bunk at debian.org  Wed Sep 10 10:10:05 2025
+From: bunk at debian.org (Adrian Bunk)
+Date: Wed, 10 Sep 2025 13:10:05 +0300
+Subject: Re: Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)
+In-Reply-To: <OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>
+References: <OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>
+Message-ID: <aMFOfTfZ3ZGJ336d@localhost>
+
+On Wed, Sep 10, 2025 at 12:20:02AM +0000, Charles Plessy wrote:
+> Hi Release team,
+
+[I am not a member of the release team]
+
+>...
+> Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload?
+>...
+
+Migrating packages to (old)stable is not possible.
+
+The way for getting 2.22.0+ds-3 into trixie would be to suggest an
+update with an additional changelog entry for 2.22.0+ds-3~deb13u1
+(similar to backports), including a debdiff comparing the source 
+differences with the version currently in trixie.
+
+> Have a nice day,
+> 
+> Charles
+
+cu
+Adrian
+
+From steffen_moeller at gmx.de  Thu Sep 11 12:37:49 2025
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Thu, 11 Sep 2025 12:37:49 +0000
+Subject: r-cran.mk: Allow R package source tree as a subtree of larger project
+Message-ID: <trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>
+
+Hello,
+
+The Apache arrow source tree has a subdirectory "r" in which is residing what constitutes the r-cran-arrow source tree. I want to generate the r-cran-arrow package from the very same source tree as arrow itself, but ran into some lintian errors
+
+E: r-cran-arrow: missing-dependency-on-libc needed by usr/lib/R/site-library/arrow/libs/arrow.so
+E: r-cran-arrow: requires-r-api
+
+that I thought I could circumvent by properly using r-cran.mk.
+
+That parses the DESCRIPTION file which should now be r/DESCRIPTION and maybe if the variables are already set then those should not be overridden. Here a first suggestion for a patch to r-cran.mk with a request for further discussion - and if you happen to know how to manually overcome those lintian errors then I would obviously also appreciate that :-)
+
+--- /usr/share/dh-r/r-cran.mk.orig      2025-09-11 13:21:18.681628060 +0100
++++ /usr/share/dh-r/r-cran.mk   2025-09-11 13:26:57.445627215 +0100
+@@ -6,15 +6,16 @@
+
+ include /usr/share/dpkg/default.mk
+
+-debRreposname  := $(shell echo $(DEB_SOURCE) | sed 's/r-\([a-z]\+\)-.*/\1/')
++origRsubdir     ?= "./"
++debRreposname  ?= $(shell echo $(DEB_SOURCE) | sed 's/r-\([a-z]\+\)-.*/\1/')
+ # apply it to the upstream meta-info file DESCRIPTION (seems to be some helpful trick to keep the quoting)
+-cranNameOrig    := $(shell awk '/^(Package|Bundle):/ {print $$2 }' DESCRIPTION)
++cranNameOrig    ?= $(shell awk '/^(Package|Bundle):/ {print $$2 }' ${origRsubdir}DESCRIPTION)
+ # generate a lc version
+-cranName       := $(shell echo "$(cranNameOrig)" | tr A-Z a-z)
+-package                := r-$(debRreposname)-$(cranName)
++cranName       ?= $(shell echo "$(cranNameOrig)" | tr A-Z a-z)
++package                ?= r-$(debRreposname)-$(cranName)
+
+ ## awk command to extract word after Priority
+-priority        := $(shell awk '/^Priority:/ {print tolower($$2) }' DESCRIPTION)
++priority        := $(shell awk '/^Priority:/ {print tolower($$2) }' ${origRsubdir}DESCRIPTION)
+
+ ifeq ($(priority),recommended)
+   debRdir      := usr/lib/R/library
+
+I think I am not subscribed to this list, please kindly CC me.
+
+Best,
+Steffen
+
+From edd at debian.org  Thu Sep 11 19:19:40 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 11 Sep 2025 14:19:40 -0500
+Subject: Re: r-cran.mk: Allow R package source tree as a subtree of larger project
+In-Reply-To: <trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>
+References: <trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>
+Message-ID: <26819.8396.166211.803917@paul.eddelbuettel.com>
+
+Hi Steffen,
+
+Quick suggestion: as you need a one-off fix, can you start by just including
+a local (and modified as below) copy of r-cran.mk and call that?  We are not
+required to all use the identical script...
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sun Sep 14 07:53:25 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 14 Sep 2025 16:53:25 +0900
+Subject: Bug#1115192: trixie-pu: package r-bioc-beachmat/2.22.0+ds-3~deb13u1
+Message-ID: <175783640532.328997.12507541420680489840.reportbug@bubu.igloo>
+
+Package: release.debian.org
+Severity: normal
+Tags: trixie
+X-Debbugs-Cc: r-bioc-beachmat at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-beachmat
+User: release.debian.org at packages.debian.org
+Usertags: pu
+
+Hello,
+
+I am sorry that we could not fix for #1111758 on time for Trixie.  As we
+can not migrate 2.22.0+ds-3 from Testing for the next point release, how
+about an upload with the following debdiff?
+
+[ Checklist ]
+  [x] *all* changes are documented in the d/changelog
+  [x] I reviewed all changes and I approve them
+  [x] attach debdiff against the package in (old)stable
+  [x] the issue is verified as fixed in unstable
+
+[ Changes ]
+
+index 068fccb..16ee884 100644
+--- a/debian/changelog
++++ b/debian/changelog
+@@ -1,3 +1,13 @@
++r-bioc-beachmat (2.22.0+ds-3~deb13u1) trixie; urgency=medium
++
++  * Team upload.
++
++  [ Michael R. Crusoe ]
++  * Patch up part of a test that depends on the "beachmat.hdf5" R
++    package, which is not yet in Debian. Closes: #1111758
++
++ -- Charles Plessy <plessy at debian.org>  Sun, 14 Sep 2025 16:38:29 +0900
++
+ r-bioc-beachmat (2.22.0+ds-2) unstable; urgency=medium
+ 
+   * Team upload.
+diff --git a/debian/patches/series b/debian/patches/series
+new file mode 100644
+index 0000000..6183596
+--- /dev/null
++++ b/debian/patches/series
+@@ -0,0 +1 @@
++skip-missing-beachmat.hdf5
+diff --git a/debian/patches/skip-missing-beachmat.hdf5 b/debian/patches/skip-missing-beachmat.hdf5
+new file mode 100644
+index 0000000..6dd66d2
+--- /dev/null
++++ b/debian/patches/skip-missing-beachmat.hdf5
+@@ -0,0 +1,15 @@
++Author: Michael R. Crusoe <crusoe at debian.org>
++Description: skip part of a test that depends on the unpackaged beachmat.hdf5
++Forwarded: not-needed
++--- r-bioc-beachmat.orig/tests/testthat/test-initializeCpp-other.R
+++++ r-bioc-beachmat/tests/testthat/test-initializeCpp-other.R
++@@ -150,9 +150,6 @@
++ 
++     ptr <- initializeCpp(mat2)
++     am_i_ok(mat, ptr)
++-
++-    # Package is automatically loaded to expose the specialized methods. 
++-    expect_true(isNamespaceLoaded("beachmat.hdf5"))
++ })
++ 
++ test_that("initialization works correctly with an unknown DelayedArray", {
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From steffen_moeller at gmx.de  Sun Sep 14 09:30:52 2025
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Sun, 14 Sep 2025 09:30:52 +0000
+Subject: Aw: Re: r-cran.mk: Allow R package source tree as a subtree of larger project
+In-Reply-To: <26819.8396.166211.803917@paul.eddelbuettel.com>
+References: <trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb> <26819.8396.166211.803917@paul.eddelbuettel.com>
+Message-ID: <trinity-33744c2b-6170-4403-bd2f-a429e76d4f89-1757842252456@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-97ls4>
+
+Hi Dirk,
+
+> Gesendet: Donnerstag, 11. September 2025 um 21:19
+> Von: "Dirk Eddelbuettel" <edd at debian.org>
+>
+> Quick suggestion: as you need a one-off fix, can you start by just including
+> a local (and modified as below) copy of r-cran.mk and call that?  We are not
+> required to all use the identical script...
+> 
+
+I like the idea. But then again, the package seems functional without
+anything included to arrow's d/rules, it is only that the variables
+in d/control are not substituted (like in particular  ${R:Depends}) and
+I do not want to set then manually.
+
+The change of := to ?= in the r-cran.mk script I considered beneficial for all,
+so I put it here for an opportunity to discuss it. Am less confident about the
+subdir. I think I would prefer some recursive Debian packaging, instead. Like,
+have arrow/r/debian introduced and the packages it comes up with would show
+as packages within arrow/debian.
+
+My motivation is the automated synchronicity between the R package and the main
+library. Could imagine that other large projects would also benefit from that,
+though.
+
+Best,
+Steffen
+
+Found out I _am_ subscribed to debian-r :)
+
+From charles.plessy at oist.jp  Sun Sep 21 23:54:36 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Mon, 22 Sep 2025 08:54:36 +0900
+Subject: Bug#1115928: RM: r-cran-assertive.base-- RoM; removed from CRAN
+Message-ID: <20d2bbd3-ec7b-4576-8eda-e9d627e2ea4f@oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi,
+
+r-cran-assertive.base was removed from CRAN for maintainer inactivity 
+for more than a year.  It has no reverse-dependencies in Debian; let's 
+remove it too.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Tue Sep 23 23:57:57 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Wed, 24 Sep 2025 08:57:57 +0900
+Subject: Bug#1116121: RM: r-cran-discriminer -- RoM; removed from CRAN
+Message-ID: <7934cbc2-d65e-413a-9611-984085e4982b@oist.jp>
+
+Package: ftp.debian.org
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Good morning,
+
+let's remove r-cran-discriminer: it has been removed from CRAN 3 years 
+ago, and no other Debian package depends on it.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Wed Sep 24 23:27:35 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Thu, 25 Sep 2025 08:27:35 +0900
+Subject: Bug#1116279: RM: r-cran-ffield -- RoM; removed from CRAN
+Message-ID: <0e9aa2c4-f418-478a-9bb7-ff72bf858558@oist.jp>
+
+Package: r-cran-ffield
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Good morning!
+
+let's remove r-cran-ffield, it was removed from CRAN five years ago and 
+has no reverse dependencies.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Fri Sep 26 01:24:33 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Fri, 26 Sep 2025 10:24:33 +0900
+Subject: Bug#1116347: RM: r-cran-fts -- RoM; removed from CRAN
+Message-ID: <0ddabd76-e740-44c2-b7a4-ea2819fcda56@oist.jp>
+
+Package: ftp.debian.org
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Good morning!
+
+r-cran-fts was removed from CRAN in 2022 and has no 
+reverse-dependencies.  Let's remove it from Debian too.
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Sun Sep 28 23:53:37 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Mon, 29 Sep 2025 08:53:37 +0900
+Subject: Bug#1116603: RM: r-cran-geoknife -- RoM; removed from CRAN
+Message-ID: <da3e0aa6-276c-46b9-8cab-e72720865bb6@oist.jp>
+
+Package: ftp.debian.org
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Good morning everybody!
+
+r-cran-geoknife was removed from CRAN last year at upstream's request, 
+and has its autopkgtest timing out randomly.
+
+It has no reverse dependencies, so let's remove it from Debian as well.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+

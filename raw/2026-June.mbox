@@ -1,0 +1,891 @@
+From plessy at debian.org  Tue Jun  2 06:43:22 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 2 Jun 2026 15:43:22 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27164.15520.900476.94@paul.eddelbuettel.com>
+References: <27124.42837.670129.219041@paul.eddelbuettel.com> <af7koTQmdZUhZUC6@bubu.igloo> <CAM8zJQvq9zydsKkTiP6FUFK34D1KYkBWF1Z7c33zL69Hp4YWDw@mail.gmail.com> <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com>
+Message-ID: <ah57inKlDPzbyxwL@bubu.igloo>
+
+Le Sun, May 31, 2026 at 08:50:24AM -0500, Dirk Eddelbuettel a écrit :
+> Almost there:
+>
+>  Migration status for r-base (4.5.3-1 to 4.6.0-5): \
+>  Will attempt migration (Any information below is purely informational)
+
+Hi Dirk,
+
+thanks for the good news, and indeed, r-base is now in Testing!
+
+thanks to everyone (Thorten, Graham, Bas) who helped us too!
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Tue Jun  2 10:44:35 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 2 Jun 2026 05:44:35 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <ah57inKlDPzbyxwL@bubu.igloo>
+References: <27124.42837.670129.219041@paul.eddelbuettel.com> <af7koTQmdZUhZUC6@bubu.igloo> <CAM8zJQvq9zydsKkTiP6FUFK34D1KYkBWF1Z7c33zL69Hp4YWDw@mail.gmail.com> <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo>
+Message-ID: <27166.46099.350967.359147@paul.eddelbuettel.com>
+
+On 2 June 2026 at 15:43, Charles Plessy wrote:
+| thanks for the good news, and indeed, r-base is now in Testing!
+
+Well but I still have about thirty (30) r-cran-* packages blocked. Nothing
+changed since r-base migrated. See
+
+  https://qa.debian.org/developer.php?login=edd&comaint=yes
+
+I am gettting rather tired of this. Maybe I should orphan all those packages
+and focus on r-base and the ones I also maintain upstream (i.e. Rcpp).
+
+Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+Support my Tour de Shore 2026 ride benefiting Maywood Fine Arts! More info at
+https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From edd at debian.org  Tue Jun  2 13:35:59 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 2 Jun 2026 08:35:59 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27166.46099.350967.359147@paul.eddelbuettel.com>
+References: <27124.42837.670129.219041@paul.eddelbuettel.com> <af7koTQmdZUhZUC6@bubu.igloo> <CAM8zJQvq9zydsKkTiP6FUFK34D1KYkBWF1Z7c33zL69Hp4YWDw@mail.gmail.com> <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com>
+Message-ID: <27166.56383.594532.535084@paul.eddelbuettel.com>
+
+On 2 June 2026 at 05:44, Dirk Eddelbuettel wrote:
+| 
+| On 2 June 2026 at 15:43, Charles Plessy wrote:
+| | thanks for the good news, and indeed, r-base is now in Testing!
+| 
+| Well but I still have about thirty (30) r-cran-* packages blocked. Nothing
+| changed since r-base migrated. See
+| 
+|   https://qa.debian.org/developer.php?login=edd&comaint=yes
+| 
+| I am gettting rather tired of this. Maybe I should orphan all those packages
+| and focus on r-base and the ones I also maintain upstream (i.e. Rcpp).
+
+Descending down the 'blocked' list leads to 'r-cran-recipes':
+
+   https://qa.debian.org/excuses.php?package=r-cran-recipes
+
+Its autopkgtest appears to fail over data.table, yet data.table itself is
+clean in testing and unstable.
+
+Charles, could you please take a look?
+
+Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+Support my Tour de Shore 2026 ride benefiting Maywood Fine Arts! More info at
+https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Tue Jun  2 21:23:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 3 Jun 2026 06:23:23 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27166.56383.594532.535084@paul.eddelbuettel.com>
+References: <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <27166.56383.594532.535084@paul.eddelbuettel.com>
+Message-ID: <ah9Jy2Ty1PZLNEjw@bubu.igloo>
+
+Le Tue, Jun 02, 2026 at 08:35:59AM -0500, Dirk Eddelbuettel a écrit :
+>   https://qa.debian.org/excuses.php?package=r-cran-recipes
+>
+> Its autopkgtest appears to fail over data.table, yet data.table itself is
+> clean in testing and unstable.
+
+Hi Dirk,
+
+the test is older than the r-base migration and used version 4.6.0-3,
+which did not yet have the Breaks against r-cran-data.table.
+
+I uploaded an update (to the new upstream version) which will trigger
+fresh tests.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Tue Jun  2 21:29:39 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 2 Jun 2026 16:29:39 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <ah9Jy2Ty1PZLNEjw@bubu.igloo>
+References: <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <27166.56383.594532.535084@paul.eddelbuettel.com> <ah9Jy2Ty1PZLNEjw@bubu.igloo>
+Message-ID: <27167.19267.567029.311829@paul.eddelbuettel.com>
+
+Hi Charles,
+
+On 3 June 2026 at 06:23, Charles Plessy wrote:
+| Le Tue, Jun 02, 2026 at 08:35:59AM -0500, Dirk Eddelbuettel a écrit :
+| >
+| >   https://qa.debian.org/excuses.php?package=r-cran-recipes
+| >
+| >Its autopkgtest appears to fail over data.table, yet data.table itself is
+| >clean in testing and unstable.
+| 
+| Hi Dirk,
+| 
+| the test is older than the r-base migration and used version 4.6.0-3,
+| which did not yet have the Breaks against r-cran-data.table.
+
+So these tests don't re-run unless a new package version arrives?
+ 
+| I uploaded an update (to the new upstream version) which will trigger
+| fresh tests.
+
+Thanks.
+
+Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+Support my Tour de Shore 2026 ride benefiting Maywood Fine Arts! More info at
+https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Tue Jun  2 23:48:47 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 3 Jun 2026 08:48:47 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27167.19267.567029.311829@paul.eddelbuettel.com>
+References: <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <27166.56383.594532.535084@paul.eddelbuettel.com> <ah9Jy2Ty1PZLNEjw@bubu.igloo> <27167.19267.567029.311829@paul.eddelbuettel.com>
+Message-ID: <ah9r3_4y8PQRN0P4@kumo.plessy.net>
+
+Le Tue, Jun 02, 2026 at 04:29:39PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> So these tests don't re-run unless a new package version arrives?
+
+I think that they eventually do but are delayed by things like other tests
+being in queue, and informations on updates being pulled instead of being
+pushed in various Debian infrastructures.  The system is not as reactive as CI
+in forges like GitLab or GitHub.
+
+This said, one can also queue a retry of the tests through the ♻ icon on the
+tracker.
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From rebecca_palmer at zoho.com  Sun Jun 21 14:02:20 2026
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Sun, 21 Jun 2026 15:02:20 +0100
+Subject: Autopkgtests blocking testing migration - arch:all depending on 64-bit-only arch:any
+Message-ID: <14492a45-2a26-4657-82ed-31917c73c2d6@zoho.com>
+
+Autopkgtests fail (by design) if the test-Depends are not installable. 
+arch:any packages only attempt the tests on architectures where the 
+package under test exists, but arch:all packages do not have that 
+notion, so attempt them on all debci architectures.
+
+If an older version of the package is already in testing and fails on 
+the same architectures, this is ignored as a non-regression failure. 
+However, if the package is not currently in testing at all, then this 
+blocks migration.
+
+This probably affects these r-cran* packages (but r-cran-dbplyr [0] is 
+the only one I've fully checked) and an unknown number of r-bioc-* packages:
+r-cran-animation r-cran-benchmarkme r-cran-benchmarkmedata 
+r-cran-broom.helpers r-cran-cards r-cran-cubelyr r-cran-dbplyr 
+r-cran-dtplyr r-cran-elliptic r-cran-gargle r-cran-gh r-cran-grimport2 
+r-cran-httptest2 r-cran-httr2 r-cran-labelled r-cran-lgr r-cran-lobstr 
+r-cran-magick r-cran-markdown r-cran-modeldata r-cran-modelr 
+r-cran-mumin r-cran-prroc r-cran-sjmisc r-cran-skimr r-cran-svglite 
+r-cran-vdiffr r-cran-webfakes
+
+A previous discussion [1] (of a non-R scientific package) recommended 
+asking the release team to unblock such packages (i.e. ignore the 
+autopkgtest failure).  If nobody objects, I intend to do this.  (Because 
+this issue does not affect packages that are already in testing, this 
+will *not* need to be repeated for every upload.)
+
+Altenatively, we could add Architecture: !armhf !i386 !s390x to the 
+autopkgtests (as an explicit list and not a test-Depends: 
+architecture-is-64-bit etc, because the whole problem is that being 
+uninstallable counts as a fail).  (Please do not use Architecture: amd64 
+[2] unless the package really is amd64-only.)
+
+I do not recommend Restriction: skip-not-installable [3] because it 
+applies everywhere, i.e. will also completely skip the tests if some bug 
+makes the package's test-Depends uninstallable everywhere; it is also 
+deprecated.
+
+[0] https://ci.debian.net/packages/r/r-cran-dbplyr/testing/i386/71199543/
+[1] https://lists.debian.org/debian-release/2025/01/msg00020.html
+[2] 
+https://salsa.debian.org/r-pkg-team/r-cran-broom/-/commit/c1503cf577f1f20c97608909b8c55801ce8b8d75
+[3] 
+https://salsa.debian.org/ci-team/autopkgtest/-/blob/master/doc/README.package-tests.rst?ref_type=heads
+
+From rebecca_palmer at zoho.com  Sun Jun 21 16:06:04 2026
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Sun, 21 Jun 2026 17:06:04 +0100
+Subject: Re: Autopkgtests blocking testing migration - arch:all depending on 64-bit-only arch:any
+In-Reply-To: <14492a45-2a26-4657-82ed-31917c73c2d6@zoho.com>
+References: <14492a45-2a26-4657-82ed-31917c73c2d6@zoho.com>
+Message-ID: <ccbb859b-e5e4-47a2-937a-724fc73552df@zoho.com>
+
+On closer inspection, this *can* also happen to arch:any packages, but 
+for them (only), adding Build-Depends: architecture-is-64-bit, 
+architecture-is-little-endian would probably work.
+
+r-cran-cards (arch:all) is an actual test failure (not an 
+uninstallability) on i386, but plausibly a mild one (rounding). 
+r-cran-grimport2 (arch:all) previously had an actual test failure on 
+i386 (#1120997) before it became uninstallable.  Should these gain a 
+*runtime* Depends on architecture-is-64-bit?  (Currently, no R packages 
+have that, and only one package of any sort (kanboard) does.)
+
+r-cran-broom and r-cran-modelr have amd64-only tests to get around this; 
+as previously noted, I don't think we want to go that far.
+
+arch:all blocked solely by test uninstallability
+r-cran-animation/2.8+dfsg-1
+r-cran-benchmarkme/1.0.8-2
+r-cran-benchmarkmedata/2.0.0-1
+r-cran-cubelyr/1.0.2-2
+r-cran-dbplyr/2.5.2+dfsg-1
+r-cran-dtplyr/1.3.3-1
+r-cran-elliptic/1.5-1-2
+r-cran-gargle/1.6.1-1
+r-cran-gh/1.5.0-3
+r-cran-httptest2/1.2.2+ds-1
+r-cran-httr2/1.2.2-1
+r-cran-labelled/2.16.0-1
+r-cran-lgr/0.5.2+dfsg-1
+r-cran-modeldata/1.5.1-1
+r-cran-mumin/1.48.19-1
+r-cran-prroc/1.4-1
+r-cran-sjmisc/2.8.11-1
+r-cran-skimr/2.2.2+dfsg-1
+
+arch:all blocked by both this and something else
+r-cran-broom.helpers/1.22.0-1 (r-cran-cards)
+r-cran-grimport2/0.3-3-2 (bug #1120997)
+r-cran-markdown/2.0-1 (r-cran-litedown)
+
+arch:any blocked solely by test uninstallability
+r-cran-lobstr/1.2.1-1
+r-cran-magick/2.9.1+dfsg-2
+r-cran-svglite/2.2.2-2
+r-cran-vdiffr/1.0.9-2
+r-cran-webfakes/1.5.0-1
+
+From plessy at debian.org  Mon Jun 22 00:18:18 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 09:18:18 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27166.46099.350967.359147@paul.eddelbuettel.com>
+References: <CAM8zJQvq9zydsKkTiP6FUFK34D1KYkBWF1Z7c33zL69Hp4YWDw@mail.gmail.com> <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com>
+Message-ID: <ajh_SksYfFEI75l1@kumo.plessy.net>
+
+[ one-line summary: I think that pbkrtest needs a source upload ]
+
+Le Tue, Jun 02, 2026 at 05:44:35AM -0500, Dirk Eddelbuettel a écrit :
+> 
+>   https://qa.debian.org/developer.php?login=edd&comaint=yes
+
+Hi Dirk,
+
+I have been monintoring your packages this month and took action to remove the
+blocking issues from the arch-restriction, as well as the blocking issues from
+the risc64 architecture.  Now the situation looks much better:
+
+https://udd.debian.org/dmd/?edd at debian.org
+
+ - The quantmod, ttr and tseries packages are going to migrate after xts in a
+   couple of days.
+
+ - car is blocked by pbkrtest because of reproducibility failues, where
+   reproduce.debian.net attempts to rebuild the package in an environment
+   similar to the one used when the package was uploaded.  In my impression,
+   the simplest solution would be that you upload a Debian revision, which
+   I expect reproduce.debian.net will be able to reproduce.
+
+So I am confident to say that this week the transition that your packages went
+through after the architecture-restriction of the other packages will be over.
+
+Remains the riscv64 issues, which I am tracking here:
+
+  https://wiki.debian.org/R/riscv64/DebianIssues
+
+For the moment I have been transiently turning off autopkgtests on packages
+where riscv64 is failing, but I think that we can not release them without at
+least warning our users riscv64 users that they will face bugs in their
+computations because of NAs being turned into NaNs.  I will write a separate
+message about this.
+
+> I am gettting rather tired of this. Maybe I should orphan all those packages
+> and focus on r-base and the ones I also maintain upstream (i.e. Rcpp).
+
+The architecture-restriction, which you did not ask for, was excruciating
+indeed, but now it is over (at least on your side) and I hope that it will bear
+fruits, by removing a bunch of 32-bit and big-endian failures, which were
+causing trouble by sinking the time we need to keep up to date with new
+upstream versions, and therefore causing transition delays in your packages
+through their dependency chain.
+
+I hope that you will continue to maintain your packages, but in any case, if
+there are some reorganisations you would like to do by transferring some
+packages to us or adopting some that are key in your dependency chain
+(not asking to increase your workload, but exchanges can be made so that
+they are a net win for you), please let me know.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Mon Jun 22 00:23:26 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 09:23:26 +0900
+Subject: Re: Autopkgtests blocking testing migration - arch:all depending on 64-bit-only arch:any
+In-Reply-To: <14492a45-2a26-4657-82ed-31917c73c2d6@zoho.com>
+References: <14492a45-2a26-4657-82ed-31917c73c2d6@zoho.com>
+Message-ID: <ajiAfthu7OgzfhoY@kumo.plessy.net>
+
+Le Sun, Jun 21, 2026 at 03:02:20PM +0100, Rebecca N. Palmer a écrit :
+> 
+> A previous discussion [1] (of a non-R scientific package) recommended asking
+> the release team to unblock such packages (i.e. ignore the autopkgtest
+> failure).  If nobody objects, I intend to do this.
+
+Hi Rebecca,
+
+thank you for looking into this.  I totally agree.
+
+> Please do not use Architecture: amd64 [2] unless the package really is amd64-only.
+> [2] https://salsa.debian.org/r-pkg-team/r-cran-broom/-/commit/c1503cf577f1f20c97608909b8c55801ce8b8d75
+
+Indeed, it is better to have the infrastructure ignoring the failures.  Do I
+have to revert the r-cran-broom commit and upload before you contact the
+release team?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Mon Jun 22 00:43:01 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 09:43:01 +0900
+Subject: Proposal: a new binary package, r-pkg-team-core-architecture
+Message-ID: <ajiFFdGqrll_qnyS@kumo.plessy.net>
+
+[This is not a new transition, just a passive replacement]
+
+Hello everyone!
+
+I propose introducing a new binary package, r-pkg-team-core-architecture, in
+the dh‑r source package. It will be built only on the currently released 64‑bit
+little‑endian architectures (amd64, arm64, loong64, ppc64el, riscv64). The
+existing architecture-is-64-bit and architecture-is-little-endian packages will
+be updated to depend on r-pkg-team-core-architecture, and most r-cran-*
+packages as well as all r-bioc-* packages will depend on it. This ensures that
+new architectures are not automatically enabled for the full R package
+ecosystem without prior coordinated evaluation.
+
+Description: Architecture gatekeeper for R packages in Debian
+ The r-pkg-team-core-architecture package defines the set of architectures
+ officially supported by the Debian R Packaging Team. Most r-cran-* packages and
+ all r-bioc-* packages depend on it, ensuring that the R ecosystem in Debian is
+ enabled only on architectures that have undergone proper evaluation and
+ testing.
+ .
+ The restriction exists because historically many porting issues were addressed
+ by disabling regression tests, resulting in reduced quality, increased patch
+ maintenance, and disruptions during routine updates. Exceptions exist for core
+ service packages central to the R dependency graph or for packages maintained
+ by teams with a strong record in software engineering (e.g., rlib).
+ .
+ We ask porters who wish to enable full R package distribution on a new
+ architecture to first build and test the full R package set outside the main
+ Debian archive, using a custom r-pkg-team-core-architecture package. They
+ should aggregate the results, identify the main classes of failures, and
+ coordinate with the wider R community and the Debian R packages team so that
+ most issues can be resolved upstream before enabling distribution in Debian.
+ .
+ Main benefits:
+ .
+ o For users: ensures that any distributed r-cran-* or r-bioc-* package meets
+   the same quality standards as on mainstream amd64 and arm64 architectures.
+ .
+ o For porters: provides control over when to invest effort in porting R
+   packages, enabling better prioritisation.
+ .
+ o For the Debian R Packages Team: reduces patch burden and improves control
+   over time spent on porting‑related issues.
+ .
+ o For the Release Team: reduces delays in testing migration and transitions,
+   and increases the quality of the Stable release.
+ .
+ o For the R community: encourages organised, focused reporting of
+   architecture‑specific issues.
+ .
+ o For the broader Linux ecosystem: prioritises upstream fixes, benefiting
+   other distributions as well.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Mon Jun 22 00:43:21 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 21 Jun 2026 19:43:21 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <ajh_SksYfFEI75l1@kumo.plessy.net>
+References: <CAM8zJQvq9zydsKkTiP6FUFK34D1KYkBWF1Z7c33zL69Hp4YWDw@mail.gmail.com> <ag19NvzjEcZpBhEH@kumo.plessy.net> <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <ajh_SksYfFEI75l1@kumo.plessy.net>
+Message-ID: <27192.34089.286816.553121@paul.eddelbuettel.com>
+
+Charles,
+
+I have also been monitoring the situation including the infortunate situation
+where several pof my package being held back by a friendly and usually
+reliable package (i.e. xts) because of your choices and actions well beyond
+my control.  
+
+On 22 June 2026 at 09:18, Charles Plessy wrote:
+| [ one-line summary: I think that pbkrtest needs a source upload ]
+[...]
+|  - car is blocked by pbkrtest because of reproducibility failues, where
+|    reproduce.debian.net attempts to rebuild the package in an environment
+|    similar to the one used when the package was uploaded.  In my impression,
+|    the simplest solution would be that you upload a Debian revision, which
+|    I expect reproduce.debian.net will be able to reproduce.
+
+Hm, I do not see that. I see a (spurious?) infrastructure failure with no
+issue at the package. Following to the log at
+
+   https://reproduce.debian.net/all/api/v1/builds/177224/log
+
+we have
+
+==============================================================================
+[...]
+I: R Package: pbkrtest Version: 0.5.5
+I: Building using R version 4.5.1-1
+I: R API version: r-api-4.0
+I: Using built-time from d/changelog: Thu, 24 Jul 2025 10:58:50 -0500
+	mkdir -p /build/reproducible-path/r-cran-pbkrtest-0.5.5/debian/r-cran-pbkrtest/usr/lib/R/site-library
+	R CMD INSTALL -l /build/reproducible-path/r-cran-pbkrtest-0.5.5/debian/r-cran-pbkrtest/usr/lib/R/site-library --clean . "--built-timestamp='Thu, 24 Jul 2025 10:58:50 -0500'"
+* installing *source* package ‘pbkrtest’ ...
+** this is package ‘pbkrtest’ version ‘0.5.5’
+** package ‘pbkrtest’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (pbkrtest)
+/bin/sh: 1: apt-cache: not found
+grep-aptavail: command (apt-cache dumpavail) failed (exit status 127)
+W: Ignoring specified R dependency: R (>= 4.2.0)
+/bin/sh: 1: apt-cache: not found
+grep-aptavail: command (apt-cache dumpavail) failed (exit status 127)
+Package r-cran-lme4 not found in apt cache at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 167.
+make: *** [debian/rules:7: binary-indep] Error 2
+dpkg-buildpackage: error: debian/rules binary-indep subprocess returned exit status 2
+--------------------------------------------------------------------------------
+Build finished at 2026-02-28T12:22:41Z
+[...]
+==============================================================================
+
+So the R CMD INSTALL step runs and completes fine, but after that apt-cache
+is not found (!!) leading to (build-dependency) r-cran-lme4 not being found.
+
+Making a random binary upload is easy for me and can be done but I do not see
+how it would help. I suppose I am missing something you are seeing?
+
+Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From plessy at debian.org  Mon Jun 22 00:51:11 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 09:51:11 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27192.34089.286816.553121@paul.eddelbuettel.com>
+References: <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <ajh_SksYfFEI75l1@kumo.plessy.net> <27192.34089.286816.553121@paul.eddelbuettel.com>
+Message-ID: <ajiG_8s7DXw4SYd8@kumo.plessy.net>
+
+Le Sun, Jun 21, 2026 at 07:43:21PM -0500, Dirk Eddelbuettel a écrit :
+> /bin/sh: 1: apt-cache: not found
+> grep-aptavail: command (apt-cache dumpavail) failed (exit status 127)
+> Package r-cran-lme4 not found in apt cache at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 167.
+...
+> So the R CMD INSTALL step runs and completes fine, but after that apt-cache
+> is not found (!!) leading to (build-dependency) r-cran-lme4 not being found.
+
+Yes, exactly.
+
+Now I understand.  I think that it is #987714 in dh-r, which was fixed after
+your last upload of pbkrtest.
+
+The presence of apt-cache is not guaranteed in build environments although it
+is installed in buildds.  So this makes the package "unreproductible" from the
+transition tracker's point of view, because it was built with an old version of
+dh-r that relies on the presence of apt-cache without explicitely depending on
+it.
+
+Charles
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Mon Jun 22 01:11:27 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 21 Jun 2026 20:11:27 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <ajiG_8s7DXw4SYd8@kumo.plessy.net>
+References: <CAM8zJQtyDtoeJZRzvs6=5BgktMzXZT_KhPrdsWUp6xUJFbfk=Q@mail.gmail.com> <ahOpnaxbkiYSj6x-@kumo.plessy.net> <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <ajh_SksYfFEI75l1@kumo.plessy.net> <27192.34089.286816.553121@paul.eddelbuettel.com> <ajiG_8s7DXw4SYd8@kumo.plessy.net>
+Message-ID: <27192.35775.415563.16418@paul.eddelbuettel.com>
+
+On 22 June 2026 at 09:51, Charles Plessy wrote:
+| Now I understand.  I think that it is #987714 in dh-r, which was fixed after
+| your last upload of pbkrtest.
+| 
+| The presence of apt-cache is not guaranteed in build environments although it
+| is installed in buildds.  So this makes the package "unreproductible" from the
+| transition tracker's point of view, because it was built with an old version of
+| dh-r that relies on the presence of apt-cache without explicitely depending on
+| it.
+
+I do not see that. From its package page https://packages.debian.org/sid/dh-r
+I get to the changelog at
+https://metadata.ftp-master.debian.org/changelogs//main/d/dh-r/dh-r_20250812_changelog
+but I do not see where apt-cache is depended-upon. In fact I see apt-cache
+being replaced by r-madison.
+
+Which, in your view, is the package revision that drives / fixes this?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Mon Jun 22 01:47:58 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 10:47:58 +0900
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27192.35775.415563.16418@paul.eddelbuettel.com>
+References: <CAM8zJQtLaafPWpdM2heM3az=c=RSCOuMpg7CJphWCktCrtiW1w@mail.gmail.com> <ahY5t1Dl0OSHfT-b@kumo.plessy.net> <CAM8zJQu=EvuqS2Cr0f9L+O8A30vdgzmnOQBAKM2n-dKDd9XGVg@mail.gmail.com> <27164.15520.900476.94@paul.eddelbuettel.com> <ah57inKlDPzbyxwL@bubu.igloo> <27166.46099.350967.359147@paul.eddelbuettel.com> <ajh_SksYfFEI75l1@kumo.plessy.net> <27192.34089.286816.553121@paul.eddelbuettel.com> <ajiG_8s7DXw4SYd8@kumo.plessy.net> <27192.35775.415563.16418@paul.eddelbuettel.com>
+Message-ID: <ajiUTvvKBu-VaXbl@kumo.plessy.net>
+
+> On 22 June 2026 at 09:51, Charles Plessy wrote:
+> | 
+> | The presence of apt-cache is not guaranteed in build environments although it
+> | is installed in buildds.  So this makes the package "unreproductible" from the
+> | transition tracker's point of view, because it was built with an old version of
+> | dh-r that relies on the presence of apt-cache without explicitely depending on
+> | it.
+
+Le Sun, Jun 21, 2026 at 08:11:27PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> I do not see that. From its package page https://packages.debian.org/sid/dh-r
+> I get to the changelog at
+> https://metadata.ftp-master.debian.org/changelogs//main/d/dh-r/dh-r_20250812_changelog
+> but I do not see where apt-cache is depended-upon. In fact I see apt-cache
+> being replaced by r-madison.
+> 
+> Which, in your view, is the package revision that drives / fixes this?
+
+The old version relies on apt-cache without depending on it, the new version
+solves the problem by removing the need for apt-cache entirely, but
+reproduce.debian.net enforces the use of the old version because
+r-cran-pbkrtest 0.5.5-1 was built with it.  It finds this information from the
+r-cran-pbkrtest_0.5.5-1_amd64.buildinfo file that was uploaded together.
+
+This version pinning is explained on https://reproduce.debian.net/, which was
+announced in May, https://lists.debian.org/debian-devel-announce/2026/05/msg00001.html
+but to be honest I only realised that it works that way this week-end.
+
+Cheers
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From rebecca_palmer at zoho.com  Mon Jun 22 07:09:46 2026
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Mon, 22 Jun 2026 08:09:46 +0100
+Subject: Re: Proposal: a new binary package, r-pkg-team-core-architecture
+In-Reply-To: <ajiFFdGqrll_qnyS@kumo.plessy.net>
+References: <ajiFFdGqrll_qnyS@kumo.plessy.net>
+Message-ID: <e52e42e7-d323-46b7-ab36-1338b6867c51@zoho.com>
+
+Mostly agreed (I'd been thinking the same thing),
+
+On 22/06/2026 01:43, Charles Plessy wrote:
+The
+> existing architecture-is-64-bit and architecture-is-little-endian packages will
+> be updated to depend on r-pkg-team-core-architecture,
+but I don't think this in particular makes sense, given that those 
+packages may also be used outside of R.
+
+I'd instead make R packages depend on r-pkg-team-core-architecture 
+(probably when they're next need uploading instead of doing it just for 
+this, and probably via script).
+
+From plessy at debian.org  Mon Jun 22 07:42:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jun 2026 16:42:23 +0900
+Subject: Re: Proposal: a new binary package, r-pkg-team-core-architecture
+In-Reply-To: <e52e42e7-d323-46b7-ab36-1338b6867c51@zoho.com>
+References: <ajiFFdGqrll_qnyS@kumo.plessy.net> <e52e42e7-d323-46b7-ab36-1338b6867c51@zoho.com>
+Message-ID: <ajjnX7o_3cn1PcFo@kumo.plessy.net>
+
+> On 22/06/2026 01:43, Charles Plessy wrote:
+> >
+> > The existing architecture-is-64-bit and architecture-is-little-endian
+> > packages will be updated to depend on r-pkg-team-core-architecture,
+
+Le Mon, Jun 22, 2026 at 08:09:46AM +0100, Rebecca N. Palmer a écrit :
+> 
+> but I don't think this in particular makes sense, given that those packages
+> may also be used outside of R.
+
+Thanks for catching it!  What I wanted to write was:
+
+The existing r-cran* and r-bioc* packages depending on the
+architecture-is-64-bit and architecture-is-little-endian virtual packates will
+be updated to depend on r-pkg-team-core-architecture
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Mon Jun 22 12:09:33 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 22 Jun 2026 07:09:33 -0500
+Subject: Re: Proposal: a new binary package, r-pkg-team-core-architecture
+In-Reply-To: <ajiFFdGqrll_qnyS@kumo.plessy.net>
+References: <ajiFFdGqrll_qnyS@kumo.plessy.net>
+Message-ID: <27193.9725.613113.335909@paul.eddelbuettel.com>
+
+Charles,
+
+I am not sure I can support this. 
+
+To me, the current fix of outlawing armhf i386 s390x still seems more like a
+bandaid for a self-imposed wound (due to choices made by the debian-r team).
+
+Before deciding to permanently limit a well-known open source project (that
+just won a major prize [1] referred to as a 'Nobel for Statistics') without
+consulting with upstream strikes me as hasty.
+
+This is Debian, and our priority per our founding documents are our users.
+Why would we permanently deprive users of entire architectures of a vibrant
+open source project? Do we do this in other parts of the Debian Project?  I
+could of course be behind the news but AFAIK Debian has not decided to 'bury'
+these three architectures. (And doing it distro-wide would be a differen
+story.)
+
+Would you be able to demonstrate for R and, say, a handful of packages that
+there is fundaemtal "brokenness"?  And if you were to find it at the R level,
+would it not your normal "Good Open Source Citizen" responsibility to
+document this at the upstream bug tracker?  For R, that is its bugzilla; for
+packages often their GH repos. Can we not start there?  That would also be a
+net benefit to the R Project which AFAIK has no access to armhf s390x and
+likely also little to none for i386.
+
+So I think a better move would be to start by limiting autopkgtests to amd64.
+And if we get to an the same 'all green' that CRAN has (even though we
+knowingly handicap ourselves by introducing variability in package versions
+as we tend to update some, but not others) we could then expand to more
+platforms.
+
+I think our choice of 'mixing' package versions when CRAN is more or less
+ensuring a buildable cohort 'at HEAD' at each point in time is still the more
+likely issue. And not the choice of build architectures. So the proposal
+seems to address a sympton and not the cause. Looking at actual failures
+(preferably for current packages) on the suspected architectures may help us
+shed light on the actual causes.
+
+Dirk
+
+[1] https://rousseeuwprize.org/2026
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Mon Jun 22 20:10:33 2026
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Mon, 22 Jun 2026 21:10:33 +0100
+Subject: Bug#1140569: unblock: R packages (test-)installable on only some architectures
+Message-ID: <02994111-e710-4e95-897b-c8a96f74af8d@zoho.com>
+
+Package: release.debian.org
+User: release.debian.org at packages.debian.org
+Usertags: unblock
+Severity: normal
+
+Many r-cran-* packages are arch:all but (test-)depend on other packages 
+that are only available on some architectures (usually, only the 64-bit 
+little-endian ones).  Hence, autopkgtests on other architectures fail as 
+uninstallable.
+
+If an older version of the package is already in testing and fails on 
+the same architectures, this is ignored as a non-regression failure. 
+However, if the package is not currently in testing at all, then this 
+blocks migration.  According to a previous discussion ( 
+https://lists.debian.org/debian-release/2025/01/msg00020.html ), the 
+preferred solution to this is to ask you to unblock them.
+
+(Other possibilities would be to add Restriction: skip-not-installable 
+or Architecture: !armhf !i386 !s390x to these autopkgtests, but the 
+first would allow packages to go completely untested if their tests 
+accidentally became uninstallable everywhere, while the second is 
+another thing to change if the set of installable architectures changes.)
+
+Hence, please allow these packages to migrate despite their i386 and/or 
+s390x autopkgtest failures:
+
+(arch:all)
+r-cran-animation/2.8+dfsg-1
+r-cran-benchmarkme/1.0.8-2
+r-cran-benchmarkmedata/2.0.0-1
+r-cran-cubelyr/1.0.2-2
+r-cran-dbplyr/2.5.2+dfsg-1
+r-cran-dtplyr/1.3.3-1
+r-cran-elliptic/1.5-1-2
+r-cran-gargle/1.6.1-1
+r-cran-gh/1.5.0-3
+r-cran-httptest2/1.2.2+ds-1
+r-cran-httr2/1.2.2-1
+r-cran-labelled/2.16.0-1
+r-cran-lgr/0.5.2+dfsg-1
+r-cran-modeldata/1.5.1-1
+r-cran-mumin/1.48.19-1
+r-cran-prroc/1.4-1
+r-cran-sjmisc/2.8.11-1
+r-cran-skimr/2.2.2+dfsg-1
+
+(arch:any)
+r-cran-lobstr/1.2.1-1
+r-cran-magick/2.9.1+dfsg-2
+r-cran-svglite/2.2.2-2
+r-cran-vdiffr/1.0.9-2
+r-cran-webfakes/1.5.0-1
+
+From rebecca_palmer at zoho.com  Tue Jun 23 07:29:14 2026
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 23 Jun 2026 08:29:14 +0100
+Subject: Re: Proposal: a new binary package, r-pkg-team-core-architecture
+In-Reply-To: <27193.9725.613113.335909@paul.eddelbuettel.com>
+References: <ajiFFdGqrll_qnyS@kumo.plessy.net> <27193.9725.613113.335909@paul.eddelbuettel.com>
+Message-ID: <16a79f68-2977-4c06-8778-965da97791c6@zoho.com>
+
+This proposal makes the most-of-CRAN architecture restrictions *less* 
+permanent than the existing system, not more.
+
+The whole point is to make it easier to change the set of included 
+architectures, by allowing this to be done by changing one package 
+instead of hundreds.  (In particular, a downstream distributor who 
+disagrees with the whole concept can disable it entirely by replacing 
+this one package with one that exists on all architectures, then 
+no-change rebuilding r-*.)
+
+Also, exceptions remain allowed: in particular, if none of your packages 
+currently use architecture-is-64-bits etc, then they would not need to 
+use this either, so you would not need to do anything.
+
+From edd at debian.org  Tue Jun 23 10:20:43 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 23 Jun 2026 05:20:43 -0500
+Subject: Re: Proposal: a new binary package, r-pkg-team-core-architecture
+In-Reply-To: <16a79f68-2977-4c06-8778-965da97791c6@zoho.com>
+References: <ajiFFdGqrll_qnyS@kumo.plessy.net> <27193.9725.613113.335909@paul.eddelbuettel.com> <16a79f68-2977-4c06-8778-965da97791c6@zoho.com>
+Message-ID: <27194.24059.191992.385210@paul.eddelbuettel.com>
+
+On 23 June 2026 at 08:29, Rebecca N. Palmer wrote:
+| This proposal makes the most-of-CRAN architecture restrictions *less* 
+| permanent than the existing system, not more.
+
+Ok.
+ 
+| The whole point is to make it easier to change the set of included 
+| architectures, by allowing this to be done by changing one package 
+| instead of hundreds.  (In particular, a downstream distributor who 
+| disagrees with the whole concept can disable it entirely by replacing 
+| this one package with one that exists on all architectures, then 
+| no-change rebuilding r-*.)
+| 
+| Also, exceptions remain allowed: in particular, if none of your packages 
+| currently use architecture-is-64-bits etc, then they would not need to 
+| use this either, so you would not need to do anything.
+
+On 23 June 2026 at 08:29, Rebecca N. Palmer wrote:
+| Also, exceptions remain allowed: in particular, if none of your packages 
+| currently use architecture-is-64-bits etc, then they would not need to 
+| use this either, so you would not need to do anything.
+
+I guess I got this part wrong, and read the proposal as dh-r enabling this
+for all packages it is used on.  My error.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

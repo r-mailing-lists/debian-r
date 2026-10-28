@@ -1,0 +1,427 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2026-02",
+  "messages": [
+    {
+      "id": "msg-15f064ebbfc5",
+      "message_id": "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-09T00:50:04Z",
+      "subject": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everybody,\n\nat the moment we are removing HTML files containing minified Javascript from\nthe r-cran- and r-bioc- source packages using the Files-Excluded field in\ndebian/copyright for `*/inst/doc/*.html` and the repack capacity of uscan.\nThis is more or less on a case-by-case basis, which requires the attention of\nmaintainers, team uploaders and reviewers.\n\nTo save people time, which is essential given how many packages we have, I\npropose to make this systematic.  The main drawback is that some Free HTML\nfiles with no minified Javascript code may be deleted as well.  On my side, I\nthink that it is not a problem since 1) we still ship their source, and 2)\nthey are still available on the Upstream sites.\n\nFor the implementation, we would default new packages and update old packages\nto have a `Files-Excluded` field containing at least `*/inst/doc/*.html`, and\nswitch the watch files to uscan format version 5 using new CRAN and\nBioconductor templates that I am preparing here:\n\nhttps://salsa.debian.org/debian/devscripts/-/merge_requests/618/diffs\n\nPlease let me know your thoughts.\n\nCharles \n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hello everybody,\n\nat the moment we are removing HTML files containing minified Javascript from\nthe r-cran- and r-bioc- source packages using the Files-Excluded field in\ndebian/copyright for `*/inst/do",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 0,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-9015035ce4e7",
+      "message_id": "<b8014664-9796-460f-a985-a79abb06fb7e@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2026-02-09T07:11:31Z",
+      "subject": "Re: Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+      "references": [
+        "<aYkvPEoxj_56sQ9I@kumo.plessy.net>"
+      ],
+      "body_plain": "On 09/02/2026 01.50, Charles Plessy wrote:\n> Hello everybody,\n\nHey Charles!\n\n> at the moment we are removing HTML files containing minified Javascript from\n> the r-cran- and r-bioc- source packages using the Files-Excluded field in\n> debian/copyright for `*/inst/doc/*.html` and the repack capacity of uscan.\n> This is more or less on a case-by-case basis, which requires the attention of\n> maintainers, team uploaders and reviewers.\n>\n> To save people time, which is essential given how many packages we have, I\n> propose to make this systematic.  The main drawback is that some Free HTML\n> files with no minified Javascript code may be deleted as well.  On my side, I\n> think that it is not a problem since 1) we still ship their source, and 2)\n> they are still available on the Upstream sites.\n\nOf course I am in favor of this change, though I would prefer it to be automatic.\n\nCan 'dh-update-R' be taught to make this change?\n\nAlso, I guess there is no habit of rendering the docs in r-* packages?\n\n> For the implementation, we would default new packages and update old packages\n> to have a `Files-Excluded` field containing at least `*/inst/doc/*.html`, and\n> switch the watch files to uscan format version 5 using new CRAN and\n> Bioconductor templates that I am preparing here:\n>\n> https://salsa.debian.org/debian/devscripts/-/merge_requests/618/diffs\n\nThe template is a good idea, but unrelated to excluding the HTML files, yes?\n\n--\nMichael R. Crusoe\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 09/02/2026 01.50, Charles Plessy wrote:\n> Hello everybody,\n\nHey Charles!\n\n> at the moment we are removing HTML files containing minified Javascript from\n> the r-cran- and r-bioc- source packages us",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 1,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-795d9980ff91",
+      "message_id": "<aYm0EVeatb85utwz@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-09T10:16:49Z",
+      "subject": "Re: Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": "<b8014664-9796-460f-a985-a79abb06fb7e@debian.org>",
+      "references": [
+        "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+        "<b8014664-9796-460f-a985-a79abb06fb7e@debian.org>"
+      ],
+      "body_plain": "Le Mon, Feb 09, 2026 at 08:11:31AM +0100, Michael R. Crusoe a écrit :\n> \n> On 09/02/2026 01.50, Charles Plessy wrote:\n> > propose to make this systematic.  The main drawback is that some Free HTML\n> > files with no minified Javascript code may be deleted as well.  On my side, I\n> > think that it is not a problem since 1) we still ship their source, and 2)\n> > they are still available on the Upstream sites.\n> \n> Can 'dh-update-R' be taught to make this change?\n\nHi Michael,\n\nwe can easily replace the contents of the Files-Excluded field with a command like:\n\n    cme modify dpkg-copyright 'Files-Excluded=\"foo\"'\n\nI have not found a tool to extract the current value, but in worst case it\nshould be easy to parse.\n\n> The template is a good idea, but unrelated to excluding the HTML files, yes?\n\nWe need to update the watch files so that the +dfsg suffix is added in case of\nrepacking.  Using the templates, we can just fix all watch files to the same\nstandard.\n\n> Also, I guess there is no habit of rendering the docs in r-* packages?\n\nThere are a couple of cases in r-bioc-*, but otherwise it is not mainstream.  Maybe\nthis is something we can consider in the future.\n\nCheers,\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Le Mon, Feb 09, 2026 at 08:11:31AM +0100, Michael R. Crusoe a écrit :\n> \n> On 09/02/2026 01.50, Charles Plessy wrote:\n> > propose to make this systematic.  The main drawback is that some Free HTML\n> >",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 2,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-c984ee9cc54b",
+      "message_id": "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-02-10T19:53:46Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>"
+      ],
+      "body_plain": "Hi Paul,\n\nOn 10 February 2026 at 20:00, Paul Gevers wrote:\n| Source: rcpp\n| Version: 1.1.0-1\n| Severity: serious\n| Control: close -1 1.1.1-2\n| Tags: sid forky\n| User: release.debian.org at packages.debian.org\n| Usertags: out-of-sync\n| \n| Dear maintainer(s),\n| \n| The Release Team considers packages that are out-of-sync between testing \n| and unstable for more than 30 days as having a Release Critical bug in \n| testing [1]. Your package src:rcpp has been trying to migrate for 31 \n| days [2], hence this bug report. The current output of the migration \n| software for this package is copied to the bottom of this report and \n| should list the reason why the package is blocked.\n| \n| If a package is out of sync between unstable and testing for a longer \n| period, this usually means that bugs in the package in testing cannot be \n| fixed via unstable. Additionally, blocked packages can have impact on \n| other packages, which makes preparing for the release more difficult. \n| Finally, it often exposes issues with the package and/or its \n| (reverse-)dependencies. We expect maintainers to fix issues that hamper \n| the migration of their package in a timely manner.\n| \n| This bug will trigger auto-removal when appropriate. As with all new \n| bugs, there will be at least 30 days before the package is auto-removed.\n| \n| This bug submission immediately closes the bug with the version in \n| unstable, so if that version or a later version migrates, this bug will \n| no longer affect testing. This bug is also tagged to only affect sid and \n| forky, so it doesn't affect (old-)stable.\n| \n| If you believe your package is unable to migrate to testing due to \n| issues beyond your control, don't hesitate to contact the Release Team.\n\nThis is downstream from me.\n\nLooking at the error I see for (r-cran-)phylobase at e.g.g amd64 that\n\n  > library('phylobase')\n  Error: package or namespace load failed for ‘phylobase’:\n   object ‘loadRcppModules’ is not exported by 'namespace:Rcpp'\n  Execution halted\n\nso that is an error in the package's autpkgtest.\n\nRcpp (for which I happen to be upstream) no longer exports loadRcppModules\nbecause it is a form of using Rcpp Modules that has been superceded for a\ndecade (!!) -- see\n\n  https://github.com/RcppCore/Rcpp/issues/1415\n  https://github.com/RcppCore/Rcpp/pull/1416\n\nfor more.\n\nIt is the same issue with (r-cran-)rncl.\n\nI am cc'ing debian-r, hopefully someone from the Debian R Packager team wants\nto take care of this.  (I can point to different Rcpp Modules resources if\nneed be.)\n\nCheers, Dirk\n\n| This bug report has been automatically generated and has only been sent \n| manually. If you have any comments with regards to the content or the \n| process, please reach out to me.\n| \n| Paul\n| \n| [1] https://lists.debian.org/debian-devel-announce/2023/06/msg00001.html\n| [2] https://qa.debian.org/excuses.php?package=rcpp\n| \n| Current text from [2]:\n| Migration status for rcpp (1.1.0-1 to 1.1.1-2): BLOCKED: \n| Rejected/violates migration policy/introduces a regression\n| Issues preventing migration:\n| ∙ ∙ Autopkgtest for r-cran-phylobase/0.8.12-1: amd64: Regression ♻ \n| (reference ♻), arm64: Regression ♻ (reference ♻), i386: Regression ♻ \n| (reference ♻), ppc64el: Regression ♻ (reference ♻), riscv64: Regression \n| ♻ (reference ♻), s390x: Regression ♻ (reference ♻)\n| ∙ ∙ Autopkgtest for r-cran-projpred/2.8.0+dfsg-1: amd64: Pass, arm64: \n| Pass, i386: Test triggered (failure will be ignored), ppc64el: Pass, \n| riscv64: Pass, s390x: Pass\n| ∙ ∙ Autopkgtest for r-cran-rncl/0.8.7-1: amd64: Regression ♻ (reference \n| ♻), arm64: Regression ♻ (reference ♻), i386: Regression ♻ (reference ♻), \n| ppc64el: Regression ♻ (reference ♻), riscv64: Regression ♻ (reference \n| ♻), s390x: Regression ♻ (reference ♻)\n| Additional info (not blocking):\n| ∙ ∙ Piuparts tested OK - https://piuparts.debian.org/sid/source/r/rcpp.html\n| ∙ ∙ Reproducible on amd64\n| ∙ ∙ Reproducible on arm64\n| ∙ ∙ Reproducible on armhf\n| ∙ ∙ Reproducible on i386\n| ∙ ∙ Reproducible on ppc64el\n| ∙ ∙ 28 days old (needed 5 days)\n| x[DELETED ATTACHMENT OpenPGP_signature.asc, application/pgp-signature]\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Paul,\n\nOn 10 February 2026 at 20:00, Paul Gevers wrote:\n| Source: rcpp\n| Version: 1.1.0-1\n| Severity: serious\n| Control: close -1 1.1.1-2\n| Tags: sid forky\n| User: release.debian.org at packages.de",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 0,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-8dfc10cc426e",
+      "message_id": "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-11T01:52:35Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Paul, Dirk and everybody,\n\n> On 10 February 2026 at 20:00, Paul Gevers wrote:\n> | Source: rcpp\n> | Version: 1.1.0-1\n> | Severity: serious\n> | Control: close -1 1.1.1-2\n> | Tags: sid forky\n> | User: release.debian.org at packages.debian.org\n> | Usertags: out-of-sync\n\nLe Tue, Feb 10, 2026 at 01:53:46PM -0600, Dirk Eddelbuettel a écrit :\n> This is downstream from me.\n\n> Looking at the error I see for (r-cran-)phylobase at e.g.g amd64 that\n>\n>  > library('phylobase')\n>  Error: package or namespace load failed for ‘phylobase’:\n>   object ‘loadRcppModules’ is not exported by 'namespace:Rcpp'\n>  Execution halted\n\n> It is the same issue with (r-cran-)rncl.\n\nYes indeed, it is an issue in r-cran-rncl 0.8.7-1 in Testing, which I\nfixed in Unstable by upgrading to 0.8.9-1 two weeks ago.\n\nr-cran-rncl 0.8.9-1 will not migrate to Testing untill all of its\nreverse dependencies (transitively) have completed the transition to the\nremoval of non-64-bit non-little-endian architectures, which I hope to\ncomplete befrore the end of March but I can not promise that for sure.\n\nr-cran-rncl 0.8.7-1 will be automatically removed from Testing on March\n8th because of the namespace issue above (#1126238).  After that,\nr-cran-rcpp can migrate to Testing because it will not break r-cran-rncl\nanymore.\n\nIf there were a system empowering me to remove r-cran-rncl from the way,\nI would surely use it, but I am not aware of such a tool.\n\nPaul, could you place a hint that does what is needed for r-cran-rcpp\nto migrate earlier than March 8th?\n\nI really feel sorry that the current situation strains a lot of time\nfrom all the parties but once the vast majority of the r-cran-* packages\nare built only on supported architectures, there will me much less\nmigration bottlenecks like this one.\n\nHave a nie day,\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hi Paul, Dirk and everybody,\n\n> On 10 February 2026 at 20:00, Paul Gevers wrote:\n> | Source: rcpp\n> | Version: 1.1.0-1\n> | Severity: serious\n> | Control: close -1 1.1.1-2\n> | Tags: sid forky\n> | User:",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 1,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-49a23f9d446c",
+      "message_id": "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2026-02-13T21:13:47Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+        "<aYvg4-uO2jqYFqvz@bubu.igloo>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 2/11/26 02:52, Charles Plessy wrote:\n> If there were a system empowering me to remove r-cran-rncl from the way,\n> I would surely use it, but I am not aware of such a tool.\n\nI don't recall I've seen one removal bug from you for an r-cran-* \npackage for your 32-bit/big-endian uploads. I recognize that you don't \nlike them, but that is the current system to deal with this. Filing RC \nbugs to your own packages will have them removed from testing, which \nmeans they are not in the way of other packages, but that's obviously \nless nice.\n\nThe ftp team can be asked to speed up processing a removal bug if it \nblocks other things and they respond typically quickly to requests like \nthat (on irc).\n\nPaul\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Charles,\n\nOn 2/11/26 02:52, Charles Plessy wrote:\n> If there were a system empowering me to remove r-cran-rncl from the way,\n> I would surely use it, but I am not aware of such a tool.\n\nI don't rec",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 2,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-17aec8b51b8b",
+      "message_id": "<27024.32959.138330.72878@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-02-14T14:03:43Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+        "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+        "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>"
+      ],
+      "body_plain": "Hi Charles, Hi Paul,\n\nOn 13 February 2026 at 22:13, Paul Gevers wrote:\n| On 2/11/26 02:52, Charles Plessy wrote:\n| > If there were a system empowering me to remove r-cran-rncl from the way,\n| > I would surely use it, but I am not aware of such a tool.\n| \n| I don't recall I've seen one removal bug from you for an r-cran-* \n| package for your 32-bit/big-endian uploads. I recognize that you don't \n| like them, but that is the current system to deal with this. Filing RC \n| bugs to your own packages will have them removed from testing, which \n| means they are not in the way of other packages, but that's obviously \n| less nice.\n| \n| The ftp team can be asked to speed up processing a removal bug if it \n| blocks other things and they respond typically quickly to requests like \n| that (on irc).\n\nNeedless to say, as the one on the receiving end with a package blocked that\nis a pure bystander here: I would of course be in favour of such a resolution.\n\nI just got another bunch of mass-removal, in my case for 31 (!!) packages,\nand this appears once again from unbuildable package/arch combination once\nagain involving i386 (and armhf and s390x) -- architectures where CRAN does\nnot test, cannot help and we are on our own. Which what may be limited\nmaintainer firepower.\n\nCheers, Dirk\n\nPS At the risk of repeating myself, I do maintain all of CRAN as binaries in\nmy Ubuntu add-on repo 'r2u' for two LTS releases one of which has two\narchitectures now.  All via GitHub Actions now. One can automate all of this;\nit is compelling to have 23,000 r-cran-* binaries and 500 r-bioc-* binaries.\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Charles, Hi Paul,\n\nOn 13 February 2026 at 22:13, Paul Gevers wrote:\n| On 2/11/26 02:52, Charles Plessy wrote:\n| > If there were a system empowering me to remove r-cran-rncl from the way,\n| > I woul",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 3,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-0f50d21d3729",
+      "message_id": "<aZVbaaw7_Juon9bZ@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-18T06:25:45Z",
+      "subject": "Re: Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": "<aYm0EVeatb85utwz@kumo.plessy.net>",
+      "references": [
+        "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+        "<b8014664-9796-460f-a985-a79abb06fb7e@debian.org>",
+        "<aYm0EVeatb85utwz@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi again,\n\nif I submit a patch to devscripts, we can use information already existing in\ndebian/upstream/metadata and get rid of debian/watch entirely, once the\ndevscript package containing defaults for CRAN and Bioconductor lands in\nTesting!  This makes us one step closer to full automation of CRAN/Bioc package\nmaintainance.\n\nOur dh-make|update-R scripts already place the appropriate `Archive` field\nwith the values of either CRAN or Bioconductor.  Remains the package upstream\nname.\n\nOne devscripts d/u/metadata-to-watch translator (CPAN) uses Upstream-Name\ndespate DEP12 saying that it should not be there.\n\nThe other (GitHub) uses Repository or Repository-Name.\n\nI would like to use the d/u/metadata route.  What should we use for the package name?\n\n - Package\n - Package-Name\n - Upstream-Name\n - Upstream-Name but grep it from debian/copyright\n - something else?\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi again,\n\nif I submit a patch to devscripts, we can use information already existing in\ndebian/upstream/metadata and get rid of debian/watch entirely, once the\ndevscript package containing defaults f",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 3,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-0bf8d86299ca",
+      "message_id": "<27030.27319.846826.92298@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-02-19T01:43:19Z",
+      "subject": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "subject_clean": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Team 'Debian R':\n\nThree of your packages are holding (r-cran-)rcpp from migrating to testing as\ncan be seen on the 'excuses' page for rcpp:\n\n   https://qa.debian.org/excuses.php?package=rcpp\n\nPer an earlier email by Charles, this appears to be driven by package\nr-cran-rncl affected at least r-cran-phylobase; I am unsure about\nr-cran-projpred.\n\nThis will result in AUTORM of rcpp, and because of dependency of more than\n230 other packages from Debian testing for rcpp alone, plus of course\nrecursive ripple effects from packages dependending on those packages. That\nis ... lunacy.\n\nI cannot stop you from using my package in your autopkg tests, but I am once\nagain a victim of you doing so. I would *truly* appreciate it if this could\nget unblocked. I would appreciate it even more if processes could get altered\nfor this not to happen recurrently.\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Team 'Debian R':\n\nThree of your packages are holding (r-cran-)rcpp from migrating to testing as\ncan be seen on the 'excuses' page for rcpp:\n\n   https://qa.debian.org/excuses.php?package=rcpp\n\nPer an e",
+      "thread_id": "thread-0bf8d86299ca",
+      "thread_depth": 0,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-dcd92d14ff85",
+      "message_id": "<ee56c1f3-4096-4869-8746-33315cae6ed7@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2026-02-19T06:40:31Z",
+      "subject": "Bug#1128383: RM: r-cran-ade4 and its reverse-dependencies [armhf i386 s390c hurd-386] -- RoM; unsupported architectures",
+      "subject_clean": "Bug#1128383: RM: r-cran-ade4 and its reverse-dependencies [armhf i386 s390c hurd-386] -- RoM; unsupported architectures",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nUser: ftp.debian.org at packages.debian.org\nUsertags: archive\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nDear Archive team\n\nplease remove r-cran-ade4 and its reverse-dependencies on armhf, i386 \nand s390c.\n\nThese architectures are not supported upstream and I have made the \npackages build-depend on architecture-is-64-bit and \narchitecture-is-little-endian.\n\nRemoving these binary packages in unstable will trigger the removal of \ntheir counterparts in testing, and allow the migration of related packages.\n\nI think that the dak command is:\n\ndak rm  -R -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-ade4\n\nOn coccia it gives the following output:\n\nWill remove the following packages from unstable:\n\nr-cran-ade4 |   1.7-23-1 | armhf, i386, s390x\n\nMaintainer: Debian R Packages Maintainers \n<r-pkg-team at alioth-lists.debian.net>\n\nWill also send CCs to: r-cran-ade4 at packages.debian.org\n\n------------------- Reason -------------------\nROM; remove 32 bit and non-little-endian architectures\n----------------------------------------------\n\nChecking reverse dependencies...\n# Broken Depends:\nr-bioc-phyloseq: r-bioc-phyloseq\nr-cran-adegenet: r-cran-adegenet\nr-cran-adegraphics: r-cran-adegraphics\nr-cran-adephylo: r-cran-adephylo\nr-cran-genoplotr: r-cran-genoplotr\nr-cran-phylobase: r-cran-phylobase\nr-cran-seqinr: r-cran-seqinr\nr-cran-treespace: r-cran-treespace\n\n# Broken Build-Depends:\nr-bioc-phyloseq: r-cran-ade4\nr-cran-adegenet: r-cran-ade4\nr-cran-adegraphics: r-cran-ade4\nr-cran-adephylo: r-cran-ade4\nr-cran-genoplotr: r-cran-ade4\nr-cran-phylobase: r-cran-ade4\nr-cran-seqinr: r-cran-ade4\nr-cran-treespace: r-cran-ade4\n\nAnd then it proposes to remove the packages.  But if it is not \nrecursive, here is a list of one-by-one dak commands.\n\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-ade4\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-adegenet\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-phylobase\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-seqinr\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-alakazam\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-adephylo\ndak rm -p -C package -m \"ROM; remove 32 bit and non-little-endian \narchitectures\" -b -a armhf,i386,s390x r-cran-treespace\n\nPlease let me know if you need more information,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: ftp.debian.org\nUser: ftp.debian.org at packages.debian.org\nUsertags: archive\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nDear Archive team\n\nplease remove r-cran-ade4 and its reverse-dependenc",
+      "thread_id": "thread-dcd92d14ff85",
+      "thread_depth": 0,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-de23f62fde15",
+      "message_id": "<aZaxXDAmZCM3EDIZ@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-19T06:44:44Z",
+      "subject": "Re: Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": "<aZVbaaw7_Juon9bZ@kumo.plessy.net>",
+      "references": [
+        "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+        "<b8014664-9796-460f-a985-a79abb06fb7e@debian.org>",
+        "<aYm0EVeatb85utwz@kumo.plessy.net>",
+        "<aZVbaaw7_Juon9bZ@kumo.plessy.net>"
+      ],
+      "body_plain": "Le Wed, Feb 18, 2026 at 03:25:45PM +0900, Charles Plessy a écrit :\n> \n> I would like to use the d/u/metadata route.  What should we use for the package name?\n> \n>  - Package\n>  - Package-Name\n>  - Upstream-Name\n>  - Upstream-Name but grep it from debian/copyright\n\nI think that the reception for using Upstream-Name from debian/copyright\nis rather good.  Shall I go ahead?\n\nhttps://salsa.debian.org/debian/devscripts/-/merge_requests/624#note_725911\n\nCheers,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Le Wed, Feb 18, 2026 at 03:25:45PM +0900, Charles Plessy a écrit :\n> \n> I would like to use the d/u/metadata route.  What should we use for the package name?\n> \n>  - Package\n>  - Package-Name\n>  - Ups",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 4,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-7cea30482f8d",
+      "message_id": "<aZaztEUSxd_cn_CO@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-19T06:54:44Z",
+      "subject": "Re: rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "subject_clean": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "in_reply_to": "<27030.27319.846826.92298@paul.eddelbuettel.com>",
+      "references": [
+        "<27030.27319.846826.92298@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nthanks again for your patience.  The migration to remove non-supported\narchitectures is progressing well and today I finally managed to produce\nsome code that I needed to write \"dak rm\" commands for removal requests.\n\nhttps://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/rdeps.R?ref_type=heads\n\nThank you for sharing earlier with me some code to parse dependencies, but I\nneeded something that was more transitive and that also included\nBuild-Depdends.\n\nI went ahead and asked for the removal (https://bugs.debian.org/1128383) of\nr-cran-ade4 and its reverse dependencies (phylobase, ...) in the unsupported\narchitectures, which should allow their migration and therefore stop blocking\nrcpp.\n\nNext I will check about rncl.\n\nOnce we have the unsupported architectures removed broady I expect the r-cran-*\npackage ecosystem to be much more stable and much easier to keep up to date.\n\nWe still build on more architectures than CRAN and, although it is rare, the\nautopkgtests also uncover real issues.  For instance we had one case where the\nCRAN package was expecting characters to be signed like on Mac, but on Linux\nARM64 they are unsigned.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi Dirk,\n\nthanks again for your patience.  The migration to remove non-supported\narchitectures is progressing well and today I finally managed to produce\nsome code that I needed to write \"dak rm\" comm",
+      "thread_id": "thread-0bf8d86299ca",
+      "thread_depth": 1,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-07f48abbc8d0",
+      "message_id": "<3290967.fEcJ0Lxnt5@ryz>",
+      "from_name": "Johannes Ranke",
+      "from_email_hash": "70f405e66820344ddf650838db2a676ed8d926ceb30aa8cf158ab94fa0d64f43",
+      "date": "2026-02-19T06:56:28Z",
+      "subject": "Re: Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "subject_clean": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "in_reply_to": "<aZaxXDAmZCM3EDIZ@kumo.plessy.net>",
+      "references": [
+        "<aYkvPEoxj_56sQ9I@kumo.plessy.net>",
+        "<aZVbaaw7_Juon9bZ@kumo.plessy.net>",
+        "<aZaxXDAmZCM3EDIZ@kumo.plessy.net>"
+      ],
+      "body_plain": "Am Donnerstag, 19. Februar 2026, 07:44:44 Mitteleuropäische Normalzeit schrieb \nCharles Plessy:\n> Le Wed, Feb 18, 2026 at 03:25:45PM +0900, Charles Plessy a écrit :\n> > I would like to use the d/u/metadata route.  What should we use for the\n> > package name?> \n> >  - Package\n> >  - Package-Name\n> >  - Upstream-Name\n> >  - Upstream-Name but grep it from debian/copyright\n> \n> I think that the reception for using Upstream-Name from debian/copyright\n> is rather good.  Shall I go ahead?\n\nDear Charles,\n\nI cannot give you an informed vote, but it sounds good to me. Just to let you \nknow that your efforts to improve maintainability are much appreciated.\n\nJohannes\n\n> \n> https://salsa.debian.org/debian/devscripts/-/merge_requests/624#note_725911\n> \n> Cheers,\n> \n> Charles",
+      "body_snippet": "Am Donnerstag, 19. Februar 2026, 07:44:44 Mitteleuropäische Normalzeit schrieb \nCharles Plessy:\n> Le Wed, Feb 18, 2026 at 03:25:45PM +0900, Charles Plessy a écrit :\n> > I would like to use the d/u/met",
+      "thread_id": "thread-15f064ebbfc5",
+      "thread_depth": 5,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-1da158ce9058",
+      "message_id": "<aZb1HfKUjWgr1P6V@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-19T11:33:49Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+        "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+        "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>"
+      ],
+      "body_plain": "Hi Paul,\n\nI finished today to write some R code that parses Debian's dependency\ngraph to help me check that if I ask for a recursive removal to the the\nArchive time, the 32-bit/big-endian buildds are not going to replace the\nbinaries immediately.  (That is, that the whole subgraph went through\nthe architecture restriction).\n\nhttps://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/rdeps.R?ref_type=heads\n\nI am making a small-scale test with https://bugs.debian.org/1128383,\nand will ramp up it it worked well.\n\nI hope that we are seeing the light at the end of the tunnel, although\nI worry that the architecture-independant packages will cause a problem\nthat I did not foresee when I started this project.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hi Paul,\n\nI finished today to write some R code that parses Debian's dependency\ngraph to help me check that if I ask for a recursive removal to the the\nArchive time, the 32-bit/big-endian buildds are ",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 3,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-ddeec5708bb3",
+      "message_id": "<41d55188-fc0e-47fa-baa8-a34fd7c718c5@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2026-02-20T06:40:13Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<aZb1HfKUjWgr1P6V@bubu.igloo>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+        "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+        "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>",
+        "<aZb1HfKUjWgr1P6V@bubu.igloo>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 2/19/26 12:33, Charles Plessy wrote:\n> I finished today to write some R code that parses Debian's dependency\n> graph to help me check that if I ask for a recursive removal to the the\n> Archive time, the 32-bit/big-endian buildds are not going to replace the\n> binaries immediately.\n\nThank you.\n\nPaul\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Charles,\n\nOn 2/19/26 12:33, Charles Plessy wrote:\n> I finished today to write some R code that parses Debian's dependency\n> graph to help me check that if I ask for a recursive removal to the the\n>",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 4,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-30792662a017",
+      "message_id": "<27032.8089.471048.125656@hornik.net>",
+      "from_name": "Kurt Hornik",
+      "from_email_hash": "6740dd468a52e648b787a10cae32d1e43b6db87654353fbd95012a5ae5b82a59",
+      "date": "2026-02-20T08:47:21Z",
+      "subject": "Re: rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "subject_clean": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "in_reply_to": "<aZaztEUSxd_cn_CO@kumo.plessy.net>",
+      "references": [
+        "<27030.27319.846826.92298@paul.eddelbuettel.com>",
+        "<aZaztEUSxd_cn_CO@kumo.plessy.net>"
+      ],
+      "body_plain": ">>>>> Charles Plessy writes:\n\n> Hi Dirk,\n> thanks again for your patience.  The migration to remove non-supported\n> architectures is progressing well and today I finally managed to produce\n> some code that I needed to write \"dak rm\" commands for removal requests.\n\n> https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/rdeps.R?ref_type=heads\n\n> Thank you for sharing earlier with me some code to parse dependencies, but I\n> needed something that was more transitive and that also included\n> Build-Depdends.\n\n> I went ahead and asked for the removal (https://bugs.debian.org/1128383) of\n> r-cran-ade4 and its reverse dependencies (phylobase, ...) in the unsupported\n> architectures, which should allow their migration and therefore stop blocking\n> rcpp.\n\n> Next I will check about rncl.\n\n> Once we have the unsupported architectures removed broady I expect the\n> r-cran-* package ecosystem to be much more stable and much easier to\n> keep up to date.\n\n> We still build on more architectures than CRAN and, although it is\n> rare, the autopkgtests also uncover real issues.  For instance we had\n> one case where the CRAN package was expecting characters to be signed\n> like on Mac, but on Linux ARM64 they are unsigned.\n\nInteresting.  Indeed, CRAN checking currently has no coverage for linux\non arm64, but it would be good to learn about such problems and get\nthese taken care of.  Did you report the above problem to the upstream\nmaintainer?\n\nBest\n-k\n\n> Have a nice day,\n\n> Charles\n\n> -- \n> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan\n> Debian Med packaging team         http://www.debian.org/devel/debian-med\n> Tooting from home                  https://framapiaf.org/@charles_plessy\n> - You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": ">>>>> Charles Plessy writes:\n\n> Hi Dirk,\n> thanks again for your patience.  The migration to remove non-supported\n> architectures is progressing well and today I finally managed to produce\n> some code",
+      "thread_id": "thread-0bf8d86299ca",
+      "thread_depth": 2,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-c13a5040a04d",
+      "message_id": "<aZgjYdR2WnFzVamy@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-02-20T09:03:29Z",
+      "subject": "Re: rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "subject_clean": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "in_reply_to": "<27032.8089.471048.125656@hornik.net>",
+      "references": [
+        "<27030.27319.846826.92298@paul.eddelbuettel.com>",
+        "<aZaztEUSxd_cn_CO@kumo.plessy.net>",
+        "<27032.8089.471048.125656@hornik.net>"
+      ],
+      "body_plain": "> >>>>> Charles Plessy writes:\n> \n> > We still build on more architectures than CRAN and, although it is\n> > rare, the autopkgtests also uncover real issues.  For instance we had\n> > one case where the CRAN package was expecting characters to be signed\n> > like on Mac, but on Linux ARM64 they are unsigned.\n\nLe Fri, Feb 20, 2026 at 09:47:21AM +0100, Kurt Hornik a écrit :\n> \n> Interesting.  Indeed, CRAN checking currently has no coverage for linux\n> on arm64, but it would be good to learn about such problems and get\n> these taken care of.  Did you report the above problem to the upstream\n> maintainer?\n\nWe opened an issue on GitHub:\n\n  https://github.com/kaneplusplus/bigmemory/issues/115\n\nand patched our package:\n\n  https://salsa.debian.org/r-pkg-team/r-cran-bigmemory/-/blob/master/debian/patches/Use_signed_char?ref_type=heads\n\nHave a nice week-end,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "> >>>>> Charles Plessy writes:\n> \n> > We still build on more architectures than CRAN and, although it is\n> > rare, the autopkgtests also uncover real issues.  For instance we had\n> > one case where th",
+      "thread_id": "thread-0bf8d86299ca",
+      "thread_depth": 3,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-4aec9427e12d",
+      "message_id": "<27032.9204.596174.238315@hornik.net>",
+      "from_name": "Kurt Hornik",
+      "from_email_hash": "6740dd468a52e648b787a10cae32d1e43b6db87654353fbd95012a5ae5b82a59",
+      "date": "2026-02-20T09:05:56Z",
+      "subject": "Re: rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "subject_clean": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "in_reply_to": "<aZgjYdR2WnFzVamy@kumo.plessy.net>",
+      "references": [
+        "<27030.27319.846826.92298@paul.eddelbuettel.com>",
+        "<aZaztEUSxd_cn_CO@kumo.plessy.net>",
+        "<27032.8089.471048.125656@hornik.net>",
+        "<aZgjYdR2WnFzVamy@kumo.plessy.net>"
+      ],
+      "body_plain": ">>>>> Charles Plessy writes:\n\nThanks!\n\nBest\n-k\n\n>> >>>>> Charles Plessy writes:\n>> \n>> > We still build on more architectures than CRAN and, although it is\n>> > rare, the autopkgtests also uncover real issues.  For instance we had\n>> > one case where the CRAN package was expecting characters to be signed\n>> > like on Mac, but on Linux ARM64 they are unsigned.\n\n> Le Fri, Feb 20, 2026 at 09:47:21AM +0100, Kurt Hornik a écrit :\n>> \n>> Interesting.  Indeed, CRAN checking currently has no coverage for linux\n>> on arm64, but it would be good to learn about such problems and get\n>> these taken care of.  Did you report the above problem to the upstream\n>> maintainer?\n\n> We opened an issue on GitHub:\n\n>   https://github.com/kaneplusplus/bigmemory/issues/115\n\n> and patched our package:\n\n>   https://salsa.debian.org/r-pkg-team/r-cran-bigmemory/-/blob/master/debian/patches/Use_signed_char?ref_type=heads\n\n> Have a nice week-end,\n\n> Charles\n\n> -- \n> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan\n> Debian Med packaging team         http://www.debian.org/devel/debian-med\n> Tooting from home                  https://framapiaf.org/@charles_plessy\n> - You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": ">>>>> Charles Plessy writes:\n\nThanks!\n\nBest\n-k\n\n>> >>>>> Charles Plessy writes:\n>> \n>> > We still build on more architectures than CRAN and, although it is\n>> > rare, the autopkgtests also uncover rea",
+      "thread_id": "thread-0bf8d86299ca",
+      "thread_depth": 4,
+      "month": "2026-02"
+    },
+    {
+      "id": "msg-17c42530ffc9",
+      "message_id": "<27032.40498.844097.110720@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-02-20T17:47:30Z",
+      "subject": "Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "subject_clean": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "in_reply_to": "<41d55188-fc0e-47fa-baa8-a34fd7c718c5@debian.org>",
+      "references": [
+        "<5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org>",
+        "<27019.36042.966359.726337@paul.eddelbuettel.com>",
+        "<aYvg4-uO2jqYFqvz@bubu.igloo>",
+        "<f13090b3-8934-42d3-ad3b-539202072b3d@debian.org>",
+        "<aZb1HfKUjWgr1P6V@bubu.igloo>",
+        "<41d55188-fc0e-47fa-baa8-a34fd7c718c5@debian.org>"
+      ],
+      "body_plain": "Hi Charles.\n\nOn 20 February 2026 at 07:40, Paul Gevers wrote:\n| On 2/19/26 12:33, Charles Plessy wrote:\n| > I finished today to write some R code that parses Debian's dependency\n| > graph to help me check that if I ask for a recursive removal to the the\n| > Archive time, the 32-bit/big-endian buildds are not going to replace the\n| > binaries immediately.\n| \n| Thank you.\n\n>>From me too -- let's hope this \"uncorks\" the issues we were seeing.\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Charles.\n\nOn 20 February 2026 at 07:40, Paul Gevers wrote:\n| On 2/19/26 12:33, Charles Plessy wrote:\n| > I finished today to write some R code that parses Debian's dependency\n| > graph to help me c",
+      "thread_id": "thread-c984ee9cc54b",
+      "thread_depth": 5,
+      "month": "2026-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-15f064ebbfc5",
+      "subject": "Proposal: always exclude */inst/doc/*.html from our team-maintained r-cran- and r-bioc- packages.",
+      "message_count": 6,
+      "participants": [
+        "Charles Plessy",
+        "Johannes Ranke",
+        "Michael R. Crusoe"
+      ],
+      "started": "2026-02-09T00:50:04Z",
+      "last_reply": "2026-02-19T06:56:28Z",
+      "root_message_id": "msg-15f064ebbfc5"
+    },
+    {
+      "id": "thread-c984ee9cc54b",
+      "subject": "Bug#1127631: src:rcpp: fails to migrate to testing for too long",
+      "message_count": 7,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel",
+        "Paul Gevers"
+      ],
+      "started": "2026-02-10T19:53:46Z",
+      "last_reply": "2026-02-20T17:47:30Z",
+      "root_message_id": "msg-c984ee9cc54b"
+    },
+    {
+      "id": "thread-0bf8d86299ca",
+      "subject": "rcpp again blocked by i386,armhf,s390x autopkg tests",
+      "message_count": 5,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel",
+        "Kurt Hornik"
+      ],
+      "started": "2026-02-19T01:43:19Z",
+      "last_reply": "2026-02-20T09:05:56Z",
+      "root_message_id": "msg-0bf8d86299ca"
+    },
+    {
+      "id": "thread-dcd92d14ff85",
+      "subject": "Bug#1128383: RM: r-cran-ade4 and its reverse-dependencies [armhf i386 s390c hurd-386] -- RoM; unsupported architectures",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-02-19T06:40:31Z",
+      "last_reply": "2026-02-19T06:40:31Z",
+      "root_message_id": "msg-dcd92d14ff85"
+    }
+  ]
+}

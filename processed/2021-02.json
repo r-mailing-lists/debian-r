@@ -1,0 +1,885 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2021-02",
+  "messages": [
+    {
+      "id": "msg-02c4b533f62e",
+      "message_id": "<20210208134316.GH5519@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-08T13:43:16Z",
+      "subject": "r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Sébastien,\n\nI've seen you have updated r-cran-rsdmx to version 0.6.  Guessing from\nthe changelog you seem to be the last one in the R team who is not using\nroutine-update.  I strongly recommend to use this script since it saves\na lot of time.\n\nI realised that upstream has added some tests and tried adding an\nautopkgtest.  Unfortunately this test is failing with:\n\n...\n  Loading required package: rsdmx\n  ══ Skipped tests ═══════════════════════════════════════════════════════════════\n  ● On CRAN (76)\n\n  ══ Failed tests ════════════════════════════════════════════════════════════════\n  ── Error (test_Codelists.R:12:3): Codelists - 2.0 ──────────────────────────────\n  Error: empty or no content specified\n  Backtrace:\n      █\n   1. └─XML::xmlParse(file) test_Codelists.R:12:2\n  ── Error (test_Codelists.R:24:3): Codelists - 2.1 ──────────────────────────────\n  Error: empty or no content specified\n  Backtrace:\n      █\n   1. └─XML::xmlParse(file) test_Codelists.R:24:2\n  ── Error (test_CompactData.R:12:3): CompactData 2.0 ────────────────────────────\n  Error: empty or no content specified\n  Backtrace:\n      █\n   1. └─XML::xmlParse(file) test_CompactData.R:12:2\n...\n\nAny idea what might be wrong here?\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nI've seen you have updated r-cran-rsdmx to version 0.6.  Guessing from\nthe changelog you seem to be the last one in the R team who is not using\nroutine-update.  I strongly recommend to ",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-5f9c1b6609a5",
+      "message_id": "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-08T13:46:27Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<20210208134316.GH5519@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nLe lundi 08 février 2021 à 14:43 +0100, Andreas Tille a écrit :\n\n> I've seen you have updated r-cran-rsdmx to version 0.6.  Guessing from\n> the changelog you seem to be the last one in the R team who is not using\n> routine-update.  I strongly recommend to use this script since it saves\n> a lot of time.\n\nSorry, I did not had the time to look at this script. I admit I'm used\nto doing many things manually (and also to use lintian-brush from time\nto time).\n\n> I realised that upstream has added some tests and tried adding an\n> autopkgtest.  Unfortunately this test is failing with:\n> \n> ...\n>   Loading required package: rsdmx\n>   ══ Skipped tests ═══════════════════════════════════════════════════════════════\n>   ● On CRAN (76)\n> \n>   ══ Failed tests ════════════════════════════════════════════════════════════════\n>   ── Error (test_Codelists.R:12:3): Codelists - 2.0 ──────────────────────────────\n>   Error: empty or no content specified\n>   Backtrace:\n>       █\n>    1. └─XML::xmlParse(file) test_Codelists.R:12:2\n\nThis is a known issue. The problem is that the test files are not under\na DFSG-free license, and thus are removed by the Files-Excluded stazna\nin debian/copyright. I don't think there is a satisfactory solution to\nthis.\n\nNote that autopkgtest is *not* failing. It succeeds, but because it\nonly tries to load the package (without exercising those tests).\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Hi Andreas,\n\nLe lundi 08 février 2021 à 14:43 +0100, Andreas Tille a écrit :\n\n> I've seen you have updated r-cran-rsdmx to version 0.6.  Guessing from\n> the changelog you seem to be the last one in th",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-81f879402368",
+      "message_id": "<20210208155639.GI5519@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-08T15:56:39Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>"
+      ],
+      "body_plain": "Hi Sébastien,\n\nOn Mon, Feb 08, 2021 at 02:46:27PM +0100, Sébastien Villemot wrote:\n> \n> Sorry, I did not had the time to look at this script.\n\nThe time is\n\n    # apt install routine-update\n    $ routine-update\n\nand saves you a *lot* of time - otherwise the amount of R packages\nwould become unmanageable.\n\n> I admit I'm used\n> to doing many things manually (and also to use lintian-brush from time\n> to time).\n\nroutine-update is doing this for you.\n \n> This is a known issue. The problem is that the test files are not under\n> a DFSG-free license, and thus are removed by the Files-Excluded stazna\n> in debian/copyright. I don't think there is a satisfactory solution to\n> this.\n> \n> Note that autopkgtest is *not* failing. It succeeds, but because it\n> only tries to load the package (without exercising those tests).\n\nWell, what *I* just added in\n\n   https://salsa.debian.org/r-pkg-team/r-cran-rsdmx/-/commit/b95085fb8cb180530a7ea6ad7f091f9328e4b265\n\nis failing and if this would be uploaded also\n\n   Testsuite: autopkgtest-pkg-r\n\nsince if I'm not misleaded this test would be executed.  To prevent\nthis I would rename\n\n    git mv debian/tests/control debian/tests/control_deactivated\n\nand drop a comment about the issue above.  That way it would be\nsufficiently documented why there is no proper autopkgtest. \n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nOn Mon, Feb 08, 2021 at 02:46:27PM +0100, Sébastien Villemot wrote:\n> \n> Sorry, I did not had the time to look at this script.\n\nThe time is\n\n    # apt install routine-update\n    $ routi",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 2,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-75932372fe47",
+      "message_id": "<b87cc7350c56fc5d4f5fee46b2ec45d1dd8e61eb.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-08T16:40:25Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<20210208155639.GI5519@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>"
+      ],
+      "body_plain": "Le lundi 08 février 2021 à 16:56 +0100, Andreas Tille a écrit :\n\n> On Mon, Feb 08, 2021 at 02:46:27PM +0100, Sébastien Villemot wrote:\n> \n> > This is a known issue. The problem is that the test files are not under\n> > a DFSG-free license, and thus are removed by the Files-Excluded stazna\n> > in debian/copyright. I don't think there is a satisfactory solution to\n> > this.\n> > \n> > Note that autopkgtest is *not* failing. It succeeds, but because it\n> > only tries to load the package (without exercising those tests).\n> \n> Well, what *I* just added in\n>    \n> https://salsa.debian.org/r-pkg-team/r-cran-rsdmx/-/commit/b95085fb8cb180530a7ea6ad7f091f9328e4b265\n> \n> \n> is failing and if this would be uploaded also\n> \n>    Testsuite: autopkgtest-pkg-r\n> \n> since if I'm not misleaded this test would be executed.  To prevent\n> this I would rename\n> \n>     git mv debian/tests/control debian/tests/control_deactivated\n> \n> and drop a comment about the issue above.  That way it would be\n> sufficiently documented why there is no proper autopkgtest. \n\nSounds good.\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le lundi 08 février 2021 à 16:56 +0100, Andreas Tille a écrit :\n\n> On Mon, Feb 08, 2021 at 02:46:27PM +0100, Sébastien Villemot wrote:\n> \n> > This is a known issue. The problem is that the test files ",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 3,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-a3451a73e3ae",
+      "message_id": "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-08T20:38:07Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<20210208155639.GI5519@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>"
+      ],
+      "body_plain": "Le lundi 08 février 2021 à 16:56 +0100, Andreas Tille a écrit :\n\n> > I admit I'm used\n> > to doing many things manually (and also to use lintian-brush from time\n> > to time).\n> \n> routine-update is doing this for you.\n\nMany things cannot be automated:\n- importing a new upstream release requires a manual check of all\nlicense/copyright changes\n- bumping to a new Standards-Version requires a manual check of what\nneeds to be updated to comply with the new policy version\n- bumping to a new debhelper compat level requires a manual check of\nwhat could break/change with the new level\n\nSo I have the impression that most tasks, even those apparently\nroutinized, cannot be automated. Moreover, lintian-brush already seems\nto cover the cases that can be. But maybe routine-update has features\nthat I am not aware of…\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le lundi 08 février 2021 à 16:56 +0100, Andreas Tille a écrit :\n\n> > I admit I'm used\n> > to doing many things manually (and also to use lintian-brush from time\n> > to time).\n> \n> routine-update is do",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 3,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-9fce5fac825e",
+      "message_id": "<20210208212825.GL5519@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-08T21:28:25Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>"
+      ],
+      "body_plain": "On Mon, Feb 08, 2021 at 09:38:07PM +0100, Sébastien Villemot wrote:\n> Many things cannot be automated:\n> - importing a new upstream release requires a manual check of all\n> license/copyright changes\n\nThat's correct but no argument against using an automated tool.\n\n> - bumping to a new Standards-Version requires a manual check of what\n> needs to be updated to comply with the new policy version\n\nI admit I simply trust lintian to do this job.\n\n> - bumping to a new debhelper compat level requires a manual check of\n> what could break/change with the new level\n\nIf the package builds correctly and passes its autopkgtest I assume the\ncompat level bump had no negative effect and should be done.\n \n> So I have the impression that most tasks, even those apparently\n> routinized, cannot be automated. Moreover, lintian-brush already seems\n> to cover the cases that can be. But maybe routine-update has features\n> that I am not aware of…\n\nRoutine-update is doing all those things that I manually did for\nseveral packages before.  For R packages it runs\n\n    dh-update-R && cme fix dpkg-control\n\nto cover new Build-Depends (and remove useless / redundant version\nspecifications afterwards).  It does boring things like\n\n    sed -i 's/ADTTMP/AUTOPKGTEST_TMP/g' debian/tests/run-unit-test\n\n(may be that feature is also provided by lintian-brush but when\nthis feature was added to routine-update it was not).  Feel free to\nsimply try it and check the commit log (which I did probably 100\ntimes).  The result is a set of normalised packages in the team.\n\nKind regards\n\n        Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Feb 08, 2021 at 09:38:07PM +0100, Sébastien Villemot wrote:\n> Many things cannot be automated:\n> - importing a new upstream release requires a manual check of all\n> license/copyright changes\n\n",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 4,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-e24c47d8244f",
+      "message_id": "<20210209185553.GT5519@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-09T18:55:53Z",
+      "subject": "How to set skip-not-installable for autopkgtest-pkg-r",
+      "subject_clean": "How to set skip-not-installable for autopkgtest-pkg-r",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Dylan,\n\nI admit I did not dived to much into autopkgtest internals.  I realised\nthe package pkg-r-autopkgtest contains the script\n\n   /usr/share/dh-r/pkg-r-autopkgtest\n\nwhich is executed for packages featuring a line\n\n   Testsuite: autopkgtest-pkg-r\n\nin debian/control.  That's nice but I wonder what control file is used\nhere and how we could possibly sneak in\n\n   Restrictions: skip-not-installable\n\nThis is cruxial for r-bioc-dupradar where I just added this restriction\nto the manual autopkgtest - but the  Testsuite:  field just triggers\nanother test without this restriction which makes my effort void.\n\nWe also need some sensible method to not run\n\n   /usr/share/dh-r/pkg-r-autopkgtest\n\nif the test was manually tweaked.\n\nFor the moment I will deactivate\n\n    Testsuite: autopkgtest-pkg-r\n\nin r-bioc-dupradar ... but I think skip-not-installable is a sensible\nrestriction in general and we should implement this.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dylan,\n\nI admit I did not dived to much into autopkgtest internals.  I realised\nthe package pkg-r-autopkgtest contains the script\n\n   /usr/share/dh-r/pkg-r-autopkgtest\n\nwhich is executed for packag",
+      "thread_id": "thread-e24c47d8244f",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-319ea03bc6a1",
+      "message_id": "<161296808235.3598367.5963656328665799981.reportbug@energija.fam-tille.de>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-10T14:41:22Z",
+      "subject": "Bug#982465: RM: r-cran-rstanarm [armhf i386 mips64el] -- ROM; Does not build on some architectures and more but testing migration for main architectures is important",
+      "subject_clean": "Bug#982465: RM: r-cran-rstanarm [armhf i386 mips64el] -- ROM; Does not build on some architectures and more but testing migration for main architectures is important",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nHi ftpmaster,\n\nShayan Doust worked really hard to fix an issue in r-cran-rstan to\nenable smooth building of r-cran-rstanarm.  For the moment it is not\nclear yet why this fix does not work for armhf, i386 and mips64el but\nother architectures are building nicely.  We will keep on investigating\nthis issue but it would be important to let r-cran-rstanarm migrate\nto testing to let a whole bunch of other R package migrate as well.\n\nSo please remove r-cran-rstanarm for the said architectures from\nunstable.\n\nThanks a lot for your ftpmaster work\n\n       Andreas.",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nHi ftpmaster,\n\nShayan Doust worked really hard to fix an issue in r-cran-rstan to\nenable smooth building of r-cran-",
+      "thread_id": "thread-319ea03bc6a1",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-e2946cd342ff",
+      "message_id": "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-13T15:29:59Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<20210208212825.GL5519@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>"
+      ],
+      "body_plain": "Le lundi 08 février 2021 à 22:28 +0100, Andreas Tille a écrit :\n> On Mon, Feb 08, 2021 at 09:38:07PM +0100, Sébastien Villemot wrote:\n> > Many things cannot be automated:\n> > - importing a new upstream release requires a manual check of all\n> > license/copyright changes\n> \n> That's correct but no argument against using an automated tool.\n\nSure. But there is the risk of forgetting to do the manual task\nassociated to what the tool has done automatically. I like to be forced\nto do something manually in order not to forget those steps.\n\nMaybe routine-update could be improved by printing a message about what\nhas to be done manually whenever it does something automatically (e.g.\nchecking the copyright/licences changes, checking the policy upgrade\nlist, checking the debhelper compat level upgrade list).\n\n> > - bumping to a new Standards-Version requires a manual check of what\n> > needs to be updated to comply with the new policy version\n> \n> I admit I simply trust lintian to do this job.\n\nIn practice there are many aspects of the policy that are not checked\nby lintian.\n\nlintian-brush does some of those upgrades automatically, but only for\nspecific pairs of older/newer policy versions, when it can be\nascertained automatically that compliance is effective.\n\n> > - bumping to a new debhelper compat level requires a manual check of\n> > what could break/change with the new level\n> \n> If the package builds correctly and passes its autopkgtest I assume the\n> compat level bump had no negative effect and should be done.\n\nAgain, that is not generally true. It is impossible in practice to\ncreate an autopkgtest that checks every aspect of a package.\n\n> > So I have the impression that most tasks, even those apparently\n> > routinized, cannot be automated. Moreover, lintian-brush already seems\n> > to cover the cases that can be. But maybe routine-update has features\n> > that I am not aware of…\n> \n> Routine-update is doing all those things that I manually did for\n> several packages before.  For R packages it runs\n> \n>     dh-update-R && cme fix dpkg-control\n> \n> to cover new Build-Depends (and remove useless / redundant version\n> specifications afterwards).  It does boring things like\n> \n>     sed -i 's/ADTTMP/AUTOPKGTEST_TMP/g' debian/tests/run-unit-test\n> \n> (may be that feature is also provided by lintian-brush but when\n> this feature was added to routine-update it was not).  Feel free to\n> simply try it and check the commit log (which I did probably 100\n> times).  The result is a set of normalised packages in the team.\n\nI value the standardization of packages within a team. However, in\nDebian this is usually achieved by mandating compliance to a team\npolicy document.\n\nIf you have noticed anything in my R packages that does not comply with\nteam practices, please let me know.\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le lundi 08 février 2021 à 22:28 +0100, Andreas Tille a écrit :\n> On Mon, Feb 08, 2021 at 09:38:07PM +0100, Sébastien Villemot wrote:\n> > Many things cannot be automated:\n> > - importing a new upstrea",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 5,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-73de985a7caf",
+      "message_id": "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+      "from_name": "Eric Brown",
+      "from_email_hash": "72f77298f57f870824dfb1ef4c17915cf731bb55eb2adaf3ad1a0e348a777d18",
+      "date": "2021-02-13T23:10:22Z",
+      "subject": "Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,I am a maintainer of a few R packages on CRAN and am interested in becoming more involved in Debian, but do not currently have any Debian packaging experience. Is there a need for additional maintainers in this Debian R group? And if so, is there a resource that describes the best practices for maintaining R packages in Debian?\nThank you,\nEric",
+      "body_snippet": "Hello,I am a maintainer of a few R packages on CRAN and am interested in becoming more involved in Debian, but do not currently have any Debian packaging experience. Is there a need for additional mai",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-4180eb165e69",
+      "message_id": "<20210214090016.GP26070@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-14T09:00:16Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Eric,\n\nOn Sat, Feb 13, 2021 at 06:10:22PM -0500, Eric Brown wrote:\n> I am a maintainer of a few R packages on CRAN and am interested in becoming\n> more involved in Debian, but do not currently have any Debian packaging\n> experience. Is there a need for additional maintainers in this Debian R\n> group? And if so, is there a resource that describes the best practices for\n> maintaining R packages in Debian?\n\nWe could probably use every helping hand.  I'm about to go AFK for some\nhours but to give you a quick kick-start I'd recommend you do\n\n    sudo apt install dh-r\n    prepare_missing_cran_package YourCRANPackage\n\nJust inspect the resulting Git repository and specifically the debian/ dir\nin it.\n\nHope this helps for the moment\n\n        Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Eric,\n\nOn Sat, Feb 13, 2021 at 06:10:22PM -0500, Eric Brown wrote:\n> I am a maintainer of a few R packages on CRAN and am interested in becoming\n> more involved in Debian, but do not currently have",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-d5adce7c5ca7",
+      "message_id": "<1aab1d911f305ace5ad1c00dfc7c62782cd126f0.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-14T09:21:13Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Eric,\n\nLe samedi 13 février 2021 à 18:10 -0500, Eric Brown a écrit :\n> I am a maintainer of a few R packages on CRAN and am interested in becoming more involved in Debian, but do not currently have any Debian packaging experience. Is there a need for additional maintainers in this Debian R group? And if so, is there a resource that describes the best practices for maintaining R packages in Debian?\n\nAs Andreas said, we could make use of more manpower in the team. In particular, we currently only maintain a subset of all the CRAN packages, so by having more people we could extend our coverage.\n\nFor a general introduction to Debian packaging, you could have a look at the “maint-guide” package. The document is also online at:\nhttps://www.debian.org/doc/manuals/maint-guide/index.en.html\n(it is also available in other languages)\n\nMore packaging resources can be found at: https://www.debian.org/doc/devel-manuals\n\nWe do not have a document describing the specific practices of the Debian R Team. However, by looking at an example, as suggested by Andreas, you should have a pretty good idea of how we do things.\n\nYou may also want to look at this wiki page which is the home of our team: https://wiki.debian.org/Teams/r-pkg-team\n\nDon’t hesitate to ask for more help/pointers.\n\nBest regards,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Dear Eric,\n\nLe samedi 13 février 2021 à 18:10 -0500, Eric Brown a écrit :\n> I am a maintainer of a few R packages on CRAN and am interested in becoming more involved in Debian, but do not currently ha",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-258a6c71684e",
+      "message_id": "<6cca56009295dd5be3b93b2d3b57c6a7d96a2b4e.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-14T09:27:15Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<1aab1d911f305ace5ad1c00dfc7c62782cd126f0.camel@debian.org>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<1aab1d911f305ace5ad1c00dfc7c62782cd126f0.camel@debian.org>"
+      ],
+      "body_plain": "Le dimanche 14 février 2021 à 10:21 +0100, Sébastien Villemot a écrit :\n\n> For a general introduction to Debian packaging, you could have a look at the “maint-guide” package. The document is also online at:\n> https://www.debian.org/doc/manuals/maint-guide/index.en.html\n> (it is also available in other languages)\n\nSorry, I realize that “maint-guide” is getting outdated and has been superseded by “debmake-doc”. The document is online at:\nhttps://www.debian.org/doc/manuals/debmake-doc/\n\nNote that some aspects of this document do not apply to R packaging. In particular, we do not use the ”debmake” command: we instead use the “prepare_missing_cran_package” command mentioned by Andreas.\n\n-- ⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le dimanche 14 février 2021 à 10:21 +0100, Sébastien Villemot a écrit :\n\n> For a general introduction to Debian packaging, you could have a look at the “maint-guide” package. The document is also onli",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 2,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-b23cf40ed2cb",
+      "message_id": "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-02-14T17:15:44Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Eric,\n\nAm 14.02.21 um 00:10 schrieb Eric Brown:\n> I am a maintainer of a few R packages on CRAN and am interested in\n> becoming more involved in Debian, but do not currently have any Debian\n> packaging experience. Is there a need for additional maintainers in\n> this Debian R group? And if so, is there a resource that describes the\n> best practices for maintaining R packages in Debian?\n\nI am not sure if I have missed a reply, just in case that I happen to be\nthe first: Welcome! Everyone is a bit busy with the upcoming Debian\nrelease, please forgive.\n\nDebian always needs hands and brains. I just hope your contribution will\nnot end with R packages once you are familiar with that process. Is\nthere a package you would be particularly like to see added to/updated\nin the distribution? If not then I would find something for you.\n\nYou may want to read:\n * https://wiki.debian.org/DebianMaintainer - which will allow you to\nupdate your package\n\n * https://wiki.debian.org/GNU_R - with references on how to create new\npackages.\n\nYou may want to just install the \"dh-r\" package and within that package\nfind the script\ndh-r: /usr/bin/prepare_missing_cran_package\n\nThis basically does the job for you, just pass the package name as an\nargument.\n\nSurprisingly readable is the Debian policy. This is basically the data\nsheet for all the files within the debian subdirectory.\n\nBest,\nSteffen",
+      "body_snippet": "Hi Eric,\n\nAm 14.02.21 um 00:10 schrieb Eric Brown:\n> I am a maintainer of a few R packages on CRAN and am interested in\n> becoming more involved in Debian, but do not currently have any Debian\n> packa",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-6f1924524733",
+      "message_id": "<20210215125252.GW26070@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-15T12:52:52Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>"
+      ],
+      "body_plain": "Hi Sébastien,\n\nOn Sat, Feb 13, 2021 at 04:29:59PM +0100, Sébastien Villemot wrote:\n> > That's correct but no argument against using an automated tool.\n> \n> Sure. But there is the risk of forgetting to do the manual task\n> associated to what the tool has done automatically. I like to be forced\n> to do something manually in order not to forget those steps.\n> \n> Maybe routine-update could be improved by printing a message about what\n> has to be done manually whenever it does something automatically (e.g.\n> checking the copyright/licences changes,\n\nRoutine-update does *nothing* with copyright/licenses.  I have no idea\nhow to automate this step and its up to the maintainer (no matter\nwhether an automated tool is used or not).\n\n> checking the policy upgrade\n> list, checking the debhelper compat level upgrade list).\n\nI've just pushed this[1].\n \n> > I admit I simply trust lintian to do this job.\n> \n> In practice there are many aspects of the policy that are not checked\n> by lintian.\n> \n> lintian-brush does some of those upgrades automatically, but only for\n> specific pairs of older/newer policy versions, when it can be\n> ascertained automatically that compliance is effective.\n\nThat's true.  But honestly, what policy breaking changes do you expect\nin R package upgrades?\n \n> > If the package builds correctly and passes its autopkgtest I assume the\n> > compat level bump had no negative effect and should be done.\n> \n> Again, that is not generally true. It is impossible in practice to\n> create an autopkgtest that checks every aspect of a package.\n\nYes.  In R packages we are checking what upstream provides as test.  Do\nyou want to tell me you are testing more in the R packages you are\nmaintaining.  How should this scale for nearly 1000 R packages?  The\nmotivation of writing routine-update was the perception that we are not\ndoing very well in coping with frequent upstream changes and the Debian\nR ecosystem tended to lag behind upstream more and more.  Thanks to\nroutine-update we manage quite OK to be up to date with upstream in\nunstable - at least to my perception - and thus detect required new\npackages sufficiently well to be in sync with upstream at freeze time.\n(It should probably discussed in a separate thread whether we stop\nupgrading packages now since we are in soft freeze or whether we\nshould upload new upstream versions until hard freeze.)\n\nI personally would not manage to upload more than 1000 packages per\nyear[2] without that level of automatisation.  I think expecting the\nteam will increase by about 10 maintainers sharing that work amongst\neach other doing the manual inspection you seem to prefer is not\nrealistic.\n \n> I value the standardization of packages within a team. However, in\n> Debian this is usually achieved by mandating compliance to a team\n> policy document.\n> \n> If you have noticed anything in my R packages that does not comply with\n> team practices, please let me know.\n\nMy point was not the quality of your packages.  I just intended to give\nyou some hint how to work more efficiently with your packages.\n \n\n[1] https://salsa.debian.org/science-team/routine-update/-/commit/8af801bd5cf4ff013825969415d34d07ebcb7383\n[2] http://blends.debian.net/liststats/uploaders_r-pkg.png\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nOn Sat, Feb 13, 2021 at 04:29:59PM +0100, Sébastien Villemot wrote:\n> > That's correct but no argument against using an automated tool.\n> \n> Sure. But there is the risk of forgetting to",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 6,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-1476e0a17bc9",
+      "message_id": "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-02-15T13:12:36Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<20210215125252.GW26070@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+        "<20210215125252.GW26070@an3as.eu>"
+      ],
+      "body_plain": "Le lundi 15 février 2021 à 13:52 +0100, Andreas Tille a écrit :\n> On Sat, Feb 13, 2021 at 04:29:59PM +0100, Sébastien Villemot wrote:\n> > > That's correct but no argument against using an automated tool.\n> > \n> > Sure. But there is the risk of forgetting to do the manual task\n> > associated to what the tool has done automatically. I like to be forced\n> > to do something manually in order not to forget those steps.\n> > \n> > Maybe routine-update could be improved by printing a message about what\n> > has to be done manually whenever it does something automatically (e.g.\n> > checking the copyright/licences changes,\n> \n> Routine-update does *nothing* with copyright/licenses.  I have no idea\n> how to automate this step and its up to the maintainer (no matter\n> whether an automated tool is used or not).\n\nActually I was just suggesting that routine-update print a message \nto remind that copyright/licenses need to be verified.\n\nAlso note that there exist tools for updating d/copyright more or less\nautomatically, but none is a perfect substitute to manual intervention.\n\n> > checking the policy upgrade\n> > list, checking the debhelper compat level upgrade list).\n> \n> I've just pushed this[1].\n\nThanks for that.\n\n> > > I admit I simply trust lintian to do this job.\n> > \n> > In practice there are many aspects of the policy that are not checked\n> > by lintian.\n> > \n> > lintian-brush does some of those upgrades automatically, but only for\n> > specific pairs of older/newer policy versions, when it can be\n> > ascertained automatically that compliance is effective.\n> \n> That's true.  But honestly, what policy breaking changes do you expect\n> in R package upgrades?\n\nI was speaking on a general level. I agree that for R packages, since\nthey almost all follow the same structure, the risk is lesser (and if\nsomething needs to be updated, an ad hoc change to routine-update could\nbe implemented to update all packages).\n\n> > > If the package builds correctly and passes its autopkgtest I assume the\n> > > compat level bump had no negative effect and should be done.\n> > \n> > Again, that is not generally true. It is impossible in practice to\n> > create an autopkgtest that checks every aspect of a package.\n> \n> Yes.  In R packages we are checking what upstream provides as test.  Do\n> you want to tell me you are testing more in the R packages you are\n> maintaining.  How should this scale for nearly 1000 R packages?  The\n> motivation of writing routine-update was the perception that we are not\n> doing very well in coping with frequent upstream changes and the Debian\n> R ecosystem tended to lag behind upstream more and more.  Thanks to\n> routine-update we manage quite OK to be up to date with upstream in\n> unstable - at least to my perception - and thus detect required new\n> packages sufficiently well to be in sync with upstream at freeze time.\n> (It should probably discussed in a separate thread whether we stop\n> upgrading packages now since we are in soft freeze or whether we\n> should upload new upstream versions until hard freeze.)\n> \n> I personally would not manage to upload more than 1000 packages per\n> year[2] without that level of automatisation.  I think expecting the\n> team will increase by about 10 maintainers sharing that work amongst\n> each other doing the manual inspection you seem to prefer is not\n> realistic.\n\nI perfectly understand your point, and I am not criticizing the way\nyou’re doing things. Basically you’ve taken an approach which consists\nin detecting some problems ex post rather than ex ante, because doing\nall ex ante checks would not be practically feasible. I think this is a\nperfectly reasonable approach, given the constraints that you’re\nfacing.\n\nI was just trying to explain why I prefer not to use a fully automated\napproach. But I admit that my workflow would probably not manageable if\nI were maintaining more R packages than I currently do (i.e. only a\ndozen).\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le lundi 15 février 2021 à 13:52 +0100, Andreas Tille a écrit :\n> On Sat, Feb 13, 2021 at 04:29:59PM +0100, Sébastien Villemot wrote:\n> > > That's correct but no argument against using an automated to",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 7,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-02c8d18b6f84",
+      "message_id": "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+      "from_name": "Eric Brown",
+      "from_email_hash": "72f77298f57f870824dfb1ef4c17915cf731bb55eb2adaf3ad1a0e348a777d18",
+      "date": "2021-02-15T13:59:42Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>"
+      ],
+      "body_plain": "Dear all,\n\nThank you for the warm welcome and helpful advice. With your direction\nI believe I've successfully locally packaged some R packages.\n\n> I am not sure if I have missed a reply, just in case that I happen to be\n> the first: Welcome! Everyone is a bit busy with the upcoming Debian\n> release, please forgive.\n\nThanks very much Steffen.\n\n> Debian always needs hands and brains. I just hope your contribution will\n> not end with R packages once you are familiar with that process. Is\n> there a package you would be particularly like to see added to/updated\n> in the distribution? If not then I would find something for you.\n\nThanks again, as above I was thinking some of the more popular and\nmissing rOpenSci packages deserve a place in Debian. Having built R\npackages in the Debian repo has saved me in the past. Additionally,\nsince I am most familiar with R packages over other software, I\nthought it was a good place to start to learn the process of deb\npackaging. The software I wish were in Debian (e.g. Zotero,\nshiny-server) are too complex for me to help with currently.\n\nOn a fresh Debian unstable VM, I installed dh-r and ran the\nprepare_missing_cran_package script. I found that I also needed to apt\ninstall cme and git-buildpackage for it to work properly (maybe these\nshould be dependencies of dh-r?). I also needed to configure git and\nexport DEBFULLNAME and DEBEMAIL environment variables.\n\nMy thought is that it would be helpful to have more rOpenSci CRAN R\npackages in Debian, since these are generally well reviewed,\nmaintained and promoted. So for practice, I ran\nprepare_missing_cran_package on codemetaR. I saw that it automatically\nfound the CRAN dependencies that were not in Debian and also packaged\nthose. In this case, it packaged pingr. pingr is a utility package\nwhich needs C compilation and sees a fair amount of activity on\nRstudio's mirrors, so it was good practice and might be a good\ncandidate for inclusion into Debian. prepare_missing_cran appeared to\nwork well, with manual intervention required to replace the FIXME in\nthe Debian copyright file to match the R package copyright file.\n\nTo test that it compiles/builds properly, I downloaded the original\ntarball from CRAN and renamed it, then ran debuild. There were no\nerrors and I was able to then install the .deb and run the package in\nR without error.\n\nIs the next step for me to push the git to a new repo on the r-pkg team salsa?\n\nWarm regards,\nEric\n\nOn Sun, Feb 14, 2021 at 12:15 PM Steffen Möller <steffen_moeller at gmx.de> wrote:\n>\n> Hi Eric,\n>\n> Am 14.02.21 um 00:10 schrieb Eric Brown:\n> > I am a maintainer of a few R packages on CRAN and am interested in\n> > becoming more involved in Debian, but do not currently have any Debian\n> > packaging experience. Is there a need for additional maintainers in\n> > this Debian R group? And if so, is there a resource that describes the\n> > best practices for maintaining R packages in Debian?\n>\n> I am not sure if I have missed a reply, just in case that I happen to be\n> the first: Welcome! Everyone is a bit busy with the upcoming Debian\n> release, please forgive.\n>\n> Debian always needs hands and brains. I just hope your contribution will\n> not end with R packages once you are familiar with that process. Is\n> there a package you would be particularly like to see added to/updated\n> in the distribution? If not then I would find something for you.\n>\n> You may want to read:\n>  * https://wiki.debian.org/DebianMaintainer - which will allow you to\n> update your package\n>\n>  * https://wiki.debian.org/GNU_R - with references on how to create new\n> packages.\n>\n> You may want to just install the \"dh-r\" package and within that package\n> find the script\n> dh-r: /usr/bin/prepare_missing_cran_package\n>\n> This basically does the job for you, just pass the package name as an\n> argument.\n>\n> Surprisingly readable is the Debian policy. This is basically the data\n> sheet for all the files within the debian subdirectory.\n>\n> Best,\n> Steffen\n>\n>",
+      "body_snippet": "Dear all,\n\nThank you for the warm welcome and helpful advice. With your direction\nI believe I've successfully locally packaged some R packages.\n\n> I am not sure if I have missed a reply, just in case ",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 2,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-b70a167e71d3",
+      "message_id": "<20210215140000.GY26070@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-15T14:00:00Z",
+      "subject": "Re: r-cran-rsdmx autopkgtest failing",
+      "subject_clean": "r-cran-rsdmx autopkgtest failing",
+      "in_reply_to": "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+        "<20210215125252.GW26070@an3as.eu>",
+        "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>"
+      ],
+      "body_plain": "On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Villemot wrote:\n> > Routine-update does *nothing* with copyright/licenses.  I have no idea\n> > how to automate this step and its up to the maintainer (no matter\n> > whether an automated tool is used or not).\n> \n> Actually I was just suggesting that routine-update print a message \n> to remind that copyright/licenses need to be verified.\n\nFeel free to push to the repository whatever hint you consider helpful. ;-)\n \n> Also note that there exist tools for updating d/copyright more or less\n> automatically, but none is a perfect substitute to manual intervention.\n\nCan you name such tools (possibly hinting to them in the said message\nto print)?\n \n> > I've just pushed this[1].\n> \n> Thanks for that.\n\nYou are welcome.\n \n> > That's true.  But honestly, what policy breaking changes do you expect\n> > in R package upgrades?\n> \n> I was speaking on a general level. I agree that for R packages, since\n> they almost all follow the same structure, the risk is lesser (and if\n> something needs to be updated, an ad hoc change to routine-update could\n> be implemented to update all packages).\n\nThat's exactly the point.  In the times of manual updates (2 or 3 API\ntransitions ago when routine-update was not available yet) I realised\nthat I forgot from time to time things I intended to do on all packages.\n \n> I perfectly understand your point, and I am not criticizing the way\n> you’re doing things. Basically you’ve taken an approach which consists\n> in detecting some problems ex post rather than ex ante, because doing\n> all ex ante checks would not be practically feasible. I think this is a\n> perfectly reasonable approach, given the constraints that you’re\n> facing.\n> \n> I was just trying to explain why I prefer not to use a fully automated\n> approach. But I admit that my workflow would probably not manageable if\n> I were maintaining more R packages than I currently do (i.e. only a\n> dozen).\n\nI admit I continue to hope that every team member touches every package\nfreely.  This is supported by routine-update by realising the person who\nis calling the script is not mentioned as Uploader and will create a\n\"Team upload\" entry.  Everybody is kindly invited to do this (for\ninstance to speed up a transition or to help with the normal upgrades /\nbug fixes).\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Villemot wrote:\n> > Routine-update does *nothing* with copyright/licenses.  I have no idea\n> > how to automate this step and its up to the maintaine",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 8,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-e3c211ada975",
+      "message_id": "<20210215144826.epzlxppflg6fjqk5@banach.uvt.nl>",
+      "from_name": "Joost van Baal-Ilić",
+      "from_email_hash": "78d0573514ad21b79ab6a053bf24ceafc24d80e4969fd8c5b1b3379382aa4495",
+      "date": "2021-02-15T14:48:26Z",
+      "subject": "automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "subject_clean": "automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "in_reply_to": "<20210215140000.GY26070@an3as.eu>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+        "<20210215125252.GW26070@an3as.eu>",
+        "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>",
+        "<20210215140000.GY26070@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nOp Mon, Feb 15, 2021 at 03:00:00PM +0100 schreef Andreas Tille:\n> On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Villemot wrote:\n> > > Routine-update does *nothing* with copyright/licenses.  I have no idea\n> > > how to automate this step and its up to the maintainer (no matter\n> > > whether an automated tool is used or not).\n> > \n> > Actually I was just suggesting that routine-update print a message \n> > to remind that copyright/licenses need to be verified.\n> \n> Feel free to push to the repository whatever hint you consider helpful. ;-)\n>  \n> > Also note that there exist tools for updating d/copyright more or less\n> > automatically, but none is a perfect substitute to manual intervention.\n> \n> Can you name such tools (possibly hinting to them in the said message\n> to print)?\n\nPackage libconfig-model-dpkg-perl ships cme, which enables one to run\n\n cme fix dpkg-copyright\n\n.  IIRC there's at least one other tool which tries to create/update\nd/copyright.\n\nBye,\n\nJoost\n\n-- \nJoost van Baal-Ilić                       http://abramowitz.uvt.nl/\n                                                 Tilburg University\nmailto:joostvb.uvt.nl                               The Netherlands",
+      "body_snippet": "Hi,\n\nOp Mon, Feb 15, 2021 at 03:00:00PM +0100 schreef Andreas Tille:\n> On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Villemot wrote:\n> > > Routine-update does *nothing* with copyright/licenses. ",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 9,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-eb2c7a4629c1",
+      "message_id": "<20210215144855.GZ26070@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-15T14:48:55Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Feb 15, 2021 at 08:59:42AM -0500, Eric Brown wrote:\n> Dear all,\n> \n> Thank you for the warm welcome and helpful advice. With your direction\n> I believe I've successfully locally packaged some R packages.\n> \n> > I am not sure if I have missed a reply, just in case that I happen to be\n> > the first: Welcome! Everyone is a bit busy with the upcoming Debian\n> > release, please forgive.\n> \n> Thanks very much Steffen.\n> \n> > Debian always needs hands and brains. I just hope your contribution will\n> > not end with R packages once you are familiar with that process. Is\n> > there a package you would be particularly like to see added to/updated\n> > in the distribution? If not then I would find something for you.\n> \n> Thanks again, as above I was thinking some of the more popular and\n> missing rOpenSci packages deserve a place in Debian. Having built R\n> packages in the Debian repo has saved me in the past. Additionally,\n> since I am most familiar with R packages over other software, I\n> thought it was a good place to start to learn the process of deb\n> packaging. The software I wish were in Debian (e.g. Zotero,\n> shiny-server) are too complex for me to help with currently.\n\nBTW, I will have a Debian packaging workshop at FOSSASIA online meeting\n   \n   Timing: 19 März, 2021 14:00 (CET) - 19 März, 2021 17:00 (CET) \n\nMay be I should advertise this a bit more here.  I will have another\npackaging workshop one week earlier but it will be in German language.\n\n> On a fresh Debian unstable VM, I installed dh-r and ran the\n> prepare_missing_cran_package script. I found that I also needed to apt\n> install cme and git-buildpackage for it to work properly (maybe these\n> should be dependencies of dh-r?).\n\nGood catch.  I've added these to Recommends in git[1].  However, I'm\nwondering whether this might bloat automatic build environments (or are\nthese installed with --no-install-recommends?)  Comments are welcome\nwhat others might think about this Recommends.\n\n> I also needed to configure git and\n> export DEBFULLNAME and DEBEMAIL environment variables.\n\nYes, that's correct.  I hope you were facing the according FIXMEs in\nd/changelog as expected.  Any better clue how to teach users about this\nwould be welcome.\n \n> My thought is that it would be helpful to have more rOpenSci CRAN R\n> packages in Debian, since these are generally well reviewed,\n> maintained and promoted. So for practice, I ran\n> prepare_missing_cran_package on codemetaR. I saw that it automatically\n> found the CRAN dependencies that were not in Debian and also packaged\n> those. In this case, it packaged pingr. pingr is a utility package\n> which needs C compilation and sees a fair amount of activity on\n> Rstudio's mirrors, so it was good practice and might be a good\n> candidate for inclusion into Debian. prepare_missing_cran appeared to\n> work well, with manual intervention required to replace the FIXME in\n> the Debian copyright file to match the R package copyright file.\n\nHappy to hear so.  You need a bit of experience if there is a bigger\ntree of dependencies to package but that should be bearable.\n \n> To test that it compiles/builds properly, I downloaded the original\n> tarball from CRAN and renamed it, then ran debuild. There were no\n> errors and I was able to then install the .deb and run the package in\n> R without error.\n\nAlso happy to hear this. :-)\n\n> Is the next step for me to push the git to a new repo on the r-pkg team salsa?\n\nThere is the script /usr/bin/salsa in the devscripts package.  However,\nfor pure historic reasons I (and several other team members here) use\n\n   https://salsa.debian.org/med-team/community/helper-scripts/-/blob/master/inject-into-salsa-git\n\nThe tools are a bit separated since invented in different teams.  But\nyou can download this script and run it inside the root of your new git\nrepository.  It should do everything correctly - provided you are a\nmember of the R-pkg team and have permissions to create a repository.\n\nYou also want to file an ITP bug report for your package which you\ncan do easily by using\n\n   itp_from_debian_dir\n\n(in dh-r package).  However, its possibly advisable for pedagogic\nreasons that you do it at least once manually by\n\n   reportbug wnpp\n\nand follow the menu.\n\nHope this helps\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/dh-r/-/commit/c9aa3c2ebee0af84be4db4dd77099e36af4a921f\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Feb 15, 2021 at 08:59:42AM -0500, Eric Brown wrote:\n> Dear all,\n> \n> Thank you for the warm welcome and helpful advice. With your direction\n> I believe I've successfully locally packaged some ",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 3,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-4f0341d9fc51",
+      "message_id": "<20210215150414.msu7wuebuiottehw@banach.uvt.nl>",
+      "from_name": "Joost van Baal-Ilić",
+      "from_email_hash": "78d0573514ad21b79ab6a053bf24ceafc24d80e4969fd8c5b1b3379382aa4495",
+      "date": "2021-02-15T15:04:14Z",
+      "subject": "Re: automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "subject_clean": "automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "in_reply_to": "<20210215144826.epzlxppflg6fjqk5@banach.uvt.nl>",
+      "references": [
+        "<20210208134316.GH5519@an3as.eu>",
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+        "<20210215125252.GW26070@an3as.eu>",
+        "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>",
+        "<20210215140000.GY26070@an3as.eu>",
+        "<20210215144826.epzlxppflg6fjqk5@banach.uvt.nl>"
+      ],
+      "body_plain": "Hi,\n\nOp Mon, Feb 15, 2021 at 03:48:26PM +0100 schreef Joost van Baal-Ilić:\n> Op Mon, Feb 15, 2021 at 03:00:00PM +0100 schreef Andreas Tille:\n> > On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Villemot wrote:\n> > > > Routine-update does *nothing* with copyright/licenses.  I have no idea\n> > > > how to automate this step and its up to the maintainer (no matter\n> > > > whether an automated tool is used or not).\n> > > \n> > > Actually I was just suggesting that routine-update print a message \n> > > to remind that copyright/licenses need to be verified.\n> > \n> > Feel free to push to the repository whatever hint you consider helpful. ;-)\n> >  \n> > > Also note that there exist tools for updating d/copyright more or less\n> > > automatically, but none is a perfect substitute to manual intervention.\n> > \n> > Can you name such tools (possibly hinting to them in the said message\n> > to print)?\n> \n> Package libconfig-model-dpkg-perl ships cme, which enables one to run\n> \n>  cme fix dpkg-copyright\n> \n> .  IIRC there's at least one other tool which tries to create/update\n> d/copyright.\n\nThat would be license-reconcile , also from the Perl people.\n\nBye,\n\nJoost\n\n-- \nJoost van Baal-Ilić                       http://abramowitz.uvt.nl/\n                                                 Tilburg University\nmailto:joostvb.uvt.nl                               The Netherlands",
+      "body_snippet": "Hi,\n\nOp Mon, Feb 15, 2021 at 03:48:26PM +0100 schreef Joost van Baal-Ilić:\n> Op Mon, Feb 15, 2021 at 03:00:00PM +0100 schreef Andreas Tille:\n> > On Mon, Feb 15, 2021 at 02:12:36PM +0100, Sébastien Vil",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 10,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-19b117703090",
+      "message_id": "<20210215191439.GB28432@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-15T19:14:39Z",
+      "subject": "Re: automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "subject_clean": "automatically updating debian/copyright (was: Re: r-cran-rsdmx autopkgtest failing)",
+      "in_reply_to": "<20210215150414.msu7wuebuiottehw@banach.uvt.nl>",
+      "references": [
+        "<2dbe51b37dfef855a26b103a086f0c8db66b7ac2.camel@debian.org>",
+        "<20210208155639.GI5519@an3as.eu>",
+        "<f80d1446ac5ef31a2429023e85fc1a6a021e556b.camel@debian.org>",
+        "<20210208212825.GL5519@an3as.eu>",
+        "<d5cefe501fd86b3be9ff31fb387d4c91cd214364.camel@debian.org>",
+        "<20210215125252.GW26070@an3as.eu>",
+        "<c485be4673dd54f4194a5c1d1a4c9dcea420b269.camel@debian.org>",
+        "<20210215140000.GY26070@an3as.eu>",
+        "<20210215144826.epzlxppflg6fjqk5@banach.uvt.nl>",
+        "<20210215150414.msu7wuebuiottehw@banach.uvt.nl>"
+      ],
+      "body_plain": "On Mon, Feb 15, 2021 at 04:04:14PM +0100, Joost van Baal-Ilić wrote:\n> > \n> > Package libconfig-model-dpkg-perl ships cme, which enables one to run\n> > \n> >  cme fix dpkg-copyright\n\nI know and use cme - but isn't this only a Syntax checker + fixer?\n\n> > .  IIRC there's at least one other tool which tries to create/update\n> > d/copyright.\n> \n> That would be license-reconcile , also from the Perl people.\n\nMay be that's worth checking for a manual run - but a quick check on a\nrandom R package did not uncovered something I would consider helpful\npersonally. \n\nThanks for the hints anyway\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Feb 15, 2021 at 04:04:14PM +0100, Joost van Baal-Ilić wrote:\n> > \n> > Package libconfig-model-dpkg-perl ships cme, which enables one to run\n> > \n> >  cme fix dpkg-copyright\n\nI know and use cme",
+      "thread_id": "thread-02c4b533f62e",
+      "thread_depth": 11,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-1cc731028da5",
+      "message_id": "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+      "from_name": "Eric Brown",
+      "from_email_hash": "72f77298f57f870824dfb1ef4c17915cf731bb55eb2adaf3ad1a0e348a777d18",
+      "date": "2021-02-15T23:43:34Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<20210215144855.GZ26070@an3as.eu>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>"
+      ],
+      "body_plain": "Dear Andreas,\n\n> Yes, that's correct.  I hope you were facing the according FIXMEs in\n> d/changelog as expected.  Any better clue how to teach users about this\n> would be welcome.\n\nYes, it was pretty straightforward from there.\n\n> BTW, I will have a Debian packaging workshop at FOSSASIA online meeting\n\nThanks, I just registered for the conference.\n\n> There is the script /usr/bin/salsa in the devscripts package.  However,\n> for pure historic reasons I (and several other team members here) use\n>\n>    https://salsa.debian.org/med-team/community/helper-scripts/-/blob/master/inject-into-salsa-git\n>\n> The tools are a bit separated since invented in different teams.  But\n> you can download this script and run it inside the root of your new git\n> repository.  It should do everything correctly - provided you are a\n> member of the R-pkg team and have permissions to create a repository.\n>\n> You also want to file an ITP bug report for your package which you\n> can do easily by using\n>\n>    itp_from_debian_dir\n>\n> (in dh-r package).  However, its possibly advisable for pedagogic\n> reasons that you do it at least once manually by\n>\n>    reportbug wnpp\n\nThanks - I just filed an ITP using reportbug for pingr\n(https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=982895). I think I\nwill need to be granted access to the R-pkg team on salsa. I have\ncreated an account (ericeb) and requested access, if that is\nappropriate.\n\nWarm regards,\nEric\n\nOn Mon, Feb 15, 2021 at 9:49 AM Andreas Tille <andreas at an3as.eu> wrote:\n>\n> On Mon, Feb 15, 2021 at 08:59:42AM -0500, Eric Brown wrote:\n> > Dear all,\n> >\n> > Thank you for the warm welcome and helpful advice. With your direction\n> > I believe I've successfully locally packaged some R packages.\n> >\n> > > I am not sure if I have missed a reply, just in case that I happen to be\n> > > the first: Welcome! Everyone is a bit busy with the upcoming Debian\n> > > release, please forgive.\n> >\n> > Thanks very much Steffen.\n> >\n> > > Debian always needs hands and brains. I just hope your contribution will\n> > > not end with R packages once you are familiar with that process. Is\n> > > there a package you would be particularly like to see added to/updated\n> > > in the distribution? If not then I would find something for you.\n> >\n> > Thanks again, as above I was thinking some of the more popular and\n> > missing rOpenSci packages deserve a place in Debian. Having built R\n> > packages in the Debian repo has saved me in the past. Additionally,\n> > since I am most familiar with R packages over other software, I\n> > thought it was a good place to start to learn the process of deb\n> > packaging. The software I wish were in Debian (e.g. Zotero,\n> > shiny-server) are too complex for me to help with currently.\n>\n> BTW, I will have a Debian packaging workshop at FOSSASIA online meeting\n>\n>    Timing: 19 März, 2021 14:00 (CET) - 19 März, 2021 17:00 (CET)\n>\n> May be I should advertise this a bit more here.  I will have another\n> packaging workshop one week earlier but it will be in German language.\n>\n> > On a fresh Debian unstable VM, I installed dh-r and ran the\n> > prepare_missing_cran_package script. I found that I also needed to apt\n> > install cme and git-buildpackage for it to work properly (maybe these\n> > should be dependencies of dh-r?).\n>\n> Good catch.  I've added these to Recommends in git[1].  However, I'm\n> wondering whether this might bloat automatic build environments (or are\n> these installed with --no-install-recommends?)  Comments are welcome\n> what others might think about this Recommends.\n>\n> > I also needed to configure git and\n> > export DEBFULLNAME and DEBEMAIL environment variables.\n>\n> Yes, that's correct.  I hope you were facing the according FIXMEs in\n> d/changelog as expected.  Any better clue how to teach users about this\n> would be welcome.\n>\n> > My thought is that it would be helpful to have more rOpenSci CRAN R\n> > packages in Debian, since these are generally well reviewed,\n> > maintained and promoted. So for practice, I ran\n> > prepare_missing_cran_package on codemetaR. I saw that it automatically\n> > found the CRAN dependencies that were not in Debian and also packaged\n> > those. In this case, it packaged pingr. pingr is a utility package\n> > which needs C compilation and sees a fair amount of activity on\n> > Rstudio's mirrors, so it was good practice and might be a good\n> > candidate for inclusion into Debian. prepare_missing_cran appeared to\n> > work well, with manual intervention required to replace the FIXME in\n> > the Debian copyright file to match the R package copyright file.\n>\n> Happy to hear so.  You need a bit of experience if there is a bigger\n> tree of dependencies to package but that should be bearable.\n>\n> > To test that it compiles/builds properly, I downloaded the original\n> > tarball from CRAN and renamed it, then ran debuild. There were no\n> > errors and I was able to then install the .deb and run the package in\n> > R without error.\n>\n> Also happy to hear this. :-)\n>\n> > Is the next step for me to push the git to a new repo on the r-pkg team salsa?\n>\n> There is the script /usr/bin/salsa in the devscripts package.  However,\n> for pure historic reasons I (and several other team members here) use\n>\n>    https://salsa.debian.org/med-team/community/helper-scripts/-/blob/master/inject-into-salsa-git\n>\n> The tools are a bit separated since invented in different teams.  But\n> you can download this script and run it inside the root of your new git\n> repository.  It should do everything correctly - provided you are a\n> member of the R-pkg team and have permissions to create a repository.\n>\n> You also want to file an ITP bug report for your package which you\n> can do easily by using\n>\n>    itp_from_debian_dir\n>\n> (in dh-r package).  However, its possibly advisable for pedagogic\n> reasons that you do it at least once manually by\n>\n>    reportbug wnpp\n>\n> and follow the menu.\n>\n> Hope this helps\n>\n>       Andreas.\n>\n>\n> [1] https://salsa.debian.org/r-pkg-team/dh-r/-/commit/c9aa3c2ebee0af84be4db4dd77099e36af4a921f\n>\n> --\n> http://fam-tille.de\n>\n\n--\nEric Brown MD MSc FRCPC\nFor encryption, OpenPGP public key available on request.",
+      "body_snippet": "Dear Andreas,\n\n> Yes, that's correct.  I hope you were facing the according FIXMEs in\n> d/changelog as expected.  Any better clue how to teach users about this\n> would be welcome.\n\nYes, it was pretty ",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 4,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-7e3c9b1cedb1",
+      "message_id": "<20210216090028.GE28432@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-16T09:00:28Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>",
+        "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Eric,\n\nOn Mon, Feb 15, 2021 at 06:43:34PM -0500, Eric Brown wrote:\n> Yes, it was pretty straightforward from there.\n\n:-)\n \n> > BTW, I will have a Debian packaging workshop at FOSSASIA online meeting\n> \n> Thanks, I just registered for the conference.\n\nCool!\nI should probably send out some information on different Debian\nchannels once the schedule is fixed.\n\n> > You also want to file an ITP bug report for your package which you\n> > can do easily by using\n> >\n> >    itp_from_debian_dir\n> >\n> > (in dh-r package).  However, its possibly advisable for pedagogic\n> > reasons that you do it at least once manually by\n> >\n> >    reportbug wnpp\n> \n> Thanks - I just filed an ITP using reportbug for pingr\n> (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=982895).\n\nI checked this.  I admit I personally have copied most of the packaging\nstuff into reportbug (like Homepage from CRAN or the long description as\ncreated by prepare_missing_cran_package).  The script\nitp_from_debian_dir is also doing this \"lazy\" approach.  Just to mention\nthis while I think your additional information as long description is\nperfectly fine and possibly more informative.\n\n> I think I\n> will need to be granted access to the R-pkg team on salsa. I have\n> created an account (ericeb) and requested access, if that is\n> appropriate.\n\nThis should work now.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Dear Eric,\n\nOn Mon, Feb 15, 2021 at 06:43:34PM -0500, Eric Brown wrote:\n> Yes, it was pretty straightforward from there.\n\n:-)\n \n> > BTW, I will have a Debian packaging workshop at FOSSASIA online meet",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 5,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-1d2affa3e5a0",
+      "message_id": "<25cykMqyCSZIUxB8AJhPyMSpmlUtJ3LMI3Ca5yhs7ad_voc-IcYzpoyURoyo_2dEfyrl1xcQzznDYQA86BBKUzVfDll-fBvNpCnRP6T2GWY=@ghosts.work>",
+      "from_name": "ghost",
+      "from_email_hash": "cf7429ab50062ec86c57f2a577729f35b24568f757341bb04f6c693a62a34c64",
+      "date": "2021-02-17T01:15:27Z",
+      "subject": "Looking for a GSoC mentor",
+      "subject_clean": "Looking for a GSoC mentor",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello\n\nI'm interested in packaging an entry-level statistical software named iNZight (https://inzight.nz/), just wondering if anyone in the R team thinks it is suitable for a GSoC project.\n\nI have uploaded a package through mentors.d.n in the past, but it was a rather ad hoc attempt. It would be great if this could be an opportunity for me to dive deeper to the Debian world.\n\nMany thanks",
+      "body_snippet": "Hello\n\nI'm interested in packaging an entry-level statistical software named iNZight (https://inzight.nz/), just wondering if anyone in the R team thinks it is suitable for a GSoC project.\n\nI have upl",
+      "thread_id": "thread-1d2affa3e5a0",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-9f5dc5a1e3d4",
+      "message_id": "<20210217090300.GW30686@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-17T09:03:00Z",
+      "subject": "Regression on arm64 for r-base",
+      "subject_clean": "Regression on arm64 for r-base",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Dirk,\n\nthere is a regression on arm64[1] for your latest upload of\nnew upstream of 4.0.4-1.\n\nKind regards\n\n     Andreas.\n\n[1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-bioc-biocviews/10515281/log.gz\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nthere is a regression on arm64[1] for your latest upload of\nnew upstream of 4.0.4-1.\n\nKind regards\n\n     Andreas.\n\n[1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-bioc-biocviews",
+      "thread_id": "thread-9f5dc5a1e3d4",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-1c0117b598ac",
+      "message_id": "<20210217115028.GD30686@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-17T11:50:28Z",
+      "subject": "Re: Regression on arm64 for r-base",
+      "subject_clean": "Regression on arm64 for r-base",
+      "in_reply_to": "<20210217090300.GW30686@an3as.eu>",
+      "references": [
+        "<20210217090300.GW30686@an3as.eu>"
+      ],
+      "body_plain": "Sorry for the noise , I was in a hurry and did not realised that tracker\nwas pointing to regressions of r-bioc-biocviews and r-bioc-genomeinfodb.\n\nKind regards, Andreas.\n\nOn Wed, Feb 17, 2021 at 10:03:00AM +0100, Andreas Tille wrote:\n> Hi Dirk,\n> \n> there is a regression on arm64[1] for your latest upload of\n> new upstream of 4.0.4-1.\n> \n> Kind regards\n> \n>      Andreas.\n> \n> \n> [1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-bioc-biocviews/10515281/log.gz\n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Sorry for the noise , I was in a hurry and did not realised that tracker\nwas pointing to regressions of r-bioc-biocviews and r-bioc-genomeinfodb.\n\nKind regards, Andreas.\n\nOn Wed, Feb 17, 2021 at 10:03",
+      "thread_id": "thread-9f5dc5a1e3d4",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-22489bbab897",
+      "message_id": "<20210218133727.GA8834@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-18T13:37:27Z",
+      "subject": "Re: Bug#983027: r-bioc-mutationalpatterns: autopkgtest regression in testing: no package called ‘BSgenome.Hsapiens.UCSC.hg19’",
+      "subject_clean": "Bug#983027: r-bioc-mutationalpatterns: autopkgtest regression in testing: no package called ‘BSgenome.Hsapiens.UCSC.hg19’",
+      "in_reply_to": "<1f73da01-63b1-96aa-83d3-ef1baee578eb@debian.org>",
+      "references": [
+        "<1f73da01-63b1-96aa-83d3-ef1baee578eb@debian.org>"
+      ],
+      "body_plain": "Hi folks,\n\nI think this is a consequence of running autopkgtest-pkg-r blindly for all\nbioc packages since we are adding\n\n   Testsuite: autopkgtest-pkg-r\n\nautomatically to all packages.  The \"manual\" test is prevented by simply\nrenaming the debian/tests/control file to\n\n   https://salsa.debian.org/r-pkg-team/r-bioc-mutationalpatterns/-/blob/master/debian/tests/control_needs_large_data\n\nand thus documenting the issue.\n\nThe easiest cure would be to simply remove the Testsuite field\nfrom debian/control.  However, routine-update would re-add this\n(which I think is a sensible thing to do) and if we use a comment\nto prevent routine-update to add this field this in turn is\nremoved again by dh-update-R (called by run-unit-test).  This\nis all not so elegant.\n\nI'm currently thinking about some file\n\n   debian/tests/autopkgtest-pkg-r.hook\n\nwhich will be executed after\n\n   https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/scripts/pkg-r-autopkgtest#L28\n\nThis could exclude or tweak some test files and in the case below simply\nremove those tests that are trying to load not yet packaged stuff (which\nis for a reason since these are just big data files).\n\nWhat do you think?\n\nKind regards\n\n     Andreas.\n\nOn Thu, Feb 18, 2021 at 12:33:47PM +0100, Paul Gevers wrote:\n> Source: r-bioc-mutationalpatterns\n> Version: 2.0.0-2\n> X-Debbugs-CC: debian-ci at lists.debian.org\n> Severity: serious\n> User: debian-ci at lists.debian.org\n> Usertags: regression\n> \n> Dear maintainer(s),\n> \n> With a recent (October 2020) change somewhere outside of your package\n> the autopkgtest of your package started to fail. I copied some of the\n> output at the bottom of this report. Can you please investigate the\n> situation and fix it?\n> \n> More information about this bug and the reason for filing it can be found on\n> https://wiki.debian.org/ContinuousIntegration/RegressionEmailInformation\n> \n> Paul\n> \n> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-mutationalpatterns/10546520/log.gz\n> \n> ══ Failed tests\n> ════════════════════════════════════════════════════════════════\n> ── Error (test-bin_mutation_density.R:11:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-bin_mutation_density.R:11:0\n> ── Error (test-calculate_lesion_segretation.R:5:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-calculate_lesion_segretation.R:5:0\n> ── Error (test-context_potential_damage_analysis.R:13:1): (code run\n> outside of `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-context_potential_damage_analysis.R:13:0\n> ── Error (test-extract_signatures.R:19:1): (code run outside of\n> `test_that()`) ──\n> Error: Package 'ccfindR' is needed for variational_bayes to work. Please\n> either install it or use the regular NMF.\n> Backtrace:\n>     █\n>  1. └─MutationalPatterns::extract_signatures(...)\n> test-extract_signatures.R:19:0\n> ── Error (test-get_indel_context.R:10:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-get_indel_context.R:10:0\n> ── Error (test-mut_context.R:10:1): (code run outside of `test_that()`)\n> ────────\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-mut_context.R:10:0\n> ── Error (test-mut_matrix_stranded.R:6:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-mut_matrix_stranded.R:6:0\n> ── Error (test-mut_matrix.R:5:1): (code run outside of `test_that()`)\n> ──────────\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE) test-mut_matrix.R:5:0\n> ── Error (test-mut_type_occurrences.R:10:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-mut_type_occurrences.R:10:0\n> ── Error (test-plot_spectrum_region.R:10:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-plot_spectrum_region.R:10:0\n> ── Error (test-plot_spectrum.R:11:1): (code run outside of\n> `test_that()`) ──────\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-plot_spectrum.R:11:0\n> ── Error (test-plot_strand.R:10:1): (code run outside of `test_that()`)\n> ────────\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-plot_strand.R:10:0\n> ── Error (test-read_vcfs_as_granges.R:5:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-read_vcfs_as_granges.R:5:0\n> ── Error (test-strand_occurrences.R:10:1): (code run outside of\n> `test_that()`) ──\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-strand_occurrences.R:10:0\n> ── Error (test-type_context.R:10:1): (code run outside of `test_that()`)\n> ───────\n> Error: there is no package called ‘BSgenome.Hsapiens.UCSC.hg19’\n> Backtrace:\n>     █\n>  1. └─base::library(ref_genome, character.only = TRUE)\n> test-type_context.R:10:0\n> \n> [ FAIL 15 | WARN 0 | SKIP 0 | PASS 264 ]\n> \n\n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi folks,\n\nI think this is a consequence of running autopkgtest-pkg-r blindly for all\nbioc packages since we are adding\n\n   Testsuite: autopkgtest-pkg-r\n\nautomatically to all packages.  The \"manual\" t",
+      "thread_id": "thread-22489bbab897",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-c7e13c88fb6d",
+      "message_id": "<20210220135247.GZ8834@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-20T13:52:47Z",
+      "subject": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "subject_clean": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Graham,\n\nwhen checking excuses of r-cran-knitr[1] I see lots of relevant\nregressions for autopkgtest for r-bioc-rhdf5lib/1.12.1+dfsg-1 and\nautopkgtest for r-cran-dt/0.17+dfsg-1.  It is just a matter of waiting 2\ndays until those packages have migrated or do we need to do anything\nabout this?\n\nKind regards\n\n      Andreas.\n\n[1] https://qa.debian.org/excuses.php?package=r-cran-knitr\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nwhen checking excuses of r-cran-knitr[1] I see lots of relevant\nregressions for autopkgtest for r-bioc-rhdf5lib/1.12.1+dfsg-1 and\nautopkgtest for r-cran-dt/0.17+dfsg-1.  It is just a matte",
+      "thread_id": "thread-c7e13c88fb6d",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-d961ffa18989",
+      "message_id": "<CAL-m-c1eOjnE8b0roAn-HQBReWpqYjwWBWoYauBGbeTpaLLw0g@mail.gmail.com>",
+      "from_name": "Eric Brown",
+      "from_email_hash": "72f77298f57f870824dfb1ef4c17915cf731bb55eb2adaf3ad1a0e348a777d18",
+      "date": "2021-02-20T17:16:36Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<20210216090028.GE28432@an3as.eu>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>",
+        "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+        "<20210216090028.GE28432@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nThanks for adding me as a maintainer to the group. I ran the\ninject-into-salsa-git script but it didn't run cleanly because I had\nto configure a few things on my first time through it. However, the\nSalsa repo was created and my repo was pushed to it. I think the only\nthing that may have been missing is a pending tag but that may not be\napplicable.\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-pingr\n\nI also found that the package postgresql is required for dh-r when\nthere is an ITP, so maybe it also belongs as a Recommends.\n\nPlease let me know if the repo looks okay if you have a chance. Thanks again,\n\nEric\n\nOn Tue, Feb 16, 2021 at 4:00 AM Andreas Tille <andreas at an3as.eu> wrote:\n>\n> Dear Eric,\n>\n> On Mon, Feb 15, 2021 at 06:43:34PM -0500, Eric Brown wrote:\n> > Yes, it was pretty straightforward from there.\n>\n> :-)\n>\n> > > BTW, I will have a Debian packaging workshop at FOSSASIA online meeting\n> >\n> > Thanks, I just registered for the conference.\n>\n> Cool!\n> I should probably send out some information on different Debian\n> channels once the schedule is fixed.\n>\n> > > You also want to file an ITP bug report for your package which you\n> > > can do easily by using\n> > >\n> > >    itp_from_debian_dir\n> > >\n> > > (in dh-r package).  However, its possibly advisable for pedagogic\n> > > reasons that you do it at least once manually by\n> > >\n> > >    reportbug wnpp\n> >\n> > Thanks - I just filed an ITP using reportbug for pingr\n> > (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=982895).\n>\n> I checked this.  I admit I personally have copied most of the packaging\n> stuff into reportbug (like Homepage from CRAN or the long description as\n> created by prepare_missing_cran_package).  The script\n> itp_from_debian_dir is also doing this \"lazy\" approach.  Just to mention\n> this while I think your additional information as long description is\n> perfectly fine and possibly more informative.\n>\n> > I think I\n> > will need to be granted access to the R-pkg team on salsa. I have\n> > created an account (ericeb) and requested access, if that is\n> > appropriate.\n>\n> This should work now.\n>\n> Kind regards\n>\n>       Andreas.\n>\n> --\n> http://fam-tille.de",
+      "body_snippet": "Hi Andreas,\n\nThanks for adding me as a maintainer to the group. I ran the\ninject-into-salsa-git script but it didn't run cleanly because I had\nto configure a few things on my first time through it. Ho",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 6,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-9af99d0b35bb",
+      "message_id": "<20210220182545.GE8834@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-02-20T18:25:45Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c1eOjnE8b0roAn-HQBReWpqYjwWBWoYauBGbeTpaLLw0g@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>",
+        "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+        "<20210216090028.GE28432@an3as.eu>",
+        "<CAL-m-c1eOjnE8b0roAn-HQBReWpqYjwWBWoYauBGbeTpaLLw0g@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Eric,\n\nOn Sat, Feb 20, 2021 at 12:16:36PM -0500, Eric Brown wrote:\n> inject-into-salsa-git script but it didn't run cleanly because I had\n> to configure a few things on my first time through it. However, the\n> Salsa repo was created and my repo was pushed to it. I think the only\n> thing that may have been missing is a pending tag but that may not be\n> applicable.\n> \n> https://salsa.debian.org/r-pkg-team/r-cran-pingr\n\nCool!\n \n> I also found that the package postgresql is required for dh-r when\n> there is an ITP, so maybe it also belongs as a Recommends.\n\nThanks for the hint but that would be a bit to heavy as Recommends.  I\nrather added it to Suggests and made sure that the code will not fail\nwhen it is missing[1].  Let me know whether you think this is sensible\nenough for newcomers and for sure if you find other missing things.\n\n> Please let me know if the repo looks okay if you have a chance. Thanks again,\n\nI've added a tiny nitpicking change: It makes sense to add \"GNU R\"\nsomehow to the short description.  This is for sure missing on the\nCRAN description but in the Debian universe this hint is usually\nhelpful.\n\nSince everything else is fine I just uploaded.\n\nCongratulations to your first package in the new queue\n\n     Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/dh-r/-/commit/bc53877ec22651ffa17ada4add6000fcafb193e8\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Eric,\n\nOn Sat, Feb 20, 2021 at 12:16:36PM -0500, Eric Brown wrote:\n> inject-into-salsa-git script but it didn't run cleanly because I had\n> to configure a few things on my first time through it. Ho",
+      "thread_id": "thread-73de985a7caf",
+      "thread_depth": 7,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-f72271ec278f",
+      "message_id": "<20210221070623.GG8834@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-21T07:06:23Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<CAL-m-c3tJzJgEa7O2B9cCaYm7FryJQnJCHEJxzntfjQT93CPDw@mail.gmail.com>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>",
+        "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+        "<20210216090028.GE28432@an3as.eu>",
+        "<CAL-m-c1eOjnE8b0roAn-HQBReWpqYjwWBWoYauBGbeTpaLLw0g@mail.gmail.com>",
+        "<20210220182545.GE8834@an3as.eu>",
+        "<CAL-m-c3tJzJgEa7O2B9cCaYm7FryJQnJCHEJxzntfjQT93CPDw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Eric,\n\n[CCing the list] BTW, list policy on Debian lists is to reply to the\nlist only and do not CC the original poster.  I was not sure whether you\nare subscribed but in future I will assume you are and will follow list\npolicy. ;-)\n\nOn Sat, Feb 20, 2021 at 05:24:33PM -0500, Eric Brown wrote:\n> > I've added a tiny nitpicking change: It makes sense to add \"GNU R\"\n> > somehow to the short description.  This is for sure missing on the\n> > CRAN description but in the Debian universe this hint is usually\n> > helpful.\n> \n> Sounds good.\n\n:-)\n \n> > Since everything else is fine I just uploaded.\n> >\n> > Congratulations to your first package in the new queue\n> \n> Wow, that's great and exciting. Thanks a lot!\n\nJust to make you not over-excited:  A package in the new queue has some\nunspecific waiting time until ftpmaster finds time to work down the\nqueue of packages.  The name queue is a bit misleading since ftpmaster\nsometimes picks from the middle for \"low hanging fruits\" (license\nchecking wise).  Since R packages are usually easy we usually see that\nthose packages are processed earlier.\n\n> As a next step, please let me know if there is a best way/script to go\n> about keeping R packages up to date with upstream. Next I can try to\n> update a package.\n\nFor updates I strongly recommend the package routine-update.  It was\ndesigned to cope with R packages.  It uses the tool uscan (from\ndevscripts package) to fetch new upstream versions.  You might like\nto put\n\n      uscan --report\n\nin some cron job if you want to become informed about upstream updates.\nYou can also watch your package at\n\n      https://tracker.debian.org/\n\n(once it is accepted!) or you can also watch your developer page\n\n      https://qa.debian.org/developer.php\n\n(once your first package is accepted).  However, what I usually do is\nchecking that file in Git:\n\n      https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/outdated_r-packages.txt\n\nIt lists all outdated R packages and usually I simply work down that\nlist calling routine-update on each package listed there.  The file is\nupdated twice a day.  In \"normal\" times this file should not contain\nmore than 20 packages.  However, we are in freeze for Debian 10 and thus\nwe should refrain from new upstream versions.  That's why we stopped the\ncontinuous upgrade and will wait until Debian 10 is released.\n\nAs a warning: When I'm working down the list I simply run routine-update\nalso on packages where I'm not listed as Uploader.  Routine-update\ngenerates an entry \"Team upload\" and this is fine for every team member.\nSo if you are in the mood of updating some other package than \"yours\"\nthat's perfectly fine.  Feel free to ping me for sponsoring than ... but\nall this after the release of Debian 10.\n \n> Warm regards,\n\nSame to you\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Eric,\n\n[CCing the list] BTW, list policy on Debian lists is to reply to the\nlist only and do not CC the original poster.  I was not sure whether you\nare subscribed but in future I will assume you a",
+      "thread_id": "thread-f72271ec278f",
+      "thread_depth": 0,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-4aae7c268581",
+      "message_id": "<CAL-m-c1xQq6NHMf_AQY13L_pKBoBnzfyvcvqfhajEArHsCk6Jw@mail.gmail.com>",
+      "from_name": "Eric Brown",
+      "from_email_hash": "72f77298f57f870824dfb1ef4c17915cf731bb55eb2adaf3ad1a0e348a777d18",
+      "date": "2021-02-21T17:00:24Z",
+      "subject": "Re: Need for maintainers",
+      "subject_clean": "Need for maintainers",
+      "in_reply_to": "<20210221070623.GG8834@an3as.eu>",
+      "references": [
+        "<CAL-m-c2Mm_p1D3yggraJ8KvWyetvpaXc0q=rBuRXC7+jNfaNQQ@mail.gmail.com>",
+        "<29f74024-8091-5979-e06c-b053c6af9a5a@gmx.de>",
+        "<CAL-m-c0u9AHHxd6MDYrWhC4Gspvtn2iZ2DQ-uHQpmZQY7EDEXQ@mail.gmail.com>",
+        "<20210215144855.GZ26070@an3as.eu>",
+        "<CAL-m-c3fO4miOtQFthO39siNUg93-MUhJO8XBSWNhA8ArWz58A@mail.gmail.com>",
+        "<20210216090028.GE28432@an3as.eu>",
+        "<CAL-m-c1eOjnE8b0roAn-HQBReWpqYjwWBWoYauBGbeTpaLLw0g@mail.gmail.com>",
+        "<20210220182545.GE8834@an3as.eu>",
+        "<CAL-m-c3tJzJgEa7O2B9cCaYm7FryJQnJCHEJxzntfjQT93CPDw@mail.gmail.com>",
+        "<20210221070623.GG8834@an3as.eu>"
+      ],
+      "body_plain": "> [CCing the list] BTW, list policy on Debian lists is to reply to the\n> list only and do not CC the original poster.  I was not sure whether you\n> are subscribed but in future I will assume you are and will follow list\n> policy. ;-)\n\nYes, I am subscribed and will do so going forward.\n\nAnd thank you very much for the detailed instructions on updating R\npackages, much appreciated.\n\nBest,\n\nEric",
+      "body_snippet": "> [CCing the list] BTW, list policy on Debian lists is to reply to the\n> list only and do not CC the original poster.  I was not sure whether you\n> are subscribed but in future I will assume you are a",
+      "thread_id": "thread-f72271ec278f",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-cfdf48a7ee66",
+      "message_id": "<CAM8zJQtcw=3QAiWJ9_1qk3pT7-D2NTScf+zKem53dAas+2qDuA@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2021-02-22T07:34:05Z",
+      "subject": "Re: Any idea what might be the issue of not migrating r-cran-knitr?",
+      "subject_clean": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "in_reply_to": "<20210220135247.GZ8834@an3as.eu>",
+      "references": [
+        "<20210220135247.GZ8834@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Sat, 20 Feb 2021 at 15:52, Andreas Tille <tille at debian.org> wrote:\n> when checking excuses of r-cran-knitr[1] I see lots of relevant\n> regressions for autopkgtest for r-bioc-rhdf5lib/1.12.1+dfsg-1 and\n> autopkgtest for r-cran-dt/0.17+dfsg-1.\n\nI suspect r-cran-knitr may be missing Breaks on r-bioc-rhdf5lib <<\n1.12.1+dfsg-2 and r-cran-dt << 0.17+dfsg-2, but adding them at this\nstage will just delay things further.\n\n> It is just a matter of waiting 2\n> days until those packages have migrated or do we need to do anything\n> about this?\n\nLet's see what happens now that r-bioc-rhdf5lib/1.12.1+dfsg-2 and\nr-cran-dt/0.17+dfsg-2 have migrated to testing.\n\nRegards\nGraham",
+      "body_snippet": "Hi Andreas\n\nOn Sat, 20 Feb 2021 at 15:52, Andreas Tille <tille at debian.org> wrote:\n> when checking excuses of r-cran-knitr[1] I see lots of relevant\n> regressions for autopkgtest for r-bioc-rhdf5lib",
+      "thread_id": "thread-c7e13c88fb6d",
+      "thread_depth": 1,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-c75adaa7bb39",
+      "message_id": "<CAM8zJQvkAxr_EnBBzyfzYjB73v7JcJFonm9oSDX799vkjfTMJg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2021-02-22T18:14:01Z",
+      "subject": "Re: Any idea what might be the issue of not migrating r-cran-knitr?",
+      "subject_clean": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "in_reply_to": "<CAM8zJQtcw=3QAiWJ9_1qk3pT7-D2NTScf+zKem53dAas+2qDuA@mail.gmail.com>",
+      "references": [
+        "<20210220135247.GZ8834@an3as.eu>",
+        "<CAM8zJQtcw=3QAiWJ9_1qk3pT7-D2NTScf+zKem53dAas+2qDuA@mail.gmail.com>"
+      ],
+      "body_plain": "It seems r-cran-knitr has migrated now:\n\n$ rmadison -u debian r-cran-knitr | grep testing\nr-cran-knitr | 1.31+dfsg-1        | testing           | source, all",
+      "body_snippet": "It seems r-cran-knitr has migrated now:\n\n$ rmadison -u debian r-cran-knitr | grep testing\nr-cran-knitr | 1.31+dfsg-1        | testing           | source, all",
+      "thread_id": "thread-c7e13c88fb6d",
+      "thread_depth": 2,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-13d0751efc89",
+      "message_id": "<20210223105818.GO15932@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-02-23T10:58:19Z",
+      "subject": "Re: Any idea what might be the issue of not migrating r-cran-knitr?",
+      "subject_clean": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "in_reply_to": "<CAM8zJQvkAxr_EnBBzyfzYjB73v7JcJFonm9oSDX799vkjfTMJg@mail.gmail.com>",
+      "references": [
+        "<20210220135247.GZ8834@an3as.eu>",
+        "<CAM8zJQtcw=3QAiWJ9_1qk3pT7-D2NTScf+zKem53dAas+2qDuA@mail.gmail.com>",
+        "<CAM8zJQvkAxr_EnBBzyfzYjB73v7JcJFonm9oSDX799vkjfTMJg@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Feb 22, 2021 at 08:14:01PM +0200, Graham Inggs wrote:\n> It seems r-cran-knitr has migrated now:\n\nI've noticed this morning as well.\nThanks for confirming anyway\n    Andreas.\n \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Feb 22, 2021 at 08:14:01PM +0200, Graham Inggs wrote:\n> It seems r-cran-knitr has migrated now:\n\nI've noticed this morning as well.\nThanks for confirming anyway\n    Andreas.\n \n\n-- \nhttp://fam-",
+      "thread_id": "thread-c7e13c88fb6d",
+      "thread_depth": 3,
+      "month": "2021-02"
+    },
+    {
+      "id": "msg-9d5c146bf520",
+      "message_id": "<24635.43375.39319.720241@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2021-02-28T14:32:15Z",
+      "subject": "RE: Is there any chance to make mathjaxr non-mandatory in metap",
+      "subject_clean": "Is there any chance to make mathjaxr non-mandatory in metap",
+      "in_reply_to": "<24597.43424.613080.344743@rob.eddelbuettel.com>",
+      "references": [
+        "<20210127075749.GH4758@an3as.eu>",
+        "<a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>",
+        "<7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>",
+        "<24594.51654.478822.942820@rob.eddelbuettel.com>",
+        "<d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk>",
+        "<8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl>",
+        "<24596.7580.713894.964728@rob.eddelbuettel.com>",
+        "<20210129174010.GL28662@an3as.eu>",
+        "<c9ac7ab1916c453a847e82cab44a96e4@UM-MAIL3214.unimaas.nl>",
+        "<24597.43424.613080.344743@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 30 January 2021 at 12:46, Dirk Eddelbuettel wrote:\n| Most excellent. I just update the Debian packaging, sent it back to the NEW\n| queue and replied to existing mail thread with one of the ftpmasters about it.\n| \n| So at \"some point soon\" (for generous definitions of \"soon\") this should be\n| in Debian, and then as always \"eventually\" also in Ubuntu and others.\n\nThis just happened:\n\n  Subject: r-cran-mathjaxr_1.2-0-2_amd64.changes ACCEPTED into unstable, unstable\n\nso we now have mathjaxr in Debian.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 30 January 2021 at 12:46, Dirk Eddelbuettel wrote:\n| Most excellent. I just update the Debian packaging, sent it back to the NEW\n| queue and replied to existing mail thread with one of the ftpmaste",
+      "thread_id": "thread-9d5c146bf520",
+      "thread_depth": 0,
+      "month": "2021-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-02c4b533f62e",
+      "subject": "r-cran-rsdmx autopkgtest failing",
+      "message_count": 13,
+      "participants": [
+        "Andreas Tille",
+        "Joost van Baal-Ilić",
+        "Sébastien Villemot"
+      ],
+      "started": "2021-02-08T13:43:16Z",
+      "last_reply": "2021-02-15T19:14:39Z",
+      "root_message_id": "msg-02c4b533f62e"
+    },
+    {
+      "id": "thread-e24c47d8244f",
+      "subject": "How to set skip-not-installable for autopkgtest-pkg-r",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-02-09T18:55:53Z",
+      "last_reply": "2021-02-09T18:55:53Z",
+      "root_message_id": "msg-e24c47d8244f"
+    },
+    {
+      "id": "thread-319ea03bc6a1",
+      "subject": "Bug#982465: RM: r-cran-rstanarm [armhf i386 mips64el] -- ROM; Does not build on some architectures and more but testing migration for main architectures is important",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-02-10T14:41:22Z",
+      "last_reply": "2021-02-10T14:41:22Z",
+      "root_message_id": "msg-319ea03bc6a1"
+    },
+    {
+      "id": "thread-73de985a7caf",
+      "subject": "Need for maintainers",
+      "message_count": 11,
+      "participants": [
+        "Andreas Tille",
+        "Eric Brown",
+        "Steffen Möller",
+        "Sébastien Villemot"
+      ],
+      "started": "2021-02-13T23:10:22Z",
+      "last_reply": "2021-02-20T18:25:45Z",
+      "root_message_id": "msg-73de985a7caf"
+    },
+    {
+      "id": "thread-1d2affa3e5a0",
+      "subject": "Looking for a GSoC mentor",
+      "message_count": 1,
+      "participants": [
+        "ghost"
+      ],
+      "started": "2021-02-17T01:15:27Z",
+      "last_reply": "2021-02-17T01:15:27Z",
+      "root_message_id": "msg-1d2affa3e5a0"
+    },
+    {
+      "id": "thread-9f5dc5a1e3d4",
+      "subject": "Regression on arm64 for r-base",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-02-17T09:03:00Z",
+      "last_reply": "2021-02-17T11:50:28Z",
+      "root_message_id": "msg-9f5dc5a1e3d4"
+    },
+    {
+      "id": "thread-22489bbab897",
+      "subject": "Bug#983027: r-bioc-mutationalpatterns: autopkgtest regression in testing: no package called ‘BSgenome.Hsapiens.UCSC.hg19’",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-02-18T13:37:27Z",
+      "last_reply": "2021-02-18T13:37:27Z",
+      "root_message_id": "msg-22489bbab897"
+    },
+    {
+      "id": "thread-c7e13c88fb6d",
+      "subject": "Any idea what might be the issue of not migrating r-cran-knitr?",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Graham Inggs"
+      ],
+      "started": "2021-02-20T13:52:47Z",
+      "last_reply": "2021-02-23T10:58:19Z",
+      "root_message_id": "msg-c7e13c88fb6d"
+    },
+    {
+      "id": "thread-f72271ec278f",
+      "subject": "Need for maintainers",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Eric Brown"
+      ],
+      "started": "2021-02-21T07:06:23Z",
+      "last_reply": "2021-02-21T17:00:24Z",
+      "root_message_id": "msg-f72271ec278f"
+    },
+    {
+      "id": "thread-9d5c146bf520",
+      "subject": "Is there any chance to make mathjaxr non-mandatory in metap",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2021-02-28T14:32:15Z",
+      "last_reply": "2021-02-28T14:32:15Z",
+      "root_message_id": "msg-9d5c146bf520"
+    }
+  ]
+}

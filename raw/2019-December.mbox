@@ -1,0 +1,1878 @@
+From jeroenooms at gmail.com  Sun Dec  1 08:43:55 2019
+From: jeroenooms at gmail.com (Jeroen Ooms)
+Date: Sun, 1 Dec 2019 09:43:55 +0100
+Subject: Re: Source for minimized JS app.min.js in bookdown
+In-Reply-To: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu>
+References: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu>
+Message-ID: <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com>
+
+On Wed, Nov 27, 2019 at 5:21 PM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi Yihui Xie,
+>
+> I intend to package bookdown for Debian (as a predependency for
+> rWikiPathways).  Debian considers minimized JS as binary without source
+> and thus I need to deliver the source for
+>
+>    inst/resources/gitbook/js/app.min.js
+>
+> Unfortunately I have no idea from where it is obtained from and thus I
+> fail to meet the requirement to provide it.  Any hint where you got that
+> file from?
+
+The upstream git repo seems to have the original version:
+https://github.com/rstudio/bookdown/tree/master/inst/resources/gitbook/js
+
+CRAN releases can be looked up via git tags.
+
+From andreas at an3as.eu  Tue Dec  3 09:29:43 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 3 Dec 2019 10:29:43 +0100
+Subject: Re: Source for minimized JS app.min.js in bookdown
+In-Reply-To: <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com>
+References: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu> <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com>
+Message-ID: <20191203092943.GE9744@an3as.eu>
+
+Hi Jeroen,
+
+On Sun, Dec 01, 2019 at 09:43:55AM +0100, Jeroen Ooms wrote:
+> On Wed, Nov 27, 2019 at 5:21 PM Andreas Tille <andreas at an3as.eu> wrote:
+> > I intend to package bookdown for Debian (as a predependency for
+> > rWikiPathways).  Debian considers minimized JS as binary without source
+> > and thus I need to deliver the source for
+> >
+> >    inst/resources/gitbook/js/app.min.js
+> >
+> > Unfortunately I have no idea from where it is obtained from and thus I
+> > fail to meet the requirement to provide it.  Any hint where you got that
+> > file from?
+> 
+> The upstream git repo seems to have the original version:
+> https://github.com/rstudio/bookdown/tree/master/inst/resources/gitbook/js
+> 
+> CRAN releases can be looked up via git tags.
+
+Thanks for the very helpful hint.  I adapted the packaging in Git[1].
+Unfortunately there is another minimized JS script inside the source
+code:
+
+      inst/resources/mathquill/mathquill.min.js
+
+Any hint to easily create this file which is originated here[2] but
+the compressed file is not available in an easy way.
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-bookdown
+[2] http://mathquill.com
+
+-- 
+http://fam-tille.de
+
+From jeroenooms at gmail.com  Tue Dec  3 11:22:19 2019
+From: jeroenooms at gmail.com (Jeroen Ooms)
+Date: Tue, 3 Dec 2019 12:22:19 +0100
+Subject: Re: Source for minimized JS app.min.js in bookdown
+In-Reply-To: <20191203092943.GE9744@an3as.eu>
+References: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu> <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com> <20191203092943.GE9744@an3as.eu>
+Message-ID: <CABFfbXvSLTh4_jrCmGxgW7GFGNzf=VyAuJ71j8TjAk5vnp9WHg@mail.gmail.com>
+
+On Tue, Dec 3, 2019 at 10:29 AM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi Jeroen,
+>
+> On Sun, Dec 01, 2019 at 09:43:55AM +0100, Jeroen Ooms wrote:
+> > On Wed, Nov 27, 2019 at 5:21 PM Andreas Tille <andreas at an3as.eu> wrote:
+> > > I intend to package bookdown for Debian (as a predependency for
+> > > rWikiPathways).  Debian considers minimized JS as binary without source
+> > > and thus I need to deliver the source for
+> > >
+> > >    inst/resources/gitbook/js/app.min.js
+> > >
+> > > Unfortunately I have no idea from where it is obtained from and thus I
+> > > fail to meet the requirement to provide it.  Any hint where you got that
+> > > file from?
+> >
+> > The upstream git repo seems to have the original version:
+> > https://github.com/rstudio/bookdown/tree/master/inst/resources/gitbook/js
+> >
+> > CRAN releases can be looked up via git tags.
+>
+> Thanks for the very helpful hint.  I adapted the packaging in Git[1].
+> Unfortunately there is another minimized JS script inside the source
+> code:
+>
+>       inst/resources/mathquill/mathquill.min.js
+>
+> Any hint to easily create this file which is originated here[2] but
+> the compressed file is not available in an easy way.
+
+The Github release for mathquil seems to have 'assets' attached with
+the compiled (but unminified) javascript:
+https://github.com/mathquill/mathquill/releases
+For example this file:
+https://github.com/mathquill/mathquill/releases/download/v0.10.1/mathquill-0.10.1.tgz
+
+From andreas at fam-tille.de  Tue Dec  3 20:48:49 2019
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 3 Dec 2019 21:48:49 +0100
+Subject: Re: Source for minimized JS app.min.js in bookdown
+In-Reply-To: <CABFfbXvSLTh4_jrCmGxgW7GFGNzf=VyAuJ71j8TjAk5vnp9WHg@mail.gmail.com>
+References: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu> <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com> <20191203092943.GE9744@an3as.eu> <CABFfbXvSLTh4_jrCmGxgW7GFGNzf=VyAuJ71j8TjAk5vnp9WHg@mail.gmail.com>
+Message-ID: <20191203204849.GO9744@an3as.eu>
+
+Hi Jeroen,
+
+On Tue, Dec 03, 2019 at 12:22:19PM +0100, Jeroen Ooms wrote:
+> > Thanks for the very helpful hint.  I adapted the packaging in Git[1].
+> > Unfortunately there is another minimized JS script inside the source
+> > code:
+> >
+> >       inst/resources/mathquill/mathquill.min.js
+> >
+> > Any hint to easily create this file which is originated here[2] but
+> > the compressed file is not available in an easy way.
+> 
+> The Github release for mathquil seems to have 'assets' attached with
+> the compiled (but unminified) javascript:
+> https://github.com/mathquill/mathquill/releases
+> For example this file:
+> https://github.com/mathquill/mathquill/releases/download/v0.10.1/mathquill-0.10.1.tgz
+
+Thanks a lot for your hints.  I've just uploaded r-cran-bookdown to
+new.
+
+@Egon: Once this package is accepted by ftpmaster r-bioc-rwikipathways
+will be probably very easy.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Dec  6 07:34:49 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 6 Dec 2019 08:34:49 +0100
+Subject: Test failures with latest rhdf5
+Message-ID: <20191206073449.GW5043@an3as.eu>
+
+Hi Mike,
+
+I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+but I stumbled about the following issues in the test suite:
+
+> library(testthat)
+> library(rhdf5)
+>.
+> test_check("rhdf5")
+── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+`object` not equal to "3 x 4".
+1/1 mismatches
+x[1]: " x 4"
+y[1]: "3 x 4"
+
+── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+`object` not equal to "4 x 3".
+1/1 mismatches
+x[1]: " x 3"
+y[1]: "4 x 3"
+
+── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+`object` not equal to "4 x 3".
+1/1 mismatches
+x[1]: " x 3"
+y[1]: "4 x 3"
+
+── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+`object` not equal to "3 x 4".
+1/1 mismatches
+x[1]: " x 4"
+y[1]: "3 x 4"
+
+── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+`object` not equal to "2 x 3 x 4".
+1/1 mismatches
+x[1]: " x 4"
+y[1]: "2 x 3 x 4"
+
+── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+`object` not equal to "4 x 3 x 2".
+1/1 mismatches
+x[1]: " x 2"
+y[1]: "4 x 3 x 2"
+
+── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+`object` not equal to "4 x 3 x 2".
+1/1 mismatches
+x[1]: " x 2"
+y[1]: "4 x 3 x 2"
+
+── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+`object` not equal to "2 x 3 x 4".
+1/1 mismatches
+x[1]: " x 4"
+y[1]: "2 x 3 x 4"
+
+══ testthat results  ═══════════════════════════════════════════════════════════
+[ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+1. Failure: h5ls supports native (@test_native.R#21).
+2. Failure: h5ls supports native (@test_native.R#23).
+3. Failure: h5ls supports native (@test_native.R#27).
+4. Failure: h5ls supports native (@test_native.R#29).
+5. Failure: h5ls supports native (@test_native.R#38).
+6. Failure: h5ls supports native (@test_native.R#41).
+7. Failure: h5ls supports native (@test_native.R#46).
+8. Failure: h5ls supports native (@test_native.R#49).
+
+Error: testthat unit tests failed
+Execution halted
+
+Do you have any idea what might be wrong here?
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From mike.smith at embl.de  Fri Dec  6 08:06:44 2019
+From: mike.smith at embl.de (Mike Smith)
+Date: Fri, 06 Dec 2019 08:06:44 +0000
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <20191206073449.GW5043@an3as.eu>
+References: <20191206073449.GW5043@an3as.eu>
+Message-ID: <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de>
+
+Hi Andreas,
+
+Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+
+This was reported once before (https://support.bioconductor.org/p/101038/) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+
+I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+
+I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+
+I'll let you know if I find something.
+Cheers,
+
+Mike
+
+On Fri, Dec 6, 2019 at 08:35, Andreas Tille <andreas at an3as.eu> wrote:
+> Hi Mike,
+>
+> I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> but I stumbled about the following issues in the test suite:
+>
+> > library(testthat)
+> > library(rhdf5)
+> > .
+> > test_check("rhdf5")
+>
+> ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> `object` not equal to "3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "3 x 4"
+>
+> ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> `object` not equal to "4 x 3".
+> 1/1 mismatches
+> x[1]: " x 3"
+> y[1]: "4 x 3"
+>
+> ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> `object` not equal to "4 x 3".
+> 1/1 mismatches
+> x[1]: " x 3"
+> y[1]: "4 x 3"
+>
+> ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> `object` not equal to "3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "3 x 4"
+>
+> ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> `object` not equal to "2 x 3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "2 x 3 x 4"
+>
+> ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> `object` not equal to "4 x 3 x 2".
+> 1/1 mismatches
+> x[1]: " x 2"
+> y[1]: "4 x 3 x 2"
+>
+> ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> `object` not equal to "4 x 3 x 2".
+> 1/1 mismatches
+> x[1]: " x 2"
+> y[1]: "4 x 3 x 2"
+>
+> ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> `object` not equal to "2 x 3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "2 x 3 x 4"
+>
+> ══ testthat results  ═══════════════════════════════════════════════════════════
+> [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> 1. Failure: h5ls supports native (@test_native.R#21).
+> 2. Failure: h5ls supports native (@test_native.R#23).
+> 3. Failure: h5ls supports native (@test_native.R#27).
+> 4. Failure: h5ls supports native (@test_native.R#29).
+> 5. Failure: h5ls supports native (@test_native.R#38).
+> 6. Failure: h5ls supports native (@test_native.R#41).
+> 7. Failure: h5ls supports native (@test_native.R#46).
+> 8. Failure: h5ls supports native (@test_native.R#49).
+>
+> Error: testthat unit tests failed
+> Execution halted
+>
+> Do you have any idea what might be wrong here?
+>
+> Kind regards
+>
+> Andreas.
+>
+> --
+> http://fam-tille.de
+
+From andreas at fam-tille.de  Fri Dec  6 09:01:11 2019
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Fri, 6 Dec 2019 10:01:11 +0100
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de>
+References: <20191206073449.GW5043@an3as.eu> <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de>
+Message-ID: <20191206090111.GY5043@an3as.eu>
+
+Hi Mike,
+
+thanks a lot for the speedy response!
+
+On Fri, Dec 06, 2019 at 08:06:44AM +0000, Mike Smith wrote:
+> Hi Andreas,
+> Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+> This was reported once before (https://support.bioconductor.org/p/101038/ (https://support.bioconductor.org/p/101038/)) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+> I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+
+I need to admit that also the previous version 2.30.0 showed the exact
+same issue.  However, non of the maintainers team payed sufficient
+attention to that issue.
+
+> I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+> I'll let you know if I find something.
+
+Thanks a lot again for your quick response.  Feel free to ask here if
+you need some further information.
+
+Kind regards
+
+       Andreas.
+
+> Cheers,
+> Mike
+> 
+> On Fri, Dec 6, 2019 at 08:35, Andreas Tille  wrote:
+> Hi Mike,
+> 
+> I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> but I stumbled about the following issues in the test suite:
+> 
+> library(testthat)
+> library(rhdf5)
+> .
+> test_check("rhdf5")
+> ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> `object` not equal to "3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "3 x 4"
+> 
+> ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> `object` not equal to "4 x 3".
+> 1/1 mismatches
+> x[1]: " x 3"
+> y[1]: "4 x 3"
+> 
+> ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> `object` not equal to "4 x 3".
+> 1/1 mismatches
+> x[1]: " x 3"
+> y[1]: "4 x 3"
+> 
+> ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> `object` not equal to "3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "3 x 4"
+> 
+> ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> `object` not equal to "2 x 3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "2 x 3 x 4"
+> 
+> ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> `object` not equal to "4 x 3 x 2".
+> 1/1 mismatches
+> x[1]: " x 2"
+> y[1]: "4 x 3 x 2"
+> 
+> ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> `object` not equal to "4 x 3 x 2".
+> 1/1 mismatches
+> x[1]: " x 2"
+> y[1]: "4 x 3 x 2"
+> 
+> ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> `object` not equal to "2 x 3 x 4".
+> 1/1 mismatches
+> x[1]: " x 4"
+> y[1]: "2 x 3 x 4"
+> 
+> ══ testthat results  ═══════════════════════════════════════════════════════════
+> [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> 1. Failure: h5ls supports native (@test_native.R#21).
+> 2. Failure: h5ls supports native (@test_native.R#23).
+> 3. Failure: h5ls supports native (@test_native.R#27).
+> 4. Failure: h5ls supports native (@test_native.R#29).
+> 5. Failure: h5ls supports native (@test_native.R#38).
+> 6. Failure: h5ls supports native (@test_native.R#41).
+> 7. Failure: h5ls supports native (@test_native.R#46).
+> 8. Failure: h5ls supports native (@test_native.R#49).
+> 
+> Error: testthat unit tests failed
+> Execution halted
+> 
+> Do you have any idea what might be wrong here?
+> 
+> Kind regards
+> 
+> Andreas.
+> 
+> -- 
+> http://fam-tille.de (http://fam-tille.de)
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sat Dec  7 21:00:00 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 7 Dec 2019 22:00:00 +0100
+Subject: Test failure for IRkernel
+Message-ID: <20191207210000.GR5043@an3as.eu>
+
+Hi,
+
+I intend to upgrade the Debian package for IRkernel.  When running the
+test suite I get some errors:
+
+...
+test_irkernel_inspects (__main__.IRkernelTests)
+Test if object inspection works. ... ok
+test_irkernel_plots (__main__.IRkernelTests)
+plotting ... FAIL
+test_irkernel_plots_only_PNG (__main__.IRkernelTests)
+plotting PNG ... FAIL
+test_irkernel_plots_only_SVG (__main__.IRkernelTests) ... FAIL
+test_irkernel_plots_without_rich_display (__main__.IRkernelTests) ... FAIL
+test_is_complete (__main__.IRkernelTests) ... ok
+test_kernel_info (__main__.IRkernelTests) ... ok
+test_pager (__main__.IRkernelTests) ... skipped ''
+test_should_increment_history (__main__.IRkernelTests)
+properly increments execution history ... ok
+test_should_not_increment_history (__main__.IRkernelTests)
+Does not increment history if silent is true or store_history is false ... ok
+test_warning_message (__main__.IRkernelTests) ... FAIL
+
+======================================================================
+FAIL: test_irkernel_plots (__main__.IRkernelTests)
+plotting
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/autopkgtest.uocGyT/tree/tests/testthat/test_ir.py", line 115, in test_irkernel_plots
+    self.assertEqual(len(metadata), 0, metadata.keys())
+AssertionError: 2 != 0 : dict_keys(['text/plain', 'image/png'])
+
+======================================================================
+FAIL: test_irkernel_plots_only_PNG (__main__.IRkernelTests)
+plotting PNG
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/autopkgtest.uocGyT/tree/tests/testthat/test_ir.py", line 137, in test_irkernel_plots_only_PNG
+    self.assertEqual(len(metadata), 0, metadata.keys())
+AssertionError: 1 != 0 : dict_keys(['image/png'])
+
+======================================================================
+FAIL: test_irkernel_plots_only_SVG (__main__.IRkernelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/autopkgtest.uocGyT/tree/tests/testthat/test_ir.py", line 159, in test_irkernel_plots_only_SVG
+    self.assertEqual(len(metadata['image/svg+xml']), 1)
+AssertionError: 3 != 1
+
+======================================================================
+FAIL: test_irkernel_plots_without_rich_display (__main__.IRkernelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/autopkgtest.uocGyT/tree/tests/testthat/test_ir.py", line 175, in test_irkernel_plots_without_rich_display
+    self.assertEqual(len(data), 2, data.keys())
+AssertionError: 1 != 2 : dict_keys(['image/svg+xml'])
+
+======================================================================
+FAIL: test_warning_message (__main__.IRkernelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/autopkgtest.uocGyT/tree/tests/testthat/test_ir.py", line 234, in test_warning_message
+    self.assertEqual(output_msgs[0]['content']['text'], 'Warning message:\n“wmsg”')
+AssertionError: 'Warning message:\n“wmsg”\n' != 'Warning message:\n“wmsg”'
+  Warning message:
+- “wmsg”
+?       -
++ “wmsg”
+
+----------------------------------------------------------------------
+Ran 26 tests in 10.018s
+
+FAILED (failures=5, skipped=7)
+
+Any idea what might be wrong here?
+
+Kind regards
+
+          Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Dec 10 12:46:35 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 10 Dec 2019 13:46:35 +0100
+Subject: Re: Test failure for IRkernel
+In-Reply-To: <20191210122318.kdruz3nompndpzm7@emissary.chronitis.net>
+References: <20191207210000.GR5043@an3as.eu> <20191208113550.txb4ctjqb2rm2bwo@emissary.chronitis.net> <20191210122318.kdruz3nompndpzm7@emissary.chronitis.net>
+Message-ID: <20191210124635.GL22950@an3as.eu>
+
+Hi Gordon,
+
+On Tue, Dec 10, 2019 at 12:23:18PM +0000, Gordon Ball wrote:
+> Reported this to upstream (and they fixed it quickly) in
+> https://github.com/IRkernel/IRkernel/issues/648
+
+Thanks a lot for reporting this.
+ 
+> I guess we can either cherry-pick that commit or wait and see if they do
+> a patch release for it.
+
+No hurry on my side.  I just added a record in d/changelog.  Feel free
+to upload if you have some reason to do so.
+
+BTW, I think this is another proof that it makes perfectly sense to run
+upstream test suite in autopkgtest.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From egon.willighagen at gmail.com  Wed Dec 11 06:12:46 2019
+From: egon.willighagen at gmail.com (Egon Willighagen)
+Date: Wed, 11 Dec 2019 07:12:46 +0100
+Subject: Re: Source for minimized JS app.min.js in bookdown
+In-Reply-To: <20191203204849.GO9744@an3as.eu>
+References: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu> <CABFfbXv+4c34F78Qy+sEmUwjVFt9oMjAkDcDLFSLSuLBKePk+w@mail.gmail.com> <20191203092943.GE9744@an3as.eu> <CABFfbXvSLTh4_jrCmGxgW7GFGNzf=VyAuJ71j8TjAk5vnp9WHg@mail.gmail.com> <20191203204849.GO9744@an3as.eu>
+Message-ID: <CAMPqvY9b8u94fr7AoOoKfUuCHjYps9mTAdV5=fQzO+OiEiyoxA@mail.gmail.com>
+
+On Tue, Dec 3, 2019 at 9:48 PM Andreas Tille <andreas at fam-tille.de> wrote:
+> Thanks a lot for your hints.  I've just uploaded r-cran-bookdown to
+> new.
+>
+> @Egon: Once this package is accepted by ftpmaster r-bioc-rwikipathways
+> will be probably very easy.
+
+Thanks, your effort is very much appreciated!
+
+Egon
+
+-- 
+Hi, do you like citation networks? Already 51% of all citations are
+available available for innovative new uses. Join me in asking the
+American Chemical Society to join the Initiative for Open Citations
+too. SpringerNature, the RSC and many others already did.
+
+-----
+E.L. Willighagen
+Department of Bioinformatics - BiGCaT
+Maastricht University (http://www.bigcat.unimaas.nl/)
+Homepage: http://egonw.github.com/
+Blog: http://chem-bla-ics.blogspot.com/
+PubList: https://www.zotero.org/egonw
+ORCID: 0000-0001-7542-0286
+ImpactStory: https://impactstory.org/u/egonwillighagen
+
+From mike.smith at embl.de  Fri Dec 13 13:43:42 2019
+From: mike.smith at embl.de (Mike Smith)
+Date: Fri, 13 Dec 2019 14:43:42 +0100
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <20191206090111.GY5043@an3as.eu>
+References: <20191206073449.GW5043@an3as.eu> <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de> <20191206090111.GY5043@an3as.eu>
+Message-ID: <8d8781d1-e311-bc9c-c280-fb39a5cbff06@embl.de>
+
+Hi Andreas,
+
+I think I've narrowed this down to an unsafe use of sprintf() in that 
+function.
+
+There's a modified version of the package at 
+https://github.com/grimbough/rhdf5/tree/h5ls_printing
+
+I haven't been able to reproduce the bug on my own system, but if you'd 
+like to test that version and report back, that would be great.
+
+I'm not sure what format you need for testing, so if you'd like me to 
+provide the source tarball or anything let me know.
+
+Cheers,
+
+Mike
+
+On 12/6/19 10:01 AM, Andreas Tille wrote:
+> Hi Mike,
+>
+> thanks a lot for the speedy response!
+>
+> On Fri, Dec 06, 2019 at 08:06:44AM +0000, Mike Smith wrote:
+> > Hi Andreas,
+> > Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+> > This was reported once before (https://support.bioconductor.org/p/101038/ (https://support.bioconductor.org/p/101038/)) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+> > I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+>
+> I need to admit that also the previous version 2.30.0 showed the exact
+> same issue.  However, non of the maintainers team payed sufficient
+> attention to that issue.
+>
+> > I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+> > I'll let you know if I find something.
+>
+> Thanks a lot again for your quick response.  Feel free to ask here if
+> you need some further information.
+>
+> Kind regards
+>
+>         Andreas.
+>
+> > Cheers,
+> > Mike
+> >
+> > On Fri, Dec 6, 2019 at 08:35, Andreas Tille  wrote:
+> > Hi Mike,
+> >
+> > I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> > but I stumbled about the following issues in the test suite:
+> >
+> > library(testthat)
+> > library(rhdf5)
+> > .
+> > test_check("rhdf5")
+> > ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> > `object` not equal to "3 x 4".
+> > 1/1 mismatches
+> > x[1]: " x 4"
+> > y[1]: "3 x 4"
+> >
+> > ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> > `object` not equal to "4 x 3".
+> > 1/1 mismatches
+> > x[1]: " x 3"
+> > y[1]: "4 x 3"
+> >
+> > ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> > `object` not equal to "4 x 3".
+> > 1/1 mismatches
+> > x[1]: " x 3"
+> > y[1]: "4 x 3"
+> >
+> > ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> > `object` not equal to "3 x 4".
+> > 1/1 mismatches
+> > x[1]: " x 4"
+> > y[1]: "3 x 4"
+> >
+> > ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> > `object` not equal to "2 x 3 x 4".
+> > 1/1 mismatches
+> > x[1]: " x 4"
+> > y[1]: "2 x 3 x 4"
+> >
+> > ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> > `object` not equal to "4 x 3 x 2".
+> > 1/1 mismatches
+> > x[1]: " x 2"
+> > y[1]: "4 x 3 x 2"
+> >
+> > ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> > `object` not equal to "4 x 3 x 2".
+> > 1/1 mismatches
+> > x[1]: " x 2"
+> > y[1]: "4 x 3 x 2"
+> >
+> > ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> > `object` not equal to "2 x 3 x 4".
+> > 1/1 mismatches
+> > x[1]: " x 4"
+> > y[1]: "2 x 3 x 4"
+> >
+> > ══ testthat results  ═══════════════════════════════════════════════════════════
+> > [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> > 1. Failure: h5ls supports native (@test_native.R#21).
+> > 2. Failure: h5ls supports native (@test_native.R#23).
+> > 3. Failure: h5ls supports native (@test_native.R#27).
+> > 4. Failure: h5ls supports native (@test_native.R#29).
+> > 5. Failure: h5ls supports native (@test_native.R#38).
+> > 6. Failure: h5ls supports native (@test_native.R#41).
+> > 7. Failure: h5ls supports native (@test_native.R#46).
+> > 8. Failure: h5ls supports native (@test_native.R#49).
+> >
+> > Error: testthat unit tests failed
+> > Execution halted
+> >
+> > Do you have any idea what might be wrong here?
+> >
+> > Kind regards
+> >
+> > Andreas.
+> >
+> > --
+> > http://fam-tille.de (http://fam-tille.de)
+
+From andreas at fam-tille.de  Fri Dec 13 14:33:22 2019
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Fri, 13 Dec 2019 15:33:22 +0100
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <8d8781d1-e311-bc9c-c280-fb39a5cbff06@embl.de>
+References: <20191206073449.GW5043@an3as.eu> <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de> <20191206090111.GY5043@an3as.eu> <8d8781d1-e311-bc9c-c280-fb39a5cbff06@embl.de>
+Message-ID: <20191213143322.GA4183@an3as.eu>
+
+Hi Mike,
+
+On Fri, Dec 13, 2019 at 02:43:42PM +0100, Mike Smith wrote:
+> Hi Andreas,
+> 
+> I think I've narrowed this down to an unsafe use of sprintf() in that
+> function.
+> 
+> There's a modified version of the package at
+> https://github.com/grimbough/rhdf5/tree/h5ls_printing
+> 
+> I haven't been able to reproduce the bug on my own system, but if you'd like
+> to test that version and report back, that would be great.
+> 
+> I'm not sure what format you need for testing, so if you'd like me to
+> provide the source tarball or anything let me know.
+
+The easiest way to verify your changes is a patch against the released
+version.  I admit I tried a diff between the whole directories but this
+is quite large and does not really fit to a simple change in an
+sprintf().
+
+So a small diff would be very convenient.
+
+Kind regards and thanks for your support
+
+    Andreas.
+ 
+> On 12/6/19 10:01 AM, Andreas Tille wrote:
+> > Hi Mike,
+> > 
+> > thanks a lot for the speedy response!
+> > 
+> > On Fri, Dec 06, 2019 at 08:06:44AM +0000, Mike Smith wrote:
+> > > Hi Andreas,
+> > > Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+> > > This was reported once before (https://support.bioconductor.org/p/101038/ (https://support.bioconductor.org/p/101038/)) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+> > > I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+> > I need to admit that also the previous version 2.30.0 showed the exact
+> > same issue.  However, non of the maintainers team payed sufficient
+> > attention to that issue.
+> > 
+> > > I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+> > > I'll let you know if I find something.
+> > Thanks a lot again for your quick response.  Feel free to ask here if
+> > you need some further information.
+> > 
+> > Kind regards
+> > 
+> >         Andreas.
+> > 
+> > > Cheers,
+> > > Mike
+> > > 
+> > > On Fri, Dec 6, 2019 at 08:35, Andreas Tille  wrote:
+> > > Hi Mike,
+> > > 
+> > > I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> > > but I stumbled about the following issues in the test suite:
+> > > 
+> > > library(testthat)
+> > > library(rhdf5)
+> > > .
+> > > test_check("rhdf5")
+> > > ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> > > `object` not equal to "3 x 4".
+> > > 1/1 mismatches
+> > > x[1]: " x 4"
+> > > y[1]: "3 x 4"
+> > > 
+> > > ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> > > `object` not equal to "4 x 3".
+> > > 1/1 mismatches
+> > > x[1]: " x 3"
+> > > y[1]: "4 x 3"
+> > > 
+> > > ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> > > `object` not equal to "4 x 3".
+> > > 1/1 mismatches
+> > > x[1]: " x 3"
+> > > y[1]: "4 x 3"
+> > > 
+> > > ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> > > `object` not equal to "3 x 4".
+> > > 1/1 mismatches
+> > > x[1]: " x 4"
+> > > y[1]: "3 x 4"
+> > > 
+> > > ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> > > `object` not equal to "2 x 3 x 4".
+> > > 1/1 mismatches
+> > > x[1]: " x 4"
+> > > y[1]: "2 x 3 x 4"
+> > > 
+> > > ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> > > `object` not equal to "4 x 3 x 2".
+> > > 1/1 mismatches
+> > > x[1]: " x 2"
+> > > y[1]: "4 x 3 x 2"
+> > > 
+> > > ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> > > `object` not equal to "4 x 3 x 2".
+> > > 1/1 mismatches
+> > > x[1]: " x 2"
+> > > y[1]: "4 x 3 x 2"
+> > > 
+> > > ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> > > `object` not equal to "2 x 3 x 4".
+> > > 1/1 mismatches
+> > > x[1]: " x 4"
+> > > y[1]: "2 x 3 x 4"
+> > > 
+> > > ══ testthat results  ═══════════════════════════════════════════════════════════
+> > > [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> > > 1. Failure: h5ls supports native (@test_native.R#21).
+> > > 2. Failure: h5ls supports native (@test_native.R#23).
+> > > 3. Failure: h5ls supports native (@test_native.R#27).
+> > > 4. Failure: h5ls supports native (@test_native.R#29).
+> > > 5. Failure: h5ls supports native (@test_native.R#38).
+> > > 6. Failure: h5ls supports native (@test_native.R#41).
+> > > 7. Failure: h5ls supports native (@test_native.R#46).
+> > > 8. Failure: h5ls supports native (@test_native.R#49).
+> > > 
+> > > Error: testthat unit tests failed
+> > > Execution halted
+> > > 
+> > > Do you have any idea what might be wrong here?
+> > > 
+> > > Kind regards
+> > > 
+> > > Andreas.
+> > > 
+> > > -- 
+> > > http://fam-tille.de (http://fam-tille.de)
+> 
+
+-- 
+http://fam-tille.de
+
+From mike.smith at embl.de  Wed Dec 18 17:39:18 2019
+From: mike.smith at embl.de (Mike Smith)
+Date: Wed, 18 Dec 2019 18:39:18 +0100
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <20191213143322.GA4183@an3as.eu>
+References: <20191206073449.GW5043@an3as.eu> <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de> <20191206090111.GY5043@an3as.eu> <8d8781d1-e311-bc9c-c280-fb39a5cbff06@embl.de> <20191213143322.GA4183@an3as.eu>
+Message-ID: <b1054af9-c3a9-25be-7d98-fa954cdd3a95@embl.de>
+
+Hi Andreas,
+
+Attached should be diff that you can apply against /rhdf5/src/h5ls.c
+
+I've made a few other changes since release, but I think this should be 
+sufficient to test whether this specific problem is fixed.
+
+Cheers,
+
+Mike
+
+On 12/13/19 3:33 PM, Andreas Tille wrote:
+> Hi Mike,
+>
+> On Fri, Dec 13, 2019 at 02:43:42PM +0100, Mike Smith wrote:
+> > Hi Andreas,
+> >
+> > I think I've narrowed this down to an unsafe use of sprintf() in that
+> > function.
+> >
+> > There's a modified version of the package at
+> > https://github.com/grimbough/rhdf5/tree/h5ls_printing
+> >
+> > I haven't been able to reproduce the bug on my own system, but if you'd like
+> > to test that version and report back, that would be great.
+> >
+> > I'm not sure what format you need for testing, so if you'd like me to
+> > provide the source tarball or anything let me know.
+>
+> The easiest way to verify your changes is a patch against the released
+> version.  I admit I tried a diff between the whole directories but this
+> is quite large and does not really fit to a simple change in an
+> sprintf().
+>
+> So a small diff would be very convenient.
+>
+> Kind regards and thanks for your support
+>
+>      Andreas.
+>
+> > On 12/6/19 10:01 AM, Andreas Tille wrote:
+> > > Hi Mike,
+> > >
+> > > thanks a lot for the speedy response!
+> > >
+> > > On Fri, Dec 06, 2019 at 08:06:44AM +0000, Mike Smith wrote:
+> > > > Hi Andreas,
+> > > > Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+> > > > This was reported once before (https://support.bioconductor.org/p/101038/ (https://support.bioconductor.org/p/101038/)) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+> > > > I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+> > >
+> > > I need to admit that also the previous version 2.30.0 showed the exact
+> > > same issue.  However, non of the maintainers team payed sufficient
+> > > attention to that issue.
+> > >
+> > > > I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+> > > > I'll let you know if I find something.
+> > >
+> > > Thanks a lot again for your quick response.  Feel free to ask here if
+> > > you need some further information.
+> > >
+> > > Kind regards
+> > >
+> > >          Andreas.
+> > >
+> > > > Cheers,
+> > > > Mike
+> > > >
+> > > > On Fri, Dec 6, 2019 at 08:35, Andreas Tille  wrote:
+> > > > Hi Mike,
+> > > >
+> > > > I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> > > > but I stumbled about the following issues in the test suite:
+> > > >
+> > > > library(testthat)
+> > > > library(rhdf5)
+> > > > .
+> > > > test_check("rhdf5")
+> > > > ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> > > > `object` not equal to "3 x 4".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 4"
+> > > > y[1]: "3 x 4"
+> > > >
+> > > > ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> > > > `object` not equal to "4 x 3".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 3"
+> > > > y[1]: "4 x 3"
+> > > >
+> > > > ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> > > > `object` not equal to "4 x 3".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 3"
+> > > > y[1]: "4 x 3"
+> > > >
+> > > > ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> > > > `object` not equal to "3 x 4".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 4"
+> > > > y[1]: "3 x 4"
+> > > >
+> > > > ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> > > > `object` not equal to "2 x 3 x 4".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 4"
+> > > > y[1]: "2 x 3 x 4"
+> > > >
+> > > > ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> > > > `object` not equal to "4 x 3 x 2".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 2"
+> > > > y[1]: "4 x 3 x 2"
+> > > >
+> > > > ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> > > > `object` not equal to "4 x 3 x 2".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 2"
+> > > > y[1]: "4 x 3 x 2"
+> > > >
+> > > > ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> > > > `object` not equal to "2 x 3 x 4".
+> > > > 1/1 mismatches
+> > > > x[1]: " x 4"
+> > > > y[1]: "2 x 3 x 4"
+> > > >
+> > > > ══ testthat results  ═══════════════════════════════════════════════════════════
+> > > > [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> > > > 1. Failure: h5ls supports native (@test_native.R#21).
+> > > > 2. Failure: h5ls supports native (@test_native.R#23).
+> > > > 3. Failure: h5ls supports native (@test_native.R#27).
+> > > > 4. Failure: h5ls supports native (@test_native.R#29).
+> > > > 5. Failure: h5ls supports native (@test_native.R#38).
+> > > > 6. Failure: h5ls supports native (@test_native.R#41).
+> > > > 7. Failure: h5ls supports native (@test_native.R#46).
+> > > > 8. Failure: h5ls supports native (@test_native.R#49).
+> > > >
+> > > > Error: testthat unit tests failed
+> > > > Execution halted
+> > > >
+> > > > Do you have any idea what might be wrong here?
+> > > >
+> > > > Kind regards
+> > > >
+> > > > Andreas.
+> > > >
+> > > > --
+> > > > http://fam-tille.de (http://fam-tille.de)
+diff --git a/src/h5ls.c b/src/h5ls.c
+index cef3ee0..c22527c 100644
+--- a/src/h5ls.c
++++ b/src/h5ls.c
+@@ -3,6 +3,33 @@
+ #include <stdio.h>
+ #include "printdatatype.h"
+ 
++#include <stdlib.h>
++#include <string.h>
++
++void concat(char *s1, hsize_t next_dim, int index)
++{
++    char tmp[100];
++    strncpy(tmp, s1, 100);
++    
++#ifdef H5_HAVE_WINDOWS
++    snprintf(s1, 100, "%s%I64u%s", tmp, next_dim, index?" x ":"");
++#else
++    snprintf(s1, 100, "%s%llu%s", tmp, next_dim, index ? " x " : "");
++#endif
++}
++
++void concatnative(char *s1, hsize_t next_dim, int index)
++{
++    char tmp[100];
++    strncpy(tmp, s1, 100);
++    
++#ifdef H5_HAVE_WINDOWS
++    snprintf(s1, 100, "%s%s%I64u", tmp, index?" x ":"", next_dim);
++#else
++    snprintf(s1, 100, "%s%s%llu", tmp, index ? " x " : "", next_dim);
++#endif
++}
++
+ typedef struct opLinfoListElement {
+     long idx;
+     char *name;
+@@ -16,7 +43,6 @@ typedef struct opLinfoListElement {
+     H5L_info_t info;
+     H5I_type_t type;
+     hsize_t num_attrs;
+-    //  H5O_info_t object_info;
+     struct opLinfoListElement *next;
+ } opLinfoListElement;
+ 
+@@ -39,7 +65,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+     herr_t herr = 0;
+     opLinfoListElement *newElement = (opLinfoListElement *)R_alloc(1,sizeof(struct opLinfoListElement) );
+     newElement->idx = data->n;
+-    //  printf("sizeof = %ld cset=%ld group=>%s< name=>%s<\n", strlen(name), info->cset, data->group, name);
+     newElement->name = (char *)R_alloc(1,(strlen(name)+1)*sizeof(char));
+     strcpy(newElement->name, name);
+     newElement->group = (char *)R_alloc(1,(strlen(data->group)+1)*sizeof(char));
+@@ -66,7 +91,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+         data->last = newElement;
+     } else {
+         hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
+-        // herr_t herr = H5Oget_info( oid, &(newElement->object_info) );
+         newElement->type = H5Iget_type(oid);
+         newElement->num_attrs = H5Oget_num_attrs(oid);
+         if ((data->showdatasetinfo) & (newElement->type == H5I_DATASET)) {
+@@ -74,7 +98,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+             hid_t type = H5Dget_type(did);
+             newElement->datatype = getDatatypeName(type);
+             newElement->class = getDatatypeClass(type);
+-            /* H5Tclose(type); */
+             hid_t sid = H5Dget_space( did );
+             hsize_t   size[H5S_MAX_RANK];
+             hsize_t   maxsize[H5S_MAX_RANK];
+@@ -97,67 +120,31 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+             } break;
+             case H5S_SIMPLE: {
+                 char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
++                memset(tmp, '\0', 100 * sizeof(char));
+                 if (data->native) {
+-#ifdef H5_HAVE_WINDOWS
+-                    sprintf(tmp, "%I64u", size[0]);
+-#else
+-                    sprintf(tmp, "%llu", size[0]);
+-#endif
+-                    for(int i = 1; i < newElement->rank; i++) {
+-#ifdef H5_HAVE_WINDOWS
+-                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
+-#else
+-                        sprintf(tmp, "%s x %llu", tmp, size[i]);
+-#endif
++                    //TODO: can we end up here?
++                    for(int i = 0; i < newElement->rank; i++) {
++                        concatnative(tmp, size[i], i);
+                     }
+                 } else {
+-#ifdef H5_HAVE_WINDOWS
+-                    sprintf(tmp, "%I64u", size[newElement->rank-1]);
+-#else
+-                    sprintf(tmp, "%llu", size[newElement->rank-1]);
+-#endif
+-                    for(int i = newElement->rank-2; i >= 0; i--) {
+-#ifdef H5_HAVE_WINDOWS
+-                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
+-#else
+-                        sprintf(tmp, "%s x %llu", tmp, size[i]);
+-#endif
++                    for(int i = newElement->rank-1; i >= 0; i--) {
++                        concat(tmp, size[i], i);
+                     }
+                 }
+-                sprintf(tmp, "%s", tmp);
+                 newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
+                 strcpy(newElement->dim, tmp);
++                
+                 if(maxsize[0] == H5S_UNLIMITED) {
+                     sprintf(tmp, "UNLIMITED");
+                 } else {
++                    memset(tmp, '\0', 100 * sizeof(char));
+                     if (data->native) {
+-#ifdef H5_HAVE_WINDOWS
+-                        sprintf(tmp, "%I64u", maxsize[0]);
+-#else
+-                        sprintf(tmp, "%llu", maxsize[0]);
+-#endif
+-                        for(int i = 1; i < newElement->rank ; i++) {
+-#ifdef H5_HAVE_WINDOWS      
+-                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
+-#else
+-                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+-#endif
+-                        }
++                        //TODO: can we end up here?
+                     } else {
+-#ifdef H5_HAVE_WINDOWS
+-                        sprintf(tmp, "%I64u", maxsize[newElement->rank-1]);
+-#else
+-                        sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
+-#endif
+-                        for(int i = newElement->rank-2; i >= 0 ; i--) {
+-#ifdef H5_HAVE_WINDOWS
+-                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
+-#else
+-                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+-#endif
++                        for(int i = 0; i < newElement->rank; i++) {
++                            concat(tmp, maxsize[i], i);
+                         }
+                     }
+-                    sprintf(tmp, "%s", tmp);
+                 }
+                 newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
+                 strcpy(newElement->maxdim, tmp);
+@@ -172,17 +159,8 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+                 newElement->maxdim = "unknown dataspace"; 
+             } break;
+             } /* end switch */
+-            H5Sclose(sid);
++                    H5Sclose(sid);
+             
+-            /* printf("type=%ld\n",H5T_STD_I32LE); */
+-            /* printf("type=%ld\n",H5T_IEEE_F32LE); */
+-            /* const char *typename = getDatatypeName(type, 1); */
+-            /* printf("type=%ld\n",hid); */
+-            /* char *typename; */
+-            /* typename = malloc(1001*sizeof(char)); */
+-            /* ssize_t s = H5Iget_name( hid, typename, 1000 ); */
+-            /* printf("size=%ld\n",s); */
+-            /* printf("name=%s\n\n",typename); */
+             H5Dclose(did);
+         } else {
+             newElement->datatype = "";
+@@ -227,7 +205,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+ }
+ 
+ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native ) {
+-    //hid_t loc_id = INTEGER(_loc_id)[0];
++    
+     hid_t loc_id = STRSXP_2_HID( _loc_id );
+     opLinfoList data;
+     data.n = 0;
+@@ -241,10 +219,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+     data.last = NULL;
+     data.index_type = INTEGER(_index_type)[0];
+     data.order = INTEGER(_order)[0];
+-    // H5_index_t index_type = H5_INDEX_NAME; 
+-    // H5_iter_order_t order = H5_ITER_INC; 
+     hsize_t idx=0;
+-    //   printf("Start visit.\n"); 
+     
+     herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToLinfoList, &data );
+     
+@@ -256,21 +231,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+         UNPROTECT(1);
+     } else {
+         PROTECT(Rval= allocVector(VECSXP, 14));
+-        // SEXP elementnames = PROTECT(allocVector(STRSXP, 0)); 
+         SEXP group = PROTECT(allocVector(STRSXP, data.n));
+         SEXP elementnames = PROTECT(allocVector(STRSXP, data.n));
+         SEXP ltype = PROTECT(allocVector(INTSXP, data.n));
+         SEXP corder_valid = PROTECT(allocVector(LGLSXP, data.n));
+         SEXP corder = PROTECT(allocVector(INTSXP, data.n));
+         SEXP cset = PROTECT(allocVector(INTSXP, data.n));
+-        //   SEXP fileno = PROTECT(allocVector(INTSXP, data.n));
+-        //    SEXP addr = PROTECT(allocVector(INTSXP, data.n));
+         SEXP otype = PROTECT(allocVector(INTSXP, data.n));
+-        //    SEXP rc = PROTECT(allocVector(INTSXP, data.n));
+-        //    SEXP atime = PROTECT(allocVector(REALSXP, data.n));
+-        //    SEXP mtime = PROTECT(allocVector(REALSXP, data.n));
+-        //    SEXP ctime = PROTECT(allocVector(REALSXP, data.n));
+-        //    SEXP btime = PROTECT(allocVector(REALSXP, data.n));
+         SEXP num_attrs = PROTECT(allocVector(INTSXP, data.n));
+         SEXP dclass = PROTECT(allocVector(STRSXP, data.n));
+         SEXP dtype = PROTECT(allocVector(STRSXP, data.n));
+@@ -283,21 +250,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+         opLinfoListElement *el = data.first;
+         opLinfoListElement *elnext;
+         while (el != NULL) {
+-            // printf("element %d\n",el->idx); 
+             SET_STRING_ELT(group, el->idx, mkChar(el->group));
+             SET_STRING_ELT(elementnames, el->idx, mkChar(el->name));
+             INTEGER(ltype)[el->idx] = el->info.type;
+             LOGICAL(corder_valid)[el->idx] = el->info.corder_valid;
+             INTEGER(corder)[el->idx] = el->info.corder;
+             INTEGER(cset)[el->idx] = el->info.cset;
+-            //      INTEGER(fileno)[el->idx] = el->object_info.fileno;
+-            //      INTEGER(addr)[el->idx] = el->object_info.addr;
+             INTEGER(otype)[el->idx] = el->type;
+-            //      INTEGER(rc)[el->idx] = el->object_info.rc;
+-            //      REAL(atime)[el->idx] = el->object_info.atime;
+-            //      REAL(mtime)[el->idx] = el->object_info.mtime;
+-            //      REAL(ctime)[el->idx] = el->object_info.ctime;
+-            //      REAL(btime)[el->idx] = el->object_info.btime;
+             INTEGER(num_attrs)[el->idx] = el->num_attrs;
+             SET_STRING_ELT(dclass, el->idx, mkChar(el->class));
+             SET_STRING_ELT(dtype, el->idx, mkChar(el->datatype));
+@@ -316,14 +275,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+         SET_VECTOR_ELT(Rval,3,corder_valid);
+         SET_VECTOR_ELT(Rval,4,corder);
+         SET_VECTOR_ELT(Rval,5,cset);
+-        //    SET_VECTOR_ELT(Rval,6,fileno);
+-        //    SET_VECTOR_ELT(Rval,7,addr);
+         SET_VECTOR_ELT(Rval,6,otype);
+-        //    SET_VECTOR_ELT(Rval,9,rc);
+-        //    SET_VECTOR_ELT(Rval,10,atime);
+-        //    SET_VECTOR_ELT(Rval,11,mtime);
+-        //    SET_VECTOR_ELT(Rval,12,ctime);
+-        //    SET_VECTOR_ELT(Rval,13,btime);
+         SET_VECTOR_ELT(Rval,7,num_attrs);
+         SET_VECTOR_ELT(Rval,8,dclass);
+         SET_VECTOR_ELT(Rval,9,dtype);
+@@ -339,14 +291,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+         SET_STRING_ELT(names, 3, mkChar("corder_valid"));
+         SET_STRING_ELT(names, 4, mkChar("corder"));
+         SET_STRING_ELT(names, 5, mkChar("cset"));
+-        //    SET_STRING_ELT(names, 6, mkChar("fileno"));
+-        //    SET_STRING_ELT(names, 7, mkChar("addr"));
+         SET_STRING_ELT(names, 6, mkChar("otype"));
+-        //    SET_STRING_ELT(names, 9, mkChar("rc"));
+-        //    SET_STRING_ELT(names, 10, mkChar("atime"));
+-        //    SET_STRING_ELT(names, 11, mkChar("mtime"));
+-        //    SET_STRING_ELT(names, 12, mkChar("ctime"));
+-        //    SET_STRING_ELT(names, 13, mkChar("btime"));
+         SET_STRING_ELT(names, 7, mkChar("num_attrs"));
+         SET_STRING_ELT(names, 8, mkChar("dclass"));
+         SET_STRING_ELT(names, 9, mkChar("dtype"));
+
+From edd at debian.org  Sat Dec 21 12:33:50 2019
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 21 Dec 2019 06:33:50 -0600
+Subject: r-base blocked by r-bioc-{iranges,s4vectors}
+Message-ID: <24062.4398.697972.232440@rob.eddelbuettel.com>
+
+See https://qa.debian.org/excuses.php?package=r-base : the pair of 
+r-bioc-{iranges,s4vectors} is blocking the migration of r-base to testing.
+
+All of R, Rcpp, and these packages rebuilt to new versions recently so the
+toolchain should be consistent. Yet it looks like a plain segfault.  Could
+one of you please take a look?
+
+Thanks, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sun Dec 22 07:36:58 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 22 Dec 2019 08:36:58 +0100
+Subject: Re: r-base blocked by r-bioc-{iranges,s4vectors}
+In-Reply-To: <24062.4398.697972.232440@rob.eddelbuettel.com>
+References: <24062.4398.697972.232440@rob.eddelbuettel.com>
+Message-ID: <20191222073658.GW18381@an3as.eu>
+
+On Sat, Dec 21, 2019 at 06:33:50AM -0600, Dirk Eddelbuettel wrote:
+> 
+> See https://qa.debian.org/excuses.php?package=r-base : the pair of 
+> r-bioc-{iranges,s4vectors} is blocking the migration of r-base to testing.
+> 
+> All of R, Rcpp, and these packages rebuilt to new versions recently so the
+> toolchain should be consistent. Yet it looks like a plain segfault.  Could
+> one of you please take a look?
+
+Thanks to the autopkgtests of the two packages the issue was spotted and
+reported #947001 and #947004.  I've forwarded the issues upstream.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Dec 22 08:00:51 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 22 Dec 2019 09:00:51 +0100
+Subject: Re: Test failures with latest rhdf5
+In-Reply-To: <b1054af9-c3a9-25be-7d98-fa954cdd3a95@embl.de>
+References: <20191206073449.GW5043@an3as.eu> <31f9012d658a6d3578b3a99fc2659857@webmail.embl.de> <20191206090111.GY5043@an3as.eu> <8d8781d1-e311-bc9c-c280-fb39a5cbff06@embl.de> <20191213143322.GA4183@an3as.eu> <b1054af9-c3a9-25be-7d98-fa954cdd3a95@embl.de>
+Message-ID: <20191222080051.GX18381@an3as.eu>
+
+Hi Mike,
+
+thanks for the patch.  I can confirm it works and is uploaded.
+
+Kind regards, Andreas.
+
+On Wed, Dec 18, 2019 at 06:39:18PM +0100, Mike Smith wrote:
+> Hi Andreas,
+> 
+> Attached should be diff that you can apply against /rhdf5/src/h5ls.c
+> 
+> I've made a few other changes since release, but I think this should be
+> sufficient to test whether this specific problem is fixed.
+> 
+> Cheers,
+> 
+> Mike
+> 
+> On 12/13/19 3:33 PM, Andreas Tille wrote:
+> > Hi Mike,
+> > 
+> > On Fri, Dec 13, 2019 at 02:43:42PM +0100, Mike Smith wrote:
+> > > Hi Andreas,
+> > > 
+> > > I think I've narrowed this down to an unsafe use of sprintf() in that
+> > > function.
+> > > 
+> > > There's a modified version of the package at
+> > > https://github.com/grimbough/rhdf5/tree/h5ls_printing
+> > > 
+> > > I haven't been able to reproduce the bug on my own system, but if you'd like
+> > > to test that version and report back, that would be great.
+> > > 
+> > > I'm not sure what format you need for testing, so if you'd like me to
+> > > provide the source tarball or anything let me know.
+> > The easiest way to verify your changes is a patch against the released
+> > version.  I admit I tried a diff between the whole directories but this
+> > is quite large and does not really fit to a simple change in an
+> > sprintf().
+> > 
+> > So a small diff would be very convenient.
+> > 
+> > Kind regards and thanks for your support
+> > 
+> >      Andreas.
+> > > On 12/6/19 10:01 AM, Andreas Tille wrote:
+> > > > Hi Mike,
+> > > > 
+> > > > thanks a lot for the speedy response!
+> > > > 
+> > > > On Fri, Dec 06, 2019 at 08:06:44AM +0000, Mike Smith wrote:
+> > > > > Hi Andreas,
+> > > > > Thanks for the heads up.  That's a weird error because really it's just comparing too strings that represent the shape of the datasets, so it's the string creation rather than anything else that's failing.
+> > > > > This was reported once before (https://support.bioconductor.org/p/101038/ (https://support.bioconductor.org/p/101038/)) but I put it down to using old versions of R/rhdf5 that predated my time as maintainer, and the user never got back to me with more details.
+> > > > > I presume you have built many previous versions of rhdf5 on your system, and I haven't changed the h5ls() function in years, so it's odd that it's manifesting now.
+> > > > I need to admit that also the previous version 2.30.0 showed the exact
+> > > > same issue.  However, non of the maintainers team payed sufficient
+> > > > attention to that issue.
+> > > > 
+> > > > > I'll take a look at the code and see if there's anything wrong in h5ls(), I guess this must be a pretty weird edge case if it doesn't show up anywhere else.
+> > > > > I'll let you know if I find something.
+> > > > Thanks a lot again for your quick response.  Feel free to ask here if
+> > > > you need some further information.
+> > > > 
+> > > > Kind regards
+> > > > 
+> > > >          Andreas.
+> > > > 
+> > > > > Cheers,
+> > > > > Mike
+> > > > > 
+> > > > > On Fri, Dec 6, 2019 at 08:35, Andreas Tille  wrote:
+> > > > > Hi Mike,
+> > > > > 
+> > > > > I intent to upgrade the Debian package of rhdf5 to version 2.30.1
+> > > > > but I stumbled about the following issues in the test suite:
+> > > > > 
+> > > > > library(testthat)
+> > > > > library(rhdf5)
+> > > > > .
+> > > > > test_check("rhdf5")
+> > > > > ── 1. Failure: h5ls supports native (@test_native.R#21)  ───────────────────────
+> > > > > `object` not equal to "3 x 4".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 4"
+> > > > > y[1]: "3 x 4"
+> > > > > 
+> > > > > ── 2. Failure: h5ls supports native (@test_native.R#23)  ───────────────────────
+> > > > > `object` not equal to "4 x 3".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 3"
+> > > > > y[1]: "4 x 3"
+> > > > > 
+> > > > > ── 3. Failure: h5ls supports native (@test_native.R#27)  ───────────────────────
+> > > > > `object` not equal to "4 x 3".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 3"
+> > > > > y[1]: "4 x 3"
+> > > > > 
+> > > > > ── 4. Failure: h5ls supports native (@test_native.R#29)  ───────────────────────
+> > > > > `object` not equal to "3 x 4".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 4"
+> > > > > y[1]: "3 x 4"
+> > > > > 
+> > > > > ── 5. Failure: h5ls supports native (@test_native.R#38)  ───────────────────────
+> > > > > `object` not equal to "2 x 3 x 4".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 4"
+> > > > > y[1]: "2 x 3 x 4"
+> > > > > 
+> > > > > ── 6. Failure: h5ls supports native (@test_native.R#41)  ───────────────────────
+> > > > > `object` not equal to "4 x 3 x 2".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 2"
+> > > > > y[1]: "4 x 3 x 2"
+> > > > > 
+> > > > > ── 7. Failure: h5ls supports native (@test_native.R#46)  ───────────────────────
+> > > > > `object` not equal to "4 x 3 x 2".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 2"
+> > > > > y[1]: "4 x 3 x 2"
+> > > > > 
+> > > > > ── 8. Failure: h5ls supports native (@test_native.R#49)  ───────────────────────
+> > > > > `object` not equal to "2 x 3 x 4".
+> > > > > 1/1 mismatches
+> > > > > x[1]: " x 4"
+> > > > > y[1]: "2 x 3 x 4"
+> > > > > 
+> > > > > ══ testthat results  ═══════════════════════════════════════════════════════════
+> > > > > [ OK: 694 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 8 ]
+> > > > > 1. Failure: h5ls supports native (@test_native.R#21).
+> > > > > 2. Failure: h5ls supports native (@test_native.R#23).
+> > > > > 3. Failure: h5ls supports native (@test_native.R#27).
+> > > > > 4. Failure: h5ls supports native (@test_native.R#29).
+> > > > > 5. Failure: h5ls supports native (@test_native.R#38).
+> > > > > 6. Failure: h5ls supports native (@test_native.R#41).
+> > > > > 7. Failure: h5ls supports native (@test_native.R#46).
+> > > > > 8. Failure: h5ls supports native (@test_native.R#49).
+> > > > > 
+> > > > > Error: testthat unit tests failed
+> > > > > Execution halted
+> > > > > 
+> > > > > Do you have any idea what might be wrong here?
+> > > > > 
+> > > > > Kind regards
+> > > > > 
+> > > > > Andreas.
+> > > > > 
+> > > > > -- 
+> > > > > http://fam-tille.de (http://fam-tille.de)
+
+> diff --git a/src/h5ls.c b/src/h5ls.c
+> index cef3ee0..c22527c 100644
+> --- a/src/h5ls.c
+> +++ b/src/h5ls.c
+> @@ -3,6 +3,33 @@
+>  #include <stdio.h>
+>  #include "printdatatype.h"
+>  
+> +#include <stdlib.h>
+> +#include <string.h>
+> +
+> +void concat(char *s1, hsize_t next_dim, int index)
+> +{
+> +    char tmp[100];
+> +    strncpy(tmp, s1, 100);
+> +    
+> +#ifdef H5_HAVE_WINDOWS
+> +    snprintf(s1, 100, "%s%I64u%s", tmp, next_dim, index?" x ":"");
+> +#else
+> +    snprintf(s1, 100, "%s%llu%s", tmp, next_dim, index ? " x " : "");
+> +#endif
+> +}
+> +
+> +void concatnative(char *s1, hsize_t next_dim, int index)
+> +{
+> +    char tmp[100];
+> +    strncpy(tmp, s1, 100);
+> +    
+> +#ifdef H5_HAVE_WINDOWS
+> +    snprintf(s1, 100, "%s%s%I64u", tmp, index?" x ":"", next_dim);
+> +#else
+> +    snprintf(s1, 100, "%s%s%llu", tmp, index ? " x " : "", next_dim);
+> +#endif
+> +}
+> +
+>  typedef struct opLinfoListElement {
+>      long idx;
+>      char *name;
+> @@ -16,7 +43,6 @@ typedef struct opLinfoListElement {
+>      H5L_info_t info;
+>      H5I_type_t type;
+>      hsize_t num_attrs;
+> -    //  H5O_info_t object_info;
+>      struct opLinfoListElement *next;
+>  } opLinfoListElement;
+>  
+> @@ -39,7 +65,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>      herr_t herr = 0;
+>      opLinfoListElement *newElement = (opLinfoListElement *)R_alloc(1,sizeof(struct opLinfoListElement) );
+>      newElement->idx = data->n;
+> -    //  printf("sizeof = %ld cset=%ld group=>%s< name=>%s<\n", strlen(name), info->cset, data->group, name);
+>      newElement->name = (char *)R_alloc(1,(strlen(name)+1)*sizeof(char));
+>      strcpy(newElement->name, name);
+>      newElement->group = (char *)R_alloc(1,(strlen(data->group)+1)*sizeof(char));
+> @@ -66,7 +91,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>          data->last = newElement;
+>      } else {
+>          hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
+> -        // herr_t herr = H5Oget_info( oid, &(newElement->object_info) );
+>          newElement->type = H5Iget_type(oid);
+>          newElement->num_attrs = H5Oget_num_attrs(oid);
+>          if ((data->showdatasetinfo) & (newElement->type == H5I_DATASET)) {
+> @@ -74,7 +98,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>              hid_t type = H5Dget_type(did);
+>              newElement->datatype = getDatatypeName(type);
+>              newElement->class = getDatatypeClass(type);
+> -            /* H5Tclose(type); */
+>              hid_t sid = H5Dget_space( did );
+>              hsize_t   size[H5S_MAX_RANK];
+>              hsize_t   maxsize[H5S_MAX_RANK];
+> @@ -97,67 +120,31 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>              } break;
+>              case H5S_SIMPLE: {
+>                  char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
+> +                memset(tmp, '\0', 100 * sizeof(char));
+>                  if (data->native) {
+> -#ifdef H5_HAVE_WINDOWS
+> -                    sprintf(tmp, "%I64u", size[0]);
+> -#else
+> -                    sprintf(tmp, "%llu", size[0]);
+> -#endif
+> -                    for(int i = 1; i < newElement->rank; i++) {
+> -#ifdef H5_HAVE_WINDOWS
+> -                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
+> -#else
+> -                        sprintf(tmp, "%s x %llu", tmp, size[i]);
+> -#endif
+> +                    //TODO: can we end up here?
+> +                    for(int i = 0; i < newElement->rank; i++) {
+> +                        concatnative(tmp, size[i], i);
+>                      }
+>                  } else {
+> -#ifdef H5_HAVE_WINDOWS
+> -                    sprintf(tmp, "%I64u", size[newElement->rank-1]);
+> -#else
+> -                    sprintf(tmp, "%llu", size[newElement->rank-1]);
+> -#endif
+> -                    for(int i = newElement->rank-2; i >= 0; i--) {
+> -#ifdef H5_HAVE_WINDOWS
+> -                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
+> -#else
+> -                        sprintf(tmp, "%s x %llu", tmp, size[i]);
+> -#endif
+> +                    for(int i = newElement->rank-1; i >= 0; i--) {
+> +                        concat(tmp, size[i], i);
+>                      }
+>                  }
+> -                sprintf(tmp, "%s", tmp);
+>                  newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
+>                  strcpy(newElement->dim, tmp);
+> +                
+>                  if(maxsize[0] == H5S_UNLIMITED) {
+>                      sprintf(tmp, "UNLIMITED");
+>                  } else {
+> +                    memset(tmp, '\0', 100 * sizeof(char));
+>                      if (data->native) {
+> -#ifdef H5_HAVE_WINDOWS
+> -                        sprintf(tmp, "%I64u", maxsize[0]);
+> -#else
+> -                        sprintf(tmp, "%llu", maxsize[0]);
+> -#endif
+> -                        for(int i = 1; i < newElement->rank ; i++) {
+> -#ifdef H5_HAVE_WINDOWS      
+> -                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
+> -#else
+> -                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+> -#endif
+> -                        }
+> +                        //TODO: can we end up here?
+>                      } else {
+> -#ifdef H5_HAVE_WINDOWS
+> -                        sprintf(tmp, "%I64u", maxsize[newElement->rank-1]);
+> -#else
+> -                        sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
+> -#endif
+> -                        for(int i = newElement->rank-2; i >= 0 ; i--) {
+> -#ifdef H5_HAVE_WINDOWS
+> -                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
+> -#else
+> -                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+> -#endif
+> +                        for(int i = 0; i < newElement->rank; i++) {
+> +                            concat(tmp, maxsize[i], i);
+>                          }
+>                      }
+> -                    sprintf(tmp, "%s", tmp);
+>                  }
+>                  newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
+>                  strcpy(newElement->maxdim, tmp);
+> @@ -172,17 +159,8 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>                  newElement->maxdim = "unknown dataspace"; 
+>              } break;
+>              } /* end switch */
+> -            H5Sclose(sid);
+> +                    H5Sclose(sid);
+>              
+> -            /* printf("type=%ld\n",H5T_STD_I32LE); */
+> -            /* printf("type=%ld\n",H5T_IEEE_F32LE); */
+> -            /* const char *typename = getDatatypeName(type, 1); */
+> -            /* printf("type=%ld\n",hid); */
+> -            /* char *typename; */
+> -            /* typename = malloc(1001*sizeof(char)); */
+> -            /* ssize_t s = H5Iget_name( hid, typename, 1000 ); */
+> -            /* printf("size=%ld\n",s); */
+> -            /* printf("name=%s\n\n",typename); */
+>              H5Dclose(did);
+>          } else {
+>              newElement->datatype = "";
+> @@ -227,7 +205,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
+>  }
+>  
+>  SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native ) {
+> -    //hid_t loc_id = INTEGER(_loc_id)[0];
+> +    
+>      hid_t loc_id = STRSXP_2_HID( _loc_id );
+>      opLinfoList data;
+>      data.n = 0;
+> @@ -241,10 +219,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+>      data.last = NULL;
+>      data.index_type = INTEGER(_index_type)[0];
+>      data.order = INTEGER(_order)[0];
+> -    // H5_index_t index_type = H5_INDEX_NAME; 
+> -    // H5_iter_order_t order = H5_ITER_INC; 
+>      hsize_t idx=0;
+> -    //   printf("Start visit.\n"); 
+>      
+>      herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToLinfoList, &data );
+>      
+> @@ -256,21 +231,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+>          UNPROTECT(1);
+>      } else {
+>          PROTECT(Rval= allocVector(VECSXP, 14));
+> -        // SEXP elementnames = PROTECT(allocVector(STRSXP, 0)); 
+>          SEXP group = PROTECT(allocVector(STRSXP, data.n));
+>          SEXP elementnames = PROTECT(allocVector(STRSXP, data.n));
+>          SEXP ltype = PROTECT(allocVector(INTSXP, data.n));
+>          SEXP corder_valid = PROTECT(allocVector(LGLSXP, data.n));
+>          SEXP corder = PROTECT(allocVector(INTSXP, data.n));
+>          SEXP cset = PROTECT(allocVector(INTSXP, data.n));
+> -        //   SEXP fileno = PROTECT(allocVector(INTSXP, data.n));
+> -        //    SEXP addr = PROTECT(allocVector(INTSXP, data.n));
+>          SEXP otype = PROTECT(allocVector(INTSXP, data.n));
+> -        //    SEXP rc = PROTECT(allocVector(INTSXP, data.n));
+> -        //    SEXP atime = PROTECT(allocVector(REALSXP, data.n));
+> -        //    SEXP mtime = PROTECT(allocVector(REALSXP, data.n));
+> -        //    SEXP ctime = PROTECT(allocVector(REALSXP, data.n));
+> -        //    SEXP btime = PROTECT(allocVector(REALSXP, data.n));
+>          SEXP num_attrs = PROTECT(allocVector(INTSXP, data.n));
+>          SEXP dclass = PROTECT(allocVector(STRSXP, data.n));
+>          SEXP dtype = PROTECT(allocVector(STRSXP, data.n));
+> @@ -283,21 +250,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+>          opLinfoListElement *el = data.first;
+>          opLinfoListElement *elnext;
+>          while (el != NULL) {
+> -            // printf("element %d\n",el->idx); 
+>              SET_STRING_ELT(group, el->idx, mkChar(el->group));
+>              SET_STRING_ELT(elementnames, el->idx, mkChar(el->name));
+>              INTEGER(ltype)[el->idx] = el->info.type;
+>              LOGICAL(corder_valid)[el->idx] = el->info.corder_valid;
+>              INTEGER(corder)[el->idx] = el->info.corder;
+>              INTEGER(cset)[el->idx] = el->info.cset;
+> -            //      INTEGER(fileno)[el->idx] = el->object_info.fileno;
+> -            //      INTEGER(addr)[el->idx] = el->object_info.addr;
+>              INTEGER(otype)[el->idx] = el->type;
+> -            //      INTEGER(rc)[el->idx] = el->object_info.rc;
+> -            //      REAL(atime)[el->idx] = el->object_info.atime;
+> -            //      REAL(mtime)[el->idx] = el->object_info.mtime;
+> -            //      REAL(ctime)[el->idx] = el->object_info.ctime;
+> -            //      REAL(btime)[el->idx] = el->object_info.btime;
+>              INTEGER(num_attrs)[el->idx] = el->num_attrs;
+>              SET_STRING_ELT(dclass, el->idx, mkChar(el->class));
+>              SET_STRING_ELT(dtype, el->idx, mkChar(el->datatype));
+> @@ -316,14 +275,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+>          SET_VECTOR_ELT(Rval,3,corder_valid);
+>          SET_VECTOR_ELT(Rval,4,corder);
+>          SET_VECTOR_ELT(Rval,5,cset);
+> -        //    SET_VECTOR_ELT(Rval,6,fileno);
+> -        //    SET_VECTOR_ELT(Rval,7,addr);
+>          SET_VECTOR_ELT(Rval,6,otype);
+> -        //    SET_VECTOR_ELT(Rval,9,rc);
+> -        //    SET_VECTOR_ELT(Rval,10,atime);
+> -        //    SET_VECTOR_ELT(Rval,11,mtime);
+> -        //    SET_VECTOR_ELT(Rval,12,ctime);
+> -        //    SET_VECTOR_ELT(Rval,13,btime);
+>          SET_VECTOR_ELT(Rval,7,num_attrs);
+>          SET_VECTOR_ELT(Rval,8,dclass);
+>          SET_VECTOR_ELT(Rval,9,dtype);
+> @@ -339,14 +291,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
+>          SET_STRING_ELT(names, 3, mkChar("corder_valid"));
+>          SET_STRING_ELT(names, 4, mkChar("corder"));
+>          SET_STRING_ELT(names, 5, mkChar("cset"));
+> -        //    SET_STRING_ELT(names, 6, mkChar("fileno"));
+> -        //    SET_STRING_ELT(names, 7, mkChar("addr"));
+>          SET_STRING_ELT(names, 6, mkChar("otype"));
+> -        //    SET_STRING_ELT(names, 9, mkChar("rc"));
+> -        //    SET_STRING_ELT(names, 10, mkChar("atime"));
+> -        //    SET_STRING_ELT(names, 11, mkChar("mtime"));
+> -        //    SET_STRING_ELT(names, 12, mkChar("ctime"));
+> -        //    SET_STRING_ELT(names, 13, mkChar("btime"));
+>          SET_STRING_ELT(names, 7, mkChar("num_attrs"));
+>          SET_STRING_ELT(names, 8, mkChar("dclass"));
+>          SET_STRING_ELT(names, 9, mkChar("dtype"));
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Dec 31 05:44:09 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 31 Dec 2019 06:44:09 +0100
+Subject: Re: r-cran-uwot_0.1.5-2_source.changes ACCEPTED into unstable
+In-Reply-To: <E1im8Xd-0006ul-7z@fasolo.debian.org>
+References: <E1im8Xd-0006ul-7z@fasolo.debian.org>
+Message-ID: <20191231054409.GE1223@an3as.eu>
+
+Hi Steffen,
+
+please push your changes.  Please note:  I also observed that uwot
+claims missing libtbb but only in a chroot, not on a running system.  It
+seems there is somewhere a hidden dependency.
+
+Kind regards
+
+       Andreas.
+
+On Tue, Dec 31, 2019 at 03:49:57AM +0000, Debian FTP Masters wrote:
+> 
+> 
+> Accepted:
+> 
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA256
+> 
+> Format: 1.8
+> Date: Tue, 31 Dec 2019 03:00:05 +0100
+> Source: r-cran-uwot
+> Architecture: source
+> Version: 0.1.5-2
+> Distribution: unstable
+> Urgency: medium
+> Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+> Changed-By: Steffen Moeller <moeller at debian.org>
+> Changes:
+>  r-cran-uwot (0.1.5-2) unstable; urgency=medium
+>  .
+>    * Merged own packaging with the one by Andreas.
+>    * TODO: Added dependency on libtbb-dev, does not FTBFS without it
+>      but states not to find it - which it still does when added,
+>      which remains to be investigated.
+> Checksums-Sha1:
+>  369b056fa3f394e2c168d9b16112ad046d2119a4 2278 r-cran-uwot_0.1.5-2.dsc
+>  593611af61c44682fc21f499ea3d5ba349a89deb 2864 r-cran-uwot_0.1.5-2.debian.tar.xz
+>  edc3587443a3909af665a6bda798dc14ceec2501 9290 r-cran-uwot_0.1.5-2_source.buildinfo
+> Checksums-Sha256:
+>  cd35af648170fc191f6e3becd740e16ccc28526a8db0f848bf86525deafec665 2278 r-cran-uwot_0.1.5-2.dsc
+>  83a3c5808c109b4c7f36e7daac0f6c2b8baddaf42ee149e271487016d6ea93f2 2864 r-cran-uwot_0.1.5-2.debian.tar.xz
+>  b900cb4884e7c6873599c73de00762b627a4f347c745a0f743e984d1f44a08fe 9290 r-cran-uwot_0.1.5-2_source.buildinfo
+> Files:
+>  700201c9eea0cc15b95c970c14edabfe 2278 gnu-r optional r-cran-uwot_0.1.5-2.dsc
+>  126d8a2e24356d94b85a4ff825cd6a55 2864 gnu-r optional r-cran-uwot_0.1.5-2.debian.tar.xz
+>  b584dd2819bdf99e6b02e1db4dc7eea9 9290 gnu-r optional r-cran-uwot_0.1.5-2_source.buildinfo
+> 
+> -----BEGIN PGP SIGNATURE-----
+> 
+> iQJHBAEBCAAxFiEEhMGXeonn7+0+XKYuL9i+2sAg7tEFAl4Kv8ATHG1vZWxsZXJA
+> ZGViaWFuLm9yZwAKCRAv2L7awCDu0b6nEACwT8TsOi7L1E/UKOjPA/pXSgXn06PN
+> fvbG+Yaq8Z2H1Kv2dKNTvGj+l9dCvqPk7VvfjkUxhFOaJZaSLm8NH+6apWtQHh43
+> RvtQq7rCbpMTn1QNJYPULcLlYaYqcKNSphyYlc/EiW+aNqcZ2Q14f2K9IKG8F3vU
+> v1v1f+VCEMzaYS3peI8Re++9z0OcDx3Ettu5003G9bn0B+XfMsn1WCt7bQYhZx7n
+> fQ+37Rnt7Yb+rxacbYyKpVL0+nFGWrYJrAdIxLV4HnarupDxtGTPGlN1RkDN598m
+> JZA2lneDOXBmo3QD7XtDJA5iZGarwLpnyyQAPeGSzR746KmFcDNz4N+4MxacOqoe
+> VWZFjdki4/MqdLXNFQgaPmMcEJiVT3czW0fCPPOuvDaNsdugNr+bgKYfi9aAm33x
+> +Vwzeu+kdQkCM1mKoxQeXbYMg7F3rXWxKepaLMa0L+tG6Yo3SqB7jHPBDbujhNLe
+> 3G98RPH1FXm4Pn3rfKE0asMOFccg5ZYAHod8uVGXOgHOwz1J52xXIMpFL5vItdS8
+> doPvsE8tDkYRhx1NLxcoJOq3jopFQL4lCXe9qfeGUjzkZcqP5vWzh2e6Pg/3693l
+> VIOEhzo4qE0cad504Lta61xALCQunYrDwmIKbzvF360g+PK0ue7ALXMkA9emvZqR
+> TwZUdAfcnSU+2g==
+> =ZHr8
+> -----END PGP SIGNATURE-----
+> 
+> 
+> Thank you for your contribution to Debian.
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+

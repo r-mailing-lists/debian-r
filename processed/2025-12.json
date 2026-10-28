@@ -1,0 +1,36 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2025-12",
+  "messages": [
+    {
+      "id": "msg-b07fa95e61df",
+      "message_id": "<aU7Jobkt_4_KyDZu@laboissiere.net>",
+      "from_name": "Rafael Laboissière",
+      "from_email_hash": "cfcad96906fa0793530406d5dd06af8899788e4cd44821c81d8eb0cf0deeafb1",
+      "date": "2025-12-26T17:45:05Z",
+      "subject": "Bug#1124032: r-cran-car: Remove dependency on r-cran-rio",
+      "subject_clean": "Bug#1124032: r-cran-car: Remove dependency on r-cran-rio",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: r-cran-car\nVersion: 3.1-3-1\nSeverity: minor\n\nDear Maintainer,\n\nThe r-cran-car package depends on r-cran-rio. However, the following is \nseen in the DESCRIPTION file:\n\n    Imports: abind, Formula, MASS, mgcv, nnet, pbkrtest (>= 0.4-4),\n            quantreg, grDevices, utils, stats, graphics, lme4 (>=\n            1.1-27.1), nlme, scales\n    Suggests: alr4, boot, coxme, effects, knitr, leaps, lmtest, Matrix,\n            MatrixModels, ordinal, plotrix, mvtnorm, rgl (>= 0.111.3), rio,\n            sandwich, SparseM, survival, survey\n\nAccording to the NEWS file, the rio package has been demoted from Imports \nto Suggests in the upstream version 3.0-12:\n\n    Changes to Version 3.0-12\n\n    o The 'rio` package is now suggested, not required.  To use the\n      Import() and Export() functions users may need to install rio using\n      install.packages(\"rio\")\n\nPlease, remove r-cran-rio from Depends.\n\nOne more question: would it be reasonable to add a Suggests field to \ndebian/control that reflects the Suggests field in DESCRIPTION? At least, \nthis is what dh-make-R does when building a package for car from scratch.\n\nBest,\n\nRafael Laboissière",
+      "body_snippet": "Package: r-cran-car\nVersion: 3.1-3-1\nSeverity: minor\n\nDear Maintainer,\n\nThe r-cran-car package depends on r-cran-rio. However, the following is \nseen in the DESCRIPTION file:\n\n    Imports: abind, Form",
+      "thread_id": "thread-b07fa95e61df",
+      "thread_depth": 0,
+      "month": "2025-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-b07fa95e61df",
+      "subject": "Bug#1124032: r-cran-car: Remove dependency on r-cran-rio",
+      "message_count": 1,
+      "participants": [
+        "Rafael Laboissière"
+      ],
+      "started": "2025-12-26T17:45:05Z",
+      "last_reply": "2025-12-26T17:45:05Z",
+      "root_message_id": "msg-b07fa95e61df"
+    }
+  ]
+}

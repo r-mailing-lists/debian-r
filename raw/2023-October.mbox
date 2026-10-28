@@ -1,0 +1,780 @@
+From tillea at gmail.com  Mon Oct  9 10:00:11 2023
+From: tillea at gmail.com (Andreas Tille)
+Date: Mon, 9 Oct 2023 12:00:11 +0200
+Subject: Test suite issues in BiocNeighbors for i386
+Message-ID: <CA+VnnnCV+6eZJKZwBsF=qxz+p7MM0zh5GSSJ1QpYrNzztY6KNg@mail.gmail.com>
+
+Hi Aaron,
+
+the Debian packaged BiocNeighbors has some test failures that occur
+only for i386 architecture.
+You can see the full build log here
+    https://ci.debian.net/data/autopkgtest/testing/i386/r/r-bioc-biocneighbors/37741244/log.gz
+Seeking for "Failed tests" brings you quickly to the affected tests.
+
+My guess is that relaxing precision might solve the issue in some but
+not all cases.
+Could you have some look into this?  Alternatively we might consider
+dropping support for i386 if its known to fail in some cases and its
+probably not relevant in practice any more.
+
+Kind regards
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Oct  9 13:32:47 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 9 Oct 2023 15:32:47 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQv1cbaEkoSFDAGEiyYncffRfWMc2Xg3nDKv8LA6N-BUMQ@mail.gmail.com>
+References: <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu> <168866974488.1111055.5863523819930753468.reportbug@sputnik> <CAM8zJQvTE_9Uk+SDF4zn8W5ujbMx6_CY5SZmXUmwjF9ezS=ZeA@mail.gmail.com> <0f6a2b4f-3a0c-4ef1-b912-175d4055a0bc@debian.org> <CAM8zJQv1cbaEkoSFDAGEiyYncffRfWMc2Xg3nDKv8LA6N-BUMQ@mail.gmail.com>
+Message-ID: <ZSQA/zkIsdViZQWn@an3as.eu>
+
+Hi Graham,
+
+Am Thu, Sep 28, 2023 at 01:27:08PM +0000 schrieb Graham Inggs:
+> I noticed r-bioc-keggrest has finally migrated, and several other
+> r-bioc-* packages with it!
+> 
+> \o/
+> 
+> I looked through the remaining blocked packages and found the
+> following still have failing autopkgtests:
+
+I finally found some time to work on these.
+ 
+> https://tracker.debian.org/pkg/r-bioc-biocneighbors
+
+Sent mail upstream.
+
+> https://tracker.debian.org/pkg/r-bioc-cner
+
+Hopefully fixed.
+
+> https://tracker.debian.org/pkg/r-bioc-ensembldb
+
+Seems to be just a dependency issue.
+
+> https://tracker.debian.org/pkg/r-bioc-glmgampoi
+
+I'm about to fix this.
+
+> https://tracker.debian.org/pkg/r-bioc-isoformswitchanalyzer
+
+Hmmmm, the log for s390x [1] says:
+
+ The following packages have unmet dependencies:
+  r-bioc-isoformswitchanalyzer : Depends: r-api-bioc-3.16
+
+r-apr-bioc-3.16 is superseeded by r-api-bioc-3.17 and this dependency
+can't be fulfilled any more.  I'm wondering why this id requested for
+s390x architecture only while all other architectures are passing as
+expected.
+
+> https://tracker.debian.org/pkg/r-bioc-megadepth
+> https://tracker.debian.org/pkg/r-bioc-rsamtools
+> https://tracker.debian.org/pkg/r-bioc-scuttle
+> https://tracker.debian.org/pkg/r-bioc-shortread
+> https://tracker.debian.org/pkg/r-bioc-tcgabiolinks
+> 
+> Fixing these should allow another thirty or so r-bioc-* packages to migrate.
+
+Try to work soon on these
+    Andreas.
+
+[1] https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-bioc-isoformswitchanalyzer/36883064/log.gz 
+
+-- 
+http://fam-tille.de
+
+From tillea at gmail.com  Mon Oct  9 18:30:32 2023
+From: tillea at gmail.com (Andreas Tille)
+Date: Mon, 9 Oct 2023 20:30:32 +0200
+Subject: Test suite failure of megadepth on s390x architecture
+Message-ID: <CA+VnnnDoEEBMTY3tULDuSzKUdT_i_S3w+rLp0SfesypNsMRK-Q@mail.gmail.com>
+
+Hi,
+the Debian packaged version of the Bioconductor megadepth package has
+uncovered some issue in the test suite when running on s390x
+architecture.  We are aware that this package is most probably not
+used on this architecture in practical settings.  However, the issue
+might uncover a general issue inside the code and thus I'd like to
+bring it to your kind attention.  You can find the full build log
+here:
+
+    https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz
+
+Since this build log is a bit longish I'd recommend to seek for "Failed tests".
+
+Please let me know whether you can find some working solution or
+whether it might be the most sensible thing to not provide this
+package for th s390x architecture.
+
+Kind regards
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From lcolladotor at gmail.com  Mon Oct  9 19:04:40 2023
+From: lcolladotor at gmail.com (Leonardo Collado Torres)
+Date: Mon, 9 Oct 2023 15:04:40 -0400
+Subject: Re: Test suite failure of megadepth on s390x architecture
+In-Reply-To: <CA+VnnnDoEEBMTY3tULDuSzKUdT_i_S3w+rLp0SfesypNsMRK-Q@mail.gmail.com>
+References: <CA+VnnnDoEEBMTY3tULDuSzKUdT_i_S3w+rLp0SfesypNsMRK-Q@mail.gmail.com>
+Message-ID: <CAP8VEO7=5tO2-_ApFmjXEZkzqG260LMgL=KWfTFxDXC4V3FTOA@mail.gmail.com>
+
+Hi Andreas,
+
+The build log link you sent doesn't work. It says: "Not Found: /data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz".
+
+Best,
+Leo
+Leonardo Collado Torres, Ph. D.Investigator, LIEBER INSTITUTE for BRAIN DEVELOPMENT
+Assistant Professor, Department of Biostatistics
+Johns Hopkins Bloomberg School of Public Health
+
+855 N. Wolfe St., Room 385
+
+Baltimore, MD 21205
+lcolladotor.github.io
+
+lcolladotor at gmail.com
+
+On Mon, Oct 9, 2023 at 2:30 PM Andreas Tille <tillea at gmail.com> wrote:
+
+> Hi,
+>
+> the Debian packaged version of the Bioconductor megadepth package has
+>
+> uncovered some issue in the test suite when running on s390x
+>
+> architecture.  We are aware that this package is most probably not
+>
+> used on this architecture in practical settings.  However, the issue
+>
+> might uncover a general issue inside the code and thus I'd like to
+>
+> bring it to your kind attention.  You can find the full build log
+>
+> here:
+>
+>
+>
+>     https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz
+>
+>
+>
+> Since this build log is a bit longish I'd recommend to seek for "Failed tests".
+>
+>
+>
+> Please let me know whether you can find some working solution or
+>
+> whether it might be the most sensible thing to not provide this
+>
+> package for th s390x architecture.
+>
+>
+>
+> Kind regards
+>
+>        Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From tillea at gmail.com  Mon Oct  9 20:09:08 2023
+From: tillea at gmail.com (Andreas Tille)
+Date: Mon, 9 Oct 2023 22:09:08 +0200
+Subject: Re: Test suite failure of megadepth on s390x architecture
+In-Reply-To: <CAP8VEO7=5tO2-_ApFmjXEZkzqG260LMgL=KWfTFxDXC4V3FTOA@mail.gmail.com>
+References: <CA+VnnnDoEEBMTY3tULDuSzKUdT_i_S3w+rLp0SfesypNsMRK-Q@mail.gmail.com> <CAP8VEO7=5tO2-_ApFmjXEZkzqG260LMgL=KWfTFxDXC4V3FTOA@mail.gmail.com>
+Message-ID: <CA+VnnnBaO2uRg5aRO02NLVgHH17kiq5VpSZYTXPKwT8R8kyp+g@mail.gmail.com>
+
+Hi Leo,
+I just realised that other links to logs are failing as well.  I
+guess/hope its a matter of waiting 12-24 hours. I can ping you once
+this is fixed again.
+Sorry for the inconvenience and thanks a lot for your fast reply
+        Andreas.
+
+Am Mo., 9. Okt. 2023 um 21:05 Uhr schrieb Leonardo Collado Torres
+<lcolladotor at gmail.com>:
+>
+> Hi Andreas,
+>
+> The build log link you sent doesn't work. It says: "Not Found: /data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz".
+>
+> Best,
+> Leo
+>
+> Leonardo Collado Torres, Ph. D.
+> Investigator, LIEBER INSTITUTE for BRAIN DEVELOPMENT
+> Assistant Professor, Department of Biostatistics
+> Johns Hopkins Bloomberg School of Public Health
+> 855 N. Wolfe St., Room 385
+> Baltimore, MD 21205
+> lcolladotor.github.io
+> lcolladotor at gmail.com
+>
+>
+>
+> On Mon, Oct 9, 2023 at 2:30 PM Andreas Tille <tillea at gmail.com> wrote:
+>>
+>> Hi,
+>> the Debian packaged version of the Bioconductor megadepth package has
+>> uncovered some issue in the test suite when running on s390x
+>> architecture.  We are aware that this package is most probably not
+>> used on this architecture in practical settings.  However, the issue
+>> might uncover a general issue inside the code and thus I'd like to
+>> bring it to your kind attention.  You can find the full build log
+>> here:
+>>
+>>     https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz
+>>
+>> Since this build log is a bit longish I'd recommend to seek for "Failed tests".
+>>
+>> Please let me know whether you can find some working solution or
+>> whether it might be the most sensible thing to not provide this
+>> package for th s390x architecture.
+>>
+>> Kind regards
+>>        Andreas.
+>>
+>> --
+>> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From infinite.monkeys.with.keyboards at gmail.com  Wed Oct 11 21:39:13 2023
+From: infinite.monkeys.with.keyboards at gmail.com (Aaron Lun)
+Date: Wed, 11 Oct 2023 14:39:13 -0700
+Subject: Re: Test suite issues in BiocNeighbors for i386
+In-Reply-To: <CA+VnnnCV+6eZJKZwBsF=qxz+p7MM0zh5GSSJ1QpYrNzztY6KNg@mail.gmail.com>
+References: <CA+VnnnCV+6eZJKZwBsF=qxz+p7MM0zh5GSSJ1QpYrNzztY6KNg@mail.gmail.com>
+Message-ID: <fa76e94d-362e-4dd9-8bfc-8a58b4625355@gmail.com>
+
+Hm. I'm actually surprised that those tests run at all, given that I 
+have the following line:
+
+if (.Platform$r_arch=="i386") skip("giving up on i386!")
+
+... from the days of struggling with 32-bit windows.
+
+I've never had to deal with Linux i386, so I don't know where the 
+relevant flag shows up, but I'm happy to skip them as well.
+
+-A
+
+On 10/9/23 03:00, Andreas Tille wrote:
+> Hi Aaron,
+>
+> the Debian packaged BiocNeighbors has some test failures that occur
+> only for i386 architecture.
+> You can see the full build log here
+>      https://ci.debian.net/data/autopkgtest/testing/i386/r/r-bioc-biocneighbors/37741244/log.gz
+> Seeking for "Failed tests" brings you quickly to the affected tests.
+>
+> My guess is that relaxing precision might solve the issue in some but
+> not all cases.
+> Could you have some look into this?  Alternatively we might consider
+> dropping support for i386 if its known to fail in some cases and its
+> probably not relevant in practice any more.
+>
+> Kind regards
+>         Andreas.
+
+From tillea at gmail.com  Thu Oct 12 06:24:57 2023
+From: tillea at gmail.com (Andreas Tille)
+Date: Thu, 12 Oct 2023 08:24:57 +0200
+Subject: Re: Test suite failure of megadepth on s390x architecture
+In-Reply-To: <CA+VnnnBaO2uRg5aRO02NLVgHH17kiq5VpSZYTXPKwT8R8kyp+g@mail.gmail.com>
+References: <CA+VnnnDoEEBMTY3tULDuSzKUdT_i_S3w+rLp0SfesypNsMRK-Q@mail.gmail.com> <CAP8VEO7=5tO2-_ApFmjXEZkzqG260LMgL=KWfTFxDXC4V3FTOA@mail.gmail.com> <CA+VnnnBaO2uRg5aRO02NLVgHH17kiq5VpSZYTXPKwT8R8kyp+g@mail.gmail.com>
+Message-ID: <CA+VnnnABd-HM5njeaoFc=7pPKgn28uQ9=cX-uHju7CGt8DjJhA@mail.gmail.com>
+
+Hi again,
+we were actually beaten by the fact that those logs were removed after
+60 days and I was actually viewing the log at the end of this time
+period.  You can find an according log here:
+    https://ci.debian.net/data/autopkgtest/unstable/s390x/r/r-bioc-megadepth/38858595/log.gz
+Kind regards
+       Andreas.
+
+Am Mo., 9. Okt. 2023 um 22:09 Uhr schrieb Andreas Tille <tillea at gmail.com>:
+>
+> Hi Leo,
+> I just realised that other links to logs are failing as well.  I
+> guess/hope its a matter of waiting 12-24 hours. I can ping you once
+> this is fixed again.
+> Sorry for the inconvenience and thanks a lot for your fast reply
+>         Andreas.
+>
+> Am Mo., 9. Okt. 2023 um 21:05 Uhr schrieb Leonardo Collado Torres
+> <lcolladotor at gmail.com>:
+> >
+> > Hi Andreas,
+> >
+> > The build log link you sent doesn't work. It says: "Not Found: /data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz".
+> >
+> > Best,
+> > Leo
+> >
+> > Leonardo Collado Torres, Ph. D.
+> > Investigator, LIEBER INSTITUTE for BRAIN DEVELOPMENT
+> > Assistant Professor, Department of Biostatistics
+> > Johns Hopkins Bloomberg School of Public Health
+> > 855 N. Wolfe St., Room 385
+> > Baltimore, MD 21205
+> > lcolladotor.github.io
+> > lcolladotor at gmail.com
+> >
+> >
+> >
+> > On Mon, Oct 9, 2023 at 2:30 PM Andreas Tille <tillea at gmail.com> wrote:
+> >>
+> >> Hi,
+> >> the Debian packaged version of the Bioconductor megadepth package has
+> >> uncovered some issue in the test suite when running on s390x
+> >> architecture.  We are aware that this package is most probably not
+> >> used on this architecture in practical settings.  However, the issue
+> >> might uncover a general issue inside the code and thus I'd like to
+> >> bring it to your kind attention.  You can find the full build log
+> >> here:
+> >>
+> >>     https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-bioc-megadepth/36684073/log.gz
+> >>
+> >> Since this build log is a bit longish I'd recommend to seek for "Failed tests".
+> >>
+> >> Please let me know whether you can find some working solution or
+> >> whether it might be the most sensible thing to not provide this
+> >> package for th s390x architecture.
+> >>
+> >> Kind regards
+> >>        Andreas.
+> >>
+> >> --
+> >> http://fam-tille.de
+>
+>
+>
+> --
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Oct 16 15:05:42 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 16 Oct 2023 17:05:42 +0200
+Subject: R/share/make/shlib.mk not in R_HOME?
+Message-ID: <ZS1RRhHT5VZ1Po0p@an3as.eu>
+
+Hi Dirk,
+
+I tried to update r-cran-rnetcdf but failed[1].  Error message says:
+
+  make[2]: /usr/lib/R/share/make/shlib.mk: No such file or directory
+
+it comes from tools/make-recursive.sh which basically does
+
+  file=shlib.mk
+  make -f {R_HOME}/share/make/$file
+
+while
+
+  $ R RHOME
+  /usr/lib/R
+
+However
+
+  $ apt-file search share/make/shlib.mk
+  r-base-core: /usr/share/R/share/make/shlib.mk
+
+so this file is in /usr/share while it is expected in /usr/lib.
+
+Patching the script to find the file properly would be easy but I'm
+wondering whether this is something we should report upstream and
+what the reasons might be to move the file to /usr/share.
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rnetcdf/-/jobs/4815468
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Oct 16 16:00:45 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 16 Oct 2023 11:00:45 -0500
+Subject: Re: R/share/make/shlib.mk not in R_HOME?
+In-Reply-To: <ZS1RRhHT5VZ1Po0p@an3as.eu>
+References: <ZS1RRhHT5VZ1Po0p@an3as.eu>
+Message-ID: <25901.24109.871659.930802@rob.eddelbuettel.com>
+
+On 16 October 2023 at 17:05, Andreas Tille wrote:
+| Hi Dirk,
+| 
+| I tried to update r-cran-rnetcdf but failed[1].  Error message says:
+| 
+|   make[2]: /usr/lib/R/share/make/shlib.mk: No such file or directory
+| 
+| it comes from tools/make-recursive.sh which basically does
+| 
+|   file=shlib.mk
+|   make -f {R_HOME}/share/make/$file
+| 
+| while
+| 
+|   $ R RHOME
+|   /usr/lib/R
+| 
+| However
+| 
+|   $ apt-file search share/make/shlib.mk
+|   r-base-core: /usr/share/R/share/make/shlib.mk
+| 
+| so this file is in /usr/share while it is expected in /usr/lib.
+| 
+| Patching the script to find the file properly would be easy but I'm
+| wondering whether this is something we should report upstream and
+| what the reasons might be to move the file to /usr/share.
+
+Done last week: I reported this upstream the day that package was last
+updated at CRAN and the bug hit me (when reverse-dependency checking a CRAN
+package of mine). It has since been fixed upstream.
+
+https://github.com/mjwoods/RNetCDF/issues/130
+
+It's 100% a local package bug but due to how we (and other non-Debian-derived
+distros also following the Linux Filesystem Standard) do things. And using
+R.home("shared") is the way around it.
+
+Dirk (on vacation in Northern Italy)
+
+| Kind regards
+|     Andreas.
+| 
+| 
+| [1] https://salsa.debian.org/r-pkg-team/r-cran-rnetcdf/-/jobs/4815468
+| 
+| -- 
+| http://fam-tille.de
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Wed Oct 25 12:03:53 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 25 Oct 2023 14:03:53 +0200
+Subject: r-cran-stanheaders seems to use old tbb interface instead of onetbb
+Message-ID: <ZTkEKT9OCyyxVmxJ@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 https://github.com/stan-dev/rstan/issues/1101
+
+Hi,
+
+I opened an issue on StanHeaders upstream about an issue with rstan and
+rstanarm.  Any help (patch) to port StanHeaders to the new onetbb
+interface would be welcome.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Fri Oct 27 14:00:23 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 27 Oct 2023 16:00:23 +0200
+Subject: Bug#1054657: transition: r-bioc-biocgenerics
+Message-ID: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-Cc: r-bioc-biocgenerics at packages.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-bioc-biocgenerics
+
+Hi,
+
+BioConductor has just released version 3.17.  Since the next r-base
+release is pending on 2023-10-31 we do not think it is a good idea to
+start the transition before but it might make sense to open this bug
+right now.  (No idea whether we will see a proper r-api transition but
+building everything against the new r-base sounds like less hassle
+than doing r-api-bioc transition right now.)
+The BioConductor transition will bump the virtual package
+r-api-bioc-3.17 to r-api-bioc-3.18.
+
+BTW, I'm aware that a couple of r-bioc-* packages did not yet migrated
+to testing due to some autopkgtest issues on some architectures.  We
+decided that it makes sense to do the transition first and approach
+upstream about their latest release in case those issues might remain.
+
+Kind regards and thanks a lot for your work as release team
+    Andreas.
+
+Ben file:
+
+title = "r-bioc-biocgenerics";
+is_affected = .depends ~ "r-api-bioc-3.17" | .depends ~ "r-api-bioc-3.18";
+is_good = .depends ~ "r-api-bioc-3.18";
+is_bad = .depends ~ "r-api-bioc-3.17";
+
+From andreas at an3as.eu  Fri Oct 27 14:43:21 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 27 Oct 2023 16:43:21 +0200
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <25915.50922.462745.463875@rob.eddelbuettel.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <25915.50922.462745.463875@rob.eddelbuettel.com>
+Message-ID: <ZTvMiYXdWxMDIXji@an3as.eu>
+
+Am Fri, Oct 27, 2023 at 09:19:22AM -0500 schrieb Dirk Eddelbuettel:
+> 
+> | BioConductor has just released version 3.17.  Since the next r-base
+> 
+> Typo: 3.18
+
+Yes.  Thanks for pointing this out.
+ 
+> | release is pending on 2023-10-31 we do not think it is a good idea to
+> | start the transition before but it might make sense to open this bug
+> 
+> These two events are basically unrelated.  (BioC releases twice a year, and
+> the April release comes usually right after an R release. Those may warrant
+> staging. October releases do not. It uses R 4.3.*. Note the wildcard.)
+> 
+> | right now.  (No idea whether we will see a proper r-api transition but
+> 
+> R does not change APIs on _minor_ releases such as 4.3.2 next week.  
+
+Thank you for this information.  Since we will "loose" just about one
+week I think waiting for r-base 4.3.2 makes sense anyway.  It might
+even last some days until release team might have setup the transition
+tracker.
+ 
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Oct 27 16:34:45 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Oct 2023 11:34:45 -0500
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZTvMiYXdWxMDIXji@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <25915.50922.462745.463875@rob.eddelbuettel.com> <ZTvMiYXdWxMDIXji@an3as.eu>
+Message-ID: <25915.59045.415782.448351@rob.eddelbuettel.com>
+
+On 27 October 2023 at 16:43, Andreas Tille wrote:
+| Am Fri, Oct 27, 2023 at 09:19:22AM -0500 schrieb Dirk Eddelbuettel:
+| > 
+| > | BioConductor has just released version 3.17.  Since the next r-base
+| > 
+| > Typo: 3.18
+| 
+| Yes.  Thanks for pointing this out.
+|  
+| > | release is pending on 2023-10-31 we do not think it is a good idea to
+| > | start the transition before but it might make sense to open this bug
+| > 
+| > These two events are basically unrelated.  (BioC releases twice a year, and
+| > the April release comes usually right after an R release. Those may warrant
+| > staging. October releases do not. It uses R 4.3.*. Note the wildcard.)
+| > 
+| > | right now.  (No idea whether we will see a proper r-api transition but
+| > 
+| > R does not change APIs on _minor_ releases such as 4.3.2 next week.  
+| 
+| Thank you for this information.  Since we will "loose" just about one
+| week I think waiting for r-base 4.3.2 makes sense anyway.  It might
+| even last some days until release team might have setup the transition
+| tracker.
+
+Let me stress again that it is not relevant.
+
+You need R 4.3.0 or R 4.3.1 which havce existed for months inside the distro.  
+Nothing in the release notes will suggest R 4.3.2 and none of those packages
+will change between use with either R 4.3.1 and R 4.3.2.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Sat Oct 28 16:55:24 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Oct 2023 16:55:24 +0000
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de>
+Message-ID: <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com>
+
+Control: tags -1 + moreinfo
+
+Hi Andreas
+
+On Fri, 27 Oct 2023 at 14:03, Andreas Tille <tille at debian.org> wrote:
+> The BioConductor transition will bump the virtual package
+> r-api-bioc-3.17 to r-api-bioc-3.18.
+>
+> BTW, I'm aware that a couple of r-bioc-* packages did not yet migrated
+> to testing due to some autopkgtest issues on some architectures.  We
+> decided that it makes sense to do the transition first and approach
+> upstream about their latest release in case those issues might remain.
+
+Please remove the 'moreinfo' tag once all NEW packages needed for this
+transition have been uploaded to experimental and have passed through
+NEW review.
+
+> Ben file:
+>
+> title = "r-bioc-biocgenerics";
+> is_affected = .depends ~ "r-api-bioc-3.17" | .depends ~ "r-api-bioc-3.18";
+> is_good = .depends ~ "r-api-bioc-3.18";
+> is_bad = .depends ~ "r-api-bioc-3.17";
+
+I modified the tracker used for the previous transition and the output
+can be viewed here:
+https://release.debian.org/transitions/html/r-api-bioc-3.18.html
+Please let me know if that doesn't look correct.
+
+Regards
+Graham
+
+From tille at debian.org  Sun Oct 29 05:33:48 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 29 Oct 2023 06:33:48 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com>
+Message-ID: <ZT3uvIS-3O-AO-k6@an3as.eu>
+
+Hi Graham,
+
+Am Sat, Oct 28, 2023 at 04:55:24PM +0000 schrieb Graham Inggs:
+> 
+> Please remove the 'moreinfo' tag once all NEW packages needed for this
+> transition have been uploaded to experimental and have passed through
+> NEW review.
+
+Can you confirm that packages uploaded to experimental can be moved in
+one rush from experimental to unstable without extra uploads?  Do you
+have this process in mind after the moreinfo tag is removed? 
+
+Kind regards
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sun Oct 29 15:57:01 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 29 Oct 2023 14:57:01 -0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZT3uvIS-3O-AO-k6@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu>
+Message-ID: <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com>
+
+Hi Andreas
+
+On Sun, 29 Oct 2023 at 04:33, Andreas Tille <tille at debian.org> wrote:
+> Can you confirm that packages uploaded to experimental can be moved in
+> one rush from experimental to unstable without extra uploads?
+
+I don't think this has ever been possible.  The packages would need to
+be uploaded again to unstable, presumably at the appropriate
+dependency level in the transition.
+
+Seeing these packages would be NEW, even if they were initially
+uploaded directly to unstable, they would likely still require
+source-only uploads for migration anyway.
+
+> Do you
+> have this process in mind after the moreinfo tag is removed?
+
+No, after the NEW packages have cleared NEW and the moreinfo tag is
+removed, we'll consider a slot for the transition.  We would like to
+avoid stalling the transition with multiple packages going through
+NEW, and putting pressure on FTP Masters by telling them a package is
+needed for a transition is not nice either.
+
+Regards
+Graham
+
+From tille at debian.org  Sun Oct 29 17:06:04 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 29 Oct 2023 18:06:04 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com>
+Message-ID: <ZT6Q_I0ryRLEHMFB@an3as.eu>
+
+Hi Graham,
+
+Am Sun, Oct 29, 2023 at 02:57:01PM -0100 schrieb Graham Inggs:
+> Hi Andreas
+> 
+> On Sun, 29 Oct 2023 at 04:33, Andreas Tille <tille at debian.org> wrote:
+> > Can you confirm that packages uploaded to experimental can be moved in
+> > one rush from experimental to unstable without extra uploads?
+> 
+> I don't think this has ever been possible.  The packages would need to
+> be uploaded again to unstable, presumably at the appropriate
+> dependency level in the transition.
+
+Sorry, my question was probably confusing.  I was not talking about the
+new packages.  I was talking about the 170 r-bioc-* packages.  If I
+upload these to experimental, will it be necessary to upload these to
+unstable again or can these be moved to unstable in one rush.  Also
+interesting in this connection:  Will the tracker display the levels
+of packages uploaded to experimental?
+ 
+> Seeing these packages would be NEW, even if they were initially
+> uploaded directly to unstable, they would likely still require
+> source-only uploads for migration anyway.
+
+I'm comfortable with doing source-only uploads of packages that have
+passed NEW.  I'm not comfortable with uploading 170 packages twice -
+once to experimmental and once again to unstable.  Given that all
+this work has mainly ended up on my shoulders I would prefer to
+upload directly to unstable and simply bear with the waiting time
+in NEW.
+
+> > Do you
+> > have this process in mind after the moreinfo tag is removed?
+> 
+> No, after the NEW packages have cleared NEW and the moreinfo tag is
+> removed, we'll consider a slot for the transition. 
+
+But you just mentioned the tracker in your previous mail[1].
+
+> We would like to
+> avoid stalling the transition with multiple packages going through
+> NEW, and putting pressure on FTP Masters by telling them a package is
+> needed for a transition is not nice either.
+
+I admit I personally see the bigger drawback on spending my time twice
+on 170 packages than waiting for new packages.  Please explain (again)
+the real drawback of a transition that was delayed due to waiting for
+new packages in total by estimated (not verified) by about two weeks.
+
+Kind regards
+   Andreas.
+
+[1] https://release.debian.org/transitions/html/r-api-bioc-3.18.html
+
+-- 
+http://fam-tille.de
+

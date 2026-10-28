@@ -1,0 +1,267 @@
+From bob.dybian at gmail.com  Wed Aug  1 18:29:55 2018
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Wed, 1 Aug 2018 20:29:55 +0200
+Subject: RFS: new packages r-cran-ranger and r-cran-reticulate
+Message-ID: <CA+6XHwQES7waY5ohp4=aAMEUTG3+bVZsnFK5qyksBLrNMYEchQ@mail.gmail.com>
+
+Hi all,
+
+Could someone upload them? Thanks.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Thu Aug  2 01:21:12 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 2 Aug 2018 03:21:12 +0200
+Subject: Re: RFS: new packages r-cran-ranger and r-cran-reticulate
+In-Reply-To: <CA+6XHwQES7waY5ohp4=aAMEUTG3+bVZsnFK5qyksBLrNMYEchQ@mail.gmail.com>
+References: <CA+6XHwQES7waY5ohp4=aAMEUTG3+bVZsnFK5qyksBLrNMYEchQ@mail.gmail.com>
+Message-ID: <20180802012112.xansyr2umemlpamr@an3as.eu>
+
+Hi Dylan,
+
+On Wed, Aug 01, 2018 at 08:29:55PM +0200, Dylan Aïssi wrote:
+> Could someone upload them? Thanks.
+
+Thanks for your work on these packages.
+
+When locking at d/copyright I see:
+
+Files: *
+       src/DataRcpp.h
+       src/DataSparse.*
+       src/rangerCpp.cpp
+       src/utilityRcpp.cpp
+Copyright: 2014-2018 Marvin N. Wright, Stefan Wager, Philipp Probst
+License: GPL-3+
+
+which uselessly adds some specific files which are included anyway in *.
+
+The next paragraph overrides those files since a latter detailed
+specification overrides what formerly was specified more generally.
+
+So you rather should mention all those files in src/* that are covered
+by Expat license.  I have not build the package but I'd be astonished if
+lintian would not have told you something in these lines - if not that
+might be worth a lintian bug report.
+
+I've just uploaded r-cran-reticulate to new.
+
+Kind regards from DebConf
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From bob.dybian at gmail.com  Thu Aug  2 08:02:52 2018
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 2 Aug 2018 10:02:52 +0200
+Subject: Re: RFS: new packages r-cran-ranger and r-cran-reticulate
+In-Reply-To: <20180802012112.xansyr2umemlpamr@an3as.eu>
+References: <CA+6XHwQES7waY5ohp4=aAMEUTG3+bVZsnFK5qyksBLrNMYEchQ@mail.gmail.com> <20180802012112.xansyr2umemlpamr@an3as.eu>
+Message-ID: <CA+6XHwTJatneM86OoVs1k9bH6+8AVyf92rRC7PWQhqXdinFyHA@mail.gmail.com>
+
+Hi Andreas,
+
+Le jeu. 2 août 2018 à 03:21, Andreas Tille <andreas at an3as.eu> a écrit :
+> When locking at d/copyright I see:
+>
+> Files: *
+>        src/DataRcpp.h
+>        src/DataSparse.*
+>        src/rangerCpp.cpp
+>        src/utilityRcpp.cpp
+> Copyright: 2014-2018 Marvin N. Wright, Stefan Wager, Philipp Probst
+> License: GPL-3+
+>
+> which uselessly adds some specific files which are included anyway in *.
+>
+> The next paragraph overrides those files since a latter detailed
+> specification overrides what formerly was specified more generally.
+>
+> So you rather should mention all those files in src/* that are covered
+> by Expat license.  I have not build the package but I'd be astonished if
+> lintian would not have told you something in these lines - if not that
+> might be worth a lintian bug report.
+
+Thanks for pointing this incoherent, it seems that I need more sleep :-).
+I fixed it. I double checked and lintian doesn't warn me about this
+mistake, so I will open a bug about that.
+
+And thank you for your uploads :-) and enjoy the DebConf.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Fri Aug  3 09:35:47 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 3 Aug 2018 11:35:47 +0200
+Subject: Re: RFS: new packages r-cran-ranger and r-cran-reticulate
+In-Reply-To: <CA+6XHwTJatneM86OoVs1k9bH6+8AVyf92rRC7PWQhqXdinFyHA@mail.gmail.com>
+References: <CA+6XHwQES7waY5ohp4=aAMEUTG3+bVZsnFK5qyksBLrNMYEchQ@mail.gmail.com> <20180802012112.xansyr2umemlpamr@an3as.eu> <CA+6XHwTJatneM86OoVs1k9bH6+8AVyf92rRC7PWQhqXdinFyHA@mail.gmail.com>
+Message-ID: <20180803093547.jo7dmbn4vc5jnc2s@an3as.eu>
+
+On Thu, Aug 02, 2018 at 10:02:52AM +0200, Dylan Aïssi wrote:
+> 
+> Thanks for pointing this incoherent, it seems that I need more sleep :-).
+> I fixed it. I double checked and lintian doesn't warn me about this
+> mistake, so I will open a bug about that.
+> 
+> And thank you for your uploads :-) and enjoy the DebConf.
+
+r-cran-ranger uploaded - keep on enjoying DebConf
+
+    Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Aug 17 08:47:43 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Aug 2018 10:47:43 +0200
+Subject: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+Message-ID: <20180817084743.okewcsnlkbizmfqu@an3as.eu>
+
+Hi,
+
+early this morning I was able to fetch new upstream versions but now this fails:
+
+salsa/r-pkg-team/r-cran-pkgconfig(master) $ uscan --verbose
+uscan info: uscan (version 2.18.3) See uscan(1) for help
+uscan info: Scan watch files in .
+uscan info: Check debian/watch and debian/changelog in .
+uscan info: package="r-cran-pkgconfig" version="2.0.1-4" (as seen in debian/changelog)
+uscan info: package="r-cran-pkgconfig" version="2.0.1" (no epoch/revision)
+uscan info: Check debian/watch and debian/changelog in ./.git/logs/refs/remotes/origin
+uscan info: Check debian/watch and debian/changelog in ./.git/logs/refs/heads
+uscan info: Check debian/watch and debian/changelog in ./.git/refs/tags
+uscan info: Check debian/watch and debian/changelog in ./.git/refs/remotes/origin
+uscan info: Check debian/watch and debian/changelog in ./.git/refs/heads
+uscan info: ./debian/changelog sets package="r-cran-pkgconfig" version="2.0.1"
+uscan info: Process watch file at: debian/watch
+    package = r-cran-pkgconfig
+    version = 2.0.1
+    pkg_dir = .
+uscan info: Last orig.tar.* tarball version (from debian/changelog): 2.0.1
+uscan info: Last orig.tar.* tarball version (dversionmangled): 2.0.1
+uscan info: Requesting URL:
+   https://cran.r-project.org/src/contrib/
+uscan warn: In watchfile debian/watch, reading webpage
+  https://cran.r-project.org/src/contrib/ failed: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+uscan info: Scan finished
+
+So something broke with the certificate of r-project.org in the last
+couple of hours.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Aug 17 13:19:59 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Aug 2018 15:19:59 +0200
+Subject: Re: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+In-Reply-To: <20180817084743.okewcsnlkbizmfqu@an3as.eu>
+References: <20180817084743.okewcsnlkbizmfqu@an3as.eu>
+Message-ID: <20180817131959.kdp5sctdrdfmvt64@an3as.eu>
+
+This seems to have settled now ...
+
+On Fri, Aug 17, 2018 at 10:47:43AM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> early this morning I was able to fetch new upstream versions but now this fails:
+> 
+> 
+> salsa/r-pkg-team/r-cran-pkgconfig(master) $ uscan --verbose
+> uscan info: uscan (version 2.18.3) See uscan(1) for help
+> uscan info: Scan watch files in .
+> uscan info: Check debian/watch and debian/changelog in .
+> uscan info: package="r-cran-pkgconfig" version="2.0.1-4" (as seen in debian/changelog)
+> uscan info: package="r-cran-pkgconfig" version="2.0.1" (no epoch/revision)
+> uscan info: Check debian/watch and debian/changelog in ./.git/logs/refs/remotes/origin
+> uscan info: Check debian/watch and debian/changelog in ./.git/logs/refs/heads
+> uscan info: Check debian/watch and debian/changelog in ./.git/refs/tags
+> uscan info: Check debian/watch and debian/changelog in ./.git/refs/remotes/origin
+> uscan info: Check debian/watch and debian/changelog in ./.git/refs/heads
+> uscan info: ./debian/changelog sets package="r-cran-pkgconfig" version="2.0.1"
+> uscan info: Process watch file at: debian/watch
+>     package = r-cran-pkgconfig
+>     version = 2.0.1
+>     pkg_dir = .
+> uscan info: Last orig.tar.* tarball version (from debian/changelog): 2.0.1
+> uscan info: Last orig.tar.* tarball version (dversionmangled): 2.0.1
+> uscan info: Requesting URL:
+>    https://cran.r-project.org/src/contrib/
+> uscan warn: In watchfile debian/watch, reading webpage
+>   https://cran.r-project.org/src/contrib/ failed: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+> uscan info: Scan finished
+> 
+> 
+> So something broke with the certificate of r-project.org in the last
+> couple of hours.
+> 
+> Kind regards
+> 
+>        Andreas.
+> 
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From jeroenooms at gmail.com  Fri Aug 17 13:26:17 2018
+From: jeroenooms at gmail.com (Jeroen Ooms)
+Date: Fri, 17 Aug 2018 15:26:17 +0200
+Subject: Re: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+In-Reply-To: <20180817131959.kdp5sctdrdfmvt64@an3as.eu>
+References: <20180817084743.okewcsnlkbizmfqu@an3as.eu> <20180817131959.kdp5sctdrdfmvt64@an3as.eu>
+Message-ID: <CABFfbXvkcwYH2bZW2T9qzOKLe3uWaCge-F3XzzWVv2u4HYAsBA@mail.gmail.com>
+
+On Fri, Aug 17, 2018 at 3:19 PM, Andreas Tille <andreas at an3as.eu> wrote:
+> This seems to have settled now ...
+
+The CRAN root server is often overloaded. It might be better to use
+the cloudfront mirror, which gets synched every hour and is never down:
+https://cloud.r-project.org/
+
+From andreas at an3as.eu  Fri Aug 17 13:39:08 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Aug 2018 15:39:08 +0200
+Subject: Re: 500 Can't connect to cran.r-project.org:443 (certificate verify failed)
+In-Reply-To: <CABFfbXvkcwYH2bZW2T9qzOKLe3uWaCge-F3XzzWVv2u4HYAsBA@mail.gmail.com>
+References: <20180817084743.okewcsnlkbizmfqu@an3as.eu> <20180817131959.kdp5sctdrdfmvt64@an3as.eu> <CABFfbXvkcwYH2bZW2T9qzOKLe3uWaCge-F3XzzWVv2u4HYAsBA@mail.gmail.com>
+Message-ID: <20180817133908.yptzrkxrnbgp46aj@an3as.eu>
+
+Hi Jeroen,
+
+On Fri, Aug 17, 2018 at 03:26:17PM +0200, Jeroen Ooms wrote:
+> On Fri, Aug 17, 2018 at 3:19 PM, Andreas Tille <andreas at an3as.eu> wrote:
+> > This seems to have settled now ...
+> 
+> The CRAN root server is often overloaded. It might be better to use
+> the cloudfront mirror, which gets synched every hour and is never down:
+> https://cloud.r-project.org/
+
+I've changed the according dh-r helpers to use the latter[1] at least
+for those packages that will be created from scratch.  I'd consider to
+adapt my routine-update script to update existing packages as well.
+
+Thanks for the hint
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/dh-r/commit/2b818e0425e4432010a883c099e106bfc7ccab06
+
+-- 
+http://fam-tille.de
+

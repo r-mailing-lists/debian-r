@@ -1,0 +1,600 @@
+From crusoe at debian.org  Thu Nov  7 10:22:12 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Thu, 7 Nov 2024 11:22:12 +0100
+Subject: Bug#1086904: RM: r-bioc-alabaster.base r-bioc-alabaster.matrix [s390x] -- ROM; big-endian archs are not supported by upstream
+Message-ID: <4694b3d9-67eb-4c72-96f6-c02d1cd484b3@debian.org>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-alabaster.base at packages.debian.org, r-bioc-alabaster.matrix at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org
+Control: affects -1 + src:r-bioc-alabaster.base
+Control: affects -1 + src:r-bioc-alabaster.matrix
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hello,
+
+Upstream doesn't support big-endian architectures and the Debian R team isn't interested in fixing the issues.
+
+Here's the dak report, showing that there are some reverse (Build-)Depends that will break, but only for Archicture: All packages, that we will configure to ignore s390x in their autopkgtests.
+
+---
+$ ssh mirror.ftp-master.debian.org "dak rm --architecture=s390x --binary-only --partial --rdep-check --no-action r-bioc-alabaster.base r-bioc-alabaster.matrix"
+Will remove the following packages from unstable:
+
+r-bioc-alabaster.base | 1.4.2+ds-3 | s390x
+r-bioc-alabaster.matrix | 1.4.2+ds-1 | s390x
+
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+------------------- Reason -------------------
+
+----------------------------------------------
+
+Checking reverse dependencies...
+# Broken Depends:
+r-bioc-alabaster.ranges: r-bioc-alabaster.ranges
+r-bioc-alabaster.sce: r-bioc-alabaster.sce
+r-bioc-alabaster.se: r-bioc-alabaster.se
+r-bioc-scrnaseq: r-bioc-scrnaseq
+
+# Broken Build-Depends:
+r-bioc-alabaster.ranges: r-bioc-alabaster.base (1.4.2+ds-2~0exp3 >=)
+r-bioc-alabaster.sce: r-bioc-alabaster.base
+r-bioc-alabaster.se: r-bioc-alabaster.base (1.4.2+ds-2~0exp3 >=)
+                     r-bioc-alabaster.matrix
+r-bioc-scrnaseq: r-bioc-alabaster.base (1.4.2+ds-2~0exp3 >=)
+                 r-bioc-alabaster.matrix
+
+Dependency problem found.
+---
+
+Thanks!
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Thu Nov 14 19:10:21 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 14 Nov 2024 13:10:21 -0600
+Subject: Package r-cran-rdpack single test fail blocks migration of package r-base
+Message-ID: <26422.19229.770113.751668@rob.eddelbuettel.com>
+
+Could a group maintainer have a look at package Rdpack (aka r-cran-rdpack) at
+  https://qa.debian.org/excuses.php?package=r-base
+which is being held up by a single test failing on multiple arches, see eg  
+  https://ci.debian.net/packages/r/r-cran-rdpack/testing/arm64/54324186/#S2
+
+This may be a good time to make contact with upstream as the package is also
+having some minor issues at CRAN
+  https://cloud.r-project.org/web/checks/check_results_Rdpack.html
+so modifying a test to be more tolerant may be advisable.
+
+Thanks, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri Nov 15 05:03:51 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 15 Nov 2024 14:03:51 +0900
+Subject: Re: Package r-cran-rdpack single test fail blocks migration of package r-base
+In-Reply-To: <26422.19229.770113.751668@rob.eddelbuettel.com>
+References: <26422.19229.770113.751668@rob.eddelbuettel.com>
+Message-ID: <ZzbWNw1FTUDzE_FS@kumo.plessy.net>
+
+One-line summary: could it be due to the latest upgrade of r-cran-rstudioapi?
+
+Le Thu, Nov 14, 2024 at 01:10:21PM -0600, Dirk Eddelbuettel a écrit :
+> 
+> Could a group maintainer have a look at package Rdpack (aka r-cran-rdpack) at
+>   https://qa.debian.org/excuses.php?package=r-base
+> which is being held up by a single test failing on multiple arches, see eg  
+>   https://ci.debian.net/packages/r/r-cran-rdpack/testing/arm64/54324186/#S2
+> 
+> This may be a good time to make contact with upstream as the package is also
+> having some minor issues at CRAN
+>   https://cloud.r-project.org/web/checks/check_results_Rdpack.html
+> so modifying a test to be more tolerant may be advisable.
+
+Hi Dirk and everybody,
+
+I have inspected the diff of the autopkgest runs for testing (2024-11-14
+17:07:34 UTC, pass),  r-base/4.4.2-1 migration (2024-11-15 00:10:43 UTC,
+fail) and unstable (2024-10-24 04:53:49 UTC, pass).
+
+First, I have to confess that I do not understand why the tests pass
+with R 4.4.1 in testing, with R 4.4.2 in unstable, but not with R 4.4.2
+in testing.
+
+In particular the diff between the runs in testing with R 4.4.1 (pass)
+and R 4.4.2 (fail) have very few differences.
+
+ 1) r-base-core (4.4.1-3 for testing, 4.4.2-1 for migration in testing)
+ 2) libsemanage2 (3.7-2 in testing, 3.7-2+b1, for migration in tesing)
+ 3) test reports [ FAIL 0 | WARN 12 | SKIP 1 | PASS 41 ]     
+    versus [ FAIL 1 | WARN 13 | SKIP 1 | PASS 40 ]                                                                                                     
+ 4) Failed tests reported in migration to testing:
+  ══ Failed tests ════════════════════════════════════════════════════════════════
+  ── Failure ('test-bib.R:90:5'): bib works fine ─────────────────────────────────
+  `insert_ref("xxx", package = "rbibutils")` did not throw an error.
+
+That's all!
+
+Then I compared the failed migration to testing with the successful run
+in unstable.
+
+ 1) Apart from r-base-core itself, all r-* packages are at exactly
+    the same version number, except for r-cran-rstudioapi which is
+    at version 0.17.1-1 in testing and 0.17.0-1 in the CI runs on
+    unstable as they were made before Dirk's latest upload.
+
+This may explain why the package's tests also fail on CRAN but did not
+on unstable.  I have rescheduled new CI runs in Unstable, let's see if
+they fail now.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Fri Nov 15 05:57:02 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 15 Nov 2024 14:57:02 +0900
+Subject: Re: Package r-cran-rdpack single test fail blocks migration of package r-base
+In-Reply-To: <ZzbWNw1FTUDzE_FS@kumo.plessy.net>
+References: <26422.19229.770113.751668@rob.eddelbuettel.com> <ZzbWNw1FTUDzE_FS@kumo.plessy.net>
+Message-ID: <ZzbirsRj6e5zJ-Bt@kumo.plessy.net>
+
+Le Fri, Nov 15, 2024 at 02:03:51PM +0900, Charles Plessy a écrit :
+> One-line summary: could it be due to the latest upgrade of r-cran-rstudioapi?
+
+Indeed, the CI tests started to fail after I triggered them, and this
+correlates with the upgrade of r-cran-rstudioapi from version 0.17.0-1
+to 0.17.1-1.
+
+I opened https://github.com/GeoBosh/Rdpack/issues/37
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Mon Nov 18 01:29:10 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 18 Nov 2024 10:29:10 +0900
+Subject: Re: Package r-cran-rdpack single test fail blocks migration of package r-base
+In-Reply-To: <ZzbirsRj6e5zJ-Bt@kumo.plessy.net>
+References: <26422.19229.770113.751668@rob.eddelbuettel.com> <ZzbWNw1FTUDzE_FS@kumo.plessy.net> <ZzbirsRj6e5zJ-Bt@kumo.plessy.net>
+Message-ID: <ZzqYZkPpbvwQkAkr@kumo.plessy.net>
+
+Le Fri, Nov 15, 2024 at 02:57:02PM +0900, Charles Plessy a écrit :
+> 
+> I opened https://github.com/GeoBosh/Rdpack/issues/37
+
+Fixed upstream, uploaded, migrated, and r-base is soon to follow :)
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Mon Nov 18 01:50:59 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 17 Nov 2024 19:50:59 -0600
+Subject: Re: Package r-cran-rdpack single test fail blocks migration of package r-base
+In-Reply-To: <ZzqYZkPpbvwQkAkr@kumo.plessy.net>
+References: <26422.19229.770113.751668@rob.eddelbuettel.com> <ZzbWNw1FTUDzE_FS@kumo.plessy.net> <ZzbirsRj6e5zJ-Bt@kumo.plessy.net> <ZzqYZkPpbvwQkAkr@kumo.plessy.net>
+Message-ID: <26426.40323.461718.579169@rob.eddelbuettel.com>
+
+On 18 November 2024 at 10:29, Charles Plessy wrote:
+| Le Fri, Nov 15, 2024 at 02:57:02PM +0900, Charles Plessy a écrit :
+| > 
+| > I opened https://github.com/GeoBosh/Rdpack/issues/37
+| 
+| Fixed upstream, uploaded, migrated, and r-base is soon to follow :)
+
+Thanks for taking care of it, and liaise with upstream.
+
+r-base looks ready to migrate
+
+  https://qa.debian.org/excuses.php?package=r-base
+
+which is what we wanted. Really appreciate the help in getting there.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Sat Nov 23 18:35:25 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 23 Nov 2024 12:35:25 -0600
+Subject: r-cran-dplyr needs some love
+Message-ID: <26434.8301.478781.114792@rob.eddelbuettel.com>
+
+Dirk Eddelbuettel <edd at debian.org>
+   car: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   fassets: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   fcopulae: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   fmultivar: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   fportfolio: buggy deps coinor-symphony,r-cran-dplyr, flagged for removal in 36 hours
+   fregression: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   hmisc: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-conquer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-doby: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-htmltable: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-pbkrtest: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-quantreg: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rcmdrmisc: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rms: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-sn: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   rcmdr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   rmpi: flagged for removal in 4 days
+   rsymphony: buggy deps coinor-symphony, flagged for removal in 37 hours
+
+[...]
+
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+   r-bioc-annotationhub: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-bioccheck: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-biocfilecache: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-biomart: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-biovizbase: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-cummerbund: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-decoupler: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-degnorm: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-degreport: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-destiny: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-dexseq: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-edaseq: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-experimenthub: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-genelendatabase: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-geoquery: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-ggbio: buggy deps r-cran-dplyr,r-cran-ggstats, flagged for removal in 12.2 days
+   r-bioc-goseq: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-gsva: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-gviz: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-ihw: buggy deps coinor-symphony, flagged for removal in 37 hours
+   r-bioc-ioniser: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-isoformswitchanalyzer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-lpsymphony: buggy deps coinor-symphony, flagged for removal in 37 hours
+   r-bioc-megadepth: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-mofa: buggy deps h5py,r-cran-dplyr,r-cran-ggstats, flagged for removal in 12.2 days
+   r-bioc-monocle: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-multiassayexperiment: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-mutationalpatterns: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-netsam: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-organismdbi: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-pfamanalyzer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-progeny: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-rcwl: buggy deps arcp,r-cran-dplyr, flagged for removal in 13.8 days
+   r-bioc-rgsepd: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-rwikipathways: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-spatialexperiment: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-structuralvariantannotation: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-tcgabiolinks: buggy deps r-cran-dplyr, flagged for removal in 21.3 days
+   r-bioc-titancna: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-txdbmaker: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-bioc-tximeta: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-adegenet: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-adephylo: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-aer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-afex: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-alakazam: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-bayesplot: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-benchmarkme: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-benchmarkmedata: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-brms: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-broom.helpers: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-broom.mixed: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-broom: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-caret: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-cmstatr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-coarsedatatools: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-covid19us: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-cubelyr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-cutpointr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-dbplyr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-diagrammer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-dials: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-dplyr: flagged for removal in 18.3 days
+   r-cran-dtplyr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-dynlm: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-emayili: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-epi: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-epiestim: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-factoextra: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-factominer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-geepack: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggalluvial: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggally: buggy deps r-cran-dplyr,r-cran-ggstats, flagged for removal in 12.2 days
+   r-cran-ggfortify: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggpubr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggraph: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggstats: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ggvis: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-gprofiler2: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-haplo.stats: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-heatmaply: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-labelled: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-latte: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-m2r: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-mcmcpack: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-metap: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-mice: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-mixtools: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-modeldata: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-modelr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-mpoly: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ncmeta: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-pammtools: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-patrick: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-pec: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-phylobase: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-plotly: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-popepi: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-prophet: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-psychometric: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-purrrlyr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-qgraph: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-randomglm: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rdflib: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-recipes: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-relsurv: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-riskregression: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-ritis: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rnexml: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rsample: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rstanarm: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-rstatix: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-sctransform: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-semplot: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-shazam: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-shinystan: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-sjmisc: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-skimr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-solrium: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-spacetime: flagged for removal in 15.6 days
+   r-cran-survminer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-systemfit: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-taxize: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tcr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tfisher: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-themis: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tidygraph: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tidyr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tidytext: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tidyverse: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-tigger: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-treespace: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-vcdextra: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-vim: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-webgestaltr: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-wgcna: buggy deps r-cran-dplyr, flagged for removal in 15.3 days
+   r-cran-wikidataqueryservicer: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-wikidatar: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-cran-wikitaxa: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-other-curvefdp: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-other-disgenet2r: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+   r-other-kcha-psiplot: buggy deps r-cran-dplyr, flagged for removal in 12.2 days
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sat Nov 23 23:44:04 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 24 Nov 2024 08:44:04 +0900
+Subject: Re: r-cran-dplyr needs some love
+In-Reply-To: <26434.8301.478781.114792@rob.eddelbuettel.com>
+References: <26434.8301.478781.114792@rob.eddelbuettel.com>
+Message-ID: <Z0JoxHwkSLg7TULw@bubu.igloo>
+
+Hi Dirk and everybody,
+
+yes it is in the radar.  I will disable the tests before the removal if I
+or others can not fix the failure:
+
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Failure ('test-rows.R:161:3'): rows_update() works ──────────────────────────
+`expect_identical(...)` produced warnings.
+── Failure ('test-rows.R:258:3'): rows_patch() works ───────────────────────────
+`expect_identical(...)` produced warnings.
+
+Unfortunately, the test logs do not show the warnings.  Here is the code
+that fails:
+
+    161   expect_silent(
+    162     expect_identical(
+    163       rows_update(data, tibble(b = "z", a = 2:3), by = "a"),
+    164       tibble(a = 1:3, b = c("a", "z", "z"), c = data$c)
+    165     )
+    166   )
+
+    258   expect_silent(
+    259     expect_identical(
+    260       rows_patch(data, tibble(b = "z", a = 2:3), by = "a"),
+    261       tibble(a = 1:3, b = c("a", "b", "z"), c = data$c)
+    262     )
+    263   )
+
+And even more unfortunately, I can not trigger the same failures in an
+unstable chroot, where these tests pass, and other fail with
+discrepancies in error messages such as:
+
+[6]    ! Can't subset columns past the end.        -   ! Can't select columns past the end.         [6]
+[17]   i In group 1: `x = 1`, `y = 1`.             -   i In group 1: `x = 1` and `y = 1`.          [17]
+
+Could it be that the tests fail because one of the r-cran- packages is
+not up to date?  But which one?
+
+Have a nice week-end,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Sun Nov 24 00:51:15 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 23 Nov 2024 18:51:15 -0600
+Subject: Re: r-cran-dplyr needs some love
+In-Reply-To: <Z0JoxHwkSLg7TULw@bubu.igloo>
+References: <26434.8301.478781.114792@rob.eddelbuettel.com> <Z0JoxHwkSLg7TULw@bubu.igloo>
+Message-ID: <26434.30851.326841.886161@rob.eddelbuettel.com>
+
+On 24 November 2024 at 08:44, Charles Plessy wrote:
+| Could it be that the tests fail because one of the r-cran- packages is
+| not up to date?  But which one?
+
+I haven't followed it that closely but "they" had issues in tidyverse
+recently by some changes of explicit versus implicit dependency starting
+between waldo (== computes object differences, use by testthat) not longer
+explicitly depending on vctrs (== columnar data) so that tibble (==
+data.frame replacement) broke. Or something like that. Which would be
+entirely avoidable if it weren't for their maze of dependencies.
+
+Which over here of course can get compounded by turning auto-pkg tests and
+not ensuring dependencies are current so you get to fight that too.
+
+So yes. I would just turn the auto-pkg tests off. At least for a while.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From crusoe at debian.org  Tue Nov 26 17:44:18 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 26 Nov 2024 18:44:18 +0100
+Subject: Bug#1088299: ITP: r-bioc-assorthead -- Assorted Header-Only C++ Libraries
+Message-ID: <0c35747f-8789-4a8e-8979-63f8ae4ee304@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-assorthead -- Assorted Header-Only C++ Libraries
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name    : r-bioc-assorthead
+  Version         : 1.0.0+ds
+  Upstream Author : Copyright: FIXME-2024 Aaron Lun
+* URL             : https://bioconductor.org/packages/assorthead/
+* License         : MIT
+  Programming Lang: GNU R
+  Description     : Assorted Header-Only C++ Libraries
+ Vendors an assortment of useful header-only C++ libraries. Bioconductor
+ packages can use these libraries in their own C++ code by LinkingTo this
+ package without introducing any additional dependencies. The use of a
+ central repository avoids duplicate vendoring of libraries across
+ multiple R packages, and enables better coordination of version updates
+ across cohorts of interdependent C++ libraries.
+ .
+ This package is a subset containing only that code needed by other Debian
+ Bioconductor packages:
+ .
+ - aarand, "Lightweight random distribution functions"
+ - annoy, "Approximate nearest neighbors oh yeah"
+ - kmeans, "C++ port of `stats::kmeans` with various initialization methods"
+ - knncolle, "C++ API for nearest-neighbor searches"
+ - knncolle_annoy, "**knncolle** extension for Annoy"
+ - knncolle_hnsw, "**knncolle** extension for HNSW"
+ - manticore, "Execute arbitrary functions on the main thread"
+ - scran_graph_cluster, "Graph-based clustering for single-cell data"
+ - singlepp, "Cell type annotation for single-cell expression data"
+ - subpar, "Substitutable parallelization for C++ libraries"
+ - tatami, "C++ API for matrix representations"
+ - tatami_chunked, "**tatami** extension for chunked matrices"
+ - tatami_mult, "Multiplication of **tatami** matrices"
+ - tatami_r, "**tatami** extension for R matrices"
+ - tatami_stats, "Compute statistics from **tatami** matrices"
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+   https://salsa.debian.org/r-pkg-team/r-bioc-assorthead
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Fri Nov 29 17:50:47 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Fri, 29 Nov 2024 18:50:47 +0100
+Subject: Bug#1088701: transition: r-bioc-biocgenerics (r-api-bioc-3.20)
+Message-ID: <b95907a0-a27e-4bb8-ae83-29818251645a@debian.org>
+
+Package: release.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-biocgenerics at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org
+Control: affects -1 + src:r-bioc-biocgenerics
+Control: block -1 by 1086904
+Control: block -1 by 1088299
+User: release.debian.org at packages.debian.org
+Usertags: transition
+
+Dear Release Team,
+
+I would like a transition slot for Bioconductor 3.20.
+
+We only need one new package, r-bioc-assorthead, and it is in the NEW queue. We are also still waiting on the removal of two r-bioc binary s390x packages. I've set both of those bugs to block this bug.
+
+Ben file:
+
+title = "r-api-bioc-3.20";
+is_affected = .depends ~ /r-api-bioc/ | .source ~ /r-bioc-/;
+is_good = .depends ~ "r-api-bioc-3.20";
+is_bad = .depends ~ "r-api-bioc-3.19";
+
+Thanks!
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Sat Nov 30 21:25:24 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sat, 30 Nov 2024 22:25:24 +0100
+Subject: Accidental upload of newer r-bioc-biocstyle to unstable ahead of BioConductor 3.20 transition
+Message-ID: <7044009f-616b-4381-bc04-e74c1844e79f@debian.org>
+
+Dear Release Team,
+
+While preparing uploads of the BioConductor 3.20 r-bioc-* packages to the experimental distribution, I accidentally uploaded a newer version of r-bioc-biocstyle (2.34.0+dfsg-1) to unstable.
+
+Shall I fix this by rolling back the change with an upload of a r-bioc-biocstyle source package version "2.34.0+really2.32.1+dfsg-1" to unstable (and corresponding "2.34.0+really2.34.0+dfsg-1" version to experimental)?
+
+Or shall I wait for the bioc-3.20 transition's [0] blockers [1][2] to be fixed and permission for the new r-bioc-* packages to be uploaded to unstable?
+
+Sorry about the mess I made!
+
+Thanks,
+
+[0] https://bugs.debian.org/1088701
+[1] https://bugs.debian.org/1086904 RM: r-bioc-alabaster.base, r-bioc-alabaster.matrix [s390x]
+[2] https://bugs.debian.org/1088299 ITP: r-bioc-assorthead -- Assorted Header-Only C++ Libraries (in NEW)
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+

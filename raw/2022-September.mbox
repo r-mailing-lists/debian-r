@@ -1,0 +1,607 @@
+From benjamin.goodrich at columbia.edu  Sat Sep  3 16:36:22 2022
+From: benjamin.goodrich at columbia.edu (Benjamin K Goodrich)
+Date: Sat, 3 Sep 2022 12:36:22 -0400
+Subject: Re: Please adjust StanHeaders to new version of (one)tbb
+In-Reply-To: <YtUdmngZvJYsBYEu@an3as.eu>
+References: <YtUdmngZvJYsBYEu@an3as.eu>
+Message-ID: <CAN5hhZW5oqQzAD-1WDcOOVtLTLUvfhOOSv8Y1Qsr7Tc003wz9g@mail.gmail.com>
+
+Sorry for the late reply. I am told that StanHeaders can be built
+successfully with oneTBB by setting environmental variables like
+TBB_INC and TBB_LIB. On CRAN, we would like to use the version of TBB
+that comes with the RcppParallel package
+
+https://github.com/RcppCore/RcppParallel/pull/144
+
+Although with the next release of StanHeaders we will not be able to
+achieve that because not all packages are LinkingTo RcppParallel so we
+have to build a similar TBB in the StanHeaders shared object. But on
+Debian, if r-cran-rcppparallel switches to oneTBB, then it would be
+fine if r-cran-stanheaders, r-cran-rstan, etc. depends on
+r-cran-rcppparallel.
+
+From nilesh at nileshpatra.info  Sat Sep  3 20:44:24 2022
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Sun, 4 Sep 2022 02:14:24 +0530
+Subject: Re: Please adjust StanHeaders to new version of (one)tbb
+In-Reply-To: <CAN5hhZW5oqQzAD-1WDcOOVtLTLUvfhOOSv8Y1Qsr7Tc003wz9g@mail.gmail.com>
+References: <YtUdmngZvJYsBYEu@an3as.eu> <CAN5hhZW5oqQzAD-1WDcOOVtLTLUvfhOOSv8Y1Qsr7Tc003wz9g@mail.gmail.com>
+Message-ID: <3d32ff7c-92e5-21cd-41d2-d5adf289c890@nileshpatra.info>
+
+Hi all,
+
+On 9/3/22 22:06, Benjamin K Goodrich wrote:
+> Sorry for the late reply. I am told that StanHeaders can be built
+> successfully with oneTBB by setting environmental variables like
+> TBB_INC and TBB_LIB. On CRAN, we would like to use the version of TBB
+> that comes with the RcppParallel package
+> [...]
+
+Thanks for the pointers, but
+we are able to build cppparallel and stanheaders without problems as is. But the built package is
+unusable as it uses "#include" statements that try to include files available in older tbb but
+not in new onetbb, as observed in rstan compilation.
+
+The problematic #include statment (and corresponding removed APIs) seems to be stemming from
+"inst/include/stan/math/prim/core/init_threadpool_tbb.hpp"
+
+On taking a deeper look, I observed that this is directly embedded from stan/math[1]
+The current release of stanheaders contains an older copy of the math lib.
+Going fwd, a patch had been added to stan/math to make it compatible with onetbb[2]
+On cherry-picking a couple of changes from there, I am able to get rstan to compile.
+
+I am not very sure if everything is good/works as expected (autopkgtests / CRAN tests seem
+to pass, so that's a good indication), but I'd be thrilled to believe so.
+
+[1]: https://github.com/stan-dev/math
+[2]: https://github.com/stan-dev/math/commit/6f94b2a70d11276a53e5b5bc4100d3ffa524b96c
+
+--
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at nileshpatra.info  Mon Sep 12 14:03:37 2022
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Mon, 12 Sep 2022 19:33:37 +0530
+Subject: Re: r-cran-projpred autopkgtest says: "Package "rstanarm" is needed for these tests. Please install it." - but it is installed
+In-Reply-To: <20220826154701.g3anvwllhsxwapwr@debian>
+References: <YwXMmPiNWm3THMZ4@an3as.eu> <20220826154701.g3anvwllhsxwapwr@debian>
+Message-ID: <20220912140332.yf37wqllrqf76phl@nileshpatra.info>
+
+Quoting Andreas Tille:
+> > I tried to upgrade r-cran-projpred to its latest upstream version, but got:
+> > [...]
+> > Error: Package "rstanarm" is needed for these tests. Please install it.
+> > Execution halted
+> >
+> > (see Salsa CI: https://salsa.debian.org/r-pkg-team/r-cran-projpred/-/jobs/3141946#L578 )
+
+This is now fixed with new uploads of stanheaders and rstan (which also fixed a bunch of rev-deps)
+and I uploaded the new release of projpred to unstable just now.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Wed Sep 14 08:29:58 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 14 Sep 2022 10:29:58 +0200
+Subject: Re: lintian: Systematic false positives for source-is-missing in r-cran-* documentation
+Message-ID: <YyGRBuxBYhwFWTlt@an3as.eu>
+
+Hi,
+
+another remark about the source-is-missing tag in r-* packages: For
+r-cran-dplyr I've just added lintian-overrides[1] for other false
+positives than embedded png files.  The "source-is-missing" tag is
+in cases of R documentation not sensible in general since the source
+can always be found in the same directory next to the html file in
+the according *.Rmd file.  May be this tag should be suppressed in
+general (even for embedded JS since the doc can be recreated as
+in the example of r-bioc-genomicfeatures[2] via
+
+   cd inst/doc && Rscript -e "require(knitr); require(markdown); knit('GenomicFeatures.Rmd', 'GenomicFeatures.md'); markdownToHTML('GenomicFeatures.md', 'GenomicFeatures.html', options=c('use_xhtml', 'base64_images'));"
+
+It would be great if those false positives from lintian could be
+avoided to reduce the amount of manual maintainer interaction.
+
+Kind regards
+
+     Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-dplyr/-/blob/master/debian/source/lintian-overrides
+[2] https://salsa.debian.org/r-pkg-team/r-bioc-genomicfeatures/-/blob/master/debian/rules
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Sep 14 11:27:49 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 14 Sep 2022 13:27:49 +0200
+Subject: Re: r-cran-projpred autopkgtest says: "Package "rstanarm" is needed for these tests. Please install it." - but it is installed
+In-Reply-To: <20220912140332.yf37wqllrqf76phl@nileshpatra.info>
+References: <YwXMmPiNWm3THMZ4@an3as.eu> <20220826154701.g3anvwllhsxwapwr@debian> <20220912140332.yf37wqllrqf76phl@nileshpatra.info>
+Message-ID: <YyG6tZJK84XQZoW7@an3as.eu>
+
+Hi Nilesh
+
+Am Mon, Sep 12, 2022 at 07:33:37PM +0530 schrieb Nilesh Patra:
+> This is now fixed with new uploads of stanheaders and rstan (which also fixed a bunch of rev-deps)
+> and I uploaded the new release of projpred to unstable just now.
+
+Thanks a lot for all your effort into this
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Sep 14 11:30:44 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 14 Sep 2022 13:30:44 +0200
+Subject: Autopkgtest of r-bioc-gsva fails on Salsa CI
+Message-ID: <YyG7ZJi+MWEn7Yay@an3as.eu>
+
+Hi,
+
+I've just realised that autopkgtest of r-bioc-gsva fails with:
+
+...
+Error in as(m, "dMatrix") : 
+  no method or default for coercing “matrix” to “dMatrix”
+In addition: Warning messages:
+1: In .local(expr, gset.idx.list, ...) :
+  Using 'HDF5Array' objects as input is still in an experimental stage.
+2: In .gsva(expr, mapped.gset.idx.list, method, kcdf, rnaseq, abs.ranking,  :
+  Using 'DelayedArray' objects as input is still in an experimental stage.
+3: Argument 'center' should be of the same length as number of rows of 'x'. Use of a scalar value is deprecated: 1 != 1000 
+4: In .local(expr, gset.idx.list, ...) :
+  Using 'HDF5Array' objects as input is still in an experimental stage.
+5: In .gsva(expr, mapped.gset.idx.list, method, kcdf, rnaseq, abs.ranking,  :
+  Using 'DelayedArray' objects as input is still in an experimental stage.
+6: Argument 'center' should be of the same length as number of rows of 'x'. Use of a scalar value is deprecated: 1 != 1000 
+7: In .local(expr, gset.idx.list, ...) :
+  Using 'HDF5Array' objects as input is still in an experimental stage.
+8: In .gsva(expr, mapped.gset.idx.list, method, kcdf, rnaseq, abs.ranking,  :
+  Using 'DelayedArray' objects as input is still in an experimental stage.
+9: In .local(expr, gset.idx.list, ...) :
+  Using 'dgCMatrix' objects as input is still in an experimental stage.
+[1] "Calculating ranks..."
+[1] "Calculating absolute values from ranks..."
+[1] "Normalizing..."
+RUNIT TEST PROTOCOL -- Wed Sep 14 07:11:01 2022 
+*********************************************** 
+Number of test functions: 4 
+Number of errors: 1 
+
+Feel free to check the full log[1].
+
+I'm not sure whether this is an hdf5 issue or something else.
+Any idea how to fix this before asking upstream?
+
+Kind regards
+
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-gsva/-/jobs/3234485
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Wed Sep 14 13:23:47 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 14 Sep 2022 15:23:47 +0200
+Subject: Re: Autopkgtest of r-bioc-gsva fails on Salsa CI
+In-Reply-To: <YyG7ZJi+MWEn7Yay@an3as.eu>
+References: <YyG7ZJi+MWEn7Yay@an3as.eu>
+Message-ID: <CAM8zJQvHGnEHahsNoYSA3N9KFtH-afjKyj_KBj2O3Cv-q1vgXQ@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 14 Sept 2022 at 13:31, Andreas Tille <andreas at an3as.eu> wrote:
+> I'm not sure whether this is an hdf5 issue or something else.
+> Any idea how to fix this before asking upstream?
+
+Well it passes in unstable right now [1], and there's a new version of
+hdf5 in unstable [2] that is blocked from migrating.
+Does r-bioc-gsva miss somehow a dependency against the version of hdf5
+it was built against?
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-bioc-gsva/unstable/amd64/
+[2] https://tracker.debian.org/pkg/hdf5
+
+From nilesh at debian.org  Wed Sep 14 14:36:59 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 14 Sep 2022 20:06:59 +0530
+Subject: Re: Autopkgtest of r-bioc-gsva fails on Salsa CI
+In-Reply-To: <CAM8zJQvHGnEHahsNoYSA3N9KFtH-afjKyj_KBj2O3Cv-q1vgXQ@mail.gmail.com>
+References: <YyG7ZJi+MWEn7Yay@an3as.eu> <CAM8zJQvHGnEHahsNoYSA3N9KFtH-afjKyj_KBj2O3Cv-q1vgXQ@mail.gmail.com>
+Message-ID: <20220914143659.7porh2gfzlvnodg6@nileshpatra.info>
+
+On Wed, Sep 14, 2022 at 03:23:47PM +0200, Graham Inggs wrote:
+> On Wed, 14 Sept 2022 at 13:31, Andreas Tille <andreas at an3as.eu> wrote:
+> > I'm not sure whether this is an hdf5 issue or something else.
+> > Any idea how to fix this before asking upstream?
+> 
+> Well it passes in unstable right now [1], and there's a new version of
+> hdf5 in unstable [2] that is blocked from migrating.
+> Does r-bioc-gsva miss somehow a dependency against the version of hdf5
+> it was built against?
+
+If you look at the latest upstream commit[3]. Which makes changes in the code
+and corresponding test that is currently failing.
+It fixes something wrt Rmatrix 1.4-2 which I suppose is not backwards compatible with rmatrix versions.
+There is r-cran-matrix 1.5-1 uploaded today itself to unstable.
+
+However, both salsa CI and debci are building it against rmatrix 1.4-1-1 which is
+expected by debci because that's the rmatrix version in testing.
+Salsa CI would build it against version in unstable, but I guess src:rmatrix
+did not dinstall at the time that CI job ran.
+
+I added in a versioned-dep against rmatrix, and uploaded (after messsing it up in first upload :-S)
+and this change IMHO should fix the situation.
+However, I think that upstream should properly fix this in DESCRIPTION file.
+
+> [1] https://ci.debian.net/packages/r/r-bioc-gsva/unstable/amd64/
+> [2] https://tracker.debian.org/pkg/hdf5
+[3] https://github.com/rcastelo/GSVA/commit/b40777c510f3aff7c4bde662e466ebff1c8686c5
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Mon Sep 19 07:19:46 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 19 Sep 2022 09:19:46 +0200
+Subject: Re: Bug#1017966: lintian: Systematic false positives for source-is-missing in r-cran-* documentation
+In-Reply-To: <YyZXnLhLOKcbaU5m@riva.ucam.org>
+References: <166123582390.984417.6272744556891409580.reportbug@sputnik> <YyZXnLhLOKcbaU5m@riva.ucam.org>
+Message-ID: <YygYEkhEzK/4tprQ@an3as.eu>
+
+Am Sun, Sep 18, 2022 at 12:26:20AM +0100 schrieb Colin Watson:
+> On Tue, Aug 23, 2022 at 08:23:43AM +0200, Andreas Tille wrote:
+> > lintian is doing a check for overlong lines to guess for included
+> > JavaScript in html pages (and may be more).  I now realised that several
+> > R packages are including
+> > 
+> >    img src="data:image/png;base64
+> > 
+> > images that were generated by the source of the documentation which is
+> > always shipped with these docs.  For example see the documentation of
+> > r-cran-patchwork[1].  It would be great if lintian would not report
+> > these false positives since the source is provided by upstream and the
+> > html file can be re-generated by an automated process.
+> 
+> I think this may be https://bugs.debian.org/1019980, but I filed that
+> separately just in case I'm wrong.
+
+I do not think that the issue of included data:image/png is the same as
+included compressed JS.  I admit I don't mind much if those lots of
+false positives in R packages could be avoided.
+
+Its just a fact that all html documentation that comes in R packages is
+accompanied by an Rmd file with the same name.  The html file that is
+rendered with tools that are packaged in Debian and thus could be
+reproduced might contain data:image/png, compressed JS (that could also
+be obtained from Debian packaged JS) or simply some lines that are
+unusually long.
+
+It would be great if this could be somehow expressed in lintian to
+avoid false positives.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep 22 04:58:22 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 22 Sep 2022 06:58:22 +0200
+Subject: =?utf-8?b?UmU6IEJ1ZyMxMDIwMDQ5OiByLWNyYW4taGRmNXI6IEZUQkZTOiBkYXRhdHlwZV9leHBvcnQuYzoxOTAzOjE5OiBlcnJvcjogc3RvcmFnZSBzaXplIG9mIOKAmG15ZW51beKAmSBpc27igJl0IGtub3du?=
+In-Reply-To: <Yya5A+C7pD0vcx/U@xanadu.blop.info>
+References: <Yya5A+C7pD0vcx/U@xanadu.blop.info>
+Message-ID: <YyvrbuX/XhfaLdjN@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 https://github.com/hhoeflin/hdf5r/issues/192
+
+Am Sun, Sep 18, 2022 at 08:21:55AM +0200 schrieb Lucas Nussbaum:
+> > gcc -I"/usr/share/R/include" -DNDEBUG -I/usr/include/hdf5/serial    -D__USE_MINGW_ANSI_STDIO   -fpic  -g -O2 -ffile-prefix-map=/build/r-base-J8F88F/r-base-4.2.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c datatype_export.c -o datatype_export.o
+> > datatype_export.c: In function ‘create_DT_H5R_type_t’:
+> > datatype_export.c:1903:19: error: storage size of ‘myenum’ isn’t known
+> >  1903 |   enum H5R_type_t myenum;
+> >       |                   ^~~~~~
+> > datatype_export.c:1904:41: error: invalid application of ‘sizeof’ to incomplete type ‘enum H5R_type_t’
+> >  1904 |   hid_t base_type = get_h5_equiv(sizeof(enum H5R_type_t), issigned(enum H5R_type_t));
+> >       |                                         ^~~~
+> > In file included from datatype_export.c:20:
+> > datatype_export.c:1904:73: error: conversion to incomplete type
+> >  1904 |   hid_t base_type = get_h5_equiv(sizeof(enum H5R_type_t), issigned(enum H5R_type_t));
+> >       |                                                                         ^~~~~~~~~~
+> > datatype_export.h:29:24: note: in definition of macro ‘issigned’
+> >    29 | #define issigned(t) (((t)(-1)) < 0)
+> >       |                        ^
+> > make[1]: *** [/usr/lib/R/etc/Makeconf:168: datatype_export.o] Error 1
+
+I have forwarded this upstream.
+
+Kind regards
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep 22 07:05:50 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 22 Sep 2022 09:05:50 +0200
+Subject: =?utf-8?b?W25vdGlmaWNhdGlvbnMgYXQgZ2l0aHViLmNvbTogUmU6IFtoaG9lZmxpbi9oZGY1cl0gZGF0YXR5cGVfZXhwb3J0LmM6MTkwMzoxOTogZXJyb3I6IHN0b3JhZ2Ugc2l6ZSBvZiDigJhteWVudW3igJkgaXNu4oCZdCBrbm93biAoSXNzdWUgIzE5Mild?=
+Message-ID: <YywJTta7pWcQinGx@an3as.eu>
+
+Control: tags -1 help
+
+----- Weitergeleitete Nachricht von Holger Hoefling <notifications at github.com> -----
+
+Date: Wed, 21 Sep 2022 23:17:30 -0700
+From: Holger Hoefling <notifications at github.com>
+To: hhoeflin/hdf5r <hdf5r at noreply.github.com>
+Cc: Andreas Tille <tille at debian.org>, Author <author at noreply.github.com>
+Subject: Re:  [hhoeflin/hdf5r] datatype_export.c:1903:19: error: storage size of ‘myenum’ isn’t known (Issue #192)
+
+I have very little time to maintain this project as I am not using it myself anymore. Happy to merge a PR.
+
+-- 
+Reply to this email directly or view it on GitHub:
+https://github.com/hhoeflin/hdf5r/issues/192#issuecomment-1254576292
+You are receiving this because you authored the thread.
+
+Message ID: <hhoeflin/hdf5r/issues/192/1254576292 at github.com>
+
+----- Ende weitergeleitete Nachricht -----
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Sep 22 08:38:42 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 22 Sep 2022 14:08:42 +0530
+Subject: =?utf-8?b?UmU6IFtub3RpZmljYXRpb25zIGF0IGdpdGh1Yi5jb206IFJlOiBbaGhvZWZsaW4vaGRmNXJdIGRhdGF0eXBlX2V4cG9ydC5jOjE5MDM6MTk6IGVycm9yOiBzdG9yYWdlIHNpemUgb2Yg4oCYbXllbnVt4oCZIGlzbuKAmXQga25vd24gKElzc3VlICMxOTIpXQ==?=
+In-Reply-To: <YywJTta7pWcQinGx@an3as.eu>
+References: <YywJTta7pWcQinGx@an3as.eu>
+Message-ID: <20220922083842.niqsuovo52mtpygr@nileshpatra.info>
+
+On Thu, Sep 22, 2022 at 09:05:50AM +0200, Andreas Tille wrote:
+> Control: tags -1 help
+
+I pushed something to salsa that makes things work atleast locally for
+me however if my patch does a sensible thing.
+
+As far as I checked the hdf5 code, I am seeing "H5R_type_t" to be already
+an enum, and I am not sure why this is defined again as enum.
+
+I also looked at the previous snapshot and there, I do not see an enum
+attached to this keyword, see here[1]
+I'd appreciate if you/someone can take a look and let me know if this is a sensible
+patch or I opened a can of worms instead.
+
+[1]: https://github.com/hhoeflin/hdf5r/blob/master/src/1_10_0/datatype_export.c#L1867
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From owner at bugs.debian.org  Fri Sep 23 13:33:05 2022
+From: owner at bugs.debian.org (Debian Bug Tracking System)
+Date: Fri, 23 Sep 2022 13:33:05 +0000
+Subject: =?utf-8?q?Bug=231020049=3A_marked_as_done_=28r-cran-hdf5r=3A_FTBFS=3A_datatype=5Fexport=2Ec=3A1903=3A19=3A_error=3A_storage_size_of_=E2=80=98myenum=E2=80=99_isn=E2=80=99t_known=29?=
+References: <E1obijE-00HPTz-SE@fasolo.debian.org> <Yya5A+C7pD0vcx/U@xanadu.blop.info>
+Message-ID: <handler.1020049.D1020049.166393971317844.ackdone@bugs.debian.org>
+
+Your message dated Fri, 23 Sep 2022 13:28:28 +0000
+with message-id <E1obijE-00HPTz-SE at fasolo.debian.org>
+and subject line Bug#1020049: fixed in r-cran-hdf5r 1.3.6+dfsg-1
+has caused the Debian Bug report #1020049,
+regarding r-cran-hdf5r: FTBFS: datatype_export.c:1903:19: error: storage size of ‘myenum’ isn’t known
+to be marked as done.
+
+This means that you claim that the problem has been dealt with.
+If this is not the case it is now your responsibility to reopen the
+Bug report if necessary, and/or fix the problem forthwith.
+
+(NB: If you are a system administrator and have no idea what this
+message is talking about, this may indicate a serious mail system
+misconfiguration somewhere. Please contact owner at bugs.debian.org
+immediately.)
+
+-- 
+1020049: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1020049
+Debian Bug Tracking System
+Contact owner at bugs.debian.org with problems
+> --- Begin Message ---
+>
+> To: submit at bugs.debian.org
+>
+> Subject: r-cran-hdf5r: FTBFS: datatype_export.c:1903:19: error: storage size of ‘myenum’ isn’t known
+>
+> From: Lucas Nussbaum <lucas at debian.org>
+>
+> Date: Sun, 18 Sep 2022 08:21:55 +0200
+>
+> Message-id: <Yya5A+C7pD0vcx/U at xanadu.blop.info>
+>
+>
+> Source: r-cran-hdf5r
+> Version: 1.3.5+dfsg-1
+> Severity: serious
+> Justification: FTBFS
+> Tags: bookworm sid ftbfs
+> User: lucas at debian.org
+> Usertags: ftbfs-20220917 ftbfs-bookworm
+>
+> Hi,
+>
+> During a rebuild of all packages in sid, your package failed to build
+> on amd64.
+>
+>
+> Relevant part (hopefully):
+> > gcc -I"/usr/share/R/include" -DNDEBUG -I/usr/include/hdf5/serial    -D__USE_MINGW_ANSI_STDIO   -fpic  -g -O2 -ffile-prefix-map=/build/r-base-J8F88F/r-base-4.2.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c datatype_export.c -o datatype_export.o
+> > datatype_export.c: In function ‘create_DT_H5R_type_t’:
+> > datatype_export.c:1903:19: error: storage size of ‘myenum’ isn’t known
+> >  1903 |   enum H5R_type_t myenum;
+> >       |                   ^~~~~~
+> > datatype_export.c:1904:41: error: invalid application of ‘sizeof’ to incomplete type ‘enum H5R_type_t’
+> >  1904 |   hid_t base_type = get_h5_equiv(sizeof(enum H5R_type_t), issigned(enum H5R_type_t));
+> >       |                                         ^~~~
+> > In file included from datatype_export.c:20:
+> > datatype_export.c:1904:73: error: conversion to incomplete type
+> >  1904 |   hid_t base_type = get_h5_equiv(sizeof(enum H5R_type_t), issigned(enum H5R_type_t));
+> >       |                                                                         ^~~~~~~~~~
+> > datatype_export.h:29:24: note: in definition of macro ‘issigned’
+> >    29 | #define issigned(t) (((t)(-1)) < 0)
+> >       |                        ^
+> > make[1]: *** [/usr/lib/R/etc/Makeconf:168: datatype_export.o] Error 1
+>
+>
+> The full build log is available from:
+> http://qa-logs.debian.net/2022/09/17/r-cran-hdf5r_1.3.5+dfsg-1_unstable.log
+>
+> All bugs filed during this archive rebuild are listed at:
+> https://bugs.debian.org/cgi-bin/pkgreport.cgi?tag=ftbfs-20220917;users=lucas at debian.org
+> or:
+> https://udd.debian.org/bugs/?release=na&merged=ign&fnewerval=7&flastmodval=7&fusertag=only&fusertagtag=ftbfs-20220917&fusertaguser=lucas at debian.org&allbugs=1&cseverity=1&ctags=1&caffected=1#results
+>
+> A list of current common problems and possible solutions is available at
+> http://wiki.debian.org/qa.debian.org/FTBFS . You're welcome to contribute!
+>
+> If you reassign this bug to another package, please marking it as 'affects'-ing
+> this package. See https://www.debian.org/Bugs/server-control#affects
+>
+> If you fail to reproduce this, please provide a build log and diff it with mine
+> so that we can identify if something relevant changed in the meantime.
+>
+> --- End Message ---
+
+> --- Begin Message ---
+>
+> To: 1020049-close at bugs.debian.org
+>
+> Subject: Bug#1020049: fixed in r-cran-hdf5r 1.3.6+dfsg-1
+>
+> From: Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+>
+> Date: Fri, 23 Sep 2022 13:28:28 +0000
+>
+> Message-id: <E1obijE-00HPTz-SE at fasolo.debian.org>
+>
+> Reply-to: Nilesh Patra <nilesh at debian.org>
+>
+>
+> Source: r-cran-hdf5r
+> Source-Version: 1.3.6+dfsg-1
+> Done: Nilesh Patra <nilesh at debian.org>
+>
+> We believe that the bug you reported is fixed in the latest version of
+> r-cran-hdf5r, which is due to be installed in the Debian FTP archive.
+>
+> A summary of the changes between this version and the previous one is
+> attached.
+>
+> Thank you for reporting the bug, which will now be closed.  If you
+> have further comments please address them to 1020049 at bugs.debian.org,
+> and the maintainer will reopen the bug report if appropriate.
+>
+> Debian distribution maintenance software
+> pp.
+> Nilesh Patra <nilesh at debian.org> (supplier of updated r-cran-hdf5r package)
+>
+> (This message was generated automatically at their request; if you
+> believe that there is a problem with it please contact the archive
+> administrators by mailing ftpmaster at ftp-master.debian.org)
+>
+>
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA512
+>
+> Format: 1.8
+> Date: Fri, 23 Sep 2022 18:08:35 +0530
+> Source: r-cran-hdf5r
+> Architecture: source
+> Version: 1.3.6+dfsg-1
+> Distribution: unstable
+> Urgency: medium
+> Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+> Changed-By: Nilesh Patra <nilesh at debian.org>
+> Closes: 1020049
+> Changes:
+>  r-cran-hdf5r (1.3.6+dfsg-1) unstable; urgency=medium
+>  .
+>    [ Andreas Tille ]
+>    * Team upload.
+>    * New upstream version
+>    * Standards-Version: 4.6.1 (routine-update)
+>    * Reorder sequence of d/control fields by cme (routine-update)
+>  .
+>    [ Nilesh Patra ]
+>    * debian/p/fix-hdf.patch: Do not add a enum before H5R_type_t since
+>      the definition has changed in new hdf5 version (Closes: #1020049)
+> Checksums-Sha1:
+>  d8d3f41a1b6659ade4aa5a83130aea47abdd5507 2158 r-cran-hdf5r_1.3.6+dfsg-1.dsc
+>  4b2dc6b15de1e502034efe2681771191cdd6ad82 1230976 r-cran-hdf5r_1.3.6+dfsg.orig.tar.xz
+>  66490a99c5a5c7e5743bcd215a4680864e38ecd1 4880 r-cran-hdf5r_1.3.6+dfsg-1.debian.tar.xz
+>  74e400579046d4e7bcaca4e8c5ae8ad27f60f8f3 11265 r-cran-hdf5r_1.3.6+dfsg-1_amd64.buildinfo
+> Checksums-Sha256:
+>  e9d571d76cafbad118ecf79d4b7fcad719e863eb8636ae77a97381822425141c 2158 r-cran-hdf5r_1.3.6+dfsg-1.dsc
+>  9f390271b55d2e3308f7408708f4a772dbc5ac8b9ae4ca8311808e5f12326d66 1230976 r-cran-hdf5r_1.3.6+dfsg.orig.tar.xz
+>  83e595bfd53714e9495bf1f9f3b86802ef476cb95e5ac6ebc670e469a1edf3d4 4880 r-cran-hdf5r_1.3.6+dfsg-1.debian.tar.xz
+>  304ec8a8a6b193eb4c76e01879b3107402e9932eea8f829e3d8cf507c87490e0 11265 r-cran-hdf5r_1.3.6+dfsg-1_amd64.buildinfo
+> Files:
+>  a08c30f05f9d797bd89646a7e18917d2 2158 gnu-r optional r-cran-hdf5r_1.3.6+dfsg-1.dsc
+>  6c800e5b187584e65351d16ba69bfe5d 1230976 gnu-r optional r-cran-hdf5r_1.3.6+dfsg.orig.tar.xz
+>  50ad5c242e899d6ec864cff25edce61e 4880 gnu-r optional r-cran-hdf5r_1.3.6+dfsg-1.debian.tar.xz
+>  19b2cc7d451de3c1bd73d37ea086ff89 11265 gnu-r optional r-cran-hdf5r_1.3.6+dfsg-1_amd64.buildinfo
+>
+> -----BEGIN PGP SIGNATURE-----
+>
+> iQJGBAEBCgAwFiEEPpmlJvXcwMu/HO6mALrnSzQzafEFAmMtqeYSHG5pbGVzaEBk
+> ZWJpYW4ub3JnAAoJEAC650s0M2nxyMIP/jbClrGgI8hTQYb9J/cZO81IBMwgVltE
+> KHvyFC3MXCmsX3jKHQVYv43jFTwL/rpvaHZbPuLFVlx7zjtyKza6mwUewK+ZShkD
+> cLfrkg+7cbKdFgL2ipM2ZbV4WYhBrpHiftPuBcKZgF/Iq7rH3eHnlUsLNFD5fBS7
+> Jdr4bNUSlUj6abbjkNhSK4x62Li5X/62xXQRCqiMF9DE0ExvGquENpyZS8bAIm4f
+> z69LA2doXmEdBwvTucYpWj3f1ZW/z4DytCRgeW/bgDGN54kWDZqyBx2dQ9KyvGzZ
+> +wJW8RPO5uvIVVvFWJFUlrfocBOx+AwaaAVjPgZ/vMTLABr0iD6TeXwF9hcDXrqc
+> 4QZxqoZA3oKcRcZt295lU5ijmlBxqv4HZDGFxTiHdLSRP7pnQLdybRkNNNnFzcQr
+> Qgp3RUg8vOh3foqxqanHhp24YavH+o5iwytq0zp3GemDNI/0Z6+BI+vSTCH6/Iwu
+> Ldu+3bY/1mqblLut7+p/oLiDsmmGCS21DK6csCqHZhMrGN98MUUSqKXwZNx9gLEV
+> 7ZzpkEEePhenKyl9qTJGYgfExYPwHMverldDsZdcS7m+s/yFHxz3syuidiEmjSQI
+> ovx6fFMFm9VSDJDcVaJ+op983BpxpiEyoWDnmL2/ZypCwHCN4CRhdDbwEzx2Rwch
+> J9N+xJsyW7Lq
+> =WI8k
+> -----END PGP SIGNATURE-----
+> --- End Message ---
+

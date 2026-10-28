@@ -1,0 +1,301 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2025-09",
+  "messages": [
+    {
+      "id": "msg-08d974f38cf4",
+      "message_id": "<OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-10T00:20:02Z",
+      "subject": "Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "subject_clean": "Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Release team,\n\nthanks for Trixie, I enjoy it at home and at work, from where I send this email.\n\nI am sorry that we could not fix for #1111758 on time for Trixie. I wonder what is the next step.  Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload? One more solution is just to ignore the issue, since the patch\n is basically putting the dust under the carpet…\n\nHere is the debdiff.\n\ndiff -Nru r-bioc-beachmat-2.22.0+ds/debian/changelog r-bioc-beachmat-2.22.0+ds/debian/changelog\n\n--- r-bioc-beachmat-2.22.0+ds/debian/changelog  2025-01-13 05:38:05.000000000 +0900\n\n+++ r-bioc-beachmat-2.22.0+ds/debian/changelog  2025-08-28 01:16:33.000000000 +0900\n\n@@ -1,3 +1,11 @@\n\n+r-bioc-beachmat (2.22.0+ds-3) unstable; urgency=medium\n\n+\n\n+  * Team upload.\n\n+  * Patch up part of a test that depends on the \"beachmat.hdf5\" R\n\n+    package, which is not yet in Debian. Closes: #1111758\n\n+\n\n+ -- Michael R. Crusoe <crusoe at debian.org>  Wed, 27 Aug 2025 18:16:33 +0200\n\n+\n\n r-bioc-beachmat (2.22.0+ds-2) unstable; urgency=medium\n\n \n\n   * Team upload.\n\ndiff -Nru r-bioc-beachmat-2.22.0+ds/debian/patches/series r-bioc-beachmat-2.22.0+ds/debian/patches/series\n\n--- r-bioc-beachmat-2.22.0+ds/debian/patches/series   1970-01-01 09:00:00.000000000 +0900\n\n+++ r-bioc-beachmat-2.22.0+ds/debian/patches/series   2025-08-27 22:43:00.000000000 +0900\n\n@@ -0,0 +1 @@\n\n+skip-missing-beachmat.hdf5\n\ndiff -Nru r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5\n\n--- r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 1970-01-01 09:00:00.000000000 +0900\n\n+++ r-bioc-beachmat-2.22.0+ds/debian/patches/skip-missing-beachmat.hdf5 2025-08-27 22:44:00.000000000 +0900\n\n@@ -0,0 +1,15 @@\n\n+Author: Michael R. Crusoe <crusoe at debian.org>\n\n+Description: skip part of a test that depends on the unpackaged beachmat.hdf5\n\n+Forwarded: not-needed\n\n+--- r-bioc-beachmat.orig/tests/testthat/test-initializeCpp-other.R\n\n++++ r-bioc-beachmat/tests/testthat/test-initializeCpp-other.R\n\n+@@ -150,9 +150,6 @@\n\n+ \n\n+     ptr <- initializeCpp(mat2)\n\n+     am_i_ok(mat, ptr)\n\n+-\n\n+-    # Package is automatically loaded to expose the specialized methods. \n\n+-    expect_true(isNamespaceLoaded(\"beachmat.hdf5\"))\n\n+ })\n\n+ \n\n+ test_that(\"initialization works correctly with an unknown DelayedArray\", {\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Hi Release team,\n\nthanks for Trixie, I enjoy it at home and at work, from where I send this email.\n\nI am sorry that we could not fix for #1111758 on time for Trixie. I wonder what is the next step.  C",
+      "thread_id": "thread-08d974f38cf4",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-4a448040e385",
+      "message_id": "<a3619b17-fd5b-4480-ab98-b5ff6bc91f42@debian.org>",
+      "from_name": "Emilio Pozuelo Monfort",
+      "from_email_hash": "4b72ad0e344ec210668d1ebbf63b4c2824f7b6649f0e25498be315b10565da0d",
+      "date": "2025-09-10T07:36:41Z",
+      "subject": "Re: Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "subject_clean": "Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "in_reply_to": "<OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>",
+      "references": [
+        "<OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 10/09/2025 02:20, Charles Plessy wrote:\n> Hi Release team,\n>\n> thanks for Trixie, I enjoy it at home and at work, from where I send this email.\n>\n> I am sorry that we could not fix for #1111758 on time for Trixie. I wonder what is the next step.  Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload? One more solution is just to ignore the issue, since the patch is basically putting the dust under the carpet…\n>\n> Here is the debdiff.\n\nPlease file this as a trixie-pu bug, following the template from `reportbug \nrelease.debian.org', and attaching the debdiff there.\n\nCheers,\nEmilio",
+      "body_snippet": "Hi Charles,\n\nOn 10/09/2025 02:20, Charles Plessy wrote:\n> Hi Release team,\n>\n> thanks for Trixie, I enjoy it at home and at work, from where I send this email.\n>\n> I am sorry that we could not fix for",
+      "thread_id": "thread-08d974f38cf4",
+      "thread_depth": 1,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-e446c309f1d9",
+      "message_id": "<aMFOfTfZ3ZGJ336d@localhost>",
+      "from_name": "Adrian Bunk",
+      "from_email_hash": "9d2741bdd49ce4f56c2825a7eb7320d125d367817f0dee32ff64ba5cfb556287",
+      "date": "2025-09-10T10:10:05Z",
+      "subject": "Re: Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "subject_clean": "Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "in_reply_to": "<OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>",
+      "references": [
+        "<OS7P286MB3826BCDF4588B81421539032830EA@OS7P286MB3826.JPNP286.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "On Wed, Sep 10, 2025 at 12:20:02AM +0000, Charles Plessy wrote:\n> Hi Release team,\n\n[I am not a member of the release team]\n\n>...\n> Can you just migrate 2.22.0+ds-3 from Testing for the next point release, or do you need an upload?\n>...\n\nMigrating packages to (old)stable is not possible.\n\nThe way for getting 2.22.0+ds-3 into trixie would be to suggest an\nupdate with an additional changelog entry for 2.22.0+ds-3~deb13u1\n(similar to backports), including a debdiff comparing the source \ndifferences with the version currently in trixie.\n\n> Have a nice day,\n> \n> Charles\n\ncu\nAdrian",
+      "body_snippet": "On Wed, Sep 10, 2025 at 12:20:02AM +0000, Charles Plessy wrote:\n> Hi Release team,\n\n[I am not a member of the release team]\n\n>...\n> Can you just migrate 2.22.0+ds-3 from Testing for the next point rel",
+      "thread_id": "thread-08d974f38cf4",
+      "thread_depth": 1,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-866ebe851b5d",
+      "message_id": "<trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2025-09-11T12:37:49Z",
+      "subject": "r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "subject_clean": "r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nThe Apache arrow source tree has a subdirectory \"r\" in which is residing what constitutes the r-cran-arrow source tree. I want to generate the r-cran-arrow package from the very same source tree as arrow itself, but ran into some lintian errors\n\nE: r-cran-arrow: missing-dependency-on-libc needed by usr/lib/R/site-library/arrow/libs/arrow.so\nE: r-cran-arrow: requires-r-api\n\nthat I thought I could circumvent by properly using r-cran.mk.\n\nThat parses the DESCRIPTION file which should now be r/DESCRIPTION and maybe if the variables are already set then those should not be overridden. Here a first suggestion for a patch to r-cran.mk with a request for further discussion - and if you happen to know how to manually overcome those lintian errors then I would obviously also appreciate that :-)\n\n--- /usr/share/dh-r/r-cran.mk.orig      2025-09-11 13:21:18.681628060 +0100\n+++ /usr/share/dh-r/r-cran.mk   2025-09-11 13:26:57.445627215 +0100\n@@ -6,15 +6,16 @@\n\n include /usr/share/dpkg/default.mk\n\n-debRreposname  := $(shell echo $(DEB_SOURCE) | sed 's/r-\\([a-z]\\+\\)-.*/\\1/')\n+origRsubdir     ?= \"./\"\n+debRreposname  ?= $(shell echo $(DEB_SOURCE) | sed 's/r-\\([a-z]\\+\\)-.*/\\1/')\n # apply it to the upstream meta-info file DESCRIPTION (seems to be some helpful trick to keep the quoting)\n-cranNameOrig    := $(shell awk '/^(Package|Bundle):/ {print $$2 }' DESCRIPTION)\n+cranNameOrig    ?= $(shell awk '/^(Package|Bundle):/ {print $$2 }' ${origRsubdir}DESCRIPTION)\n # generate a lc version\n-cranName       := $(shell echo \"$(cranNameOrig)\" | tr A-Z a-z)\n-package                := r-$(debRreposname)-$(cranName)\n+cranName       ?= $(shell echo \"$(cranNameOrig)\" | tr A-Z a-z)\n+package                ?= r-$(debRreposname)-$(cranName)\n\n ## awk command to extract word after Priority\n-priority        := $(shell awk '/^Priority:/ {print tolower($$2) }' DESCRIPTION)\n+priority        := $(shell awk '/^Priority:/ {print tolower($$2) }' ${origRsubdir}DESCRIPTION)\n\n ifeq ($(priority),recommended)\n   debRdir      := usr/lib/R/library\n\nI think I am not subscribed to this list, please kindly CC me.\n\nBest,\nSteffen",
+      "body_snippet": "Hello,\n\nThe Apache arrow source tree has a subdirectory \"r\" in which is residing what constitutes the r-cran-arrow source tree. I want to generate the r-cran-arrow package from the very same source tr",
+      "thread_id": "thread-866ebe851b5d",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-220fd9ce33e3",
+      "message_id": "<26819.8396.166211.803917@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2025-09-11T19:19:40Z",
+      "subject": "Re: r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "subject_clean": "r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "in_reply_to": "<trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>",
+      "references": [
+        "<trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>"
+      ],
+      "body_plain": "Hi Steffen,\n\nQuick suggestion: as you need a one-off fix, can you start by just including\na local (and modified as below) copy of r-cran.mk and call that?  We are not\nrequired to all use the identical script...\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Steffen,\n\nQuick suggestion: as you need a one-off fix, can you start by just including\na local (and modified as below) copy of r-cran.mk and call that?  We are not\nrequired to all use the identical",
+      "thread_id": "thread-866ebe851b5d",
+      "thread_depth": 1,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-e5b226234b8c",
+      "message_id": "<175783640532.328997.12507541420680489840.reportbug@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2025-09-14T07:53:25Z",
+      "subject": "Bug#1115192: trixie-pu: package r-bioc-beachmat/2.22.0+ds-3~deb13u1",
+      "subject_clean": "Bug#1115192: trixie-pu: package r-bioc-beachmat/2.22.0+ds-3~deb13u1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nTags: trixie\nX-Debbugs-Cc: r-bioc-beachmat at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-beachmat\nUser: release.debian.org at packages.debian.org\nUsertags: pu\n\nHello,\n\nI am sorry that we could not fix for #1111758 on time for Trixie.  As we\ncan not migrate 2.22.0+ds-3 from Testing for the next point release, how\nabout an upload with the following debdiff?\n\n[ Checklist ]\n  [x] *all* changes are documented in the d/changelog\n  [x] I reviewed all changes and I approve them\n  [x] attach debdiff against the package in (old)stable\n  [x] the issue is verified as fixed in unstable\n\n[ Changes ]\n\nindex 068fccb..16ee884 100644\n--- a/debian/changelog\n+++ b/debian/changelog\n@@ -1,3 +1,13 @@\n+r-bioc-beachmat (2.22.0+ds-3~deb13u1) trixie; urgency=medium\n+\n+  * Team upload.\n+\n+  [ Michael R. Crusoe ]\n+  * Patch up part of a test that depends on the \"beachmat.hdf5\" R\n+    package, which is not yet in Debian. Closes: #1111758\n+\n+ -- Charles Plessy <plessy at debian.org>  Sun, 14 Sep 2025 16:38:29 +0900\n+\n r-bioc-beachmat (2.22.0+ds-2) unstable; urgency=medium\n \n   * Team upload.\ndiff --git a/debian/patches/series b/debian/patches/series\nnew file mode 100644\nindex 0000000..6183596\n--- /dev/null\n+++ b/debian/patches/series\n@@ -0,0 +1 @@\n+skip-missing-beachmat.hdf5\ndiff --git a/debian/patches/skip-missing-beachmat.hdf5 b/debian/patches/skip-missing-beachmat.hdf5\nnew file mode 100644\nindex 0000000..6dd66d2\n--- /dev/null\n+++ b/debian/patches/skip-missing-beachmat.hdf5\n@@ -0,0 +1,15 @@\n+Author: Michael R. Crusoe <crusoe at debian.org>\n+Description: skip part of a test that depends on the unpackaged beachmat.hdf5\n+Forwarded: not-needed\n+--- r-bioc-beachmat.orig/tests/testthat/test-initializeCpp-other.R\n++++ r-bioc-beachmat/tests/testthat/test-initializeCpp-other.R\n+@@ -150,9 +150,6 @@\n+ \n+     ptr <- initializeCpp(mat2)\n+     am_i_ok(mat, ptr)\n+-\n+-    # Package is automatically loaded to expose the specialized methods. \n+-    expect_true(isNamespaceLoaded(\"beachmat.hdf5\"))\n+ })\n+ \n+ test_that(\"initialization works correctly with an unknown DelayedArray\", {\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nTags: trixie\nX-Debbugs-Cc: r-bioc-beachmat at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-beac",
+      "thread_id": "thread-e5b226234b8c",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-cf857af321ba",
+      "message_id": "<trinity-33744c2b-6170-4403-bd2f-a429e76d4f89-1757842252456@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-97ls4>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2025-09-14T09:30:52Z",
+      "subject": "Aw: Re: r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "subject_clean": "Aw: Re: r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "in_reply_to": "<26819.8396.166211.803917@paul.eddelbuettel.com>",
+      "references": [
+        "<trinity-77708431-5004-4568-833c-88e717a3b3c0-1757594269567@trinity-msg-rest-gmx-gmx-live-646f7b8dfd-dnjlb>",
+        "<26819.8396.166211.803917@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\n> Gesendet: Donnerstag, 11. September 2025 um 21:19\n> Von: \"Dirk Eddelbuettel\" <edd at debian.org>\n>\n> Quick suggestion: as you need a one-off fix, can you start by just including\n> a local (and modified as below) copy of r-cran.mk and call that?  We are not\n> required to all use the identical script...\n> \n\nI like the idea. But then again, the package seems functional without\nanything included to arrow's d/rules, it is only that the variables\nin d/control are not substituted (like in particular  ${R:Depends}) and\nI do not want to set then manually.\n\nThe change of := to ?= in the r-cran.mk script I considered beneficial for all,\nso I put it here for an opportunity to discuss it. Am less confident about the\nsubdir. I think I would prefer some recursive Debian packaging, instead. Like,\nhave arrow/r/debian introduced and the packages it comes up with would show\nas packages within arrow/debian.\n\nMy motivation is the automated synchronicity between the R package and the main\nlibrary. Could imagine that other large projects would also benefit from that,\nthough.\n\nBest,\nSteffen\n\nFound out I _am_ subscribed to debian-r :)",
+      "body_snippet": "Hi Dirk,\n\n> Gesendet: Donnerstag, 11. September 2025 um 21:19\n> Von: \"Dirk Eddelbuettel\" <edd at debian.org>\n>\n> Quick suggestion: as you need a one-off fix, can you start by just including\n> a local ",
+      "thread_id": "thread-866ebe851b5d",
+      "thread_depth": 2,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-7e695614dbde",
+      "message_id": "<20d2bbd3-ec7b-4576-8eda-e9d627e2ea4f@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-21T23:54:36Z",
+      "subject": "Bug#1115928: RM: r-cran-assertive.base-- RoM; removed from CRAN",
+      "subject_clean": "Bug#1115928: RM: r-cran-assertive.base-- RoM; removed from CRAN",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\n\nr-cran-assertive.base was removed from CRAN for maintainer inactivity \nfor more than a year.  It has no reverse-dependencies in Debian; let's \nremove it too.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\n\nr-cran-assertive.base was removed from CRAN for maintainer inactivity \nfor more than a year.  It has no revers",
+      "thread_id": "thread-7e695614dbde",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-1171c03e62f5",
+      "message_id": "<7934cbc2-d65e-413a-9611-984085e4982b@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-23T23:57:57Z",
+      "subject": "Bug#1116121: RM: r-cran-discriminer -- RoM; removed from CRAN",
+      "subject_clean": "Bug#1116121: RM: r-cran-discriminer -- RoM; removed from CRAN",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning,\n\nlet's remove r-cran-discriminer: it has been removed from CRAN 3 years \nago, and no other Debian package depends on it.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning,\n\nlet's remove r-cran-discriminer: it has been removed from CRAN 3 years \nago, and no other Debian package depends on i",
+      "thread_id": "thread-1171c03e62f5",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-43e4f8ef2057",
+      "message_id": "<0e9aa2c4-f418-478a-9bb7-ff72bf858558@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-24T23:27:35Z",
+      "subject": "Bug#1116279: RM: r-cran-ffield -- RoM; removed from CRAN",
+      "subject_clean": "Bug#1116279: RM: r-cran-ffield -- RoM; removed from CRAN",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: r-cran-ffield\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning!\n\nlet's remove r-cran-ffield, it was removed from CRAN five years ago and \nhas no reverse dependencies.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: r-cran-ffield\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning!\n\nlet's remove r-cran-ffield, it was removed from CRAN five years ago and \nhas no reverse dependencies.\n\nHave a nice day",
+      "thread_id": "thread-43e4f8ef2057",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-80f3111f4580",
+      "message_id": "<0ddabd76-e740-44c2-b7a4-ea2819fcda56@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-26T01:24:33Z",
+      "subject": "Bug#1116347: RM: r-cran-fts -- RoM; removed from CRAN",
+      "subject_clean": "Bug#1116347: RM: r-cran-fts -- RoM; removed from CRAN",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning!\n\nr-cran-fts was removed from CRAN in 2022 and has no \nreverse-dependencies.  Let's remove it from Debian too.\n\nHave a nice week-end,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning!\n\nr-cran-fts was removed from CRAN in 2022 and has no \nreverse-dependencies.  Let's remove it from Debian too.\n\nHave a ",
+      "thread_id": "thread-80f3111f4580",
+      "thread_depth": 0,
+      "month": "2025-09"
+    },
+    {
+      "id": "msg-569a4a4ea012",
+      "message_id": "<da3e0aa6-276c-46b9-8cab-e72720865bb6@oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "04176b5d1d2c2ae997a8dfffdf79dfd706b6d5ff2ef87b9a1e8469da93f73506",
+      "date": "2025-09-28T23:53:37Z",
+      "subject": "Bug#1116603: RM: r-cran-geoknife -- RoM; removed from CRAN",
+      "subject_clean": "Bug#1116603: RM: r-cran-geoknife -- RoM; removed from CRAN",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning everybody!\n\nr-cran-geoknife was removed from CRAN last year at upstream's request, \nand has its autopkgtest timing out randomly.\n\nIt has no reverse dependencies, so let's remove it from Debian as well.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp\nOkinawa  Institute  of  Science  and  Technology  Graduate  University\nSenior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu\nToots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy",
+      "body_snippet": "Package: ftp.debian.org\nX-Debbugs-CC: debian-r at lists.debian.org\n\nGood morning everybody!\n\nr-cran-geoknife was removed from CRAN last year at upstream's request, \nand has its autopkgtest timing out ",
+      "thread_id": "thread-569a4a4ea012",
+      "thread_depth": 0,
+      "month": "2025-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-08d974f38cf4",
+      "subject": "Stable RC bug #1111758 (r-bioc-beachmat: autopkgtest regression)",
+      "message_count": 3,
+      "participants": [
+        "Adrian Bunk",
+        "Charles Plessy",
+        "Emilio Pozuelo Monfort"
+      ],
+      "started": "2025-09-10T00:20:02Z",
+      "last_reply": "2025-09-10T10:10:05Z",
+      "root_message_id": "msg-08d974f38cf4"
+    },
+    {
+      "id": "thread-866ebe851b5d",
+      "subject": "r-cran.mk: Allow R package source tree as a subtree of larger project",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Steffen Möller"
+      ],
+      "started": "2025-09-11T12:37:49Z",
+      "last_reply": "2025-09-14T09:30:52Z",
+      "root_message_id": "msg-866ebe851b5d"
+    },
+    {
+      "id": "thread-e5b226234b8c",
+      "subject": "Bug#1115192: trixie-pu: package r-bioc-beachmat/2.22.0+ds-3~deb13u1",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-14T07:53:25Z",
+      "last_reply": "2025-09-14T07:53:25Z",
+      "root_message_id": "msg-e5b226234b8c"
+    },
+    {
+      "id": "thread-7e695614dbde",
+      "subject": "Bug#1115928: RM: r-cran-assertive.base-- RoM; removed from CRAN",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-21T23:54:36Z",
+      "last_reply": "2025-09-21T23:54:36Z",
+      "root_message_id": "msg-7e695614dbde"
+    },
+    {
+      "id": "thread-1171c03e62f5",
+      "subject": "Bug#1116121: RM: r-cran-discriminer -- RoM; removed from CRAN",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-23T23:57:57Z",
+      "last_reply": "2025-09-23T23:57:57Z",
+      "root_message_id": "msg-1171c03e62f5"
+    },
+    {
+      "id": "thread-43e4f8ef2057",
+      "subject": "Bug#1116279: RM: r-cran-ffield -- RoM; removed from CRAN",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-24T23:27:35Z",
+      "last_reply": "2025-09-24T23:27:35Z",
+      "root_message_id": "msg-43e4f8ef2057"
+    },
+    {
+      "id": "thread-80f3111f4580",
+      "subject": "Bug#1116347: RM: r-cran-fts -- RoM; removed from CRAN",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-26T01:24:33Z",
+      "last_reply": "2025-09-26T01:24:33Z",
+      "root_message_id": "msg-80f3111f4580"
+    },
+    {
+      "id": "thread-569a4a4ea012",
+      "subject": "Bug#1116603: RM: r-cran-geoknife -- RoM; removed from CRAN",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2025-09-28T23:53:37Z",
+      "last_reply": "2025-09-28T23:53:37Z",
+      "root_message_id": "msg-569a4a4ea012"
+    }
+  ]
+}

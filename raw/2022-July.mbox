@@ -1,0 +1,86 @@
+From andreas at an3as.eu  Mon Jul 18 08:45:14 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 18 Jul 2022 10:45:14 +0200
+Subject: Please adjust StanHeaders to new version of (one)tbb
+Message-ID: <YtUdmngZvJYsBYEu@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Ben Goodrich <benjamin.goodrich at columbia.edu>
+
+Hi Ben,
+
+Debian is migrating from old tbb to onetbb (currently version 2021.5.0).  When
+trying to build rstan version 2.21.5 which includes StanHeaders we get the error
+you can find here in our CI:
+
+   https://salsa.debian.org/r-pkg-team/r-cran-rstan/-/jobs/3011219
+
+In file included from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core.hpp:4,
+                 from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/mat.hpp:6,
+                 from /usr/lib/R/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12,
+                 from ./stan/model/log_prob_grad.hpp:4,
+                 from ./stan/model/test_gradients.hpp:7,
+                 from ./stan/services/diagnose/diagnose.hpp:10,
+                 from stan_fit.cpp:33:
+/usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core/init_threadpool_tbb.hpp:9:10: fatal error: tbb/task_scheduler_init.h: No such file or directory
+    9 | #include <tbb/task_scheduler_init.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+It seems StanHeaders need to be adapted to onetbb.
+
+There is a tbb -> onetbb transition guide:
+https://oneapi-src.github.io/oneTBB/main/tbb_userguide/Migration_Guide.html
+
+Hope this helps
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sat Jul 30 19:53:38 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 30 Jul 2022 21:53:38 +0200
+Subject: Where can we find the source code for scatterD3.js
+Message-ID: <YuWMQkjNLm33RXnz@an3as.eu>
+
+Hi Julien,
+
+the Debian R packaging team has packaged scatterD3.  Since Debian is considering
+compressed JS as binary code without source we need to uncompressed source for
+this JavaScript file.  Could you please point us to this source?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sat Jul 30 20:09:13 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 30 Jul 2022 15:09:13 -0500
+Subject: Re: Where can we find the source code for scatterD3.js
+In-Reply-To: <YuWMQkjNLm33RXnz@an3as.eu>
+References: <YuWMQkjNLm33RXnz@an3as.eu>
+Message-ID: <25317.36841.22264.629628@rob.eddelbuettel.com>
+
+On 30 July 2022 at 21:53, Andreas Tille wrote:
+| the Debian R packaging team has packaged scatterD3.  Since Debian is considering
+| compressed JS as binary code without source we need to uncompressed source for
+| this JavaScript file.  Could you please point us to this source?
+
+The CRAN package in its DESCRIPTION file links to the GitHub repo. Which
+shows in
+                                      
+   https://github.com/juba/scatterD3#development-notes                                      
+
+how to bundle the (not in the package by design) source dir srcjs/ into a
+compacted file by using node / npm.  (Disclaimer: I know little JS myself)
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

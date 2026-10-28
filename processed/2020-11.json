@@ -1,0 +1,977 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2020-11",
+  "messages": [
+    {
+      "id": "msg-2de1c817f1d4",
+      "message_id": "<20201103110611.GG18308@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-11-03T11:06:11Z",
+      "subject": "Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "subject_clean": "Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "in_reply_to": "<CA+6XHwTVOmMMhZc8ijCJGnx=423Geg2hnuo2_zFUr74sjQ-GXw@mail.gmail.com>",
+      "references": [
+        "<CA+6XHwTVOmMMhZc8ijCJGnx=423Geg2hnuo2_zFUr74sjQ-GXw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nthere is a new dependency r-bioc-rhdf5filters[1] which needed some work\nto exclude code copies of Debian packaged libs.  The current packaging\nis *not* *finished* since the actual libraries are not properly linked.\nThere are also some failures in autopkgtest.\n\nAny volunteers?\n\nKind regards\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5filters\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nthere is a new dependency r-bioc-rhdf5filters[1] which needed some work\nto exclude code copies of Debian packaged libs.  The current packaging\nis *not* *finished* since the actual libraries are n",
+      "thread_id": "thread-2de1c817f1d4",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ed81ab2b7dcc",
+      "message_id": "<20201110075732.GE25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-11-10T07:57:32Z",
+      "subject": "Re: Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "subject_clean": "Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "in_reply_to": "<20201103110611.GG18308@an3as.eu>",
+      "references": [
+        "<CA+6XHwTVOmMMhZc8ijCJGnx=423Geg2hnuo2_zFUr74sjQ-GXw@mail.gmail.com>",
+        "<20201103110611.GG18308@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Nov 03, 2020 at 12:06:11PM +0100, Andreas Tille wrote:\n> there is a new dependency r-bioc-rhdf5filters[1] which needed some work\n> to exclude code copies of Debian packaged libs.  The current packaging\n> is *not* *finished* since the actual libraries are not properly linked.\n> There are also some failures in autopkgtest.\n\nI think my suspicion that r-bioc-rhdf5filters is not correct is proven\nby the fact that r-bioc-rhdf5 is stumbling in its test upon missing\nbzip2 and blosc - which is exactly what is introduced in\nr-bioc-rhdf5filters:\n\n> library(testthat)\n> library(rhdf5)\n> \n> test_check(\"rhdf5\")\n── 1. Failure: BZIP2 filter works when reading (@test_external_filters.R#49)  ──\nH5Dget_storage_size(did) is not strictly less than 4 * 2000. Difference: 0\n\n── 2. Failure: BLOSC filter works when reading (@test_external_filters.R#57)  ──\nH5Dget_storage_size(did) is not strictly less than 4 * 2000. Difference: 0\n\n── 3. Error: Failing to read BLOSC (@test_h5read.R#342)  ───────────────────────\nUnable to read dataset.\nNot all required filters available.\nMissing filters: blosc\nBacktrace:\n  1. testthat::expect_silent(h5read(blosc_file, \"dset\"))\n  9. rhdf5::h5read(blosc_file, \"dset\")\n 10. rhdf5:::h5readDataset(...)\n 11. base::tryCatch(...)\n 12. base:::tryCatchList(expr, classes, parentenv, handlers)\n 13. base:::tryCatchOne(expr, names, parentenv, handlers[[1L]])\n 14. value[[3L]](cond)\n\n── 4. Error: Failing to read BLOSC (@test_h5read.R#342)  ───────────────────────\nError in h5checktype(). H5Identifier not valid.\nBacktrace:\n  1. testthat::expect_silent(h5read(blosc_file, \"dset\"))\n  9. rhdf5::h5read(blosc_file, \"dset\")\n 10. rhdf5::H5Dclose(h5dataset)\n 11. rhdf5:::h5checktype(h5dataset, \"dataset\")\n\n══ testthat results  ═══════════════════════════════════════════════════════════\n[ OK: 776 | SKIPPED: 0 | WARNINGS: 0 | FAILED: 4 ]\n1. Failure: BZIP2 filter works when reading (@test_external_filters.R#49) \n2. Failure: BLOSC filter works when reading (@test_external_filters.R#57) \n3. Error: Failing to read BLOSC (@test_h5read.R#342) \n4. Error: Failing to read BLOSC (@test_h5read.R#342) \n\nError: testthat unit tests failed\nExecution halted\n\nI think we should clarify this before uploading r-bioc-rhdf5 with a\nbroken test which will prevent the migration.\n\nAny help would be welcome\n\n       Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Nov 03, 2020 at 12:06:11PM +0100, Andreas Tille wrote:\n> there is a new dependency r-bioc-rhdf5filters[1] which needed some work\n> to exclude code copies of Debian packaged libs.  The current ",
+      "thread_id": "thread-2de1c817f1d4",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-21b4151878e6",
+      "message_id": "<20201113103055.GE25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-11-13T10:30:55Z",
+      "subject": "Re: Bug#973407: Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "subject_clean": "Bug#973407: Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "in_reply_to": "<20201112195932.GC2014248@ramacher.at>",
+      "references": [
+        "<CA+6XHwTVOmMMhZc8ijCJGnx=423Geg2hnuo2_zFUr74sjQ-GXw@mail.gmail.com>",
+        "<20201103110611.GG18308@an3as.eu>",
+        "<20201110075732.GE25476@an3as.eu>",
+        "<20201112195932.GC2014248@ramacher.at>"
+      ],
+      "body_plain": "Hi Sebastian,\n\nOn Thu, Nov 12, 2020 at 08:59:32PM +0100, Sebastian Ramacher wrote:\n> > \n> > I think we should clarify this before uploading r-bioc-rhdf5 with a\n> > broken test which will prevent the migration.\n> \n> Is a fix for that issues in sight? Or should we consider removal of the\n> r-bioc-rhdf5 and its reverse dependencies to finish the transition once\n> r-bioc-genomicfiles, r-bioc-degreport, and r-bioc-dexseq have been\n> uploaded to finish the transition?\n\nI do not think that it is necessary to remove reverse dependencies.  The\nBioConductor transition is kind of a closed set of packages and it makes\nsense to have them migrated together.  But thanks for the idea anyway -\nwe might come back to this in case it takes longer than expected.\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sebastian,\n\nOn Thu, Nov 12, 2020 at 08:59:32PM +0100, Sebastian Ramacher wrote:\n> > \n> > I think we should clarify this before uploading r-bioc-rhdf5 with a\n> > broken test which will prevent the m",
+      "thread_id": "thread-21b4151878e6",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ee1b21fc70b8",
+      "message_id": "<CAJN1928oNJO5PLLnkjwFcndGrO6+782QLM0sZCxmH3bE1bnkig@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-13T11:16:47Z",
+      "subject": "[RFS] r-cran-psyphy",
+      "subject_clean": "[RFS] r-cran-psyphy",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-psyphy\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-psyphy\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-psyphy\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-psyphy\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-ee1b21fc70b8",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-6af1fce5eb50",
+      "message_id": "<CAJN1928CQqzo4r2JoF6a0NKyV0Z8cz7gs+r1BXxyrXY_KcpL8Q@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-13T11:27:34Z",
+      "subject": "[RFS] r-cran-rentrez",
+      "subject_clean": "[RFS] r-cran-rentrez",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-rentrez\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-rentrez\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-rentrez\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-rentrez\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-6af1fce5eb50",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-4a914701d522",
+      "message_id": "<CAJN19280RUHe2Zd2VMMBrqQSUSm34nmbDwsndwKqQbRUaYPFHQ@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-13T13:41:01Z",
+      "subject": "[RFS] r-cran-waldo",
+      "subject_clean": "[RFS] r-cran-waldo",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-waldo\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-waldo\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-waldo\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-waldo\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-4a914701d522",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-26a5d40372bb",
+      "message_id": "<CAJN192_BJei2z0+L5wDC_AQdbyv5OPzsvP=LdOaYDW1VqaKVeA@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-13T13:58:43Z",
+      "subject": "[RFS] r-cran-lava",
+      "subject_clean": "[RFS] r-cran-lava",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-lava\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-lava\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-lava\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-lava\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-26a5d40372bb",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-90125585c5df",
+      "message_id": "<1b170b68-e598-b220-7dca-e8926f26c008@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2020-11-13T14:16:58Z",
+      "subject": "done Re: [RFS] r-cran-waldo",
+      "subject_clean": "done Re: [RFS] r-cran-waldo",
+      "in_reply_to": "<CAJN19280RUHe2Zd2VMMBrqQSUSm34nmbDwsndwKqQbRUaYPFHQ@mail.gmail.com>",
+      "references": [
+        "<CAJN19280RUHe2Zd2VMMBrqQSUSm34nmbDwsndwKqQbRUaYPFHQ@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks!\n\nOn 13.11.20 14:41, Nilesh Patra wrote:\n> gbp clone --pristine-tar\n> https://salsa.debian.org/med-team/r-cran-waldo\n> <https://salsa.debian.org/med-team/r-cran-waldo>\n>\n> OR\n>\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-waldo\n>\n> Thanks and Regards\n> Nilesh",
+      "body_snippet": "Thanks!\n\nOn 13.11.20 14:41, Nilesh Patra wrote:\n> gbp clone --pristine-tar\n> https://salsa.debian.org/med-team/r-cran-waldo\n> <https://salsa.debian.org/med-team/r-cran-waldo>\n>\n> OR\n>\n> dcut dm --uid ",
+      "thread_id": "thread-4a914701d522",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-092bd6ad5dff",
+      "message_id": "<CAJN1929pnTDwDJu-pMZcCiDmfR3juOoonAf7crgMwqP0fTUgRA@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-13T18:25:11Z",
+      "subject": "[RFS] r-cran-colorspace",
+      "subject_clean": "[RFS] r-cran-colorspace",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-colorspace\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-colorspace\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/med-team/r-cran-colorspace\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-colorspace\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-092bd6ad5dff",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-41ebc6bfc258",
+      "message_id": "<42d8ae00-5eea-5e9f-45a2-28f35bfb6ea8@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2020-11-13T19:51:45Z",
+      "subject": "done Re: [RFS] r-cran-colorspace",
+      "subject_clean": "done Re: [RFS] r-cran-colorspace",
+      "in_reply_to": "<CAJN1929pnTDwDJu-pMZcCiDmfR3juOoonAf7crgMwqP0fTUgRA@mail.gmail.com>",
+      "references": [
+        "<CAJN1929pnTDwDJu-pMZcCiDmfR3juOoonAf7crgMwqP0fTUgRA@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks!\n\nOn 13.11.20 19:25, Nilesh Patra wrote:\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-colorspace",
+      "body_snippet": "Thanks!\n\nOn 13.11.20 19:25, Nilesh Patra wrote:\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-colorspace",
+      "thread_id": "thread-092bd6ad5dff",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-a60897efe545",
+      "message_id": "<CAJN192_cefyaddOBoGons9DSHGFDuuOvB_uXxS-T54mMU26oZA@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-16T18:34:50Z",
+      "subject": "[RFS] r-cran-recipes",
+      "subject_clean": "[RFS] r-cran-recipes",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "dcut dm --uid npatra974 at gmail.com --allow r-cran-recipes",
+      "body_snippet": "dcut dm --uid npatra974 at gmail.com --allow r-cran-recipes",
+      "thread_id": "thread-a60897efe545",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-07fa331d789b",
+      "message_id": "<eca8042b-71b0-962b-6a52-55413efbb73f@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2020-11-16T18:56:29Z",
+      "subject": "Done Re: [RFS] r-cran-recipes",
+      "subject_clean": "Done Re: [RFS] r-cran-recipes",
+      "in_reply_to": "<CAJN192_cefyaddOBoGons9DSHGFDuuOvB_uXxS-T54mMU26oZA@mail.gmail.com>",
+      "references": [
+        "<CAJN192_cefyaddOBoGons9DSHGFDuuOvB_uXxS-T54mMU26oZA@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks!\n\nOn 16.11.20 19:34, Nilesh Patra wrote:\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-recipes",
+      "body_snippet": "Thanks!\n\nOn 16.11.20 19:34, Nilesh Patra wrote:\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-recipes",
+      "thread_id": "thread-a60897efe545",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-dddc19de0f34",
+      "message_id": "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-17T04:20:59Z",
+      "subject": "Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have a couple of questions about packaging some software for debian that is dependent on both custom R and Python packages.\n\nFirst, what is the proper way to package such a project?  The python portion of the project is highly dependent on the R package I have created, but the R package stands on its own fairly well.  Would it make sense to package the R project on its own and then\n package the python code, listing the R package as a dependency for installation?  Alternatively, would it make more sense to just package everything together since it really does run best that way?  If I were to package both together, how would this look using\n debhelper?  Would a debian/rules file with the following two lines be acceptable?\n\ndh $@ --with python3 --buildsystem=pybuild\n\ndh $@ --with R --buildsystem=R\n\nSecond, the R package I am planning on distributing has some dependencies that are not available in\n the default apt repositories (lomb, msiseq, and deconstructsigs).  Do I need to package these for debian as well in order to deploy my project?  Is that something I can do without explicit permission from the original R package creators?  Alternatively, since\n I am testing all this in a ppa at the moment, can I upload the packages there without stepping on any toes?\n\nI greatly appreciate any help you are able to give.\n\nBen",
+      "body_snippet": "Hello,\n\nI have a couple of questions about packaging some software for debian that is dependent on both custom R and Python packages.\n\nFirst, what is the proper way to package such a project?  The pyt",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-03fffe25cbbf",
+      "message_id": "<20201117131559.GL25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-17T13:15:59Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nthanks for contacting the pkg-r team.\n\nOn Tue, Nov 17, 2020 at 04:20:59AM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> Hello,\n> \n> I have a couple of questions about packaging some software for debian that is dependent on both custom R and Python packages.\n> \n> First, what is the proper way to package such a project?  The python portion of the project is highly dependent on the R package I have created, but the R package stands on its own fairly well.  Would it make sense to package the R project on its own and then package the python code, listing the R package as a dependency for installation?  Alternatively, would it make more sense to just package everything together since it really does run best that way?  If I were to package both together, how would this look using debhelper?  Would a debian/rules file with the following two lines be acceptable?\n> \n> dh $@ --with python3 --buildsystem=pybuild\n> dh $@ --with R --buildsystem=R\n\nI admit I have not much inside into the project you have in mind.\nHowever, there is r-cran-fastcluster[1] you might want to have a look\nat.  I would not say thet there is a \"right or wrong\" solution - finally\nall install files need to end up in the proper location on users machine\nvia a set of *.deb packages.  But the solution in fastcluster looks\npretty sensible and easily readable to me.\n \n> Second, the R package I am planning on distributing has some dependencies that are not available in the default apt repositories (lomb, msiseq, and deconstructsigs).  Do I need to package these for debian as well in order to deploy my project?\n\nYes, definitely (see below how to approach this).\n\n> Is that something I can do without explicit permission from the original R package creators?\n\nIn Debian slang the authors of the R code are called \"upstream authors\".\nIt is considered polite to inform them about the attempt to package but\ngiven it is free software you do not need to ask for permission and\ngiven the amount of R packages it would be quite some work to always\ncontact upstream in advance.  Thus I do not do this and I guess most\nDebian packagers do the same except if there are reasons to talk to\nupstream (to apply patches, ask for help etc.)\n\n> Alternatively, since I am testing all this in a ppa at the moment, can I upload the packages there without stepping on any toes?\n\nYou can only upload Debian packages to ftp.debian.org when you have\nDebian Developer status.  However, you are perfectly able to do the\nmaintenance work and ask a Debian Developer here (at least five are\nreading this list) for sponsering your work.\n\nTo do so please register at\n\n     https://salsa.debian.org\n\nand ask for becoming a member of r-pkg-team.  This will give you\npermissions to push to our team scope on salsa.debian.org.  The\npreparation of R packages is very simple.  Just install the dh-r\npackage (at best from unstable/sid) and do\n\n    prepare_missing_cran_package lomb\n    prepare_missing_cran_package ...\n\nThis will create close to ready packaging repositories in\n\n    ../CRAN_prospective\n\nfrom the said package as well as all its not yet packaged dependencies.\nPlease verivy the \"FIXME\" inside debian/copyright and also make sure the\ndescription in debian/control makes sense.  Once you have created such\nrepositories there is some helper script\n\n    https://salsa.debian.org/med-team/community/helper-scripts/-/blob/master/inject-into-salsa-git\n\nJust call this script when you are in such a repository and it will push\nyour initial repository to salsa.d.o.  If you are happy with your\npackaging you can call itp_from_debian_dir[2] (I've just uploaded\ndh-r_20201117 where this script is also installed to /usr/bin since it\nis so established meanwhile.  Once this is done you can ask for\nsponsering your package here on the list.\n \n> I greatly appreciate any help you are able to give.\n\nHope this helps so far.  Feel free to keep on asking here on this list\nif something might remain unclear.\n\nKind regards\n\n     Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-fastcluster\n[2] https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/scripts/itp_from_debian_dir\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ben,\n\nthanks for contacting the pkg-r team.\n\nOn Tue, Nov 17, 2020 at 04:20:59AM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> Hello,\n> \n> I have a couple of questions about packaging some softw",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-5891b1cc3436",
+      "message_id": "<24499.61127.187073.435533@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-17T15:39:51Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nOn 17 November 2020 at 04:20, Morledge-Hampton, Benjamin Stuart wrote:\n| I have a couple of questions about packaging some software for debian that is dependent on both custom R and Python packages.\n\nCan you clarify what you mean by \"packaging\"? Creating a .deb (or set of\n.deb) for lab or company use (easy, common), or upload to Debian's repos\n(more formal requirements).\n \n| First, what is the proper way to package such a project?  The python portion of the project is highly dependent on the R package I have created, but the R package stands on its own fairly well.\n\nThat suggests a one-way dependency, no?\n\n| Would it make sense to package the R project on its own and then package the python code, listing the R package as a dependency for installation?  Alternatively, would it make more sense to just package everything together since it really does run best that way?  If I were to package both together, how would this look using debhelper?  Would a debian/rules file with the following two lines be acceptable?\n| \n| dh $@ --with python3 --buildsystem=pybuild\n| dh $@ --with R --buildsystem=R\n\nWhat you could also do is to have these two lines under two different targets\ncreating both an R package and a Python package and have the latter depend on\nthe former.\n \n| Second, the R package I am planning on distributing has some dependencies that are not available in the default apt repositories (lomb, msiseq, and deconstructsigs).  Do I need to package these for debian as well in order to deploy my project?  Is that something I can do without explicit permission from the original R package creators?  Alternatively, since I am testing all this in a ppa at the moment, can I upload the packages there without stepping on any toes?\n\nThat is related to question 1 above. Where do you plan to distribute this\nfrom?\n\nBut in a nutshell, if something is a dependency then yes it needs to be\npackaged too. That isn't really this hard.  Some of us have worked on various\n'cran2deb' iniatives for many (many) years; one very successful and active\ninitiative is Michael's PPAs for Ubuntu (currentlu ~ 4600 packages for three\ndistros).  Because CRAN is so rigorous and structured, it really generally is\njust a matter of running a simple script. And by keeping these outside of\nDebian you save a little on formalism and development time, but you of course\nreach fewer people. I sometimes still build local packages (accessible via\napt from Launchpad, or GitHub pages, ...) for CI use etc but I also maintain\na few dozen r-cran-* packages in the distro.\n\nHope this helps,  Dirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Ben,\n\nOn 17 November 2020 at 04:20, Morledge-Hampton, Benjamin Stuart wrote:\n| I have a couple of questions about packaging some software for debian that is dependent on both custom R and Python pa",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-3ab55381accc",
+      "message_id": "<BYAPR01MB388069AD1C1A5573CD5105C0CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-17T19:44:57Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<24499.61127.187073.435533@rob.eddelbuettel.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24499.61127.187073.435533@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "From: Dirk Eddelbuettel <edd at debian.org>\n\nSent: Tuesday, November 17, 2020 7:39 AM\n\nTo: Morledge-Hampton, Benjamin Stuart <b.morledge-hampton at wsu.edu>\n\nCc: debian-r at lists.debian.org <debian-r at lists.debian.org>\n\nSubject: Re: Packaging Hybrid R/Python Software\n \n\nHi Ben,\n\nOn 17 November 2020 at 04:20, Morledge-Hampton, Benjamin Stuart wrote:\n\n> | I have a couple of questions about packaging some software for debian that is dependent on both custom R and Python packages.\n>\n>\n>\n> Can you clarify what you mean by \"packaging\"? Creating a .deb (or set of\n>\n> .deb) for lab or company use (easy, common), or upload to Debian's repos\n>\n> (more formal requirements).\n\nMy current plan is to have the package accessible through a ppa.  I believe that means that I build the source files locally and then launchpad builds the .deb for distribution from those source files?  (I'm still new to a lot of this, so my understanding of\n the whole process is shaky at best.)  I wouldn't be opposed to uploading the package to Debian's repos, but I want to try to get it working in a more informal environment first.  Does that seem reasonable?\n\n> | First, what is the proper way to package such a project?  The python portion of the project is highly dependent on the R package I have created, but the R package stands on its own fairly well.\n>\n>\n>\n> That suggests a one-way dependency, no?\n>\n>\n>\n> | Would it make sense to package the R project on its own and then package the python code, listing the R package as a dependency for installation?  Alternatively, would it make more sense to just package everything together since it really does run best that\n>  way?  If I were to package both together, how would this look using debhelper?  Would a debian/rules file with the following two lines be acceptable?\n>\n> |\n>\n> | dh $@ --with python3 --buildsystem=pybuild\n>\n> | dh $@ --with R --buildsystem=R\n>\n>\n>\n> What you could also do is to have these two lines under two different targets\n>\n> creating both an R package and a Python package and have the latter depend on\n>\n> the former.\n\nGreat!  This is very helpful!  I will plan to create the R package as a dependency for the python package then. \n\n> | Second, the R package I am planning on distributing has some dependencies that are not available in the default apt repositories (lomb, msiseq, and deconstructsigs).  Do I need to package these for debian as well in order to deploy my project?  Is that something\n>  I can do without explicit permission from the original R package creators?  Alternatively, since I am testing all this in a ppa at the moment, can I upload the packages there without stepping on any toes?\n>\n>\n>\n> That is related to question 1 above. Where do you plan to distribute this\n>\n> from?\n>\n>\n>\n> But in a nutshell, if something is a dependency then yes it needs to be\n>\n> packaged too. That isn't really this hard.  Some of us have worked on various\n>\n> 'cran2deb' iniatives for many (many) years; one very successful and active\n>\n> initiative is Michael's PPAs for Ubuntu (currentlu ~ 4600 packages for three\n>\n> distros).  Because CRAN is so rigorous and structured, it really generally is\n>\n> just a matter of running a simple script. And by keeping these outside of\n>\n> Debian you save a little on formalism and development time, but you of course\n>\n> reach fewer people. I sometimes still build local packages (accessible via\n>\n> apt from Launchpad, or GitHub pages, ...) for CI use etc but I also maintain\n>\n> a few dozen r-cran-* packages in the distro.\n\nThank you.  This, in combination with Andreas's response give me a very good idea of how to proceed.\n\n> Hope this helps,  Dirk\n>\n>\n>\n> --\n>\n> https://urldefense.com/v3/__https://dirk.eddelbuettel.com__;!!JmPEgBY0HMszNaDT!-fNJXqfYBauF6AgMyyleeGIIK9LeOqQFNeCmAhcEA1m8dtOw9IHS8DugYf6beUmO97ma9Pc0$\n>  | @eddelbuettel | edd at debian.org\n\nIt really does help!  Thanks so much!  One final question:  Am I quoting/replying to this email in an acceptable manner based on what is common practice in these mailing lists?  This is the first time I have done anything more complex than just hitting\n \"reply\" on an email, and I want to make sure I am doing it correctly.",
+      "body_snippet": "From: Dirk Eddelbuettel <edd at debian.org>\n\nSent: Tuesday, November 17, 2020 7:39 AM\n\nTo: Morledge-Hampton, Benjamin Stuart <b.morledge-hampton at wsu.edu>\n\nCc: debian-r at lists.debian.org <debian-r",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-572a8371d572",
+      "message_id": "<24500.13319.59903.944150@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-17T20:35:19Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB388069AD1C1A5573CD5105C0CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24499.61127.187073.435533@rob.eddelbuettel.com>",
+        "<BYAPR01MB388069AD1C1A5573CD5105C0CEE20@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Ben,\n\nAs you asked: I am not sure what email software you use but your mail was\nbarely readable for me (on a Linux computer using primarily text based mail\nreaders).\n\nDo not separate block by colour -- invisible on a text reader. Use empty\nlines. And if possible don't use html mail.\n\nThanks, Dirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Ben,\n\nAs you asked: I am not sure what email software you use but your mail was\nbarely readable for me (on a Linux computer using primarily text based mail\nreaders).\n\nDo not separate block by colour -",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-5bbd2ccdf482",
+      "message_id": "<BYAPR01MB3880A30EC656546F1063BE99CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-17T23:07:02Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<24500.13319.59903.944150@rob.eddelbuettel.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24499.61127.187073.435533@rob.eddelbuettel.com>",
+        "<BYAPR01MB388069AD1C1A5573CD5105C0CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24500.13319.59903.944150@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Dirk,\n\n| As you asked: I am not sure what email software you use but your mail was\n\nbarely readable for me (on a Linux computer using primarily text based mail\n\nreaders).\n\n|\n\n| Do not separate block by colour -- invisible on a text reader. Use empty\n\nlines. And if possible don't use html mail.\n\nThank you for the reply.  I was trying to use the \"quote\" function on Outlook, but it appears that isn't the best option.  Does this look better? \n (Also, I apologize for bloating the mailing list with logistical emails like this, but hopefully this is the last one I will be sending.  I greatly appreciate the help.)\n\nBen",
+      "body_snippet": "Dirk,\n\n| As you asked: I am not sure what email software you use but your mail was\n\nbarely readable for me (on a Linux computer using primarily text based mail\n\nreaders).\n\n|\n\n| Do not separate block b",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 4,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ad55fe51ae35",
+      "message_id": "<24500.41201.33626.302860@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-18T04:20:01Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880A30EC656546F1063BE99CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24499.61127.187073.435533@rob.eddelbuettel.com>",
+        "<BYAPR01MB388069AD1C1A5573CD5105C0CEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<24500.13319.59903.944150@rob.eddelbuettel.com>",
+        "<BYAPR01MB3880A30EC656546F1063BE99CEE20@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "On 17 November 2020 at 23:07, Morledge-Hampton, Benjamin Stuart wrote:\n| Thank you for the reply.  I was trying to use the \"quote\" function on Outlook, but it appears that isn't the best option.  Does this look better?  (Also, I apologize for bloating the mailing list with logistical emails like this, but hopefully this is the last one I will be sending.  I greatly appreciate the help.)\n\nMuch better :)\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 17 November 2020 at 23:07, Morledge-Hampton, Benjamin Stuart wrote:\n| Thank you for the reply.  I was trying to use the \"quote\" function on Outlook, but it appears that isn't the best option.  Does",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 5,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ed9625b1c8c6",
+      "message_id": "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-18T06:38:00Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<20201117131559.GL25476@an3as.eu>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>"
+      ],
+      "body_plain": "Andreas,\n\nThis is extremely helpful!  Thank you so much.  I've had a chance to work with some of the tools you described, and I do have a couple of quick questions:\n\n| The preparation of R packages is very simple.  Just install the dh-r\n\npackage (at best from unstable/sid) and do\n\n|\n\n|    prepare_missing_cran_package lomb\n\n|    prepare_missing_cran_package ...\n\n|\n\n| This will create close to ready packaging repositories in\n\n|\n\n|    ../CRAN_prospective\n\n|\n\n| from the said package as well as all its not yet packaged dependencies.\n\nPlease verivy the \"FIXME\" inside debian/copyright and also make sure the\n\ndescription in debian/control makes sense.  Once you have created such\n\nrepositories there is some helper script\n\nI have run the function you described and noticed that it performed similarly to the dh-make-R command I was using previously.  Is this command invoking prepare_missing_cran_package at some point?  Is this an acceptable way to discover and package dependencies?  \n\nAlso, I have noticed that this process creates two directories in the ../CRAN_prospective directory for each dependency.  One is named simply after the dependency (e.g. \"lomb\") while the other seems to be named using the debian standard\n for R packages (e.g. \"r-cran-lomb\").  Adding to my confusion, the directory the simpler name contains what I would expect to be standard for building a debian package (i.e. the debian directory along with the usual R package structure), but the other directory\n only contains a .git directory.  What is the rationale behind the creation of both of these directories?  My inclination is to only use the one with the created debian directory and ignore the other, but I am concerned by the presence of this second directory. \n Am I meant to combine the directories somehow before running the script to push the repository to salsa?  My brief read-through of the script you sent me seems to indicate that this is the case.  (Though admittedly, I'm a bit of a novice when it comes to bash\n scripting, so I may be missing something)\n\nThanks again for all your help.  It means a lot to me.  I feel like I'm making real progress now on this project, and it's very exciting!\n\nBen",
+      "body_snippet": "Andreas,\n\nThis is extremely helpful!  Thank you so much.  I've had a chance to work with some of the tools you described, and I do have a couple of quick questions:\n\n| The preparation of R packages is",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-40b3f1749493",
+      "message_id": "<20201118065611.GT25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-18T06:56:11Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nOn Wed, Nov 18, 2020 at 06:38:00AM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> This is extremely helpful!  Thank you so much.  I've had a chance to work with some of the tools you described, and I do have a couple of quick questions:\n\nYou are welcome.\n \n> I have run the function you described and noticed that it performed similarly to the dh-make-R command I was using previously.  Is this command invoking prepare_missing_cran_package at some point?  Is this an acceptable way to discover and package dependencies?\n\nYes, prepare_missing_cran_package is a wrapper around dh-make-R.\n \n> Also, I have noticed that this process creates two directories in the ../CRAN_prospective directory for each dependency.  One is named simply after the dependency (e.g. \"lomb\") while the other seems to be named using the debian standard for R packages (e.g. \"r-cran-lomb\").\n\nThat's strange.  I tried to reproduce this here but I get only\nr-cran-lomb (which is the right one and should contain a Git repository\nincluding the debian/ dir).\n\n> Adding to my confusion, the directory the simpler name contains what I would expect to be standard for building a debian package (i.e. the debian directory along with the usual R package structure), but the other directory only contains a .git directory.  What is the rationale behind the creation of both of these directories?  My inclination is to only use the one with the created debian directory and ignore the other, but I am concerned by the presence of this second directory.  Am I meant to combine the directories somehow before running the script to push the repository to salsa?  My brief read-through of the script you sent me seems to indicate that this is the case.  (Though admittedly, I'm a bit of a novice when it comes to bash scripting, so I may be missing something)\n\nI tried to reproduce this an all went well.  I pushed the result to\n\n   https://salsa.debian.org/r-pkg-team/r-cran-lomb\n\nYou can see an example what needs to be changed in a manual commit.\nFeel free to add your user ID to the Uploaders field and send an\nITP for that package.\n\nSince you've read the script I would be really happy if you could\nadd some `set -x` and check where the problem might occure on your\nside.  There are no reports about that kind of failure before.\n \n> Thanks again for all your help.  It means a lot to me.  I feel like I'm making real progress now on this project, and it's very exciting!\n\nYou are welcome\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ben,\n\nOn Wed, Nov 18, 2020 at 06:38:00AM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> This is extremely helpful!  Thank you so much.  I've had a chance to work with some of the tools you descr",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-bdd5c684f75b",
+      "message_id": "<20201118110232.GZ25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-18T11:02:32Z",
+      "subject": "In rcdk test: An illegal reflective access operation has occurred",
+      "subject_clean": "In rcdk test: An illegal reflective access operation has occurred",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen creating the Debian package of rcdk I was running the provided\ntest suite.  All tests but one were running successfully.  This is\nthe message I've got for the failing test:\n\nExecuting test function test.get.properties  ... WARNING: An illegal reflective access operation has occurred\nWARNING: Illegal reflective access by RJavaTools to method java.util.Collections$UnmodifiableCollection$1.next()\nWARNING: Please consider reporting this to the maintainers of RJavaTools\nWARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations\nWARNING: All illegal access operations will be denied in a future release\n\nThis problem occures on Debian unstable.  Any idea what needs to be\ndone here?\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen creating the Debian package of rcdk I was running the provided\ntest suite.  All tests but one were running successfully.  This is\nthe message I've got for the failing test:\n\nExecuting test f",
+      "thread_id": "thread-bdd5c684f75b",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-41d0d1b0f96b",
+      "message_id": "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-18T21:06:51Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<20201118065611.GT25476@an3as.eu>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>"
+      ],
+      "body_plain": "> That's strange.  I tried to reproduce this here but I get only\n\nr-cran-lomb (which is the right one and should contain a Git repository\n\nincluding the debian/ dir).\n\nI've realized that my problems stemmed from running dh-make-R instead of prepare_missing_cran_package.  When I run the latter command, I get the desired behavior.  My apologies for not realizing this sooner.\n\n> You can see an example what needs to be changed in a manual commit.\n\nFeel free to add your user ID to the Uploaders field and send an\n\nITP for that package.\n\nThis was my first time filing an ITP.  I used the \"bugreport wnpp\" command and did my best to follow the prompts that were given to me to submit the ITP for r-cran-lomb.  I believe I filled in everything correctly, but to tell the truth, I'm not really sure\n how to tell for sure that everything is ok.  How will I know if I performed this process properly?  How long does it take for the package to be available to general users?\n\nAlso, do I need to credit you somewhere in the bug report since you initiated the repository?  Also, I did blatantly copy the long description you provided in the debian/control file for the ITP.  Is that alright?  I am willing to repeat\n this process for the other R packages my project depends on, but I'd also like to catch any mistakes I am making early on, rather than after I've repeated them for several packaging attempts :P\n\nFinally, is it reasonable for the moment to also upload these packages to my ppa so I can test whether or not they provide the required dependencies for my larger project?  I'll admit, I'm a little anxious to see results, and it would\n please me greatly if I could at least get my software to an installable state through my ppa.\n\nThanks again,\n\nBen",
+      "body_snippet": "> That's strange.  I tried to reproduce this here but I get only\n\nr-cran-lomb (which is the right one and should contain a Git repository\n\nincluding the debian/ dir).\n\nI've realized that my problems s",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 4,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-04bcb40b960c",
+      "message_id": "<20201119082400.GH25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-19T08:24:00Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>",
+        "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nOn Wed, Nov 18, 2020 at 09:06:51PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> > That's strange.  I tried to reproduce this here but I get only\n> r-cran-lomb (which is the right one and should contain a Git repository\n> including the debian/ dir).\n> \n> I've realized that my problems stemmed from running dh-make-R instead of prepare_missing_cran_package.  When I run the latter command, I get the desired behavior.  My apologies for not realizing this sooner.\n\nOK, good that this is settled.\n\n> > You can see an example what needs to be changed in a manual commit.\n> Feel free to add your user ID to the Uploaders field and send an\n> ITP for that package.\n> \n> This was my first time filing an ITP.  I used the \"bugreport wnpp\" command and did my best to follow the prompts that were given to me to submit the ITP for r-cran-lomb.  I believe I filled in everything correctly, but to tell the truth, I'm not really sure how to tell for sure that everything is ok.  How will I know if I performed this process properly?\n\nYou can check the bug page[1] and you should have received an e-mail\nthat the bug was created.  (As I said there is also a script\nitp_from_debian_dir which fills in all the questions for you when\ncalling in the Git repository - but from a pedagocial point of view its\ncorrect that you did this step at least once manually.)\n\n> How long does it take for the package to be available to general users?\n\nTo be clear here: We have just created a Git repository with the\npackaging.  From the existence of this repository *nothing* will happen.\nA Debian Developer (like me) needs to upload it to the new queue and\nthan we need to wait for the new processing by ftpmaster.  Currently\nthis takes about 1-3 days.\n\nBut if *you* want to be the maitainer of the package you need to get\na login on salsa.debian.org and become a member of the team.\n \n> Also, do I need to credit you somewhere in the bug report since you initiated the repository?\n\nCurrently there is my Copyright for the packaging (autoinjected) and I'm\nalso changelog owner and Uploader (in d/control).  I'd prefer if you add\nyourself to Uploaders if you intend to maintain this package.  You should\nalso insert the ITP bug number into d/changelog.  Once you have done this\nI will upload the package.\n\n> Also, I did blatantly copy the long description you provided in the debian/control file for the ITP.  Is that alright?\n\nYes sure.  The itp_from_debian_dir script is copying this verbosely.\n\n> I am willing to repeat this process for the other R packages my project depends on, but I'd also like to catch any mistakes I am making early on, rather than after I've repeated them for several packaging attempts :P\n\nThat was my point to deliver this example.  There is no need to worry\nabout copying stuff.  Finally everything was autogenerated.\n \n> Finally, is it reasonable for the moment to also upload these packages to my ppa so I can test whether or not they provide the required dependencies for my larger project?\n\nThat's your decision.  I'm not sure what you want to approach.  I think\nonce the package is officially available it is not the best idea to have\ncompeting packages hanging around.\n\n> I'll admit, I'm a little anxious to see results, and it would please me greatly if I could at least get my software to an installable state through my ppa.\n\nThere is no real conflict between your ppa and the Debian repository, IMHO.\n \nKind regards\n\n    Andreas.\n\n[1] https://bugs.debian.org/975091\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ben,\n\nOn Wed, Nov 18, 2020 at 09:06:51PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> > That's strange.  I tried to reproduce this here but I get only\n> r-cran-lomb (which is the right one and",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 5,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-d411495a4ea4",
+      "message_id": "<20201119133741.GL25476@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-19T13:37:41Z",
+      "subject": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "subject_clean": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Control: tags -1 help\n\nHi, since version 0.7.0 (uploaded by Dylan Aïssi in CC) the autopkgtest\nof r-cran-bayestestr fails with the error mentioned in the bug log.  It\nhas slightly changed with the version I pushed to Git.  It is now:\n\n> library(bayestestR)\n> \n> if (length(strsplit(packageDescription(\"bayestestR\")$Version, \"\\\\.\")[[1]]) > 3) {\n+   Sys.setenv(\"RunAllbayestestRTests\" = \"yes\")\n+ } else {\n+   Sys.setenv(\"RunAllbayestestRTests\" = \"no\")                                                                                                                                           o\n+ }                                                                                                                                                                                      n\n>                                                                                                                                                                                        s\n> test_check(\"bayestestR\")\n\n *** caught segfault ***                                                                                                                                                                  \naddress 0x7f9f3d27b008, cause 'invalid permissions'                                                                                                                                      n\n\nTraceback:\n 1: dyn.load(file, DLLpath = DLLpath, ...)\n 2: library.dynam(lib, package, package.lib)\n 3: loadNamespace(package, lib.loc)\n 4: doTryCatch(return(expr), name, parentenv, handler)\n 5: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n 6: tryCatchList(expr, classes, parentenv, handlers)\n 7: tryCatch({    attr(package, \"LibPath\") <- which.lib.loc    ns <- loadNamespace(package, lib.loc)    env <- attachNamespace(ns, pos = pos, deps, exclude, include.only)}, error = function(e) {    P <- if (!is.null(cc <- conditionCall(e)))         paste(\" in\", deparse(cc)[1L])    else \"\"    msg <- gettextf(\"package or namespace load failed for %s%s:\\n %s\",         sQuote(package), P, conditionMessage(e))    if (logical.return)         message(paste(\"Error:\", msg), domain = NA)    else stop(msg, call. = FALSE, domain = NA)})\n 8: library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,     warn.conflicts = warn.conflicts, quietly = quietly, mask.ok = mask.ok,     exclude = exclude, include.only = include.only, attach.required = attach.required)\n 9: doTryCatch(return(expr), name, parentenv, handler)\n10: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n11: tryCatchList(expr, classes, parentenv, handlers)\n12: tryCatch(library(package, lib.loc = lib.loc, character.only = TRUE,     logical.return = TRUE, warn.conflicts = warn.conflicts, quietly = quietly,     mask.ok = mask.ok, exclude = exclude, include.only = include.only,     attach.required = attach.required), error = function(e) e)\n13: require(\"rstanarm\")\n14: eval(code, test_env)\n15: eval(code, test_env)\n16: withCallingHandlers({    eval(code, test_env)    if (!handled && !is.null(test)) {        skip_empty()    }}, expectation = handle_expectation, skip = handle_skip, warning = handle_warning,     message = handle_message, error = handle_error)\n17: doTryCatch(return(expr), name, parentenv, handler)\n18: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n19: tryCatchList(expr, names[-nh], parentenv, handlers[-nh])\n20: doTryCatch(return(expr), name, parentenv, handler)                                                                                                                                   o\n21: tryCatchOne(tryCatchList(expr, names[-nh], parentenv, handlers[-nh]),     names[nh], parentenv, handlers[[nh]])                                                                      n\n22: tryCatchList(expr, classes, parentenv, handlers)                                                                                                                                     s\n23: tryCatch(withCallingHandlers({    eval(code, test_env)    if (!handled && !is.null(test)) {        skip_empty()    }}, expectation = handle_expectation, skip = handle_skip, warning = handle_warning,     message = handle_message, error = handle_error), error = handle_fatal,     skip = function(e) {    })\n24: test_code(NULL, exprs, env)                                                                                                                                                           \n25: source_file(path, child_env(env), wrap = wrap)                                                                                                                                       n\n26: FUN(X[[i]], ...)\n27: lapply(test_paths, test_one_file, env = env, wrap = wrap)\n28: force(code)\n29: doWithOneRestart(return(expr), restart)\n30: withOneRestart(expr, restarts[[1L]])\n31: withRestarts(testthat_abort_reporter = function() NULL, force(code))\n32: with_reporter(reporters$multi, lapply(test_paths, test_one_file,     env = env, wrap = wrap))\n33: test_files(test_dir = test_dir, test_package = test_package,     test_paths = test_paths, load_helpers = load_helpers, reporter = reporter,     env = env, stop_on_failure = stop_on_failure, stop_on_warning = stop_on_warning,     wrap = wrap, load_package = load_package)\n34: test_files(test_dir = path, test_paths = test_paths, test_package = package,     reporter = reporter, load_helpers = load_helpers, env = env,     stop_on_failure = stop_on_failure, stop_on_warning = stop_on_warning,     wrap = wrap, load_package = load_package, parallel = parallel)\n35: test_dir(\"testthat\", package = package, reporter = reporter,     ..., load_package = \"installed\")\n36: test_check(\"bayestestR\")\nAn irrecoverable exception occurred. R is aborting now ...\nSegmentation fault\nautopkgtest [10:57:07]: test run-unit-test: -----------------------]\nautopkgtest [10:57:07]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -\nrun-unit-test        FAIL non-zero exit status 139\nautopkgtest [10:57:07]: @@@@@@@@@@@@@@@@@@@@ summary\nrun-unit-test        FAIL non-zero exit status 139\n\nI do not have the slightest idea what this might mean.  If nobody has\nany clue we should probably ask upstream about this.\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\n\nHi, since version 0.7.0 (uploaded by Dylan Aïssi in CC) the autopkgtest\nof r-cran-bayestestr fails with the error mentioned in the bug log.  It\nhas slightly changed with the ver",
+      "thread_id": "thread-d411495a4ea4",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-80fd901ec8c6",
+      "message_id": "<24502.30914.936546.138165@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-19T13:53:06Z",
+      "subject": "Re: [Help] r-cran-bayestestr: autopkgtest regression",
+      "subject_clean": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "in_reply_to": "<20201119133741.GL25476@an3as.eu>",
+      "references": [
+        "<20201119133741.GL25476@an3as.eu>"
+      ],
+      "body_plain": "On 19 November 2020 at 14:37, Andreas Tille wrote:\n| Control: tags -1 help\n| \n| Hi, since version 0.7.0 (uploaded by Dylan Aïssi in CC) the autopkgtest\n| of r-cran-bayestestr fails with the error mentioned in the bug log.  It\n| has slightly changed with the version I pushed to Git.  It is now:\n| \n| \n| > library(bayestestR)\n| > \n| > if (length(strsplit(packageDescription(\"bayestestR\")$Version, \"\\\\.\")[[1]]) > 3) {\n| +   Sys.setenv(\"RunAllbayestestRTests\" = \"yes\")\n| + } else {\n| +   Sys.setenv(\"RunAllbayestestRTests\" = \"no\")                                                                                                                                           o\n| + }                                                                                                                                                                                      n\n| >                                                                                                                                                                                        s\n| > test_check(\"bayestestR\")\n| \n|  *** caught segfault ***                                                                                                                                                                  \n| address 0x7f9f3d27b008, cause 'invalid permissions'                                                                                                                                      n\n| \n| Traceback:\n|  1: dyn.load(file, DLLpath = DLLpath, ...)\n|  2: library.dynam(lib, package, package.lib)\n|  3: loadNamespace(package, lib.loc)\n|  4: doTryCatch(return(expr), name, parentenv, handler)\n|  5: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n|  6: tryCatchList(expr, classes, parentenv, handlers)\n|  7: tryCatch({    attr(package, \"LibPath\") <- which.lib.loc    ns <- loadNamespace(package, lib.loc)    env <- attachNamespace(ns, pos = pos, deps, exclude, include.only)}, error = function(e) {    P <- if (!is.null(cc <- conditionCall(e)))         paste(\" in\", deparse(cc)[1L])    else \"\"    msg <- gettextf(\"package or namespace load failed for %s%s:\\n %s\",         sQuote(package), P, conditionMessage(e))    if (logical.return)         message(paste(\"Error:\", msg), domain = NA)    else stop(msg, call. = FALSE, domain = NA)})\n|  8: library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,     warn.conflicts = warn.conflicts, quietly = quietly, mask.ok = mask.ok,     exclude = exclude, include.only = include.only, attach.required = attach.required)\n|  9: doTryCatch(return(expr), name, parentenv, handler)\n| 10: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n| 11: tryCatchList(expr, classes, parentenv, handlers)\n| 12: tryCatch(library(package, lib.loc = lib.loc, character.only = TRUE,     logical.return = TRUE, warn.conflicts = warn.conflicts, quietly = quietly,     mask.ok = mask.ok, exclude = exclude, include.only = include.only,     attach.required = attach.required), error = function(e) e)\n| 13: require(\"rstanarm\")\n| 14: eval(code, test_env)\n| 15: eval(code, test_env)\n| 16: withCallingHandlers({    eval(code, test_env)    if (!handled && !is.null(test)) {        skip_empty()    }}, expectation = handle_expectation, skip = handle_skip, warning = handle_warning,     message = handle_message, error = handle_error)\n| 17: doTryCatch(return(expr), name, parentenv, handler)\n| 18: tryCatchOne(expr, names, parentenv, handlers[[1L]])\n| 19: tryCatchList(expr, names[-nh], parentenv, handlers[-nh])\n| 20: doTryCatch(return(expr), name, parentenv, handler)                                                                                                                                   o\n| 21: tryCatchOne(tryCatchList(expr, names[-nh], parentenv, handlers[-nh]),     names[nh], parentenv, handlers[[nh]])                                                                      n\n| 22: tryCatchList(expr, classes, parentenv, handlers)                                                                                                                                     s\n| 23: tryCatch(withCallingHandlers({    eval(code, test_env)    if (!handled && !is.null(test)) {        skip_empty()    }}, expectation = handle_expectation, skip = handle_skip, warning = handle_warning,     message = handle_message, error = handle_error), error = handle_fatal,     skip = function(e) {    })\n| 24: test_code(NULL, exprs, env)                                                                                                                                                           \n| 25: source_file(path, child_env(env), wrap = wrap)                                                                                                                                       n\n| 26: FUN(X[[i]], ...)\n| 27: lapply(test_paths, test_one_file, env = env, wrap = wrap)\n| 28: force(code)\n| 29: doWithOneRestart(return(expr), restart)\n| 30: withOneRestart(expr, restarts[[1L]])\n| 31: withRestarts(testthat_abort_reporter = function() NULL, force(code))\n| 32: with_reporter(reporters$multi, lapply(test_paths, test_one_file,     env = env, wrap = wrap))\n| 33: test_files(test_dir = test_dir, test_package = test_package,     test_paths = test_paths, load_helpers = load_helpers, reporter = reporter,     env = env, stop_on_failure = stop_on_failure, stop_on_warning = stop_on_warning,     wrap = wrap, load_package = load_package)\n| 34: test_files(test_dir = path, test_paths = test_paths, test_package = package,     reporter = reporter, load_helpers = load_helpers, env = env,     stop_on_failure = stop_on_failure, stop_on_warning = stop_on_warning,     wrap = wrap, load_package = load_package, parallel = parallel)\n| 35: test_dir(\"testthat\", package = package, reporter = reporter,     ..., load_package = \"installed\")\n| 36: test_check(\"bayestestR\")\n| An irrecoverable exception occurred. R is aborting now ...\n| Segmentation fault\n| autopkgtest [10:57:07]: test run-unit-test: -----------------------]\n| autopkgtest [10:57:07]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -\n| run-unit-test        FAIL non-zero exit status 139\n| autopkgtest [10:57:07]: @@@@@@@@@@@@@@@@@@@@ summary\n| run-unit-test        FAIL non-zero exit status 139\n| \n| \n| I do not have the slightest idea what this might mean.\n\nABI/API slippage in the stack. An interface changed but a package didn't recompile.\n\n| If nobody has any clue we should probably ask upstream about this.\n\nThat risks making you look foolish as upstream is (once again) 100% clean at\nCRAN which is (to a first approximation) the only measure a CRAN author cares\nabout.  Copied and pasted from the results page [1] and lightly edited for\ncolumn alignment:\n\nCRAN Package Check Results for Package bayestestR\nLast updated on 2020-11-19 13:50:51 CET.\n\nFlavor\tVersion\tTinstall\t\tTcheck\tTtotal\tStatus\tFlags\nr-devel-linux-x86_64-debian-clang\t0.7.5\t12.67\t406.54\t419.21\tOK\t\nr-devel-linux-x86_64-debian-gcc\t\t0.7.5\t8.37\t295.67\t304.04\tOK\t\nr-devel-linux-x86_64-fedora-clang\t0.7.5\t\t\t498.86\tOK\t\nr-devel-linux-x86_64-fedora-gcc\t\t0.7.5\t\t\t487.49\tOK\t\nr-devel-windows-ix86+x86_64\t\t0.7.5\t16.00\t636.00\t652.00\tOK\t\nr-patched-linux-x86_64\t\t\t0.7.5\t12.72\t388.61\t401.33\tOK\t\nr-patched-solaris-x86\t\t\t0.7.5\t\t\t725.40\tOK\t\nr-release-linux-x86_64\t\t\t0.7.5\t12.04\t390.98\t403.02\tOK\t\nr-release-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\nr-release-windows-ix86+x86_64\t\t0.7.5\t13.00\t652.00\t665.00\tOK\t\nr-oldrel-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\nr-oldrel-windows-ix86+x86_64\t\t0.7.5\t11.00\t500.00\t511.00\tOK\n\n'OK' on every platform is as clean as it gets. It is an ambitious package\nwith a lot of Suggests. If you insist on loading all Suggests (which are,\nafter all, optional) then you simply have to make sure they are all\ncurrent. CRAN does that.  If you want to autotest you need to as well.\n\nDirk\n\n[1] https://cran.r-project.org/web/checks/check_results_bayestestR.html\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 19 November 2020 at 14:37, Andreas Tille wrote:\n| Control: tags -1 help\n| \n| Hi, since version 0.7.0 (uploaded by Dylan Aïssi in CC) the autopkgtest\n| of r-cran-bayestestr fails with the error ment",
+      "thread_id": "thread-d411495a4ea4",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-3e6a02d133fe",
+      "message_id": "<20201119180700.GB20188@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-11-19T18:07:00Z",
+      "subject": "Re: [Help] r-cran-bayestestr: autopkgtest regression",
+      "subject_clean": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "in_reply_to": "<24502.30914.936546.138165@rob.eddelbuettel.com>",
+      "references": [
+        "<20201119133741.GL25476@an3as.eu>",
+        "<24502.30914.936546.138165@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Control: tags 972074 pending\nControl: block 972074 by 963392\n\nOn Thu, Nov 19, 2020 at 07:53:06AM -0600, Dirk Eddelbuettel wrote:\n> | \n> | I do not have the slightest idea what this might mean.\n> \n> ABI/API slippage in the stack. An interface changed but a package didn't recompile.\n\nIt seems it is caused by r-cran-rstanarm which in turn has a test\nsuite issue itself:\n\n...\ng++ -std=gnu++14 -shared -L/usr/lib/R/lib -Wl,-z,relro -o sourceCpp_2.so file8f23649f86.o /usr/lib/R/site-library/rstan/lib/libStanServices.a -L/usr/lib/R/site-library/StanHeaders// -lStanHeaders -L/usr/lib/R/site-library/RcppParallel// -ltbb -L/usr/lib/R/lib -lR\n/usr/bin/ld: cannot find -lStanHeaders\ncollect2: error: ld returned 1 exit status\nmake: *** [/usr/share/R/share/make/shlib.mk:10: sourceCpp_2.so] Error 1\n── ERROR (test_stan_functions.R:70:1): (code run outside of `test_that()`) ─────\nError: $ operator is invalid for atomic vectors\nBacktrace:\n    █\n 1. └─rstan::expose_stan_functions(stanc_ret, rebuild = TRUE, verbose = TRUE) test_stan_functions.R:70:0\n\n══ testthat results  ═══════════════════════════════════════════════════════════\nERROR (test_stan_functions.R:70:1): (code run outside of `test_that()`)\n\n[ FAIL 1 | WARN 0 | SKIP 0 | PASS 1 ]\nError: Test failures\nExecution halted\n\nThis is actually the reason why r-cran-rstanarm 2.21.1 is in Git for\nseveral weeks but not uploaded yet.\n \n> | If nobody has any clue we should probably ask upstream about this.\n> \n> That risks making you look foolish as upstream is (once again) 100% clean at\n> CRAN which is (to a first approximation) the only measure a CRAN author cares\n> about.  Copied and pasted from the results page [1] and lightly edited for\n> column alignment:\n\nWe do not test the code provided by somebody else but what we package\nfor Debian.  You know we are sometimes replacing code copies you are\nyourself maintaining r-cran-bh which is something else than what is\nrunning on CRAN.  Thus I think its a sensible approach to test what we\npackage.\n \n> CRAN Package Check Results for Package bayestestR\n> Last updated on 2020-11-19 13:50:51 CET.\n> \n> Flavor\tVersion\tTinstall\t\tTcheck\tTtotal\tStatus\tFlags\n> r-devel-linux-x86_64-debian-clang\t0.7.5\t12.67\t406.54\t419.21\tOK\t\n> r-devel-linux-x86_64-debian-gcc\t\t0.7.5\t8.37\t295.67\t304.04\tOK\t\n> r-devel-linux-x86_64-fedora-clang\t0.7.5\t\t\t498.86\tOK\t\n> r-devel-linux-x86_64-fedora-gcc\t\t0.7.5\t\t\t487.49\tOK\t\n> r-devel-windows-ix86+x86_64\t\t0.7.5\t16.00\t636.00\t652.00\tOK\t\n> r-patched-linux-x86_64\t\t\t0.7.5\t12.72\t388.61\t401.33\tOK\t\n> r-patched-solaris-x86\t\t\t0.7.5\t\t\t725.40\tOK\t\n> r-release-linux-x86_64\t\t\t0.7.5\t12.04\t390.98\t403.02\tOK\t\n> r-release-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\n> r-release-windows-ix86+x86_64\t\t0.7.5\t13.00\t652.00\t665.00\tOK\t\n> r-oldrel-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\n> r-oldrel-windows-ix86+x86_64\t\t0.7.5\t11.00\t500.00\t511.00\tOK\n\nNot sure what information this table should provide to us.  The fact\nthat things are running on those other systems is great but does not\nanswer why it is not running for us. \n \n> 'OK' on every platform is as clean as it gets. It is an ambitious package\n> with a lot of Suggests. If you insist on loading all Suggests (which are,\n> after all, optional) then you simply have to make sure they are all\n> current. CRAN does that.  If you want to autotest you need to as well.\n\nIn most cases the error log was verbose about what is missing or what\nis not current.  My try with the latest r-cran-rstanarm (that fails its\nown test) shows that this is probably the cause for the test issue.\n\nKind regards\n\n     Andreas.\n \n> [1] https://cran.r-project.org/web/checks/check_results_bayestestR.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags 972074 pending\nControl: block 972074 by 963392\n\nOn Thu, Nov 19, 2020 at 07:53:06AM -0600, Dirk Eddelbuettel wrote:\n> | \n> | I do not have the slightest idea what this might mean.\n> \n> AB",
+      "thread_id": "thread-d411495a4ea4",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-7402f55491ce",
+      "message_id": "<24502.49152.914900.621809@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-19T18:57:04Z",
+      "subject": "Re: [Help] r-cran-bayestestr: autopkgtest regression",
+      "subject_clean": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "in_reply_to": "<20201119180700.GB20188@an3as.eu>",
+      "references": [
+        "<20201119133741.GL25476@an3as.eu>",
+        "<24502.30914.936546.138165@rob.eddelbuettel.com>",
+        "<20201119180700.GB20188@an3as.eu>"
+      ],
+      "body_plain": "On 19 November 2020 at 19:07, Andreas Tille wrote:\n| Control: tags 972074 pending\n| Control: block 972074 by 963392\n| \n| On Thu, Nov 19, 2020 at 07:53:06AM -0600, Dirk Eddelbuettel wrote:\n| > | \n| > | I do not have the slightest idea what this might mean.\n| > \n| > ABI/API slippage in the stack. An interface changed but a package didn't recompile.\n| \n| It seems it is caused by r-cran-rstanarm which in turn has a test\n| suite issue itself:\n\n[...]\n\n| > CRAN Package Check Results for Package bayestestR\n| > Last updated on 2020-11-19 13:50:51 CET.\n| > \n| > Flavor  Version\tTinstall\t\tTcheck\tTtotal\tStatus\tFlags\n| > r-devel-linux-x86_64-debian-clang\t0.7.5\t12.67\t406.54\t419.21\tOK\t\n| > r-devel-linux-x86_64-debian-gcc\t\t0.7.5\t8.37\t295.67\t304.04\tOK\t\n| > r-devel-linux-x86_64-fedora-clang\t0.7.5\t\t\t498.86\tOK\t\n| > r-devel-linux-x86_64-fedora-gcc\t\t0.7.5\t\t\t487.49\tOK\t\n| > r-devel-windows-ix86+x86_64\t\t0.7.5\t16.00\t636.00\t652.00\tOK\t\n| > r-patched-linux-x86_64\t\t\t0.7.5\t12.72\t388.61\t401.33\tOK\t\n| > r-patched-solaris-x86\t\t\t0.7.5\t\t\t725.40\tOK\t\n| > r-release-linux-x86_64\t\t\t0.7.5\t12.04\t390.98\t403.02\tOK\t\n| > r-release-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\n| > r-release-windows-ix86+x86_64\t\t0.7.5\t13.00\t652.00\t665.00\tOK\t\n| > r-oldrel-macos-x86_64\t\t\t0.7.5\t\t\t\tOK\t\n| > r-oldrel-windows-ix86+x86_64\t\t0.7.5\t11.00\t500.00\t511.00\tOK\n| \n| Not sure what information this table should provide to us.  The fact\n\nIt makes it fairly obvious that you should not contact upstream -- because\nthere is no issue in the upstream code.\n\n| that things are running on those other systems is great but does not\n| answer why it is not running for us. \n\nExactly. It's most-likely a self-inflicted wound.  \n\nFWIW I see that myself too when I do reverse depenency tests for Rcpp or\nrelated packages. rstanarm is a complicated package. You could consider not\ninstalling it for the autopkgtests for this package.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 19 November 2020 at 19:07, Andreas Tille wrote:\n| Control: tags 972074 pending\n| Control: block 972074 by 963392\n| \n| On Thu, Nov 19, 2020 at 07:53:06AM -0600, Dirk Eddelbuettel wrote:\n| > | \n| > |",
+      "thread_id": "thread-d411495a4ea4",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-75ae59454645",
+      "message_id": "<BYAPR01MB38806F79082C95A0DB5BC163CEE00@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-19T19:50:59Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<20201119082400.GH25476@an3as.eu>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>",
+        "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119082400.GH25476@an3as.eu>"
+      ],
+      "body_plain": "Andreas,\n\n> You can check the bug page[1] and you should have received an e-mail\n\nthat the bug was created.  (As I said there is also a script\n\nitp_from_debian_dir which fills in all the questions for you when\n\ncalling in the Git repository - but from a pedagocial point of view its\n\ncorrect that you did this step at least once manually.)\n\nGreat.  That sounds like a very useful script.  I'll be sure to utilize it in the future.\n\n> To be clear here: We have just created a Git repository with the\n\npackaging.  From the existence of this repository *nothing* will happen.\n\nA Debian Developer (like me) needs to upload it to the new queue and\n\nthan we need to wait for the new processing by ftpmaster.  Currently\n\nthis takes about 1-3 days.\n\n>\n\n> But if *you* want to be the maitainer of the package you need to get\n\na login on salsa.debian.org and become a member of the team.\n\nI have created an account on salsa.debian.org and I requested access on the \"Debian R Package Maintainers\" group.  Is this what you mean by becoming a member?  I don't believe I've been granted access yet as there's still an option for\n me to \"withdraw access request\" on the main page for the group.\n\n> Currently there is my Copyright for the packaging (autoinjected) and I'm\n\nalso changelog owner and Uploader (in d/control).  I'd prefer if you add\n\nyourself to Uploaders if you intend to maintain this package.  You should\n\nalso insert the ITP bug number into d/changelog.  Once you have done this\n\nI will upload the package.\n\nI will be sure to do these tasks once I have access.\n\n \n\n>Kind regards\n\n>\n\n>    Andreas.\n\nThanks again for all the help!  I feel like I'm learning a lot from this process!\n\nBen",
+      "body_snippet": "Andreas,\n\n> You can check the bug page[1] and you should have received an e-mail\n\nthat the bug was created.  (As I said there is also a script\n\nitp_from_debian_dir which fills in all the questions for",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 6,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-0892e6fa4480",
+      "message_id": "<20201119204801.GC20188@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-19T20:48:01Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB38806F79082C95A0DB5BC163CEE00@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>",
+        "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119082400.GH25476@an3as.eu>",
+        "<BYAPR01MB38806F79082C95A0DB5BC163CEE00@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nOn Thu, Nov 19, 2020 at 07:50:59PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> I have created an account on salsa.debian.org and I requested access on the \"Debian R Package Maintainers\" group.  Is this what you mean by becoming a member?  I don't believe I've been granted access yet as there's still an option for me to \"withdraw access request\" on the main page for the group.\n\nYou should be able to push to the repository now.\n \n> > Currently there is my Copyright for the packaging (autoinjected) and I'm\n> also changelog owner and Uploader (in d/control).  I'd prefer if you add\n> yourself to Uploaders if you intend to maintain this package.  You should\n> also insert the ITP bug number into d/changelog.  Once you have done this\n> I will upload the package.\n> \n> I will be sure to do these tasks once I have access.\n\nOK, just ping me here on the list for sponsoring your package.\n \n> Thanks again for all the help!  I feel like I'm learning a lot from this process!\n\nI'm happy to teach newcomers\n\n     Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ben,\n\nOn Thu, Nov 19, 2020 at 07:50:59PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> I have created an account on salsa.debian.org and I requested access on the \"Debian R Package Maintainers\"",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 7,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-9dca0db3d002",
+      "message_id": "<33852076-EBC5-42A0-B680-8F2683F8965B@biom.uni-freiburg.de>",
+      "from_name": "carsten.dormann at biom.uni-freiburg.de",
+      "from_email_hash": "ac6375633e9e3d7e33dff16d195fa14af07831ccf751c03f72c7254c0cfd4396",
+      "date": "2020-11-20T17:51:41Z",
+      "subject": "Re: Usage of MersenneTwister.h in CRAN bipartite (Was:r-cran-bipartite_2.15-1_amd64.changes REJECTED)",
+      "subject_clean": "Usage of MersenneTwister.h in CRAN bipartite (Was:r-cran-bipartite_2.15-1_amd64.changes REJECTED)",
+      "in_reply_to": "<20201107182439.GA25476@an3as.eu>",
+      "references": [
+        "<20201107165934.GZ25476@an3as.eu>",
+        "<32692689-3092-47DB-9E7D-70F2296A9A26@biom.uni-freiburg.de>",
+        "<20201107182439.GA25476@an3as.eu>"
+      ],
+      "body_plain": "Dear Andreas,\nTL;DR: I think it's fine, and I will continue claiming it is compatible with GPL.\n\nWell, all I found, on the internet, is that this software is used all over the place, with various licenses, and I managed to track down \"Richard Wagner\": he died recently (https://www.legacy.com/obituaries/telegram/obituary.aspx?pid=196507520). I have no idea what that means for his code legacy, however.\nI found this webpage (https://public.kitware.com/pub/itk/Examples/src/Core/Common/MersenneTwisterRandomIntegerGenerator/Documentation.html), which to me suggests that the code is CC-BY-.. licensed (see bottom of the page), although they reproduce exactly the same license statement. It is hard for me to see what that actually means, legally.\n\nAlso, did you notice that at the very bottom of the file is says that the license (in version 1.0) was changed to BSD?\n// v1.0 - Revised seeding to match 26 Jan 2002 update of Nishimura and Matsumoto\n<snip>\n//      - Changed license from GNU LGPL to BSD\n\nThe audio-software Essentia also uses exactly this file and is Affero GPLv3-licensed (https://essentia.upf.edu/licensing_information.html)\n(So does \"open source\" SUMO, but it does not provide any license information: https://sumo.dlr.de/daily/doxygen/index.html)\n\nSo, in summary, I suggest that this file is \"permissively\" licensed, and therefore \"safe\" to distribute also for Debian. I am, of course, ignorant both of the legal details and the strictness of Debian engineering. And of course that everybody else doesn't care doesn't mean it is correct to do so.\n\nCheers,\nCarsten\n\n> On 7. Nov 2020, at 19:24, Andreas Tille <andreas at fam-tille.de> wrote:\n> Dear Carsten,thanks a lot for your quick response.On Sat, Nov 07, 2020 at 07:20:47PM +0100, carsten.dormann at biom.uni-freiburg.dewrote:> To be honest, I had scanned the licence statement in that file, but not noticed the notice.The code in bipartite is based on code by Aaron Clauset, who himself used the Mersenne Twister to avoid the relatively short random number period. We (Rouven Strauss and I) did not touch that bit of code at all; our work was solely on the bit produced by Aaron. His code is available publicly here: http://tuvalu.santafe.edu/~aaronc/hierarchy/<http://tuvalu.santafe.edu/~aaronc/hierarchy/> I never wrote to any of the emails listed. It is indeed somewhat awkward and I have no idea what to do about it.Wikipedia does not square with the notice you found: https://en.wikipedia.org/wiki/Mersenne_Twister<https://en.wikipedia.org/wiki/Mersenne_Twister>, calling it \"permissively licensed\".Given Debian's merit of being very careful with such licenses, I can only ask you for suggestions: is there anything I can do, you think, to push the Mersenne Twister towards a GPL-like license?\n> I think the only way is to convince the copyright holders to drop thatparagraph and use one of the known licenses (not necessarily GPL even ifthis would probably a nicely fitting choice for your own code). Kind regards     Andreas.> > On 7. Nov 2020, at 17:59, Andreas Tille <andreas at fam-tille.de> wrote:Hi,I intend to package bipartite for Debian since some R package needsit to run its test suite.  Our ftpmaster who is checking licensingissues stumbled upon the file src\\MersenneTwister.h.  It containsan additional clause to the license which says:// The original code included the following notice:////     When you use this, send an email to: matumoto at math.keio.ac.jp//     with an appropriate reference to your work.//// It would be nice to CC: rjwagner at writeme.com and Cokus at math.washington.edu// when you write.Would you please clarify how far the \"original code\" is changed?  Itsalso hard to interpret what the \"send an email to\" might mean.  Shouldevery user who is using the bipartite package send an e-mail to theauthors?  That's really hard to realise since we can not guarantee thatevery user will read the copyright statement of all software that isinstalled.  So some clarification what that clause might mean would beappreciated.Kind regards   Andreas.----- Forwarded message from Joerg Jaspert <ftpmaster at ftp-master.debian.org> -----Date: Fri, 06 Nov 2020 23:00:08 +0000From: Joerg Jaspert <ftpmaster at ftp-master.debian.org>To: Andreas Tille <tille at debian.org>, Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>Subject: r-cran-bipartite_2.15-1_amd64.changes REJECTEDHi Maintainer,rejected, sorry, but src\\MersenneTwister.h is not GPL.Also, how much is that code there based on \"the original code\"? Seethe paragraph directly below the license. The requirement there is*NOT* nice for inclusion in Debian.--bye Joerg===Please feel free to respond to this email if you don't understand whyyour files were rejected, or if you upload new files which address ourconcerns._______________________________________________R-pkg-team mailing listR-pkg-team at alioth-lists.debian.nethttps://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team----- End forwarded message ------- http://fam-tille.de\n> > — — — — — — Carsten DormannProfessor of Biometry and Environmental System AnalysisFaculty of Environment and Natural ResourcesUniversity of FreiburgTennenbacher Str. 479106 FreiburgTel.: 0049 (0)761 203-3750Fax.: 0049 (0)761 203 3751Email: carsten.dormann at biom.uni-freiburg.de\n> -- http://fam-tille.de\n\n— — — — — — Carsten DormannProfessor of Biometry and Environmental System AnalysisFaculty of Environment and Natural ResourcesUniversity of FreiburgTennenbacher Str. 479106 FreiburgTel.: 0049 (0)761 203-3750\nFax.: 0049 (0)761 203 3751Email: carsten.dormann at biom.uni-freiburg.de",
+      "body_snippet": "Dear Andreas,\nTL;DR: I think it's fine, and I will continue claiming it is compatible with GPL.\n\nWell, all I found, on the internet, is that this software is used all over the place, with various lice",
+      "thread_id": "thread-9dca0db3d002",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-5af6bba46b30",
+      "message_id": "<BYAPR01MB3880E1A10512F50EFF01A7B4CEFF0@BYAPR01MB3880.prod.exchangelabs.com>",
+      "from_name": "Morledge-Hampton, Benjamin Stuart",
+      "from_email_hash": "e370a5c3b1165b007b00675efebc2d9d7a2e101a8c29454d5b9a5d11661ac0ee",
+      "date": "2020-11-20T21:06:06Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<20201119204801.GC20188@an3as.eu>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>",
+        "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119082400.GH25476@an3as.eu>",
+        "<BYAPR01MB38806F79082C95A0DB5BC163CEE00@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119204801.GC20188@an3as.eu>"
+      ],
+      "body_plain": "Andreas,\n\nI've made some progress with the packaging process, but as per usual, that progress has brought some new questions to mind:\n\nFirst, I realized that the itp_from_debian_dir command is not available on the current version of dh-r I have installed. (I installed it using apt on the Focal release of Ubuntu)  I know you initially recommended that I get the package from the unstable branch\n on Debian.  I assume that this version has the itp_from_debian_dir command while the release I am using does not.  With that in mind, what is the best way to get access to the unstable release?  Is there any reasonable way to get it running on my Ubuntu installation,\n or is this as bad of an idea as I suspect it may be?  Would I just be better off managing an unstable Debian installation alongside my Ubuntu installation?\n\nSecond, while pondering (and learning more about) the split between Debian and Ubuntu, I realized that I am not entirely sure where these packages that we are uploading are going to end up.  Will they be available on the stable release of Debian, or only the\n unstable release for some time?  If I also want them to be available on the current LTS release of Ubuntu, do I need to go through a separate sponsor, or is that something that you do by default as part of this process?\n\nFinally, while working to package MSIseq, one of the dependencies of my R package, I realized that the package has been pulled from the CRAN repository due to the maintainer's email \"bouncing.\"  It appears that I can still package MSIseq by running dh-make-R\n after unpacking the tarball for MSIseq that is available on the CRAN archive, but is this even considered acceptable practice?  If not, what steps need to be taken to get the MSIseq package up on the CRAN repository again?\n\nThanks again for everything,\n\nBen",
+      "body_snippet": "Andreas,\n\nI've made some progress with the packaging process, but as per usual, that progress has brought some new questions to mind:\n\nFirst, I realized that the itp_from_debian_dir command is not ava",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 8,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-c86fe9fb4a64",
+      "message_id": "<20201120222259.GJ29748@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-20T22:22:59Z",
+      "subject": "Re: Packaging Hybrid R/Python Software",
+      "subject_clean": "Packaging Hybrid R/Python Software",
+      "in_reply_to": "<BYAPR01MB3880E1A10512F50EFF01A7B4CEFF0@BYAPR01MB3880.prod.exchangelabs.com>",
+      "references": [
+        "<BYAPR01MB3880CE67236A15273608610DCEE20@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201117131559.GL25476@an3as.eu>",
+        "<BYAPR01MB3880D946D4DC46E1E7E4AB85CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201118065611.GT25476@an3as.eu>",
+        "<BYAPR01MB3880948C6379F16F2DDC3086CEE10@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119082400.GH25476@an3as.eu>",
+        "<BYAPR01MB38806F79082C95A0DB5BC163CEE00@BYAPR01MB3880.prod.exchangelabs.com>",
+        "<20201119204801.GC20188@an3as.eu>",
+        "<BYAPR01MB3880E1A10512F50EFF01A7B4CEFF0@BYAPR01MB3880.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Hi Ben,\n\nOn Fri, Nov 20, 2020 at 09:06:06PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> \n> First, I realized that the itp_from_debian_dir command is not available on the current version of dh-r I have installed. (I installed it using apt on the Focal release of Ubuntu)  I know you initially recommended that I get the package from the unstable branch on Debian.  I assume that this version has the itp_from_debian_dir command while the release I am using does not.  With that in mind, what is the best way to get access to the unstable release?  Is there any reasonable way to get it running on my Ubuntu installation, or is this as bad of an idea as I suspect it may be?  Would I just be better off managing an unstable Debian installation alongside my Ubuntu installation?\n\nYou can clone the Git repository of dh-r and move the script to your\nPATH.  Developing for Debian under Ubuntu should be OK since packages\nshould be build in an unstable chroot anyway.  I personally have no idea\nwhat side effects to expect since I personally never used Ubuntu.\n \n> Second, while pondering (and learning more about) the split between Debian and Ubuntu, I realized that I am not entirely sure where these packages that we are uploading are going to end up.  Will they be available on the stable release of Debian, or only the unstable release for some time?  If I also want them to be available on the current LTS release of Ubuntu, do I need to go through a separate sponsor, or is that something that you do by default as part of this process?\n\nWe develop for Debian unstable.  Ubuntu is syncing this from time to\ntime and releases this snapshot of unstable at some point in time.\nPlease take all this with a grain of salt - I have only rudimentary\nknowledge about Ubuntu.\n \n> Finally, while working to package MSIseq, one of the dependencies of my R package, I realized that the package has been pulled from the CRAN repository due to the maintainer's email \"bouncing.\"  It appears that I can still package MSIseq by running dh-make-R after unpacking the tarball for MSIseq that is available on the CRAN archive, but is this even considered acceptable practice?  If not, what steps need to be taken to get the MSIseq package up on the CRAN repository again?\n\nSorry, I have no idea about this.\n \nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ben,\n\nOn Fri, Nov 20, 2020 at 09:06:06PM +0000, Morledge-Hampton, Benjamin Stuart wrote:\n> \n> First, I realized that the itp_from_debian_dir command is not available on the current version of dh-r ",
+      "thread_id": "thread-dddc19de0f34",
+      "thread_depth": 9,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-17c6ee9eaa87",
+      "message_id": "<CAJN1929Gc3-_vvmZ8T2pnGdWaQEMkFTrCn_c7M8sK60LwWw=Tw@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-23T15:30:14Z",
+      "subject": "[RFS] r-cran-uwot",
+      "subject_clean": "[RFS] r-cran-uwot",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-uwot\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-uwot\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-uwot\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-uwot\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-17c6ee9eaa87",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-6e56856e65c7",
+      "message_id": "<CAJN1928g3jOqvOP+3V=WzzGCz+w4dzwED_vbUmkuvEw8ROU9Vw@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-11-23T15:36:50Z",
+      "subject": "[RFS] r-cran-tm",
+      "subject_clean": "[RFS] r-cran-tm",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-tm\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-tm\n\nThanks and Regards\nNilesh",
+      "body_snippet": "gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-tm\n\nOR\n\ndcut dm --uid npatra974 at gmail.com --allow r-cran-tm\n\nThanks and Regards\nNilesh",
+      "thread_id": "thread-6e56856e65c7",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-a99840cbabc2",
+      "message_id": "<5094299d-bb26-376b-b4fe-2616fcbfd163@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2020-11-23T16:16:16Z",
+      "subject": "done Re: [RFS] r-cran-uwot and r-cran-tm",
+      "subject_clean": "done Re: [RFS] r-cran-uwot and r-cran-tm",
+      "in_reply_to": "<CAJN1929Gc3-_vvmZ8T2pnGdWaQEMkFTrCn_c7M8sK60LwWw=Tw@mail.gmail.com>",
+      "references": [
+        "<CAJN1929Gc3-_vvmZ8T2pnGdWaQEMkFTrCn_c7M8sK60LwWw=Tw@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks!\n\nOn 23.11.20 16:30, Nilesh Patra wrote:\n> gbp clone --pristine-tar\n> https://salsa.debian.org/r-pkg-team/r-cran-uwot\n> <https://salsa.debian.org/r-pkg-team/r-cran-uwot>\n>\n> OR\n>\n> dcut dm --uid npatra974 at gmail.com <mailto:npatra974 at gmail.com> --allow\n> r-cran-uwot\n>\n> Thanks and Regards\n> Nilesh",
+      "body_snippet": "Thanks!\n\nOn 23.11.20 16:30, Nilesh Patra wrote:\n> gbp clone --pristine-tar\n> https://salsa.debian.org/r-pkg-team/r-cran-uwot\n> <https://salsa.debian.org/r-pkg-team/r-cran-uwot>\n>\n> OR\n>\n> dcut dm --ui",
+      "thread_id": "thread-17c6ee9eaa87",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-c57c79655daf",
+      "message_id": "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-27T14:19:44Z",
+      "subject": "mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I started to package mathjaxr as package rgl will now need it. Unfortunately\nit includes a lot of Javascript as well as fonts and we have the usual\nproblem of ftp-master wanting sources (see below)\n\nWould anybody here have time, experience and patience to work through this\nand update mathjaxr? I am a little short on two to three of these.\n\nI have a basic package at\n  https://salsa.debian.org/edd/r-cran-mathjaxr\nand I now see that a prior attempt was at\n  https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr\n(as I had only checked packages.debian.org, my bad).\n\nThe email I got from Joerg is below. The matter is becoming somewhat urgent\nas rgl now build-depends on mathjaxr, and rgl itself is used in a few other\npackages.\n\nDirk\n\nReply from ftp-masters:\n\n  Hi Maintainer,\n\n  rejected, sorry. The javascript files in the subdirs of\n  doc\\mathjax\\es5\\ all look pretty minified and not the way anyone would\n  edit them in, so not source to ship. Additionally they appear to have\n  a different license too, not mentioned in your copyright file.\n\n  Also, do you really need to ship them, there is a libjs-mathjax\n  package existing already.\n\n  Same set of questions for the woff files and the existing package\n  there.\n\n  --\n  bye Joerg\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "I started to package mathjaxr as package rgl will now need it. Unfortunately\nit includes a lot of Javascript as well as fonts and we have the usual\nproblem of ftp-master wanting sources (see below)\n\nW",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-a7778865593c",
+      "message_id": "<20201127170601.GB31595@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-27T17:06:01Z",
+      "subject": "Re: mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+      "references": [
+        "<24513.2816.350026.25270@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Fri, Nov 27, 2020 at 08:19:44AM -0600, Dirk Eddelbuettel wrote:\n> \n> I started to package mathjaxr as package rgl will now need it. Unfortunately\n> it includes a lot of Javascript as well as fonts and we have the usual\n> problem of ftp-master wanting sources (see below)\n> \n> Would anybody here have time, experience and patience to work through this\n> and update mathjaxr? I am a little short on two to three of these.\n> \n> I have a basic package at\n>   https://salsa.debian.org/edd/r-cran-mathjaxr\n> and I now see that a prior attempt was at\n>   https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr\n> (as I had only checked packages.debian.org, my bad).\n\nYep, I also started a packaging attempt since some other package needs\nthis new dependency.  If I would have managed to fight through all these\nJS I would have uploaded.  Unfortunately there was no spare time slot\nand my Debian time in the next 10 days will be drastically reduced due\nto real life issues.  You will not see much activity from me in R-pkg\nteam in this time.\n \n> The email I got from Joerg is below. The matter is becoming somewhat urgent\n> as rgl now build-depends on mathjaxr, and rgl itself is used in a few other\n> packages.\n\nPlease decide what repository should be used for the packaging.  I think\nyou have permissions to https://salsa.debian.org/r-pkg-team.  If you\nwant to stick to .../edd I'd rather remove the other repository to avoid\nconfusion.\n \nKind regards\n\n       Andreas.\n\n \n> Reply from ftp-masters:\n> \n>   Hi Maintainer,\n> \n>   rejected, sorry. The javascript files in the subdirs of\n>   doc\\mathjax\\es5\\ all look pretty minified and not the way anyone would\n>   edit them in, so not source to ship. Additionally they appear to have\n>   a different license too, not mentioned in your copyright file.\n> \n>   Also, do you really need to ship them, there is a libjs-mathjax\n>   package existing already.\n> \n>   Same set of questions for the woff files and the existing package\n>   there.\n> \n>   --\n>   bye Joerg\n> \n> \n> -- \n> https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, Nov 27, 2020 at 08:19:44AM -0600, Dirk Eddelbuettel wrote:\n> \n> I started to package mathjaxr as package rgl will now need it. Unfortunately\n> it includes a lot of Javascript as well as fonts ",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-3e55d5271d81",
+      "message_id": "<24513.13802.166883.681006@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-27T17:22:50Z",
+      "subject": "Re: mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": "<20201127170601.GB31595@an3as.eu>",
+      "references": [
+        "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+        "<20201127170601.GB31595@an3as.eu>"
+      ],
+      "body_plain": "On 27 November 2020 at 18:06, Andreas Tille wrote:\n| On Fri, Nov 27, 2020 at 08:19:44AM -0600, Dirk Eddelbuettel wrote:\n| > \n| > I started to package mathjaxr as package rgl will now need it. Unfortunately\n| > it includes a lot of Javascript as well as fonts and we have the usual\n| > problem of ftp-master wanting sources (see below)\n| > \n| > Would anybody here have time, experience and patience to work through this\n| > and update mathjaxr? I am a little short on two to three of these.\n| > \n| > I have a basic package at\n| >   https://salsa.debian.org/edd/r-cran-mathjaxr\n| > and I now see that a prior attempt was at\n| >   https://salsa.debian.org/r-pkg-team/r-cran-mathjaxr\n| > (as I had only checked packages.debian.org, my bad).\n| \n| Yep, I also started a packaging attempt since some other package needs\n| this new dependency.  If I would have managed to fight through all these\n| JS I would have uploaded.  Unfortunately there was no spare time slot\n| and my Debian time in the next 10 days will be drastically reduced due\n| to real life issues.  You will not see much activity from me in R-pkg\n| team in this time.\n|  \n| > The email I got from Joerg is below. The matter is becoming somewhat urgent\n| > as rgl now build-depends on mathjaxr, and rgl itself is used in a few other\n| > packages.\n| \n| Please decide what repository should be used for the packaging.  I think\n| you have permissions to https://salsa.debian.org/r-pkg-team.  If you\n| want to stick to .../edd I'd rather remove the other repository to avoid\n| confusion.\n\nI don't care one iota. If it gets packaged in your repo, great. Easy for me\nto delete a (unused) repo.  FWIW there are other duplicate repos too. I\nalready wrote above that, I created my repo as I was unaware of yours. I just\nneed mathjaxr in Debian, and can't do it myself.\n\nSo unless maybe I convince upstream to make mathjaxr a Suggests:, rgl will\neventually die.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 27 November 2020 at 18:06, Andreas Tille wrote:\n| On Fri, Nov 27, 2020 at 08:19:44AM -0600, Dirk Eddelbuettel wrote:\n| > \n| > I started to package mathjaxr as package rgl will now need it. Unfortun",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-27e66137e22f",
+      "message_id": "<24513.35276.555185.937717@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-27T23:20:44Z",
+      "subject": "Re: mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": "<24513.13802.166883.681006@rob.eddelbuettel.com>",
+      "references": [
+        "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+        "<20201127170601.GB31595@an3as.eu>",
+        "<24513.13802.166883.681006@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "So for the case of rgl, I have (following email with upstream too) simply\npatched the use of mathjax out of the single one (!!) help page using it.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "So for the case of rgl, I have (following email with upstream too) simply\npatched the use of mathjax out of the single one (!!) help page using it.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbue",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-8d61041f5284",
+      "message_id": "<20201128062955.GH31595@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-11-28T06:29:55Z",
+      "subject": "Re: mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": "<24513.13802.166883.681006@rob.eddelbuettel.com>",
+      "references": [
+        "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+        "<20201127170601.GB31595@an3as.eu>",
+        "<24513.13802.166883.681006@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nOn Fri, Nov 27, 2020 at 11:22:50AM -0600, Dirk Eddelbuettel wrote:\n> FWIW there are other duplicate repos too. I\n> already wrote above that,\n\nSeems I missed that.  Please let us know again if in r-pkg-team might\nreside some unused repositories.  It would be better to delete these.\n\n> So unless maybe I convince upstream to make mathjaxr a Suggests:, rgl will\n> eventually die.\n\nIn your other mail you wrote that you solved this with upstream.  May be\nwe should do the same with r-cran-clubsandwich?  On the other hand I'm\nafraid that sooner or later more upstreams might have fun to use mathjax\nand may be Jörg's hint to use the Debian packaged libmathjax might do the\ntrick easily.  Any volunteer to check this?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nOn Fri, Nov 27, 2020 at 11:22:50AM -0600, Dirk Eddelbuettel wrote:\n> FWIW there are other duplicate repos too. I\n> already wrote above that,\n\nSeems I missed that.  Please let us know again i",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-345a34205b40",
+      "message_id": "<24514.25868.577501.531711@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-11-28T14:56:12Z",
+      "subject": "Re: mathjaxr",
+      "subject_clean": "mathjaxr",
+      "in_reply_to": "<20201128062955.GH31595@an3as.eu>",
+      "references": [
+        "<24513.2816.350026.25270@rob.eddelbuettel.com>",
+        "<20201127170601.GB31595@an3as.eu>",
+        "<24513.13802.166883.681006@rob.eddelbuettel.com>",
+        "<20201128062955.GH31595@an3as.eu>"
+      ],
+      "body_plain": "On 28 November 2020 at 07:29, Andreas Tille wrote:\n| In your other mail you wrote that you solved this with upstream.\n\nI did not *state* that the problem was solved. \n\nDirk \n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 28 November 2020 at 07:29, Andreas Tille wrote:\n| In your other mail you wrote that you solved this with upstream.\n\nI did not *state* that the problem was solved. \n\nDirk \n\n-- \nhttps://dirk.eddelbue",
+      "thread_id": "thread-c57c79655daf",
+      "thread_depth": 4,
+      "month": "2020-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-2de1c817f1d4",
+      "subject": "Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-11-03T11:06:11Z",
+      "last_reply": "2020-11-10T07:57:32Z",
+      "root_message_id": "msg-2de1c817f1d4"
+    },
+    {
+      "id": "thread-21b4151878e6",
+      "subject": "Bug#973407: Help for r-bioc-rhdf5filters needed (Was: Bug#973407: transition: r-api-bioc-3.12)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-11-13T10:30:55Z",
+      "last_reply": "2020-11-13T10:30:55Z",
+      "root_message_id": "msg-21b4151878e6"
+    },
+    {
+      "id": "thread-ee1b21fc70b8",
+      "subject": "[RFS] r-cran-psyphy",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2020-11-13T11:16:47Z",
+      "last_reply": "2020-11-13T11:16:47Z",
+      "root_message_id": "msg-ee1b21fc70b8"
+    },
+    {
+      "id": "thread-6af1fce5eb50",
+      "subject": "[RFS] r-cran-rentrez",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2020-11-13T11:27:34Z",
+      "last_reply": "2020-11-13T11:27:34Z",
+      "root_message_id": "msg-6af1fce5eb50"
+    },
+    {
+      "id": "thread-4a914701d522",
+      "subject": "[RFS] r-cran-waldo",
+      "message_count": 2,
+      "participants": [
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2020-11-13T13:41:01Z",
+      "last_reply": "2020-11-13T14:16:58Z",
+      "root_message_id": "msg-4a914701d522"
+    },
+    {
+      "id": "thread-26a5d40372bb",
+      "subject": "[RFS] r-cran-lava",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2020-11-13T13:58:43Z",
+      "last_reply": "2020-11-13T13:58:43Z",
+      "root_message_id": "msg-26a5d40372bb"
+    },
+    {
+      "id": "thread-092bd6ad5dff",
+      "subject": "[RFS] r-cran-colorspace",
+      "message_count": 2,
+      "participants": [
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2020-11-13T18:25:11Z",
+      "last_reply": "2020-11-13T19:51:45Z",
+      "root_message_id": "msg-092bd6ad5dff"
+    },
+    {
+      "id": "thread-a60897efe545",
+      "subject": "[RFS] r-cran-recipes",
+      "message_count": 2,
+      "participants": [
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2020-11-16T18:34:50Z",
+      "last_reply": "2020-11-16T18:56:29Z",
+      "root_message_id": "msg-a60897efe545"
+    },
+    {
+      "id": "thread-dddc19de0f34",
+      "subject": "Packaging Hybrid R/Python Software",
+      "message_count": 15,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Morledge-Hampton, Benjamin Stuart"
+      ],
+      "started": "2020-11-17T04:20:59Z",
+      "last_reply": "2020-11-20T22:22:59Z",
+      "root_message_id": "msg-dddc19de0f34"
+    },
+    {
+      "id": "thread-bdd5c684f75b",
+      "subject": "In rcdk test: An illegal reflective access operation has occurred",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-11-18T11:02:32Z",
+      "last_reply": "2020-11-18T11:02:32Z",
+      "root_message_id": "msg-bdd5c684f75b"
+    },
+    {
+      "id": "thread-d411495a4ea4",
+      "subject": "[Help] r-cran-bayestestr: autopkgtest regression",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2020-11-19T13:37:41Z",
+      "last_reply": "2020-11-19T18:57:04Z",
+      "root_message_id": "msg-d411495a4ea4"
+    },
+    {
+      "id": "thread-9dca0db3d002",
+      "subject": "Usage of MersenneTwister.h in CRAN bipartite (Was:r-cran-bipartite_2.15-1_amd64.changes REJECTED)",
+      "message_count": 1,
+      "participants": [
+        "carsten.dormann at biom.uni-freiburg.de"
+      ],
+      "started": "2020-11-20T17:51:41Z",
+      "last_reply": "2020-11-20T17:51:41Z",
+      "root_message_id": "msg-9dca0db3d002"
+    },
+    {
+      "id": "thread-17c6ee9eaa87",
+      "subject": "[RFS] r-cran-uwot",
+      "message_count": 2,
+      "participants": [
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2020-11-23T15:30:14Z",
+      "last_reply": "2020-11-23T16:16:16Z",
+      "root_message_id": "msg-17c6ee9eaa87"
+    },
+    {
+      "id": "thread-6e56856e65c7",
+      "subject": "[RFS] r-cran-tm",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2020-11-23T15:36:50Z",
+      "last_reply": "2020-11-23T15:36:50Z",
+      "root_message_id": "msg-6e56856e65c7"
+    },
+    {
+      "id": "thread-c57c79655daf",
+      "subject": "mathjaxr",
+      "message_count": 6,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2020-11-27T14:19:44Z",
+      "last_reply": "2020-11-28T14:56:12Z",
+      "root_message_id": "msg-c57c79655daf"
+    }
+  ]
+}

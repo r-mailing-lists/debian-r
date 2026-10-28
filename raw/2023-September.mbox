@@ -1,0 +1,64 @@
+From elbrus at debian.org  Thu Sep  7 10:58:27 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 7 Sep 2023 12:58:27 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQvTE_9Uk+SDF4zn8W5ujbMx6_CY5SZmXUmwjF9ezS=ZeA@mail.gmail.com>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu> <CAM8zJQvTE_9Uk+SDF4zn8W5ujbMx6_CY5SZmXUmwjF9ezS=ZeA@mail.gmail.com>
+Message-ID: <0f6a2b4f-3a0c-4ef1-b912-175d4055a0bc@debian.org>
+
+Hi,
+
+On 20-08-2023 13:58, Graham Inggs wrote:
+> Besides those packages mentioned above, there are others still needing
+> attention.  These can be seen on the team's DDPO page [1], just search
+> for 'Excuse' there.
+
+> [1] https://qa.debian.org/developer.php?email=r-pkg-team at alioth-lists.debian.net
+
+Or [2], which has a nice "Todo" list at the top that also enables you to 
+(temporarily) hide thing you have inspected and don't need your 
+immediate attention.
+
+Anyways, from the Release Team point of view, this transition is done 
+[3]. The rest is up to you.
+
+Paul
+
+[2] https://udd.debian.org/dmd.cgi?email1=r-pkg-team at alioth-lists.debian.net
+[3] except there are still autopkgtest regressions because not 
+everything migrated back to testing, but we assume you'll look into [2]
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From ginggs at debian.org  Thu Sep 28 13:27:08 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 28 Sep 2023 13:27:08 +0000
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <0f6a2b4f-3a0c-4ef1-b912-175d4055a0bc@debian.org>
+References: <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu> <168866974488.1111055.5863523819930753468.reportbug@sputnik> <CAM8zJQvTE_9Uk+SDF4zn8W5ujbMx6_CY5SZmXUmwjF9ezS=ZeA@mail.gmail.com> <0f6a2b4f-3a0c-4ef1-b912-175d4055a0bc@debian.org>
+Message-ID: <CAM8zJQv1cbaEkoSFDAGEiyYncffRfWMc2Xg3nDKv8LA6N-BUMQ@mail.gmail.com>
+
+I noticed r-bioc-keggrest has finally migrated, and several other
+r-bioc-* packages with it!
+
+\o/
+
+I looked through the remaining blocked packages and found the
+following still have failing autopkgtests:
+
+https://tracker.debian.org/pkg/r-bioc-biocneighbors
+https://tracker.debian.org/pkg/r-bioc-cner
+https://tracker.debian.org/pkg/r-bioc-ensembldb
+https://tracker.debian.org/pkg/r-bioc-glmgampoi
+https://tracker.debian.org/pkg/r-bioc-isoformswitchanalyzer
+https://tracker.debian.org/pkg/r-bioc-megadepth
+https://tracker.debian.org/pkg/r-bioc-rsamtools
+https://tracker.debian.org/pkg/r-bioc-scuttle
+https://tracker.debian.org/pkg/r-bioc-shortread
+https://tracker.debian.org/pkg/r-bioc-tcgabiolinks
+
+Fixing these should allow another thirty or so r-bioc-* packages to migrate.
+

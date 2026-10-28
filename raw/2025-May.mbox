@@ -1,0 +1,548 @@
+From elbrus at debian.org  Thu May  1 10:18:17 2025
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 1 May 2025 12:18:17 +0200
+Subject: Re: How to find out why britney is trying to migrate unexpected (and unmigratable) packages?
+In-Reply-To: <3c12fb7a-7d07-4c0f-a63a-02d2fc2080d6@zoho.com>
+References: <3c12fb7a-7d07-4c0f-a63a-02d2fc2080d6@zoho.com>
+Message-ID: <5120c5cf-0d38-4cc8-848e-0a3603391a28@debian.org>
+
+Hi Rebecca,
+
+On 30-04-2025 16:32, Rebecca N. Palmer wrote:
+> We recently added some Breaks: to r-base, and britney is now trying to
+> migrate a larger set of packages than I intended
+
+What exactly do you mean by that? britney always tries to migrate 
+everything.
+
+> - including many
+> packages that *can't* migrate now because they are not in testing at all.
+
+Things that aren't in testing shouldn't be able to block migration 
+except if they are (build) dependencies for the version in unstable.
+
+> What are good ways to investigate further (that don't involve waiting 10
+> days, because if anything needs fixing then we don't have that long)?
+
+I'm not exaclty understanding your problem, so I can't really advise.
+
+> Which version of https://salsa.debian.org/release-team/britney2 is the
+> currently running britney?  head-of-master since there aren't any tags??
+
+Yesterday I made changes to britney2 and they are deployed. People with 
+access to respighi should be able to check the state. The code lives in 
+~release/britney/code/b2/.
+
+> Packages I think we need:
+> src:r-base,src:r-bioc-bioccheck,src:r-bioc-pwalign,src:r-cran-
+> argparser,src:r-cran-hdf5r,src:r-cran-plotly,src:r-cran-rcmdcheck,src:r-
+> cran-rlang,src:r-cran-s2,src:r-cran-sf,src:r-cran-survminer,src:r-cran-
+> svglite,src:r-cran-testthat,src:r-cran-timechange,src:r-cran-units
+
+You mean for the tests that fail for r-base migration?
+
+> Packages britney actually passed to debci (see e.g. https://
+> ci.debian.net/packages/r/r-cran-testthat/testing/amd64/60313000/ ):
+> --pin-packages=unstable=src:r-base,src:r-bioc-bioccheck,src:r-bioc-
+> pwalign,src:r-cran-argparser,src:r-cran-bigmemory,src:r-cran-
+> broom.helpers,src:r-cran-cards,src:r-cran-dendextend,src:r-cran-
+> effectsize,src:r-cran-fitcoach,src:r-cran-hdf5r,src:r-cran-
+> heatmaply,src:r-cran-mockr,src:r-cran-performance,src:r-cran-
+> plotly,src:r-cran-rcmdcheck,src:r-cran-rlang,src:r-cran-rpact,src:r-
+> cran-s2,src:r-cran-sf,src:r-cran-sjplot,src:r-cran-sjstats,src:r-cran-
+> survminer,src:r-cran-svglite,src:r-cran-testthat,src:r-cran-
+> tikzdevice,src:r-cran-timechange,src:r-cran-units,src:r-cran-zelig
+>
+>
+> All the packages I wasn't expecting are not in testing at all, except
+> src:r-cran-broom.helpers, which can't migrate because the new version
+> depends on such packages.  (This is fine in itself, but I wasn't
+> expecting it to block other packages; there appear to be no
+> (Build-)Depends on it at all.)
+
+The list of pinned packages is a rather greedy. But if they are not 
+dependencies, they shouldn't block.
+
+> There are test-Depends (debian/tests/control) on some of the not-in-
+> testing packages, which might technically be an RC bug since it fails
+> migration-reference autopkgtests,  but I don't think Britney looks at
+> those.
+
+Correct, except to determine if failures are regressions.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From rebecca_palmer at zoho.com  Thu May  1 10:30:29 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Thu, 1 May 2025 11:30:29 +0100
+Subject: Re: How to find out why britney is trying to migrate unexpected (and unmigratable) packages?
+In-Reply-To: <5120c5cf-0d38-4cc8-848e-0a3603391a28@debian.org>
+References: <3c12fb7a-7d07-4c0f-a63a-02d2fc2080d6@zoho.com> <5120c5cf-0d38-4cc8-848e-0a3603391a28@debian.org>
+Message-ID: <1d64ae1f-a80b-4534-aaa7-99a07f602604@zoho.com>
+
+On 01/05/2025 11:18, Paul Gevers wrote:
+> Hi Rebecca,
+>
+> On 30-04-2025 16:32, Rebecca N. Palmer wrote:
+> > We recently added some Breaks: to r-base, and britney is now trying to
+> > migrate a larger set of packages than I intended
+>
+>
+>
+> What exactly do you mean by that? britney always tries to migrate
+> everything.
+
+I mean the set of packages that all have to migrate together with r-base 
+(i.e. r-base won't migrate if any of them are broken).
+
+I suspect this may not actually be the same thing as the --pin-packages 
+list passed to autopkgtest, but I'm not sure how to check it.
+
+> Things that aren't in testing shouldn't be able to block migration
+> except if they are (build) dependencies for the version in unstable.
+
+> The list of pinned packages is a rather greedy. But if they are not
+> dependencies, they shouldn't block.
+
+I think they're not, but how to actually check that is the question.
+
+From rebecca_palmer at zoho.com  Thu May  1 11:20:13 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Thu, 1 May 2025 12:20:13 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26642.3004.847043.287734@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com> <26642.3004.847043.287734@rob.eddelbuettel.com>
+Message-ID: <fd42d0fb-86c5-4a9a-a63f-6d1cca2ec161@zoho.com>
+
+r-cran-testthat has migrated, which cuts some of the bigger tangles (as 
+packages that were already broken should no longer look like 
+regressions).  The other new failures look like random flakiness (which 
+I have retried) and/or #1104335 (likely to go away on its own).  Hence, 
+I'm now expecting r-base 4.5 + r-bioc-bioccheck + r-bioc-pwalign + 
+r-cran-rlang to migrate if we simply wait.
+
+I'm also expecting most of the other r-* packages with RC fixes to 
+migrate, but they're not blocking R 4.5 if they don't.
+
+From elbrus at debian.org  Thu May  1 11:39:49 2025
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 1 May 2025 13:39:49 +0200
+Subject: Re: How to find out why britney is trying to migrate unexpected (and unmigratable) packages?
+In-Reply-To: <1d64ae1f-a80b-4534-aaa7-99a07f602604@zoho.com>
+References: <3c12fb7a-7d07-4c0f-a63a-02d2fc2080d6@zoho.com> <5120c5cf-0d38-4cc8-848e-0a3603391a28@debian.org> <1d64ae1f-a80b-4534-aaa7-99a07f602604@zoho.com>
+Message-ID: <8ea34707-82d7-4a16-b524-66834d9464ca@debian.org>
+
+Hi,
+
+On 01-05-2025 12:30, Rebecca N. Palmer wrote:
+> On 01/05/2025 11:18, Paul Gevers wrote:
+> > On 30-04-2025 16:32, Rebecca N. Palmer wrote:
+> > > We recently added some Breaks: to r-base, and britney is now trying
+> > > to migrate a larger set of packages than I intended
+> >
+> >
+> >
+> > What exactly do you mean by that? britney always tries to migrate
+> > everything.
+>
+>
+> I mean the set of packages that all have to migrate together with r-base
+> (i.e. r-base won't migrate if any of them are broken).
+>
+>
+> I suspect this may not actually be the same thing as the --pin-packages
+> list passed to autopkgtest, but I'm not sure how to check it.
+
+The excuses says it explicitly:
+∙ ∙ Implicit dependency: r-base r-bioc-bioccheck
+∙ ∙ Implicit dependency: r-base r-bioc-pwalign
+∙ ∙ Implicit dependency: r-base r-cran-rlang
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Thu May  1 14:41:27 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 1 May 2025 09:41:27 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26641.19115.394992.209425@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com>
+Message-ID: <26643.34839.909447.791021@rob.eddelbuettel.com>
+
+On 29 April 2025 at 16:54, Dirk Eddelbuettel wrote:
+| The packages I maintain have always added the Depends (in almost the same
+| form you use, I just don't bother with the final tilde as I know here will
+| always be a Debian version).
+
+Correction. I always add to the Build-Depends, not the Depends. That leaves
+the generated Depends: "softer" as it (currently) only adds the r-api-4.0 tag
+via dh-r. I have found this to be sufficient.
+
+Adding explicit Depends: as Rebecca has done for e.g. r-cran-rlang in a more
+selective 'as-needed' manner is always possible, and I think that way is good
+as it does not overly constrain the package set.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri May  2 00:53:18 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 2 May 2025 09:53:18 +0900
+Subject: Please help us to remove packages from 32-bit and big-endian architectures in Trixie.
+Message-ID: <aBQXfioCNWxxxD9c@kumo.plessy.net>
+
+Dear Release team,
+
+as you may have seen, we are struggling with a lot of r-cran* packages for the
+Trixie release.
+
+Core issues are:
+
+ - Breakage on unsupported architectures upstream,
+ - Autopkgtest failures on amd64 / arm64 that we do not know how to troubleshoot
+   efficiently (other than turning off tests),
+ - R 4.5 transition.
+
+Every single point in that list is already enough to worry that we will not
+make it in time for the freeze.
+
+There are very little returns and incentives to support r-cran-* packages on
+archtectures that are not supported upstream.  Indeed, in a lot of cases the
+"support" we give is just to turn off tests to hide the fact that the packages
+do not work on non-mainstream (amd64, arm64) architectures, to ease migration.
+
+At least on my side, unsupported architecture breakages blur the radar for
+finding priorities on the two other points, and add some convolutions to some
+of the fixes.  I think that everything would be simpler if the packages would
+simply not be present on these architectures.  Please note again that we are
+already unable to promise that the packages are really working there, because
+we sometimes turn off tests as a fix.  Also in at least some of the
+architectures like i386 I think that it is fair to say that it is unlikely that
+somebody actually needs these packages to be present and functional in Trixie.
+
+The dependency tree of the r-cran-* (and r-bioc-*) packages maintained by the
+Debian R packaging team is mostly self-contained, with the exception of
+packages maintained by the Debian Med and the Debian Science teams, which
+are actually the motivation for packaging some of these r-cran-* packages.
+
+Earlier I asked debian-devel, Debian Med, Debian Science and Debian R teams if
+it would be fine to remove the packages and their reverse dependencies from
+the unsupported architectures, and I did not receive major objections. 
+
+There are a few r-cran-* packages maintained by Dirk, which are more at the
+core of the CRAN dependency graph.  I am not asking to remove these.  The
+r-base package is available on all release architectures and provides the
+tools needed to install CRAN pakcages directly from CRAN.
+
+The mass removal seems to necessitate a mass upload; I am committed to do it if
+necessary (and eventually) but I was wondering if there would be a possible
+shortcut with the help of the Release team, for just removing the packages from
+Trixie at the moment, because I expect that a mass upload can cause migration
+delays at a time where it really matters.
+
+Can you remove the r-cran-* packages and all their reverse-Depends from
+Trixie on all the 32-bit and big-endian architectures?
+
+Have a nice day, 
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Fri May  2 01:34:54 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 1 May 2025 20:34:54 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26643.34839.909447.791021@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <26643.34839.909447.791021@rob.eddelbuettel.com>
+Message-ID: <26644.8510.690439.334305@rob.eddelbuettel.com>
+
+As of right now, r-base has no excuses from autopkg-tests -- just the
+standard 'too young' so it should migrate in a week's time when it hits ten
+days. See https://qa.debian.org/excuses.php?package=r-base
+
+Thanks to everybody, and especially Rebecca, for moving it along.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri May  2 01:37:04 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 2 May 2025 10:37:04 +0900
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26644.8510.690439.334305@rob.eddelbuettel.com>
+References: <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <26643.34839.909447.791021@rob.eddelbuettel.com> <26644.8510.690439.334305@rob.eddelbuettel.com>
+Message-ID: <aBQhwL_9lJCoLNZN@kumo.plessy.net>
+
+Le Thu, May 01, 2025 at 08:34:54PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Thanks to everybody, and especially Rebecca, for moving it along.
+
+Deep thanks to Rebecca!
+
+Once the release is over, please teach us about your toolchain.  You seem to do
+in 10 min what takes me hours!
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From sramacher at debian.org  Fri May  2 06:20:51 2025
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Fri, 2 May 2025 08:20:51 +0200
+Subject: Re: Please help us to remove packages from 32-bit and big-endian architectures in Trixie.
+In-Reply-To: <aBQXfioCNWxxxD9c@kumo.plessy.net>
+References: <aBQXfioCNWxxxD9c@kumo.plessy.net>
+Message-ID: <aBRkQ1_CrQqeL1lZ@ramacher.at>
+
+Hi Charles
+
+On 2025-05-02 09:53:18 +0900, Charles Plessy wrote:
+> Can you remove the r-cran-* packages and all their reverse-Depends from
+> Trixie on all the 32-bit and big-endian architectures?
+
+No, we cannot. Architecture-specific removal needs to happen via FTP
+masters and removals in unstable. Those removals will then be synced to
+testing.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From plessy at debian.org  Fri May  2 06:27:11 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 2 May 2025 15:27:11 +0900
+Subject: Re: Please help us to remove packages from 32-bit and big-endian architectures in Trixie.
+In-Reply-To: <aBRkQ1_CrQqeL1lZ@ramacher.at>
+References: <aBQXfioCNWxxxD9c@kumo.plessy.net> <aBRkQ1_CrQqeL1lZ@ramacher.at>
+Message-ID: <aBRlv84FQnC6Rft2@kumo.plessy.net>
+
+Le Fri, May 02, 2025 at 08:20:51AM +0200, Sebastian Ramacher a écrit :
+> 
+> No, we cannot. Architecture-specific removal needs to happen via FTP
+> masters and removals in unstable. Those removals will then be synced to
+> testing.
+
+Thanks for the fast answer!
+
+Am I right that first I need to upload packages updated with adjusted
+build-dependencies, because otherwise the buildds will just rebuild the
+packages that were just removed?
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From elbrus at debian.org  Fri May  2 13:02:13 2025
+From: elbrus at debian.org (Paul Gevers)
+Date: Fri, 2 May 2025 15:02:13 +0200
+Subject: Re: Please help us to remove packages from 32-bit and big-endian architectures in Trixie.
+In-Reply-To: <aBRlv84FQnC6Rft2@kumo.plessy.net>
+References: <aBQXfioCNWxxxD9c@kumo.plessy.net> <aBRkQ1_CrQqeL1lZ@ramacher.at> <aBRlv84FQnC6Rft2@kumo.plessy.net>
+Message-ID: <5a253bef-141e-4467-a2d2-e84239f5094a@debian.org>
+
+Hi
+
+On 02-05-2025 08:27, Charles Plessy wrote:
+> Am I right that first I need to upload packages updated with adjusted
+> build-dependencies, because otherwise the buildds will just rebuild the
+> packages that were just removed?
+
+With "adjusted build-dependencies" do you mean the Architecture field, 
+or do you mean the "B-D-that-doesnt-exist [<arch-to-not-build>]" trick, 
+or something else? Nowadays it's recommended to not handle this via the 
+Architecture field but via that non-existing B-D [1]
+
+You only need to do this at the bottom of the stack; everything that 
+misses its build depends on an arch is not build. But yes, the 
+ftp-master might need to remove things is one go and/or in the right 
+order to prevent rebuilds.
+
+Paul
+
+[1] 
+https://salsa.debian.org/debian/developers-reference/-/merge_requests/60/diffs
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Fri May  2 13:05:16 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 2 May 2025 08:05:16 -0500
+Subject: Another R 4.5.0 and BioConductor 3.21 idea
+Message-ID: <26644.49932.443367.986665@rob.eddelbuettel.com>
+
+There is another possibly bullet point for the list Charles assembled in what
+became a long-ish thread.  We could simply update the (tiny) BiocVersion (aka
+r-bioc-biocversion) package to its new 3.21 release. (And, for the next few
+weeks, knowingly leave the other r-bioc-* packages at 3.20.) If and when a
+user invokes BiocManager::install() they will at least be able to install (or
+upgrade) packages.
+
+It removes a hard conflict between 3.20 and R 4.5.0 and allows continued
+operations.
+
+Of course, it is not ideal as a bunch of packages remain in 'need an update'
+state but that happens to other r-cran-* packages too at times.
+
+But it removes the hard(er) conflict we currently have.  Just a thought.
+
+Cheers,  Dirk
+
+PS I just 'organically' upgraded about 500 r-bioc-* packages three times each
+for Ubuntu 20.04, 22.04, and 24.04 over at my r2u project, and had no issues
+(besides racking up cpu cycles at GitHub Actions).  I ran this from the
+'inside out' ordering all packages by the number of BioC depenendencies,
+starting with the no-depends packages and working up. That way dependee
+packages were tested during the build.
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Sat May  3 11:36:21 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 3 May 2025 06:36:21 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <aBQhwL_9lJCoLNZN@kumo.plessy.net>
+References: <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <26643.34839.909447.791021@rob.eddelbuettel.com> <26644.8510.690439.334305@rob.eddelbuettel.com> <aBQhwL_9lJCoLNZN@kumo.plessy.net>
+Message-ID: <26645.65461.966105.763992@rob.eddelbuettel.com>
+
+For completeness, r-base 4.5.0-3 now migrated to testing.
+
+Big thank you to Rebecca for driving this, and to everybody else who helped
+with a test 'retry' (I did) or other nudges, including of course Graham who
+reset the time window to two days allowing the package to migrate sooner.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat May  3 17:37:27 2025
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 3 May 2025 19:37:27 +0200
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <fd42d0fb-86c5-4a9a-a63f-6d1cca2ec161@zoho.com>
+References: <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com> <26642.3004.847043.287734@rob.eddelbuettel.com> <fd42d0fb-86c5-4a9a-a63f-6d1cca2ec161@zoho.com>
+Message-ID: <aBZUV-Tv18o_zPJV@an3as.eu>
+
+Dear Rebecca,
+
+Am Thu, May 01, 2025 at 12:20:13PM +0100 schrieb Rebecca N. Palmer:
+> r-cran-testthat has migrated, which cuts some of the bigger tangles (as
+> packages that were already broken should no longer look like regressions).
+> The other new failures look like random flakiness (which I have retried)
+> and/or #1104335 (likely to go away on its own).  Hence, I'm now expecting
+> r-base 4.5 + r-bioc-bioccheck + r-bioc-pwalign + r-cran-rlang to migrate if
+> we simply wait.
+> 
+> I'm also expecting most of the other r-* packages with RC fixes to migrate,
+> but they're not blocking R 4.5 if they don't.
+
+Thanks a lot for your really tough work.  Its really appreciated
+    Andreas.
+
+-- 
+https://fam-tille.de
+
+From rebecca_palmer at zoho.com  Sun May  4 19:22:47 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Sun, 4 May 2025 20:22:47 +0100
+Subject: done Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <aBZUV-Tv18o_zPJV@an3as.eu>
+References: <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com> <26642.3004.847043.287734@rob.eddelbuettel.com> <fd42d0fb-86c5-4a9a-a63f-6d1cca2ec161@zoho.com> <aBZUV-Tv18o_zPJV@an3as.eu>
+Message-ID: <5ed04232-22c4-480d-838e-17febdaa8e5b@zoho.com>
+
+R 4.5 has migrated, and all other R package updates (except 
+r-cran-broom.helpers, which can't but that's not a problem, #1102589) 
+should migrate if we simply wait.
+
+Hence, there should be no urgent need to remove 32-bit r-*.
+
+I think that leaves r-cran-fastcluster as our only RC bug; it is 
+currently waiting for upstream.
+
+From plessy at debian.org  Thu May  8 05:48:51 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 8 May 2025 14:48:51 +0900
+Subject: Re: Another R 4.5.0 and BioConductor 3.21 idea
+In-Reply-To: <26644.49932.443367.986665@rob.eddelbuettel.com>
+References: <26644.49932.443367.986665@rob.eddelbuettel.com>
+Message-ID: <aBxFw8UFWR-xOp2N@kumo.plessy.net>
+
+Hi Dirk,
+
+thank you for thinking into this,
+
+I am not familiar enough with the topic to make a call by myself,
+but if you are confident that there are only benefits and no drawbacks,
+I can surely upload an update of r-bioc-biocversion.
+
+Have a nice day,
+
+Charles
+
+From edd at debian.org  Sun May 25 20:39:18 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 25 May 2025 15:39:18 -0500
+Subject: Bug#1106545: RFA: rpy2 -- Python3 interface to the GNU R language and environment (version 2)
+Message-ID: <174820555840.1793499.12597526372667044383.reportbug@rob.eddelbuettel.com>
+
+Package: wnpp
+Severity: normal
+X-Debbugs-Cc: rpy2 at packages.debian.org, edd at debian.org, debian-r at lists.debian.org, debian-python at lists.debian.org
+Control: affects -1 + src:rpy2
+
+I request an adopter for the rpy2 package.
+
+The package description is:
+ This Debian package provides RPy2, a very simple yet robust Python interface
+ to the GNU R Programming Language. It can manage different types of R objects,
+ and can execute arbitrary R functions, including graphic functions.
+ Rpy2 is a rewrite and extension of the older RPy interface.
+
+The package just got rewritten upstream (and arrived on pypi as rpy2-3.6.0)
+with two new sub-packages in rpy2 namespace, so it needs some work. And while
+I do (some, light) Pythob programming, I do not real other Python packaging
+so the minor rewrite or checkup it needs would be best provided by someone
+else.
+
+I am happy to look after it in the meantime, but my attempt at packaging it
+went nowhere right.  Sources are on salsa (https://salsa.debian.org/edd/rpy2)
+and generally in good shape.
+
+Feel free to ping me by email if you have question.
+
+Cheers,  Dirk
+

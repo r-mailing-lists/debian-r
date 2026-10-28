@@ -1,0 +1,1175 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2023-01",
+  "messages": [
+    {
+      "id": "msg-fc98a7e0b7ae",
+      "message_id": "<Y7wo8hJwgfu1OqCR@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-09T14:47:14Z",
+      "subject": "Re: Bug#1028111: r-cran-clock: autopkgtest failure on 32bit",
+      "subject_clean": "Bug#1028111: r-cran-clock: autopkgtest failure on 32bit",
+      "in_reply_to": "<167305332473.10049.16004521939574418521.reportbug@localhost>",
+      "references": [
+        "<167305332473.10049.16004521939574418521.reportbug@localhost>"
+      ],
+      "body_plain": "Control: tags -1 upstream\nControl: forwarded -1 https://github.com/r-lib/clock/issues/312\n\nI've forwarded the issue to the upstream issue tracker.\n\nKind regards\n   Andreas.\n\nAm Sat, Jan 07, 2023 at 03:02:04AM +0200 schrieb Adrian Bunk:\n> Source: r-cran-clock\n> Version: 0.6.1-1\n> Severity: serious\n> \n> https://tracker.debian.org/pkg/r-cran-clock\n> \n> Issues preventing migration:\n> ∙ ∙ autopkgtest for r-cran-clock/0.6.1-1: amd64: Pass, arm64: Pass, armel: Regression ♻ , armhf: Regression ♻ , i386: Regression ♻\n> \n> \n> ...\n> > test_check(\"clock\")\n> [ FAIL 2 | WARN 29 | SKIP 252 | PASS 1146 ]\n> \n> ══ Skipped tests ═══════════════════════════════════════════════════════════════\n> • On CRAN (252)\n> \n> ══ Failed tests ════════════════════════════════════════════════════════════════\n> ── Failure ('test-posixt.R:151'): can group by year/month/day/hour/minute/second ──\n> date_group(z, \"year\") (`actual`) not identical to `expect` (`expected`).\n> \n>     actual              | expected     \n> [1] \"-1-12-31 23:56:02\" - \"0-01-01\" [1]\n> [2] \"0-12-31 23:56:02\"  - \"1-01-01\" [2]\n> [3] \"1-12-31 23:56:02\"  - \"2-01-01\" [3]\n> [4] \"2-12-31 23:56:02\"  - \"3-01-01\" [4]\n> [5] \"3-12-31 23:56:02\"  - \"4-01-01\" [5]\n> ── Failure ('test-posixt.R:152'): can group by year/month/day/hour/minute/second ──\n> date_group(z, \"year\", n = 3) (`actual`) not identical to expect[c(1, 1, 1, 4, 4)] (`expected`).\n> \n>     actual              | expected     \n> [1] \"-1-12-31 23:56:02\" - \"0-01-01\" [1]\n> [2] \"-1-12-31 23:56:02\" - \"0-01-01\" [2]\n> [3] \"-1-12-31 23:56:02\" - \"0-01-01\" [3]\n> [4] \"2-12-31 23:56:02\"  - \"3-01-01\" [4]\n> [5] \"2-12-31 23:56:02\"  - \"3-01-01\" [5]\n> \n> [ FAIL 2 | WARN 29 | SKIP 252 | PASS 1146 ]\n> Error: Test failures\n> Execution halted\n> autopkgtest [16:10:54]: test run-unit-test: -----------------------]\n> autopkgtest [16:10:55]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -\n> run-unit-test        FAIL non-zero exit status 1\n> ...\n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 upstream\nControl: forwarded -1 https://github.com/r-lib/clock/issues/312\n\nI've forwarded the issue to the upstream issue tracker.\n\nKind regards\n   Andreas.\n\nAm Sat, Jan 07, 2023 at 03",
+      "thread_id": "thread-fc98a7e0b7ae",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-12e977eaee70",
+      "message_id": "<Y7x2j6niRnCtUNOG@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-09T20:18:23Z",
+      "subject": "Re: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>"
+      ],
+      "body_plain": "Control: tags -1 help\n\nI pushed some changes to git[1] that should fix this bug.\n\nUnfortunately the package does not build any more (even without my\nchanges)[2] due to\n\nError: package or namespace load failed for 'hunspell' in dyn.load(file, DLLpath = DLLpath, ...):\n unable to load shared object '/builds/r-pkg-team/r-cran-hunspell/debian/output/source_dir/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-source_dir/00new/hunspell/libs/hunspell.so':\n  /builds/r-pkg-team/r-cran-hunspell/debian/output/source_dir/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-source_dir/00new/hunspell/libs/hunspell.so: undefined symbol: _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb\nError: loading failed\nExecution halted\n\nI checked inside the pbuilder environment\n\n # R CMD INSTALL -l /build/r-cran-hunspell-3.0.2\\+dfsg2/debian/r-cran-hunspell/usr/lib/R/site-library  .\n # strings src/hunspell.so | grep _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb                                                   \n _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb\n _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb\n _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb\n\nso that symbol exists.  I have no idea how to proceed from here.\n\nAny help would be welcome\n    Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-hunspell\n[2] https://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/jobs/3770516\n\nAm Sat, Jan 07, 2023 at 04:28:28PM +0100 schrieb Rene Engelhard:\n> Package: r-cran-hunspell\n> Version: 3.0.2+dfsg-1\n> Severity: important\n> Tags: patch\n> \n> Dear Maintainer,\n> \n> I just noticed\n> \n> /usr/lib/R/site-library/hunspell/dict/en_GB.aff\n> /usr/lib/R/site-library/hunspell/dict/en_GB.dic\n> /usr/lib/R/site-library/hunspell/dict/en_US.aff\n> /usr/lib/R/site-library/hunspell/dict/en_US.dic\n> /usr/lib/R/site-library/hunspell/dict/readme.txt\n> \n> uh? There is\n> \n> hunspell-en-gb\n> hunspell-en-us\n> \n> and gazillions of other dictionaries?\n> \n> That one even says\n> \n> Dec 2018: Updated en_US / en_GB from\n>   https://extensions.libreoffice.org/extensions/english-dictionaries/2018-11.01\n> \n> If there's no mechanism in R to\n> handle them it seems they look in /usr/lib/R/site-library/hunspell? So\n> there just can be a symlink\n> \n> /usr/lib/R/site-library/hunspell/dict -> /usr/share/hunspell ?\n> \n> Filing it as important as that fits its definition:\n> \n> 1 important  a bug which has a major effect on the usability of a package, without rendering it completely unusable to everyone.\n> \n> It doesn't seem to support anything else than en_US and en_GB, so...\n> \n> Regards,\n> \n> Rene\n> \n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\n\nI pushed some changes to git[1] that should fix this bug.\n\nUnfortunately the package does not build any more (even without my\nchanges)[2] due to\n\nError: package or namespace loa",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-ee0683b293a2",
+      "message_id": "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+      "from_name": "Rene Engelhard",
+      "from_email_hash": "dd3af3fde1bdbf8d73dc2d6bb182d7eaf05034fd2503ef21cbb1e6997a3c61ab",
+      "date": "2023-01-09T20:40:17Z",
+      "subject": "Re: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<Y7x2j6niRnCtUNOG@an3as.eu>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nAm 09.01.23 um 21:18 schrieb Andreas Tille:\n> Control: tags -1 help\n\nErm, no? I think you mean #1028124, not this one (#1028130)?\n\n> I pushed some changes to git[1] that should fix this bug.\n\nYou only applied half of the patch in #1028124 so of course it breaks.\n> Unfortunately the package does not build any more (even without my\n> changes)[2] due to\n>\n> Error: package or namespace load failed for 'hunspell' in dyn.load(file, DLLpath = DLLpath, ...):\n>   unable to load shared object '/builds/r-pkg-team/r-cran-hunspell/debian/output/source_dir/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-source_dir/00new/hunspell/libs/hunspell.so':\n>    /builds/r-pkg-team/r-cran-hunspell/debian/output/source_dir/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-source_dir/00new/hunspell/libs/hunspell.so: undefined symbol: _Z6u8_u16RSt6vectorI6w_charSaIS0_EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb\n> Error: loading failed\n> Execution halted\n\nOf course that now happens if you build against sid.\n\nThe private headers now are for 1.7.2 - which as of now is in \nexperimental and thus you need to build against 1.7.2 (and probably have \na updated runtime dependency.)\n\nWhich is what my patch does in addition to the headers only. You just \napplied the header change in \nhttps://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/commit/ae8796cc2e2b72372b55cf40ce35a15bf00ae2d8, \nneither the build-dependency nor the runtime dependency. Do that and \nbuild against hunspell 1.7.2 and it will build.\n\nThe problem per se is that you copy private stuff over.\n\nNo one said 1.7.2 was in sid (actually if it was it would have been \nserious instead of important)\n\n(And also see \nhttps://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028124#24 which I \nespecially wrote to make the RT and you aware that 1.7.2 will not be \nthere soonish as hunspell-ko still breaks with 1.7.2).\n\nRegards,\n\nRene",
+      "body_snippet": "Hi,\n\nAm 09.01.23 um 21:18 schrieb Andreas Tille:\n> Control: tags -1 help\n\nErm, no? I think you mean #1028124, not this one (#1028130)?\n\n> I pushed some changes to git[1] that should fix this bug.\n\nYou",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-be0c045eae5d",
+      "message_id": "<d749bbbd-089d-1531-a047-c9009f1fabce@debian.org>",
+      "from_name": "Rene Engelhard",
+      "from_email_hash": "dd3af3fde1bdbf8d73dc2d6bb182d7eaf05034fd2503ef21cbb1e6997a3c61ab",
+      "date": "2023-01-09T21:38:37Z",
+      "subject": "Re: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>",
+        "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>"
+      ],
+      "body_plain": "Hi,\n\nAm 09.01.23 um 21:40 schrieb Rene Engelhard:\n> The private headers now are for 1.7.2 - which as of now is in\n> experimental and thus you need to build against 1.7.2 (and probably have\n> a updated runtime dependency.)\n>\n>\n> Which is what my patch does in addition to the headers only.\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/merge_requests/1\n\nRegards,\n\nRene",
+      "body_snippet": "Hi,\n\nAm 09.01.23 um 21:40 schrieb Rene Engelhard:\n> The private headers now are for 1.7.2 - which as of now is in\n> experimental and thus you need to build against 1.7.2 (and probably have\n> a updated",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-32f8f38d1099",
+      "message_id": "<Y70NS1F5G8fk+wxh@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-10T07:01:31Z",
+      "subject": "Re: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>",
+        "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>"
+      ],
+      "body_plain": "Hi Rene,\n\nAm Mon, Jan 09, 2023 at 09:40:17PM +0100 schrieb Rene Engelhard:\n> \n> Of course that now happens if you build against sid.\n> \n> The private headers now are for 1.7.2 - which as of now is in experimental\n> and thus you need to build against 1.7.2 (and probably have a updated\n> runtime dependency.)\n\nAh, sorry for missing this.\n \n> Which is what my patch does in addition to the headers only. You just\n> applied the header change in https://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/commit/ae8796cc2e2b72372b55cf40ce35a15bf00ae2d8,\n> neither the build-dependency nor the runtime dependency. Do that and build\n> against hunspell 1.7.2 and it will build.\n> \n> \n> The problem per se is that you copy private stuff over.\n\nI'm aware that this is not a nice solution - I considered a bit better\nthen keeping a full code copy of hunspell which is shipped by upstream.\nOn the other hand this would saved us some work now.\n \nAfter merging your MR the package builds.  However, I get two failures\nwhen running its test suite:\n\n══ Failed tests ════════════════════════════════════════════════════════════════\n── Failure ('test-encodings.R:16'): Dictionaries are found ─────────────────────\nhunspell_info(\"en_US\")$wordchars not equal to \"’\".\n1/1 mismatches\nx[1]: \"0123456789’\"\ny[1]: \"’\"\n── Failure ('test-encodings.R:17'): Dictionaries are found ─────────────────────\nhunspell_info(\"en_GB\")$wordchars not equal to \"’\".\n1/1 mismatches\nx[1]: \"0123456789’\"\ny[1]: \"’\"\n\n[ FAIL 2 | WARN 0 | SKIP 0 | PASS 126 ]\nError: Test failures\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Rene,\n\nAm Mon, Jan 09, 2023 at 09:40:17PM +0100 schrieb Rene Engelhard:\n> \n> Of course that now happens if you build against sid.\n> \n> The private headers now are for 1.7.2 - which as of now is in ",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-c2d802bed659",
+      "message_id": "<E7246018-DF5C-496E-940C-E0D3BD7FCBBB@debian.org>",
+      "from_name": "Rene Engelhard",
+      "from_email_hash": "dd3af3fde1bdbf8d73dc2d6bb182d7eaf05034fd2503ef21cbb1e6997a3c61ab",
+      "date": "2023-01-10T07:30:52Z",
+      "subject": "Re: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<Y70NS1F5G8fk+wxh@an3as.eu>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>",
+        "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+        "<Y70NS1F5G8fk+wxh@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nAm 10. Januar 2023 08:01:31 MEZ schrieb Andreas Tille <andreas at an3as.eu>:\n\n>> The problem per se is that you copy private stuff over.\n>\n>I'm aware that this is not a nice solution - I considered a bit better\n>then keeping a full code copy of hunspell which is shipped by upstream.\n\nOh my... Yeah, it probably is. If you filed a bug with a wish for a libhunspell-private-dev or somesuch (as e.g. poppler or Qt do) I am not sure I'd have done that but that'd probably be the cleanest solution. (Though given the waiting time in NEW for simple binary package additions I'd now not like to have to do it..\n)\n\n>On the other hand this would saved us some work now.\n\nMaybe, yes, but...\n\n>After merging your MR the package builds.  However, I get two failures\n>when running its test suite:\n>\n>\n>══ Failed tests ════════════════════════════════════════════════════════════════\n>── Failure ('test-encodings.R:16'): Dictionaries are found ─────────────────────\n>hunspell_info(\"en_US\")$wordchars not equal to \"’\".\n>1/1 mismatches\n>x[1]: \"0123456789’\"\n>y[1]: \"’\"\n\nGroan. Looks like it needs some specific stuff in the dictionaries it has which are now used from the system. I don't think it should not do that, can't the tests be adapted?\n\nRegards\n\nRené \n-- \nDiese Nachricht wurde von meinem Android-Gerät mit K-9 Mail gesendet.",
+      "body_snippet": "Hi,\n\nAm 10. Januar 2023 08:01:31 MEZ schrieb Andreas Tille <andreas at an3as.eu>:\n\n>> The problem per se is that you copy private stuff over.\n>\n>I'm aware that this is not a nice solution - I consider",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 3,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-8ad69bb6e863",
+      "message_id": "<Y70hZNG3AfzDmdQJ@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-10T08:27:16Z",
+      "subject": "Re: Bug#1028124: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028124: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<E7246018-DF5C-496E-940C-E0D3BD7FCBBB@debian.org>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>",
+        "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+        "<Y70NS1F5G8fk+wxh@an3as.eu>",
+        "<Y7l+An91x4XCaYDO@rene-engelhard.de>",
+        "<E7246018-DF5C-496E-940C-E0D3BD7FCBBB@debian.org>"
+      ],
+      "body_plain": "Hi Rene,\n\nAm Tue, Jan 10, 2023 at 08:30:52AM +0100 schrieb Rene Engelhard:\n> >> The problem per se is that you copy private stuff over.\n> >\n> >I'm aware that this is not a nice solution - I considered a bit better\n> >then keeping a full code copy of hunspell which is shipped by upstream.\n> \n> Oh my... Yeah, it probably is. If you filed a bug with a wish for a libhunspell-private-dev or somesuch (as e.g. poppler or Qt do) I am not sure I'd have done that but that'd probably be the cleanest solution. (Though given the waiting time in NEW for simple binary package additions I'd now not like to have to do it..\n> )\n\nI have no experience how frequently those private headers are changing.\nI'd say: If we run into similar trouble again we could consider a\ncleaner solution - but for the moment it workd somehow.\n \n> >On the other hand this would saved us some work now.\n> \n> Maybe, yes, but...\n\n:-)\n \n> >After merging your MR the package builds.  However, I get two failures\n> >when running its test suite:\n> >\n> >\n> >══ Failed tests ════════════════════════════════════════════════════════════════\n> >── Failure ('test-encodings.R:16'): Dictionaries are found ─────────────────────\n> >hunspell_info(\"en_US\")$wordchars not equal to \"’\".\n> >1/1 mismatches\n> >x[1]: \"0123456789’\"\n> >y[1]: \"’\"\n> \n> Groan. Looks like it needs some specific stuff in the dictionaries it has which are now used from the system. I don't think it should not do that, can't the tests be adapted?\n\nPossibly.  I'm fine with skipping these two tests for the moment.\nI'd assume that upstream will stumble upon this once the package\nitself is upgraded to hunspell 1.7.2.\n\nKind regards\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Rene,\n\nAm Tue, Jan 10, 2023 at 08:30:52AM +0100 schrieb Rene Engelhard:\n> >> The problem per se is that you copy private stuff over.\n> >\n> >I'm aware that this is not a nice solution - I considered",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 4,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-8ce3a9e59dd6",
+      "message_id": "<FE516D50-51E4-498E-A41E-2E8C607B5A94@debian.org>",
+      "from_name": "Rene Engelhard",
+      "from_email_hash": "dd3af3fde1bdbf8d73dc2d6bb182d7eaf05034fd2503ef21cbb1e6997a3c61ab",
+      "date": "2023-01-10T09:19:10Z",
+      "subject": "Re: Bug#1028124: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "subject_clean": "Bug#1028124: Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "in_reply_to": "<Y70hZNG3AfzDmdQJ@an3as.eu>",
+      "references": [
+        "<Y7mPnEHCgu6RspBs@rene-engelhard.de>",
+        "<Y7x2j6niRnCtUNOG@an3as.eu>",
+        "<b4f7e466-4b98-4c5a-63e2-deee345597d8@debian.org>",
+        "<Y70NS1F5G8fk+wxh@an3as.eu>",
+        "<Y7l+An91x4XCaYDO@rene-engelhard.de>",
+        "<E7246018-DF5C-496E-940C-E0D3BD7FCBBB@debian.org>",
+        "<Y70hZNG3AfzDmdQJ@an3as.eu>"
+      ],
+      "body_plain": "Ho,\n\nAm 10. Januar 2023 09:27:16 MEZ schrieb Andreas Tille <andreas at an3as.eu>:\n  However, I get two failures\n>> >when running its test suite:\n>> >\n>> >\n>> >══ Failed tests ════════════════════════════════════════════════════════════════\n>> >── Failure ('test-encodings.R:16'): Dictionaries are found ─────────────────────\n>> >hunspell_info(\"en_US\")$wordchars not equal to \"’\".\n>> >1/1 mismatches\n>> >x[1]: \"0123456789’\"\n>> >y[1]: \"’\"\n>> \n>> Groan. Looks like it needs some specific stuff in the dictionaries it has which are now used from the system. I don't think it should not do that, can't the tests be adapted?\n>\n>Possibly.  I'm fine with skipping these two tests for the moment.\n>I'd assume that upstream will stumble upon this once the package\n>itself is upgraded to hunspell 1.7.2.\n\nI don't believe that failure is because of hunspell 1.7.2.. But related to the usage of other dictionaries... So as long as they ship internal dictionaries...\nThen again noone expected the Korean failure(s) either...\n\nShould be easy to cross check...\n\nRegards\n\nRené \n-- \nDiese Nachricht wurde von meinem Android-Gerät mit K-9 Mail gesendet.",
+      "body_snippet": "Ho,\n\nAm 10. Januar 2023 09:27:16 MEZ schrieb Andreas Tille <andreas at an3as.eu>:\n  However, I get two failures\n>> >when running its test suite:\n>> >\n>> >\n>> >══ Failed tests ═════════════════════════",
+      "thread_id": "thread-12e977eaee70",
+      "thread_depth": 5,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-22362c7f2803",
+      "message_id": "<Y72kA6jgwj4FXvIz@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-10T17:44:35Z",
+      "subject": "Please review autopkgtest of r-cran-tmb / r-cran-glmmtmb",
+      "subject_clean": "Please review autopkgtest of r-cran-tmb / r-cran-glmmtmb",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nmy last upload of r-cran-tmb was:\n\n r-cran-tmb (1.9.1-3) unstable; urgency=medium\n .\n   * Rebuild against latest version of r-cran-matrix\n   * Keep patch and add DEP3, but deactivate patch.  It seems we\n     should not ignore the signal a new rmatrix raises and rebuild\n     this package accordingly afterwards\n\nI can install r-cran-tmb and r-cran-glmmtmb in a local unstable\nchroot and load the libraries in R.  Unfortunately this does not\nseem to work in debci as per\n\n  https://tracker.debian.org/pkg/r-cran-tmb\n\nAny idea how to let the packages smoothly would be welcome.\n\nKind regards\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nmy last upload of r-cran-tmb was:\n\n r-cran-tmb (1.9.1-3) unstable; urgency=medium\n .\n   * Rebuild against latest version of r-cran-matrix\n   * Keep patch and add DEP3, but deactivate patch.  It s",
+      "thread_id": "thread-22362c7f2803",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-543593b3e724",
+      "message_id": "<20230110180229.wdd4krkl6r2avaaj@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-10T18:02:29Z",
+      "subject": "Re: Please review autopkgtest of r-cran-tmb / r-cran-glmmtmb",
+      "subject_clean": "Please review autopkgtest of r-cran-tmb / r-cran-glmmtmb",
+      "in_reply_to": "<Y72kA6jgwj4FXvIz@an3as.eu>",
+      "references": [
+        "<Y72kA6jgwj4FXvIz@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Jan 10, 2023 at 06:44:35PM +0100, Andreas Tille wrote:\n> Hi,\n> \n> my last upload of r-cran-tmb was:\n> \n>  r-cran-tmb (1.9.1-3) unstable; urgency=medium\n>  .\n>    * Rebuild against latest version of r-cran-matrix\n>    * Keep patch and add DEP3, but deactivate patch.  It seems we\n>      should not ignore the signal a new rmatrix raises and rebuild\n>      this package accordingly afterwards\n> \n> I can install r-cran-tmb and r-cran-glmmtmb in a local unstable\n> chroot and load the libraries in R.  Unfortunately this does not\n> seem to work in debci as per\n> \n>   https://tracker.debian.org/pkg/r-cran-tmb\n\nThis is expected. debci tests packages against their versions in testing.\nIt pulls matrix from testing and fails,\n\nquoting relevant log:\n| Selecting previously unselected package r-cran-matrix.\n| Preparing to unpack .../65-r-cran-matrix_1.5-1-1_amd64.deb ...\n| Unpacking r-cran-matrix (1.5-1-1) ...\n\n> Any idea how to let the packages smoothly would be welcome.\n\nVersioned \"Depends\" against rmatrix is the way to go. This[1] should\nbe changed to (>= 1.5-3-1~)\nPlease ensure that the correct version is getting pulled before you upload.\n\n[1]: https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/control#L24\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, Jan 10, 2023 at 06:44:35PM +0100, Andreas Tille wrote:\n> Hi,\n> \n> my last upload of r-cran-tmb was:\n> \n>  r-cran-tmb (1.9.1-3) unstable; urgency=medium\n>  .\n>    * Rebuild against latest versi",
+      "thread_id": "thread-22362c7f2803",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-e2930d552686",
+      "message_id": "<Y73FWHtZ/oNT4d2r@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-10T20:06:48Z",
+      "subject": "MutationalPatterns fails one test when using latest version of stringr",
+      "subject_clean": "MutationalPatterns fails one test when using latest version of stringr",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nafter uploading stringgr 1.5.0 to the Debian package pool\nMutationalPatterns fails with:\n\n══ Failed tests ════════════════════════════════════════════════════════════════\n── Error ('test-lengthen_mut_matrix.R:16'): (code run outside of `test_that()`) ──\n<vctrs_error_incompatible_size/vctrs_error_incompatible/vctrs_error/rlang_error/error/condition>\nError in `stringr::str_c(rownames(mut_matrix), \"_\", types_rownames)`: Can't recycle `..1` (size 96) to match `..3` (size 384).\nBacktrace:\n     ▆\n  1. ├─MutationalPatterns::lengthen_mut_matrix(input) at test-lengthen_mut_matrix.R:16:0\n  2. │ ├─... %>% do.call(cbind, .)\n  3. │ └─purrr::map(mut_mat_l, .lengthen_mut_matrix_single_sample)\n  4. │   └─MutationalPatterns (local) .f(.x[[i]], ...)\n  5. │     └─stringr::str_c(rownames(mut_matrix), \"_\", types_rownames)\n  6. │       └─vctrs::vec_size_common(!!!dots)\n  7. ├─base::do.call(cbind, .)\n  8. └─vctrs::stop_incompatible_size(...)\n  9.   └─vctrs:::stop_incompatible(...)\n 10.     └─vctrs:::stop_vctrs(...)\n 11.       └─rlang::abort(message, class = c(class, \"vctrs_error\"), ..., call = vctrs_error_call(call))\n\n[ FAIL 1 | WARN 1 | SKIP 0 | PASS 299 ]\n\nYou can find a test build log here:\n\n   https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-mutationalpatterns/30185040/log.gz\n\nKind regards\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nafter uploading stringgr 1.5.0 to the Debian package pool\nMutationalPatterns fails with:\n\n══ Failed tests ════════════════════════════════════════════════════════════════\n── Error ('test-lengthen",
+      "thread_id": "thread-e2930d552686",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-234e68dd8cb9",
+      "message_id": "<4BE2B3B3-754D-4484-AD4D-8E55E15DF2A1@prinsesmaximacentrum.nl>",
+      "from_name": "Roosmalen-3, M.J. van (Mark)",
+      "from_email_hash": "c458d8206b4545b30c04f24e2748bb6aa0cd1d9580203ab316e2f4d1726e9fcb",
+      "date": "2023-01-11T06:45:42Z",
+      "subject": "Re: MutationalPatterns fails one test when using latest version of stringr",
+      "subject_clean": "MutationalPatterns fails one test when using latest version of stringr",
+      "in_reply_to": "<Y73FWHtZ/oNT4d2r@an3as.eu>",
+      "references": [
+        "<Y73FWHtZ/oNT4d2r@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nThank you of notifying. We currently working on fixing this error.\n\nBest\nMark\n\n﻿On 10/01/2023, 21:06, \"Andreas Tille\" <andreas at an3as.eu> wrote:\n\n    Hi,\n\n    after uploading stringgr 1.5.0 to the Debian package pool\n    MutationalPatterns fails with:\n\n    ══ Failed tests ════════════════════════════════════════════════════════════════\n    ── Error ('test-lengthen_mut_matrix.R:16'): (code run outside of `test_that()`) ──\n    <vctrs_error_incompatible_size/vctrs_error_incompatible/vctrs_error/rlang_error/error/condition>\n    Error in `stringr::str_c(rownames(mut_matrix), \"_\", types_rownames)`: Can't recycle `..1` (size 96) to match `..3` (size 384).\n    Backtrace:\n         ▆\n      1. ├─MutationalPatterns::lengthen_mut_matrix(input) at test-lengthen_mut_matrix.R:16:0\n      2. │ ├─... %>% do.call(cbind, .)\n      3. │ └─purrr::map(mut_mat_l, .lengthen_mut_matrix_single_sample)\n      4. │   └─MutationalPatterns (local) .f(.x[[i]], ...)\n      5. │     └─stringr::str_c(rownames(mut_matrix), \"_\", types_rownames)\n      6. │       └─vctrs::vec_size_common(!!!dots)\n      7. ├─base::do.call(cbind, .)\n      8. └─vctrs::stop_incompatible_size(...)\n      9.   └─vctrs:::stop_incompatible(...)\n     10.     └─vctrs:::stop_vctrs(...)\n     11.       └─rlang::abort(message, class = c(class, \"vctrs_error\"), ..., call = vctrs_error_call(call))\n\n    [ FAIL 1 | WARN 1 | SKIP 0 | PASS 299 ]\n\n    You can find a test build log here:\n\n       https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-mutationalpatterns/30185040/log.gz\n\n    Kind regards\n       Andreas.\n\n    -- \n    http://fam-tille.de",
+      "body_snippet": "Hi Andreas\n\nThank you of notifying. We currently working on fixing this error.\n\nBest\nMark\n\n﻿On 10/01/2023, 21:06, \"Andreas Tille\" <andreas at an3as.eu> wrote:\n\n    Hi,\n\n    after uploading stringgr 1.",
+      "thread_id": "thread-e2930d552686",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-89aeaf6260f1",
+      "message_id": "<Y8GAkFn5aEvAccp+@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-13T16:02:24Z",
+      "subject": "Help needed to skip test on i386 only",
+      "subject_clean": "Help needed to skip test on i386 only",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI intended to exclude some tests for r-cran-leidenbase for the i386\narchitecture since upstream does not respond to the issue I opened[1].\nI tried my luck with a patch[2] basically adding\n\n  skip_if(Sys.info()[[\"machine\"]] == \"i386\")\n\nbefore the test in question.  Unfortunately my build on i386 arch\nkept on running these tests and thus failed.  Any idea what might\nbe wrong with my skip_if statement?\n\nKind regards\n   Andreas.\n\n[1] https://github.com/cole-trapnell-lab/leidenbase/issues/36\n[2] https://salsa.debian.org/r-pkg-team/r-cran-leidenbase/-/blob/master/debian/patches/ignore_failing_test_on_i386.patch\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI intended to exclude some tests for r-cran-leidenbase for the i386\narchitecture since upstream does not respond to the issue I opened[1].\nI tried my luck with a patch[2] basically adding\n\n  skip",
+      "thread_id": "thread-89aeaf6260f1",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-4bad4977fb91",
+      "message_id": "<20230113164114.5v7ot5jtiw47k3cy@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-13T16:41:14Z",
+      "subject": "Re: Help needed to skip test on i386 only",
+      "subject_clean": "Help needed to skip test on i386 only",
+      "in_reply_to": "<Y8GAkFn5aEvAccp+@an3as.eu>",
+      "references": [
+        "<Y8GAkFn5aEvAccp+@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn Fri, Jan 13, 2023 at 05:02:24PM +0100, Andreas Tille wrote:\n> I intended to exclude some tests for r-cran-leidenbase for the i386\n> architecture since upstream does not respond to the issue I opened[1].\n> I tried my luck with a patch[2] basically adding\n> [...]\n> before the test in question.\n\nI have uploaded the package with a patch which should fix autopkgtests\non i386 as I also verified locally with a i386 chroot.\n\nHope that helps.\n\n> [1] https://github.com/cole-trapnell-lab/leidenbase/issues/36\n> [2] https://salsa.debian.org/r-pkg-team/r-cran-leidenbase/-/blob/master/debian/patches/ignore_failing_test_on_i386.patch\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Andreas,\n\nOn Fri, Jan 13, 2023 at 05:02:24PM +0100, Andreas Tille wrote:\n> I intended to exclude some tests for r-cran-leidenbase for the i386\n> architecture since upstream does not respond to the ",
+      "thread_id": "thread-89aeaf6260f1",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-749858999608",
+      "message_id": "<Y8GzI23A8QvL//y1@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-13T19:38:11Z",
+      "subject": "Re: Help needed to skip test on i386 only",
+      "subject_clean": "Help needed to skip test on i386 only",
+      "in_reply_to": "<20230113164114.5v7ot5jtiw47k3cy@nileshpatra.info>",
+      "references": [
+        "<Y8GAkFn5aEvAccp+@an3as.eu>",
+        "<20230113164114.5v7ot5jtiw47k3cy@nileshpatra.info>"
+      ],
+      "body_plain": "Hi Nilesh\n\nAm Fri, Jan 13, 2023 at 10:11:14PM +0530 schrieb Nilesh Patra:\n> I have uploaded the package with a patch which should fix autopkgtests\n> on i386 as I also verified locally with a i386 chroot.\n> \n> Hope that helps.\n\nIt helps a lot!\n\nKind regards\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh\n\nAm Fri, Jan 13, 2023 at 10:11:14PM +0530 schrieb Nilesh Patra:\n> I have uploaded the package with a patch which should fix autopkgtests\n> on i386 as I also verified locally with a i386 chro",
+      "thread_id": "thread-89aeaf6260f1",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-e026d338e9ec",
+      "message_id": "<Y8r7DBbthHSbulLw@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-20T20:35:24Z",
+      "subject": "Re: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384)",
+      "subject_clean": "Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384)",
+      "in_reply_to": "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+      "references": [
+        "<joshuaulrich/xts/issues/384@github.com>",
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nAm Fri, Jan 20, 2023 at 11:48:52AM -0600 schrieb Dirk Eddelbuettel:\n> Thanks -- version 4.2.2.20221110-2 with the change is being uploaded now.  I\n> forgot the 'done' entry in the changelog so doing that here and now.\n\nThanks a lot for the quick and helpful action\n    Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nAm Fri, Jan 20, 2023 at 11:48:52AM -0600 schrieb Dirk Eddelbuettel:\n> Thanks -- version 4.2.2.20221110-2 with the change is being uploaded now.  I\n> forgot the 'done' entry in the changelog ",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-366445b9dde3",
+      "message_id": "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-21T11:26:37Z",
+      "subject": "[Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "[Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>"
+      ],
+      "body_plain": "Control: tags -1 help\nControl: reopen -1\n (reopening to make sure we will not overlook this bug)\n\nHi,\n\nas per DebCI there are 15 autopkgtest failures which seem to be\nconnected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\nshow this autopkgtest error neither can I reproduce the problem on my local\npbuilder.\n\nHas anyone some idea what might be wrong?  If not I might ask bug reporter\nfor more info.\n\nKind regards\n    Andreas.\n\n[1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/30534574/log.gz\n[2] https://salsa.debian.org/r-pkg-team/r-cran-bayesplot/-/jobs/3779597\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\nControl: reopen -1\n (reopening to make sure we will not overlook this bug)\n\nHi,\n\nas per DebCI there are 15 autopkgtest failures which seem to be\nconnected to ggplot2 API somehow.",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-5b20cc573b7f",
+      "message_id": "<Y8vtDByDu7O614SY@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-21T13:47:56Z",
+      "subject": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "subject_clean": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'm just running into\n\n   dh_auto_install: warning: can't parse dependency spatstat (>= 2.3-3).linnet (>= 2.0-0)\n   Can't call method \"get_deps\" on an undefined value at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 51.\n\nwhen trying to build r-cran-spatstat.core[1]\n\nI've never seen this strange substitution of dependencies before.\nAny idea what's wrong here?\n\nKind regards\n   Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-spatstat.core/-/jobs/3830571\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'm just running into\n\n   dh_auto_install: warning: can't parse dependency spatstat (>= 2.3-3).linnet (>= 2.0-0)\n   Can't call method \"get_deps\" on an undefined value at /usr/share/perl5/Debian/D",
+      "thread_id": "thread-5b20cc573b7f",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-fab52f52593a",
+      "message_id": "<014aec89-9ebf-a26d-a2a2-8de278bb9b51@debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-21T15:39:15Z",
+      "subject": "Re: Strange error in dh_auto_install of r-cran-spatstat.core",
+      "subject_clean": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "in_reply_to": "<Y8vtDByDu7O614SY@an3as.eu>",
+      "references": [
+        "<Y8vtDByDu7O614SY@an3as.eu>"
+      ],
+      "body_plain": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\nHi Andreas,\n\nOn 1/21/23 19:17, Andreas Tille wrote:\n> Hi,\n>\n> I'm just running into\n>\n>     dh_auto_install: warning: can't parse dependency spatstat (>= 2.3-3).linnet (>= 2.0-0)\n>     Can't call method \"get_deps\" on an undefined value at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 51.\n>\n> when trying to build r-cran-spatstat.core[1]\n>\n> I've never seen this strange substitution of dependencies before.\n> Any idea what's wrong here?\n\nCongrats. Looks like you hit a case which catches a bug in dh-R.\n\nThe problem is in the code when you are trying to substitute test depends from the ones in suggests[2]. The substitution\nthat you are trying to do is also replacing prefixes with versioned dep. Since there is spatstat and spatstat.linnet both in\nd/t/control test-depends, and as you could see spatstat is a common prefix, it is replacing this with the one\nwritten in DESCRIPTION file which is wrong.\n\nAs it seems to me that you only intend to replace non-versioned stuff with the versioned stuff, maybe you don't have\nto replace all strings that are prefix. So _maybe_ a patch like this would do (it works in this case at least):\n\ndiff --git a/dh/R.pm b/dh/R.pm\nindex 18171ae..7d052b1 100644\n--- a/dh/R.pm\n+++ b/dh/R.pm\n@@ -210,7 +210,7 @@ sub install {\n          $rsname =~ s/[\\s(].*// ;\n          if ( grep(/^$rsname$/i, @testdeps) ) {\n            if ( $rs ne $rsname ) { # seems that is a versioned depends that needs to be propagated to Recommends\n-             $testdepends =~ s/$rsname */$rs/ ;\n+             $testdepends =~ s/$rsname$/$rs/ ;\n            }\n          } else {\n            $newsuggests = $newsuggests . ', ' . $rs ;\n\nBut that said, I do not know the essence of this code, and please _triple check_ and ** do not blindly apply **\n\n> [1] https://salsa.debian.org/r-pkg-team/r-cran-spatstat.core/-/jobs/3830571\n\n[2]: https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L213\n\nHope that helps.\n\nThank you\nNilesh",
+      "body_snippet": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\nHi Andreas,\n\nOn 1/21/23 19:17, Andreas Tille wrote:\n> Hi,\n>\n> I'm just running in",
+      "thread_id": "thread-5b20cc573b7f",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-38346e5d30c5",
+      "message_id": "<152e6c36-b5df-9ddb-0c26-53cd1d21bf0e@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-01-21T15:44:43Z",
+      "subject": "Re: Strange error in dh_auto_install of r-cran-spatstat.core",
+      "subject_clean": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "in_reply_to": "<Y8vtDByDu7O614SY@an3as.eu>",
+      "references": [
+        "<Y8vtDByDu7O614SY@an3as.eu>"
+      ],
+      "body_plain": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\nHi Andreas,\n\nOn 1/21/23 19:17, Andreas Tille wrote:\n> Hi,\n>\n> I'm just running into\n>\n>     dh_auto_install: warning: can't parse dependency spatstat (>= 2.3-3).linnet (>= 2.0-0)\n>     Can't call method \"get_deps\" on an undefined value at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 51.\n>\n> when trying to build r-cran-spatstat.core[1]\n>\n> I've never seen this strange substitution of dependencies before.\n> Any idea what's wrong here?\n\nCongrats. Looks like you hit a case which catches a bug in dh-R.\n\nThe problem is in the code when you are trying to substitute test depends from the ones in suggests[2]. The substitution\nthat you are trying to do is also replacing prefixes with versioned dep. Since there is spatstat and spatstat.linnet both in\nd/t/control test-depends, and as you could see spatstat is a common prefix, it is replacing this with the one\nwritten in DESCRIPTION file which is wrong.\n\nAs it seems to me that you only intend to replace non-versioned stuff with the versioned stuff, maybe you don't have\nto replace all strings that are prefix. So _maybe_ a patch like this would do (it works in this case at least):\n\ndiff --git a/dh/R.pm b/dh/R.pm\nindex 18171ae..7d052b1 100644\n--- a/dh/R.pm\n+++ b/dh/R.pm\n@@ -210,7 +210,7 @@ sub install {\n          $rsname =~ s/[\\s(].*// ;\n          if ( grep(/^$rsname$/i, @testdeps) ) {\n            if ( $rs ne $rsname ) { # seems that is a versioned depends that needs to be propagated to Recommends\n-             $testdepends =~ s/$rsname */$rs/ ;\n+             $testdepends =~ s/$rsname$/$rs/ ;\n            }\n          } else {\n            $newsuggests = $newsuggests . ', ' . $rs ;\n\nBut that said, I do not know the essence of this code, and please _triple check_ and ** do not blindly apply **\n\n> [1] https://salsa.debian.org/r-pkg-team/r-cran-spatstat.core/-/jobs/3830571\n\n[2]: https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L213\n\nHope that helps.\n\nThank you\nNilesh",
+      "body_snippet": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\nHi Andreas,\n\nOn 1/21/23 19:17, Andreas Tille wrote:\n> Hi,\n>\n> I'm just running in",
+      "thread_id": "thread-5b20cc573b7f",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-1cfc7cbf7f55",
+      "message_id": "<fb72177a-4028-4914-7ba0-6d62ee4faa9b@debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-21T15:52:36Z",
+      "subject": "Re: Strange error in dh_auto_install of r-cran-spatstat.core",
+      "subject_clean": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "in_reply_to": "<Y8vtDByDu7O614SY@an3as.eu>",
+      "references": [
+        "<Y8vtDByDu7O614SY@an3as.eu>"
+      ],
+      "body_plain": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\n[ Looks like I has mistakenly submitted the report to control@ earlier, fixing that, rest of the mail is copied as is ]\n\nHi Andreas,\n\nOn 1/21/23 19:17, Andreas Tille wrote:\n> Hi,\n>\n> I'm just running into\n>\n>     dh_auto_install: warning: can't parse dependency spatstat (>= 2.3-3).linnet (>= 2.0-0)\n>     Can't call method \"get_deps\" on an undefined value at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 51.\n>\n> when trying to build r-cran-spatstat.core[1]\n>\n> I've never seen this strange substitution of dependencies before.\n> Any idea what's wrong here?\n\nCongrats. Looks like you hit a case which catches a bug in dh-R.\n\nThe problem is in the code when you are trying to substitute test depends from the ones in suggests[2]. The substitution\nthat you are trying to do is also replacing prefixes with versioned dep. Since there is spatstat and spatstat.linnet both in\nd/t/control test-depends, and as you could see spatstat is a common prefix, it is replacing this with the one\nwritten in DESCRIPTION file which is wrong.\n\nAs it seems to me that you only intend to replace non-versioned stuff with the versioned stuff, maybe you don't have\nto replace all strings that are prefix. So _maybe_ a patch like this would do (it works in this case at least):\n\ndiff --git a/dh/R.pm b/dh/R.pm\nindex 18171ae..7d052b1 100644\n--- a/dh/R.pm\n+++ b/dh/R.pm\n@@ -210,7 +210,7 @@ sub install {\n          $rsname =~ s/[\\s(].*// ;\n          if ( grep(/^$rsname$/i, @testdeps) ) {\n            if ( $rs ne $rsname ) { # seems that is a versioned depends that needs to be propagated to Recommends\n-             $testdepends =~ s/$rsname */$rs/ ;\n+             $testdepends =~ s/$rsname$/$rs/ ;\n            }\n          } else {\n            $newsuggests = $newsuggests . ', ' . $rs ;\n\nBut that said, I do not know the essence of this code, and please _triple check_ and ** do not blindly apply **\n\n> [1] https://salsa.debian.org/r-pkg-team/r-cran-spatstat.core/-/jobs/3830571\n\n[2]: https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L213\n\nHope that helps.\n\nThank you\nNilesh",
+      "body_snippet": "Source: dh-r\nVersion: 20210816\nSeverity: serious\nControl: retitle -1 dh-r parsing of tests depends/suggests is faulty\n\n[ Looks like I has mistakenly submitted the report to control@ earlier, fixing th",
+      "thread_id": "thread-5b20cc573b7f",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-5ff779761a00",
+      "message_id": "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-21T16:16:07Z",
+      "subject": "Re: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "[Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>"
+      ],
+      "body_plain": "On 1/21/23 16:56, Andreas Tille wrote:\n> as per DebCI there are 15 autopkgtest failures which seem to be\n> connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n> show this autopkgtest error neither can I reproduce the problem on my local\n> pbuilder.\n>\n> Has anyone some idea what might be wrong?  If not I might ask bug reporter\n> for more info.\n\nI can't repro it either. But the log you point to is a fresh failure (today).\nDid not dig deeper, but did you take a look at the `diff` between log that passes and the one\nwhich does not?\n\nI'm suspecting there is some dependency problem here.\n\n> [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/30534574/log.gz\n> [2] https://salsa.debian.org/r-pkg-team/r-cran-bayesplot/-/jobs/3779597\n\nThanks\nNilesh",
+      "body_snippet": "On 1/21/23 16:56, Andreas Tille wrote:\n> as per DebCI there are 15 autopkgtest failures which seem to be\n> connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n> show this autopkgt",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-25723e43277b",
+      "message_id": "<Y8wS3ao2YuUy9JLX@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-21T16:29:17Z",
+      "subject": "Re: Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+        "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>"
+      ],
+      "body_plain": "Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> On 1/21/23 16:56, Andreas Tille wrote:\n> > as per DebCI there are 15 autopkgtest failures which seem to be\n> > connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n> > show this autopkgtest error neither can I reproduce the problem on my local\n> > pbuilder.\n> > \n> > Has anyone some idea what might be wrong?  If not I might ask bug reporter\n> > for more info.\n> \n> I can't repro it either.\n\nRelieving to know that I did not missed any basic thing here. ;-)\n\n> But the log you point to is a fresh failure (today).\n> Did not dig deeper, but did you take a look at the `diff` between log that passes and the one\n> which does not?\n\nNot yet.  Where can I find those old logs?\n \n> I'm suspecting there is some dependency problem here.\n\nI also suspected this but the only hint about issues given by the log was\nggplot2 which was not changed a long time.\n\nKind regards\n   Andreas.\n \n> > [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/30534574/log.gz\n> > [2] https://salsa.debian.org/r-pkg-team/r-cran-bayesplot/-/jobs/3779597\n> \n> Thanks\n> Nilesh\n> \n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> On 1/21/23 16:56, Andreas Tille wrote:\n> > as per DebCI there are 15 autopkgtest failures which seem to be\n> > connected to ggplot2 API",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-c181704d0c9c",
+      "message_id": "<bf2e0f67-0474-20ba-80a1-d98d49675ab2@debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-21T16:47:06Z",
+      "subject": "Re: Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<Y8wS3ao2YuUy9JLX@an3as.eu>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+        "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+        "<Y8wS3ao2YuUy9JLX@an3as.eu>"
+      ],
+      "body_plain": "On 1/21/23 21:59, Andreas Tille wrote:\n> Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> > On 1/21/23 16:56, Andreas Tille wrote:\n> > > as per DebCI there are 15 autopkgtest failures which seem to be\n> > > connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n> > > show this autopkgtest error neither can I reproduce the problem on my local\n> > > pbuilder.\n> > >\n> > > Has anyone some idea what might be wrong?  If not I might ask bug reporter\n> > > for more info.\n> >\n> >\n> > I can't repro it either.\n>\n>\n> Relieving to know that I did not missed any basic thing here. ;-)\n>\n> > But the log you point to is a fresh failure (today).\n> > Did not dig deeper, but did you take a look at the `diff` between log that passes and the one\n> > which does not?\n>\n>\n> Not yet.  Where can I find those old logs?\n\nYou can take a diff betweek ci log you pointed to and the log on salsa CI/local system.\nThe debci runs with package versions in testing, so there might be a bump in some dependency.\n\nThanks\nNilesh",
+      "body_snippet": "On 1/21/23 21:59, Andreas Tille wrote:\n> Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> > On 1/21/23 16:56, Andreas Tille wrote:\n> > > as per DebCI there are 15 autopkgtest failures ",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 3,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-51b80ef33d55",
+      "message_id": "<Y8z06EMtBXJTuuD7@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-22T08:33:44Z",
+      "subject": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "subject_clean": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Sebastian,\n\nthanks for your bug report and your attempt to track this down by replacing\nthe sockjs files.  Please note that neither Nilesh nor I are shiny-server\nusers.  Thus it would help if you could provide a possibly small example that\nhelps us reproducing the problem.\n\nKind regards\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sebastian,\n\nthanks for your bug report and your attempt to track this down by replacing\nthe sockjs files.  Please note that neither Nilesh nor I are shiny-server\nusers.  Thus it would help if you c",
+      "thread_id": "thread-51b80ef33d55",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-d5e6706673a2",
+      "message_id": "<Y80cbUNPzYrehiSF@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-22T11:22:21Z",
+      "subject": "Re: [IRkernel/repr] Test suite issues in version 1.1.5 (Issue #159)",
+      "subject_clean": "[IRkernel/repr] Test suite issues in version 1.1.5 (Issue #159)",
+      "in_reply_to": "<IRkernel/repr/issues/159/1399452449@github.com>",
+      "references": [
+        "<IRkernel/repr/issues/159@github.com>",
+        "<IRkernel/repr/issues/159/1399452449@github.com>"
+      ],
+      "body_plain": "Am Sun, Jan 22, 2023 at 02:49:30AM -0800 schrieb aitap:\n> I don't have a solution, but the \"expected\" strings contain `×`, U+00D7 MULTIPLICATION SIGN, while the \"actual\" strings contain `x`, U+0078 LATIN SMALL LETTER X.\nAhhh, good catch.  Does the test work at your site so is it an issue that is specific for the Debian environment at my site?\nKind regards, Andreas.",
+      "body_snippet": "Am Sun, Jan 22, 2023 at 02:49:30AM -0800 schrieb aitap:\n> I don't have a solution, but the \"expected\" strings contain `×`, U+00D7 MULTIPLICATION SIGN, while the \"actual\" strings contain `x`, U+0078 LA",
+      "thread_id": "thread-d5e6706673a2",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-be83297bb489",
+      "message_id": "<Y81uWR8D40YQPwwF@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-22T17:11:53Z",
+      "subject": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y8r7DBbthHSbulLw@an3as.eu>",
+      "references": [
+        "<joshuaulrich/xts/issues/384@github.com>",
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>"
+      ],
+      "body_plain": "According to tracker[1] there are now r-cran-bbmle[2] failing with\n\n--- profbound.Rout.save_\t2023-01-22 11:28:41.154493354 +0000\n+++ profbound.Rout_\t2023-01-22 11:28:41.158493203 +0000\n@@ -40,6 +40,9 @@\n +              method=\"L-BFGS-B\")\n > \n > pp <- profile(fit2,prof.lower=-0.2)\n+Warning message:\n+In mle2(minuslogl = function (a = NULL, b = NULL)  :\n+  convergence failure: code=52 (ERROR: ABNORMAL_TERMINATION_IN_LNSRCH)\n > stopifnot(min(subset(as.data.frame(pp),param==\"b\")$par.vals.b)==-0.2)\n > ## note that b does go below -0.2 when profiling a ...\n > options(old_opt)\n\nand r-cran-rpf[3] failing with\n\n══ Failed tests ════════════════════════════════════════════════════════════════\n── Failure ('test-fit.R:116'): fit w/ mcar ─────────────────────────────────────\n`stat` not equal to `Estat`.\n1/20 mismatches\n[5] 4.42 - 6.69 == -2.27\n\n[ FAIL 1 | WARN 0 | SKIP 0 | PASS 381 ]\n\nI have no idea what to do sensibly (except patching out the said tests).\n\nKind regards\n   Andreas.\n\n[1] https://tracker.debian.org/pkg/r-base\n[2] https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-bbmle/30587711/log.gz\n[3] https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-rpf/30580781/log.gz\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "According to tracker[1] there are now r-cran-bbmle[2] failing with\n\n--- profbound.Rout.save_\t2023-01-22 11:28:41.154493354 +0000\n+++ profbound.Rout_\t2023-01-22 11:28:41.158493203 +0000\n@@ -40,6 +40,9 ",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-672079f34241",
+      "message_id": "<Y81wYraFv7riPwAT@localhost>",
+      "from_name": "Adrian Bunk",
+      "from_email_hash": "9d2741bdd49ce4f56c2825a7eb7320d125d367817f0dee32ff64ba5cfb556287",
+      "date": "2023-01-22T17:20:34Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y81uWR8D40YQPwwF@an3as.eu>",
+      "references": [
+        "<joshuaulrich/xts/issues/384@github.com>",
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nI already noticed.\n\nOn Sun, Jan 22, 2023 at 06:11:53PM +0100, Andreas Tille wrote:\n> According to tracker[1] there are now r-cran-bbmle[2] failing with\n> \n> --- profbound.Rout.save_\t2023-01-22 11:28:41.154493354 +0000\n> +++ profbound.Rout_\t2023-01-22 11:28:41.158493203 +0000\n> @@ -40,6 +40,9 @@\n>  +              method=\"L-BFGS-B\")\n>  > \n>  > pp <- profile(fit2,prof.lower=-0.2)\n> +Warning message:\n> +In mle2(minuslogl = function (a = NULL, b = NULL)  :\n> +  convergence failure: code=52 (ERROR: ABNORMAL_TERMINATION_IN_LNSRCH)\n>  > stopifnot(min(subset(as.data.frame(pp),param==\"b\")$par.vals.b)==-0.2)\n>  > ## note that b does go below -0.2 when profiling a ...\n>  > options(old_opt)\n\nI don't have a better idea for that than sending you a MR to disable \nthis test on i386.\n\nUbuntu has problems with a different test in this package on ppc64el \nwhere they are building with -O3,[1] so this package seems to have\nfragile tests.\n\n> and r-cran-rpf[3] failing with\n> \n> ══ Failed tests ════════════════════════════════════════════════════════════════\n> ── Failure ('test-fit.R:116'): fit w/ mcar ─────────────────────────────────────\n> `stat` not equal to `Estat`.\n> 1/20 mismatches\n> [5] 4.42 - 6.69 == -2.27\n> \n> [ FAIL 1 | WARN 0 | SKIP 0 | PASS 381 ]\n> \n> I have no idea what to do sensibly (except patching out the said tests).\n\nThis might end up being similar, but there is some weirdness going on here.\nI'll let you know if patching is needed.\n\n> Kind regards\n>    Andreas.\n>...\n\ncu\nAdrian\n\n[1] https://patches.ubuntu.com/r/r-cran-bbmle/r-cran-bbmle_1.0.25-1ubuntu1.patch",
+      "body_snippet": "Hi Andreas,\n\nI already noticed.\n\nOn Sun, Jan 22, 2023 at 06:11:53PM +0100, Andreas Tille wrote:\n> According to tracker[1] there are now r-cran-bbmle[2] failing with\n> \n> --- profbound.Rout.save_\t2023-",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-101e2e67256e",
+      "message_id": "<Y84rkxB+rlLslHIV@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-23T06:39:15Z",
+      "subject": "How can I successfully prevent debci from running on s390x for r-cran-stars",
+      "subject_clean": "How can I successfully prevent debci from running on s390x for r-cran-stars",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI have set\n\n  Restrictions: allow-stderr, skip-not-installable\n  Architecture: !s390x\n\nin debian/tests/control for r-cran-stars[1].  Unfortunately debci is running on\ns390x anyway and considers it a regression[2]:\n\nThe following packages have unmet dependencies:\n r-cran-stars : Depends: r-cran-lwgeom but it is not installable\nE: Unable to correct problems, you have held broken packages.\n\nWhat else can I do to prevent debci from running tests on s390x?\n\nKind regards\n   Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-stars/-/blob/master/debian/tests/control\n[2] https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-cran-stars/30588082/log.gz\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI have set\n\n  Restrictions: allow-stderr, skip-not-installable\n  Architecture: !s390x\n\nin debian/tests/control for r-cran-stars[1].  Unfortunately debci is running on\ns390x anyway and considers i",
+      "thread_id": "thread-101e2e67256e",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-fd952e17bc88",
+      "message_id": "<Y84sER3Q4y6m83mk@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-23T06:41:21Z",
+      "subject": "Re: How can I successfully prevent debci from running on s390x for r-cran-stars",
+      "subject_clean": "How can I successfully prevent debci from running on s390x for r-cran-stars",
+      "in_reply_to": "<Y84rkxB+rlLslHIV@an3as.eu>",
+      "references": [
+        "<Y84rkxB+rlLslHIV@an3as.eu>"
+      ],
+      "body_plain": "Same is the case for r-cran-sftime...\n\nAm Mon, Jan 23, 2023 at 07:39:15AM +0100 schrieb Andreas Tille:\n> Hi,\n> \n> I have set\n> \n>   Restrictions: allow-stderr, skip-not-installable\n>   Architecture: !s390x\n> \n> in debian/tests/control for r-cran-stars[1].  Unfortunately debci is running on\n> s390x anyway and considers it a regression[2]:\n> \n> The following packages have unmet dependencies:\n>  r-cran-stars : Depends: r-cran-lwgeom but it is not installable\n> E: Unable to correct problems, you have held broken packages.\n> \n> What else can I do to prevent debci from running tests on s390x?\n> \n> Kind regards\n>    Andreas.\n> \n> \n> [1] https://salsa.debian.org/r-pkg-team/r-cran-stars/-/blob/master/debian/tests/control\n> [2] https://ci.debian.net/data/autopkgtest/testing/s390x/r/r-cran-stars/30588082/log.gz\n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Same is the case for r-cran-sftime...\n\nAm Mon, Jan 23, 2023 at 07:39:15AM +0100 schrieb Andreas Tille:\n> Hi,\n> \n> I have set\n> \n>   Restrictions: allow-stderr, skip-not-installable\n>   Architecture: !",
+      "thread_id": "thread-101e2e67256e",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-7a58f9b06adf",
+      "message_id": "<Y85VOnoug2L3nfct@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-23T09:36:58Z",
+      "subject": "Re: Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<bf2e0f67-0474-20ba-80a1-d98d49675ab2@debian.org>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+        "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+        "<Y8wS3ao2YuUy9JLX@an3as.eu>",
+        "<bf2e0f67-0474-20ba-80a1-d98d49675ab2@debian.org>"
+      ],
+      "body_plain": "Am Sat, Jan 21, 2023 at 10:17:06PM +0530 schrieb Nilesh Patra:\n> On 1/21/23 21:59, Andreas Tille wrote:\n> > Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> > > On 1/21/23 16:56, Andreas Tille wrote:\n> > > > as per DebCI there are 15 autopkgtest failures which seem to be\n> > > > connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n> > > > show this autopkgtest error neither can I reproduce the problem on my local\n> > > > pbuilder.\n> > > > \n> > > > Has anyone some idea what might be wrong?  If not I might ask bug reporter\n> > > > for more info.\n> > > \n> > > I can't repro it either.\n> > \n> > Relieving to know that I did not missed any basic thing here. ;-)\n> > \n> > > But the log you point to is a fresh failure (today).\n> > > Did not dig deeper, but did you take a look at the `diff` between log that passes and the one\n> > > which does not?\n> > \n> > Not yet.  Where can I find those old logs?\n> \n> You can take a diff betweek ci log you pointed to and the log on salsa CI/local system.\n> The debci runs with package versions in testing, so there might be a bump in some dependency.\n\nI did a diff between the r-cran-* packages in the failing log and the\nsuccessful log: \n\n--- debci (with dependencies from testing which fails https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/30584842/log.gz\n+++ salsa (with dependencies from unstable which works)\n@@ -2,8 +2,8 @@\n@@ -153,12 +153,13 @@\n\n-r-base-core_4.2.2.20221110-1+b1_amd64.deb\n+r-base-core_4.2.2.20221110-1_amd64.deb\n\n-r-cran-bayesplot_1.9.0-1_all.deb\n+r-cran-bayesplot.deb\n\n-r-cran-cli_3.6.0-1_amd64.deb\n+r-cran-cli_3.5.0-1_amd64.deb\n\n-r-cran-ggplot2_3.4.0+dfsg-2_all.deb\n+r-cran-ggplot2_3.4.0+dfsg-1_all.deb\n\n-r-cran-htmlwidgets_1.6.1+dfsg-1_all.deb\n-r-cran-httpuv_1.6.8+dfsg-1_amd64.deb\n+r-cran-htmlwidgets_1.6.0+dfsg-1_all.deb\n+r-cran-httpuv_1.6.7+dfsg-1_amd64.deb\n\n-r-cran-purrr_0.3.5-1_amd64.deb\n+r-cran-purrr_1.0.0-1_amd64.deb\n\n-r-cran-rcppparallel_5.1.6+dfsg-1_amd64.deb\n+r-cran-rcppparallel_5.1.5+dfsg-3_amd64.deb\n\n-r-cran-statmod_1.5.0-1_amd64.deb\n-r-cran-stringi_1.7.12-1_amd64.deb\n-r-cran-stringr_1.4.1-1_all.deb\n+r-cran-statmod_1.4.37-1_amd64.deb\n+r-cran-stringi_1.7.8-1+b1_amd64.deb\n+r-cran-stringr_1.5.0-1_all.deb\n\n-r-cran-xts_0.12.1-1_amd64.deb\n+r-cran-xts_0.12.2-1_amd64.deb\n\nto me those diffs are locking not really spectacular regarding to\nthe actual issue.  I also checked the debci history[1] where the\nfirst failure of this kind is\n\n1.9.0-1 \t2022-11-11 23:59:45 UTC \t\nr-cran-ggplot2/3.4.0+dfsg-1 diffoscop...\nsrc:r-cran-ggplot2 from unstable\nsrc:diffoscope from unstable\nsrc:r-base from unstable\nsrc:r-cran-vctrs from unstable \n\nwhere I can find inside the test log[2]\n\nThis might correlate to\n\nr-cran-ggplot2 (3.4.0+dfsg-1) unstable; urgency=medium\n\n  * New upstream version\n...\n -- Andreas Tille <tille at debian.org>  Fri, 11 Nov 2022 08:24:21 +0100\n\nI admit I'm running out of ideas but for the moment my last resort\nis to skip the 8 affected test, let the packages migrate to testing\nand revert skipping the tests afterwards.\n\nKind regards\n    Andreas.\n\n[1] https://ci.debian.net/packages/r/r-cran-bayesplot/testing/amd64/\n[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/28139180/log.gz\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Sat, Jan 21, 2023 at 10:17:06PM +0530 schrieb Nilesh Patra:\n> On 1/21/23 21:59, Andreas Tille wrote:\n> > Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n> > > On 1/21/23 16:56, Andre",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 4,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-191df34ef8ff",
+      "message_id": "<4A5E8A02-81E4-4C04-A225-E7C3C0F19BF7@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2023-01-23T10:19:29Z",
+      "subject": "Re: Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<Y85VOnoug2L3nfct@an3as.eu>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+        "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+        "<Y8wS3ao2YuUy9JLX@an3as.eu>",
+        "<bf2e0f67-0474-20ba-80a1-d98d49675ab2@debian.org>",
+        "<Y85VOnoug2L3nfct@an3as.eu>"
+      ],
+      "body_plain": "On 23 January 2023 3:06:58 pm IST, Andreas Tille <tille at debian.org> wrote:\n>Am Sat, Jan 21, 2023 at 10:17:06PM +0530 schrieb Nilesh Patra:\n>> On 1/21/23 21:59, Andreas Tille wrote:\n>> > Am Sat, Jan 21, 2023 at 09:46:07PM +0530 schrieb Nilesh Patra:\n>> > > On 1/21/23 16:56, Andreas Tille wrote:\n>> > > > as per DebCI there are 15 autopkgtest failures which seem to be\n>> > > > connected to ggplot2 API somehow.[1]  Interestingly Salsa CI[2] does not\n>> > > > show this autopkgtest error neither can I reproduce the problem on my local\n>> > > > pbuilder.\n>> > > > \n>> > > > Has anyone some idea what might be wrong?  If not I might ask bug reporter\n>> > > > for more info.\n>> > > \n>> > > I can't repro it either.\n>> > \n>> > Relieving to know that I did not missed any basic thing here. ;-)\n>> > \n>> > > But the log you point to is a fresh failure (today).\n>> > > Did not dig deeper, but did you take a look at the `diff` between log that passes and the one\n>> > > which does not?\n>> > \n>> > Not yet.  Where can I find those old logs?\n>> \n>> You can take a diff betweek ci log you pointed to and the log on salsa CI/local system.\n>> The debci runs with package versions in testing, so there might be a bump in some dependency.\n>\n>I did a diff between the r-cran-* packages in the failing log and the\n>successful log: \n> [...]\n>\n>to me those diffs are locking not really spectacular regarding to\n>the actual issue.\n\nRight.\n\n>I admit I'm running out of ideas but for the moment my last resort\n>is to skip the 8 affected test, let the packages migrate to testing\n>and revert skipping the tests afterwards.\n\nI did find an issue[3] which states ggplot2 breaks bayesplot 1.9.0 and spews the exact same errors we observe in debci.\nThere's also an upstream issue with bayesplot installation (similar stuff again) where it works for some people but not for others, see[4].\nBut then I'm not sure as to why it works for me, you and salsa CI. For now I'll have to dismiss it by calling it black magic.\n\nYour approach sounds fair. Maybe you should do what you wrote (disable tests, let it migrate, enable tests again)\n\n>[1] https://ci.debian.net/packages/r/r-cran-bayesplot/testing/amd64/\n>[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/28139180/log.gz\n[3]: https://github.com/tidyverse/ggplot2/blob/main/revdep/problems.md#bayesplot\n[4]: \nhttps://github.com/stan-dev/bayesplot/issues/297\n--\nBest,\nNilesh",
+      "body_snippet": "On 23 January 2023 3:06:58 pm IST, Andreas Tille <tille at debian.org> wrote:\n>Am Sat, Jan 21, 2023 at 10:17:06PM +0530 schrieb Nilesh Patra:\n>> On 1/21/23 21:59, Andreas Tille wrote:\n>> > Am Sat, Jan",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 5,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-75d640bde5dd",
+      "message_id": "<Y87joM5XoXzuhAnW@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-23T19:44:32Z",
+      "subject": "Re: Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "subject_clean": "Bug#1029310: [Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "in_reply_to": "<4A5E8A02-81E4-4C04-A225-E7C3C0F19BF7@nileshpatra.info>",
+      "references": [
+        "<f27cad9b-092f-004e-3920-278e1fafae72@debian.org>",
+        "<Y8vL7UoFHZnVNQyg@an3as.eu>",
+        "<4429b5b8-81ee-1a83-4a21-5c8d3190aac3@debian.org>",
+        "<Y8wS3ao2YuUy9JLX@an3as.eu>",
+        "<bf2e0f67-0474-20ba-80a1-d98d49675ab2@debian.org>",
+        "<Y85VOnoug2L3nfct@an3as.eu>",
+        "<4A5E8A02-81E4-4C04-A225-E7C3C0F19BF7@nileshpatra.info>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nAm Mon, Jan 23, 2023 at 03:49:29PM +0530 schrieb Nilesh Patra:\n> >I admit I'm running out of ideas but for the moment my last resort\n> >is to skip the 8 affected test, let the packages migrate to testing\n> >and revert skipping the tests afterwards.\n> \n> I did find an issue[3] which states ggplot2 breaks bayesplot 1.9.0 and spews the exact same errors we observe in debci.\n> There's also an upstream issue with bayesplot installation (similar stuff again) where it works for some people but not for others, see[4].\n> But then I'm not sure as to why it works for me, you and salsa CI. For now I'll have to dismiss it by calling it black magic.\n> \n> Your approach sounds fair. Maybe you should do what you wrote (disable tests, let it migrate, enable tests again)\n\nI did so just to learn that there are new errors now[5].  I admit I've\nlost my nerves and uploaded by really forcing acceptance of all errors[6].\nI'll revert this after testing migration as well as the patch I tried\nbefore.\n\nKind regards\n    Andreas.\n \n> >[1] https://ci.debian.net/packages/r/r-cran-bayesplot/testing/amd64/\n> >[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/28139180/log.gz\n> [3]: https://github.com/tidyverse/ggplot2/blob/main/revdep/problems.md#bayesplot\n> [4]: \n> https://github.com/stan-dev/bayesplot/issues/297\n\n[5] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-bayesplot/30633104/log.gz \n[6] https://salsa.debian.org/r-pkg-team/r-cran-bayesplot/-/blob/master/debian/tests/run-unit-test#L15\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nAm Mon, Jan 23, 2023 at 03:49:29PM +0530 schrieb Nilesh Patra:\n> >I admit I'm running out of ideas but for the moment my last resort\n> >is to skip the 8 affected test, let the packages mig",
+      "thread_id": "thread-366445b9dde3",
+      "thread_depth": 6,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-89b4f0543888",
+      "message_id": "<Y8+I5peEEAhMwrEV@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-24T07:29:42Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y81wYraFv7riPwAT@localhost>",
+      "references": [
+        "<joshuaulrich/xts/issues/384@github.com>",
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>",
+        "<Y81wYraFv7riPwAT@localhost>"
+      ],
+      "body_plain": "Am Sun, Jan 22, 2023 at 07:20:34PM +0200 schrieb Adrian Bunk:\n> >  > pp <- profile(fit2,prof.lower=-0.2)\n> > +Warning message:\n> > +In mle2(minuslogl = function (a = NULL, b = NULL)  :\n> > +  convergence failure: code=52 (ERROR: ABNORMAL_TERMINATION_IN_LNSRCH)\n> >  > stopifnot(min(subset(as.data.frame(pp),param==\"b\")$par.vals.b)==-0.2)\n> >  > ## note that b does go below -0.2 when profiling a ...\n> >  > options(old_opt)\n> \n> I don't have a better idea for that than sending you a MR to disable \n> this test on i386.\n\nI can reproduce this one in a i386 chroot and I'm working on a patch\nthat disables this test.\n \n> Ubuntu has problems with a different test in this package on ppc64el \n> where they are building with -O3,[1] so this package seems to have\n> fragile tests.\n\nI can include this patch as well.\n\n> > and r-cran-rpf[3] failing with\n> > \n> > ══ Failed tests ════════════════════════════════════════════════════════════════\n> > ── Failure ('test-fit.R:116'): fit w/ mcar ─────────────────────────────────────\n> > `stat` not equal to `Estat`.\n> > 1/20 mismatches\n> > [5] 4.42 - 6.69 == -2.27\n> > \n> > [ FAIL 1 | WARN 0 | SKIP 0 | PASS 381 ]\n> > \n> > I have no idea what to do sensibly (except patching out the said tests).\n> \n> This might end up being similar, but there is some weirdness going on here.\n> I'll let you know if patching is needed.\n\nI can't reproduce this one in my i386 pbuilder chroot.\n\nKind regards\n    Andreas. \n \n> [1] https://patches.ubuntu.com/r/r-cran-bbmle/r-cran-bbmle_1.0.25-1ubuntu1.patch\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Sun, Jan 22, 2023 at 07:20:34PM +0200 schrieb Adrian Bunk:\n> >  > pp <- profile(fit2,prof.lower=-0.2)\n> > +Warning message:\n> > +In mle2(minuslogl = function (a = NULL, b = NULL)  :\n> > +  converge",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 3,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-6b1b5c5b0a89",
+      "message_id": "<Y8+S+n6FnK/Mr9tP@localhost>",
+      "from_name": "Adrian Bunk",
+      "from_email_hash": "9d2741bdd49ce4f56c2825a7eb7320d125d367817f0dee32ff64ba5cfb556287",
+      "date": "2023-01-24T08:12:42Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y8+I5peEEAhMwrEV@an3as.eu>",
+      "references": [
+        "<joshuaulrich/xts/issues/384@github.com>",
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>",
+        "<Y81wYraFv7riPwAT@localhost>",
+        "<Y8+I5peEEAhMwrEV@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Jan 24, 2023 at 08:29:42AM +0100, Andreas Tille wrote:\n> Am Sun, Jan 22, 2023 at 07:20:34PM +0200 schrieb Adrian Bunk:\n> > >  > pp <- profile(fit2,prof.lower=-0.2)\n> > > +Warning message:\n> > > +In mle2(minuslogl = function (a = NULL, b = NULL)  :\n> > > +  convergence failure: code=52 (ERROR: ABNORMAL_TERMINATION_IN_LNSRCH)\n> > >  > stopifnot(min(subset(as.data.frame(pp),param==\"b\")$par.vals.b)==-0.2)\n> > >  > ## note that b does go below -0.2 when profiling a ...\n> > >  > options(old_opt)\n> > \n> > I don't have a better idea for that than sending you a MR to disable \n> > this test on i386.\n> \n> I can reproduce this one in a i386 chroot and I'm working on a patch\n> that disables this test.\n>  \n> > Ubuntu has problems with a different test in this package on ppc64el \n> > where they are building with -O3,[1] so this package seems to have\n> > fragile tests.\n> \n> I can include this patch as well.\n\nThe Ubuntu diff followed by\n\nif [ \"$hostarch\" = \"i386\" ] ; then\n    rm -f profbound.R\nfi\n\nworks for me.\n\n> > > and r-cran-rpf[3] failing with\n> > > \n> > > ══ Failed tests ════════════════════════════════════════════════════════════════\n> > > ── Failure ('test-fit.R:116'): fit w/ mcar ─────────────────────────────────────\n> > > `stat` not equal to `Estat`.\n> > > 1/20 mismatches\n> > > [5] 4.42 - 6.69 == -2.27\n> > > \n> > > [ FAIL 1 | WARN 0 | SKIP 0 | PASS 381 ]\n> > > \n> > > I have no idea what to do sensibly (except patching out the said tests).\n> > \n> > This might end up being similar, but there is some weirdness going on here.\n> > I'll let you know if patching is needed.\n> \n> I can't reproduce this one in my i386 pbuilder chroot.\n\nIt fails when testing the package in unstable/testing, but passes after \nrecompiling that one with the new r-base.\n\n> Kind regards\n>     Andreas. \n>...\n\ncu\nAdrian",
+      "body_snippet": "On Tue, Jan 24, 2023 at 08:29:42AM +0100, Andreas Tille wrote:\n> Am Sun, Jan 22, 2023 at 07:20:34PM +0200 schrieb Adrian Bunk:\n> > >  > pp <- profile(fit2,prof.lower=-0.2)\n> > > +Warning message:\n> > ",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 4,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-cbd8a011237b",
+      "message_id": "<Y8+bVWHcPgCqaNlN@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-24T08:48:21Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y8+S+n6FnK/Mr9tP@localhost>",
+      "references": [
+        "<joshuaulrich/xts/issues/384/1397093851@github.com>",
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>",
+        "<Y81wYraFv7riPwAT@localhost>",
+        "<Y8+I5peEEAhMwrEV@an3as.eu>",
+        "<Y8+S+n6FnK/Mr9tP@localhost>"
+      ],
+      "body_plain": "Am Tue, Jan 24, 2023 at 10:12:42AM +0200 schrieb Adrian Bunk:\n> > I can include this patch as well.\n> \n> The Ubuntu diff followed by\n> \n> if [ \"$hostarch\" = \"i386\" ] ; then\n>     rm -f profbound.R\n> fi\n> \n> works for me.\n\nThis will definitely work.  However, I'd like to keep more of the tests and tried\n\ndiff --git a/debian/tests/run-unit-test b/debian/tests/run-unit-test\nindex ce1d7be..81419cc 100644\n--- a/debian/tests/run-unit-test\n+++ b/debian/tests/run-unit-test\n@@ -44,6 +44,22 @@ fi\n # skip tests which have no saved results\n rm -f boundstest.R impsamp.R prof_newmin.R prof_spec.R\n \n+hostarch=$(dpkg-architecture -qDEB_HOST_ARCH)\n+# Ignore single test for i386 architecture.  This is a workaround for a strange test error that occured after r-base was compiled with -ffloat-store\n+if [ \"$hostarch\" = \"i386\" ] ; then\n+  sed -i '/pp <- profile(fit2,prof.lower=-0.2)/,$d' profbound.R*\n+  echo '> ' >> profbound.Rsave\n+fi\n+\n\n(which has some remaining trouble with the line ending in the compared\noutput which I'll fix later).\n \n> > I can't reproduce this one in my i386 pbuilder chroot.\n> \n> It fails when testing the package in unstable/testing, but passes after \n> recompiling that one with the new r-base.\n\nSo do you think I should simply re-upload?\n\nKind regards\n   Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Tue, Jan 24, 2023 at 10:12:42AM +0200 schrieb Adrian Bunk:\n> > I can include this patch as well.\n> \n> The Ubuntu diff followed by\n> \n> if [ \"$hostarch\" = \"i386\" ] ; then\n>     rm -f profbound.R\n> f",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 5,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-bfea5545f35e",
+      "message_id": "<Y8+cdITp7ZZE/kiB@localhost>",
+      "from_name": "Adrian Bunk",
+      "from_email_hash": "9d2741bdd49ce4f56c2825a7eb7320d125d367817f0dee32ff64ba5cfb556287",
+      "date": "2023-01-24T08:53:08Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y8+bVWHcPgCqaNlN@an3as.eu>",
+      "references": [
+        "<Y3E6lGWml3dWDGIL@ramacher.at>",
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>",
+        "<Y81wYraFv7riPwAT@localhost>",
+        "<Y8+I5peEEAhMwrEV@an3as.eu>",
+        "<Y8+S+n6FnK/Mr9tP@localhost>",
+        "<Y8+bVWHcPgCqaNlN@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Jan 24, 2023 at 09:48:21AM +0100, Andreas Tille wrote:\n> Am Tue, Jan 24, 2023 at 10:12:42AM +0200 schrieb Adrian Bunk:\n>...\n> > > I can't reproduce this one in my i386 pbuilder chroot.\n> > \n> > It fails when testing the package in unstable/testing, but passes after \n> > recompiling that one with the new r-base.\n> \n> So do you think I should simply re-upload?\n\nA rebuild (like through a re-upload) should fix it in unstable.\n\nI am not sure whether this might need hinting from the release team \nafterwards, but if it's working in unstable this is something I can\nrequest if needed.\n\n> Kind regards\n>    Andreas. \n\ncu\nAdrian",
+      "body_snippet": "On Tue, Jan 24, 2023 at 09:48:21AM +0100, Andreas Tille wrote:\n> Am Tue, Jan 24, 2023 at 10:12:42AM +0200 schrieb Adrian Bunk:\n>...\n> > > I can't reproduce this one in my i386 pbuilder chroot.\n> > \n> ",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 6,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-d3ad0be31e1f",
+      "message_id": "<Y8+yyLwo2k46gD04@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-24T10:28:24Z",
+      "subject": "Re: Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "subject_clean": "Two other packages are now failing their debci tests on i386 (Was: Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384))",
+      "in_reply_to": "<Y8+cdITp7ZZE/kiB@localhost>",
+      "references": [
+        "<Y8laVC4o14SYuuxu@an3as.eu>",
+        "<Y8q95XoaQG2gvlfp@localhost>",
+        "<25546.54276.722295.400519@rob.eddelbuettel.com>",
+        "<Y8r7DBbthHSbulLw@an3as.eu>",
+        "<Y81uWR8D40YQPwwF@an3as.eu>",
+        "<Y81wYraFv7riPwAT@localhost>",
+        "<Y8+I5peEEAhMwrEV@an3as.eu>",
+        "<Y8+S+n6FnK/Mr9tP@localhost>",
+        "<Y8+bVWHcPgCqaNlN@an3as.eu>",
+        "<Y8+cdITp7ZZE/kiB@localhost>"
+      ],
+      "body_plain": "Hi Adrian,\n\nI've just uploaded a less invasive patch for r-cran-bbmle.\n\nAm Tue, Jan 24, 2023 at 10:53:08AM +0200 schrieb Adrian Bunk:\n> \n> A rebuild (like through a re-upload) should fix it in unstable.\n\nRebuild and uploaded.\n \n> I am not sure whether this might need hinting from the release team \n> afterwards, but if it's working in unstable this is something I can\n> request if needed.\n\nHope the migration will go smoothly now.\n\nKind regards and thanks for your support\n   Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Adrian,\n\nI've just uploaded a less invasive patch for r-cran-bbmle.\n\nAm Tue, Jan 24, 2023 at 10:53:08AM +0200 schrieb Adrian Bunk:\n> \n> A rebuild (like through a re-upload) should fix it in unstabl",
+      "thread_id": "thread-e026d338e9ec",
+      "thread_depth": 7,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-8780376e31d0",
+      "message_id": "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-24T10:40:02Z",
+      "subject": "Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Dirk,\n\nwhen I realised that the arm64 build for r-cran-rcpptoml failed on arm64\nI tried to rather include the Debian packaged libtomlplusplus-dev and\nexcluded the code copy you are providing.  Unfortunately this ends up in\nthe identic build error for arm64[1]:\n\ng++ -std=gnu++17 -I\"/usr/share/R/include\" -DNDEBUG -I../inst/include -I'/usr/lib/R/site-library/Rcpp/include'    -fpic  -g -O2 -ffile-prefix-map=/build/r-base-85GD2O/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c parse.cpp -o parse.o\nIn file included from /usr/include/toml++/toml.h:39,\n                 from parse.cpp:22:\n/usr/include/toml++/impl/forward_declarations.h:630:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n  630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n      |                             ^~~~~~~~\n      |                             _Float64\n/usr/include/toml++/impl/forward_declarations.h:630:37: error: template argument 1 is invalid\n  630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n      |                                     ^\n/usr/include/toml++/impl/forward_declarations.h:630:59: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n  630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n      |                                                           ^~~~~~~~\n      |                                                           _Float64\n/usr/include/toml++/impl/forward_declarations.h:630:102: error: template argument 1 is invalid\n  630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n      |                                                                                                      ^\n/usr/include/toml++/impl/forward_declarations.h:651:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n  651 |         struct value_traits<_Float16> : float_traits<_Float16>\n      |                             ^~~~~~~~\n      |                             _Float64\n...\n\nKind regards\n    Andreas.\n\n[1] https://buildd.debian.org/status/fetch.php?pkg=r-cran-rcpptoml&arch=arm64&ver=0.2.0%2Bdfsg-1&stamp=1674418861&raw=0\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nwhen I realised that the arm64 build for r-cran-rcpptoml failed on arm64\nI tried to rather include the Debian packaged libtomlplusplus-dev and\nexcluded the code copy you are providing.  Unfo",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-fdd5e81acd11",
+      "message_id": "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-01-24T13:24:52Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>"
+      ],
+      "body_plain": "On 24 January 2023 at 11:40, Andreas Tille wrote:\n| Hi Dirk,\n| \n| when I realised that the arm64 build for r-cran-rcpptoml failed on arm64\n| I tried to rather include the Debian packaged libtomlplusplus-dev and\n| excluded the code copy you are providing.  Unfortunately this ends up in\n| the identic build error for arm64[1]:\n\nOf course. Same code. It'll likely fail in more places as e.g. at CRAN it\nalso fails on 'Windows old-release' which still contains the jurassic i386\nside of things. And it of course also fails on arm:\n\nhttps://www.r-project.org/nosvn/R.check/r-release-macos-x86_64/RcppTOML-00install.html\n\nI'll talk to upstream toml++ about it.\n\n(Done. Refreshed this issue https://github.com/marzer/tomlplusplus/issues/178\nand as upstream and I got friendly after he release also send him a DM\nnudge. Moderately hopeful this will get sorted out.)\n\nDirk\n\nPS If I ever don't reply email me with CCing debian-r as procmail puts\ndebian-r email in a folder I don't frequent as often as others.\n\n| g++ -std=gnu++17 -I\"/usr/share/R/include\" -DNDEBUG -I../inst/include -I'/usr/lib/R/site-library/Rcpp/include'    -fpic  -g -O2 -ffile-prefix-map=/build/r-base-85GD2O/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c parse.cpp -o parse.o\n| In file included from /usr/include/toml++/toml.h:39,\n|                  from parse.cpp:22:\n| /usr/include/toml++/impl/forward_declarations.h:630:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n|   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n|       |                             ^~~~~~~~\n|       |                             _Float64\n| /usr/include/toml++/impl/forward_declarations.h:630:37: error: template argument 1 is invalid\n|   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n|       |                                     ^\n| /usr/include/toml++/impl/forward_declarations.h:630:59: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n|   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n|       |                                                           ^~~~~~~~\n|       |                                                           _Float64\n| /usr/include/toml++/impl/forward_declarations.h:630:102: error: template argument 1 is invalid\n|   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n|       |                                                                                                      ^\n| /usr/include/toml++/impl/forward_declarations.h:651:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n|   651 |         struct value_traits<_Float16> : float_traits<_Float16>\n|       |                             ^~~~~~~~\n|       |                             _Float64\n| ...\n| \n| Kind regards\n|     Andreas.\n| \n| [1] https://buildd.debian.org/status/fetch.php?pkg=r-cran-rcpptoml&arch=arm64&ver=0.2.0%2Bdfsg-1&stamp=1674418861&raw=0\n| \n| -- \n| http://fam-tille.de\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 24 January 2023 at 11:40, Andreas Tille wrote:\n| Hi Dirk,\n| \n| when I realised that the arm64 build for r-cran-rcpptoml failed on arm64\n| I tried to rather include the Debian packaged libtomlpluspl",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-16d9edc04da2",
+      "message_id": "<25551.56913.239757.633245@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-01-24T13:34:09Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+        "<25551.56356.983075.58586@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 24 January 2023 at 07:24, Dirk Eddelbuettel wrote:\n| \n| On 24 January 2023 at 11:40, Andreas Tille wrote:\n| | Hi Dirk,\n| | \n| | when I realised that the arm64 build for r-cran-rcpptoml failed on arm64\n| | I tried to rather include the Debian packaged libtomlplusplus-dev and\n| | excluded the code copy you are providing.  Unfortunately this ends up in\n| | the identic build error for arm64[1]:\n| \n| Of course. Same code. It'll likely fail in more places as e.g. at CRAN it\n| also fails on 'Windows old-release' which still contains the jurassic i386\n| side of things. And it of course also fails on arm:\n| \n| https://www.r-project.org/nosvn/R.check/r-release-macos-x86_64/RcppTOML-00install.html\n| \n| I'll talk to upstream toml++ about it.\n| \n| (Done. Refreshed this issue https://github.com/marzer/tomlplusplus/issues/178\n| and as upstream and I got friendly after he release also send him a DM\n| nudge. Moderately hopeful this will get sorted out.)\n| \n| Dirk\n| \n| PS If I ever don't reply email me with CCing debian-r as procmail puts\n| debian-r email in a folder I don't frequent as often as others.\n\nSorry: that should read have \"withOUT ccing debian-r\".\n\nThe issue is closed upstream at\nhttps://github.com/marzer/tomlplusplus/issues/178 which is newer than his\nlast release so if you feel it is urgent you could patch his git HEAD in\n(which should cleanly replace just the files below inst/include/toml++/).  I\nexpect him to tell us either do that, or to wait for a new release.\n\nDirk\n\n| | g++ -std=gnu++17 -I\"/usr/share/R/include\" -DNDEBUG -I../inst/include -I'/usr/lib/R/site-library/Rcpp/include'    -fpic  -g -O2 -ffile-prefix-map=/build/r-base-85GD2O/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c parse.cpp -o parse.o\n| | In file included from /usr/include/toml++/toml.h:39,\n| |                  from parse.cpp:22:\n| | /usr/include/toml++/impl/forward_declarations.h:630:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n| |   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n| |       |                             ^~~~~~~~\n| |       |                             _Float64\n| | /usr/include/toml++/impl/forward_declarations.h:630:37: error: template argument 1 is invalid\n| |   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n| |       |                                     ^\n| | /usr/include/toml++/impl/forward_declarations.h:630:59: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n| |   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n| |       |                                                           ^~~~~~~~\n| |       |                                                           _Float64\n| | /usr/include/toml++/impl/forward_declarations.h:630:102: error: template argument 1 is invalid\n| |   630 |         struct float_traits<_Float16> : float_traits_base<_Float16, __FLT16_MANT_DIG__, __FLT16_DIG__>\n| |       |                                                                                                      ^\n| | /usr/include/toml++/impl/forward_declarations.h:651:29: error: ‘_Float16’ was not declared in this scope; did you mean ‘_Float64’?\n| |   651 |         struct value_traits<_Float16> : float_traits<_Float16>\n| |       |                             ^~~~~~~~\n| |       |                             _Float64\n| | ...\n| | \n| | Kind regards\n| |     Andreas.\n| | \n| | [1] https://buildd.debian.org/status/fetch.php?pkg=r-cran-rcpptoml&arch=arm64&ver=0.2.0%2Bdfsg-1&stamp=1674418861&raw=0\n| | \n| | -- \n| | http://fam-tille.de\n| \n| -- \n| dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 24 January 2023 at 07:24, Dirk Eddelbuettel wrote:\n| \n| On 24 January 2023 at 11:40, Andreas Tille wrote:\n| | Hi Dirk,\n| | \n| | when I realised that the arm64 build for r-cran-rcpptoml failed on ar",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-a85564a84089",
+      "message_id": "<25551.59494.224337.843854@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-01-24T14:17:10Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<25551.56913.239757.633245@rob.eddelbuettel.com>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+        "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+        "<25551.56913.239757.633245@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Andreas,\n\nPer the discussion with upstream at\n  https://github.com/marzer/tomlplusplus/issues/178#issuecomment-1402010516\nthe RcppTOML codebase is actually pretty close to what upstream has right\nnow, modulo a changed / failed way to detect when to define TOML_ENABLE_FLOAT16\n\nSo you could brute-force this by adding -DTOML_ENABLE_FLOAT16 to src/Makevars\ni.e. make the second line\n\n   PKG_CPPFLAGS = -I../inst/include -DTOML_ENABLE_FLOAT16\n\nand see where that gets you.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Andreas,\n\nPer the discussion with upstream at\n  https://github.com/marzer/tomlplusplus/issues/178#issuecomment-1402010516\nthe RcppTOML codebase is actually pretty close to what upstream has right\nnow,",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 3,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-ea759e549917",
+      "message_id": "<25551.63342.186116.209587@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-01-24T15:21:18Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<25551.59494.224337.843854@rob.eddelbuettel.com>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+        "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+        "<25551.56913.239757.633245@rob.eddelbuettel.com>",
+        "<25551.59494.224337.843854@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 24 January 2023 at 08:17, Dirk Eddelbuettel wrote:\n| \n| Andreas,\n| \n| Per the discussion with upstream at\n|   https://github.com/marzer/tomlplusplus/issues/178#issuecomment-1402010516\n| the RcppTOML codebase is actually pretty close to what upstream has right\n| now, modulo a changed / failed way to detect when to define TOML_ENABLE_FLOAT16\n| \n| So you could brute-force this by adding -DTOML_ENABLE_FLOAT16 to src/Makevars\n| i.e. make the second line\n| \n|    PKG_CPPFLAGS = -I../inst/include -DTOML_ENABLE_FLOAT16\n\nCorrection after further chats with upstream in issue ticket:\n\n   PKG_CPPFLAGS = -I../inst/include -DTOML_ENABLE_FLOAT16=0\n\nWith that I built at CRAN win-builder under old-rel for i386 and x86_64.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 24 January 2023 at 08:17, Dirk Eddelbuettel wrote:\n| \n| Andreas,\n| \n| Per the discussion with upstream at\n|   https://github.com/marzer/tomlplusplus/issues/178#issuecomment-1402010516\n| the RcppTOM",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 4,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-921088396678",
+      "message_id": "<Y9EghD9GiMEXm/fE@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-01-25T12:28:52Z",
+      "subject": "Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "subject_clean": "Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nas per excuses for r-cran-ggplot2[1] a conflict with\nr-cran-bayesplot/1.9.0-1 is preventing the migration.  Can we please\nget a hint to let migrate r-cran-bayesplot 1.10.0-4 together with\nr-cran-ggplot2 3.4.0+dfsg-2.  I do not see any other chance to\naccomplish the migration.\n\nKind regards\n    Andreas.\n\n[1] https://qa.debian.org/excuses.php?package=r-cran-ggplot2\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nas per excuses for r-cran-ggplot2[1] a conflict with\nr-cran-bayesplot/1.9.0-1 is preventing the migration.  Can we please\nget a hint to let migrate r-cran-bayesplot 1.10.0-4 together with\nr-cran-",
+      "thread_id": "thread-921088396678",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-5dfd36ba5e2a",
+      "message_id": "<25553.16432.114468.789168@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-01-25T14:44:00Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<25551.63342.186116.209587@rob.eddelbuettel.com>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+        "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+        "<25551.56913.239757.633245@rob.eddelbuettel.com>",
+        "<25551.59494.224337.843854@rob.eddelbuettel.com>",
+        "<25551.63342.186116.209587@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "RcppTOML 0.2.1 is now on CRAN, it skips 'float16' so you should be good.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "RcppTOML 0.2.1 is now on CRAN, it skips 'float16' so you should be good.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 5,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-f111059c167b",
+      "message_id": "<Y9FJHyJfzKOAC8Xo@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-25T15:22:07Z",
+      "subject": "Re: Arm64 fails to build r-cran-rcpptoml",
+      "subject_clean": "Arm64 fails to build r-cran-rcpptoml",
+      "in_reply_to": "<25553.16432.114468.789168@rob.eddelbuettel.com>",
+      "references": [
+        "<Y8+1gq0VEKqXgyUv@an3as.eu>",
+        "<25551.56356.983075.58586@rob.eddelbuettel.com>",
+        "<25551.56913.239757.633245@rob.eddelbuettel.com>",
+        "<25551.59494.224337.843854@rob.eddelbuettel.com>",
+        "<25551.63342.186116.209587@rob.eddelbuettel.com>",
+        "<25553.16432.114468.789168@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nAm Wed, Jan 25, 2023 at 08:44:00AM -0600 schrieb Dirk Eddelbuettel:\n> \n> RcppTOML 0.2.1 is now on CRAN, it skips 'float16' so you should be good.\n\nThanks a lot for the information.  With your last hint from yesterday I\nwas able to fix the arm64 issue.  I think I will not touch the package\nuntil all dependencies are migrated to testing and push the new version\nafter this has happened.\n\nKind regards\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nAm Wed, Jan 25, 2023 at 08:44:00AM -0600 schrieb Dirk Eddelbuettel:\n> \n> RcppTOML 0.2.1 is now on CRAN, it skips 'float16' so you should be good.\n\nThanks a lot for the information.  With you",
+      "thread_id": "thread-8780376e31d0",
+      "thread_depth": 6,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-284bee5ee95b",
+      "message_id": "<f2e8139e-e29e-7724-4b0b-a396308d124e@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2023-01-25T18:46:25Z",
+      "subject": "Re: Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "subject_clean": "Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "in_reply_to": "<Y9EghD9GiMEXm/fE@an3as.eu>",
+      "references": [
+        "<Y9EghD9GiMEXm/fE@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn 25-01-2023 13:28, Andreas Tille wrote:\n> as per excuses for r-cran-ggplot2[1] a conflict with\n> r-cran-bayesplot/1.9.0-1 is preventing the migration.  Can we please\n> get a hint to let migrate r-cran-bayesplot 1.10.0-4 together with\n> r-cran-ggplot2 3.4.0+dfsg-2.  I do not see any other chance to\n> accomplish the migration.\n\nThis is a question for the release team (preferably with an unblock \nbug). The Debian-CI team only runs the infrastructure.\n\n[Release Team member hat on] Having said that, r-cran-bayersplot is not \nblocked by r-cran-ggplot2, so it can migrate once it's aged (assuming \nr-base migrates before that time). After that, the migration tooling \nwill trigger a new test with r-cran-bayerspot in testing and assuming \nyou're right, all will be well than.[/hat off]\n\nSo, I think all we need is a bit of patience.\n\nPaul\n\n> [1] https://qa.debian.org/excuses.php?package=r-cran-ggplot2\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Andreas,\n\nOn 25-01-2023 13:28, Andreas Tille wrote:\n> as per excuses for r-cran-ggplot2[1] a conflict with\n> r-cran-bayesplot/1.9.0-1 is preventing the migration.  Can we please\n> get a hint to let",
+      "thread_id": "thread-921088396678",
+      "thread_depth": 1,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-295b8d731083",
+      "message_id": "<Y9GMP6mUO5O1A9He@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-01-25T20:08:31Z",
+      "subject": "Re: Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "subject_clean": "Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "in_reply_to": "<f2e8139e-e29e-7724-4b0b-a396308d124e@debian.org>",
+      "references": [
+        "<Y9EghD9GiMEXm/fE@an3as.eu>",
+        "<f2e8139e-e29e-7724-4b0b-a396308d124e@debian.org>"
+      ],
+      "body_plain": "Hi Paul,\n\nAm Wed, Jan 25, 2023 at 07:46:25PM +0100 schrieb Paul Gevers:\n> This is a question for the release team (preferably with an unblock bug).\n> The Debian-CI team only runs the infrastructure.\n> \n> [Release Team member hat on]\n\nLuckily you are wearing several hats. ;-)\n\n> Having said that, r-cran-bayersplot is not\n> blocked by r-cran-ggplot2, so it can migrate once it's aged (assuming r-base\n> migrates before that time). After that, the migration tooling will trigger a\n> new test with r-cran-bayerspot in testing and assuming you're right, all\n> will be well than.[/hat off]\n> \n> So, I think all we need is a bit of patience.\n\nThanks a lot for the clarification ... ohhhhmmmmmmmmmmmmmm.\n\nKind regards\n    Andreas.\n \n> > [1] https://qa.debian.org/excuses.php?package=r-cran-ggplot2\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Paul,\n\nAm Wed, Jan 25, 2023 at 07:46:25PM +0100 schrieb Paul Gevers:\n> This is a question for the release team (preferably with an unblock bug).\n> The Debian-CI team only runs the infrastructure.\n>",
+      "thread_id": "thread-921088396678",
+      "thread_depth": 2,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-be818ee60d55",
+      "message_id": "<AM0PR08MB50915C7CE514C17C952A9E00C4CC9@AM0PR08MB5091.eurprd08.prod.outlook.com>",
+      "from_name": "Krüger",
+      "from_email_hash": "5290f81c36c11dc039b86997a4adcfcc6b1043cfbb148e4f707241845974a5d2",
+      "date": "2023-01-27T19:45:35Z",
+      "subject": "Re: Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "subject_clean": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello Andreas , hello and sorry Nilesh (for the lack of feedback),\n\nI'm not a Shiny user either (so far), however the plan is for our institute to provide Shiny applications for certain users. (I will probably write some of these applications at some point, and I also administrate the web server...).\n\nMy test system: I have a current Debian sid with R, cleaned from nodejs (apt...) and thus without shiny-server.\n\nNow I install the shiny-server (apt install shiny-server).\n\nIn the packages r-cran-shiny and shiny-server are sample applications. I copied the examples from the r-cran-shiny package (e.g. /usr/lib/R/site-library/shiny/examples/01_hello) to /srv/shiny-server and could (after restarting shiny-server (systemctl restart shiny-server)) access the application via firefox: http://localhost:3838/01_hello/ .\n\nThese applications consist of a UI part (user interface) and a result part. In the UI part, the web user can set (e.g.) parameters for the display in the result part.\n\nThe problem: After installation, only the UI part is visible via the web browser.\nThe result part is probably not visible because it does not receive any data from the UI part.\n\nWith the help of a deb package for the Shiny sever from rstudio and the Debian package, I had at some point identified the sockjs installation as the problem...\n\nTo get the Shiny application running (in the current scenario), I got the latest version of sockjs from github, \"comped\" it with npm () and then replaced the javascript files under \"/usr/share/nodejs/sockjs/lib/\" (from the Debian installation) with the files from the sockjs (github) package tree \".../node_modules/sockjs/lib/\".\n\nAfter restarting the Shiny server, you can now also see the result part in the web browser and the Shiny application works. \n\nI am not a javascript/coffeescript friend or expert. The only thing I could see is that both my sockjs scripts and the Debian ones are based on the same github version (https://github.com/sockjs/sockjs-node/releases/tag/v0.3.24), but the Debian version was generated with coffescript 2.7.0 and \"my\" version was generated with coffescript 1.12.7.\n\nI hope this helps, sincerly,\nSebastian\n\n-----Ursprüngliche Nachricht-----\nVon: Andreas Tille <andreas at an3as.eu> \nGesendet: Sonntag, 22. Januar 2023 09:34\nAn: Debian Science List <debian-science at lists.debian.org>; Debian R <debian-r at lists.debian.org>; 1017871 at bugs.debian.org; Krüger, Sebastian <sebastian.krueger at institut-ba.de>; Eric Brown <eb at ericebrown.com>\nBetreff: Please help to reproduce (Was: shiny-server: server-function don't run)\n\nHi Sebastian,\n\nthanks for your bug report and your attempt to track this down by replacing\nthe sockjs files.  Please note that neither Nilesh nor I are shiny-server\nusers.  Thus it would help if you could provide a possibly small example that\nhelps us reproducing the problem.\n\nKind regards\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hello Andreas , hello and sorry Nilesh (for the lack of feedback),\n\nI'm not a Shiny user either (so far), however the plan is for our institute to provide Shiny applications for certain users. (I will",
+      "thread_id": "thread-be818ee60d55",
+      "thread_depth": 0,
+      "month": "2023-01"
+    },
+    {
+      "id": "msg-1b6d62f98476",
+      "message_id": "<20230128053921.sbkf5e7immpgzetw@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-01-28T05:39:21Z",
+      "subject": "Re: Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "subject_clean": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "in_reply_to": "<AM0PR08MB50915C7CE514C17C952A9E00C4CC9@AM0PR08MB5091.eurprd08.prod.outlook.com>",
+      "references": [
+        "<AM0PR08MB50915C7CE514C17C952A9E00C4CC9@AM0PR08MB5091.eurprd08.prod.outlook.com>"
+      ],
+      "body_plain": "reopen 1016732\nstop\n\nHi Yadd,\n\nOn Fri, Jan 27, 2023 at 07:45:35PM +0000, Krüger, Sebastian wrote:\n> I'm not a Shiny user either (so far), however the plan is for our institute to provide Shiny applications for certain users. (I will probably write some of these applications at some point, and I also administrate the web server...).\n> \n> My test system: I have a current Debian sid with R, cleaned from nodejs (apt...) and thus without shiny-server.\n> \n> Now I install the shiny-server (apt install shiny-server).\n> \n> In the packages r-cran-shiny and shiny-server are sample applications. I copied the examples from the r-cran-shiny package (e.g. /usr/lib/R/site-library/shiny/examples/01_hello) to /srv/shiny-server and could (after restarting shiny-server (systemctl restart shiny-server)) access the application via firefox: http://localhost:3838/01_hello/ .\n> \n> These applications consist of a UI part (user interface) and a result part. In the UI part, the web user can set (e.g.) parameters for the display in the result part.\n> \n> The problem: After installation, only the UI part is visible via the web browser.\n> The result part is probably not visible because it does not receive any data from the UI part.\n> \n> With the help of a deb package for the Shiny sever from rstudio and the Debian package, I had at some point identified the sockjs installation as the problem...\n> \n> To get the Shiny application running (in the current scenario), I got the latest version of sockjs from github, \"comped\" it with npm () and then replaced the javascript files under \"/usr/share/nodejs/sockjs/lib/\" (from the Debian installation) with the files from the sockjs (github) package tree \".../node_modules/sockjs/lib/\".\n> \n> After restarting the Shiny server, you can now also see the result part in the web browser and the Shiny application works. \n> \n> I am not a javascript/coffeescript friend or expert. The only thing I could see is that both my sockjs scripts and the Debian ones are based on the same github version (https://github.com/sockjs/sockjs-node/releases/tag/v0.3.24), but the Debian version was generated with coffescript 2.7.0 and \"my\" version was generated with coffescript 1.12.7.\n\nLooks like the coffeescript thingy in #1016732 is still unfixed and I've re-opened the BR. Could you please\nconsider taking another look?\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "reopen 1016732\nstop\n\nHi Yadd,\n\nOn Fri, Jan 27, 2023 at 07:45:35PM +0000, Krüger, Sebastian wrote:\n> I'm not a Shiny user either (so far), however the plan is for our institute to provide Shiny applica",
+      "thread_id": "thread-be818ee60d55",
+      "thread_depth": 1,
+      "month": "2023-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-fc98a7e0b7ae",
+      "subject": "Bug#1028111: r-cran-clock: autopkgtest failure on 32bit",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2023-01-09T14:47:14Z",
+      "last_reply": "2023-01-09T14:47:14Z",
+      "root_message_id": "msg-fc98a7e0b7ae"
+    },
+    {
+      "id": "thread-12e977eaee70",
+      "subject": "Bug#1028130: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Rene Engelhard"
+      ],
+      "started": "2023-01-09T20:18:23Z",
+      "last_reply": "2023-01-10T09:19:10Z",
+      "root_message_id": "msg-12e977eaee70"
+    },
+    {
+      "id": "thread-22362c7f2803",
+      "subject": "Please review autopkgtest of r-cran-tmb / r-cran-glmmtmb",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2023-01-10T17:44:35Z",
+      "last_reply": "2023-01-10T18:02:29Z",
+      "root_message_id": "msg-22362c7f2803"
+    },
+    {
+      "id": "thread-e2930d552686",
+      "subject": "MutationalPatterns fails one test when using latest version of stringr",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Roosmalen-3, M.J. van (Mark)"
+      ],
+      "started": "2023-01-10T20:06:48Z",
+      "last_reply": "2023-01-11T06:45:42Z",
+      "root_message_id": "msg-e2930d552686"
+    },
+    {
+      "id": "thread-89aeaf6260f1",
+      "subject": "Help needed to skip test on i386 only",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2023-01-13T16:02:24Z",
+      "last_reply": "2023-01-13T19:38:11Z",
+      "root_message_id": "msg-89aeaf6260f1"
+    },
+    {
+      "id": "thread-e026d338e9ec",
+      "subject": "Bug#1024012: [joshuaulrich/xts] Unit test failure when running on i386 (Issue #384)",
+      "message_count": 8,
+      "participants": [
+        "Adrian Bunk",
+        "Andreas Tille"
+      ],
+      "started": "2023-01-20T20:35:24Z",
+      "last_reply": "2023-01-24T10:28:24Z",
+      "root_message_id": "msg-e026d338e9ec"
+    },
+    {
+      "id": "thread-366445b9dde3",
+      "subject": "[Help] Re: Bug#1029310: src:r-cran-bayesplot: fails to migrate to testing for too long: autopkgtest regression",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2023-01-21T11:26:37Z",
+      "last_reply": "2023-01-23T19:44:32Z",
+      "root_message_id": "msg-366445b9dde3"
+    },
+    {
+      "id": "thread-5b20cc573b7f",
+      "subject": "Strange error in dh_auto_install of r-cran-spatstat.core",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2023-01-21T13:47:56Z",
+      "last_reply": "2023-01-21T15:52:36Z",
+      "root_message_id": "msg-5b20cc573b7f"
+    },
+    {
+      "id": "thread-51b80ef33d55",
+      "subject": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2023-01-22T08:33:44Z",
+      "last_reply": "2023-01-22T08:33:44Z",
+      "root_message_id": "msg-51b80ef33d55"
+    },
+    {
+      "id": "thread-d5e6706673a2",
+      "subject": "[IRkernel/repr] Test suite issues in version 1.1.5 (Issue #159)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2023-01-22T11:22:21Z",
+      "last_reply": "2023-01-22T11:22:21Z",
+      "root_message_id": "msg-d5e6706673a2"
+    },
+    {
+      "id": "thread-101e2e67256e",
+      "subject": "How can I successfully prevent debci from running on s390x for r-cran-stars",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2023-01-23T06:39:15Z",
+      "last_reply": "2023-01-23T06:41:21Z",
+      "root_message_id": "msg-101e2e67256e"
+    },
+    {
+      "id": "thread-8780376e31d0",
+      "subject": "Arm64 fails to build r-cran-rcpptoml",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2023-01-24T10:40:02Z",
+      "last_reply": "2023-01-25T15:22:07Z",
+      "root_message_id": "msg-8780376e31d0"
+    },
+    {
+      "id": "thread-921088396678",
+      "subject": "Can we get a hint for r-cran-ggplot2 to migrate to testing",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Paul Gevers"
+      ],
+      "started": "2023-01-25T12:28:52Z",
+      "last_reply": "2023-01-25T20:08:31Z",
+      "root_message_id": "msg-921088396678"
+    },
+    {
+      "id": "thread-be818ee60d55",
+      "subject": "Please help to reproduce (Was: shiny-server: server-function don't run)",
+      "message_count": 2,
+      "participants": [
+        "Krüger",
+        "Nilesh Patra"
+      ],
+      "started": "2023-01-27T19:45:35Z",
+      "last_reply": "2023-01-28T05:39:21Z",
+      "root_message_id": "msg-be818ee60d55"
+    }
+  ]
+}

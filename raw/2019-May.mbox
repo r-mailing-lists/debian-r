@@ -1,0 +1,209 @@
+From kapouer at melix.org  Wed May 22 07:36:05 2019
+From: kapouer at melix.org (=?utf-8?b?SsOpcsOpbXkgTGFs?=)
+Date: Wed, 22 May 2019 09:36:05 +0200
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CABFfbXuS0VuQ7D7h8Lr=sX5Ju1L8zCFFdOsKBfpk8_0orjmWvA@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com> <CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com> <CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com> <CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com> <CABFfbXsPXyXsFKKYB5AZJrsnbaSY=eZO2HY8WedYTA=qmyad9g@mail.gmail.com> <CAJxTCxzhA=Ao8Cnc4+gXpgbwmjDcfS6mSoeFyoaRNS_Swd_w+Q@mail.gmail.com> <CABFfbXuO09Bc=y=3H+xt_5vH_i5Z+FJk9twH+LboUx+wNo3ZKg@mail.gmail.com> <CAJxTCxyOf_2+d-sD4rBDQ6Tsk5UpF6eAxNT3vj5WNEQjs5oTJg@mail.gmail.com> <CABFfbXtQfyVMnWgXgsSTv8D6t-G2mZ=0+nkSxupUGh4X9gh0Fw@mail.gmail.com> <CAJxTCxxWn+y58W5L+5CMn8171cG+95mWV9Uca-zBtRFtUq7a=w@mail.gmail.com> <CABFfbXt8QJka=_wcV0kKFzJiUcQNaUcZvCgUYacN=iegCmpRww@mail.gmail.com> <CAJxTCxwmUE4iGX5YsAhe4fZmAcu=nVvBw9F=rtsvZCBKRacYCw@mail.gmail.com> <CABFfbXv=Dwm1tHnPHft_CrG96xksEwS7WdXx3gvM7=8=BsgEBw@mail.gmail.com> <CAJxTCxwJQxcjb6dtWxHFwUZ+-aag8YQr4Yk8ygtw+QdB_usUiQ@mail.gmail.com> <CABFfbXvLswXjxT9eZKNLFCHM_XRfyocja2W5c8aaiirEfms-YA@mail.gmail.com> <CAJxTCxxYpKb96XS6YFQnpQX-OFFXL8HNBfdSkAPWXBgs02daGQ@mail.gmail.com> <CABFfbXumumRnZjnD_6ygZ+8SSVD6G7a+1WUHhWuKBy54KxpX=g@mail.gmail.com> <CAJxTCxyMEWTQ_XduFKaBzFJmouFdU4AWgXca4QekkuSm-i0+5Q@mail.gmail.com> <CABFfbXuS0VuQ7D7h8Lr=sX5Ju1L8zCFFdOsKBfpk8_0orjmWvA@mail.gmail.com>
+Message-ID: <CAJxTCxwkvF-2wAuMmvE9vwO7AsQVi8Wb2vHzD_ytE96imwjf4Q@mail.gmail.com>
+
+Le mer. 22 mai 2019 à 01:32, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+
+> Hi Jérémy
+>
+>
+>
+> Now that r-cran-v8 seems to be working great with libnode-dev, perhaps
+>
+> the old libv8 should be removed from sid?  Today I was working in sid
+>
+> and I noticed that apt still prefers the old v8 over the libnode-dev
+>
+> virtual package when installing libv8-dev as a dependency.
+>
+>
+>
+> Alternatively, instead of removing the old libv8 alltogether, you
+>
+> could push a mini-update for the old package such that libv8-3.14-dev
+>
+> no longer provides libv8-dev, but libv8-3.14-dev keeps existing in
+>
+> sid. Thereby there will only be one libv8-dev in sid, which is the
+>
+> libnode-dev virtual package. However if people really want the old
+>
+> package for whatever reason, they could still install libv8-3.14-dev.
+
+Thanks for the tip, i'll do that !
+
+Jérémy
+
+From kapouer at melix.org  Wed May 22 09:05:35 2019
+From: kapouer at melix.org (=?utf-8?b?SsOpcsOpbXkgTGFs?=)
+Date: Wed, 22 May 2019 11:05:35 +0200
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CAJxTCxwkvF-2wAuMmvE9vwO7AsQVi8Wb2vHzD_ytE96imwjf4Q@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com> <CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com> <CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com> <CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com> <CABFfbXsPXyXsFKKYB5AZJrsnbaSY=eZO2HY8WedYTA=qmyad9g@mail.gmail.com> <CAJxTCxzhA=Ao8Cnc4+gXpgbwmjDcfS6mSoeFyoaRNS_Swd_w+Q@mail.gmail.com> <CABFfbXuO09Bc=y=3H+xt_5vH_i5Z+FJk9twH+LboUx+wNo3ZKg@mail.gmail.com> <CAJxTCxyOf_2+d-sD4rBDQ6Tsk5UpF6eAxNT3vj5WNEQjs5oTJg@mail.gmail.com> <CABFfbXtQfyVMnWgXgsSTv8D6t-G2mZ=0+nkSxupUGh4X9gh0Fw@mail.gmail.com> <CAJxTCxxWn+y58W5L+5CMn8171cG+95mWV9Uca-zBtRFtUq7a=w@mail.gmail.com> <CABFfbXt8QJka=_wcV0kKFzJiUcQNaUcZvCgUYacN=iegCmpRww@mail.gmail.com> <CAJxTCxwmUE4iGX5YsAhe4fZmAcu=nVvBw9F=rtsvZCBKRacYCw@mail.gmail.com> <CABFfbXv=Dwm1tHnPHft_CrG96xksEwS7WdXx3gvM7=8=BsgEBw@mail.gmail.com> <CAJxTCxwJQxcjb6dtWxHFwUZ+-aag8YQr4Yk8ygtw+QdB_usUiQ@mail.gmail.com> <CABFfbXvLswXjxT9eZKNLFCHM_XRfyocja2W5c8aaiirEfms-YA@mail.gmail.com> <CAJxTCxxYpKb96XS6YFQnpQX-OFFXL8HNBfdSkAPWXBgs02daGQ@mail.gmail.com> <CABFfbXumumRnZjnD_6ygZ+8SSVD6G7a+1WUHhWuKBy54KxpX=g@mail.gmail.com> <CAJxTCxyMEWTQ_XduFKaBzFJmouFdU4AWgXca4QekkuSm-i0+5Q@mail.gmail.com> <CABFfbXuS0VuQ7D7h8Lr=sX5Ju1L8zCFFdOsKBfpk8_0orjmWvA@mail.gmail.com> <CAJxTCxwkvF-2wAuMmvE9vwO7AsQVi8Wb2vHzD_ytE96imwjf4Q@mail.gmail.com>
+Message-ID: <CAJxTCxxfHfVbiDJYFE6PcS_tXvuwr94ZmdpDbyT2-nyFL4me5g@mail.gmail.com>
+
+Le mer. 22 mai 2019 à 09:36, Jérémy Lal <kapouer at melix.org> a écrit :
+
+> Le mer. 22 mai 2019 à 01:32, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+>
+> > Hi Jérémy
+> >
+> >
+> >
+> > Now that r-cran-v8 seems to be working great with libnode-dev, perhaps
+> >
+> > the old libv8 should be removed from sid?  Today I was working in sid
+> >
+> > and I noticed that apt still prefers the old v8 over the libnode-dev
+> >
+> > virtual package when installing libv8-dev as a dependency.
+> >
+> >
+> >
+> > Alternatively, instead of removing the old libv8 alltogether, you
+> >
+> > could push a mini-update for the old package such that libv8-3.14-dev
+> >
+> > no longer provides libv8-dev, but libv8-3.14-dev keeps existing in
+> >
+> > sid. Thereby there will only be one libv8-dev in sid, which is the
+> >
+> > libnode-dev virtual package. However if people really want the old
+> >
+> > package for whatever reason, they could still install libv8-3.14-dev.
+>
+>
+> Thanks for the tip, i'll do that !
+
+In the process of doing that, i realized libv8-3.14 is no longer building from source
+and may require a lot of work to get it to.
+There is now only one package depending on libv8-3.14: uwsgi-plugin-v8
+so i'd rather remove libv8-3.14 entirely.
+
+Jérémy
+>
+
+From andreas at an3as.eu  Fri May 24 08:13:23 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 24 May 2019 10:13:23 +0200
+Subject: Backports for Stretch updated
+Message-ID: <20190524081323.r4mbeqdeda7oe6h7@an3as.eu>
+
+Hi folks,
+
+I've updated all upgradable r-cran-* and r-bioc-* packages that were
+once backported to Stretch to the latest version in Buster.  There are
+two exceptions:  r-cran-effects (4.0.1 is backported, 4.1.0 is in
+Buster) and r-cran-stanheaders (2.17.2 is backported, 2.18.1 is in
+Buster).  The reason for the two not updated ones is that these
+explicitly require a higher version of r-base than we have currently in
+Stretch.  I'm not interested to backport r-base since when I tried the
+shiny application we are using here did not worked.  So my main
+motivation to keep packages backported properly was spoiled for this
+one.
+
+Just to keep you informed about the backport status
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From noreply at launchpad.net  Fri May 24 14:57:50 2019
+From: noreply at launchpad.net (Launchpad Email Validator)
+Date: Fri, 24 May 2019 14:57:50 -0000
+Subject: Launchpad: Validate your team's contact email address
+Message-ID: <155870987087.12653.15568178922592808220.launchpad@soybean.canonical.com>
+
+Hello
+
+The Launchpad user named 'Dylan Aïssi (daissi)' requested the
+registration of 'debian-r at lists.debian.org' as the contact email address
+of team 'Debian R Packages Maintainers'. This request can only be made by a team
+owner/administrator, so if this change request was unexpected or was
+not requested by one of the team's administrators, please contact
+system-error at launchpad.net.
+
+If you want to make this email address the contact email of
+'Debian R Packages Maintainers', please click on the link below and follow the
+instructions.
+
+    https://launchpad.net/token/z7NqtBrZdpF4xXgGnJC4
+
+Thanks,
+
+The Launchpad Team
+
+From andreas at an3as.eu  Fri May 24 16:03:34 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 24 May 2019 18:03:34 +0200
+Subject: Re: Launchpad: Validate your team's contact email address
+In-Reply-To: <155870987087.12653.15568178922592808220.launchpad@soybean.canonical.com>
+References: <155870987087.12653.15568178922592808220.launchpad@soybean.canonical.com>
+Message-ID: <20190524160334.j57strntllwujpy2@an3as.eu>
+
+Hi,
+
+I do not mind much but wouldn't it be better to use
+
+   r-pkg-team at alioth-lists.debian.net
+
+for purposes like bug reports etc?
+
+Dylan, thanks for the effort anyway
+
+      Andreas.
+
+On Fri, May 24, 2019 at 02:57:50PM -0000, Launchpad Email Validator wrote:
+> 
+> Hello
+> 
+> The Launchpad user named 'Dylan Aïssi (daissi)' requested the
+> registration of 'debian-r at lists.debian.org' as the contact email address
+> of team 'Debian R Packages Maintainers'. This request can only be made by a team
+> owner/administrator, so if this change request was unexpected or was
+> not requested by one of the team's administrators, please contact
+> system-error at launchpad.net.
+> 
+> If you want to make this email address the contact email of
+> 'Debian R Packages Maintainers', please click on the link below and follow the
+> instructions.
+> 
+>     https://launchpad.net/token/z7NqtBrZdpF4xXgGnJC4
+> 
+> Thanks,
+> 
+> The Launchpad Team
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Fri May 24 19:42:07 2019
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 24 May 2019 21:42:07 +0200
+Subject: Re: Launchpad: Validate your team's contact email address
+In-Reply-To: <20190524160334.j57strntllwujpy2@an3as.eu>
+References: <155870987087.12653.15568178922592808220.launchpad@soybean.canonical.com> <20190524160334.j57strntllwujpy2@an3as.eu>
+Message-ID: <CA+6XHwSAQacBR51Zh1AmOYNYEi_tbAt-MBRRid-XrVyc4AQCcA@mail.gmail.com>
+
+Hi Andreas,
+
+Le ven. 24 mai 2019 à 18:03, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> I do not mind much but wouldn't it be better to use
+>
+>    r-pkg-team at alioth-lists.debian.net
+>
+> for purposes like bug reports etc?
+
+Indeed, I have corrected that.
+
+Best,
+Dylan
+

@@ -1,0 +1,776 @@
+From tille at debian.org  Fri Sep  7 07:50:28 2018
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 7 Sep 2018 09:50:28 +0200
+Subject: BTS seems to send bugs to old maintainer of a package but displays new one correctly (Was: Bug#908065: r-cran-adegraphics: autopkgtest regression: dependency versions not properly specified)
+In-Reply-To: <cd4e018f-92f7-040b-26c6-1cab385710f0@debian.org>
+References: <03f096af-c707-7b31-695d-2175de5b4576@debian.org> <20180906121248.7tedgjmwvmmaxtjv@an3as.eu> <e3956595-c57b-a273-d78d-012cdbbfbfd7@debian.org> <20180906193217.wc3ymlwkfhcpfqu7@an3as.eu> <1fa9f5d3-24ad-d16d-bd48-d6b7078eae57@debian.org> <20180906200925.qevkq6gh6c5oxbea@an3as.eu> <cd4e018f-92f7-040b-26c6-1cab385710f0@debian.org>
+Message-ID: <20180907075028.td3a3nm7dgns2gtc@an3as.eu>
+
+Hi,
+
+On Thu, Sep 06, 2018 at 10:31:34PM +0200, Paul Gevers wrote:
+> 
+> > BTW, do you have any idea why that bug is filed against Debian Med
+> > packaging list[1] while the maintainer of the package is
+> > r-pkg-team at alioth-lists.debian.net?
+> 
+> tracker.d.o?
+
+Hmmm, why should tracker.d.o keep a record where a package was
+maintained *before* instead of just taking the Maintainer field of the
+current package?  At least the *rendered* information of tracker.d.o[1]
+mentions Debian R Packages Maintainers.
+
+The result of this wrong choice of team somehow hides the todo item for
+dh-r from the people who should care (I'll forward a summary, but would
+like to understand this issue first).  The BTS says on the bug page:
+
+   Maintainer for src:r-cran-adegraphics is Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+but it sends the e-mail in contrast to this to debian-med-packaging[3].
+
+Any idea why BTS sends the e-mail to the maintainer that is mentioned
+for instance in the package in stable rather than the one in unstable
+(which is correctly parsed obviously)?
+
+Kind regards
+
+       Andreas.
+
+[1] https://tracker.debian.org/pkg/r-cran-adegraphics
+[2] https://bugs.debian.org/908065
+[3] https://alioth-lists.debian.net/pipermail/debian-med-packaging/2018-September/065335.html
+
+-- 
+http://fam-tille.de
+
+From mattia at debian.org  Fri Sep  7 13:03:01 2018
+From: mattia at debian.org (Mattia Rizzolo)
+Date: Fri, 7 Sep 2018 15:03:01 +0200
+Subject: Re: BTS seems to send bugs to old maintainer of a package but displays new one correctly (Was: Bug#908065: r-cran-adegraphics: autopkgtest regression: dependency versions not properly specified)
+In-Reply-To: <20180907075028.td3a3nm7dgns2gtc@an3as.eu>
+References: <20180906121248.7tedgjmwvmmaxtjv@an3as.eu> <03f096af-c707-7b31-695d-2175de5b4576@debian.org> <e3956595-c57b-a273-d78d-012cdbbfbfd7@debian.org> <20180906193217.wc3ymlwkfhcpfqu7@an3as.eu> <1fa9f5d3-24ad-d16d-bd48-d6b7078eae57@debian.org> <20180906200925.qevkq6gh6c5oxbea@an3as.eu> <cd4e018f-92f7-040b-26c6-1cab385710f0@debian.org> <20180907075028.td3a3nm7dgns2gtc@an3as.eu>
+Message-ID: <20180907130259.GG28976@mapreri.org>
+
+On Fri, Sep 07, 2018 at 09:50:28AM +0200, Andreas Tille wrote:
+> On Thu, Sep 06, 2018 at 10:31:34PM +0200, Paul Gevers wrote:
+> > 
+> > > BTW, do you have any idea why that bug is filed against Debian Med
+> > > packaging list[1] while the maintainer of the package is
+> > > r-pkg-team at alioth-lists.debian.net?
+> > 
+> > tracker.d.o?
+> 
+> Hmmm, why should tracker.d.o keep a record where a package was
+> maintained *before* instead of just taking the Maintainer field of the
+> current package?  At least the *rendered* information of tracker.d.o[1]
+> mentions Debian R Packages Maintainers.
+
+Well, this has nothing at all (really) with tracker.d.o, nor with the QA
+team alas.
+
+> Any idea why BTS sends the e-mail to the maintainer that is mentioned
+> for instance in the package in stable rather than the one in unstable
+> (which is correctly parsed obviously)?
+
+FTR, looking at #908065 I can read:
+
+|Report forwarded to debian-bugs-dist at lists.debian.org, debian-ci at lists.debian.org, Debian Med Packaging Team <debian-med-packaging at lists.alioth.debian.org>:
+|Bug#908065; Package src:r-cran-adegraphics. (Wed, 05 Sep 2018 18:42:04 GMT)
+
+no idea why, given that the page header mentions the r-pkg-team@ alioth
+address.
+
+I suggest you ask owner at bugs.debian.org and/or file a bug against the
+bugs.debian.org pseudo-package, as that's where the bugs.d.o maintainer
+answer.
+
+-- 
+regards,
+                        Mattia Rizzolo
+
+GPG Key: 66AE 2B4A FCCF 3F52 DA18  4D18 4B04 3FCD B944 4540      .''`.
+more about me:  https://mapreri.org                             : :'  :
+Launchpad user: https://launchpad.net/~mapreri                  `. `'`
+Debian QA page: https://qa.debian.org/developer.php?login=mattia  `-
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at fam-tille.de  Mon Sep 10 11:43:26 2018
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Mon, 10 Sep 2018 13:43:26 +0200
+Subject: Re: R-Packaging Project Space Workflow
+In-Reply-To: <alpine.DEB.2.20.1809100741250.1615@debian>
+References: <alpine.DEB.2.20.1809100741250.1615@debian>
+Message-ID: <20180910114326.4hil7d3lzovtdebm@an3as.eu>
+
+[Since at bottom you said you could write to the list I'm just
+ answering there.  Please in future just use the list from the
+ beginning.]
+
+Hi Oliver,
+
+On Mon, Sep 10, 2018 at 08:04:35AM -0300, Oliver Dechant wrote:
+> Hi Andreas,
+> 
+> I have a question about packaging, specifically generating the wnpp
+> report.
+>
+> Most (all?) of the ITP requests sent include the Salsa project URL, I am
+> apparently unable to create such a new location myself.
+
+Now you can.  I think its a stupid default setting.
+ 
+> Is the workflow that I should email someone with higher privileges ahead
+> of posting the ITP? Will the ITP with a yet non-existing R Salsa Group
+> location result in the creation of that project?
+
+An ITP is just an e-mail.  It has no technical side effects (besides
+opening a bug in BTS).
+
+> Or is it better to submit
+> my ITP as a RFS? I believe RFS is for uploading to Debian. If that were
+> the case I suppose I could simply point to a personal project space and
+> have the Developer copy the files to Salsa.
+
+Please create the project in Salsa (please let me know if you can not
+even now).  Its fine if you ask for RFS on the mailinglist *without* the
+official RFS mechanism.  I admit I do *not* follow mentors.d.n so I will
+not notice any ITP of an R package.
+ 
+> I've not found specific direction on this simple matter in the mailing
+> list archives.
+
+That's my main argument for always sticking to the list.  Next time
+a websearch should uncover the answer.
+
+> In two cases the projects were apparently already on Salsa
+> in their own project spaces or in personal project it's not specified.
+> 
+> [1] https://lists.debian.org/debian-r/2018/03/msg00002.html
+> [2] https://lists.debian.org/debian-r/2018/08/msg00000.html
+
+Dylan just knows that we are talking about the same.  If he is just
+specifying a package name he can safely assume that I will find it on
+
+    https://salsa.debian.org/r-pkg-team/<packagename>
+ 
+> I can send this question to the mailing list if you'd prefer.
+
+Ne need to repost since I quotet the whole text.  Next time please
+use the list in the first place.
+
+Hope this helps
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Sep 12 06:38:31 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 12 Sep 2018 08:38:31 +0200
+Subject: First time all packages are up to date
+Message-ID: <20180912063831.yyhxd746xupkb7gj@an3as.eu>
+
+Hi,
+
+I think I advertised the page where the package status according
+upstream releases and bugs is rendered twice a day before[1].  Thanks to
+ftpmaster (namely Thorsten Alteholz) now all preconditions for new
+upstream versions were available and that is the first time that we are
+down to zero packages which are not up to data.  We are also pretty good
+regarding bugs about failed autopkgtests (only #898442 remaining waiting
+for r-cran-popepi becoming accepted).
+
+For those who want to contribute:  The same repository that contains the
+package status has the script routine-update[2] which I've used now for
+brain dead automatic package upgrades quite successfully the last five
+monthes with no problems.  So if you want to help keeping the current
+status feel free to watch[1] and if you see some package that is not up
+to date fire up routine-update.  The effort to do this is about 1min
+(including checking git log and git diff about what routine-update did).
+Any team member with upload permissions can do this and I would really
+welcome if people would not simply assume that I'm the person who is
+enjoying doing this on my own.
+
+Kind regards and happy routine-update
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/outdated_r-packages.txt
+[2] https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep 13 20:04:35 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 13 Sep 2018 22:04:35 +0200
+Subject: r-cran-pracma
+Message-ID: <20180913200435.j3e3jjfm3joukrxl@an3as.eu>
+
+Hi Oliver,
+
+I need r-cran-pracma for libvcflib and created the packaging
+via
+
+    prepare_missing_cran_package pracma
+
+When I tried to push the resulting Git archive I realised that you did
+some work on this package.  That's nice - but obviously you did this
+manually since several files of the autogeneration are missing.  Please
+*everybody* notice: close to everything is done automatically.
+
+I took the freedom to override your work in Git but added you as
+Uploader so you are kindly invited to file the according ITP bug (and
+just use itp_from_debian_dir to create the content of your ITP mail).
+I'd be happy to sponsor your package if needed.  Please let me know
+if this is your prefered way to continue with this package.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From dechant at dal.ca  Fri Sep 14 00:26:32 2018
+From: dechant at dal.ca (Oliver Dechant)
+Date: Thu, 13 Sep 2018 21:26:32 -0300 (ADT)
+Subject: Re: r-cran-pracma
+In-Reply-To: <20180913200435.j3e3jjfm3joukrxl@an3as.eu>
+References: <20180913200435.j3e3jjfm3joukrxl@an3as.eu>
+Message-ID: <alpine.DEB.2.20.1809132114360.25907@debian>
+
+On Thu, 13 Sep 2018, Andreas Tille wrote:
+
+> Date: Thu, 13 Sep 2018 17:04:35
+> From: Andreas Tille <andreas at an3as.eu>
+> To: Oliver Dechant <dechant at dal.ca>, debian-r at lists.debian.org
+> Subject: r-cran-pracma
+>
+> Hi Oliver,
+>
+> I need r-cran-pracma for libvcflib and created the packaging
+> via
+>
+>     prepare_missing_cran_package pracma
+>
+> When I tried to push the resulting Git archive I realised that you did
+> some work on this package.  That's nice - but obviously you did this
+> manually since several files of the autogeneration are missing.  Please
+> *everybody* notice: close to everything is done automatically.
+>
+> I took the freedom to override your work in Git but added you as
+> Uploader so you are kindly invited to file the according ITP bug (and
+> just use itp_from_debian_dir to create the content of your ITP mail).
+> I'd be happy to sponsor your package if needed.  Please let me know
+> if this is your prefered way to continue with this package.
+>
+> Kind regards
+>
+>       Andreas.
+>
+>
+Hi Andreas,
+
+I need a sponsor to upload r-cran-pracma to the archive. I'll send the ITP
+momentarily. I also remain interested in helping to maintain r-cran-pracma
+going forward.
+
+Many thanks again,
+--
+Oliver Dechant
+Undergrad, Dalhousie University
+Faculty of Computer Science
+
+From tille at debian.org  Fri Sep 14 12:45:10 2018
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 14 Sep 2018 14:45:10 +0200
+Subject: Re: r-cran-pracma
+In-Reply-To: <alpine.DEB.2.20.1809132114360.25907@debian>
+References: <20180913200435.j3e3jjfm3joukrxl@an3as.eu> <alpine.DEB.2.20.1809132114360.25907@debian>
+Message-ID: <20180914124510.72r2jn2lskinzctn@an3as.eu>
+
+On Thu, Sep 13, 2018 at 09:26:32PM -0300, Oliver Dechant wrote:
+> 
+> I need a sponsor to upload r-cran-pracma to the archive. I'll send the ITP
+> momentarily. I also remain interested in helping to maintain r-cran-pracma
+> going forward.
+
+Just ping me for sponsoring once you added the ITP bug number to d/changelog.
+ 
+> Many thanks again,
+
+You are welcome and thanks to you for helping with maintenance
+
+        Andreas.
+
+PS: Did you tried 
+
+      prepare_missing_cran_package pracma
+
+    just for an exercise to safe time for your next new package?  BTW,
+    the script will check ITPs and do nothing once an ITP is out so if
+    you ITPed than this example will not work any more.
+
+-- 
+http://fam-tille.de
+
+From dechant at dal.ca  Fri Sep 14 17:34:50 2018
+From: dechant at dal.ca (Oliver Dechant)
+Date: Fri, 14 Sep 2018 14:34:50 -0300 (ADT)
+Subject: Re: r-cran-pracma
+In-Reply-To: <20180914124510.72r2jn2lskinzctn@an3as.eu>
+References: <20180913200435.j3e3jjfm3joukrxl@an3as.eu> <alpine.DEB.2.20.1809132114360.25907@debian> <20180914124510.72r2jn2lskinzctn@an3as.eu>
+Message-ID: <alpine.DEB.2.20.1809141431200.2519@debian>
+
+On Fri, 14 Sep 2018, Andreas Tille wrote:
+
+> Date: Fri, 14 Sep 2018 09:45:10
+> From: Andreas Tille <tille at debian.org>
+> To: Oliver Dechant <dechant at dal.ca>
+> Cc: debian-r at lists.debian.org
+> Subject: Re: r-cran-pracma
+>
+> On Thu, Sep 13, 2018 at 09:26:32PM -0300, Oliver Dechant wrote:
+> >
+> > I need a sponsor to upload r-cran-pracma to the archive. I'll send the ITP
+> > momentarily. I also remain interested in helping to maintain r-cran-pracma
+> > going forward.
+>
+> Just ping me for sponsoring once you added the ITP bug number to d/changelog.
+>
+> > Many thanks again,
+>
+> You are welcome and thanks to you for helping with maintenance
+>
+>         Andreas.
+>
+> PS: Did you tried
+>
+>       prepare_missing_cran_package pracma
+>
+>     just for an exercise to safe time for your next new package?  BTW,
+>     the script will check ITPs and do nothing once an ITP is out so if
+>     you ITPed than this example will not work any more.
+>
+>
+Hello,
+
+Here is a reference for the bug report:
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908788
+
+I will look into the script you've referenced. I will update d/changelog
+for pracma.
+
+Many thanks,
+--
+Oliver Dechant
+Undergrad, Dalhousie University
+Faculty of Computer Science
+
+From dechant at dal.ca  Sun Sep 16 22:22:03 2018
+From: dechant at dal.ca (Oliver Dechant)
+Date: Sun, 16 Sep 2018 19:22:03 -0300 (ADT)
+Subject: RFS: rootsolve, rmpfr
+Message-ID: <alpine.DEB.2.20.1809161911430.26149@debian>
+
+Hello Debian-R Developers, this week I have prepared two new projects
+which can be found on Salsa:
+
+[1] r-cran-rootsolve
+[2] r-cran-rmpfr
+
+Would an appropriately privileged team member take a look and upload
+them? I will continue to maintain these projects if any additional support
+is required.
+
+Many thanks,
+--
+Oliver Dechant
+Undergrad, Dalhousie University
+Faculty of Computer Science
+
+From andreas at an3as.eu  Mon Sep 17 06:54:13 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 17 Sep 2018 08:54:13 +0200
+Subject: Re: RFS: rootsolve, rmpfr
+In-Reply-To: <alpine.DEB.2.20.1809161911430.26149@debian>
+References: <alpine.DEB.2.20.1809161911430.26149@debian>
+Message-ID: <20180917065413.7nrllbgebx2o4zsd@an3as.eu>
+
+Hi Oliver,
+
+On Sun, Sep 16, 2018 at 07:22:03PM -0300, Oliver Dechant wrote:
+> Hello Debian-R Developers, this week I have prepared two new projects
+> which can be found on Salsa:
+> 
+> [1] r-cran-rootsolve
+> [2] r-cran-rmpfr
+
+Hmmm, how do you manage to build those packages without any
+debian/changelog file?  It is missing in both cases.  I was thinking
+about whether you simply forget to `git add debian/changelog` but
+the prepare_missing_cran_package script is doing all this for you.
+
+I also realised that you have actually used prepare_missing_cran_package
+since the marker "FIXME: year" remained in both d/copyright scripts. ;-)
+
+I also noticed that in d/copyright the debian/* section is lacking your
+ID.  That's because you have not yet set DEBFULLNAME and DEBEMAIL in
+your environment as it is recommended in Debian packaging manual (and
+assumed to be set by prepare_missing_cran_package of dh-r in unstable).
+I've just uploaded dh-r 20180917 which injects FIXME strings if these
+environment variables are not found.  BTW, it makes much sense to use
+these variables since you can be sure to have *identical* IDs in
+d/control and d/changelog - in r-cran-rmpfr you have an additional space
+inside the Uploaders field and once you have created a d/changelog file
+and the changelog owner ID is lacking this space lintian will warn you
+about a Non-Maintainer Upload.
+
+When I checked the FIXME-injection I recreated r-cran-rmpfr via
+
+    prepare_missing_cran_package Rmpfr
+
+and it creates the additional dependency r-cran-gmp.  This needs to be
+packaged as well.  In short:  Please do not just create the repository
+but also build the package and its dependencies and test the installed
+packages.  Please let me know if you have any questions about this or
+ping me again after filing the according ITPs and the ITP-bugs are
+closed in d/changelog.
+
+Thanks for your work so far
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Sep 17 16:17:35 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 17 Sep 2018 18:17:35 +0200
+Subject: Re: RFS: rootsolve, rmpfr
+In-Reply-To: <0ea8a8fc-48b8-8a0c-52be-9b449e6ea70b@dal.ca>
+References: <alpine.DEB.2.20.1809161911430.26149@debian> <20180917065413.7nrllbgebx2o4zsd@an3as.eu> <0ea8a8fc-48b8-8a0c-52be-9b449e6ea70b@dal.ca>
+Message-ID: <20180917161735.ukrhdasvfhloxran@an3as.eu>
+
+On Mon, Sep 17, 2018 at 09:30:48AM -0300, Oliver Dechant wrote:
+> > When I checked the FIXME-injection I recreated r-cran-rmpfr via
+> >
+> >     prepare_missing_cran_package Rmpfr
+> >
+> > and it creates the additional dependency r-cran-gmp.  This needs to be
+> > packaged as well.  In short:  Please do not just create the repository
+> > but also build the package and its dependencies and test the installed
+> > packages.  Please let me know if you have any questions about this or
+> > ping me again after filing the according ITPs and the ITP-bugs are
+> > closed in d/changelog.
+> This was a `debuild` block as the build was failing apparently when
+> calling `make` to a non-existent /tests, I made the assumption that the
+> Developer
+> upload would magically place the package contents in an appropriate
+> testing environment.
+
+Please use pbuilder (pdebuild) to build in a clean chroot.
+
+I admit I can not parse what you want to tell me with that paragraph.
+
+> I saw the dependency was being flagged but would not build. I think the
+> dependency is for
+> `libgmp-dev`.
+
+What version of dh-r are you using?  I'd recommend the latest from
+unstable.
+
+> Many thanks again, 
+
+You are welcome
+
+       Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Sep 18 04:49:28 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 18 Sep 2018 06:49:28 +0200
+Subject: Re: RFS: rootsolve, rmpfr
+In-Reply-To: <alpine.DEB.2.20.1809171745050.8014@debian>
+References: <alpine.DEB.2.20.1809161911430.26149@debian> <20180917065413.7nrllbgebx2o4zsd@an3as.eu> <0ea8a8fc-48b8-8a0c-52be-9b449e6ea70b@dal.ca> <20180917161735.ukrhdasvfhloxran@an3as.eu> <alpine.DEB.2.20.1809171745050.8014@debian>
+Message-ID: <20180918044928.egmgsmfx2kysbte4@an3as.eu>
+
+[ Please always write to the list - thank you ]
+
+On Mon, Sep 17, 2018 at 05:51:19PM -0300, Oliver Dechant wrote:
+> > > I saw the dependency was being flagged but would not build. I think the
+> > > dependency is for
+> > > `libgmp-dev`.
+> >
+> > What version of dh-r are you using?  I'd recommend the latest from
+> > unstable.
+> For this I am using the stable 2018 dh-r from the stretchcran.0 archive.
+
+I don't know about stretchcran.0 archive and there are a couple of
+versions starting with 2018.  I recommend 20180917 which you can get
+from unstable.  I released it *especially* for you since you obviously
+had not set DEBFULLNAME and DEBEMAIL. (Did you fixed now?)
+
+> I noticed there have been updates to dh-r only recently. I also see that
+> CRAN hosts a proper gmp package as to your suggestion and my
+> misunderstanding.
+
+It seems we keep on misunderstanding.  We are talking about packages
+inside the Debian archive and there is no gmp package.  If
+prepare_missing_cran_package you can be pretty sure that it is needed
+for your target package (and you need to add this to Build-Depends
+manually later).  Can you please confirm that you understood what
+pbuilder is and that you are using it?
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From dechant at dal.ca  Tue Sep 18 05:25:51 2018
+From: dechant at dal.ca (Oliver Dechant)
+Date: Tue, 18 Sep 2018 05:25:51 +0000
+Subject: Re: RFS: rootsolve, rmpfr
+In-Reply-To: <20180918044928.egmgsmfx2kysbte4@an3as.eu>
+References: <alpine.DEB.2.20.1809161911430.26149@debian> <20180917065413.7nrllbgebx2o4zsd@an3as.eu> <0ea8a8fc-48b8-8a0c-52be-9b449e6ea70b@dal.ca> <20180917161735.ukrhdasvfhloxran@an3as.eu> <alpine.DEB.2.20.1809171745050.8014@debian> <20180918044928.egmgsmfx2kysbte4@an3as.eu>
+Message-ID: <alpine.DEB.2.20.1809180159570.14184@debian>
+
+Hi Andreas,
+
+On Tue, 18 Sep 2018, Andreas Tille wrote:
+
+> Date: Tue, 18 Sep 2018 01:49:28
+> From: Andreas Tille <andreas at an3as.eu>
+> To: Oliver Dechant <dechant at dal.ca>, debian-r at lists.debian.org
+> Subject: Re: RFS: rootsolve, rmpfr
+>
+> [ Please always write to the list - thank you ]
+>
+> On Mon, Sep 17, 2018 at 05:51:19PM -0300, Oliver Dechant wrote:
+> > > > I saw the dependency was being flagged but would not build. I think the
+> > > > dependency is for
+> > > > `libgmp-dev`.
+> > >
+> > > What version of dh-r are you using?  I'd recommend the latest from
+> > > unstable.
+> > For this I am using the stable 2018 dh-r from the stretchcran.0 archive.
+>
+> I don't know about stretchcran.0 archive and there are a couple of
+> versions starting with 2018.  I recommend 20180917 which you can get
+> from unstable.  I released it *especially* for you since you obviously
+> had not set DEBFULLNAME and DEBEMAIL. (Did you fixed now?)
+I've made the updates locally. Thank you for the revisions to dh-r, the
+scripts are very interesting. I don't think stretchcran0 is actually an
+archive, I have a Debian Science Team maintained project under --
+Filename: stretch-cran35/dh-r_20180403~stretchcran.0_all.deb.
+>
+> > I noticed there have been updates to dh-r only recently. I also see that
+> > CRAN hosts a proper gmp package as to your suggestion and my
+> > misunderstanding.
+>
+> It seems we keep on misunderstanding.  We are talking about packages
+> inside the Debian archive and there is no gmp package.  If
+> prepare_missing_cran_package you can be pretty sure that it is needed
+> for your target package (and you need to add this to Build-Depends
+> manually later).  Can you please confirm that you understood what
+> pbuilder is and that you are using it?
+I know of pbuilder from the maintainers guide. I can follow the
+maintainers guide.
+>
+> Kind regards
+>
+>         Andreas.
+>
+>
+Many thanks again,
+-- 
+Oliver Dechant
+https://web.cs.dal.ca/~dechant | Dalhousie University
+Faculty of Computer Science
+
+From andreas at an3as.eu  Tue Sep 18 09:09:51 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 18 Sep 2018 11:09:51 +0200
+Subject: Re: RFS: rootsolve, rmpfr
+In-Reply-To: <alpine.DEB.2.20.1809180159570.14184@debian>
+References: <alpine.DEB.2.20.1809161911430.26149@debian> <20180917065413.7nrllbgebx2o4zsd@an3as.eu> <0ea8a8fc-48b8-8a0c-52be-9b449e6ea70b@dal.ca> <20180917161735.ukrhdasvfhloxran@an3as.eu> <alpine.DEB.2.20.1809171745050.8014@debian> <20180918044928.egmgsmfx2kysbte4@an3as.eu> <alpine.DEB.2.20.1809180159570.14184@debian>
+Message-ID: <20180918090951.2hhfnsu77wxsa3dp@an3as.eu>
+
+On Tue, Sep 18, 2018 at 05:25:51AM +0000, Oliver Dechant wrote:
+> > I don't know about stretchcran.0 archive and there are a couple of
+> > versions starting with 2018.  I recommend 20180917 which you can get
+> > from unstable.  I released it *especially* for you since you obviously
+> > had not set DEBFULLNAME and DEBEMAIL. (Did you fixed now?)
+> I've made the updates locally. Thank you for the revisions to dh-r, the
+> scripts are very interesting. I don't think stretchcran0 is actually an
+> archive, I have a Debian Science Team maintained project under --
+> Filename: stretch-cran35/dh-r_20180403~stretchcran.0_all.deb.
+
+The Maintainer name is probably not relevant.  Those Debian packages are
+consumed by lots of derivatives.  The name seems to be a sign that you
+somehow have
+
+    http://cran.wustl.edu/bin/linux/debian/stretch-cran35/
+
+in your sources.list.  For the purpose of Debian package development it
+is dangerous to consume third party apt sources since it could lead to
+wrong assumptions what package exists and what not.
+
+> > It seems we keep on misunderstanding.  We are talking about packages
+> > inside the Debian archive and there is no gmp package.  If
+> > prepare_missing_cran_package you can be pretty sure that it is needed
+> > for your target package (and you need to add this to Build-Depends
+> > manually later).  Can you please confirm that you understood what
+> > pbuilder is and that you are using it?
+> I know of pbuilder from the maintainers guide. I can follow the
+> maintainers guide.
+
+Yes, that would be helpful.
+
+Kind regards
+
+       Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Sep 19 09:28:59 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 19 Sep 2018 11:28:59 +0200
+Subject: Test suite of r-cran-snakecase has transliteration errors in test suite
+Message-ID: <20180919092859.tnm6ddwbmmeqisgg@an3as.eu>
+
+Hi,
+
+when running the test suite of r-cran-snakecase (for instance by installing
+the package including its Test-Depends r-cran-purrrlyr and running
+
+    sh /usr/share/doc/r-cran-snakecase/run-unit-test ) I get:
+
+...
+> test_check("snakecase")
+── 1. Failure: transliterations (@test-to_any_case.R#397)  ─────────────────────
+to_any_case("Älterer Herr", transliterations = c("german", Herr = "Mann")) not equal to "aelterer_mann".
+1/1 mismatches
+x[1]: "älterer_mann"
+y[1]: "aelterer_mann"
+
+── 2. Failure: transliterations (@test-to_any_case.R#399)  ─────────────────────
+to_any_case(...) not equal to "aelterer_mann".
+1/1 mismatches
+x[1]: "älterer_mann"
+y[1]: "aelterer_mann"
+
+── 3. Failure: complex strings (@test-to_any_case.R#515)  ──────────────────────
+to_any_case("acÄo", transliterations = c("german", "Latin-ASCII")) not equal to "ac_aeo".
+1/1 mismatches
+x[1]: "ac_ao"
+y[1]: "ac_aeo"
+
+── 4. Failure: complex strings (@test-to_any_case.R#522)  ──────────────────────
+to_any_case("Ø", transliterations = c("danish", "Latin-ASCII")) not equal to "oe".
+1/1 mismatches
+x[1]: "o"
+y[1]: "oe"
+
+── 5. Failure: complex strings (@test-to_any_case.R#524)  ──────────────────────
+to_any_case("ø", transliterations = c("danish", "Latin-ASCII")) not equal to "oe".
+1/1 mismatches
+x[1]: "o"
+y[1]: "oe"
+
+── 6. Failure: complex strings (@test-to_any_case.R#526)  ──────────────────────
+to_any_case("Å", transliterations = c("danish", "Latin-ASCII")) not equal to "aa".
+1/1 mismatches
+x[1]: "a"
+y[1]: "aa"
+
+── 7. Failure: complex strings (@test-to_any_case.R#528)  ──────────────────────
+to_any_case("å", transliterations = c("danish", "Latin-ASCII")) not equal to "aa".
+1/1 mismatches
+x[1]: "a"
+y[1]: "aa"
+
+── 8. Failure: complex strings (@test-to_any_case.R#531)  ──────────────────────
+to_any_case("Æ", transliterations = c("finnish", "Latin-ASCII")) not equal to "a".
+1/1 mismatches
+x[1]: "ae"
+y[1]: "a"
+
+── 9. Failure: complex strings (@test-to_any_case.R#533)  ──────────────────────
+to_any_case("æ", transliterations = c("finnish", "Latin-ASCII")) not equal to "a".
+1/1 mismatches
+x[1]: "ae"
+y[1]: "a"
+
+── 10. Failure: complex strings (@test-to_any_case.R#540)  ─────────────────────
+to_any_case("Æ", transliterations = c("swedish")) not equal to "a".
+1/1 mismatches
+x[1]: "æ"
+y[1]: "a"
+
+── 11. Failure: complex strings (@test-to_any_case.R#542)  ─────────────────────
+to_any_case("æ", transliterations = c("swedish")) not equal to "a".
+1/1 mismatches
+x[1]: "æ"
+y[1]: "a"
+
+── 12. Failure: complex strings (@test-to_any_case.R#544)  ─────────────────────
+to_any_case("Ø", transliterations = c("swedish")) not equal to "o".
+1/1 mismatches
+x[1]: "ø"
+y[1]: "o"
+
+── 13. Failure: complex strings (@test-to_any_case.R#546)  ─────────────────────
+to_any_case("ø", transliterations = c("swedish")) not equal to "o".
+1/1 mismatches
+x[1]: "ø"
+y[1]: "o"
+
+── 14. Failure: complex strings (@test-to_any_case.R#548)  ─────────────────────
+to_any_case("Å", transliterations = c("swedish")) not equal to "a".
+1/1 mismatches
+x[1]: "å"
+y[1]: "a"
+
+── 15. Failure: complex strings (@test-to_any_case.R#550)  ─────────────────────
+to_any_case("å", transliterations = c("swedish")) not equal to "a".
+1/1 mismatches
+x[1]: "å"
+y[1]: "a"
+
+══ testthat results  ═══════════════════════════════════════════════════════════
+OK: 198 SKIPPED: 0 FAILED: 15
+1. Failure: transliterations (@test-to_any_case.R#397) 
+2. Failure: transliterations (@test-to_any_case.R#399) 
+3. Failure: complex strings (@test-to_any_case.R#515) 
+4. Failure: complex strings (@test-to_any_case.R#522) 
+5. Failure: complex strings (@test-to_any_case.R#524) 
+6. Failure: complex strings (@test-to_any_case.R#526) 
+7. Failure: complex strings (@test-to_any_case.R#528) 
+8. Failure: complex strings (@test-to_any_case.R#531) 
+9. Failure: complex strings (@test-to_any_case.R#533) 
+1. ...
+
+Error: testthat unit tests failed
+
+Any idea what might went wrong here?
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+

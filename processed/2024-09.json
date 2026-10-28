@@ -1,0 +1,338 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2024-09",
+  "messages": [
+    {
+      "id": "msg-5c432be896da",
+      "message_id": "<ZtehCS9F85xbhiJM@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2024-09-03T23:51:37Z",
+      "subject": "Mass removal of 32-bit support in r-cran-* packages?",
+      "subject_clean": "Mass removal of 32-bit support in r-cran-* packages?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nCRAN and Bioconductor do not test their packages on 32-bit architectures\nanymore for a while.\n\nAs of today, when one of our packages fail on i386, armel or armhf, one\npossible solution is to make it build-depend on architecture-is-64-bit\nand file a request for removal on these three architectures on the BTS\nto ftp.debian.org.  And it has to be done recursively when it is not a\nleaf package.\n\nThis is manual work on both sides and the end of the story is that one\nday, Debian will stop releasing i368, armel and armhf, and that decision\nwill not depend much on whether R packages supports them or not.  So I\nam increasingly feeling that it is too much of a burden to do this\ntedious work of only removing r-* packages as they break one by one.\n\nWhat would you think about just dropping 32-bit support entierly for all\nthe r-cran-* and r-bioc-* and their reverse-dependencies?  This way we\nwould only need to ask for one mass-removal to the FTP team, and on our\nside we would mostly need one mass source-only upload with routine-update\n--64 --force.\n\nHace a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi all,\n\nCRAN and Bioconductor do not test their packages on 32-bit architectures\nanymore for a while.\n\nAs of today, when one of our packages fail on i386, armel or armhf, one\npossible solution is to ",
+      "thread_id": "thread-5c432be896da",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-0f6f94e973c8",
+      "message_id": "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-09-06T16:26:01Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>"
+      ],
+      "body_plain": "Hi Michael\n\nOn Wed, 28 Aug 2024 at 07:04, Michael R. Crusoe <crusoe at debian.org> wrote:\n> Please let me know if those \"breaks\" are harmless or if they should be reverted.\n\nI think these are merely redundant because of the dependencies on\nr-api-bioc-3.19.\n\nYou can remove them in a future upload, no need to upload only for this.\n\nRegards\nGraham",
+      "body_snippet": "Hi Michael\n\nOn Wed, 28 Aug 2024 at 07:04, Michael R. Crusoe <crusoe at debian.org> wrote:\n> Please let me know if those \"breaks\" are harmless or if they should be reverted.\n\nI think these are merely r",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-c32af8c7b7f6",
+      "message_id": "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-09-08T17:00:32Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Michael\n\nWhile I was preparing this email, it looks like the last 32-bit binary\nremoval was done [1]. \\o/\n\nI've been adding migration hints for the 32-bit autopkgtests, but it's\na manual process, so please let me know if any are still needed.\n\nPlease check the tracker pages for all the uploaded packages, and\neither fix, or highlight here any problems.  There should be no red\nautopkgtests, and no packages marked \"not considered\".  I did spot\nsome problems, e.g. r-bioc-rhdf5 [2] autopkgtest failure on s390x, and\nr-bioc-tcgabiolinks [3] autopkgtest failure on ppc64el.\n\nRegards\nGraham\n\n[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1079145\n[2] https://tracker.debian.org/pkg/r-bioc-rhdf5\n[3] https://tracker.debian.org/pkg/r-bioc-tcgabiolinks",
+      "body_snippet": "Hi Michael\n\nWhile I was preparing this email, it looks like the last 32-bit binary\nremoval was done [1]. \\o/\n\nI've been adding migration hints for the 32-bit autopkgtests, but it's\na manual process, s",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-b4918cd864bd",
+      "message_id": "<0d70b3bf-1b4a-4603-a1f1-24d46e46f9e8@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2024-09-08T17:44:44Z",
+      "subject": "Help requested Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Help requested Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>"
+      ],
+      "body_plain": "Hey all,\n\nWe are nearly done with the bioconductor 3.19 transition!\n\nCan I get some help with the r-bioc-rhdf5 [2] autopkgtest failure on s390x, and r-bioc-tcgabiolinks [3] autopkgtest failure on ppc64el ?\n\nOn 08/09/2024 19.00, Graham Inggs wrote:\n> Hi Michael\n>\n> While I was preparing this email, it looks like the last 32-bit binary\n> removal was done [1]. \\o/\n>\n> I've been adding migration hints for the 32-bit autopkgtests, but it's\n> a manual process, so please let me know if any are still needed.\n>\n> Please check the tracker pages for all the uploaded packages, and\n> either fix, or highlight here any problems.  There should be no red\n> autopkgtests, and no packages marked \"not considered\".  I did spot\n> some problems, e.g. r-bioc-rhdf5 [2] autopkgtest failure on s390x, and\n> r-bioc-tcgabiolinks [3] autopkgtest failure on ppc64el.\n>\n> Regards\n> Graham\n>\n>\n> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1079145\n> [2] https://tracker.debian.org/pkg/r-bioc-rhdf5\n> [3] https://tracker.debian.org/pkg/r-bioc-tcgabiolinks\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hey all,\n\nWe are nearly done with the bioconductor 3.19 transition!\n\nCan I get some help with the r-bioc-rhdf5 [2] autopkgtest failure on s390x, and r-bioc-tcgabiolinks [3] autopkgtest failure on ppc6",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 2,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-d476473e7f93",
+      "message_id": "<Zt403L5Y8lwKJJVM@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2024-09-08T23:35:56Z",
+      "subject": "No need for opening bugs against packages removed from CRAN, just directly ask for removal if you are confident.",
+      "subject_clean": "No need for opening bugs against packages removed from CRAN, just directly ask for removal if you are confident.",
+      "in_reply_to": "<172582915995.18276.14009893556238754101.reportbug@emike.toes>",
+      "references": [
+        "<172582915995.18276.14009893556238754101.reportbug@emike.toes>"
+      ],
+      "body_plain": "Hi Ben,\n\nthanks for your involvement in package maintenance,\n\nthe 'uscan error' type in the packaging team's UDD page already gives us\na good overview of what is removed from CRAN.\n\nhttps://udd.debian.org/dmd/?r-pkg-team at alioth-lists.debian.net#todo\n\nSo please do not bother filing bugs against the packages.  If they are\nleaf packages, you can just file a request for removal and mention that\n(unless somebody objects) you have pre-approval from the team.\n\nIf they are not leaf packages, an overview of their reverse-dependency\ntree would be very useful.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi Ben,\n\nthanks for your involvement in package maintenance,\n\nthe 'uscan error' type in the packaging team's UDD page already gives us\na good overview of what is removed from CRAN.\n\nhttps://udd.debian",
+      "thread_id": "thread-d476473e7f93",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-824606f26011",
+      "message_id": "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-09-09T08:33:40Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Michael\n\nr-bioc-biocgenerics [1] has migrated and r-api-bioc-3.18 is gone from testing.\n>>From the release team's perspective, this transition is done.\n\nThere are still some packages that were not in testing for the\ntransition.  Please check the transition tracker [2] for \"good\"\npackages marked \"sid only\",\nAnother place to check is the r-pkg-team DDPO page [3], and search for \"Excuse\".\n\nI spotted a problem with r-bioc-golubesets [4], which still needs a\nsource-only upload.\n\nRegards\nGraham\n\n[1] https://tracker.debian.org/pkg/r-bioc-biocgenerics\n[2] https://release.debian.org/transitions/html/r-api-bioc-3.19.html\n[3] https://qa.debian.org/developer.php?email=r-pkg-team at alioth-lists.debian.net\n[4] https://tracker.debian.org/pkg/r-bioc-golubesets",
+      "body_snippet": "Hi Michael\n\nr-bioc-biocgenerics [1] has migrated and r-api-bioc-3.18 is gone from testing.\n>>From the release team's perspective, this transition is done.\n\nThere are still some packages that were not ",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 2,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-7b2e66915251",
+      "message_id": "<1572f2f6-633b-4992-8974-bc5f3566f891@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2024-09-09T09:44:07Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+        "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Graham,\n\nThank you very much!\n\nWe have a question about https://qa.debian.org/excuses.php?package=r-bioc-tcgabiolinks ; the CI for this package has never passed on ppc64el, so we are confused as to why this is now holding up migration.\n\nLikewise for https://qa.debian.org/excuses.php?package=r-bioc-rhdf5 ; the s390x CI has never passed here either.\n\nhttps://ci.debian.net/packages/r/r-bioc-tcgabiolinks/testing/ppc64el/\nhttps://ci.debian.net/packages/r/r-bioc-rhdf5/testing/s390x/\n\nOn 09/09/2024 10.33, Graham Inggs wrote:\n> Hi Michael\n>\n> r-bioc-biocgenerics [1] has migrated and r-api-bioc-3.18 is gone from testing.\n>  From the release team's perspective, this transition is done.\n>\n> There are still some packages that were not in testing for the\n> transition.  Please check the transition tracker [2] for \"good\"\n> packages marked \"sid only\",\n> Another place to check is the r-pkg-team DDPO page [3], and search for \"Excuse\".\n>\n> I spotted a problem with r-bioc-golubesets [4], which still needs a\n> source-only upload.\n>\n> Regards\n> Graham\n>\n>\n> [1] https://tracker.debian.org/pkg/r-bioc-biocgenerics\n> [2] https://release.debian.org/transitions/html/r-api-bioc-3.19.html\n> [3] https://qa.debian.org/developer.php?email=r-pkg-team at alioth-lists.debian.net\n> [4] https://tracker.debian.org/pkg/r-bioc-golubesets\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Dear Graham,\n\nThank you very much!\n\nWe have a question about https://qa.debian.org/excuses.php?package=r-bioc-tcgabiolinks ; the CI for this package has never passed on ppc64el, so we are confused as ",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 3,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-064c2b3554ea",
+      "message_id": "<CAM8zJQt4oLE7DKsY-58r0t3oUZcMoD-r4kPu8DbMcqYgJpy-dg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-09-09T12:08:37Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<1572f2f6-633b-4992-8974-bc5f3566f891@debian.org>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+        "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>",
+        "<1572f2f6-633b-4992-8974-bc5f3566f891@debian.org>"
+      ],
+      "body_plain": "Hi Michael\n\nAfter the first migrations, a second wave of about 70 migrations\nhappened after autopkgtests were retried.  These can already be seen\non the tracker.\n\nOn Mon, 9 Sept 2024 at 09:44, Michael R. Crusoe <crusoe at debian.org> wrote:\n> We have a question about https://qa.debian.org/excuses.php?package=r-bioc-tcgabiolinks ; the CI for this package has never passed on ppc64el, so we are confused as to why this is now holding up migration.\n>\n> Likewise for https://qa.debian.org/excuses.php?package=r-bioc-rhdf5 ; the s390x CI has never passed here either.\n\nWhen autopkgtest infrastructure for new architectures are added,\nexisting failures in testing are not considered regressions by\nbritney.\nHowever, if a package is removed from testing, the failures are\nconsidered new, as with any other package attempting to migrate to\ntesting for the first time.\n\nr-bioc-rhdf5 [1] was auto-removed from testing on 2024-06-25.\n\nr-bioc-tcgabiolinks [2] was manually removed from testing on\n2023-07-14, a new upload was done on 2023-07-28 for the previous\nr-bioc transition, but was not able to migrate for more than a year.\n\nRegards\nGraham\n\n[1] https://tracker.debian.org/pkg/r-bioc-rhdf5\n[2] https://tracker.debian.org/pkg/r-bioc-tcgabiolinks",
+      "body_snippet": "Hi Michael\n\nAfter the first migrations, a second wave of about 70 migrations\nhappened after autopkgtests were retried.  These can already be seen\non the tracker.\n\nOn Mon, 9 Sept 2024 at 09:44, Michael",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 4,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-6f9cdd1b478e",
+      "message_id": "<ba17ec06-585c-4f90-b572-44f4facfb3bd@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2024-09-09T13:00:17Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<CAM8zJQt4oLE7DKsY-58r0t3oUZcMoD-r4kPu8DbMcqYgJpy-dg@mail.gmail.com>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+        "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>",
+        "<1572f2f6-633b-4992-8974-bc5f3566f891@debian.org>",
+        "<CAM8zJQt4oLE7DKsY-58r0t3oUZcMoD-r4kPu8DbMcqYgJpy-dg@mail.gmail.com>"
+      ],
+      "body_plain": "Hey Graham,\n\nThanks for the update, it is very exciting to see the progress!\n\nCan we get an exception/hint to ignore the s390x test failure for r-bioc-rhdf5 and the ppc64el test failure for r-bioc-tcgabiolinks?\n\nThanks,\n\nOn 09/09/2024 14.08, Graham Inggs wrote:\n> Hi Michael\n>\n> After the first migrations, a second wave of about 70 migrations\n> happened after autopkgtests were retried.  These can already be seen\n> on the tracker.\n>\n> On Mon, 9 Sept 2024 at 09:44, Michael R. Crusoe <crusoe at debian.org> wrote:\n> > We have a question about https://qa.debian.org/excuses.php?package=r-bioc-tcgabiolinks ; the CI for this package has never passed on ppc64el, so we are confused as to why this is now holding up migration.\n> >\n> > Likewise for https://qa.debian.org/excuses.php?package=r-bioc-rhdf5 ; the s390x CI has never passed here either.\n>\n>\n> When autopkgtest infrastructure for new architectures are added,\n> existing failures in testing are not considered regressions by\n> britney.\n> However, if a package is removed from testing, the failures are\n> considered new, as with any other package attempting to migrate to\n> testing for the first time.\n>\n> r-bioc-rhdf5 [1] was auto-removed from testing on 2024-06-25.\n>\n> r-bioc-tcgabiolinks [2] was manually removed from testing on\n> 2023-07-14, a new upload was done on 2023-07-28 for the previous\n> r-bioc transition, but was not able to migrate for more than a year.\n>\n> Regards\n> Graham\n>\n>\n> [1] https://tracker.debian.org/pkg/r-bioc-rhdf5\n> [2] https://tracker.debian.org/pkg/r-bioc-tcgabiolinks\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hey Graham,\n\nThanks for the update, it is very exciting to see the progress!\n\nCan we get an exception/hint to ignore the s390x test failure for r-bioc-rhdf5 and the ppc64el test failure for r-bioc-tcg",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 5,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-a7d526031f0a",
+      "message_id": "<CAM8zJQvKa=k6BmFhHz+tMEW_qZH9PC4G4wsieZ16t2hNoWaC1A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-09-09T13:25:01Z",
+      "subject": "Re: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "subject_clean": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "in_reply_to": "<ba17ec06-585c-4f90-b572-44f4facfb3bd@debian.org>",
+      "references": [
+        "<3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>",
+        "<CAM8zJQvDb0LPvrUJM_oc+0BsTU-98ftya0Ug+mMmZQtuz1zjGA@mail.gmail.com>",
+        "<2658fd29-da0d-4bbe-a95a-0d1c070171ab@debian.org>",
+        "<CAM8zJQsCM0dvYeGMESFhG-OSPhk+3ENNbYkc4naihrqsVFO9vg@mail.gmail.com>",
+        "<f57532ca-760d-4b98-8226-1dacbaa133fc@debian.org>",
+        "<e6c6d1a1-8352-4fdd-83a3-b458da017725@debian.org>",
+        "<CAM8zJQvCPJFhDo-7FEDkxXY5LH4H8gH2=AE8=v5dq_W90jz9ig@mail.gmail.com>",
+        "<CAM8zJQvne6dbwNoQve5WteU5g2m5sL6T_xZ+A9dr6qLt0ZpnZw@mail.gmail.com>",
+        "<CAM8zJQuND+R9kiD72OCSWqOAcUVzUDFi9QN4Ap_j_4i27k8QUg@mail.gmail.com>",
+        "<1572f2f6-633b-4992-8974-bc5f3566f891@debian.org>",
+        "<CAM8zJQt4oLE7DKsY-58r0t3oUZcMoD-r4kPu8DbMcqYgJpy-dg@mail.gmail.com>",
+        "<ba17ec06-585c-4f90-b572-44f4facfb3bd@debian.org>"
+      ],
+      "body_plain": "Hi Michael\n\nOn Mon, 9 Sept 2024 at 13:00, Michael R. Crusoe <crusoe at debian.org> wrote:\n> Can we get an exception/hint to ignore the s390x test failure for r-bioc-rhdf5 and the ppc64el test failure for r-bioc-tcgabiolinks?\n\nI'd prefer that the failing tests were fixed (or skipped) in the\npackages themselves.\nOtherwise, the problems will just surface again in future.\n\nRegards\nGraham",
+      "body_snippet": "Hi Michael\n\nOn Mon, 9 Sept 2024 at 13:00, Michael R. Crusoe <crusoe at debian.org> wrote:\n> Can we get an exception/hint to ignore the s390x test failure for r-bioc-rhdf5 and the ppc64el test failure ",
+      "thread_id": "thread-0f6f94e973c8",
+      "thread_depth": 6,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-65758853b20d",
+      "message_id": "<20240911131128.FEDA7DB7E62B73BA@nbnku.com>",
+      "from_name": "jackie at nbnku.com",
+      "from_email_hash": "6124a034ea89bf20e8069c76473e29dabec52a302cce4d4f6339c3afc01206e0",
+      "date": "2024-09-11T20:11:28Z",
+      "subject": "Hello",
+      "subject_clean": "Hello",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dearest.\n \nI pray this mail finds you in good health and peace of mind. \n我祈祷这封邮件能让您身体健康、心境平和。 I am Mrs. Cecilia Wang, living here In USA. \n\nI have something very important, I would want to discuss with \nyou, Can i have your attentions please...\n \nMrs. Cecilia Wang.",
+      "body_snippet": "Dearest.\n \nI pray this mail finds you in good health and peace of mind. \n我祈祷这封邮件能让您身体健康、心境平和。 I am Mrs. Cecilia Wang, living here In USA. \n\nI have something very important, I would want to discuss wit",
+      "thread_id": "thread-65758853b20d",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-87434620a63f",
+      "message_id": "<8e3b84f0-7325-4c80-81fe-dc0f9ed278fc@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2024-09-17T10:38:36Z",
+      "subject": "Bug#1082005: RM: r-cran-wgcna [armel armhf i386] -- ROM; 32-bit build-deps are no longer available",
+      "subject_clean": "Bug#1082005: RM: r-cran-wgcna [armel armhf i386] -- ROM; 32-bit build-deps are no longer available",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-wgcna at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org\nControl: affects -1 + src:r-cran-wgcna\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\n\nDear FTP Team,\n\nDue to some transitive build-deps no longer supporting 32-bit architectures, the maintainers of r-cran-wgcna request the removal of its armel armhf and i386 binaries.\n\nThis will help r-bioc-netsam migrate to testing as part of the bioconductor-3.19 transition.\n\nhttps://qa.debian.org/excuses.php?package=r-bioc-netsam\n\nHere's the dak report:\n\n$ ssh mirror.ftp-master.debian.org \"dak rm --architecture=armel,armhf,i386 --no-arch-all-rdeps --binary-only --partial --rdep-check --no-action r-cran-wgcna\"\nWill remove the following packages from unstable:\n\nr-cran-wgcna |   1.72-5-1 | armel, armhf, i386\n\nMaintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>\n\n------------------- Reason -------------------\n\n----------------------------------------------\n\nChecking reverse dependencies...\n# Broken Build-Depends:\nr-bioc-netsam: r-cran-wgcna\n\nDependency problem found.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-wgcna at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org\nControl: affects -1 + src:r-cran-wgcna\nUser: ftp.debian.o",
+      "thread_id": "thread-87434620a63f",
+      "thread_depth": 0,
+      "month": "2024-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-5c432be896da",
+      "subject": "Mass removal of 32-bit support in r-cran-* packages?",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2024-09-03T23:51:37Z",
+      "last_reply": "2024-09-03T23:51:37Z",
+      "root_message_id": "msg-5c432be896da"
+    },
+    {
+      "id": "thread-0f6f94e973c8",
+      "subject": "Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)",
+      "message_count": 8,
+      "participants": [
+        "Graham Inggs",
+        "Michael R. Crusoe"
+      ],
+      "started": "2024-09-06T16:26:01Z",
+      "last_reply": "2024-09-09T13:25:01Z",
+      "root_message_id": "msg-0f6f94e973c8"
+    },
+    {
+      "id": "thread-d476473e7f93",
+      "subject": "No need for opening bugs against packages removed from CRAN, just directly ask for removal if you are confident.",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2024-09-08T23:35:56Z",
+      "last_reply": "2024-09-08T23:35:56Z",
+      "root_message_id": "msg-d476473e7f93"
+    },
+    {
+      "id": "thread-65758853b20d",
+      "subject": "Hello",
+      "message_count": 1,
+      "participants": [
+        "jackie at nbnku.com"
+      ],
+      "started": "2024-09-11T20:11:28Z",
+      "last_reply": "2024-09-11T20:11:28Z",
+      "root_message_id": "msg-65758853b20d"
+    },
+    {
+      "id": "thread-87434620a63f",
+      "subject": "Bug#1082005: RM: r-cran-wgcna [armel armhf i386] -- ROM; 32-bit build-deps are no longer available",
+      "message_count": 1,
+      "participants": [
+        "Michael R. Crusoe"
+      ],
+      "started": "2024-09-17T10:38:36Z",
+      "last_reply": "2024-09-17T10:38:36Z",
+      "root_message_id": "msg-87434620a63f"
+    }
+  ]
+}

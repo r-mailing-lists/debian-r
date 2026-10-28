@@ -1,0 +1,153 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2023-03",
+  "messages": [
+    {
+      "id": "msg-db950427cb16",
+      "message_id": "<ZAg2xCmophchwPr5@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-03-08T07:18:28Z",
+      "subject": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Dirk,\n\nupstream suspects that the issue to build r-cran-rstan might be connected to\nthe boost version that is used.\n\nIts to late to change anything for bookworm but having r-cran-bh 1.81 in\nexperimental could help clarifying the issue with r-cran-rstan.\n\nKind regards\n   Andreas.\n\n----- Weitergeleitete Nachricht von bgoodri <notifications at github.com> -----\n\nDate: Tue, 07 Mar 2023 10:58:37 -0800\nFrom: bgoodri <notifications at github.com>\nTo: stan-dev/rstan <rstan at noreply.github.com>\nCc: Andreas Tille <tille at debian.org>, Mention <mention at noreply.github.com>\nSubject: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)\n\nIf bookworm is going to use a version of Boost that is less than the BH 1.81 which is on CRAN, then you could get the previous version of r-cran-rstan under the freeze. In the version of rstan on CRAN, I just changed the compilation to deal with linker errors induced by Boost 1.81, but that apparently induced different errors on 32bit architectures. \n\n-- \nReply to this email directly or view it on GitHub:\nhttps://github.com/stan-dev/rstan/issues/1032#issuecomment-1458671266\nYou are receiving this because you were mentioned.\n\nMessage ID: <stan-dev/rstan/issues/1032/1458671266 at github.com>\n\n----- Ende weitergeleitete Nachricht -----\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nupstream suspects that the issue to build r-cran-rstan might be connected to\nthe boost version that is used.\n\nIts to late to change anything for bookworm but having r-cran-bh 1.81 in\nexperim",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 0,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-aa0fbee2af50",
+      "message_id": "<25608.32597.606989.316131@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-03-08T12:28:05Z",
+      "subject": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<ZAg2xCmophchwPr5@an3as.eu>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>"
+      ],
+      "body_plain": "On 8 March 2023 at 08:18, Andreas Tille wrote:\n| Hi Dirk,\n| \n| upstream suspects that the issue to build r-cran-rstan might be connected to\n| the boost version that is used.\n\nAs you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a month\nof careful alignment with reverse depende on Jan 22.  That is six weeks ago.\nI cannot do anything about you deciding not to update it sooner, sorry.  \n\nAlso FYI new issue between clang16, Boost and the stan complex -- but as it\nis clang-only (and brand-new clang as CRAN sometimes does for forward-looking\ntests) it may not affect us:\n   https://github.com/eddelbuettel/bh/issues/92\n\nDirk\n\n| Its to late to change anything for bookworm but having r-cran-bh 1.81 in\n| experimental could help clarifying the issue with r-cran-rstan.\n| \n| Kind regards\n|    Andreas.\n| \n| ----- Weitergeleitete Nachricht von bgoodri <notifications at github.com> -----\n| \n| Date: Tue, 07 Mar 2023 10:58:37 -0800\n| From: bgoodri <notifications at github.com>\n| To: stan-dev/rstan <rstan at noreply.github.com>\n| Cc: Andreas Tille <tille at debian.org>, Mention <mention at noreply.github.com>\n| Subject: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)\n| \n| If bookworm is going to use a version of Boost that is less than the BH 1.81 which is on CRAN, then you could get the previous version of r-cran-rstan under the freeze. In the version of rstan on CRAN, I just changed the compilation to deal with linker errors induced by Boost 1.81, but that apparently induced different errors on 32bit architectures. \n| \n| -- \n| Reply to this email directly or view it on GitHub:\n| https://github.com/stan-dev/rstan/issues/1032#issuecomment-1458671266\n| You are receiving this because you were mentioned.\n| \n| Message ID: <stan-dev/rstan/issues/1032/1458671266 at github.com>\n| \n| ----- Ende weitergeleitete Nachricht -----\n| \n| -- \n| http://fam-tille.de\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 8 March 2023 at 08:18, Andreas Tille wrote:\n| Hi Dirk,\n| \n| upstream suspects that the issue to build r-cran-rstan might be connected to\n| the boost version that is used.\n\nAs you may know, I am ups",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 1,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-cab543aa5ac4",
+      "message_id": "<ZAiLJRDN07HxhZDj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-03-08T13:18:29Z",
+      "subject": "Re: r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<25608.32597.606989.316131@rob.eddelbuettel.com>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>",
+        "<25608.32597.606989.316131@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel:\n> \n> As you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a month\n> of careful alignment with reverse depende on Jan 22.  That is six weeks ago.\n> I cannot do anything about you deciding not to update it sooner, sorry.  \n\n$ apt showsrc r-cran-bh | grep -e ^Version -e Maintainer\nVersion: 1.74.0-2\nMaintainer: Dirk Eddelbuettel <edd at debian.org>\n\nWhat do you mean by \"you deciding to update it sooner\"?\n\nKind regards\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel:\n> \n> As you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a month\n> of careful alignment with reverse depende on Ja",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 2,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-f2e49cc9bd08",
+      "message_id": "<6c20f9c8-3b0c-32c9-7273-564994d04eb5@debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2023-03-08T16:12:43Z",
+      "subject": "Re: r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<ZAg2xCmophchwPr5@an3as.eu>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>"
+      ],
+      "body_plain": "On 3/8/23 12:48, Andreas Tille wrote:\n> upstream suspects that the issue to build r-cran-rstan might be connected to\n> the boost version that is used.\n\nI've managed to get this building (along with passing autopkgtests) in an i386 chroot\nwith a patch. It probably should be able to build on other 32-bit archs too.\n\nChanges pushed to salsa.\n\nIt took a bit of tussling with the Makevars file to get it right, because it\nis impossible to tune some of the gcc/g++ based options that R passes, since it\nis hard-coded in \"/etc/R/Makeconf\", which is a bit of a bummer.\n(And no, I don't want to hear that this is how it is since time immemorial, every single\nbuild system I've ever used has an option to tune compiler options, except this one)\n\n@Andreas: Please do not upload the package, these changes might not be appropriate at freeze time.\nAnd when you do the next upload, kindly do check if it builds without the 32-bit\npatch (provided the situation with bh/boost settles down).\n\nThanks,\nNilesh",
+      "body_snippet": "On 3/8/23 12:48, Andreas Tille wrote:\n> upstream suspects that the issue to build r-cran-rstan might be connected to\n> the boost version that is used.\n\nI've managed to get this building (along with pa",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 1,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-3a43648a9f62",
+      "message_id": "<ZAi3wR4N1Iel08lf@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2023-03-08T16:28:49Z",
+      "subject": "Re: r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<6c20f9c8-3b0c-32c9-7273-564994d04eb5@debian.org>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>",
+        "<6c20f9c8-3b0c-32c9-7273-564994d04eb5@debian.org>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nAm Wed, Mar 08, 2023 at 09:42:43PM +0530 schrieb Nilesh Patra:\n> On 3/8/23 12:48, Andreas Tille wrote:\n> > upstream suspects that the issue to build r-cran-rstan might be connected to\n> > the boost version that is used.\n> \n> I've managed to get this building (along with passing autopkgtests) in an i386 chroot\n> with a patch. It probably should be able to build on other 32-bit archs too.\n> \n> Changes pushed to salsa.\n\nThanks a lot.\n\n> It took a bit of tussling with the Makevars file to get it right, because it\n> is impossible to tune some of the gcc/g++ based options that R passes, since it\n> is hard-coded in \"/etc/R/Makeconf\", which is a bit of a bummer.\n> (And no, I don't want to hear that this is how it is since time immemorial, every single\n> build system I've ever used has an option to tune compiler options, except this one)\n\nDo you have some suggestion how to fix this to enhance the situation in\nfuture?\n \n> @Andreas: Please do not upload the package, these changes might not be appropriate at freeze time.\n> And when you do the next upload, kindly do check if it builds without the 32-bit\n> patch (provided the situation with bh/boost settles down).\n\nI do not intend to upload to unstable.  IMHO the pool of r-* packages\nmaintained by Debian R team is ready now for bookworm and only RC bugs\nshould be fixed in case those will be filed.  We'll re-evaluate the\nsituation once bookworm is released.\n\nKind regards\n   Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nAm Wed, Mar 08, 2023 at 09:42:43PM +0530 schrieb Nilesh Patra:\n> On 3/8/23 12:48, Andreas Tille wrote:\n> > upstream suspects that the issue to build r-cran-rstan might be connected to\n> > ",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 2,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-63a30121d6c1",
+      "message_id": "<25608.50976.273661.874308@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2023-03-08T17:34:24Z",
+      "subject": "Re: r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<ZAiLJRDN07HxhZDj@an3as.eu>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>",
+        "<25608.32597.606989.316131@rob.eddelbuettel.com>",
+        "<ZAiLJRDN07HxhZDj@an3as.eu>"
+      ],
+      "body_plain": "On 8 March 2023 at 14:18, Andreas Tille wrote:\n| Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel:\n| > \n| > As you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a month\n| > of careful alignment with reverse depende on Jan 22.  That is six weeks ago.\n| > I cannot do anything about you deciding not to update it sooner, sorry.  \n| \n| $ apt showsrc r-cran-bh | grep -e ^Version -e Maintainer\n| Version: 1.74.0-2\n| Maintainer: Dirk Eddelbuettel <edd at debian.org>\n\nBut that package is an 'empty shell' so that we do not need the 120mb package\nBH from CRAN?\n\n   edd@rob:~/deb/bh(master)$ cat debian/control \n   Source: r-cran-bh\n   Section: gnu-r\n   Priority: optional\n   Maintainer: Dirk Eddelbuettel <edd at debian.org>\n   Build-Depends: debhelper-compat (= 11), r-base-dev (>= 4.1.1), dh-r\n   Standards-Version: 4.6.0\n   Vcs-Browser: https://salsa.debian.org/edd/r-cran-bh\n   Vcs-Git: https://salsa.debian.org/edd/r-cran-bh.git\n   Homepage: https://cran.r-project.org/package=BH\n   \n   Package: r-cran-bh\n   Architecture: all\n   Multi-Arch: foreign\n   Depends: ${misc:Depends}, libboost-dev (>= 1.74.0)\n   Description: (Virtual) GNU R package to provide BH\n    The CRAN package BH provides a (large) subset of Boost.  This package tricks\n    R into believing BH is installed when we just depend on the distribution's\n    Boost packages.  The actual set of Boost libraries could get fine-tuned. In\n    short, we avoid doubling up the 140+ mb of the 'BH' package which are alredy\n    in libboost-dev.\n   edd@rob:~/deb/bh(master)$ \n\nIn short, it has little to do with BH at CRAN (and we both once thought that\nwas a good idea) and depends only Debian's Boost packages. I have no control\nover their release cycle. It is as we both know a pretty big package.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 8 March 2023 at 14:18, Andreas Tille wrote:\n| Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel:\n| > \n| > As you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a mo",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 3,
+      "month": "2023-03"
+    },
+    {
+      "id": "msg-459aafd98bdd",
+      "message_id": "<ZAj3Q90aHeS0AJIj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2023-03-08T20:59:47Z",
+      "subject": "Re: r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "subject_clean": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "in_reply_to": "<25608.50976.273661.874308@rob.eddelbuettel.com>",
+      "references": [
+        "<ZAg2xCmophchwPr5@an3as.eu>",
+        "<25608.32597.606989.316131@rob.eddelbuettel.com>",
+        "<ZAiLJRDN07HxhZDj@an3as.eu>",
+        "<25608.50976.273661.874308@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nAm Wed, Mar 08, 2023 at 11:34:24AM -0600 schrieb Dirk Eddelbuettel:\n> \n> On 8 March 2023 at 14:18, Andreas Tille wrote:\n> | Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel:\n> | > \n> | > As you may know, I am upstream for BH 1.81.0-1. It reached CRAN after a month\n> | > of careful alignment with reverse depende on Jan 22.  That is six weeks ago.\n> | > I cannot do anything about you deciding not to update it sooner, sorry.  \n> | \n> | $ apt showsrc r-cran-bh | grep -e ^Version -e Maintainer\n> | Version: 1.74.0-2\n> | Maintainer: Dirk Eddelbuettel <edd at debian.org>\n> \n> But that package is an 'empty shell' so that we do not need the 120mb package\n> BH from CRAN?\n\nYou once told here explicitly that you don't like if someone might\nupload one of your packages which are marked by:\n\n>    Maintainer: Dirk Eddelbuettel <edd at debian.org>\n\nI'm now pretty astonished that you wrote someone else decided something\nabout one of your packages.  I remain confused.\n\nBesides this there is no hurry to upload this package.  I just suggested\nto upload to experimental but simply take your time.\n\nKind regards\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nAm Wed, Mar 08, 2023 at 11:34:24AM -0600 schrieb Dirk Eddelbuettel:\n> \n> On 8 March 2023 at 14:18, Andreas Tille wrote:\n> | Am Wed, Mar 08, 2023 at 06:28:05AM -0600 schrieb Dirk Eddelbuettel",
+      "thread_id": "thread-db950427cb16",
+      "thread_depth": 4,
+      "month": "2023-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-db950427cb16",
+      "subject": "r-cran-rstan issue and r-cran-boost version [notifications at github.com: Re: [stan-dev/rstan] Does not build on 32 bit architectures any more (Issue #1032)]",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Nilesh Patra"
+      ],
+      "started": "2023-03-08T07:18:28Z",
+      "last_reply": "2023-03-08T20:59:47Z",
+      "root_message_id": "msg-db950427cb16"
+    }
+  ]
+}

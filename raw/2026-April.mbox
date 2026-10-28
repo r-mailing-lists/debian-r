@@ -1,0 +1,2551 @@
+From plessy at debian.org  Sat Apr  4 07:13:47 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 4 Apr 2026 16:13:47 +0900
+Subject: Building more CRAN packages on all architectures.
+Message-ID: <adC6HmgTMWbndtYy@bubu.igloo>
+
+Hello Dirk and everyone,
+
+when I did my first assessment of the impact of the mass architecture
+restriction of Bioc and CRAN packages, I assumed that all of Dirk's
+source package names were not starting with "r-cran", and therefore
+strongly underestimated their number, and therefore the impact on Dirk.
+
+Dirk, I apologise to you for this error.
+
+I have browsed the planned autoremoval page
+(https://udd.debian.org/cgi-bin/autoremovals.cgi), looking at which of
+the team-maintained r-cran-* packages are responsible for most of the
+impact on Dirk's packages.  Without surprise, most of them are related
+to the tidyverse or provide other services that are not scientific
+computations (r-cran-jpeg, r-cran-jsonlite, etc.).
+
+Our routine-update restricts architectures by default but I have
+added a list of exceptions, which I am uploading now.
+
+https://salsa.debian.org/debian/routine-update/-/blob/c21f890155726d72362ba50e5939dfc261dec3bc/routine-update#L599
+
+The list of exceptions is still growing, but I want to keep it short
+with the two following criteria:
+
+ - A large number of packages depend or transitively depend on the
+   package getting an exception.
+ - The package is not performing scientific computations.
+
+Dirk, these excptions will considerably reduce the list of packages for
+which I would like to ask you to add architecture-is-64-bit,
+architecture-is-little-endian, in their Build-Depends field.  I do not
+yet have a list but it will probably include car, effects, lme4 and
+r-cran-pbkrtest for instance, as they depend on r-cran-statmod.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From ginggs at debian.org  Sat Apr  4 12:18:52 2026
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 4 Apr 2026 12:18:52 +0000
+Subject: Re: Building more CRAN packages on all architectures.
+In-Reply-To: <adC6HmgTMWbndtYy@bubu.igloo>
+References: <adC6HmgTMWbndtYy@bubu.igloo>
+Message-ID: <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com>
+
+Hi Charles
+
+On Sat, 4 Apr 2026 at 07:14, Charles Plessy <plessy at debian.org> wrote:
+> Dirk, these excptions will considerably reduce the list of packages for
+> which I would like to ask you to add architecture-is-64-bit,
+> architecture-is-little-endian, in their Build-Depends field.  I do not
+> yet have a list but it will probably include car, effects, lme4 and
+> r-cran-pbkrtest for instance, as they depend on r-cran-statmod.
+
+Is r-cran-statmod a particularly troublesome package to build everywhere?
+The autopkgtest results look good to me on s390x [1] and i386 [2], and
+although there were some failures in the first half of 2024 on armhf
+[3], they seem to have been good since then.
+
+I don't think Dirk needs to modify any of his packages.  Firstly, car
+and effects are architecture all, so adding Build-Depends on
+architecture-is-64-bit and architecture-is-little-endian doesn't do
+what you think it does.  This was raised on this list previously [4],
+but I didn't see a response.  Secondly, if you do end up removing the
+binaries of r-cran-statmod on some architectures, then lme4 and
+r-cran-pbkrtest will no longer be able to build on those
+architectures, and all you need to do is also request removal of the
+binaries of lme4 and r-cran-pbkrtest.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-statmod/testing/s390x/
+[2] https://ci.debian.net/packages/r/r-cran-statmod/testing/i386/
+[3] https://ci.debian.net/packages/r/r-cran-statmod/testing/armhf/
+[4] https://lists.debian.org/debian-r/2026/03/msg00037.html
+
+From edd at debian.org  Sat Apr  4 13:13:35 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 08:13:35 -0500
+Subject: Re: Building more CRAN packages on all architectures.
+In-Reply-To: <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com>
+References: <adC6HmgTMWbndtYy@bubu.igloo> <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com>
+Message-ID: <27089.3711.186025.104690@paul.eddelbuettel.com>
+
+On 4 April 2026 at 12:18, Graham Inggs wrote:
+| I don't think Dirk needs to modify any of his packages.
+
+I strongly concur, obviously.
+
+As has been argued before, I believe this is to be an (honest, if naive)
+design mistake in how autopkgtests are set up, casting too wide a net by
+forcing all Suggests: in.  If we did not do then I am fairly certain that I
+would not have (literally) dozens of my packages removed from testing.
+
+As a reference point, I just bulk compiled twenty eight thousand CRAN
+packages for the upcoming Ubuntu 26.04 on amd64 and arm64 for my one-man side
+project r2u [1]. I am now at over 100k .deb binaries across several LTS
+releases. This generally just works. And there is demand: r2u has now shipped
+over 72 million packages, and over 4.2 million just last month.
+
+That we force ourselves to remove perfectly valid packages from testing is
+insane, as is the insistence on remaining several BioConductor releases
+behind. I cover about 600 packages (for amd64 and arm64) in r2u and I will
+have those rebuilt within days after BioConductor 3.23 comes out later this
+month following the release of R 4.6.0.
+
+Dirk
+
+[1] https://eddelbuettel.github.io/r2u 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 and
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Sat Apr  4 15:28:18 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 5 Apr 2026 00:28:18 +0900
+Subject: Re: Building more CRAN packages on all architectures.
+In-Reply-To: <27089.3711.186025.104690@paul.eddelbuettel.com>
+References: <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com>
+Message-ID: <adEuEsbXnLb-ESBT@kumo.plessy.net>
+
+Hi Graham and Dirk,
+
+Le Sat, Apr 04, 2026 at 12:18:52PM +0000, Graham Inggs a écrit :
+> 
+> Is r-cran-statmod a particularly troublesome package to build everywhere?
+
+The difficulty we face is that, on architectures without upstream regression
+testing, bugs appear randomly and unpredictably. In my view, this makes the
+workload unsustainable given the resources we currently have. This is not about
+r-cran-statmod specifically but about the entire collection. At some point we
+need to draw a line, rather than continue playing whack‑a‑mole with porting
+issues that can seize our time without warning.
+
+We could, of course, stop running regression tests altogether or mask the
+issues by disabling failing tests, as has occasionally been done in the past.
+But that approach goes against Debian’s standards, which increasingly emphasize
+reproducibility and reliability.
+
+Dirk, I have read and understood your comments about CRAN being well tested and
+not requiring re-testing on amd64 and arm64—the architectures you target with
+r2u. However, on the other architectures, autopkgtests do uncover real bugs,
+and these may well be only the tip of the iceberg.
+
+If we are serious about supporting Debian on these other architectures, my view
+is that we should aim to distribute packages that genuinely work there, and
+avoid shipping packages that we already suspect to be less reliable than on
+amd64.
+
+> car and effects are architecture all
+
+Sorry, I did not check before writing.  This is good news and less work.
+
+> adding Build-Depends on architecture-is-64-bit and
+> architecture-is-little-endian doesn't do what you think it does.
+
+I understand that it is useless and ugly to upload the arch-all packages with
+these build-depends, but it is also harmless and was simplest for me since it
+was done in a loop of automated uploads.
+
+> Secondly, if you do end up removing the binaries of r-cran-statmod on some
+> architectures, then lme4 and r-cran-pbkrtest will no longer be able to build
+> on those architectures, and all you need to do is also request removal of the
+> binaries of lme4 and r-cran-pbkrtest.
+
+That is excellent news, thank for pointing it out to me.  I will fill removal
+requests for r-cran-statmod and let Dirk know what removal requests are needed
+on his side.  Dirk, if you want me to fill the architecture removal requests
+on your behalf, please let me know.
+
+Le Sat, Apr 04, 2026 at 08:13:35AM -0500, Dirk Eddelbuettel a écrit :
+> 
+> As has been argued before, I believe this is to be an (honest, if naive)
+> design mistake in how autopkgtests are set up, casting too wide a net by
+> forcing all Suggests: in.  If we did not do then I am fairly certain that I
+> would not have (literally) dozens of my packages removed from testing.
+
+Most if not all of the removal requests at the moment are because of the
+architecture restrictions and not of the autopkgtests.
+
+Regarding the scope of the autopkgtests, I think it would be best to postpone
+this discussion until the architecture removals are complete. I’ve explained my
+perspective, and I understand yours. I’m not yet sure where the release team
+stands on this. If they ask me to proceed in the way you suggest, I will do so.
+If we ultimately end up with three different viewpoints, I propose bringing the
+matter to the technical committee at a later stage. I will accept their
+decision without contest.
+
+Have a nice week-end,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Sat Apr  4 16:06:49 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 11:06:49 -0500
+Subject: Re: Building more CRAN packages on all architectures.
+In-Reply-To: <adEuEsbXnLb-ESBT@kumo.plessy.net>
+References: <27089.3711.186025.104690@paul.eddelbuettel.com> <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com> <adEuEsbXnLb-ESBT@kumo.plessy.net>
+Message-ID: <27089.14105.250389.852644@paul.eddelbuettel.com>
+
+On 5 April 2026 at 00:28, Charles Plessy wrote:
+| Dirk, I have read and understood your comments about CRAN being well tested and
+| not requiring re-testing on amd64 and arm64—the architectures you target with
+| r2u. However, on the other architectures, autopkgtests do uncover real bugs,
+| and these may well be only the tip of the iceberg.
+
+You continue to not hear what I am saying. [ I am not saying Debian should
+mimick r2u which is an illustration showing that it is in fact easy to script
+builds of CRAN package at larger scale. And that there is demand for working
+_and current_ packages. ]
+
+Let me try again. My position is that the cross product of testing over
+
+  - a large-ish number 'N' of packages (I guess we are 1300 or so r-{cran,bioc}-*)
+  - times all our 'A' build architectures
+  - times all possible dependency packages
+
+creates a problem set that is too large and not meaningful.
+
+We are Debian, so of course we look after the packages picked ('N') and
+platforms we support ('A'). We all agree here.
+
+Where your view differs from mine (and also from what e.g. Paul Gevers
+clearly stated in some threads shared between the BTS and this list) is
+whether it is wise to run autopkgtest across all three dimension (ie
+including all Suggests).  My *core position* is that that is not wise.
+
+My recommendations remains to NOT extend autopkgtest to ALL SUGGESTED
+packages.  Run 'all package N times all architectures A across all hard
+dependencies'.  Discover bugs, contact upstream, that alone may keep you busy
+giving that there seem to be few other active debian-r maintainers. You could
+then selectively turn on more extended tests and file bugs with upstream.
+That would make use of Debian's infrastructure, but without overly
+constraining ourselves.
+
+In the meantime, R 4.6.0 will come out at the end of April and my prediction
+is that this ongoing quagmire will prevent it from migrating to testing for
+no fault of its own just as your activities have removed several of my
+r-cran-* packages for no real reason from testing. Really not a great look.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From edd at debian.org  Sat Apr  4 18:22:04 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 13:22:04 -0500
+Subject: Re: Building more CRAN packages on all architectures.
+In-Reply-To: <27089.14105.250389.852644@paul.eddelbuettel.com>
+References: <27089.3711.186025.104690@paul.eddelbuettel.com> <CAM8zJQtiVLVnOVJuuDXOhc32cBdR0J5UPyEtpsyyLSyVnkfKpQ@mail.gmail.com> <adEuEsbXnLb-ESBT@kumo.plessy.net> <27089.14105.250389.852644@paul.eddelbuettel.com>
+Message-ID: <27089.22220.228778.488907@paul.eddelbuettel.com>
+
+On 4 April 2026 at 11:06, Dirk Eddelbuettel wrote:
+| Let me try again. My position is that the cross product of testing over
+| 
+|   - a large-ish number 'N' of packages (I guess we are 1300 or so r-{cran,bioc}-*)
+|   - times all our 'A' build architectures
+|   - times all possible dependency packages
+| 
+| creates a problem set that is too large and not meaningful.
+
+And of course another point I forgot but should add
+
+    - compounding this by not keeping packages current with CRAN (or Bioc)
+      version risking that our tests run with known bugs fixed in newer
+      releases 
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Sat Apr  4 20:29:33 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 05 Apr 2026 05:29:33 +0900
+Subject: Bug#1132731: RM: r-cran-statmod [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177533457343.331440.17317622918052472496.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-statmod at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-statmod
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten, can you also remove r-cran-statmod and its
+reverse-dependencies from the architectures above?
+
+Thanks !
+
+Charles
+
+From plessy at debian.org  Sat Apr  4 20:42:01 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 5 Apr 2026 05:42:01 +0900
+Subject: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+Message-ID: <adF3mZ8ydFlnHP0w@bubu.igloo>
+
+Hello,
+
+The r-cran-data.table package fails autopkgtests on riscv64 on equalty
+tests, and I have difficulty understanding the severity of the problem.
+
+https://ci.debian.net/packages/r/r-cran-data.table/testing/riscv64/69941941/
+
+ - It is that the computation is not correct?
+ - Is it that computations on riscv64 generate are rounding numbers
+   differently than on other little-endian 64-bit platforms, and that
+   regression tests have to be adapted to that ?  And if yes, how?
+
+I would appreciate if someone could help with this package, because
+otherwise it is going to hold a lot of other packages out of Testing…
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Sat Apr  4 21:03:10 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 16:03:10 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adF3mZ8ydFlnHP0w@bubu.igloo>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo>
+Message-ID: <27089.31886.656652.901762@paul.eddelbuettel.com>
+
+On 5 April 2026 at 05:42, Charles Plessy wrote:
+| I would appreciate if someone could help with this package, because
+| otherwise it is going to hold a lot of other packages out of Testing…
+
+You could consider the two-step of 
+
+ - filing an issue with the (responsive) upstream team at their github repo
+   and also inform them about our open (!!) porterbox ricci to get their help
+
+ - at the same time patch the package to skip the test known-or-suspected-bad
+   test to not hold  the package up on all other architectures
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plenae at disroot.org  Sat Apr  4 22:12:06 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Sun, 05 Apr 2026 00:12:06 +0200
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <27089.31886.656652.901762@paul.eddelbuettel.com>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com>
+Message-ID: <DHKPRIDLB6DI.3N46JWUYXNNJP@disroot.org>
+
+On Sat Apr 4, 2026 at 11:03 PM CEST, Dirk Eddelbuettel wrote:
+
+Hi Dirk,
+
+>  - filing an issue with the (responsive) upstream team at their github repo
+>    and also inform them about our open (!!) porterbox ricci to get their help
+
+I was looking for access to a riscv64 machine for #1123819 but I've handled
+that in a qemu machine.
+
+I have a running application for a guest account but my application
+for DM is still open as well.
+https://nm.debian.org/process/1530/ and https://nm.debian.org/process/15329/
+
+I noted that ricci is listed as public. You call it open. Can you tell me where
+I can find how to access this machine? Or can you push me in the right
+direction?
+
+Thanks in advance,
+
+Pieter
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From edd at debian.org  Sat Apr  4 23:13:14 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 18:13:14 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <DHKPRIDLB6DI.3N46JWUYXNNJP@disroot.org>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com> <DHKPRIDLB6DI.3N46JWUYXNNJP@disroot.org>
+Message-ID: <27089.39690.264513.531879@paul.eddelbuettel.com>
+
+Hi Pieter,
+
+On 5 April 2026 at 00:12, Pieter Lenaerts wrote:
+| >  - filing an issue with the (responsive) upstream team at their github repo
+| >    and also inform them about our open (!!) porterbox ricci to get their help
+| 
+| I was looking for access to a riscv64 machine for #1123819 but I've handled
+| that in a qemu machine.
+| 
+| I have a running application for a guest account but my application
+| for DM is still open as well.
+| https://nm.debian.org/process/1530/ and https://nm.debian.org/process/15329/
+| 
+| I noted that ricci is listed as public. You call it open. Can you tell me where
+| I can find how to access this machine? Or can you push me in the right
+| direction?
+
+I was between a few things and just quickly checked the public Debian porters
+pages and the page at
+
+  https://db.debian.org/machines.cgi?sortby=purpose&sortorder=dsc
+
+and I may have misstated: open may just mean "open to Debian developers /
+maintainers".  It's been a while since I have searched for a shell on a
+porter box myself.
+
+debian-riscv is on the recipient list, maybe some can correct me and the
+record and point to the correct resource if there is one?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From edd at debian.org  Sun Apr  5 02:57:53 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2026 21:57:53 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <27089.31886.656652.901762@paul.eddelbuettel.com>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com>
+Message-ID: <27089.53169.435926.844632@paul.eddelbuettel.com>
+
+On 4 April 2026 at 16:03, Dirk Eddelbuettel wrote:
+|  - at the same time patch the package to skip the test known-or-suspected-bad
+|    test to not hold  the package up on all other architectures
+
+Untested, of course, as I have no riscv64 machine to test on, but these are
+the two test lines giving you trouble.
+
+So we wrap them in 'if (R.version$arch != "riscv64")': 
+
+modified   inst/tests/froll.Rraw
+@@ -1453,8 +1453,10 @@ test(6001.731, frollvar(y, 3)[4L], 0)
+ test(6001.732, frollsd(y, 3)[4L], 0)
+ test(6001.733, frollvar(y, c(3,3,3,3), adaptive=TRUE)[4L], 0)
+ test(6001.734, frollsd(y, c(3,3,3,3), adaptive=TRUE)[4L], 0)
+-test(6001.740, frollvar(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.25,NA), c(NA,NA,0.25,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE)) # ensure no nested parallelism in rolling functions #7352
+-test(6001.741, frollsd(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.5,NA), c(NA,NA,0.5,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE))
++if (R.version$arch != "riscv64") {
++    test(6001.740, frollvar(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.25,NA), c(NA,NA,0.25,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE)) # ensure no nested parallelism in rolling functions #7352
++    test(6001.741, frollsd(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.5,NA), c(NA,NA,0.5,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE))
++}
+ test(6001.742, frollvar(c(1.5,2.5,2,1.5), c(3,3)), list(c(NA,NA,0.25,0.25), c(NA,NA,0.25,0.25)), notOutput="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE)) # no NA - no fallback to exact
+ test(6001.743, frollsd(c(1.5,2.5,2,1.5), c(3,3)), list(c(NA,NA,0.5,0.5), c(NA,NA,0.5,0.5)), notOutput="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE))
+ test(6001.744, frollvar(c(1.5,2.5,2,NA), 3), c(NA,NA,0.25,NA), notOutput="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE)) # not vectorized - no outer parallelism
+
+Hth,  Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Sun Apr  5 05:48:30 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 5 Apr 2026 14:48:30 +0900
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <27089.53169.435926.844632@paul.eddelbuettel.com>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com> <27089.53169.435926.844632@paul.eddelbuettel.com>
+Message-ID: <adH3rs7SFXEzyhIx@kumo.plessy.net>
+
+Le Sat, Apr 04, 2026 at 09:57:53PM -0500, Dirk Eddelbuettel a écrit :
+> +if (R.version$arch != "riscv64") {
+> +    test(6001.740, frollvar(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.25,NA), c(NA,NA,0.25,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE)) # ensure no nested parallelism in rolling functions #7352
+> +    test(6001.741, frollsd(c(1.5,2.5,2,NA), c(3,3)), list(c(NA,NA,0.5,NA), c(NA,NA,0.5,NA)), output="running sequentially, because outer parallelism has been used", options=c(datatable.verbose=TRUE))
+> +}
+
+Thanks a lot Dirk,
+
+with a bit of help from Copilot, I have opened
+https://github.com/Rdatatable/data.table/issues/7695 on GitHub.
+
+Let's see upstream's reaction and timeline.
+
+Have a nice day,
+
+Charles
+
+From edd at debian.org  Sun Apr  5 13:37:34 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 5 Apr 2026 08:37:34 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adH3rs7SFXEzyhIx@kumo.plessy.net>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com> <27089.53169.435926.844632@paul.eddelbuettel.com> <adH3rs7SFXEzyhIx@kumo.plessy.net>
+Message-ID: <27090.26014.394834.706043@paul.eddelbuettel.com>
+
+Hi Charles,
+
+On 5 April 2026 at 14:48, Charles Plessy wrote:
+| with a bit of help from Copilot, I have opened
+| https://github.com/Rdatatable/data.table/issues/7695 on GitHub.
+
+Excellent.
+ 
+| Let's see upstream's reaction and timeline.
+
+And we already have a response from the infatiguable Ivan Krylov. Can you
+possibly run his test code on riscv64?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plenae at disroot.org  Sun Apr  5 15:15:50 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Sun, 05 Apr 2026 17:15:50 +0200
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <27090.26014.394834.706043@paul.eddelbuettel.com>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <27089.31886.656652.901762@paul.eddelbuettel.com> <27089.53169.435926.844632@paul.eddelbuettel.com> <adH3rs7SFXEzyhIx@kumo.plessy.net> <27090.26014.394834.706043@paul.eddelbuettel.com>
+Message-ID: <DHLBJCEPQQS5.2BKIH32J9VJQP@disroot.org>
+
+On Sun Apr 5, 2026 at 3:37 PM CEST, Dirk Eddelbuettel wrote:
+
+Hi Charles & Dirk,
+
+> Can you possibly run his test code on riscv64?
+
+If this helps, refer to my notes, item 3 in
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1123819#35
+
+I was able to do significant tests, with the intended architecture specific
+failures, in a qemu machine.
+
+Br,
+
+Pieter
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From aurel32 at debian.org  Sun Apr  5 21:39:51 2026
+From: aurel32 at debian.org (Aurelien Jarno)
+Date: Sun, 5 Apr 2026 23:39:51 +0200
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adF3mZ8ydFlnHP0w@bubu.igloo>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo>
+Message-ID: <adLWp3SxVN5SLaqf@aurel32.net>
+
+Hi,
+
+On 2026-04-05 05:42, Charles Plessy wrote:
+> Hello,
+> 
+> The r-cran-data.table package fails autopkgtests on riscv64 on equalty
+> tests, and I have difficulty understanding the severity of the problem.
+> 
+> https://ci.debian.net/packages/r/r-cran-data.table/testing/riscv64/69941941/
+> 
+>  - It is that the computation is not correct?
+>  - Is it that computations on riscv64 generate are rounding numbers
+>    differently than on other little-endian 64-bit platforms, and that
+>    regression tests have to be adapted to that ?  And if yes, how?
+> 
+> I would appreciate if someone could help with this package, because
+> otherwise it is going to hold a lot of other packages out of Testing…
+
+It appears that the issue is that r-cran is using NaN boxing to 
+represent the NA value. This does not work on riscv64, as a canonical 
+NaN is generated for an operation involving a NaN input operand.
+
+Regards
+Aurelien
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien at aurel32.net                     http://aurel32.net
+
+From edd at debian.org  Sun Apr  5 22:22:33 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 5 Apr 2026 17:22:33 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adLWp3SxVN5SLaqf@aurel32.net>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net>
+Message-ID: <27090.57513.657925.936062@paul.eddelbuettel.com>
+
+Hi Aurelien,
+
+On 5 April 2026 at 23:39, Aurelien Jarno wrote:
+| It appears that the issue is that r-cran is using NaN boxing to 
+| represent the NA value. This does not work on riscv64, as a canonical 
+| NaN is generated for an operation involving a NaN input operand.
+
+Yes, well spotted. There are a few issues going on. For context:
+
+- R itself natively only has double (64bit) and int (32bit). We often want
+  int64_t and there is an add-on package 'mocking' int64 via an underlying
+  double (package 'bit64', used by 'data.table' and many others)
+
+- double is all good because of IEE 754 so NA, NaN, ... are defined.  But R
+  is a data language and wants NA, NaN, ... on other types and hence 'locally
+  defines' NA for int effectively dropping one value, also for bool making
+  bool 'TRUE', 'FALSE' or 'NA' and character.
+
+- for int64 we generally get by (see below), but it appears that the usual
+  ops lead on riscv64 to a NA turning into a NaN. And instead of testing
+  'is.finite()' where both come out FALSE data.table appears to only looks at
+  NA here.   Adjusting that may fix the bug. I am sure upstream gets to that,
+  they started to comment / ask for more feedback here
+    https://github.com/Rdatatable/data.table/issues/7695
+  and maybe you can help?
+
+Dirk
+
+Simple example (on my amd64 box)
+
+  > vals <- c(1.12, 42L, NA, NaN)  # vector of 'double', int gets cast up
+  > vals
+  [1]  1.12 42.00    NA   NaN
+  > as.integer64(vals)    # make them 'int64' (needs bit64 package)
+  integer64
+  [1] 1    42   <NA> <NA>
+  > is.na(as.integer64(vals))
+  [1] FALSE FALSE  TRUE  TRUE
+  > is.finite(as.integer64(vals))
+  [1]  TRUE  TRUE FALSE FALSE
+  > 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Sun Apr  5 22:45:03 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 6 Apr 2026 07:45:03 +0900
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adLWp3SxVN5SLaqf@aurel32.net>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net>
+Message-ID: <adLl77EYZBLu15Dx@bubu.igloo>
+
+Le Sun, Apr 05, 2026 at 11:39:51PM +0200, Aurelien Jarno a écrit :
+> It appears that the issue is that r-cran is using NaN boxing to
+> represent the NA value. This does not work on riscv64, as a canonical
+> NaN is generated for an operation involving a NaN input operand.
+
+Hi Aurélien,
+
+thanks for the hint,
+
+Unfortunately I failed to install gcc in a schroot on ricci.  Do you
+know what I could have done wrong?
+
+```
+plessy@ricci:~$ schroot -c sid
+I: 00check: Untarring chroot environment.  This might take a minute or two.
+I: 99porterbox-extra-sources: o To install build dependencies run
+I: 99porterbox-extra-sources:   dd-schroot-cmd -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b apt-get update
+I: 99porterbox-extra-sources:   followed by build-dep/install as appropriate in the host system.
+I: 99porterbox-extra-sources: o If you started this session with schroot -b, please do not forget to run
+I: 99porterbox-extra-sources:   schroot --end-session -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b
+I: 99porterbox-extra-sources:   when you no longer need this environment.
+(sid_riscv64-dchroot)plessy@ricci:~$ gcc
+gcc: fatal error: no input files
+compilation terminated.
+(sid_riscv64-dchroot)plessy@ricci:~$ dd-schroot-cmd -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b apt-get update
+-bash: dd-schroot-cmd: command not found
+```
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Sun Apr  5 23:02:08 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 06 Apr 2026 08:02:08 +0900
+Subject: Bug#1132810: RM: r-cran-proxy [armhf i386 s390x] -- ROM; Architecture not supported upstream
+Message-ID: <177543012846.5857.10647686653419404664.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-proxy at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-proxy
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten, can you also remove r-cran-proxy on the above
+architectures?  Thanks !
+
+Charles
+
+From plessy at debian.org  Sun Apr  5 23:27:37 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 6 Apr 2026 08:27:37 +0900
+Subject: R graphics engine update to version 17
+Message-ID: <adLv6U6zBK6BdpvE@bubu.igloo>
+
+Hi Dirk and everybody,
+
+https://tracker.debian.org/pkg/r-base lists a bunch of packages that are
+uninstallable with r-base 4.5.3.20260404-1; I think that for most of
+them it is because of R graphics engine version bump from 16 to 17.
+
+We need to rebuild all the r-cran-* packages that declare a dependency
+on the r-graphics-engine-16, and I will start tomorrow for the
+team-maintained ones.  binNMU requests should work but source uploads
+are cheap, so I think that I will just do source uploads.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Sun Apr  5 23:57:04 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 5 Apr 2026 18:57:04 -0500
+Subject: Re: R graphics engine update to version 17
+In-Reply-To: <adLv6U6zBK6BdpvE@bubu.igloo>
+References: <adLv6U6zBK6BdpvE@bubu.igloo>
+Message-ID: <27090.63184.433801.374896@paul.eddelbuettel.com>
+
+Hi Charles,
+
+On 6 April 2026 at 08:27, Charles Plessy wrote:
+| Hi Dirk and everybody,
+| 
+| https://tracker.debian.org/pkg/r-base lists a bunch of packages that are
+| uninstallable with r-base 4.5.3.20260404-1; I think that for most of
+| them it is because of R graphics engine version bump from 16 to 17.
+
+Zong. I usually pay pretty close attention to R-devel (and also rebuild it
+every few days locally, if not more often as "they" make live) for us package
+authors harder with transitions --- and I missed / forgot this.
+
+This will be the new release R 4.6.0 by the end of the month.
+
+The rather nice thing that our scripts actually DID catch that and created a
+new 'r-graphics-engine-17' tag.  
+
+| We need to rebuild all the r-cran-* packages that declare a dependency
+| on the r-graphics-engine-16, and I will start tomorrow for the
+| team-maintained ones.  binNMU requests should work but source uploads
+| are cheap, so I think that I will just do source uploads.
+
+The question now is whether I should play 'defense' and upload one R
+4.5.4.really.4.5.3 (or alike) to dominate the R 4.6.0 RC out, or whether we
+just updated.
+
+Remind me again how I find packages that tagged themselved with
+r-graphics-engine-16?  My quick 'apt-cache search' is not finding what I am
+looking for.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From ginggs at debian.org  Mon Apr  6 10:14:50 2026
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 6 Apr 2026 10:14:50 +0000
+Subject: Re: R graphics engine update to version 17
+In-Reply-To: <27090.63184.433801.374896@paul.eddelbuettel.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com>
+Message-ID: <CAM8zJQvubh_kmVJeWnZbeh8o7Qa60GZwpXB_A8rgAmMjbwL1Cg@mail.gmail.com>
+
+Hi Dirk
+
+On Sun, 5 Apr 2026 at 23:57, Dirk Eddelbuettel <edd at debian.org> wrote:
+> The question now is whether I should play 'defense' and upload one R
+> 4.5.4.really.4.5.3 (or alike) to dominate the R 4.6.0 RC out, or whether we
+> just updated.
+
+Yes, please upload a +really version to unstable.
+
+A 4.6.0 something version to experimental could be useful for
+identifying these and other issues before uploading to unstable.
+
+I vaguely recall r-base having an issue with a tilde in the version,
+like 4.6.0~20260404, but hopefully that is no longer the case.
+
+Regards
+Graham
+
+From plessy at debian.org  Mon Apr  6 10:47:05 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 6 Apr 2026 19:47:05 +0900
+Subject: Re: R graphics engine update to version 17
+In-Reply-To: <27090.63184.433801.374896@paul.eddelbuettel.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com>
+Message-ID: <adOPKVRq41GzdhFh@bubu.igloo>
+
+Le Sun, Apr 05, 2026 at 06:57:04PM -0500, Dirk Eddelbuettel a écrit :
+> Remind me again how I find packages that tagged themselved with
+> r-graphics-engine-16?  My quick 'apt-cache search' is not finding what I am
+> looking for.
+
+In the end it seems to be only 7 packages, but one is maintained
+by the KDE team.
+
+grep-dctrl -F Depends -s Package,Maintainer -n r-graphics-engine-16 /var/lib/apt/lists/deb.debian.org_debian_dists_sid_main_binary-amd64_Packages
+r-cran-cairo
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+r-cran-magick
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+r-cran-ragg
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+r-cran-svglite
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+r-cran-tikzdevice
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+r-cran-vdiffr
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+rkward
+Debian KDE Extras Team <pkg-kde-extras at lists.alioth.debian.org>
+
+Cheers,
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Mon Apr  6 11:16:07 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 6 Apr 2026 06:16:07 -0500
+Subject: Re: R graphics engine update to version 17
+In-Reply-To: <adOPKVRq41GzdhFh@bubu.igloo>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo>
+Message-ID: <27091.38391.872926.884199@paul.eddelbuettel.com>
+
+On 6 April 2026 at 19:47, Charles Plessy wrote:
+| Le Sun, Apr 05, 2026 at 06:57:04PM -0500, Dirk Eddelbuettel a écrit :
+| >
+| >Remind me again how I find packages that tagged themselved with
+| >r-graphics-engine-16?  My quick 'apt-cache search' is not finding what I am
+| >looking for.
+| 
+| In the end it seems to be only 7 packages, but one is maintained
+| by the KDE team.
+| 
+| grep-dctrl -F Depends -s Package,Maintainer -n r-graphics-engine-16 /var/lib/apt/lists/deb.debian.org_debian_dists_sid_main_binary-amd64_Packages
+| r-cran-cairo
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| r-cran-magick
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| r-cran-ragg
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| r-cran-svglite
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| r-cran-tikzdevice
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| r-cran-vdiffr
+| Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+| 
+| rkward
+| Debian KDE Extras Team <pkg-kde-extras at lists.alioth.debian.org>
+
+Thanks. Given the somewhat 'complicated' state of R in testing right now I
+would be ok with going 'quick direct upload' of these seven. Can you do the
+six you are directly involved with, and we talk to the rkward folks?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From edd at debian.org  Mon Apr  6 11:19:10 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 6 Apr 2026 06:19:10 -0500
+Subject: Re: R graphics engine update to version 17
+In-Reply-To: <CAM8zJQvubh_kmVJeWnZbeh8o7Qa60GZwpXB_A8rgAmMjbwL1Cg@mail.gmail.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <CAM8zJQvubh_kmVJeWnZbeh8o7Qa60GZwpXB_A8rgAmMjbwL1Cg@mail.gmail.com>
+Message-ID: <27091.38574.934617.102897@paul.eddelbuettel.com>
+
+Hi Graham,
+
+On 6 April 2026 at 10:14, Graham Inggs wrote:
+| Yes, please upload a +really version to unstable.
+
+I think in the current situation with dozens of packages already missing in
+testing and other threatened we could for once do the quick informal
+approach.
+ 
+| A 4.6.0 something version to experimental could be useful for
+| identifying these and other issues before uploading to unstable.
+| 
+| I vaguely recall r-base having an issue with a tilde in the version,
+| like 4.6.0~20260404, but hopefully that is no longer the case.
+
+Yes it was (is?) an issue in internal path expansion, and I think it may
+still persist. I am not aware of a fix, and I last used the the 'fourth
+digit' approach just a few years ago.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From aurel32 at debian.org  Mon Apr  6 16:17:05 2026
+From: aurel32 at debian.org (Aurelien Jarno)
+Date: Mon, 6 Apr 2026 18:17:05 +0200
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <27090.57513.657925.936062@paul.eddelbuettel.com>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net> <27090.57513.657925.936062@paul.eddelbuettel.com>
+Message-ID: <adPcgVrXoqLDGtwn@aurel32.net>
+
+Hi Dirk,
+
+On 2026-04-05 17:22, Dirk Eddelbuettel wrote:
+> 
+> Hi Aurelien,
+> 
+> On 5 April 2026 at 23:39, Aurelien Jarno wrote:
+> | It appears that the issue is that r-cran is using NaN boxing to 
+> | represent the NA value. This does not work on riscv64, as a canonical 
+> | NaN is generated for an operation involving a NaN input operand.
+> 
+> Yes, well spotted. There are a few issues going on. For context:
+> 
+> - R itself natively only has double (64bit) and int (32bit). We often want
+>   int64_t and there is an add-on package 'mocking' int64 via an underlying
+>   double (package 'bit64', used by 'data.table' and many others)
+> 
+> - double is all good because of IEE 754 so NA, NaN, ... are defined.  But R
+
+Not sure that is NA. As far as I remember IEEE 754 only defines NaN (in 
+practice two categories, qNaN and sNaN). Is that a R specific think?
+
+>   is a data language and wants NA, NaN, ... on other types and hence 'locally
+>   defines' NA for int effectively dropping one value, also for bool making
+>   bool 'TRUE', 'FALSE' or 'NA' and character.
+> 
+> - for int64 we generally get by (see below), but it appears that the usual
+>   ops lead on riscv64 to a NA turning into a NaN. And instead of testing
+>   'is.finite()' where both come out FALSE data.table appears to only looks at
+>   NA here.   Adjusting that may fix the bug. I am sure upstream gets to that,
+>   they started to comment / ask for more feedback here
+>     https://github.com/Rdatatable/data.table/issues/7695
+>   and maybe you can help?
+
+I have just sent my comment there. On riscv64, any operation on a NaN 
+will create a canonical NaN, so with all the NaN payload as 0. I think 
+that R expects it go be propagated.
+
+Regards
+Aurelien
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien at aurel32.net                     http://aurel32.net
+
+From aurel32 at debian.org  Mon Apr  6 16:17:16 2026
+From: aurel32 at debian.org (Aurelien Jarno)
+Date: Mon, 6 Apr 2026 18:17:16 +0200
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adLl77EYZBLu15Dx@bubu.igloo>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net> <adLl77EYZBLu15Dx@bubu.igloo>
+Message-ID: <adPcjGVlhBfwqC1l@aurel32.net>
+
+Hi Charles,
+
+On 2026-04-06 07:45, Charles Plessy wrote:
+> Le Sun, Apr 05, 2026 at 11:39:51PM +0200, Aurelien Jarno a écrit :
+> > 
+> > It appears that the issue is that r-cran is using NaN boxing to
+> > represent the NA value. This does not work on riscv64, as a canonical
+> > NaN is generated for an operation involving a NaN input operand.
+> 
+> Hi Aurélien,
+> 
+> thanks for the hint,
+> 
+> Unfortunately I failed to install gcc in a schroot on ricci.  Do you
+> know what I could have done wrong?
+> 
+> ```
+> plessy@ricci:~$ schroot -c sid
+> I: 00check: Untarring chroot environment.  This might take a minute or two.
+> I: 99porterbox-extra-sources: o To install build dependencies run
+> I: 99porterbox-extra-sources:   dd-schroot-cmd -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b apt-get update
+> I: 99porterbox-extra-sources:   followed by build-dep/install as appropriate in the host system.
+> I: 99porterbox-extra-sources: o If you started this session with schroot -b, please do not forget to run
+> I: 99porterbox-extra-sources:   schroot --end-session -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b
+> I: 99porterbox-extra-sources:   when you no longer need this environment.
+> (sid_riscv64-dchroot)plessy@ricci:~$ gcc
+> gcc: fatal error: no input files
+> compilation terminated.
+> (sid_riscv64-dchroot)plessy@ricci:~$ dd-schroot-cmd -c sid_riscv64-dchroot-097ef177-c6cb-45f2-a397-31ac12ca443b apt-get update
+> -bash: dd-schroot-cmd: command not found
+> ```
+
+You are trying to run dd-schroot-cmd from inside the chroot. It has to 
+be run from outside the chroot instead.
+
+Regards
+Aurelien
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien at aurel32.net                     http://aurel32.net
+
+From edd at debian.org  Mon Apr  6 16:33:29 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 6 Apr 2026 11:33:29 -0500
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adPcgVrXoqLDGtwn@aurel32.net>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net> <27090.57513.657925.936062@paul.eddelbuettel.com> <adPcgVrXoqLDGtwn@aurel32.net>
+Message-ID: <27091.57433.718227.90841@paul.eddelbuettel.com>
+
+On 6 April 2026 at 18:17, Aurelien Jarno wrote:
+| Hi Dirk,
+| 
+| On 2026-04-05 17:22, Dirk Eddelbuettel wrote:
+| > 
+| > Hi Aurelien,
+| > 
+| > On 5 April 2026 at 23:39, Aurelien Jarno wrote:
+| > | It appears that the issue is that r-cran is using NaN boxing to 
+| > | represent the NA value. This does not work on riscv64, as a canonical 
+| > | NaN is generated for an operation involving a NaN input operand.
+| > 
+| > Yes, well spotted. There are a few issues going on. For context:
+| > 
+| > - R itself natively only has double (64bit) and int (32bit). We often want
+| >   int64_t and there is an add-on package 'mocking' int64 via an underlying
+| >   double (package 'bit64', used by 'data.table' and many others)
+| > 
+| > - double is all good because of IEE 754 so NA, NaN, ... are defined.  But R
+| 
+| Not sure that is NA. As far as I remember IEEE 754 only defines NaN (in 
+| practice two categories, qNaN and sNaN). Is that a R specific think?
+
+It's been 30 years with R and I still have to double-check. Yes, the NA may
+be an overload that is R specific (as only the NaN is IEEE mandated for
+double). R uses a bitmap of (int) 1954, birth year of one of the two "Rs"
+behind the creation of the language. And for int I believe it is a #define
+for SIZE_MIN.  Anyway...
+
+Thanks for your follow-up and confirmation in the GH issue. That should help
+them.
+
+Dirk
+
+| >   is a data language and wants NA, NaN, ... on other types and hence 'locally
+| >   defines' NA for int effectively dropping one value, also for bool making
+| >   bool 'TRUE', 'FALSE' or 'NA' and character.
+| > 
+| > - for int64 we generally get by (see below), but it appears that the usual
+| >   ops lead on riscv64 to a NA turning into a NaN. And instead of testing
+| >   'is.finite()' where both come out FALSE data.table appears to only looks at
+| >   NA here.   Adjusting that may fix the bug. I am sure upstream gets to that,
+| >   they started to comment / ask for more feedback here
+| >     https://github.com/Rdatatable/data.table/issues/7695
+| >   and maybe you can help?
+| 
+| I have just sent my comment there. On riscv64, any operation on a NaN 
+| will create a canonical NaN, so with all the NaN payload as 0. I think 
+| that R expects it go be propagated.
+| 
+| Regards
+| Aurelien
+| 
+| -- 
+| Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+| aurelien at aurel32.net                     http://aurel32.net
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Mon Apr  6 21:46:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 7 Apr 2026 06:46:23 +0900
+Subject: Re: Help needed for riscv64 autopkgtest failures in r-cran-data.table.
+In-Reply-To: <adPcjGVlhBfwqC1l@aurel32.net>
+References: <adF3mZ8ydFlnHP0w@bubu.igloo> <adLWp3SxVN5SLaqf@aurel32.net> <adLl77EYZBLu15Dx@bubu.igloo> <adPcjGVlhBfwqC1l@aurel32.net>
+Message-ID: <adQpr0reyYvkjWt5@bubu.igloo>
+
+Le Mon, Apr 06, 2026 at 06:17:16PM +0200, Aurelien Jarno a écrit :
+> You are trying to run dd-schroot-cmd from inside the chroot. It has to
+> be run from outside the chroot instead.
+
+Thanks!  I have added the information in our wiki.
+
+https://wiki.debian.org/PorterBoxHowToUse?action=diff&rev2=16&rev1=15
+
+Cheers,
+
+Charles
+
+From plessy at debian.org  Tue Apr  7 06:14:40 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 07 Apr 2026 15:14:40 +0900
+Subject: Bug#1132892: R Graphics Engine version mismatch
+Message-ID: <177554248061.2782359.9790226615892097360.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: rkward
+Version: 0.8.2-1
+Severity: important
+X-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org
+
+Hello,
+
+in R 4.6.0, the graphics engine version number was increased to 17.  The
+package 4.5.3.20260404-1 that was recently uploaded already provides an
+alpha version of R 4.6 and does not provide the graphics engine version
+16 anymore. 
+
+In order to depend on r-graphics-engine-17, it is necessary to rebuild
+rkward.
+
+Please let me know if you would like me to do so with a source upload.
+
+Cheers,
+
+Charles Plessy
+
+From plessy at debian.org  Tue Apr  7 06:55:36 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 7 Apr 2026 15:55:36 +0900
+Subject: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <27091.38391.872926.884199@paul.eddelbuettel.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com>
+Message-ID: <adSqaOkHevV7yOjt@kumo.plessy.net>
+
+Le Mon, Apr 06, 2026 at 06:16:07AM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Thanks. Given the somewhat 'complicated' state of R in testing right now I
+> would be ok with going 'quick direct upload' of these seven. Can you do the
+> six you are directly involved with, and we talk to the rkward folks?
+
+Hi Dirk,
+
+I uploaded the packages and took the opportunity to revert the architecture
+restriction to ease things as these packages do not perform scientific
+computations.  I also opened #1132892 against rkward.
+
+By the way, before doing each upload, I run autopkgtest locally, and while
+preparing the above uploads I had failures that I only could solve by
+rebuilding r-cran-vctrs and upgrading r-cran-rlang to version 1.2.0 released
+yesterday.  Indeed, a lot failures reported on
+https://tracker.debian.org/pkg/r-base seem to also be related to the error:
+
+    unable to load shared object '/usr/lib/R/site-library/rlang/libs/rlang.so':
+      /usr/lib/R/site-library/rlang/libs/rlang.so: undefined symbol: SETLENGTH
+
+A simple rebuild of r-cran-rlang at the previous 1.1.7 version was not enough;
+it may be that we will need to have a Breaks statement in r-base or r-cran-rlang
+if the Release team informs us that it would help r-base's migration.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Tue Apr  7 08:51:45 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 07 Apr 2026 17:51:45 +0900
+Subject: Bug#1132906: RM: r-cran-sp [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177555190588.2881172.16843501347868910658.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-sp at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-sp
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten,
+
+thanks for today's removals!
+
+Please also remove r-cran-sp.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Tue Apr  7 09:08:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 7 Apr 2026 18:08:23 +0900
+Subject: Re: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <adSqaOkHevV7yOjt@kumo.plessy.net>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com> <adSqaOkHevV7yOjt@kumo.plessy.net>
+Message-ID: <adTJh4jBV9BniyVU@kumo.plessy.net>
+
+Le Tue, Apr 07, 2026 at 03:55:36PM +0900, Charles Plessy a écrit :
+> 
+> A simple rebuild of r-cran-rlang at the previous 1.1.7 version was not enough;
+
+Correction: 1.1.7 can be rebuilt against R 4.6 alpha and pass its tests, after
+r-cran-vctrs has been rebuilt.
+
+Well, I have updated to 1.2.0 anyway as its changelog do mention R 4.6.
+
+Cheers,
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Tue Apr  7 11:26:34 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 7 Apr 2026 06:26:34 -0500
+Subject: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <adSqaOkHevV7yOjt@kumo.plessy.net>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com> <adSqaOkHevV7yOjt@kumo.plessy.net>
+Message-ID: <27092.59882.396529.269885@paul.eddelbuettel.com>
+
+Charles,
+
+On 7 April 2026 at 15:55, Charles Plessy wrote:
+| I uploaded the packages and took the opportunity to revert the architecture
+| restriction to ease things as these packages do not perform scientific
+| computations.  I also opened #1132892 against rkward.
+
+Thank you!
+ 
+| By the way, before doing each upload, I run autopkgtest locally, and while
+| preparing the above uploads I had failures that I only could solve by
+| rebuilding r-cran-vctrs and upgrading r-cran-rlang to version 1.2.0 released
+| yesterday.  Indeed, a lot failures reported on
+| https://tracker.debian.org/pkg/r-base seem to also be related to the error:
+| 
+|     unable to load shared object '/usr/lib/R/site-library/rlang/libs/rlang.so':
+|       /usr/lib/R/site-library/rlang/libs/rlang.so: undefined symbol: SETLENGTH
+| 
+| A simple rebuild of r-cran-rlang at the previous 1.1.7 version was not enough;
+| it may be that we will need to have a Breaks statement in r-base or r-cran-rlang
+| if the Release team informs us that it would help r-base's migration.
+
+I continue to maintain that looking at CRAN should generally be enough. CRAN
+has a field 'Deadline', not unlike our expulsion mechanism and I think both
+those packages were under it.  But we can trust that when something comes to
+CRAN then the package will
+
+- build will all other CRAN packages
+- build with current R ("r-release"), next R ("R-devel") and previous R ("R-oldrel")
+- many packages also test against many more older versions
+
+So I see no point in testing random permutations here, especially when it is
+the same upstream team. The first step would just be to keep them all current.
+
+Best, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Tue Apr  7 18:19:10 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 08 Apr 2026 03:19:10 +0900
+Subject: Bug#1132933: RM: r-cran-lme4 [armhf i386 s390x] -- Dependencies removed from unsupported architectures
+Message-ID: <177558595076.63590.2993448429807772251.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: lme4 at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:lme4
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten,
+
+as discussed on the debian-r mailing list, r-cran-statmod was removed
+from the architectures above, and we need to remove r-cran-lme4 from
+these architectures as well, as it depends on r-cran-statmod.
+
+This will allow r-cran-statmod to migrate to Testing and therefore lme4
+to stay in Testing in the remaining architectures.
+
+Thanks for your help!
+
+Charles
+
+From plessy at debian.org  Tue Apr  7 23:30:12 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 08 Apr 2026 08:30:12 +0900
+Subject: Bug#1132947: RM: r-cran-admisc [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177560461254.3031853.8771560629676778553.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-admisc at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-admisc
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten, please remove r-cran-admisc from armhf i386 s390x; it
+blocks r-cran-polycor from migrating.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Tue Apr  7 23:37:05 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 08 Apr 2026 08:37:05 +0900
+Subject: Bug#1132948: RM: r-cran-cba [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177560502533.3052929.166384113021820613.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-cba at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-cba
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsted, can you remove r-cran-cba on armhf i386 s390x to let
+it and r-cran-proxy migrate to Testing?
+
+Thanks !
+
+Charles
+
+From plessy at debian.org  Wed Apr  8 07:25:13 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 08 Apr 2026 16:25:13 +0900
+Subject: Bug#1132954: RM: r-cran-spatstat.utils [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177563311393.3054977.5089411205375934180.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-spatstat.utils at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-spatstat.utils
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten,
+
+this is a removal request that will open the doors of Testing to the
+r-cran-spatstat* family.
+
+Thanks again !
+
+Charles
+
+From edd at debian.org  Thu Apr  9 02:39:59 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 8 Apr 2026 21:39:59 -0500
+Subject: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <27092.59882.396529.269885@paul.eddelbuettel.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com> <adSqaOkHevV7yOjt@kumo.plessy.net> <27092.59882.396529.269885@paul.eddelbuettel.com>
+Message-ID: <27095.4479.26431.611787@paul.eddelbuettel.com>
+
+Hi Charles,
+
+I would strongly recommend and suggest to update these. rlang 1.2.0 for
+example updates its used of the C API interface, and we _dozens_ of packages
+failing because the (outdated) previous version no longer loads:
+
+  unable to load shared object '/usr/lib/R/site-library/rlang/libs/rlang.so':
+
+rlang 1.1.7 from Januart may "seem" recent but it is not. We needed 1.2.0
+from this week.  That may carry over to a few other key packages. See
+
+  https://tracker.debian.org/pkg/r-base
+
+and there is simply not a lot I can do when the reverse dependencies need an
+update.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Thu Apr  9 03:03:21 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 9 Apr 2026 12:03:21 +0900
+Subject: Re: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <27095.4479.26431.611787@paul.eddelbuettel.com>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com> <adSqaOkHevV7yOjt@kumo.plessy.net> <27092.59882.396529.269885@paul.eddelbuettel.com> <27095.4479.26431.611787@paul.eddelbuettel.com>
+Message-ID: <adcW-S30JmTO57oz@kumo.plessy.net>
+
+Le Wed, Apr 08, 2026 at 09:39:59PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> rlang 1.1.7 from Januart may "seem" recent but it is not. We needed 1.2.0
+> from this week.
+
+Hi Dirk,
+
+yes this is what I did (https://tracker.debian.org/pkg/r-cran-rlang).
+
+ - I tried to rebuild 1.1.7 and it failed because vctrs needed a rebuild.
+ - I went straight for 1.2.0.
+ - I wrote the email saying that vctrs needs a rebuild and rlang needs an upgrade.
+ - I corrected myself in another email because it was suggesting that 1.1.7 can
+   not be rebuilt after vctrs, which is factually wrong.  But 1.2.0 was already
+   on its way to Unstable :)  Sorry that I was confusing with this message.
+
+I worry that we will need Breaks: statements or the help of the Release Team
+for the migration, but let's wait until the 12th (upload + 5 days) to see if it
+works without intervention.
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Thu Apr  9 14:57:51 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 9 Apr 2026 09:57:51 -0500
+Subject: Re: Tight coupling between vctrs, rlang, and R 4.6 (Re: R graphics engine update to version 17)
+In-Reply-To: <adcW-S30JmTO57oz@kumo.plessy.net>
+References: <adLv6U6zBK6BdpvE@bubu.igloo> <27090.63184.433801.374896@paul.eddelbuettel.com> <adOPKVRq41GzdhFh@bubu.igloo> <27091.38391.872926.884199@paul.eddelbuettel.com> <adSqaOkHevV7yOjt@kumo.plessy.net> <27092.59882.396529.269885@paul.eddelbuettel.com> <27095.4479.26431.611787@paul.eddelbuettel.com> <adcW-S30JmTO57oz@kumo.plessy.net>
+Message-ID: <27095.48751.406622.570688@paul.eddelbuettel.com>
+
+Hi Charles,
+
+Missed this last night and now catching up.
+
+On 9 April 2026 at 12:03, Charles Plessy wrote:
+| yes this is what I did (https://tracker.debian.org/pkg/r-cran-rlang).
+| 
+|  - I tried to rebuild 1.1.7 and it failed because vctrs needed a rebuild.
+|  - I went straight for 1.2.0.
+|  - I wrote the email saying that vctrs needs a rebuild and rlang needs an upgrade.
+|  - I corrected myself in another email because it was suggesting that 1.1.7 can
+|    not be rebuilt after vctrs, which is factually wrong.  But 1.2.0 was already
+|    on its way to Unstable :)  Sorry that I was confusing with this message.
+
+Cool. I may have missed details.
+
+| I worry that we will need Breaks: statements or the help of the Release Team
+| for the migration, but let's wait until the 12th (upload + 5 days) to see if it
+| works without intervention.
+
+Current packages should just work. I do not see a need for breaks but I may
+be missing something.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+Sponsor me for Tour de Shore 2026! Donate at
+   https://www.pledgereg.com/536435 
+More about the ride at
+   https://dirk.eddelbuettel.com/blog/2026/04/03#sponsor_tour_de_shore_2026
+
+From plessy at debian.org  Fri Apr 10 01:24:06 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 10 Apr 2026 10:24:06 +0900
+Subject: Bug#1133114: lintian-brush breaks debian/watch for r-cran-* packages.
+Message-ID: <177578424654.4009920.6557077184451942281.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: lintian-brush
+Version: 0.174
+Severity: normal
+X-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org
+
+Hello,
+
+we run lintian-brush on the r-cran-* packages maintained by the Debian R
+packages maintainers team, and I noted that recenly the UDD reports a
+lot of uscan errors for our packages. 
+
+The reason is that lintian-brush converts files like this:
+
+    --- a/debian/watch
+    +++ b/debian/watch
+    @@ -1,2 +1,3 @@
+    -version=4
+    -https://cloud.r-project.org/src/contrib/forecast_([-\d.]*)\.tar\.gz
+    +Version: 5
+    +
+    +Source: https://cloud.r-project.org/src/contrib/forecast_([-\d.]*)\.tar\.gz
+
+But the new watch file is broken:
+
+    $ uscan --report
+    uscan warn: No Matching-Pattern found, using .*?@ANY_VERSION@@ARCHIVE_EXT@
+    uscan warn: In debian/watch no matching files for watch source
+      https://cloud.r-project.org/src/contrib/forecast_([-\d.]*)\.tar\.gz
+
+While the old one would have worked:
+
+    $ uscan --report
+    Newest version of r-cran-forecast on remote site is 9.0.2, local version is 9.0.1
+     => Newer package available from:
+    	=> https://cloud.r-project.org/src/contrib/forecast_9.0.2.tar.gz
+
+By the way, since devscripts 2.26.6, we have a uscan template for CRAN
+and Bioconductor packages, so the following watch file would work:
+
+    Version: 5
+    Template: CRAN
+    Package: forecast
+
+Would that something that lintian-brush could implement?  All CRAN
+packages come from https://cloud.r-project.org/, and all Bioconductor
+packages come from https://bioconductor.org/.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Sat Apr 11 00:47:16 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 11 Apr 2026 09:47:16 +0900
+Subject: Bug#1133196: RM: r-cran-e1071 [armhf i386 s390x] -- ; Architectures not supported upstream.
+Message-ID: <177586843635.123251.17541937518277145940.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-e1071 at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, edd at debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-e1071
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten, can you remove r-cran-e1071 from the above architectures?
+It will allow it to stay in Testing as its dependencies have been
+arch-restricted.
+
+Have a nice week-end,
+
+Charles
+
+From plessy at debian.org  Wed Apr 15 02:22:13 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 15 Apr 2026 11:22:13 +0900
+Subject: Packages staying in "Will attempt migration" for multiple days.
+Message-ID: <ad72VZy49A7hoLU2@kumo.plessy.net>
+
+Dear Release Team,
+
+we have a bunch of pakcages like r-cran-isoband, for instance, that are staying
+in "Will attempt migration" state for multiple days, without actually
+migrating, despite the excuses state "not blocking".
+
+https://tracker.debian.org/pkg/r-cran-isoband
+
+These packages typically have more architectures in Testing than in Sid as I
+have prevented them from building on non-little-endian non-32-bit platforms.
+
+Although https://wiki.debian.org/ftpmaster_Removals clearly explains that
+architectures removed in Sid will be automatically removed from Testing, it
+does not seem to happen.
+
+Do I need to request Testing removals for r-cran-isoband and other packages in
+the same situation?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From bunk at debian.org  Wed Apr 15 08:18:15 2026
+From: bunk at debian.org (Adrian Bunk)
+Date: Wed, 15 Apr 2026 11:18:15 +0300
+Subject: Re: Packages staying in "Will attempt migration" for multiple days.
+In-Reply-To: <ad886tT5dVe18PFs@ramacher.at>
+References: <ad72VZy49A7hoLU2@kumo.plessy.net> <ad886tT5dVe18PFs@ramacher.at>
+Message-ID: <ad9JxxWGyxtHa7Es@localhost>
+
+On Wed, Apr 15, 2026 at 09:23:22AM +0200, Sebastian Ramacher wrote:
+> Hi
+> 
+> On 2026-04-15 11:22:13 +0900, Charles Plessy wrote:
+> > Dear Release Team,
+> > 
+> > we have a bunch of pakcages like r-cran-isoband, for instance, that are staying
+> > in "Will attempt migration" state for multiple days, without actually
+> > migrating, despite the excuses state "not blocking".
+> > 
+> > https://tracker.debian.org/pkg/r-cran-isoband
+> 
+> It fails during https://release.debian.org/britney/update_output.txt as
+> it renders packages in testing uninstallable due to expected removal of
+> the 32 bit architectures. Without checking, I suspect that the reverse
+> dependencies of r-cran-isoband have not yet been dealt with or the
+> 32-bit removal of those have not yet migrated testing.
+
+trying: r-cran-isoband
+skipped: r-cran-isoband (33, 0, 669)
+    got: 51+0: a-12:a-8:a-15:i-15:p-0:r-0:s-1
+    * armhf: ea-utils, mapdamage, r-cran-caret, r-cran-conquer, r-cran-factominer, r-cran-forecast, r-cran-fregression, r-cran-ggrepel, r-cran-hmisc, r-cran-pec, r-cran-quantreg, r-cran-riskregression, r-cran-rms, r-cran-rstan, r-other-kcha-psiplot
+
+ea-utils -> r-cran-ggplot2 -> r-cran-isoband
+mapdamage -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-caret -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-conquer -> r-cran-caret -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-factominer -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-forecast -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-fregression -> r-cran-fmultivar -> r-cran-sn -> r-cran-quantreg -> r-cran-conquer -> r-cran-caret -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-ggrepel -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-hmisc -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-pec -> r-cran-rms -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-quantreg -> r-cran-conquer -> r-cran-caret -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-riskregression -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-rms -> r-cran-ggplot2 -> r-cran-isoband
+r-cran-rstan -> r-cran-ggplot2 -> r-cran-isoband
+r-other-kcha-psiplot -> r-cran-ggplot2 -> r-cran-isoband
+
+> Cheers
+
+cu
+Adrian
+
+From plessy at debian.org  Wed Apr 15 13:43:20 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 15 Apr 2026 22:43:20 +0900
+Subject: Bug#1133898: Bulk r-cran-*-related armhf i386 s390x removals, round 2.
+In-Reply-To: <ad9JxxWGyxtHa7Es@localhost>
+References: <ad9JxxWGyxtHa7Es@localhost>
+Message-ID: <ad-V-I3NxLW8ZHNr@kumo.plessy.net>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Hi Thorsten and thanks Adrian for the hint.
+
+Thorsten, can I ask you the following batch of architecture removals?  These
+packages are blocking the migration of r-cran-isoband, r-cran-xfun,
+r-cran-redland, and r-cran-roxygen2 as per the Britney log at
+https://release.debian.org/britney/update_output.txt.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x ea-utils
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x mapdamage
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-caret
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-conquer
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-factominer
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-forecast
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-fregression
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-ggrepel
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-hmisc
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-pec
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-quantreg
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-riskregression
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-rms
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-rstan
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-gridtext
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-profvis
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-redland
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-rgl
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-roxygen2
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-rpact
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-rdflib
+
+Le Wed, Apr 15, 2026 at 11:18:15AM +0300, Adrian Bunk a écrit :
+> 
+> trying: r-cran-isoband
+> skipped: r-cran-isoband (33, 0, 669)
+>     got: 51+0: a-12:a-8:a-15:i-15:p-0:r-0:s-1
+>     * armhf: ea-utils, mapdamage, r-cran-caret, r-cran-conquer, r-cran-factominer, r-cran-forecast, r-cran-fregression, r-cran-ggrepel, r-cran-hmisc, r-cran-pec, r-cran-quantreg, r-cran-riskregression, r-cran-rms, r-cran-rstan, r-other-kcha-psiplot
+
+Thanks a lot Adrian.
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Sat Apr 18 14:05:06 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 18 Apr 2026 23:05:06 +0900
+Subject: Bug#1134266: RM: r-cran-ecodist [armhf i386 s390x] -- Build-dependency not available on these architectures.
+Message-ID: <177652110641.369248.15614074953944787359.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-ecodist at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-ecodist
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten,
+
+can I ask you to remove Dirk's r-cran-ecodist package from the
+architectures above?  It build-depends on r-cran-igraph, which is not
+available there anymore.
+
+This will prepare the return of r-cran-ecodist into Testing, with its
+reverse-dependencies fassets and fportfolio.
+
+Have a nice week-end,
+
+Charles
+
+From plessy at debian.org  Sat Apr 18 23:45:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 19 Apr 2026 08:45:23 +0900
+Subject: Bug#1134352: transition: Bioconductor 3.23
+Message-ID: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo>
+
+Package: release.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-*@packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-biocgenerics
+User: release.debian.org at packages.debian.org
+Usertags: transition
+
+Dear Release Team,
+
+Shortly after the release of R 4.6, planned for next week, Bioconductor
+will publish new upstream versions for all of its packages. This
+collective release will form Bioconductor 3.23.
+
+There is tight coupling between R and Bioconductor packages, and as you
+can see from the RC bugs opened yesterday by Santiago, a number of them
+will need to be rebuilt. This will be addressed by the update to the new
+upstream versions, since each upstream package is receiving an update,
+even if only to its changelog.
+
+As with the previous transition, the dependency graph will likely grow
+with new packages. The NEW queue is almost empty at the moment, so
+processing should be fast.
+
+I am writing now to ask you to set up a transition tracker. All uploads
+will be targeted to Experimental, and we will contact you again when
+mass uploads to Unstable are ready, so we can proceed once you confirm
+that the transition may begin.
+
+On the technical side: r-bioc-generics provides the r-api-bioc-3.??
+virtual package, and the tools used to build the other r-bioc-* packages
+pick up that virtual package at build time. There are currently no
+packages depending on r-api-bioc-3.21, and only one package depending on
+r-api-bioc-3.22, since we skipped the corresponding Bioconductor
+releases due to lack of manpower.
+
+Have a nice weekend,
+
+Charles
+
+Ben file:
+
+title = "r-api-bioc-3.23";
+is_affected = .depends ~ /r-api-bioc/ | .source ~ /r-bioc-/;
+is_good = .depends ~ "r-api-bioc-3.23";
+is_bad = .depends ~ "r-api-bioc-3.20 | r-api-bioc-3.22";
+
+From plessy at debian.org  Tue Apr 21 00:51:13 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 21 Apr 2026 09:51:13 +0900
+Subject: R 4.6 in unstable: testing migration and autopkgtest implications
+Message-ID: <aebKAcB4fzHY7QAQ@kumo.plessy.net>
+
+Hello everybody,
+
+As you know R 4.6.0 release candidates are currently shipped in unstable
+(r-base 4.5.3.20260417-1 and later). As part of this, the R graphics engine ABI
+has been bumped (graphics API 16 → 17) and other incompatibilities are being
+uncovered.  While no transition has been declared, the transition is already
+effective in the archive.
+
+Impact on testing migration;
+
+ * Some important binary r-cran- packages built against R ≤ 4.5 (notably
+   r-cran-rlang and r-cran-vctrs) are incompatible with r-base shipping R 4.6,
+   and vice‑versa.
+
+ * During unstable → testing migration, britney runs autopkgtests against
+   partial upgrades by design. Since these incompatibilities are not fully
+   declared, reverse‑dependency tests triggered by r-base and by r-cran- core
+   packages fail, blocking migration.
+
+ * r-cran-rlang autopkgtests detect this correctly. I added a versioned Breaks
+   against r-base-core, but this is insufficient to prevent invalid mixed
+   testing/unstable combinations for its reverse dependencies.
+
+ * r-cran-vctrs is similarly blocked, in addition to at least one riscv64
+   regression triggered during migration.
+
+ * Independently, the current r-cran-rcpp in unstable is incompatible with the
+   current r-base, causing FTBFS for packages build‑depending on it (see the
+   recent RC bugs opened by Santiago and Sebastian).  This currently blocks
+   rebuild‑based progress.
+
+I see the following technical options:
+
+ * Extend Breaks from r-base against known‑incompatible r-cran- core packages
+   (e.g. rlang, vctrs, others as identified), to limit invalid partial upgrades
+   during migration.
+
+ * Bump the virtual R API package (e.g. r-api-4.0 → r-api-4.6), enforcing a
+   clean rebuild boundary at the cost of rebuilding a lot packages that do not
+   require it.  This said, from my side, it is just a shell loop of source uploads
+   running unattened.
+
+ * Rebuild affected packages via binNMUs, selectively or broadly (currently
+   constrained by r-cran-rcpp for some of them).
+
+ * Ask the Release Team to force‑hint r-base into testing and let r-cran packages
+   migrate later, accepting temporary breakage.
+
+It looks to me that most options likely require declaring an R 4.6 transition
+explicitly, both to reflect the current archive state and to align with Release
+Team processes.
+
+The mass architecture-restriction that I did not finish in time aggravates the
+problem, but completing it will not solve alone the issue of r-base migration
+because of the partial upgrade issue.
+
+Dirk, I noted your activity upstream regarding the issue between Rcpp and the
+latest R 4.6 release candidate, which prevents the rebuild or update of a bunch
+of packages that would need it in most scenarios. What solution are you
+envisioning?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Tue Apr 21 01:24:11 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 20 Apr 2026 20:24:11 -0500
+Subject: Re: R 4.6 in unstable: testing migration and autopkgtest implications
+In-Reply-To: <aebKAcB4fzHY7QAQ@kumo.plessy.net>
+References: <aebKAcB4fzHY7QAQ@kumo.plessy.net>
+Message-ID: <27110.53691.483130.943418@paul.eddelbuettel.com>
+
+On 21 April 2026 at 09:51, Charles Plessy wrote:
+| What solution are you envisioning?
+
+R Core (mostly LT) made a clusterfuck of the transition so we are going to be
+in two worlds of pain: one because of you and the usual and never-ending
+autopkg nonsense you impose upon Debian from inside, and one because of R
+Core and what you saw already in rlang (ie inabiliry to compile because
+accessors removed from headers) and for which I have to upload 'non-release'
+version Rcpp 1.1.1-1 [1] to Debian. Which I will do before R 4.6.0 lands
+later this week. (CRAN now seems to use it throughout.)
+
+I am really REALLY tired of both sides of this nonsense. What you continue to
+do is objectively wrong, and what R Core did here is just so naive it boggles
+my mind.
+
+In the grand scheme of things, we can handle both as we are effectively 'an
+intermediating layer'. I am just tired of us imposing extra pain upon
+ourselves. (There is an abstract 'reason' why this may work in theory, but I
+think I have ample 'in practice' empirics it doesn't because maybe it seems
+to misunderstand how R works (generally, the R 4.6.0 clusterfuck is
+orthogonal.))
+
+Dirk
+
+[1] See https://cran.r-project.org/src/contrib/Transit/ and some comments on
+rcpp-devel if you follow it
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From plessy at debian.org  Wed Apr 22 00:35:53 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 22 Apr 2026 09:35:53 +0900
+Subject: Re: R 4.6 in unstable: testing migration and autopkgtest implications
+In-Reply-To: <aec7Q9GSOsFljmYA@localhost>
+References: <27110.53691.483130.943418@paul.eddelbuettel.com>
+Message-ID: <aegX0jUTT7ZoTRVM@kumo.plessy.net>
+
+Hi Dirk, Adrian, and everybody,
+
+Thanks Dirk for the r-cran-rcpp 1.1.1-1-1 upload.
+
+Given Adrian’s suggestion in #1134484, and given the increasing number of
+warnings and errors like “package ‘x’ was built under R version 4.6.0” that I
+see on the package tracker, I think we should move forward and make the R 4.5 /
+4.6 boundary explicit.
+
+If changing r-base to provide r-api-4.6 instead of r-api-4.0 is considered
+misleading with respect to upstream, we could instead use a neutral name such
+as r-transition-2026; I can update dh-r accordingly.
+
+On my side, I am fine with a mass source upload. Dirk, I can also do
+changelog‑only source NMUs of your packages if you wish.
+
+Declaring this as a formal transition would also let us use the Release Team
+transition tracker, putting us in a better position to ask first for their
+feedback and then for their time for the final push if needed.
+
+Does this seem acceptable to you as a reasonable way forward?
+
+I will be away from the keyboard from Friday to Tuesday, so this leaves some
+time to think about the details.
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Wed Apr 22 00:51:19 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 21 Apr 2026 19:51:19 -0500
+Subject: Re: R 4.6 in unstable: testing migration and autopkgtest implications
+In-Reply-To: <aegX0jUTT7ZoTRVM@kumo.plessy.net>
+References: <aec7Q9GSOsFljmYA@localhost> <27110.53691.483130.943418@paul.eddelbuettel.com> <aegX0jUTT7ZoTRVM@kumo.plessy.net>
+Message-ID: <27112.7047.510892.305556@paul.eddelbuettel.com>
+
+On 22 April 2026 at 09:35, Charles Plessy wrote:
+| Hi Dirk, Adrian, and everybody,
+| 
+| Thanks Dirk for the r-cran-rcpp 1.1.1-1-1 upload.
+| 
+| Given Adrian’s suggestion in #1134484, and given the increasing number of
+| warnings and errors like “package ‘x’ was built under R version 4.6.0” that I
+| see on the package tracker, I think we should move forward and make the R 4.5 /
+| 4.6 boundary explicit.
+| 
+| If changing r-base to provide r-api-4.6 instead of r-api-4.0 is considered
+| misleading with respect to upstream, we could instead use a neutral name such
+| as r-transition-2026; I can update dh-r accordingly.
+
+Strongly against. It is r-api-4.0.
+
+Take the rlang and Rcpp examples. They bonked on compilation-only. You could
+run the compiled packages just fine on R 4.5.3 or another.  This is really
+merely an idiocy by R Core.
+ 
+| On my side, I am fine with a mass source upload. Dirk, I can also do
+| changelog‑only source NMUs of your packages if you wish.
+
+Please do not touch my packages unless I very explicitly ask you to. Thank you.
+ 
+| Declaring this as a formal transition would also let us use the Release Team
+| transition tracker, putting us in a better position to ask first for their
+| feedback and then for their time for the final push if needed.
+| 
+| Does this seem acceptable to you as a reasonable way forward?
+
+No.
+
+Dirk
+
+| 
+| I will be away from the keyboard from Friday to Tuesday, so this leaves some
+| time to think about the details.
+| 
+| Cheers,
+| 
+| Charles
+| 
+| -- 
+| Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+| Debian Med packaging team         http://www.debian.org/devel/debian-med
+| Tooting from home                  https://framapiaf.org/@charles_plessy
+| - You  do not have  my permission  to use  this email  to train  an AI -
+| 
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From plessy at debian.org  Thu Apr 23 09:30:32 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 23 Apr 2026 18:30:32 +0900
+Subject: Bug#1134700: Bulk r-cran-*-related armhf i386 s390x removals, round 3.
+Message-ID: <177693663227.927761.6078968047967480578.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org
+Usertags: archive
+
+Hi Thorsten,
+
+Can I ask you one more round of architecture removals for r-cran-*
+packages?  This time I have confirmed on the ftpmaster mirror that they
+all have something to remove.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-desolve
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-dqrng
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-epi
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-etm
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-exactranktests
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-sf
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-tsp
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-wk
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-survey
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-proc
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-irace
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-psychotools
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-samr
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-fingerprint
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-flashclust
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-xts
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-s2
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-fracdiff
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-genieclust
+
+Have a nice day,
+
+Charles
+
+From onders.am.istiets at gmail.com  Sat Apr 25 11:24:51 2026
+From: onders.am.istiets at gmail.com (onders)
+Date: Sat, 25 Apr 2026 13:24:51 +0200
+Subject: r-cran-whatif was removed but reason seems not true now
+Message-ID: <CALbAaL9rxTKLCn4n-Ade+Lg_XeFTVQjinvmjAseh6+WxJj7Qhw@mail.gmail.com>
+
+r-cran-whatif WhatIf seems a normal cran package now.
+
+From edd at debian.org  Sat Apr 25 12:34:01 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 25 Apr 2026 07:34:01 -0500
+Subject: Re: r-cran-whatif was removed but reason seems not true now
+In-Reply-To: <CALbAaL9rxTKLCn4n-Ade+Lg_XeFTVQjinvmjAseh6+WxJj7Qhw@mail.gmail.com>
+References: <CALbAaL9rxTKLCn4n-Ade+Lg_XeFTVQjinvmjAseh6+WxJj7Qhw@mail.gmail.com>
+Message-ID: <27116.46265.864227.172624@paul.eddelbuettel.com>
+
+On 25 April 2026 at 13:24, onders wrote:
+| r-cran-whatif WhatIf seems a normal cran package now.
+
+It is not uncommon [1] for package removed at CRAN to return to CRAN. By the
+same token, the packages dependending on it may in the meantime have removed
+a dependency, or made or it a suggsted weaker dependency.
+
+Dirk
+
+[1] I have been running a (now hourly) monitor (for rss but with bsky /
+mastodon pushed too) at https://dirk.eddelbuettel.com/cranberries/ for almost
+twenty years. It has a category 'removed' tracking removed packages.
+Returning packages were for years treated as 'new' but this became so common
+that I now flag them in the rss / blog post entry and post as 'readmitted'.
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From onders.am.istiets at gmail.com  Sat Apr 25 14:22:18 2026
+From: onders.am.istiets at gmail.com (onders)
+Date: Sat, 25 Apr 2026 16:22:18 +0200
+Subject: Re: r-cran-whatif was removed but reason seems not true now
+In-Reply-To: <27116.46265.864227.172624@paul.eddelbuettel.com>
+References: <CALbAaL9rxTKLCn4n-Ade+Lg_XeFTVQjinvmjAseh6+WxJj7Qhw@mail.gmail.com> <27116.46265.864227.172624@paul.eddelbuettel.com>
+Message-ID: <CALbAaL-Krj9oAbnZa0JaV7BsBOWwbrJQGRubwjzLQRjMgbk=5A@mail.gmail.com>
+
+just to be sure, r-cran-whatif is removed from Debian because WhatIf
+was removed from CRAN see #1130773
+
+these are the mentioned changes in version 1.5-11
+Replaced deprecated with_mock() usage in tests with modern testthat
+approach, fixing CRAN check failures.
+Added structured Authors@R field to DESCRIPTION.
+Updated minimum R version to 3.5.0.
+New maintainer: Katalina Toth.
+
+On Sat, Apr 25, 2026 at 2:34 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+>
+>
+> On 25 April 2026 at 13:24, onders wrote:
+> | r-cran-whatif WhatIf seems a normal cran package now.
+>
+> It is not uncommon [1] for package removed at CRAN to return to CRAN. By the
+> same token, the packages dependending on it may in the meantime have removed
+> a dependency, or made or it a suggsted weaker dependency.
+>
+> Dirk
+>
+> [1] I have been running a (now hourly) monitor (for rss but with bsky /
+> mastodon pushed too) at https://dirk.eddelbuettel.com/cranberries/ for almost
+> twenty years. It has a category 'removed' tracking removed packages.
+> Returning packages were for years treated as 'new' but this became so common
+> that I now flag them in the rss / blog post entry and post as 'readmitted'.
+>
+> --
+> Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From edd at debian.org  Sun Apr 26 17:36:10 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 26 Apr 2026 12:36:10 -0500
+Subject: R 4.6.0 and its 'binary' transition
+Message-ID: <27118.19722.757185.846030@paul.eddelbuettel.com>
+
+R 4.6.0 came out on Friday, and following three weekly prerelease mapping the
+upstream 'alpha', 'beta', and 'rc' stages, was updated on Friday as well.
+
+With the release, (upstream team) R Core made some choices about symbols in
+public headers that are the same time defensible (at least in theory), yet
+(in practice) also questioned by some folks with experience around R (myself
+included) and/or release management.
+
+In short, 'public headers' were cleaned up by removing some previously
+exported symbols (both functions and variables).  That obviously breaks some
+things at compile-time. Yet at the same time it is _not_ an 'R API breakage'
+as R 4.0.0 was.  Many packages built under any version past 4.0.0 still load
+as can be checked easily. Packages without compiled code--by far the
+majority--are also obviously unaffected by header changes. So what exactly is
+the extend?
+
+I had promised myself to do a little bit of data-driven digging, and have
+done a first pass of that now over at a public repo that also has more
+context than this short email:
+
+   https://github.com/eddelbuettel/R-4.6.0-binary-transition
+
+And we look good!! I used a GitHub code search to find packages checking for
+'before or after 4.6.0', installed these and tested if they load. 'Known
+suspects' such as `rlang` or `data.table` load fine in unstable which is
+pretty nice!!  We did well so far.  I only found package `lobstr` to require
+a rebuild which we can clearly do.
+
+I need a bit of a break now after having spent some hours on this yesterday
+and today, but I think I will go back to the container-based approach and
+'simply' try to install and load each of our 183 (per a different thread in
+the BTS) packages with compiled code. Maybe tomorrow. Spot-checking some
+packages does not reveal any cause for concern.
+
+So if you care about the topic, and have a minute maybe glance at the repo
+and try the code. I can expand it and explain it more detail so feel free to
+ask here or in an issue---but I just wanted to get a first email out.
+
+Last but not least if 'we all' were to decide we really need a new tag and
+full rebuild then I can of course adjust r-base-core. I just don't think we
+need it, and I feel I now have to the empirical 'proof' for it.
+
+Cheers, Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From edd at debian.org  Tue Apr 28 00:33:57 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 27 Apr 2026 19:33:57 -0500
+Subject: Re: R 4.6.0 and its 'binary' transition
+In-Reply-To: <27118.19722.757185.846030@paul.eddelbuettel.com>
+References: <27118.19722.757185.846030@paul.eddelbuettel.com>
+Message-ID: <27120.117.323213.989552@paul.eddelbuettel.com>
+
+I added a (simple) bulk test (in a screenful of code) loading all 519
+r-cran-* packages containing compiled code.  Only seven had an issues:
+
+      Package Version NeedsCompilation             lcpkg  loads   
+       <char>  <char>           <char>            <char> <lgcl>   
+1:      gstat   2.1-6              yes      r-cran-gstat  FALSE   
+2:     lobstr   1.2.1              yes     r-cran-lobstr  FALSE   
+3: reticulate  1.46.0              yes r-cran-reticulate  FALSE   
+4:       Rmpi 0.7-3.4              yes       r-cran-rmpi  FALSE   
+5:  RQuantLib  0.4.26              yes  r-cran-rquantlib  FALSE   
+6:  Rsymphony  0.1-33              yes  r-cran-rsymphony  FALSE   
+7:     Seurat   5.5.0              yes     r-cran-seurat  FALSE 
+
+Seurat not loading is a side-effect of reticulate not loading; reticulate
+just had a new upstream. lobstr was already know. gstat works when I try it
+manually, not sure what was happening there. Rsymphony seems unrelated as do
+wo of those are mine and may also have two unrelated issues; RQuantLib may
+need an update QuantLib I will look into, ditto for Rmpi.
+
+Dirk
+
+-- 
+Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com
+
+From edd at debian.org  Tue Apr 28 13:05:52 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 28 Apr 2026 08:05:52 -0500
+Subject: Bug#1135160: r-cran-lobstr: New version available, and R 4.6.0 recompilation needed
+Message-ID: <177738155248.1111826.7428089198212220028.reportbug@paul.eddelbuettel.com>
+
+Package: r-cran-lobstr
+Version: 1.2.0-1
+Severity: normal
+X-Debbugs-Cc: debian-r at lists.debian.org, edd at debian.org
+
+As described on debian-r, and backed up by a bit more writing on 
+https://github.com/eddelbuettel/R-4.6.0-binary-transition, the now-released 
+R 4.6.0 tightened what it exposes in header files (mostly to allow the R 
+team to change internals without exposing these). This required upstream 
+changes for some package, and (r-cran-)lobstr may be one of them. In any
+event, the current version does not load:
+
+  root@unstable_docker:~$ lsb_release -a
+  No LSB modules are available.
+  Distributor ID: Debian
+  Description:    Debian GNU/Linux forky/sid
+  Release:        n/a
+  Codename:       forky
+  root@unstable_docker:~$ Rscript -e 'library(lobstr)'
+  Error: package or namespace load failed for ‘lobstr’ in dyn.load(file, DLLpath = DLLpath, ...):
+   unable to load shared object '/usr/lib/R/site-library/lobstr/libs/lobstr.so':
+    /usr/lib/R/site-library/lobstr/libs/lobstr.so: undefined symbol: SET_GROWABLE_BIT
+  Execution halted
+  root@unstable_docker:~$ 
+
+'SET_GROWABLE_BIT' is one of those accessors now outlawd.
+
+A simple update to the now-available 1.2.1 will almost surely fix this.
+
+Thanks, Dirk
+
+-- System Information:
+Debian Release: forky/sid
+  APT prefers questing-updates
+  APT policy: (500, 'questing-updates'), (500, 'questing-security'), (500, 'questing'), (100, 'questing-backports')
+Architecture: amd64 (x86_64)
+Foreign Architectures: i386
+
+Kernel: Linux 6.17.0-20-generic (SMP w/32 CPU threads; PREEMPT)
+Kernel taint flags: TAINT_WARN, TAINT_OOT_MODULE, TAINT_UNSIGNED_MODULE
+Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8), LANGUAGE not set
+Shell: /bin/sh linked to /usr/bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+Versions of packages r-cran-lobstr depends on:
+ii  libc6                    2.42-0ubuntu3.1
+ii  libgcc-s1                15.2.0-4ubuntu4
+ii  libstdc++6               15.2.0-4ubuntu4
+ii  r-base-core [r-api-4.0]  4.6.0-0.2404.1
+pn  r-cran-cpp11             <none>
+pn  r-cran-crayon            <none>
+pn  r-cran-prettyunits       <none>
+pn  r-cran-rlang             <none>
+
+Versions of packages r-cran-lobstr recommends:
+pn  r-cran-testthat  <none>
+
+Versions of packages r-cran-lobstr suggests:
+pn  r-cran-covr    <none>
+pn  r-cran-pillar  <none>
+
+From edd at debian.org  Tue Apr 28 13:13:56 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 28 Apr 2026 08:13:56 -0500
+Subject: Bug#1135162: r-cran-reticulate: New version available, and R 4.6.0 recompilation needed
+Message-ID: <177738203692.1171507.15342756922565843754.reportbug@paul.eddelbuettel.com>
+
+Package: r-cran-reticulate
+Version: 1.41.0.1+dfsg-2
+Severity: normal
+X-Debbugs-Cc: edd at debian.org,debian-r at lists.debian.org
+
+As described on debian-r, and backed up by a bit more writing on 
+https://github.com/eddelbuettel/R-4.6.0-binary-transition, the now-released 
+R 4.6.0 tightened what it exposes in header files (mostly to allow the R 
+team to change internals without exposing these). This required upstream 
+changes for some package, and (r-cran-)reticulate is one of them. In any
+event, the current version does not load:
+
+  root@unstable_docker:~$ lsb_release -a
+  No LSB modules are available.
+  Distributor ID: Debian
+  Description:    Debian GNU/Linux forky/sid
+  Release:        n/a
+  Codename:       forky
+  root@unstable_docker:~$ Rscript -e 'library(reticulate)'
+  Error: package or namespace load failed for ‘reticulate’ in dyn.load(file, DLLpath = DLLpath, ...):
+   unable to load shared object '/usr/lib/R/site-library/reticulate/libs/reticulate.so':
+    /usr/lib/R/site-library/reticulate/libs/reticulate.so: undefined symbol: Rf_GetOption
+  Execution halted
+  root@unstable_docker:~$ 
+
+The just-released version 1.46 will fix this, an update would be appreciated.
+
+Thanks, Dirk
+
+-- System Information:
+Debian Release: forky/sid
+  APT prefers questing-updates
+  APT policy: (500, 'questing-updates'), (500, 'questing-security'), (500, 'questing'), (100, 'questing-backports')
+Architecture: amd64 (x86_64)
+Foreign Architectures: i386
+
+Kernel: Linux 6.17.0-20-generic (SMP w/32 CPU threads; PREEMPT)
+Kernel taint flags: TAINT_WARN, TAINT_OOT_MODULE, TAINT_UNSIGNED_MODULE
+Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8), LANGUAGE not set
+Shell: /bin/sh linked to /usr/bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+Versions of packages r-cran-reticulate depends on:
+ii  libc6                    2.42-0ubuntu3.1
+ii  libgcc-s1                15.2.0-4ubuntu4
+ii  libstdc++6               15.2.0-4ubuntu4
+ii  python3                  3.13.7-1
+ii  r-base-core [r-api-4.0]  4.6.0-0.2404.1
+pn  r-cran-here              <none>
+pn  r-cran-jsonlite          <none>
+ii  r-cran-matrix            1.7-5-1.2404.0
+pn  r-cran-png               <none>
+pn  r-cran-rappdirs          <none>
+pn  r-cran-rcpp              <none>
+pn  r-cran-rcpptoml          <none>
+pn  r-cran-rlang             <none>
+pn  r-cran-withr             <none>
+
+Versions of packages r-cran-reticulate recommends:
+pn  r-cran-callr      <none>
+pn  r-cran-cli        <none>
+pn  r-cran-glue       <none>
+pn  r-cran-knitr      <none>
+pn  r-cran-pillar     <none>
+pn  r-cran-rmarkdown  <none>
+pn  r-cran-testthat   <none>
+
+r-cran-reticulate suggests no packages.
+

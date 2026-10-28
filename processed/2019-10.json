@@ -1,0 +1,102 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-10",
+  "messages": [
+    {
+      "id": "msg-13cceef46fff",
+      "message_id": "<20191009091251.ybuoa3ehnlu72cny@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-10-09T09:12:51Z",
+      "subject": "Status of R packages",
+      "subject_clean": "Status of R packages",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nafter release of Debian 10 I tried to catch up to update all R packages\nto recent upstream versions (since in freeze policy was forbidding this\nand we were lagging behind).\n\nCurrently 7 packages are waiting for new preconditions in new queue.  I\ndocumented in d/changelog in Git on what package these are waiting for.\n\nHowever, there is also one packages I found an issue in the test suite I\nhave no idea how to cope with:\n\nr-cran-fpc (2.2-3-1) UNRELEASED; urgency=medium\n\nautopkgtest is failing:\n    k=  3  flexmix error in run  1\n     Error in flexout[[optimalk]] :\n       attempt to select less than one element in get1index <real>\n    Calls: flexmixedruns -> summary\n    Execution halted\n    autopkgtest [06:15:54]: test run-unit-test: -----------------------]\n    autopkgtest [06:15:54]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -\n    run-unit-test        FAIL non-zero exit status 1\n\nIt would be really great if some volunteer would deal with this.\nThere is another issue\n\nr-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium\n\n  TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by\n    https://github.com/BenjaminVanRyseghem/numbro\n\nwhich seems to be complex since it requires extra JS packages.  I'd be\nreally happy if someone joins in here.  I admit that I'm doing currently\na lot to keep R packages up to date - a bit more than expected since I\nexpected when we started this team.  So please keep on watching\n\n   https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/outdated_r-packages.txt\n\nthe upcoming three weeks.  It would be nice if there would not be lots\nof updating work left for me in November.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nafter release of Debian 10 I tried to catch up to update all R packages\nto recent upstream versions (since in freeze policy was forbidding this\nand we were lagging behind).\n\nCurrently 7 packages ",
+      "thread_id": "thread-13cceef46fff",
+      "thread_depth": 0,
+      "month": "2019-10"
+    },
+    {
+      "id": "msg-e5bd042bbd4c",
+      "message_id": "<20191009093722.cypwz2mj355ff3d3@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-10-09T09:37:22Z",
+      "subject": "Re: HELP: Test suite error with latest version of r-cran-fpc",
+      "subject_clean": "HELP: Test suite error with latest version of r-cran-fpc",
+      "in_reply_to": "<992f5960-524d-7116-88bd-8b96490cb7bb@dal.ca>",
+      "references": [
+        "<20190826084641.chhpcwppyiibx2x2@an3as.eu>",
+        "<992f5960-524d-7116-88bd-8b96490cb7bb@dal.ca>"
+      ],
+      "body_plain": "Hi Oliver,\n\nOn Fri, Sep 06, 2019 at 12:04:16PM +0000, Oliver Dechant wrote:\n> Might the missing dependency be `mvtnorm`?\n\nCool, this really helps.\n\nI just had missed that mal.  Thanks a lot, Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Oliver,\n\nOn Fri, Sep 06, 2019 at 12:04:16PM +0000, Oliver Dechant wrote:\n> Might the missing dependency be `mvtnorm`?\n\nCool, this really helps.\n\nI just had missed that mal.  Thanks a lot, Andreas. ",
+      "thread_id": "thread-e5bd042bbd4c",
+      "thread_depth": 0,
+      "month": "2019-10"
+    },
+    {
+      "id": "msg-88a2ec7b65e8",
+      "message_id": "<20191009093904.xkgpxravmqddyeiy@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-10-09T09:39:04Z",
+      "subject": "Re: Status of R packages",
+      "subject_clean": "Status of R packages",
+      "in_reply_to": "<20191009091251.ybuoa3ehnlu72cny@an3as.eu>",
+      "references": [
+        "<20191009091251.ybuoa3ehnlu72cny@an3as.eu>"
+      ],
+      "body_plain": "On Wed, Oct 09, 2019 at 11:12:51AM +0200, Andreas Tille wrote:\n> r-cran-fpc (2.2-3-1) UNRELEASED; urgency=medium\n> \n> autopkgtest is failing:\n>     k=  3  flexmix error in run  1\n>      Error in flexout[[optimalk]] :\n>        attempt to select less than one element in get1index <real>\n>     Calls: flexmixedruns -> summary\n>     Execution halted\n>     autopkgtest [06:15:54]: test run-unit-test: -----------------------]\n>     autopkgtest [06:15:54]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -\n>     run-unit-test        FAIL non-zero exit status 1\n\nThat's clarified now thanks to a hint from Oliver Dechant.\n \n> r-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium\n> \n>   TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by\n>     https://github.com/BenjaminVanRyseghem/numbro\n> \n> which seems to be complex since it requires extra JS packages.  I'd be\n> really happy if someone joins in here.\n\nSo I'll leave this for volunteers as a real challenge. ;-)\n\nKind regards\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Wed, Oct 09, 2019 at 11:12:51AM +0200, Andreas Tille wrote:\n> r-cran-fpc (2.2-3-1) UNRELEASED; urgency=medium\n> \n> autopkgtest is failing:\n>     k=  3  flexmix error in run  1\n>      Error in flexo",
+      "thread_id": "thread-13cceef46fff",
+      "thread_depth": 1,
+      "month": "2019-10"
+    },
+    {
+      "id": "msg-e077b3a62b6d",
+      "message_id": "<20191010073342.c5eipnjg2mfkfnin@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-10-10T07:33:42Z",
+      "subject": "Updated status of R packages",
+      "subject_clean": "Updated status of R packages",
+      "in_reply_to": "<20191009091251.ybuoa3ehnlu72cny@an3as.eu>",
+      "references": [
+        "<20191009091251.ybuoa3ehnlu72cny@an3as.eu>"
+      ],
+      "body_plain": "[This is an update of my previous mail and replaces this]\nHi,\n \nafter release of Debian 10 I tried to catch up to update all R packages\nto recent upstream versions (since in freeze policy was forbidding this\nand we were lagging behind).\n \nCurrently 6 packages are waiting for new preconditions in new queue.  I\ndocumented in d/changelog in Git on what package these are waiting for.\n\nThere is one package we can not update: r-bioc-metagenomeseq\nIt depends r-bioc-wrench which in turn depends r-cran-locfit which can\nnot be packaged legally (see #731599).  Discussion with CRAN admins to\nremove locfit from CRAN to force users to find alternatives is ongoing.\n \nr-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium\n \n   TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by\n     https://github.com/BenjaminVanRyseghem/numbro\n \nwhich seems to be complex since it requires extra JS packages.  I'd be\nreally happy if someone joins in here.  I admit that I'm doing currently\na lot to keep R packages up to date - a bit more than expected since I\nexpected when we started this team.  So please keep on watching\n \n    https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/outdated_r-packages.txt\n \nthe upcoming three weeks.  It would be nice if there would not be lots\nof updating work left for me in November.\n \nKind regards\n \n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "[This is an update of my previous mail and replaces this]\nHi,\n \nafter release of Debian 10 I tried to catch up to update all R packages\nto recent upstream versions (since in freeze policy was forbiddi",
+      "thread_id": "thread-13cceef46fff",
+      "thread_depth": 1,
+      "month": "2019-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-13cceef46fff",
+      "subject": "Status of R packages",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-10-09T09:12:51Z",
+      "last_reply": "2019-10-10T07:33:42Z",
+      "root_message_id": "msg-13cceef46fff"
+    },
+    {
+      "id": "thread-e5bd042bbd4c",
+      "subject": "HELP: Test suite error with latest version of r-cran-fpc",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-10-09T09:37:22Z",
+      "last_reply": "2019-10-09T09:37:22Z",
+      "root_message_id": "msg-e5bd042bbd4c"
+    }
+  ]
+}

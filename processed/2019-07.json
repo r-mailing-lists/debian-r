@@ -1,0 +1,1085 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-07",
+  "messages": [
+    {
+      "id": "msg-61c582b4b474",
+      "message_id": "<20190705132514.g6wczarhzqxul7y7@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-05T13:25:14Z",
+      "subject": "Question for r-bioc-lpsymphony",
+      "subject_clean": "Question for r-bioc-lpsymphony",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI have injected r-bioc-lpsymphony[1] since it is needed for BioC IHW\nwhich in turn is needed to upgrade r-bioc-metagenomeseq (which has other\nissues with locfit dependencies anyway).  lpsymphony has a driectory\n\n  src/SYMPHONY/ThirdParty\n\nwhere the user is supposed to put the **sources** of lapack and glpk.\nWell, we have both libraries so why putting the sources?  Shouldn't it\nbe possible to link dynamically?  I added the according -dev packages to\nBuild-Depends but this does not make any effect.  The package builds\n(equally if the -dev packages are missing) and is probably way less\npermformant as it could be.\n\nAny idea how to sneak in the dynamic libraries?\n\nKind regards\n\n         Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-bioc-lpsymphony\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI have injected r-bioc-lpsymphony[1] since it is needed for BioC IHW\nwhich in turn is needed to upgrade r-bioc-metagenomeseq (which has other\nissues with locfit dependencies anyway).  lpsymphony ",
+      "thread_id": "thread-61c582b4b474",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-85f8abe3b60d",
+      "message_id": "<CAFQwRQyQHm7tSgGtuz5T=U7ZZ=TSCebK6=QzMZR95XQNfi=Ydw@mail.gmail.com>",
+      "from_name": "Ralf Stubner",
+      "from_email_hash": "2ac4882c3f0915efd06df6654bc99c22c49875a9bb5f05f1541e1f6d50afa523",
+      "date": "2019-07-06T07:26:28Z",
+      "subject": "Re: Question for r-bioc-lpsymphony",
+      "subject_clean": "Question for r-bioc-lpsymphony",
+      "in_reply_to": "<20190705132514.g6wczarhzqxul7y7@an3as.eu>",
+      "references": [
+        "<20190705132514.g6wczarhzqxul7y7@an3as.eu>"
+      ],
+      "body_plain": "On Fri, Jul 5, 2019 at 3:25 PM Andreas Tille <andreas at an3as.eu> wrote:\n> I have injected r-bioc-lpsymphony[1] since it is needed for BioC IHW\n> which in turn is needed to upgrade r-bioc-metagenomeseq (which has other\n> issues with locfit dependencies anyway).  lpsymphony has a driectory\n>\n>   src/SYMPHONY/ThirdParty\n>\n> where the user is supposed to put the **sources** of lapack and glpk.\n\nThat's ugly ...\n\n> Well, we have both libraries so why putting the sources?  Shouldn't it\n> be possible to link dynamically?\n\nActually we also have the symphony library (used by r-cran-rsymphony ...)\nand lpsymphony's configure is looking for it:\nhttps://salsa.debian.org/r-pkg-team/r-bioc-lpsymphony/blob/master/configure#L12\n\nSo it might be sufficient to add 'coinor-libsymphony-dev' to Build-Depends\nand the corresponding library to Depends.\n\ncheerio\nralf",
+      "body_snippet": "On Fri, Jul 5, 2019 at 3:25 PM Andreas Tille <andreas at an3as.eu> wrote:\n> I have injected r-bioc-lpsymphony[1] since it is needed for BioC IHW\n> which in turn is needed to upgrade r-bioc-metagenomes",
+      "thread_id": "thread-61c582b4b474",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-38c46c2f80cb",
+      "message_id": "<20190706080628.46ozbodblhssv3vy@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2019-07-06T08:06:28Z",
+      "subject": "Re: Question for r-bioc-lpsymphony",
+      "subject_clean": "Question for r-bioc-lpsymphony",
+      "in_reply_to": "<CAFQwRQyQHm7tSgGtuz5T=U7ZZ=TSCebK6=QzMZR95XQNfi=Ydw@mail.gmail.com>",
+      "references": [
+        "<20190705132514.g6wczarhzqxul7y7@an3as.eu>",
+        "<CAFQwRQyQHm7tSgGtuz5T=U7ZZ=TSCebK6=QzMZR95XQNfi=Ydw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Ralf,\n\nOn Sat, Jul 06, 2019 at 09:26:28AM +0200, Ralf Stubner wrote:\n> On Fri, Jul 5, 2019 at 3:25 PM Andreas Tille <andreas at an3as.eu> wrote:\n> > I have injected r-bioc-lpsymphony[1] since it is needed for BioC IHW\n> > which in turn is needed to upgrade r-bioc-metagenomeseq (which has other\n> > issues with locfit dependencies anyway).  lpsymphony has a driectory\n> >\n> >   src/SYMPHONY/ThirdParty\n> >\n> > where the user is supposed to put the **sources** of lapack and glpk.\n> \n> That's ugly ...\n\nYes.\n\n> > Well, we have both libraries so why putting the sources?  Shouldn't it\n> > be possible to link dynamically?\n> \n> Actually we also have the symphony library (used by r-cran-rsymphony ...)\n> and lpsymphony's configure is looking for it:\n> https://salsa.debian.org/r-pkg-team/r-bioc-lpsymphony/blob/master/configure#L12\n> \n> So it might be sufficient to add 'coinor-libsymphony-dev' to Build-Depends\n> and the corresponding library to Depends.\n\nI perfectly know this.  The description of lpsymphony explicitly says:\n\n The main difference between this package and\n Rsymphony is that it includes the solver source code (SYMPHONY version\n 5.6), while Rsymphony expects to find header and library files on the\n users' system. Thus the intention of lpsymphony is to provide an easy to\n install interface to SYMPHONY.\n\nThe point is actually *how* to use the packaged libs and this is why\nI was asking for help here.  Would you consider crafting a patch? \n\nOr would you condider crafting a patch for IHW to rather use Rsymphony\ninstead of lpsymphony?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ralf,\n\nOn Sat, Jul 06, 2019 at 09:26:28AM +0200, Ralf Stubner wrote:\n> On Fri, Jul 5, 2019 at 3:25 PM Andreas Tille <andreas at an3as.eu> wrote:\n> > I have injected r-bioc-lpsymphony[1] since it is",
+      "thread_id": "thread-61c582b4b474",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-85a0632f1251",
+      "message_id": "<CAFQwRQwdYeLicZz=1m=_6KM8KoCS7c6=j2PFRcvcVND_EPdiiw@mail.gmail.com>",
+      "from_name": "Ralf Stubner",
+      "from_email_hash": "2ac4882c3f0915efd06df6654bc99c22c49875a9bb5f05f1541e1f6d50afa523",
+      "date": "2019-07-06T10:05:09Z",
+      "subject": "Re: Question for r-bioc-lpsymphony",
+      "subject_clean": "Question for r-bioc-lpsymphony",
+      "in_reply_to": "<20190706080628.46ozbodblhssv3vy@an3as.eu>",
+      "references": [
+        "<20190705132514.g6wczarhzqxul7y7@an3as.eu>",
+        "<CAFQwRQyQHm7tSgGtuz5T=U7ZZ=TSCebK6=QzMZR95XQNfi=Ydw@mail.gmail.com>",
+        "<20190706080628.46ozbodblhssv3vy@an3as.eu>"
+      ],
+      "body_plain": "On Sat, Jul 6, 2019 at 10:24 AM Andreas Tille <andreas at fam-tille.de> wrote:\n> I perfectly know this.  The description of lpsymphony explicitly says:\n>\n>  The main difference between this package and\n>  Rsymphony is that it includes the solver source code (SYMPHONY version\n>  5.6), while Rsymphony expects to find header and library files on the\n>  users' system. Thus the intention of lpsymphony is to provide an easy to\n>  install interface to SYMPHONY.\n>\n> The point is actually *how* to use the packaged libs and this is why\n> I was asking for help here.  Would you consider crafting a patch?\n\nI don't see the need for a patch since lpsymphony's configure  script first\nsearches for a system installed symphony library before considering to\nbuild the included sources. It therefore should be sufficient to build with\n'coinor-libsymphony-dev' installed. Have you tried that? The resulting\nlibrary /usr/lib/R/site-libary/lpsymphony/libs/lpsymphony.so should be\ndynamically linked with the system installed symphony library.\n\ncheerio\nralf",
+      "body_snippet": "On Sat, Jul 6, 2019 at 10:24 AM Andreas Tille <andreas at fam-tille.de> wrote:\n> I perfectly know this.  The description of lpsymphony explicitly says:\n>\n>  The main difference between this package an",
+      "thread_id": "thread-61c582b4b474",
+      "thread_depth": 3,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-2ac84bd8b52c",
+      "message_id": "<20190706125339.holw4kllfzdx7jdu@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-06T12:53:39Z",
+      "subject": "Re: Question for r-bioc-lpsymphony",
+      "subject_clean": "Question for r-bioc-lpsymphony",
+      "in_reply_to": "<CAFQwRQwdYeLicZz=1m=_6KM8KoCS7c6=j2PFRcvcVND_EPdiiw@mail.gmail.com>",
+      "references": [
+        "<20190705132514.g6wczarhzqxul7y7@an3as.eu>",
+        "<CAFQwRQyQHm7tSgGtuz5T=U7ZZ=TSCebK6=QzMZR95XQNfi=Ydw@mail.gmail.com>",
+        "<20190706080628.46ozbodblhssv3vy@an3as.eu>",
+        "<CAFQwRQwdYeLicZz=1m=_6KM8KoCS7c6=j2PFRcvcVND_EPdiiw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Ralf,\n\nOn Sat, Jul 06, 2019 at 12:05:09PM +0200, Ralf Stubner wrote:\n> \n> I don't see the need for a patch since lpsymphony's configure  script first\n> searches for a system installed symphony library before considering to\n> build the included sources. It therefore should be sufficient to build with\n> 'coinor-libsymphony-dev' installed. Have you tried that?\n\nAhhh, very good hint.  I've thought about solving the lapack issue\nfirst but I now realised that this is automatically solved when using\ncoinor-libsymphony-dev as Build-Depends.  I even excluded the SYMPHONY\nsource code from the source tarball now.\n\n> The resulting\n> library /usr/lib/R/site-libary/lpsymphony/libs/lpsymphony.so should be\n> dynamically linked with the system installed symphony library.\n\nWorks.\n\nThanks a lot\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Ralf,\n\nOn Sat, Jul 06, 2019 at 12:05:09PM +0200, Ralf Stubner wrote:\n> \n> I don't see the need for a patch since lpsymphony's configure  script first\n> searches for a system installed symphony libr",
+      "thread_id": "thread-61c582b4b474",
+      "thread_depth": 4,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-aa678241625b",
+      "message_id": "<20190708080524.lmy6fya7z3lrcevf@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-08T08:05:24Z",
+      "subject": "HTML documentation including minimized JS",
+      "subject_clean": "HTML documentation including minimized JS",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen I fixed bug #912254 by fixing the links inside the autogenerated\nindex.html this will probably not make the bug reporter really happy\nsince the references html pages needed to be removed since these contain\nminimized JS inside the html code of the source package.  These files\nare thus considered \"binary without source\".\n\nI brought up this topic previously here on this list:  What is the way\nto re-render these html pages with Debian packaged JS?  Please help to\nmake sure we can provide sensible user documentation.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen I fixed bug #912254 by fixing the links inside the autogenerated\nindex.html this will probably not make the bug reporter really happy\nsince the references html pages needed to be removed sin",
+      "thread_id": "thread-aa678241625b",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-a290bfeea3c9",
+      "message_id": "<20190711143034.xva3tnepwiad3u7q@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-11T14:30:34Z",
+      "subject": "r-cran-rjsonio up for removal?",
+      "subject_clean": "r-cran-rjsonio up for removal?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nthe package r-cran-rjsonio is non-free de-facto orphaned by its Uploader\nand has no rdepends (which I would be aware of).  I'd consider removing\nthat package from the Debian package pool in case nobody insists (or in\ncase I'm missing something).\n\nOpinions?\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nthe package r-cran-rjsonio is non-free de-facto orphaned by its Uploader\nand has no rdepends (which I would be aware of).  I'd consider removing\nthat package from the Debian package pool in case ",
+      "thread_id": "thread-a290bfeea3c9",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-b6566fb7ea7c",
+      "message_id": "<20190711153234.ihuaj5xymxo47kcs@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2019-07-11T15:32:34Z",
+      "subject": "Re: r-cran-rjsonio up for removal?",
+      "subject_clean": "r-cran-rjsonio up for removal?",
+      "in_reply_to": "<a5b779fc-1996-67d9-557b-368de4fc2693@gmx.de>",
+      "references": [
+        "<20190711143034.xva3tnepwiad3u7q@an3as.eu>",
+        "<a5b779fc-1996-67d9-557b-368de4fc2693@gmx.de>"
+      ],
+      "body_plain": "On Thu, Jul 11, 2019 at 04:41:51PM +0200, Steffen Möller wrote:\n> If it does not hurt, move it to non-free.\n\nIt **is** in non-free and thus causes extra work (==hurts) (think about\nbinary uploads, extra care in transitions).  If you volunteer to do this\nextra work - please replace current Uploader by your ID and care for the\npackage.\n\nKind regards\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Jul 11, 2019 at 04:41:51PM +0200, Steffen Möller wrote:\n> If it does not hurt, move it to non-free.\n\nIt **is** in non-free and thus causes extra work (==hurts) (think about\nbinary uploads, ext",
+      "thread_id": "thread-b6566fb7ea7c",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-6568fb2a9ee6",
+      "message_id": "<20190715110015.DB791202C2@bendel.debian.org>",
+      "from_name": "731599-subhelp at bugs.debian.org",
+      "from_email_hash": "bfad94d6f1f03e98cf530c29a877d07cdca296449f63649b50c26938a989435b",
+      "date": "2019-07-15T11:00:15Z",
+      "subject": "Please confirm subscription to 731599 at bugs.debian.org (RFP: r-cran-locfit -- GNU R local regression, likelihood and density estimation)",
+      "subject_clean": "Please confirm subscription to 731599 at bugs.debian.org (RFP: r-cran-locfit -- GNU R local regression, likelihood and density estimation)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello, \n\nThis email has been sent to you as someone requested for this address\nto be subscribed to Bug#731599. This bug is currently filed against\nwnpp.\n\nIf you reply to this mail, you confirm that you wish to be added as a\nsubscriber. The contents of the reply do not matter. Usually, you can\njust use the normal reply feature in your mail program. Alternatively,\nyou can send mail to the address below:\n\n    731599-subyes-52bf82660486c1d656dc2c34394d6cb6-3048e3eeaaa6b011076532f432727521 at bugs.debian.org\n\nIf you don't want to subscribe, just ignore this mail.\n\nIf you have problems, please contact the Debian Listmaster Team\nat listmaster at lists.debian.org.\n\nThank you.\n\n - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\nReturn-Path: <1 at buxtehude.debian.org>\nX-Original-To: lists-bugs=731599-subscribe at bendel.debian.org\nDelivered-To: lists-bugs=731599-subscribe at bendel.debian.org\nReceived: from localhost (localhost [127.0.0.1])\n\tby bendel.debian.org (Postfix) with ESMTP id CD880202CA\n\tfor <lists-bugs=731599-subscribe at bendel.debian.org>; Mon, 15 Jul 2019 11:00:13 +0000 (UTC)\nX-Virus-Scanned: Debian amavisd-new at bendel.debian.org\nX-Spam-Flag: NO\nX-Spam-Score: -2.807\nX-Spam-Level:\nX-Spam-Status: No, score=-2.807 tagged_above=-10000 required=6.31\n\ttests=[BAYES_00=-1.9, PYZOR_CHECK=1.392, RCVD_IN_DNSWL_MED=-2.3,\n\tTVD_SPACE_RATIO=0.001] autolearn=ham autolearn_force=no\nReceived: from bendel.debian.org ([127.0.0.1])\n\tby localhost (lists.debian.org [127.0.0.1]) (amavisd-new, port 2525)\n\twith ESMTP id AYm6heSGAQ1f\n\tfor <lists-bugs=731599-subscribe at bendel.debian.org>;\n\tMon, 15 Jul 2019 11:00:11 +0000 (UTC)\nReceived: from buxtehude.debian.org (buxtehude.debian.org [IPv6:2607:f8f0:614:1::1274:39])\n\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\n\t(Client CN \"buxtehude.debian.org\", Issuer \"Debian SMTP CA\" (not verified))\n\tby bendel.debian.org (Postfix) with ESMTPS id CAA1E202A2\n\tfor <bugs=731599-subscribe at lists.debian.org>; Mon, 15 Jul 2019 11:00:10 +0000 (UTC)\nReceived: from debbugs by buxtehude.debian.org with local (Exim 4.89)\n\t(envelope-from <1 at buxtehude.debian.org>)\n\tid 1hmyiF-0008PS-Nj\n\tfor bugs=731599-subscribe at lists.debian.org; Mon, 15 Jul 2019 11:00:07 +0000\nReceived: (at 731599-subscribe) by bugs.debian.org; 15 Jul 2019 10:56:57 +0000\nX-Spam-Bayes: score:0.0000 Tokens: new, 13; hammy, 41; neutral, 20; spammy, 0.\n\tspammytokens: hammytokens:0.000-+--H*UA:NeoMutt, 0.000-+--H*u:NeoMutt,\n\t0.000-+--H*RU:mail.an3as.eu, 0.000-+--H*r:mail.an3as.eu,\n\t0.000-+--H*M:an3as\nReceived: from mail.an3as.eu ([88.198.124.37])\n\tby buxtehude.debian.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)\n\t(Exim 4.89)\n\t(envelope-from <debian-r at lists.debian.org>)\n\tid 1hmyfA-0007ym-Ni\n\tfor 731599-subscribe at bugs.debian.org; Mon, 15 Jul 2019 10:56:56 +0000\nReceived: from andreas by mail.an3as.eu with local (Exim 4.89)\n\t(envelope-from <debian-r at lists.debian.org>)\n\tid 1hmyf7-0005L9-D1\n\tfor 731599-subscribe at bugs.debian.org; Mon, 15 Jul 2019 12:56:53 +0200\nDate: Mon, 15 Jul 2019 12:56:53 +0200\nFrom: debian-r at lists.debian.org\nTo: 731599-subscribe at bugs.debian.org\nSubject: Subscribe\nMessage-ID: <20190715105653.aryse7o762rzixjz at an3as.eu>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=us-ascii\nContent-Disposition: inline\nUser-Agent: NeoMutt/20170113 (1.7.2)\nX-CrossAssassin-Score: 9459\nX-Debian-PR-Message: list 731599\nX-Debian-PR-Package: wnpp\nX-Debian-PR-Title: RFP: r-cran-locfit -- GNU R local regression, likelihood and density estimation",
+      "body_snippet": "Hello, \n\nThis email has been sent to you as someone requested for this address\nto be subscribed to Bug#731599. This bug is currently filed against\nwnpp.\n\nIf you reply to this mail, you confirm that yo",
+      "thread_id": "thread-6568fb2a9ee6",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-189a67f08a00",
+      "message_id": "<20190715113009.E0C0C2015B@bendel.debian.org>",
+      "from_name": "731599-subhelp at bugs.debian.org",
+      "from_email_hash": "bfad94d6f1f03e98cf530c29a877d07cdca296449f63649b50c26938a989435b",
+      "date": "2019-07-15T11:30:09Z",
+      "subject": "Subscription to 731599 at bugs.debian.org successful",
+      "subject_clean": "Subscription to 731599 at bugs.debian.org successful",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "You have been successfully subscribed to 731599 at bugs.debian.org.\n\nIf you wish to unsubscribe, send mail to \n731599-unsubscribe at bugs.debian.org .\n\nFor instructions on using the bug subscription software, send\nmail to 731599-help at bugs.debian.org .\n\nIf you have problems with this subscription, please contact the Debian\nListmaster Team at listmaster at lists.debian.org.\n\nThank you.",
+      "body_snippet": "You have been successfully subscribed to 731599 at bugs.debian.org.\n\nIf you wish to unsubscribe, send mail to \n731599-unsubscribe at bugs.debian.org .\n\nFor instructions on using the bug subscription s",
+      "thread_id": "thread-189a67f08a00",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-7fe9866dc647",
+      "message_id": "<CA+6XHwSOoa-00XpOd6HxRx=vME3vsHDPXMALiS4KqSt=6nSsYQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2019-07-16T07:33:08Z",
+      "subject": "Re: r-cran-rjsonio up for removal?",
+      "subject_clean": "r-cran-rjsonio up for removal?",
+      "in_reply_to": "<20190711143034.xva3tnepwiad3u7q@an3as.eu>",
+      "references": [
+        "<20190711143034.xva3tnepwiad3u7q@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nLe jeu. 11 juil. 2019 à 16:30, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> the package r-cran-rjsonio is non-free de-facto orphaned by its Uploader\n> and has no rdepends (which I would be aware of).  I'd consider removing\n> that package from the Debian package pool in case nobody insists (or in\n> case I'm missing something).\n>\n> Opinions?\n\nr-cran-rjsonio is also orphaned by upstream [1]:\n\n> Maintainer: ORPHANED\n\nThis is another reason to remove it from our repositories.\n\nBest,\nDylan\n\n[1] https://cloud.r-project.org/package=RJSONIO",
+      "body_snippet": "Hi,\n\nLe jeu. 11 juil. 2019 à 16:30, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> the package r-cran-rjsonio is non-free de-facto orphaned by its Uploader\n> and has no rdepends (which I would be a",
+      "thread_id": "thread-a290bfeea3c9",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-b13837f7b987",
+      "message_id": "<20190716134407.rm2rufcjbngy3e2r@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-16T13:44:07Z",
+      "subject": "Re: r-cran-rjsonio up for removal?",
+      "subject_clean": "r-cran-rjsonio up for removal?",
+      "in_reply_to": "<CA+6XHwSOoa-00XpOd6HxRx=vME3vsHDPXMALiS4KqSt=6nSsYQ@mail.gmail.com>",
+      "references": [
+        "<20190711143034.xva3tnepwiad3u7q@an3as.eu>",
+        "<CA+6XHwSOoa-00XpOd6HxRx=vME3vsHDPXMALiS4KqSt=6nSsYQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Jul 16, 2019 at 09:33:08AM +0200, Dylan Aïssi wrote:\n> > Opinions?\n> \n> r-cran-rjsonio is also orphaned by upstream [1]:\n> \n> > Maintainer: ORPHANED\n> \n> This is another reason to remove it from our repositories.\n\n #932118\n RM: r-cran-rjsonio -- ROM; Non-free, no active Uploader, rarely used\n\nThanks for the additional input\n\n      Andreas.\n \n> [1] https://cloud.r-project.org/package=RJSONIO\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Jul 16, 2019 at 09:33:08AM +0200, Dylan Aïssi wrote:\n> > Opinions?\n> \n> r-cran-rjsonio is also orphaned by upstream [1]:\n> \n> > Maintainer: ORPHANED\n> \n> This is another reason to remove it fr",
+      "thread_id": "thread-a290bfeea3c9",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-1b32d1b4f5d3",
+      "message_id": "<20190722124604.4dcrxyiwfmwbqtpj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-22T12:46:04Z",
+      "subject": "Re: r-bioc-biocparallel: autopkgtest regression - any idea",
+      "subject_clean": "r-bioc-biocparallel: autopkgtest regression - any idea",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi folks,\n\nafter each new upload of r-bioc-biocparallel the autopkgtest fails in a\ndifferent way.  Currently I have no good idea what might be the problem\nand currently its also urgent to fix it since if we don't our whole BioC\nstack will be removed from testing which we need to prevent.\n\nAny idea how to fix the autopkgtest?\n\nKind regards\n\n         Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi folks,\n\nafter each new upload of r-bioc-biocparallel the autopkgtest fails in a\ndifferent way.  Currently I have no good idea what might be the problem\nand currently its also urgent to fix it since",
+      "thread_id": "thread-1b32d1b4f5d3",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-9d5c9cf5725d",
+      "message_id": "<CA+6XHwR3A87mboYvOH-gBBzEBWAk=2gZL7kVP3tQ0vWLw0KELg@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2019-07-22T14:47:52Z",
+      "subject": "Re: r-bioc-biocparallel: autopkgtest regression - any idea",
+      "subject_clean": "r-bioc-biocparallel: autopkgtest regression - any idea",
+      "in_reply_to": "<20190722124604.4dcrxyiwfmwbqtpj@an3as.eu>",
+      "references": [
+        "<20190722124604.4dcrxyiwfmwbqtpj@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nLe lun. 22 juil. 2019 à 14:46, Andreas Tille <andreas at an3as.eu> a écrit :\n> after each new upload of r-bioc-biocparallel the autopkgtest fails in a\n> different way.  Currently I have no good idea what might be the problem\n> and currently its also urgent to fix it since if we don't our whole BioC\n> stack will be removed from testing which we need to prevent.\n>\n> Any idea how to fix the autopkgtest?\n\nI have disabled two tests [1] which seem problematic. If we look at\nthe bioconductor logs for r-bioc-biocparallel checking, it seems there\nare frequently errors for this package [2-4]. Without these two tests,\nautopkgtest seems to be happy [5]. Should we upload a new version\nwithout these two tests?\n\nBest,\nDylan\n\n[1] https://salsa.debian.org/r-pkg-team/r-bioc-biocparallel/blob/master/debian/patches/deactivated_tests.patch\n[2] https://bioconductor.org/checkResults/3.9/bioc-LATEST/BiocParallel/\n[3] https://bioconductor.org/checkResults/3.8/bioc-LATEST/BiocParallel/\n[4] https://bioconductor.org/checkResults/3.7/bioc-LATEST/BiocParallel/\n[5] https://salsa.debian.org/r-pkg-team/r-bioc-biocparallel/-/jobs/231405/raw",
+      "body_snippet": "Hi Andreas,\n\nLe lun. 22 juil. 2019 à 14:46, Andreas Tille <andreas at an3as.eu> a écrit :\n> after each new upload of r-bioc-biocparallel the autopkgtest fails in a\n> different way.  Currently I have n",
+      "thread_id": "thread-1b32d1b4f5d3",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-528098e8a279",
+      "message_id": "<20190722160358.cuxx6vhqw2lnkpip@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-22T16:03:58Z",
+      "subject": "Re: r-bioc-biocparallel: autopkgtest regression - any idea",
+      "subject_clean": "r-bioc-biocparallel: autopkgtest regression - any idea",
+      "in_reply_to": "<CA+6XHwR3A87mboYvOH-gBBzEBWAk=2gZL7kVP3tQ0vWLw0KELg@mail.gmail.com>",
+      "references": [
+        "<20190722124604.4dcrxyiwfmwbqtpj@an3as.eu>",
+        "<CA+6XHwR3A87mboYvOH-gBBzEBWAk=2gZL7kVP3tQ0vWLw0KELg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan,\n\nOn Mon, Jul 22, 2019 at 04:47:52PM +0200, Dylan Aïssi wrote:\n> > Any idea how to fix the autopkgtest?\n> \n> I have disabled two tests [1] which seem problematic. If we look at\n> the bioconductor logs for r-bioc-biocparallel checking, it seems there\n> are frequently errors for this package [2-4]. Without these two tests,\n> autopkgtest seems to be happy [5]. Should we upload a new version\n> without these two tests?\n\nThanks a lot for your analysis.  If we have no better solution than\ndisabling some tests we should probably do this.\n\nKind regards\n\n     Andreas.\n\n> [1] https://salsa.debian.org/r-pkg-team/r-bioc-biocparallel/blob/master/debian/patches/deactivated_tests.patch\n> [2] https://bioconductor.org/checkResults/3.9/bioc-LATEST/BiocParallel/\n> [3] https://bioconductor.org/checkResults/3.8/bioc-LATEST/BiocParallel/\n> [4] https://bioconductor.org/checkResults/3.7/bioc-LATEST/BiocParallel/\n> [5] https://salsa.debian.org/r-pkg-team/r-bioc-biocparallel/-/jobs/231405/raw\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dylan,\n\nOn Mon, Jul 22, 2019 at 04:47:52PM +0200, Dylan Aïssi wrote:\n> > Any idea how to fix the autopkgtest?\n> \n> I have disabled two tests [1] which seem problematic. If we look at\n> the biocondu",
+      "thread_id": "thread-1b32d1b4f5d3",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-2528b7becd3a",
+      "message_id": "<20190722174206.imawny3kc3soweao@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-22T17:42:06Z",
+      "subject": "Open ITPs (turned into RFPs)",
+      "subject_clean": "Open ITPs (turned into RFPs)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Joost,\n\nyou have at least two long standing ITPs (#813815 - r-cran-nfactors,\n#835082 - r-cran-semplot, may be others) which were turned into RFPs\nautomatically.  Could you give some statement whether these packages\nmight remain interesting for you and whether we should fire up\nprepare_missing_cran_package for these?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Joost,\n\nyou have at least two long standing ITPs (#813815 - r-cran-nfactors,\n#835082 - r-cran-semplot, may be others) which were turned into RFPs\nautomatically.  Could you give some statement wheth",
+      "thread_id": "thread-2528b7becd3a",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-f82e5bd9dc1f",
+      "message_id": "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-23T09:18:47Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi All\n\nI think we're nearing the end of the R 3.6 transition, so I had a\nbrief look at the remaining autopkgtest regressions.\n\nr-bioc-biocinstaller/1.32.1-1        needs update\nr-bioc-graph/1.60.0-1            1.62-0-1 in unstable\nr-bioc-phyloseq/1.26.1+dfsg-1        1.28.0+dfsg-1 in unstable\nr-cran-bbmle/1.0.20-4            needs update\nr-cran-biocmanager/1.30.4+dfsg-1    needs update\nr-cran-caret/6.0-81-2            6.0-84-1 in unstable, fails its own tests\nr-cran-filehash/2.4-1-3            2.4-2-1 in unstable, fails its own tests\nr-cran-haplo.stats/1.7.9-2        needs update\nr-cran-sp/1:1.3-1-1            needs update\n\nDirk, once these have been fixed, you might need to upload r-base\nagain adding a couple of Breaks.  You will need to do a source-only\nupload anyway, since packages in main, not built on buildds, are no\nlonger able to migrate to testing.\n\nRegards\nGraham",
+      "body_snippet": "Hi All\n\nI think we're nearing the end of the R 3.6 transition, so I had a\nbrief look at the remaining autopkgtest regressions.\n\nr-bioc-biocinstaller/1.32.1-1        needs update\nr-bioc-graph/1.60.0-1 ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-cde8819fca06",
+      "message_id": "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2019-07-23T10:09:16Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>"
+      ],
+      "body_plain": "On 23 July 2019 at 11:18, Graham Inggs wrote:\n| Hi All\n| \n| I think we're nearing the end of the R 3.6 transition, so I had a\n| brief look at the remaining autopkgtest regressions.\n| \n| r-bioc-biocinstaller/1.32.1-1        needs update\n| r-bioc-graph/1.60.0-1            1.62-0-1 in unstable\n| r-bioc-phyloseq/1.26.1+dfsg-1        1.28.0+dfsg-1 in unstable\n| r-cran-bbmle/1.0.20-4            needs update\n| r-cran-biocmanager/1.30.4+dfsg-1    needs update\n| r-cran-caret/6.0-81-2            6.0-84-1 in unstable, fails its own tests\n| r-cran-filehash/2.4-1-3            2.4-2-1 in unstable, fails its own tests\n| r-cran-haplo.stats/1.7.9-2        needs update\n| r-cran-sp/1:1.3-1-1            needs update\n| \n| Dirk, once these have been fixed, you might need to upload r-base\n| again adding a couple of Breaks.  You will need to do a source-only\n| upload anyway, since packages in main, not built on buildds, are no\n| longer able to migrate to testing.\n\nCan you expand that last sentence? I do not understand what you are trying to\nsay here. What is \"main\"?  What are \"buildds\"? Why would r-base not migrate?\n\nAlso, speaking to some R Core members at the useR! conference earlier this\nmonths, we may have the same again in size next April.  Next R may be 4.0.0\nwith recompilation need just like for 3.4 and 3.5.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 23 July 2019 at 11:18, Graham Inggs wrote:\n| Hi All\n| \n| I think we're nearing the end of the R 3.6 transition, so I had a\n| brief look at the remaining autopkgtest regressions.\n| \n| r-bioc-biocins",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-216f563836a0",
+      "message_id": "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-23T10:56:52Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk\n\nOn Tue, 23 Jul 2019 at 12:09, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Can you expand that last sentence? I do not understand what you are trying to\n> say here. What is \"main\"?  What are \"buildds\"? Why would r-base not migrate?\n\nPlease see Bits from the Release Team announcement of 2019-07-07 [1],\nsection \"No binary maintainer uploads for bullseye\".\n\nMain is the main Debian archive, i.e. excluding contrib and non-free.\nBuildds are Debian's autobuilders that build binary packages for the\nvarious architectures.\n\n> Also, speaking to some R Core members at the useR! conference earlier this\n> months, we may have the same again in size next April.  Next R may be 4.0.0\n> with recompilation need just like for 3.4 and 3.5.\n\nThanks for the heads up!\n\nRegards\nGraham\n\n[1] https://lists.debian.org/debian-devel-announce/2019/07/msg00002.html",
+      "body_snippet": "Hi Dirk\n\nOn Tue, 23 Jul 2019 at 12:09, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Can you expand that last sentence? I do not understand what you are trying to\n> say here. What is \"main\"?  What ar",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-5394f493bdab",
+      "message_id": "<23862.60462.279335.797924@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2019-07-23T11:14:54Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+        "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>"
+      ],
+      "body_plain": "On 23 July 2019 at 12:56, Graham Inggs wrote:\n| Hi Dirk\n| \n| On Tue, 23 Jul 2019 at 12:09, Dirk Eddelbuettel <edd at debian.org> wrote:\n| > Can you expand that last sentence? I do not understand what you are trying to\n| > say here. What is \"main\"?  What are \"buildds\"? Why would r-base not migrate?\n| \n| Please see Bits from the Release Team announcement of 2019-07-07 [1],\n| section \"No binary maintainer uploads for bullseye\".\n\nAh. I missed that with the travel for useR!  Guess I have to change my pbuilder setup.\n \n| Main is the main Debian archive, i.e. excluding contrib and non-free.\n| Buildds are Debian's autobuilders that build binary packages for the\n| various architectures.\n| \n| > Also, speaking to some R Core members at the useR! conference earlier this\n| > months, we may have the same again in size next April.  Next R may be 4.0.0\n| > with recompilation need just like for 3.4 and 3.5.\n| \n| Thanks for the heads up!\n\nAlways a pleasure.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 23 July 2019 at 12:56, Graham Inggs wrote:\n| Hi Dirk\n| \n| On Tue, 23 Jul 2019 at 12:09, Dirk Eddelbuettel <edd at debian.org> wrote:\n| > Can you expand that last sentence? I do not understand what ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 3,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-a5e45fa028ac",
+      "message_id": "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-23T13:05:43Z",
+      "subject": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> Hi All\n> \n> I think we're nearing the end of the R 3.6 transition, so I had a\n> brief look at the remaining autopkgtest regressions.\n> \n> r-bioc-biocinstaller/1.32.1-1        needs update\n\nI think this simply needs removal.  d/changelog contains:\n\n  [ Andreas Tille ]\n  https://www.bioconductor.org/packages/3.8/bioc/html/BiocInstaller.html says:\n    This package is for version 3.8 of Bioconductor. This package has been removed from Bioconductor.\n  Should we add a conflict to this package to r-bioc-biocgenerics ?\n\n  [ Dylan Aïssi ]\n  * r-bioc-biocinstaller is now replaced by r-cran-biocmanager, we should also\n    manage the transition to the new package.\n\nSince we now finalised the BioC 3.9 migration and r-cran-biocmanager was \nnot needed by any of the packaged BioC packages I'd vote for an immediate\nremoval of r-bioc-biocinstaller.  Am I missing anything?\n\nKind regards\n\n         Andreas.\n \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> Hi All\n> \n> I think we're nearing the end of the R 3.6 transition, so I had a\n> brief look at the remaining autopkgtest regressions.\n> \n",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-dc67a56f6713",
+      "message_id": "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-23T13:30:05Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Jul 23, 2019 at 03:05:43PM +0200, Andreas Tille wrote:\n> On Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> > Hi All\n> > \n> > I think we're nearing the end of the R 3.6 transition, so I had a\n> > brief look at the remaining autopkgtest regressions.\n> > \n> > r-bioc-biocinstaller/1.32.1-1        needs update\n> \n> I think this simply needs removal.  d/changelog contains:\n> \n> \n>   [ Andreas Tille ]\n>   https://www.bioconductor.org/packages/3.8/bioc/html/BiocInstaller.html says:\n>     This package is for version 3.8 of Bioconductor. This package has been removed from Bioconductor.\n>   Should we add a conflict to this package to r-bioc-biocgenerics ?\n> \n>   [ Dylan Aïssi ]\n>   * r-bioc-biocinstaller is now replaced by r-cran-biocmanager, we should also\n>     manage the transition to the new package.\n> \n> \n> Since we now finalised the BioC 3.9 migration and r-cran-biocmanager was \n> not needed by any of the packaged BioC packages I'd vote for an immediate\n> removal of r-bioc-biocinstaller.  Am I missing anything?\n\nMay be I was missing that we need to do Conflicts/Replaces/Provides:\nr-bioc-biocinstaller which I did in [1] and uploaded.\n\nAnything else?\n\nKind regards\n\n         Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-biocmanager/commit/2da2e4bc04c9b5d504f4bc85f0ce17eb643a88f8\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Jul 23, 2019 at 03:05:43PM +0200, Andreas Tille wrote:\n> On Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> > Hi All\n> > \n> > I think we're nearing the end of the R 3.6 transition",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-46b612e01c2d",
+      "message_id": "<20190723141917.i7qmq3vg5udkhf5o@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-23T14:19:17Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nthanks for your investigation.\n\nOn Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> I think we're nearing the end of the R 3.6 transition, so I had a\n> brief look at the remaining autopkgtest regressions.\n> \n> r-bioc-biocinstaller/1.32.1-1        needs update\n\nShould be removed (see my other mail).\n\n> r-bioc-graph/1.60.0-1            1.62-0-1 in unstable\n> r-bioc-phyloseq/1.26.1+dfsg-1        1.28.0+dfsg-1 in unstable\n> r-cran-bbmle/1.0.20-4            needs update\n\nUpdated.\n\n> r-cran-biocmanager/1.30.4+dfsg-1    needs update\n\nUpdated.\n\n> r-cran-caret/6.0-81-2            6.0-84-1 in unstable, fails its own tests\n> r-cran-filehash/2.4-1-3            2.4-2-1 in unstable, fails its own tests\n> r-cran-haplo.stats/1.7.9-2        needs update\n\nIts failing its autopkgtest bit its no regression since it never passed.\nI think the data that is compared with the test result is not correct -\nbut I have no idea what might bit be an appropriate way to deal with\nthis (except not running the test at all).\n\n> r-cran-sp/1:1.3-1-1            needs update\n\nUpdated.\n \nAnything else to do?\n\nKind regards\n\n       Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nthanks for your investigation.\n\nOn Tue, Jul 23, 2019 at 11:18:47AM +0200, Graham Inggs wrote:\n> I think we're nearing the end of the R 3.6 transition, so I had a\n> brief look at the remaining aut",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 1,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-f7017bde5b09",
+      "message_id": "<CABFfbXsWxNbXve-KGx4WH6v0Rx8Oa6R70HggGAPR7n47MkBXNw@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "ed154dbe019b44583030c9f2c2b2180b1dcbec781ce7fa417e21033d7f55f24a",
+      "date": "2019-07-23T14:22:17Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CAJxTCxxfHfVbiDJYFE6PcS_tXvuwr94ZmdpDbyT2-nyFL4me5g@mail.gmail.com>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+        "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+        "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>",
+        "<CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com>",
+        "<CABFfbXsPXyXsFKKYB5AZJrsnbaSY=eZO2HY8WedYTA=qmyad9g@mail.gmail.com>",
+        "<CAJxTCxzhA=Ao8Cnc4+gXpgbwmjDcfS6mSoeFyoaRNS_Swd_w+Q@mail.gmail.com>",
+        "<CABFfbXuO09Bc=y=3H+xt_5vH_i5Z+FJk9twH+LboUx+wNo3ZKg@mail.gmail.com>",
+        "<CAJxTCxyOf_2+d-sD4rBDQ6Tsk5UpF6eAxNT3vj5WNEQjs5oTJg@mail.gmail.com>",
+        "<CABFfbXtQfyVMnWgXgsSTv8D6t-G2mZ=0+nkSxupUGh4X9gh0Fw@mail.gmail.com>",
+        "<CAJxTCxxWn+y58W5L+5CMn8171cG+95mWV9Uca-zBtRFtUq7a=w@mail.gmail.com>",
+        "<CABFfbXt8QJka=_wcV0kKFzJiUcQNaUcZvCgUYacN=iegCmpRww@mail.gmail.com>",
+        "<CAJxTCxwmUE4iGX5YsAhe4fZmAcu=nVvBw9F=rtsvZCBKRacYCw@mail.gmail.com>",
+        "<CABFfbXv=Dwm1tHnPHft_CrG96xksEwS7WdXx3gvM7=8=BsgEBw@mail.gmail.com>",
+        "<CAJxTCxwJQxcjb6dtWxHFwUZ+-aag8YQr4Yk8ygtw+QdB_usUiQ@mail.gmail.com>",
+        "<CABFfbXvLswXjxT9eZKNLFCHM_XRfyocja2W5c8aaiirEfms-YA@mail.gmail.com>",
+        "<CAJxTCxxYpKb96XS6YFQnpQX-OFFXL8HNBfdSkAPWXBgs02daGQ@mail.gmail.com>",
+        "<CABFfbXumumRnZjnD_6ygZ+8SSVD6G7a+1WUHhWuKBy54KxpX=g@mail.gmail.com>",
+        "<CAJxTCxyMEWTQ_XduFKaBzFJmouFdU4AWgXca4QekkuSm-i0+5Q@mail.gmail.com>",
+        "<CABFfbXuS0VuQ7D7h8Lr=sX5Ju1L8zCFFdOsKBfpk8_0orjmWvA@mail.gmail.com>",
+        "<CAJxTCxwkvF-2wAuMmvE9vwO7AsQVi8Wb2vHzD_ytE96imwjf4Q@mail.gmail.com>",
+        "<CAJxTCxxfHfVbiDJYFE6PcS_tXvuwr94ZmdpDbyT2-nyFL4me5g@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, May 22, 2019 at 11:06 AM Jérémy Lal <kapouer at melix.org> wrote:\n>>> Hi Jérémy\n>>>\n>>> Now that r-cran-v8 seems to be working great with libnode-dev, perhaps\n>>> the old libv8 should be removed from sid?  Today I was working in sid\n>>> and I noticed that apt still prefers the old v8 over the libnode-dev\n>>> virtual package when installing libv8-dev as a dependency.\n>>>\n>>> Alternatively, instead of removing the old libv8 alltogether, you\n>>> could push a mini-update for the old package such that libv8-3.14-dev\n>>> no longer provides libv8-dev, but libv8-3.14-dev keeps existing in\n>>> sid. Thereby there will only be one libv8-dev in sid, which is the\n>>> libnode-dev virtual package. However if people really want the old\n>>> package for whatever reason, they could still install libv8-3.14-dev.\n>>\n>>\n>> Thanks for the tip, i'll do that !\n>\n>\n> In the process of doing that, i realized libv8-3.14 is no longer building from source\n> and may require a lot of work to get it to.\n> There is now only one package depending on libv8-3.14: uwsgi-plugin-v8\n> so i'd rather remove libv8-3.14 entirely.\n\nFYI I asked the Ubuntu maintainers to have a look at dropping\nlibv8-3.14 from stable releases too:\nhttps://bugs.launchpad.net/ubuntu/+source/libv8-3.14/+bug/1837038",
+      "body_snippet": "On Wed, May 22, 2019 at 11:06 AM Jérémy Lal <kapouer at melix.org> wrote:\n>>> Hi Jérémy\n>>>\n>>> Now that r-cran-v8 seems to be working great with libnode-dev, perhaps\n>>> the old libv8 should be remov",
+      "thread_id": "thread-f7017bde5b09",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-b89f0348b347",
+      "message_id": "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-23T20:30:10Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Tue, 23 Jul 2019 at 15:30, Andreas Tille <andreas at an3as.eu> wrote:\n> > I think this simply needs removal.  d/changelog contains:\n\nI agree, and elbrus has kindly removed it from testing for us already.\nOnce the migration is done, we can request its removal from unstable.\n\n> May be I was missing that we need to do Conflicts/Replaces/Provides:\n> r-bioc-biocinstaller which I did in [1] and uploaded.\n\nI don't follow the reason for the Conflicts/Replaces/Provides.  Did\nr-bioc-biocinstaller ship files that are now in r-cran-biocmanager?\nAnyway, I don't think this causes harm, so we can just remove them\nafter the migration if they aren't needed.\nI think r-base might need an unversioned Breaks on\nr-bioc-biocinstaller, because no version of r-bioc-biocinstaller is\ncompatible with r-base 3.6.\n\nRegards\nGraham",
+      "body_snippet": "Hi Andreas\n\nOn Tue, 23 Jul 2019 at 15:30, Andreas Tille <andreas at an3as.eu> wrote:\n> > I think this simply needs removal.  d/changelog contains:\n\nI agree, and elbrus has kindly removed it from testi",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 3,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-c9f4680b5812",
+      "message_id": "<CAM8zJQtAEyh-go04rkp+TV_LFRDOFEM-RFAWZgrUFAdGwCdTeg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-23T20:34:56Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<20190723141917.i7qmq3vg5udkhf5o@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723141917.i7qmq3vg5udkhf5o@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Tue, 23 Jul 2019 at 16:19, Andreas Tille <andreas at an3as.eu> wrote:\n> > r-bioc-biocinstaller/1.32.1-1        needs update\n>\n> Should be removed (see my other mail).\n\nElbrus removed r-bioc-biocinstaller from testing.\n\n> > r-bioc-graph/1.60.0-1            1.62-0-1 in unstable\n> > r-bioc-phyloseq/1.26.1+dfsg-1        1.28.0+dfsg-1 in unstable\n> > r-cran-bbmle/1.0.20-4            needs update\n>\n> Updated.\n\nThanks!\n\n> > r-cran-biocmanager/1.30.4+dfsg-1    needs update\n>\n> Updated.\n\nThanks!\n\n> > r-cran-caret/6.0-81-2            6.0-84-1 in unstable, fails its own tests\n> > r-cran-filehash/2.4-1-3            2.4-2-1 in unstable, fails its own tests\n> > r-cran-haplo.stats/1.7.9-2        needs update\n>\n> Its failing its autopkgtest bit its no regression since it never passed.\n> I think the data that is compared with the test result is not correct -\n> but I have no idea what might bit be an appropriate way to deal with\n> this (except not running the test at all).\n\nAll three of these passed previously, that's why they show up on the\nr-base excuses [1] (and on the r-base package tracker page).\n\n> > r-cran-sp/1:1.3-1-1            needs update\n>\n> Updated.\n\nThanks!\n\nRegards\nGraham\n\n[1] https://qa.debian.org/excuses.php?package=r-base",
+      "body_snippet": "Hi Andreas\n\nOn Tue, 23 Jul 2019 at 16:19, Andreas Tille <andreas at an3as.eu> wrote:\n> > r-bioc-biocinstaller/1.32.1-1        needs update\n>\n> Should be removed (see my other mail).\n\nElbrus removed r-",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 2,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-2630b5160f2d",
+      "message_id": "<156392225347.6437.5742919055809518146.reportbug@sputnik.fam-tille.de>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2019-07-23T22:50:53Z",
+      "subject": "Bug#932857: RM: r-cran-rjsonio -- ROM; Nobody wants to maintain this non-free package",
+      "subject_clean": "Bug#932857: RM: r-cran-rjsonio -- ROM; Nobody wants to maintain this non-free package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\n\nHi ftpmasters,\n\nI was asking on debian-r list[1] whether somebody wants to take over\nthis non-free package and did not got any positive response.  So please\nremove it from the archive.\n\nThanks for your work as ftpmaster\n\n      Andreas.\n\n[1] https://lists.debian.org/debian-r/2019/07/msg00006.html",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\n\nHi ftpmasters,\n\nI was asking on debian-r list[1] whether somebody wants to take over\nthis non-free package and did not got any positive response.  So please\nr",
+      "thread_id": "thread-2630b5160f2d",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-fae5d086fdf4",
+      "message_id": "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-23T22:56:55Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nOn Tue, Jul 23, 2019 at 10:30:10PM +0200, Graham Inggs wrote:\n> \n> I agree, and elbrus has kindly removed it from testing for us already.\n> Once the migration is done, we can request its removal from unstable.\n\nGood.\n \n> > May be I was missing that we need to do Conflicts/Replaces/Provides:\n> > r-bioc-biocinstaller which I did in [1] and uploaded.\n> \n> I don't follow the reason for the Conflicts/Replaces/Provides.  Did\n> r-bioc-biocinstaller ship files that are now in r-cran-biocmanager?\n\nNo.  However, if a user has r-bioc-biocinstaller installed on a box this\npackage will not be replaced by anything but it should be removed from\nthe machine.  This removal can only approached by some conflict to some\nof the newly installed packages.  I took the comment inside the\nd/changelog I quoted in my other mail as a valid reason for the\nReplaces.\n\n> Anyway, I don't think this causes harm, so we can just remove them\n> after the migration if they aren't needed.\n> I think r-base might need an unversioned Breaks on\n> r-bioc-biocinstaller, because no version of r-bioc-biocinstaller is\n> compatible with r-base 3.6.\n\nWell, that's another way to get rid of that package.\n \nKind regards\n\n        Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nOn Tue, Jul 23, 2019 at 10:30:10PM +0200, Graham Inggs wrote:\n> \n> I agree, and elbrus has kindly removed it from testing for us already.\n> Once the migration is done, we can request its r",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 4,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-207c2f59d15b",
+      "message_id": "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-24T07:30:32Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Wed, 24 Jul 2019 at 00:57, Andreas Tille <andreas at an3as.eu> wrote:\n> > I don't follow the reason for the Conflicts/Replaces/Provides.  Did\n> > r-bioc-biocinstaller ship files that are now in r-cran-biocmanager?\n>\n> No.  However, if a user has r-bioc-biocinstaller installed on a box this\n> package will not be replaced by anything but it should be removed from\n> the machine.  This removal can only approached by some conflict to some\n> of the newly installed packages.  I took the comment inside the\n> d/changelog I quoted in my other mail as a valid reason for the\n> Replaces.\n\nIf you want that behaviour, then perhaps src:r-cran-biocmanager should\nship an empty r-bioc-biocinstaller transitional package that depends\nDepends: r-cran-biocmanager, but I have no idea if this is really\nneeded, and it might get tricky if r-base gets a Breaks, as below.\n\n> > I think r-base might need an unversioned Breaks on\n> > r-bioc-biocinstaller, because no version of r-bioc-biocinstaller is\n> > compatible with r-base 3.6.\n>\n> Well, that's another way to get rid of that package.\n\nI've just found this in the r-bioc-biocinstaller autopkgtest:\nError: This is R 3.6.1, package 'BiocInstaller' needs < 3.6.0\n\nSo I believe r-base is the right place for a Breaks: r-bioc-biocinstaller.\n\nRegards\nGraham",
+      "body_snippet": "Hi Andreas\n\nOn Wed, 24 Jul 2019 at 00:57, Andreas Tille <andreas at an3as.eu> wrote:\n> > I don't follow the reason for the Conflicts/Replaces/Provides.  Did\n> > r-bioc-biocinstaller ship files that ar",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 5,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-18f480b3798b",
+      "message_id": "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-24T11:04:41Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, Jul 24, 2019 at 09:30:32AM +0200, Graham Inggs wrote:\n> > Well, that's another way to get rid of that package.\n> \n> I've just found this in the r-bioc-biocinstaller autopkgtest:\n> Error: This is R 3.6.1, package 'BiocInstaller' needs < 3.6.0\n> \n> So I believe r-base is the right place for a Breaks: r-bioc-biocinstaller.\n\nACK.\n\nSince I think my recent changes to r-cran-biocmanager will not really\nharm I do not mind reverting this (or am I missing something again? \n\n>>From my point of view we can also ask for removal of\nr-bioc-biocinstaller.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Wed, Jul 24, 2019 at 09:30:32AM +0200, Graham Inggs wrote:\n> > Well, that's another way to get rid of that package.\n> \n> I've just found this in the r-bioc-biocinstaller autopkgtest:\n> Error: This ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 6,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-d56e0875a6fa",
+      "message_id": "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-24T16:54:52Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>"
+      ],
+      "body_plain": "On Wed, 24 Jul 2019 at 13:04, Andreas Tille <andreas at an3as.eu> wrote:\n> Since I think my recent changes to r-cran-biocmanager will not really\n> harm I do not mind reverting this (or am I missing something again?\n\nI don't think they will do harm, so shall we look at reverting after\nthe r-base migration?\nDoes anyone else in the team have an opinion on how to transition from\nr-bioc-biocinstaller to r-cran-biocmanager?\n\n> >From my point of view we can also ask for removal of\n> r-bioc-biocinstaller.\n\nAgreed.  It's already removed from testing and not blocking the r-base\nmigration, so not urgent.",
+      "body_snippet": "On Wed, 24 Jul 2019 at 13:04, Andreas Tille <andreas at an3as.eu> wrote:\n> Since I think my recent changes to r-cran-biocmanager will not really\n> harm I do not mind reverting this (or am I missing so",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 7,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-e6129f6185bb",
+      "message_id": "<20190725000545.n5exkhhwukpnyk4k@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-25T00:05:45Z",
+      "subject": "Re: Wrong culprit",
+      "subject_clean": "Wrong culprit",
+      "in_reply_to": "<20190724140155.57yocbwihcku6nq4@emissary.chronitis.net>",
+      "references": [
+        "<20190724140155.57yocbwihcku6nq4@emissary.chronitis.net>"
+      ],
+      "body_plain": "Hi Gordon,\n\nOn Wed, Jul 24, 2019 at 02:01:55PM +0000, Gordon Ball wrote:\n> I turns out I picked up on the wrong origin for the HTML in this\n> package. It's not from `pkgdown`; that is just used to generate their\n> upstream website and isn't shipped in the CRAN tarball. Mea culpa.\n> \n> The HTML in this case (`inst/doc/*.html`) appears in fact to be\n> generated by RMarkdown when upstream built this package, from the\n> corresponding files in `vignettes/*.Rmd`.\n> \n> Two of these documents (`extending-ggplot2` and `ggplot2-specs`) contain\n> only a short code highlighting script (inserted by Pandoc) and a\n> generated link to Mathjax. These links are likely to be common to any\n> RMarkdown documentation prebuilt by upstream. They could be fixed by\n> regex, but these HTML files are in any case not source and should be\n> removed (and ideally rebuilt).\n> \n> `profiling` contains a huge pile of minified javascript, which appears\n> to be generated by the `profvis` library. This generates an HTML widget\n> in the RMarkdown output including all the necessary inlined libraries.\n> Rebuilding this vignette would be hard, but I think is probably of\n> pretty marginal interest.\n> \n> `dh-r` already supports rebuilding vignettes (`dh $@ --buildsystem R --with\n> vignette`), but this functionality has never been much tested or used, I\n> think. It means adding a bunch of extra build dependencies (either\n> pandoc or texlive, depending on the output format, in addition to any\n> extra packages needed for the vignette). I also doesn't currently have\n> any mechanism to only build a subset of vignettes if some are known to\n> break, require exotic dependencies of take too long to run. I'm a bit\n> concerned that trying to enable this more broadly is a bit of a rabbit\n> hole which risks making a lot of packages slower and more flaky to\n> build.\n\nIf you ask me the extra Build-Depends and extra processing power needed\nis rectified by the extra testing the package gets.  If we value the\ndocumentation that has to be deleted due to included non-free code high\nenough I would consider it a good idea to regenerate it.\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Gordon,\n\nOn Wed, Jul 24, 2019 at 02:01:55PM +0000, Gordon Ball wrote:\n> I turns out I picked up on the wrong origin for the HTML in this\n> package. It's not from `pkgdown`; that is just used to gen",
+      "thread_id": "thread-e6129f6185bb",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-b4fba2464b66",
+      "message_id": "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2019-07-25T07:44:45Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nLe mer. 24 juil. 2019 à 18:55, Graham Inggs <ginggs at debian.org> a écrit :\n> I don't think they will do harm, so shall we look at reverting after\n> the r-base migration?\n> Does anyone else in the team have an opinion on how to transition from\n> r-bioc-biocinstaller to r-cran-biocmanager?\n\nAs a user of r-bioc-biocinstaller, I would be happy if an upgrade\nautomatically install r-cran-biocmanager to replace\nr-bioc-biocinstaller. But, if it is not the case this would not be a\nbig deal.\n\n> > >From my point of view we can also ask for removal of\n> > r-bioc-biocinstaller.\n>\n> Agreed.  It's already removed from testing and not blocking the r-base\n> migration, so not urgent.\n\nI agree we can remove r-bioc-biocinstaller, this package is useful\nonly with Bioconductor <= 3.7. Unstable has Bioc 3.9 and Testing has\n3.8.\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe mer. 24 juil. 2019 à 18:55, Graham Inggs <ginggs at debian.org> a écrit :\n> I don't think they will do harm, so shall we look at reverting after\n> the r-base migration?\n> Does anyone else in t",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 8,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-36063b84665d",
+      "message_id": "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-25T09:12:23Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan\n\nOn Thu, 25 Jul 2019 at 09:45, Dylan Aïssi <daissi at debian.org> wrote:\n> As a user of r-bioc-biocinstaller, I would be happy if an upgrade\n> automatically install r-cran-biocmanager to replace\n> r-bioc-biocinstaller. But, if it is not the case this would not be a\n> big deal.\n\nOK, then if src:r-cran-biocmanager ships an empty r-bioc-biocinstaller\ntransitional package, then we should not ask Dirk to add Breaks:\nr-bioc-biocinstaller to r-base.  Take note that the version of\nr-cran-biocmanager (1.30.4) is lower than r-bioc-biocinstaller\n(1.32.1), so you would need to adjust the version of the\nr-bioc-biocinstaller binary package in debian/control file to make\nsure it is higher (this is possible, and other packages do use this\ntechnique).\n\nRegards\nGraham",
+      "body_snippet": "Hi Dylan\n\nOn Thu, 25 Jul 2019 at 09:45, Dylan Aïssi <daissi at debian.org> wrote:\n> As a user of r-bioc-biocinstaller, I would be happy if an upgrade\n> automatically install r-cran-biocmanager to repl",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 9,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-532b89807801",
+      "message_id": "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-25T10:42:35Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>"
+      ],
+      "body_plain": "On Thu, Jul 25, 2019 at 11:12:23AM +0200, Graham Inggs wrote:\n> Hi Dylan\n> \n> On Thu, 25 Jul 2019 at 09:45, Dylan Aïssi <daissi at debian.org> wrote:\n> > As a user of r-bioc-biocinstaller, I would be happy if an upgrade\n> > automatically install r-cran-biocmanager to replace\n> > r-bioc-biocinstaller.\n\nExactly this was my motivation to add the Provides.  Its not that\nany file needs to be provided - but the functionality.\n\n> > But, if it is not the case this would not be a\n> > big deal.\n> \n> OK, then if src:r-cran-biocmanager ships an empty r-bioc-biocinstaller\n> transitional package,\n\nThat's \"Provides\".\n\n> then we should not ask Dirk to add Breaks:\n> r-bioc-biocinstaller to r-base.  Take note that the version of\n> r-cran-biocmanager (1.30.4) is lower than r-bioc-biocinstaller\n> (1.32.1), so you would need to adjust the version of the\n> r-bioc-biocinstaller binary package in debian/control file to make\n> sure it is higher (this is possible, and other packages do use this\n> technique).\n> Graham\n\nIn the current situation I do not see any need to ask Dirk for anything.\n\nKind regards\n\n     Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Jul 25, 2019 at 11:12:23AM +0200, Graham Inggs wrote:\n> Hi Dylan\n> \n> On Thu, 25 Jul 2019 at 09:45, Dylan Aïssi <daissi at debian.org> wrote:\n> > As a user of r-bioc-biocinstaller, I would be ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 10,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-668847360d80",
+      "message_id": "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-25T11:08:56Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723130543.pnjgmmvrzcgcquu4@an3as.eu>",
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Thu, 25 Jul 2019 at 12:42, Andreas Tille <andreas at an3as.eu> wrote:\n> Exactly this was my motivation to add the Provides.  Its not that\n> any file needs to be provided - but the functionality.\n\n> > OK, then if src:r-cran-biocmanager ships an empty r-bioc-biocinstaller\n> > transitional package,\n>\n> That's \"Provides\".\n\nThere's nothing that Depends on r-bioc-biocinstaller, so I guess it\ncould only have been installed manually.  Will the Provides be\nsufficient to work on upgrades?\n\n> In the current situation I do not see any need to ask Dirk for anything.\n\nOK, great!  As per the excuses for r-base [1], once the regressions in\nr-cran-filehash and r-cran-haplo.stats have been fixed, I will ask\nDirk to do a no-change source-only upload to resolve the \"not built on\nbuildd\" issue.\n\nRegards\nGraham\n\n[1] https://qa.debian.org/excuses.php?package=r-base",
+      "body_snippet": "Hi Andreas\n\nOn Thu, 25 Jul 2019 at 12:42, Andreas Tille <andreas at an3as.eu> wrote:\n> Exactly this was my motivation to add the Provides.  Its not that\n> any file needs to be provided - but the funct",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 11,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-e345642e3ec2",
+      "message_id": "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-26T12:59:16Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+      "references": [
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>"
+      ],
+      "body_plain": "On Thu, Jul 25, 2019 at 01:08:56PM +0200, Graham Inggs wrote:\n> There's nothing that Depends on r-bioc-biocinstaller, so I guess it\n> could only have been installed manually.\n\nThat's wrong.  R-bioc-affy and r-bioc-annotationhub depended from it\n(otherwise I would not have packaged it).  I'm maintaining a manually\ncrafted dependency graph to know what package needs to be touched first:\n\n   https://salsa.debian.org/r-pkg-team/r-bioc-000-dependency-scheme\n\n(You can apt-get install ditaa && make  or read the ditaa document\nwith a text viewer as well.)\n\n> Will the Provides be\n> sufficient to work on upgrades?\n\nThe Conflicts will make sure the package will be deinstalled and the\nProvides / Replaces informs (previous) dependencies that everything\nis OK with the dependency tree.\n\n> > In the current situation I do not see any need to ask Dirk for anything.\n> \n> OK, great!  As per the excuses for r-base [1], once the regressions in\n> r-cran-filehash and r-cran-haplo.stats have been fixed, I will ask\n> Dirk to do a no-change source-only upload to resolve the \"not built on\n> buildd\" issue.\n\nIf those two packages are the only blockers we might consider\ndeactivating the tests for the moment.  I'm to busy at DebConf to\ndo more complex stuff than simple uploads / upgrades but feel free\nto \"cheat\" with the tests.  I just activated the tests which were\nnever be run before so deactivating them is just restoring the\nsituation we had before.  These should not block any transition.\n\nKind regards\n\n      Andreas.\n \n> [1] https://qa.debian.org/excuses.php?package=r-base\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Jul 25, 2019 at 01:08:56PM +0200, Graham Inggs wrote:\n> There's nothing that Depends on r-bioc-biocinstaller, so I guess it\n> could only have been installed manually.\n\nThat's wrong.  R-bioc-af",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 12,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-d6f62829788d",
+      "message_id": "<CA+6XHwQjK6HdzfFqqmM-GKaZgtupt1mN6dwbC-nUEm1N7u=qJg@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2019-07-26T13:07:13Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+      "references": [
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+        "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nLe ven. 26 juil. 2019 à 14:59, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> If those two packages are the only blockers we might consider\n> deactivating the tests for the moment.  I'm to busy at DebConf to\n> do more complex stuff than simple uploads / upgrades but feel free\n> to \"cheat\" with the tests.  I just activated the tests which were\n> never be run before so deactivating them is just restoring the\n> situation we had before.  These should not block any transition.\n>\n\nI agree with that. The CRAN logs of these two packages have similar\ndifferences to those we get with autopkgtest. So, it is not a problem\nin the Debian packages but only how the tests are handled.\n\nhttps://cran.r-project.org/web/checks/check_results_filehash.html\nhttps://cran.r-project.org/web/checks/check_results_haplo.stats.html\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe ven. 26 juil. 2019 à 14:59, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> If those two packages are the only blockers we might consider\n> deactivating the tests for the moment.  I'm to bus",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 13,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-e266bf7b1796",
+      "message_id": "<CAM8zJQtf8vDJe6omT0DOTeR0NV0DQ7uzYKj2SJadND0QLGLjiA@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-26T13:38:11Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+      "references": [
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+        "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>"
+      ],
+      "body_plain": "On Fri, 26 Jul 2019 at 14:59, Andreas Tille <andreas at an3as.eu> wrote:\n> On Thu, Jul 25, 2019 at 01:08:56PM +0200, Graham Inggs wrote:\n> > There's nothing that Depends on r-bioc-biocinstaller, so I guess it\n> > could only have been installed manually.\n>\n> That's wrong.  R-bioc-affy and r-bioc-annotationhub depended from it\n> (otherwise I would not have packaged it).  I'm maintaining a manually\n> crafted dependency graph to know what package needs to be touched first:\n\nI don't see the dependency.\n\n$ reverse-depends -r buster src:r-bioc-biocinstaller\nNo reverse dependencies found\n\n$ reverse-depends -b -r buster src:r-bioc-biocinstaller\nNo reverse dependencies found\n\n> > Will the Provides be\n> > sufficient to work on upgrades?\n>\n> The Conflicts will make sure the package will be deinstalled and the\n> Provides / Replaces informs (previous) dependencies that everything\n> is OK with the dependency tree.\n\nI don't believe that is going to work.  See section RenamingPackages\n[1] from the wiki.  I believe you need to use the Transition Package\nMethod, not the Clean Slate Method, if you want r-bioc-biocinstaller\nto be replaced by r-cran-biocmanager during an upgrade.\n\n[1] https://wiki.debian.org/RenamingPackages",
+      "body_snippet": "On Fri, 26 Jul 2019 at 14:59, Andreas Tille <andreas at an3as.eu> wrote:\n> On Thu, Jul 25, 2019 at 01:08:56PM +0200, Graham Inggs wrote:\n> > There's nothing that Depends on r-bioc-biocinstaller, so I ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 13,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-de70ade59209",
+      "message_id": "<20190726135144.fzharafa2lgc5b4l@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-26T13:51:44Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQtf8vDJe6omT0DOTeR0NV0DQ7uzYKj2SJadND0QLGLjiA@mail.gmail.com>",
+      "references": [
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+        "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+        "<CAM8zJQtf8vDJe6omT0DOTeR0NV0DQ7uzYKj2SJadND0QLGLjiA@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Jul 26, 2019 at 03:38:11PM +0200, Graham Inggs wrote:\n> > That's wrong.  R-bioc-affy and r-bioc-annotationhub depended from it\n> > (otherwise I would not have packaged it).  I'm maintaining a manually\n> > crafted dependency graph to know what package needs to be touched first:\n> \n> I don't see the dependency.\n> \n> $ reverse-depends -r buster src:r-bioc-biocinstaller\n> No reverse dependencies found\n> \n> $ reverse-depends -b -r buster src:r-bioc-biocinstaller\n> No reverse dependencies found\n\nIt was **before** buster!\n \n> > Provides / Replaces informs (previous) dependencies that everything\n> > is OK with the dependency tree.\n> \n> I don't believe that is going to work.  See section RenamingPackages\n> [1] from the wiki.  I believe you need to use the Transition Package\n> Method, not the Clean Slate Method, if you want r-bioc-biocinstaller\n> to be replaced by r-cran-biocmanager during an upgrade.\n\nWhat's your reasoning why you do not believe that this will work?\n\nKind regards\n\n       Andreas.\n \n> [1] https://wiki.debian.org/RenamingPackages\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, Jul 26, 2019 at 03:38:11PM +0200, Graham Inggs wrote:\n> > That's wrong.  R-bioc-affy and r-bioc-annotationhub depended from it\n> > (otherwise I would not have packaged it).  I'm maintaining a ",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 14,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-0ff8ae0d0a83",
+      "message_id": "<CAM8zJQtd2u_PnB1WY5Njhfr_zREwVUqUH8TeC4+ipL61yf0VtQ@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-26T13:57:54Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190726135144.fzharafa2lgc5b4l@an3as.eu>",
+      "references": [
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+        "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+        "<CAM8zJQtf8vDJe6omT0DOTeR0NV0DQ7uzYKj2SJadND0QLGLjiA@mail.gmail.com>",
+        "<20190726135144.fzharafa2lgc5b4l@an3as.eu>"
+      ],
+      "body_plain": "On Fri, 26 Jul 2019 at 15:51, Andreas Tille <andreas at an3as.eu> wrote:\n> It was **before** buster!\n\nRight, so nothing in buster depends on r-bioc-biocinstaller.\n\n> What's your reasoning why you do not believe that this will work?\n\nQuoting the wiki:\n\n\"Clean slate method\n...\nThis should be used for example for any non-leaf packages that are\nonly ever installed by other packages depending on it. Because in that\ncase the only thing needed will be for the reverse-dependencies to\nstart depending on the new package.\"\n\nSo if there's nothing that Depends on r-bioc-biocinstaller, there's\nnothing that will act on the Provides.",
+      "body_snippet": "On Fri, 26 Jul 2019 at 15:51, Andreas Tille <andreas at an3as.eu> wrote:\n> It was **before** buster!\n\nRight, so nothing in buster depends on r-bioc-biocinstaller.\n\n> What's your reasoning why you do n",
+      "thread_id": "thread-f82e5bd9dc1f",
+      "thread_depth": 15,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-3e419dead446",
+      "message_id": "<20190729174038.nvoiibv4wra55bm4@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-07-29T17:40:39Z",
+      "subject": "Any hint how to successfully use libhunspell-dev in r-cran-hunspell",
+      "subject_clean": "Any hint how to successfully use libhunspell-dev in r-cran-hunspell",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Joost and other readers,\n\nsince the new version of r-cran-magick would need r-cran-spelling in its\ntest suite I intend to package this and its dependency r-cran-hunspell.\nI realised that Joost started with this.  I upgraded the packaging and\nalso tried to use the Debian packaged libhunspell-dev.  I was able to\nwork around missing header files in libhunspell-dev but before I go on\nwriting a bug report to include the missing headers I'd love to be sure\nthat the package really builds nicely.  Unfortunately the current status\nin Git ends up with\n\nError: loading failed\nExecution halted\nERROR: loading failed\n* removing '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/hunspell'\ndh_auto_install: R CMD INSTALL -l /build/r-cran-hunspell-3.0\\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . \"--built-timestamp='Sun, 28 Jul 2019 15:37:29 +0200'\" returned exit code 1\nmake: *** [debian/rules:4: binary] Error 255\n\nAny hint how to fix this?\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Joost and other readers,\n\nsince the new version of r-cran-magick would need r-cran-spelling in its\ntest suite I intend to package this and its dependency r-cran-hunspell.\nI realised that Joost star",
+      "thread_id": "thread-3e419dead446",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-e5e716a7d60f",
+      "message_id": "<156455444199.30059.4878542915370376705@hoothoot>",
+      "from_name": "Johannes Schauer",
+      "from_email_hash": "64e79ab5e136783a8ae1338cb63e729b6e4f7f00b97df653c78a7edb00815477",
+      "date": "2019-07-31T06:27:21Z",
+      "subject": "default branch for r-cran-tufte",
+      "subject_clean": "default branch for r-cran-tufte",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI packaged r-cran-tufte (ITP #933515) and wanted to push it to here:\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-tufte\n\nUnfortunately it seems that one needs to be \"Owner\" or \"Maintainer\" in the\nr-pkg-team to push into a new repository because I'm only a \"Developer\". I'm\ngetting this error when I try to push my work:\n\nremote: GitLab:\nremote: A default branch (e.g. master) does not yet exist for r-pkg-team/r-cran-tufte\nremote: Ask a project Owner or Maintainer to create a default branch:\nremote:\nremote:   https://salsa.debian.org/r-pkg-team/r-cran-tufte/-/project_members\nremote:\nTo salsa.debian.org:r-pkg-team/r-cran-tufte.git\n ! [remote rejected] master -> master (pre-receive hook declined)\n ! [remote rejected] upstream/0.5 -> upstream/0.5 (pre-receive hook declined)\nerror: failed to push some refs to 'git at salsa.debian.org:r-pkg-team/r-cran-tufte.git'\n\nPlease either create a default branch for me or raise my privileges to\n\"Maintainer\".\n\nThanks!\n\ncheers, josch\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: signature",
+      "body_snippet": "Hi,\n\nI packaged r-cran-tufte (ITP #933515) and wanted to push it to here:\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-tufte\n\nUnfortunately it seems that one needs to be \"Owner\" or \"Maintainer\" in the\n",
+      "thread_id": "thread-e5e716a7d60f",
+      "thread_depth": 0,
+      "month": "2019-07"
+    },
+    {
+      "id": "msg-dbbb33046882",
+      "message_id": "<CAM8zJQs9M25uxMEHN6iE=W8MaYeLTs7HWePKSpG5TypBH2iX3A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-07-31T06:58:41Z",
+      "subject": "Re: default branch for r-cran-tufte",
+      "subject_clean": "default branch for r-cran-tufte",
+      "in_reply_to": "<156455444199.30059.4878542915370376705@hoothoot>",
+      "references": [
+        "<156455444199.30059.4878542915370376705@hoothoot>"
+      ],
+      "body_plain": "Hi Josch\n\nOn Wed, 31 Jul 2019 at 08:35, Johannes Schauer <josch at debian.org> wrote:\n> Please either create a default branch for me or raise my privileges to\n> \"Maintainer\".\n\nI've bumped you to Maintainer.\n\nRegards\nGraham",
+      "body_snippet": "Hi Josch\n\nOn Wed, 31 Jul 2019 at 08:35, Johannes Schauer <josch at debian.org> wrote:\n> Please either create a default branch for me or raise my privileges to\n> \"Maintainer\".\n\nI've bumped you to Maint",
+      "thread_id": "thread-e5e716a7d60f",
+      "thread_depth": 1,
+      "month": "2019-07"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-61c582b4b474",
+      "subject": "Question for r-bioc-lpsymphony",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Ralf Stubner"
+      ],
+      "started": "2019-07-05T13:25:14Z",
+      "last_reply": "2019-07-06T12:53:39Z",
+      "root_message_id": "msg-61c582b4b474"
+    },
+    {
+      "id": "thread-aa678241625b",
+      "subject": "HTML documentation including minimized JS",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-08T08:05:24Z",
+      "last_reply": "2019-07-08T08:05:24Z",
+      "root_message_id": "msg-aa678241625b"
+    },
+    {
+      "id": "thread-a290bfeea3c9",
+      "subject": "r-cran-rjsonio up for removal?",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi"
+      ],
+      "started": "2019-07-11T14:30:34Z",
+      "last_reply": "2019-07-16T13:44:07Z",
+      "root_message_id": "msg-a290bfeea3c9"
+    },
+    {
+      "id": "thread-b6566fb7ea7c",
+      "subject": "r-cran-rjsonio up for removal?",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-11T15:32:34Z",
+      "last_reply": "2019-07-11T15:32:34Z",
+      "root_message_id": "msg-b6566fb7ea7c"
+    },
+    {
+      "id": "thread-6568fb2a9ee6",
+      "subject": "Please confirm subscription to 731599 at bugs.debian.org (RFP: r-cran-locfit -- GNU R local regression, likelihood and density estimation)",
+      "message_count": 1,
+      "participants": [
+        "731599-subhelp at bugs.debian.org"
+      ],
+      "started": "2019-07-15T11:00:15Z",
+      "last_reply": "2019-07-15T11:00:15Z",
+      "root_message_id": "msg-6568fb2a9ee6"
+    },
+    {
+      "id": "thread-189a67f08a00",
+      "subject": "Subscription to 731599 at bugs.debian.org successful",
+      "message_count": 1,
+      "participants": [
+        "731599-subhelp at bugs.debian.org"
+      ],
+      "started": "2019-07-15T11:30:09Z",
+      "last_reply": "2019-07-15T11:30:09Z",
+      "root_message_id": "msg-189a67f08a00"
+    },
+    {
+      "id": "thread-1b32d1b4f5d3",
+      "subject": "r-bioc-biocparallel: autopkgtest regression - any idea",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi"
+      ],
+      "started": "2019-07-22T12:46:04Z",
+      "last_reply": "2019-07-22T16:03:58Z",
+      "root_message_id": "msg-1b32d1b4f5d3"
+    },
+    {
+      "id": "thread-2528b7becd3a",
+      "subject": "Open ITPs (turned into RFPs)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-22T17:42:06Z",
+      "last_reply": "2019-07-22T17:42:06Z",
+      "root_message_id": "msg-2528b7becd3a"
+    },
+    {
+      "id": "thread-f82e5bd9dc1f",
+      "subject": "r-base breaks 9 autopkgtests",
+      "message_count": 22,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Dylan Aïssi",
+        "Graham Inggs"
+      ],
+      "started": "2019-07-23T09:18:47Z",
+      "last_reply": "2019-07-26T13:57:54Z",
+      "root_message_id": "msg-f82e5bd9dc1f"
+    },
+    {
+      "id": "thread-f7017bde5b09",
+      "subject": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "message_count": 1,
+      "participants": [
+        "Jeroen Ooms"
+      ],
+      "started": "2019-07-23T14:22:17Z",
+      "last_reply": "2019-07-23T14:22:17Z",
+      "root_message_id": "msg-f7017bde5b09"
+    },
+    {
+      "id": "thread-2630b5160f2d",
+      "subject": "Bug#932857: RM: r-cran-rjsonio -- ROM; Nobody wants to maintain this non-free package",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-23T22:50:53Z",
+      "last_reply": "2019-07-23T22:50:53Z",
+      "root_message_id": "msg-2630b5160f2d"
+    },
+    {
+      "id": "thread-e6129f6185bb",
+      "subject": "Wrong culprit",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-25T00:05:45Z",
+      "last_reply": "2019-07-25T00:05:45Z",
+      "root_message_id": "msg-e6129f6185bb"
+    },
+    {
+      "id": "thread-3e419dead446",
+      "subject": "Any hint how to successfully use libhunspell-dev in r-cran-hunspell",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-07-29T17:40:39Z",
+      "last_reply": "2019-07-29T17:40:39Z",
+      "root_message_id": "msg-3e419dead446"
+    },
+    {
+      "id": "thread-e5e716a7d60f",
+      "subject": "default branch for r-cran-tufte",
+      "message_count": 2,
+      "participants": [
+        "Graham Inggs",
+        "Johannes Schauer"
+      ],
+      "started": "2019-07-31T06:27:21Z",
+      "last_reply": "2019-07-31T06:58:41Z",
+      "root_message_id": "msg-e5e716a7d60f"
+    }
+  ]
+}

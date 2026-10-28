@@ -1,0 +1,609 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2018-10",
+  "messages": [
+    {
+      "id": "msg-aabe44de5e9c",
+      "message_id": "<20181003130048.vsgsj3s7d5im2p2t@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2018-10-03T13:00:48Z",
+      "subject": "Re: curl/7.60.0-1 appears to break r-cran-curl/3.2-1 autopkgtest in testing",
+      "subject_clean": "curl/7.60.0-1 appears to break r-cran-curl/3.2-1 autopkgtest in testing",
+      "in_reply_to": "<CABFfbXtSPTt41WiWvWyXGdT_nOYZ7UqP3ZPfpvwdXFSEX_XfRw@mail.gmail.com>",
+      "references": [
+        "<20180520200040.jeehzfxovvvonqyf@an3as.eu>",
+        "<23297.55213.579129.413255@rob.eddelbuettel.com>",
+        "<23297.56172.437587.835545@rob.eddelbuettel.com>",
+        "<CABFfbXusvQ5nRXfgfmJf59EeNdra24_+g9D=xXD_gi9STLbDkA@mail.gmail.com>",
+        "<20180621045753.u7tai5p2qy2j537g@an3as.eu>",
+        "<CABFfbXtOk-vGvkFjR+9RxD8aHbSbxkB85WzjpZOS4cSbVrZ+3w@mail.gmail.com>",
+        "<20180621144332.zkssdej6yit35ljd@an3as.eu>",
+        "<CABFfbXvJQeRMmDYNwf4dviZMPvu6f58tMfLK18Hn-=vX2zvOBQ@mail.gmail.com>",
+        "<20180621202836.6jqegqyanj7lmlat@an3as.eu>",
+        "<CABFfbXtSPTt41WiWvWyXGdT_nOYZ7UqP3ZPfpvwdXFSEX_XfRw@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, Jul 11, 2018 at 11:12:56AM +0200, Jeroen Ooms wrote:\n> > Thanks a lot for your investigations.  Nice that the CI in Debian\n> > has uncovered the issue.\n> \n> Today libcurl 7.61.0 was released, which should fix most problems. Once\n> libcurl4-openssl-dev is updated in Debian, could you confirm that this\n> fixes the r-cran-curl crash?\n\nI found this mail in my inbox today and thus think it was not answered\nyet.  I can confirm the issue does not occure for libcurl 7.61 any more.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Wed, Jul 11, 2018 at 11:12:56AM +0200, Jeroen Ooms wrote:\n> > Thanks a lot for your investigations.  Nice that the CI in Debian\n> > has uncovered the issue.\n> \n> Today libcurl 7.61.0 was released, ",
+      "thread_id": "thread-aabe44de5e9c",
+      "thread_depth": 0,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-8fa3d6734041",
+      "message_id": "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-17T19:35:39Z",
+      "subject": "Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI've commited the packaging for the latest version of r-cran-rstan[1].\nUnfortunately I hit one of the rare cases where an R package does not\nbuild out of the box (and it is not obvious that a Build-Depend is\nmissing):\n\n...\ng++ -std=gnu++14 -I\"/usr/share/R/include\" -DNDEBUG -I\"../inst/include\" -I\"`\"/usr/lib/R/bin/Rscript\" --vanilla -e \"cat(system.file('include', 'src', package = 'StanHeaders'))\"`\" -        DBOOST_DISABLE_ASSERTS -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION -I\"/usr/lib/R/site-library/Rcpp/include\" -I\"/usr/lib/R/site-library/RcppEigen/include\" -I\"/usr/lib/R/site-library/BH/       include\" -I\"/usr/lib/R/site-library/StanHeaders/include\"    -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-udh3fS/r-base-3.5.1=. -fstack-protector-strong -Wformat -Werror=format-        security -Wdate-time -D_FORTIFY_SOURCE=2 -g -c lang__grammars__expression07_grammar_inst.cpp -o lang__grammars__expression07_grammar_inst.o\nIn file included from /usr/include/boost/phoenix/core/detail/preprocessed/function_eval.hpp:12,\n                 from /usr/include/boost/phoenix/core/detail/function_eval.hpp:14,\n                 from /usr/include/boost/phoenix/function/function.hpp:14,\n                 from /usr/include/boost/phoenix/function.hpp:11,\n                 from /usr/include/boost/spirit/include/phoenix_function.hpp:11,\n                 from /usr/include/boost/spirit/home/support/terminal.hpp:18,\n                 from /usr/include/boost/spirit/home/support/common_terminals.hpp:15,\n                 from /usr/include/boost/spirit/home/qi/auto/auto.hpp:13,\n                 from /usr/include/boost/spirit/home/qi/auto.hpp:15,\n                 from /usr/include/boost/spirit/home/qi.hpp:15,\n                 from /usr/include/boost/spirit/include/qi.hpp:16,\n                 from /usr/lib/R/site-library/StanHeaders/include/src/stan/lang/grammars/expression07_grammar_def.hpp:6,\n                 from /usr/lib/R/site-library/StanHeaders/include/src/stan/lang/grammars/expression07_grammar_inst.cpp:1,\n                 from lang__grammars__expression07_grammar_inst.cpp:18:\n/usr/include/boost/phoenix/core/detail/preprocessed/function_eval_10.hpp: In instantiation of ‘struct boost::phoenix::detail::function_eval::result<boost::phoenix::detail::              function_eval(const boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<stan::lang::validate_expr_type3>, 0>&, const boost::phoenix::      actor<boost::spirit::attribute<0> >&, const boost::phoenix::actor<boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<boost::phoenix::     argument<3> >, 0> >&, const boost::phoenix::actor<boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<boost::reference_wrapper<std::       __cxx11::basic_stringstream<char> > >, 0> >&, const boost::phoenix::vector2<boost::phoenix::vector4<const boost::phoenix::actor<boost::proto::exprns_::basic_expr<boost::phoenix::detail::tag::function_eval, boost::proto::argsns_::list4<boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<stan::lang::validate_expr_type3>, 0>, boost::phoenix::actor<boost::spirit::attribute<0> >, boost::phoenix::actor<boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<boost::     phoenix::argument<3> >, 0> >, boost::phoenix::actor<boost::proto::exprns_::basic_expr<boost::proto::tagns_::tag::terminal, boost::proto::argsns_::term<boost::reference_wrapper<std::     __cxx11::basic_stringstream<char> > >, 0> > >, 4> >*, const boost::fusion::vector<boost::spirit::unused_type&>&, const boost::spirit::context<boost::fusion::cons<stan::lang::            expression&, boost::fusion::cons<stan::lang::scope, boost::fusion::nil_> >, boost::fusion::vector<> >&, const bool&>&, const boost::phoenix::default_actions&>&)>’:\n...\n\nAny idea how to fix this or is this something I should report\nupstream?\n\nKind regards\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-rstan\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI've commited the packaging for the latest version of r-cran-rstan[1].\nUnfortunately I hit one of the rare cases where an R package does not\nbuild out of the box (and it is not obvious that a Bui",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 0,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-34ef46c63ebc",
+      "message_id": "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-17T19:51:00Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>"
+      ],
+      "body_plain": "My $0.05, from a quick glance:\n\n1)  It builds on all CRAN machines, so likely our problem: see the summary at\n    https://cloud.r-project.org/web/checks/check_results_rstan.html\n\n2)  Remember that we chose to take a shortcut with the 'virtual' r-cran-bh\n\n3)  Our Boost is behind at 1.62.  CRAN of course builds with my cross-platform\n    BH package (for parts of Boost) which is at 1.66.\n\n4)  You can ask upstream for advice but this is really our problem. And\n    rstan is of course a pretty complicated package.\n\n5)  Maybe ask the Debian Boost maintainer?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "My $0.05, from a quick glance:\n\n1)  It builds on all CRAN machines, so likely our problem: see the summary at\n    https://cloud.r-project.org/web/checks/check_results_rstan.html\n\n2)  Remember that we ",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 1,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-2261c1b51246",
+      "message_id": "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2018-10-18T07:17:30Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi All\n\nOn Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> 3)  Our Boost is behind at 1.62.  CRAN of course builds with my cross-platform\n>     BH package (for parts of Boost) which is at 1.66.\n\nI confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\nwhere Boost 1.67 is the default.\n\nRegards\nGraham",
+      "body_snippet": "Hi All\n\nOn Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> 3)  Our Boost is behind at 1.62.  CRAN of course builds with my cross-platform\n>     BH package (for parts of Boost",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 2,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-499b2127e600",
+      "message_id": "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T09:52:26Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nOn Thu, Oct 18, 2018 at 09:17:30AM +0200, Graham Inggs wrote:\n> On Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> > 3)  Our Boost is behind at 1.62.  CRAN of course builds with my cross-platform\n> >     BH package (for parts of Boost) which is at 1.66.\n> \n> I confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\n> where Boost 1.67 is the default.\n\nThanks for the helpful hint.  I've successfully build against\nlibboost1.67-dev and filed #911291 requesting a match between the\nversion number of r-cran-bh and the libboost version it pulls in.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nOn Thu, Oct 18, 2018 at 09:17:30AM +0200, Graham Inggs wrote:\n> On Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> > 3)  Our Boost is behind at 1.62.  CRAN of cou",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 3,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-3373b1653ccd",
+      "message_id": "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-18T11:38:14Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>"
+      ],
+      "body_plain": "On 18 October 2018 at 11:52, Andreas Tille wrote:\n| Hi Graham,\n| \n| On Thu, Oct 18, 2018 at 09:17:30AM +0200, Graham Inggs wrote:\n| > On Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n| > > 3)  Our Boost is behind at 1.62.  CRAN of course builds with my cross-platform\n\nThat was wrong. I was in a rush checking packages.d.o.\n\n| > >     BH package (for parts of Boost) which is at 1.66.\n| > \n| > I confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\n| > where Boost 1.67 is the default.\n\nGood. So we have no issue.\n\nSo how come your build failed at first but fails no more?  Where you on\nstable and you now filled in via backports?  \n \n| Thanks for the helpful hint.  I've successfully build against\n| libboost1.67-dev and filed #911291 requesting a match between the\n| version number of r-cran-bh and the libboost version it pulls in.\n\nThose are two independently moving parts and I am not convinved the patch is\na good idea.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 18 October 2018 at 11:52, Andreas Tille wrote:\n| Hi Graham,\n| \n| On Thu, Oct 18, 2018 at 09:17:30AM +0200, Graham Inggs wrote:\n| > On Wed, 17 Oct 2018 at 21:51, Dirk Eddelbuettel <edd at debian.org",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 4,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-3f2208ba76b6",
+      "message_id": "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T12:06:41Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n> \n> | > >     BH package (for parts of Boost) which is at 1.66.\n> | > \n> | > I confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\n> | > where Boost 1.67 is the default.\n> \n> Good. So we have no issue.\n> \n> So how come your build failed at first but fails no more?\n\nAs I tried to explain.  May be its better explained in code:\n\n   https://salsa.debian.org/r-pkg-team/r-cran-rstan/commit/4ce8aa3e675946977a0761295838d5b30cb7edfd\n\n> Where you on\n> stable and you now filled in via backports?  \n\nI'm building always on unstable pbuilder chroot.  The build keeps\non failing with current r-cran-bh.\n\n> | Thanks for the helpful hint.  I've successfully build against\n> | libboost1.67-dev and filed #911291 requesting a match between the\n> | version number of r-cran-bh and the libboost version it pulls in.\n> \n> Those are two independently moving parts and I am not convinved the patch is\n> a good idea.\n\nWhat is your motivation for the current version number 1.66?\nAt least my patch would avoid the problem we are currently\nobserving.\n\nKind regards\n\n       Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n> \n> | > >     BH package (for parts of Boost) which is at 1.66.\n> | > \n> | > I confirm that r-cran-stan 2.18.1-1 from salsa builds i",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 5,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-5dbc048a0385",
+      "message_id": "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>",
+      "from_name": "Ralf Stubner",
+      "from_email_hash": "72dadb73bb75e0c3317da0cf8824a969f3ce5dab32b051c157f712b02005631f",
+      "date": "2018-10-18T12:12:43Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>"
+      ],
+      "body_plain": "On 10/18/18 2:06 PM, Andreas Tille wrote:\n> On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n>> | > >     BH package (for parts of Boost) which is at 1.66.\n>> | > \n>> | > I confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\n>> | > where Boost 1.67 is the default.\n>>\n>> Good. So we have no issue.\n>>\n>> So how come your build failed at first but fails no more?\n> As I tried to explain.  May be its better explained in code:\n> \n>    https://salsa.debian.org/r-pkg-team/r-cran-rstan/commit/4ce8aa3e675946977a0761295838d5b30cb7edfd\n\nWhile libboost1.67-dev is available in sid, libboost-dev still depends\non libboost1.62-dev.\n\nGreetings\nRalf\n\n-- \nRalf Stubner\nSenior Software Engineer / Trainer\n\ndaqana GmbH\nDortustraße 48\n14467 Potsdam\n\nT: +49 331 23 61 93 11\nF: +49 331 23 61 93 90\nM: +49 162 20 91 196\nMail: ralf.stubner at daqana.com\n\nSitz: Potsdam\nRegister: AG Potsdam HRB 27966 P\nUst.-IdNr.: DE300072622\nGeschäftsführer: Prof. Dr. Dr. Karl-Kuno Kunze\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/18/18 2:06 PM, Andreas Tille wrote:\n> On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n>> | > >     BH package (for parts of Boost) which is at 1.66.\n>> | > \n>> | > I confirm t",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 6,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-e6df9ae132ec",
+      "message_id": "<20181018131443.chahywckf6bvczjc@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T13:14:43Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>"
+      ],
+      "body_plain": "On Thu, Oct 18, 2018 at 02:12:43PM +0200, Ralf Stubner wrote:\n> On 10/18/18 2:06 PM, Andreas Tille wrote:\n> > On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n> >>\n> >> So how come your build failed at first but fails no more?\n> > As I tried to explain.  May be its better explained in code:\n> > \n> >    https://salsa.debian.org/r-pkg-team/r-cran-rstan/commit/4ce8aa3e675946977a0761295838d5b30cb7edfd\n> \n> While libboost1.67-dev is available in sid, libboost-dev still depends\n> on libboost1.62-dev.\n\nYes, that's correct and the cause of the issue which was circumvented \nby the patch above.\n\nKind regards\n\n   Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Oct 18, 2018 at 02:12:43PM +0200, Ralf Stubner wrote:\n> On 10/18/18 2:06 PM, Andreas Tille wrote:\n> > On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n> >>\n> >> So how come y",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 7,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-8bf04b355e14",
+      "message_id": "<23496.35895.853089.583856@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-18T13:35:51Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>"
+      ],
+      "body_plain": "On 18 October 2018 at 14:12, Ralf Stubner wrote:\n| On 10/18/18 2:06 PM, Andreas Tille wrote:\n| > On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n| >> | > >     BH package (for parts of Boost) which is at 1.66.\n| >> | > \n| >> | > I confirm that r-cran-stan 2.18.1-1 from salsa builds in Ubuntu 18.10\n| >> | > where Boost 1.67 is the default.\n| >>\n| >> Good. So we have no issue.\n| >>\n| >> So how come your build failed at first but fails no more?\n| > As I tried to explain.  May be its better explained in code:\n| > \n| >    https://salsa.debian.org/r-pkg-team/r-cran-rstan/commit/4ce8aa3e675946977a0761295838d5b30cb7edfd\n| \n| While libboost1.67-dev is available in sid, libboost-dev still depends\n| on libboost1.62-dev.\n\nGood catch.\n\nCould someone talk to the Boost maintainer about that?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 18 October 2018 at 14:12, Ralf Stubner wrote:\n| On 10/18/18 2:06 PM, Andreas Tille wrote:\n| > On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n| >> | > >     BH package (for parts",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 7,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-5b3ec8638df9",
+      "message_id": "<23496.36620.687219.857889@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-18T13:47:56Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018131443.chahywckf6bvczjc@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>",
+        "<20181018131443.chahywckf6bvczjc@an3as.eu>"
+      ],
+      "body_plain": "On 18 October 2018 at 15:14, Andreas Tille wrote:\n| On Thu, Oct 18, 2018 at 02:12:43PM +0200, Ralf Stubner wrote:\n| > On 10/18/18 2:06 PM, Andreas Tille wrote:\n| > > On Thu, Oct 18, 2018 at 06:38:14AM -0500, Dirk Eddelbuettel wrote:\n| > >>\n| > >> So how come your build failed at first but fails no more?\n| > > As I tried to explain.  May be its better explained in code:\n| > > \n| > >    https://salsa.debian.org/r-pkg-team/r-cran-rstan/commit/4ce8aa3e675946977a0761295838d5b30cb7edfd\n| > \n| > While libboost1.67-dev is available in sid, libboost-dev still depends\n| > on libboost1.62-dev.\n| \n| Yes, that's correct and the cause of the issue which was circumvented \n| by the patch above.\n\nA more local solution would be for your r-cran-rstan package to depend on\nlibboost1.67-all-dev -- as it actually depends on it.  For the rest of the\nBH-using packages this is less clear.\n\nThere is probably a reason why the rest of Debian still has 1.62 as the\ndefault Boost version.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 18 October 2018 at 15:14, Andreas Tille wrote:\n| On Thu, Oct 18, 2018 at 02:12:43PM +0200, Ralf Stubner wrote:\n| > On 10/18/18 2:06 PM, Andreas Tille wrote:\n| > > On Thu, Oct 18, 2018 at 06:38:14AM",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 8,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-8b725716d99f",
+      "message_id": "<20181018135552.3wueqjsrd4toq7nc@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T13:55:52Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>"
+      ],
+      "body_plain": "Hi Dirk,\n\nmay be you missed my question in the other mail:\n\nOn Thu, Oct 18, 2018 at 02:06:41PM +0200, Andreas Tille wrote:\n> > Those are two independently moving parts and I am not convinved the patch is\n> > a good idea.\n> \n> What is your motivation for the current version number 1.66?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nmay be you missed my question in the other mail:\n\nOn Thu, Oct 18, 2018 at 02:06:41PM +0200, Andreas Tille wrote:\n> > Those are two independently moving parts and I am not convinved the patch",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 6,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-de6878242cc1",
+      "message_id": "<23496.37774.598978.920005@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-18T14:07:10Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>"
+      ],
+      "body_plain": "On 18 October 2018 at 14:06, Andreas Tille wrote:\n| I'm building always on unstable pbuilder chroot.  The build keeps\n| on failing with current r-cran-bh.\n\nYou could just edit the Build-Depends of your package as it has an implicit\nrequirement for a Boost newer than Debian's default Boost.\n\n| What is your motivation for the current version number 1.66?\n\nSame as every other r-cran-*: the upstream version:\n  https://cran.r-project.org/package=BH\n\n| At least my patch would avoid the problem we are currently\n| observing.\n\nWith a side effect which is why am unlike to adopt it. \n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 18 October 2018 at 14:06, Andreas Tille wrote:\n| I'm building always on unstable pbuilder chroot.  The build keeps\n| on failing with current r-cran-bh.\n\nYou could just edit the Build-Depends of you",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 6,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-0e6db6254955",
+      "message_id": "<20181018141117.ukgl3xuz63bti3lj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T14:11:17Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<23496.36620.687219.857889@rob.eddelbuettel.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<6b6c3523-43ea-b6c4-245c-78fe2314b595@daqana.com>",
+        "<20181018131443.chahywckf6bvczjc@an3as.eu>",
+        "<23496.36620.687219.857889@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Thu, Oct 18, 2018 at 08:47:56AM -0500, Dirk Eddelbuettel wrote:\n> | \n> | Yes, that's correct and the cause of the issue which was circumvented \n> | by the patch above.\n> \n> A more local solution would be for your r-cran-rstan package to depend on\n> libboost1.67-all-dev -- as it actually depends on it.\n\nBut this is actually part of my solution - in addition I prevented the\nBH dependency since I did not considered it a good idea to pull in two\ncompeting boost versions.\n\n> For the rest of the\n> BH-using packages this is less clear.\n> \n> There is probably a reason why the rest of Debian still has 1.62 as the\n> default Boost version.\n\nI admit I have not yet tested all R packages but you confirmed that CRAN\nservers are using a higher version than 1.62.  Thus for the R packages I\ndo not see any reason to stick to 1.62. \n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Oct 18, 2018 at 08:47:56AM -0500, Dirk Eddelbuettel wrote:\n> | \n> | Yes, that's correct and the cause of the issue which was circumvented \n> | by the patch above.\n> \n> A more local solution wo",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 9,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-fb5f3e1bba65",
+      "message_id": "<20181018141837.pf4c5pc2nhmkkh23@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-18T14:18:37Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<23496.37774.598978.920005@rob.eddelbuettel.com>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<23496.37774.598978.920005@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Thu, Oct 18, 2018 at 09:07:10AM -0500, Dirk Eddelbuettel wrote:\n> \n> On 18 October 2018 at 14:06, Andreas Tille wrote:\n> | I'm building always on unstable pbuilder chroot.  The build keeps\n> | on failing with current r-cran-bh.\n> \n> You could just edit the Build-Depends of your package as it has an implicit\n> requirement for a Boost newer than Debian's default Boost.\n\nI might not have been clear about this:  I did this and the package is\nuploaded.\n \n> | What is your motivation for the current version number 1.66?\n> \n> Same as every other r-cran-*: the upstream version:\n>   https://cran.r-project.org/package=BH\n\nOK.  As we have seen this has the side effect that packages which\nrequire higher libboost than 1.62 will fail to build.\n \n> | At least my patch would avoid the problem we are currently\n> | observing.\n> \n> With a side effect which is why am unlike to adopt it. \n\nDo you have an example for this side effect?\n\nKind regards\n\n        Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Oct 18, 2018 at 09:07:10AM -0500, Dirk Eddelbuettel wrote:\n> \n> On 18 October 2018 at 14:06, Andreas Tille wrote:\n> | I'm building always on unstable pbuilder chroot.  The build keeps\n> | on f",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 7,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-77f791e1ba5f",
+      "message_id": "<23496.38788.892487.981647@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-18T14:24:04Z",
+      "subject": "Re: Problem building latest version of r-cran-rstan",
+      "subject_clean": "Problem building latest version of r-cran-rstan",
+      "in_reply_to": "<20181018135552.3wueqjsrd4toq7nc@an3as.eu>",
+      "references": [
+        "<20181017193539.m6a6i2356qztmsi5@an3as.eu>",
+        "<23495.37540.787861.717578@rob.eddelbuettel.com>",
+        "<CAM8zJQt4w3wdcunYZ3ysDgqnN7OpT37r0McLUW2h8e1A0ZvDag@mail.gmail.com>",
+        "<20181018095226.w73fqfwob6mmql2u@an3as.eu>",
+        "<23496.28838.391510.162069@rob.eddelbuettel.com>",
+        "<20181018120641.mf6xrb26pwu6bcfp@an3as.eu>",
+        "<20181018135552.3wueqjsrd4toq7nc@an3as.eu>"
+      ],
+      "body_plain": "On 18 October 2018 at 15:55, Andreas Tille wrote:\n| may be you missed my question in the other mail:\n\nMaybe (one word) you missed my suggestion to go and talk to the Boost\nmaintainer why 1.67 is not the default?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 18 October 2018 at 15:55, Andreas Tille wrote:\n| may be you missed my question in the other mail:\n\nMaybe (one word) you missed my suggestion to go and talk to the Boost\nmaintainer why 1.67 is not t",
+      "thread_id": "thread-8fa3d6734041",
+      "thread_depth": 7,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-8d2e2a866bc9",
+      "message_id": "<be033a2b-f82c-c043-26e3-39d05d694f20@daqana.com>",
+      "from_name": "Ralf Stubner",
+      "from_email_hash": "72dadb73bb75e0c3317da0cf8824a969f3ce5dab32b051c157f712b02005631f",
+      "date": "2018-10-18T14:34:32Z",
+      "subject": "boost-defaults is still at version 1.62",
+      "subject_clean": "boost-defaults is still at version 1.62",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear boost maintainers,\n\nboost-defaults (and therefore libboost-dev) is still using version 1.62.\nAre there any plans to update this to a more recent version?\n\nThanks\nRalf\n\n-- \nRalf Stubner\nSenior Software Engineer / Trainer\n\ndaqana GmbH\nDortustraße 48\n14467 Potsdam\n\nT: +49 331 23 61 93 11\nF: +49 331 23 61 93 90\nM: +49 162 20 91 196\nMail: ralf.stubner at daqana.com\n\nSitz: Potsdam\nRegister: AG Potsdam HRB 27966 P\nUst.-IdNr.: DE300072622\nGeschäftsführer: Prof. Dr. Dr. Karl-Kuno Kunze\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Dear boost maintainers,\n\nboost-defaults (and therefore libboost-dev) is still using version 1.62.\nAre there any plans to update this to a more recent version?\n\nThanks\nRalf\n\n-- \nRalf Stubner\nSenior Sof",
+      "thread_id": "thread-8d2e2a866bc9",
+      "thread_depth": 0,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-74b4ba75bc76",
+      "message_id": "<CALF6qJnGoFtm_hECxwiebNwK9TQuzTHTUU99A7WRsXYLO1d7ZQ@mail.gmail.com>",
+      "from_name": "Anton Gladky",
+      "from_email_hash": "6a2d2358bf1888d14828ce84ed5d91c6f88eacd8e5570efda2f75139f65ccde3",
+      "date": "2018-10-20T12:34:58Z",
+      "subject": "Re: boost-defaults is still at version 1.62",
+      "subject_clean": "boost-defaults is still at version 1.62",
+      "in_reply_to": "<be033a2b-f82c-c043-26e3-39d05d694f20@daqana.com>",
+      "references": [
+        "<be033a2b-f82c-c043-26e3-39d05d694f20@daqana.com>"
+      ],
+      "body_plain": "Hi Ralf,\n\nplease see #904316 for more details.\n\nCheers\n\nAnton\nAm Do., 18. Okt. 2018 um 16:34 Uhr schrieb Ralf Stubner\n<ralf.stubner at daqana.com>:\n>\n> Dear boost maintainers,\n>\n> boost-defaults (and therefore libboost-dev) is still using version 1.62.\n> Are there any plans to update this to a more recent version?\n>\n> Thanks\n> Ralf\n>\n> --\n> Ralf Stubner\n> Senior Software Engineer / Trainer\n>\n> daqana GmbH\n> Dortustraße 48\n> 14467 Potsdam\n>\n> T: +49 331 23 61 93 11\n> F: +49 331 23 61 93 90\n> M: +49 162 20 91 196\n> Mail: ralf.stubner at daqana.com\n>\n> Sitz: Potsdam\n> Register: AG Potsdam HRB 27966 P\n> Ust.-IdNr.: DE300072622\n> Geschäftsführer: Prof. Dr. Dr. Karl-Kuno Kunze\n>",
+      "body_snippet": "Hi Ralf,\n\nplease see #904316 for more details.\n\nCheers\n\nAnton\nAm Do., 18. Okt. 2018 um 16:34 Uhr schrieb Ralf Stubner\n<ralf.stubner at daqana.com>:\n>\n> Dear boost maintainers,\n>\n> boost-defaults (and ",
+      "thread_id": "thread-8d2e2a866bc9",
+      "thread_depth": 1,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-25d743128eb1",
+      "message_id": "<20181022065611.reyqcs3qvkaklnry@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-22T06:56:11Z",
+      "subject": "r-cran-pkgbuild failure in autopkgtest",
+      "subject_clean": "r-cran-pkgbuild failure in autopkgtest",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI tried to upgrade pkgbuild but stumbled upon two errors in the test\nsuite for the HEAD of Git packaging[1]:\n\n> test_check(\"pkgbuild\")\n-- 1. Error: binary builds return correct filenames (@test-build-process.r#33)  \nBuild process failed\n1: expect_true(file.exists(pr$get_built_file())) at testthat/test-build-process.r:33\n2: quasi_label(enquo(object), label)\n3: eval_bare(get_expr(quo), get_env(quo))\n4: file.exists(pr$get_built_file())\n5: pr$get_built_file()\n6: stop(\"Build process failed\")\n\n-- 2. Error: can build package without src without compiler (@test-build-process\nBuild process failed\n1: without_compiler({\n       pr <- pkgbuild_process$new(\"testDummy\", binary = TRUE, dest_path = tmp)\n       pr$wait(60000)\n       if (pr$is_alive()) {\n           pr$kill()\n           skip(\"has not finished in one minute\")\n       }\n       expect_true(file.exists(pr$get_dest_path()))\n       expect_true(file.exists(pr$get_built_file()))\n       expect_true(!is.na(desc::desc(pr$get_built_file())$get(\"Built\")))\n   }) at testthat/test-build-process.r:41\n2: without_cache({\n       withr::with_makevars(flags, code)\n   })\n3: withr::with_makevars(flags, code)\n4: with_envvar(c(R_MAKEVARS_USER = makevars_file), {\n       set_makevars(new, path, makevars_file, assignment = assignment)\n       force(code)\n   })\n5: force(code)\n6: force(code)\n7: expect_true(file.exists(pr$get_built_file())) at testthat/test-build-process.r:50\n8: quasi_label(enquo(object), label)\n9: eval_bare(get_expr(quo), get_env(quo))\n10: file.exists(pr$get_built_file())\n11: pr$get_built_file()\n12: stop(\"Build process failed\")\n\n== testthat results  ===========================================================\nOK: 47 SKIPPED: 2 FAILED: 2\n1. Error: binary builds return correct filenames (@test-build-process.r#33) \n2. Error: can build package without src without compiler (@test-build-process.r#41) \n\nError: testthat unit tests failed\nExecution halted\n\nDoes anybody have an idea what \"compiler\" the test suite is seeking for?\n\nKind regards\n\n       Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-pkgbuild\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI tried to upgrade pkgbuild but stumbled upon two errors in the test\nsuite for the HEAD of Git packaging[1]:\n\n> test_check(\"pkgbuild\")\n-- 1. Error: binary builds return correct filenames (@test-b",
+      "thread_id": "thread-25d743128eb1",
+      "thread_depth": 0,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-7faa104a1e49",
+      "message_id": "<20181022070632.xpfmfayibrsayhjs@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-22T07:06:32Z",
+      "subject": "Copyright file of r-cran-pracma messed up",
+      "subject_clean": "Copyright file of r-cran-pracma messed up",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Oliver,\n\nin the commits\n\ncommit 09c29614fe9c5d02cfdd74324dd2c7a9770a06c5\nAuthor: Oliver Dechant <dechant at dal.ca>\nDate:   Mon Oct 8 08:36:26 2018 -0300\n\n    oliver: debain/copyright formatting\n\ncommit 605599391842592e3d514b4ffe3639374799c05b\nAuthor: Oliver Dechant <dechant at dal.ca>\nDate:   Mon Oct 8 08:25:26 2018 -0300\n\n    oliver: updated debian.copyright\n\nyou changed debian/copyright heavily.  It has *lots* of DEP5 syntax\nissues now and contains information which I totally fail to understand\n(like \"permission obtained by Hans W Borchers\", permissive, \"no license\"\nor BSD when files do not explicitly mention any BSD text).  Can you\nplease explain your motivation for these changes?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Oliver,\n\nin the commits\n\ncommit 09c29614fe9c5d02cfdd74324dd2c7a9770a06c5\nAuthor: Oliver Dechant <dechant at dal.ca>\nDate:   Mon Oct 8 08:36:26 2018 -0300\n\n    oliver: debain/copyright formatting\n\nc",
+      "thread_id": "thread-7faa104a1e49",
+      "thread_depth": 0,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-e38af637e5e3",
+      "message_id": "<alpine.DEB.2.20.1810220408260.3358@debian>",
+      "from_name": "Oliver Dechant",
+      "from_email_hash": "f2b714b7dd2cb2489b4e41e2b56ce037cdd729fe37cd04362dc6a2a3610f11cc",
+      "date": "2018-10-22T07:39:28Z",
+      "subject": "Re: Copyright file of r-cran-pracma messed up",
+      "subject_clean": "Copyright file of r-cran-pracma messed up",
+      "in_reply_to": "<20181022070632.xpfmfayibrsayhjs@an3as.eu>",
+      "references": [
+        "<20181022070632.xpfmfayibrsayhjs@an3as.eu>"
+      ],
+      "body_plain": "On Mon, 22 Oct 2018, Andreas Tille wrote:\n\n> Date: Mon, 22 Oct 2018 04:06:32\n> From: Andreas Tille <andreas at an3as.eu>\n> To: debian-r at lists.debian.org, Oliver Dechant <dechant at dal.ca>\n> Subject: Copyright file of r-cran-pracma messed up\n>\n> Hi Oliver,\n>\n> in the commits\n>\n>\n> commit 09c29614fe9c5d02cfdd74324dd2c7a9770a06c5\n> Author: Oliver Dechant <dechant at dal.ca>\n> Date:   Mon Oct 8 08:36:26 2018 -0300\n>\n>     oliver: debain/copyright formatting\n>\n> commit 605599391842592e3d514b4ffe3639374799c05b\n> Author: Oliver Dechant <dechant at dal.ca>\n> Date:   Mon Oct 8 08:25:26 2018 -0300\n>\n>     oliver: updated debian.copyright\n>\n>\n> you changed debian/copyright heavily.  It has *lots* of DEP5 syntax\n> issues now and contains information which I totally fail to understand\n> (like \"permission obtained by Hans W Borchers\", permissive, \"no license\"\n> or BSD when files do not explicitly mention any BSD text).  Can you\n> please explain your motivation for these changes?\n>\nIn the packaging manual the examples show non-SPDX and unspecified license\nformatting. I did not have means to test for compiling errors and this has\ncaught up to me now.\n\nI believed CRAN packages to be entirely free software. At the top level\npracma appears to be entirely GPL-3+.\n>\n> Kind regards\n>\n>        Andreas.\n>\n>\n>\n\nMany thanks,\n\n-- \nOliver Dechant",
+      "body_snippet": "On Mon, 22 Oct 2018, Andreas Tille wrote:\n\n> Date: Mon, 22 Oct 2018 04:06:32\n> From: Andreas Tille <andreas at an3as.eu>\n> To: debian-r at lists.debian.org, Oliver Dechant <dechant at dal.ca>\n> Subjec",
+      "thread_id": "thread-7faa104a1e49",
+      "thread_depth": 1,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-7f3e565ae4db",
+      "message_id": "<20181022081351.seo6ae3nm6skggzh@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-22T08:13:51Z",
+      "subject": "Re: Copyright file of r-cran-pracma messed up",
+      "subject_clean": "Copyright file of r-cran-pracma messed up",
+      "in_reply_to": "<20181022070632.xpfmfayibrsayhjs@an3as.eu>",
+      "references": [
+        "<20181022070632.xpfmfayibrsayhjs@an3as.eu>"
+      ],
+      "body_plain": "Hi Oliver,\n\nah, I now see the motivation - it was your attempt to fix bug #910522.\nI'll come up with a fix for this.\n\nTwo general remarks:\n\n  1. Please *always* use lintian on your packages by doing\n\n       lintian -i -I *.changes\n\n  2. If you think you have fixed a bug in Git please mention this\n     somehow visibly to some sponsor via sending an e-mail to\n     debian-r at lists.debian.org or at least to the bug log marking\n     the bug pending upload.\n\nKind regards\n\n       Andreas.\n\nOn Mon, Oct 22, 2018 at 09:06:32AM +0200, Andreas Tille wrote:\n> Hi Oliver,\n> \n> in the commits\n> \n> \n> commit 09c29614fe9c5d02cfdd74324dd2c7a9770a06c5\n> Author: Oliver Dechant <dechant at dal.ca>\n> Date:   Mon Oct 8 08:36:26 2018 -0300\n> \n>     oliver: debain/copyright formatting\n> \n> commit 605599391842592e3d514b4ffe3639374799c05b\n> Author: Oliver Dechant <dechant at dal.ca>\n> Date:   Mon Oct 8 08:25:26 2018 -0300\n> \n>     oliver: updated debian.copyright\n> \n> \n> you changed debian/copyright heavily.  It has *lots* of DEP5 syntax\n> issues now and contains information which I totally fail to understand\n> (like \"permission obtained by Hans W Borchers\", permissive, \"no license\"\n> or BSD when files do not explicitly mention any BSD text).  Can you\n> please explain your motivation for these changes?\n> \n> Kind regards\n> \n>        Andreas.\n> \n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Oliver,\n\nah, I now see the motivation - it was your attempt to fix bug #910522.\nI'll come up with a fix for this.\n\nTwo general remarks:\n\n  1. Please *always* use lintian on your packages by doing\n\n",
+      "thread_id": "thread-7faa104a1e49",
+      "thread_depth": 1,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-f145f7ccc277",
+      "message_id": "<11c469c2-ce96-bb34-41cb-e56638fe5ff7@daqana.com>",
+      "from_name": "Ralf Stubner",
+      "from_email_hash": "72dadb73bb75e0c3317da0cf8824a969f3ce5dab32b051c157f712b02005631f",
+      "date": "2018-10-22T09:22:51Z",
+      "subject": "Re: boost-defaults is still at version 1.62",
+      "subject_clean": "boost-defaults is still at version 1.62",
+      "in_reply_to": "<CALF6qJnGoFtm_hECxwiebNwK9TQuzTHTUU99A7WRsXYLO1d7ZQ@mail.gmail.com>",
+      "references": [
+        "<be033a2b-f82c-c043-26e3-39d05d694f20@daqana.com>",
+        "<CALF6qJnGoFtm_hECxwiebNwK9TQuzTHTUU99A7WRsXYLO1d7ZQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Anton,\n\nOn 10/20/18 2:34 PM, Anton Gladky wrote:\n> please see #904316 for more details.\n\nthanks a lot. I wasn't aware of this ongoing/planned transition. I was\nsurprised to learn that a major hurdle in packaging new boost versions\nis getting the copyrights file right.\n\n@Dirk: rquantlib is among the packages listed at\nhttps://salsa.debian.org/gio/rebuilder/blob/master/reasons\nthat fail with boost 1.67.\n\nGreetings\nRalf\n\n-- \nRalf Stubner\nSenior Software Engineer / Trainer\n\ndaqana GmbH\nDortustraße 48\n14467 Potsdam\n\nT: +49 331 23 61 93 11\nF: +49 331 23 61 93 90\nM: +49 162 20 91 196\nMail: ralf.stubner at daqana.com\n\nSitz: Potsdam\nRegister: AG Potsdam HRB 27966 P\nUst.-IdNr.: DE300072622\nGeschäftsführer: Prof. Dr. Dr. Karl-Kuno Kunze\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Anton,\n\nOn 10/20/18 2:34 PM, Anton Gladky wrote:\n> please see #904316 for more details.\n\nthanks a lot. I wasn't aware of this ongoing/planned transition. I was\nsurprised to learn that a major hurdl",
+      "thread_id": "thread-8d2e2a866bc9",
+      "thread_depth": 2,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-8ea6e7347029",
+      "message_id": "<23501.49890.606313.149005@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-10-22T12:30:26Z",
+      "subject": "Re: boost-defaults is still at version 1.62",
+      "subject_clean": "boost-defaults is still at version 1.62",
+      "in_reply_to": "<11c469c2-ce96-bb34-41cb-e56638fe5ff7@daqana.com>",
+      "references": [
+        "<be033a2b-f82c-c043-26e3-39d05d694f20@daqana.com>",
+        "<CALF6qJnGoFtm_hECxwiebNwK9TQuzTHTUU99A7WRsXYLO1d7ZQ@mail.gmail.com>",
+        "<11c469c2-ce96-bb34-41cb-e56638fe5ff7@daqana.com>"
+      ],
+      "body_plain": "On 22 October 2018 at 11:22, Ralf Stubner wrote:\n| Hi Anton,\n| \n| On 10/20/18 2:34 PM, Anton Gladky wrote:\n| > please see #904316 for more details.\n| \n| thanks a lot. I wasn't aware of this ongoing/planned transition. I was\n| surprised to learn that a major hurdle in packaging new boost versions\n| is getting the copyrights file right.\n| \n| @Dirk: rquantlib is among the packages listed at\n| https://salsa.debian.org/gio/rebuilder/blob/master/reasons\n| that fail with boost 1.67.\n\nThat \"rquantlib (various problems with boost)\" is news to me as\n\n a) nobody from that team spoke to me\n \n b) I just rebuilt my RQuantLib package locally following the new QuantLib\n    1.14 upstream release, and as usual it just worked so ...\n\nDirk\n \n| Greetings\n| Ralf\n| \n| -- \n| Ralf Stubner\n| Senior Software Engineer / Trainer\n| \n| daqana GmbH\n| Dortustraße 48\n| 14467 Potsdam\n| \n| T: +49 331 23 61 93 11\n| F: +49 331 23 61 93 90\n| M: +49 162 20 91 196\n| Mail: ralf.stubner at daqana.com\n| \n| Sitz: Potsdam\n| Register: AG Potsdam HRB 27966 P\n| Ust.-IdNr.: DE300072622\n| Geschäftsführer: Prof. Dr. Dr. Karl-Kuno Kunze\n| \n| x[DELETED ATTACHMENT signature.asc, application/pgp-signature]\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 22 October 2018 at 11:22, Ralf Stubner wrote:\n| Hi Anton,\n| \n| On 10/20/18 2:34 PM, Anton Gladky wrote:\n| > please see #904316 for more details.\n| \n| thanks a lot. I wasn't aware of this ongoing/pl",
+      "thread_id": "thread-8d2e2a866bc9",
+      "thread_depth": 3,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-80d5419ab6d9",
+      "message_id": "<20181022145610.p7dyap3cqwt6qwhv@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-10-22T14:56:10Z",
+      "subject": "Re: Copyright file of r-cran-pracma messed up",
+      "subject_clean": "Copyright file of r-cran-pracma messed up",
+      "in_reply_to": "<alpine.DEB.2.20.1810220408260.3358@debian>",
+      "references": [
+        "<20181022070632.xpfmfayibrsayhjs@an3as.eu>",
+        "<alpine.DEB.2.20.1810220408260.3358@debian>"
+      ],
+      "body_plain": "On Mon, Oct 22, 2018 at 07:39:28AM +0000, Oliver Dechant wrote:\n> >\n> In the packaging manual the examples show non-SPDX and unspecified license\n> formatting. I did not have means to test for compiling errors and this has\n> caught up to me now.\n\nHmmmm, I can not really parse what you want to express.  Did you build\nthe package before commiting to Git?  Than you should run lintian as I\nrecommended.\n \n> I believed CRAN packages to be entirely free software. At the top level\n> pracma appears to be entirely GPL-3+.\n\nYes, that's the main license.  If there is nothing else mentioned you\nneed to assume that this is valid for all files.  In your commit you\nmentioned several others with no obvious reason.  You also failed to\nmention the files correctly (without path).\n\nKind regards\n \n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Oct 22, 2018 at 07:39:28AM +0000, Oliver Dechant wrote:\n> >\n> In the packaging manual the examples show non-SPDX and unspecified license\n> formatting. I did not have means to test for compilin",
+      "thread_id": "thread-7faa104a1e49",
+      "thread_depth": 2,
+      "month": "2018-10"
+    },
+    {
+      "id": "msg-ed1e0408c238",
+      "message_id": "<alpine.DEB.2.20.1810221235350.2912@debian>",
+      "from_name": "Oliver Dechant",
+      "from_email_hash": "f2b714b7dd2cb2489b4e41e2b56ce037cdd729fe37cd04362dc6a2a3610f11cc",
+      "date": "2018-10-22T15:46:16Z",
+      "subject": "Re: Copyright file of r-cran-pracma messed up",
+      "subject_clean": "Copyright file of r-cran-pracma messed up",
+      "in_reply_to": "<20181022145610.p7dyap3cqwt6qwhv@an3as.eu>",
+      "references": [
+        "<20181022070632.xpfmfayibrsayhjs@an3as.eu>",
+        "<alpine.DEB.2.20.1810220408260.3358@debian>",
+        "<20181022145610.p7dyap3cqwt6qwhv@an3as.eu>"
+      ],
+      "body_plain": "Inline below.\n\nOn Mon, 22 Oct 2018, Andreas Tille wrote:\n\n> Date: Mon, 22 Oct 2018 11:56:10\n> From: Andreas Tille <andreas at an3as.eu>\n> To: debian-r at lists.debian.org\n> Subject: Re: Copyright file of r-cran-pracma messed up\n> Resent-Date: Mon, 22 Oct 2018 14:56:39 +0000\n> Resent-From: <debian-r at lists.debian.org>\n>\n> On Mon, Oct 22, 2018 at 07:39:28AM +0000, Oliver Dechant wrote:\n> > >\n> > In the packaging manual the examples show non-SPDX and unspecified license\n> > formatting. I did not have means to test for compiling errors and this has\n> > caught up to me now.\n>\n> Hmmmm, I can not really parse what you want to express.  Did you build\n> the package before commiting to Git?  Than you should run lintian as I\n> recommended.\n>\nUnfortunately, I failed to advance as far as building the package again or\nusing lintian before updates caught up to me.\n>\n> > I believed CRAN packages to be entirely free software. At the top level\n> > pracma appears to be entirely GPL-3+.\n>\n> Yes, that's the main license.  If there is nothing else mentioned you\n> need to assume that this is valid for all files.  In your commit you\n> mentioned several others with no obvious reason.  You also failed to\n> mention the files correctly (without path).\n>\nI will have to spend longer reviewing the processes involved, and would\nnot have filed this bug as a complete without further study of the issues.\n>\n> Kind regards\n>\n>      Andreas.\n>\n>\nMany thanks again,\n\n-- \nOliver Dechant\nhttps://web.cs.dal.ca/~dechant | Dalhousie University\nFaculty of Computer Science",
+      "body_snippet": "Inline below.\n\nOn Mon, 22 Oct 2018, Andreas Tille wrote:\n\n> Date: Mon, 22 Oct 2018 11:56:10\n> From: Andreas Tille <andreas at an3as.eu>\n> To: debian-r at lists.debian.org\n> Subject: Re: Copyright file",
+      "thread_id": "thread-7faa104a1e49",
+      "thread_depth": 3,
+      "month": "2018-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-aabe44de5e9c",
+      "subject": "curl/7.60.0-1 appears to break r-cran-curl/3.2-1 autopkgtest in testing",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-10-03T13:00:48Z",
+      "last_reply": "2018-10-03T13:00:48Z",
+      "root_message_id": "msg-aabe44de5e9c"
+    },
+    {
+      "id": "thread-8fa3d6734041",
+      "subject": "Problem building latest version of r-cran-rstan",
+      "message_count": 15,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Graham Inggs",
+        "Ralf Stubner"
+      ],
+      "started": "2018-10-17T19:35:39Z",
+      "last_reply": "2018-10-18T14:24:04Z",
+      "root_message_id": "msg-8fa3d6734041"
+    },
+    {
+      "id": "thread-8d2e2a866bc9",
+      "subject": "boost-defaults is still at version 1.62",
+      "message_count": 4,
+      "participants": [
+        "Anton Gladky",
+        "Dirk Eddelbuettel",
+        "Ralf Stubner"
+      ],
+      "started": "2018-10-18T14:34:32Z",
+      "last_reply": "2018-10-22T12:30:26Z",
+      "root_message_id": "msg-8d2e2a866bc9"
+    },
+    {
+      "id": "thread-25d743128eb1",
+      "subject": "r-cran-pkgbuild failure in autopkgtest",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-10-22T06:56:11Z",
+      "last_reply": "2018-10-22T06:56:11Z",
+      "root_message_id": "msg-25d743128eb1"
+    },
+    {
+      "id": "thread-7faa104a1e49",
+      "subject": "Copyright file of r-cran-pracma messed up",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Oliver Dechant"
+      ],
+      "started": "2018-10-22T07:06:32Z",
+      "last_reply": "2018-10-22T15:46:16Z",
+      "root_message_id": "msg-7faa104a1e49"
+    }
+  ]
+}

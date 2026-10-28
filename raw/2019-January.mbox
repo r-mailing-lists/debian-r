@@ -1,0 +1,592 @@
+From andreas at an3as.eu  Thu Jan 17 11:01:36 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 17 Jan 2019 12:01:36 +0100
+Subject: Re: working on r-cran-tablehtml r-cran-lsa r-cran-quanteda, willing to join?
+In-Reply-To: <20190117100330.GK27227@dijkstra.uvt.nl>
+References: <20190117100330.GK27227@dijkstra.uvt.nl>
+Message-ID: <20190117110135.njaonjll26up22az@an3as.eu>
+
+Hi Joost,
+
+On Thu, Jan 17, 2019 at 11:03:30AM +0100, Joost van Baal-Ilić wrote:
+> [feel free to quote and reply publically, at e.g. debian-r at lists.debian.org ]
+
+Quiting in public. ;-)
+ 
+> I just asked for access at https://salsa.debian.org/groups/r-pkg-team/,
+> and was granted that: Thanks!
+
+You are welcome.  I should have added you before since you are Uploader of
+some other packages ...
+
+> Are you willing to have:
+> 
+>  Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+>  Uploaders: Joost van Baal-Ilić <joostvb at debian.org>,
+>   Andreas Tille <tille at debian.org>
+> 
+> in packages r-cran-tablehtml, r-cran-lsa and r-cran-quanteda?
+
+Its fine if you leave me out as Uploader.  I'm fine with doing team
+uploads as I'm doing with lots of packages but I'd prefer to be
+explicitly mentioned only if I really have some personal interest.
+ 
+> I have created initial Debian packages for r-cran-tablehtml, r-cran-lsa and
+> r-cran-quanteda; I want to work on them and use them on our Debian/stable
+> machines.  I likely will not have time to do long-term maintenance of those
+> packages for Debian/unstable.
+
+We have lots of this package in this status.  Luckily the upgrade process
+is heavily automatized:
+
+   https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update
+
+I'd recommend also checking this (also for non-R packages).
+
+> My only interest is to keep this software
+> running on Debian/stable.  I can invest some time to make that possible; I can
+> e.g. upload stuff to backports.
+
+That's fine.
+ 
+> I have created and uploaded git repo's holding initial packaging the 3 pieces
+> of software (I used your excellent prepare_missing_cran_package script as
+> shipped with the dh-r package; thanks for that!).
+
+You are welcome. :-)
+ 
+> FWIW, I'm also listed as one of the Uploaders of
+> 
+>  r-cran-corpcor
+>  r-cran-formatr
+>  r-cran-highr
+>  r-cran-httpuv
+>  r-cran-knitr
+>  r-cran-lavaan
+>  r-cran-markdown
+>  r-cran-matrixcalc
+>  r-cran-mi
+>  r-cran-mime
+>  r-cran-sem
+>  r-cran-semtools
+>  r-cran-yaml
+
+Yep, that's OK. 
+
+Thanks for your work and welcome in the r-pkg team
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Jan 29 09:04:40 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 29 Jan 2019 10:04:40 +0100
+Subject: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>
+Message-ID: <20190129090440.w7qmybckqd6ols3o@an3as.eu>
+
+Hi Jeroen,
+
+I realised that the Debian package of V8 has de facto no chance to make
+it into the next stable Debian release if it depends from V8 version
+3.14 or 3.15 (as it is enforced in its configuration step).  The reason
+is that it depends from libv8-3.14 package which is suffering from
+several security bugs[1].  I've started a discussion[2] with the
+JavaScript maintainers which leaded to the suggestion to use the current
+V8 library which is part of the libnode-dev package.  However, the
+explicit version checks are preventing this.  I even tried to remove
+these checks but later (not unexpected) the code failed to build.
+
+The problem is that the CRAN V8 package has some reverse dependencies
+which all are affected and can not migrate to the next Debian stable
+release which would be a real shame.  Do you see any chance to adapt V8
+to some more recent implementation of the library?  Finally R
+applications like Shiny etc might suffer from security issues of that
+old and unmaintained V8 implementation.
+
+Kind regards
+
+      Andreas.
+
+[1] https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=libv8-3.14
+[2] https://alioth-lists.debian.net/pipermail/pkg-javascript-devel/2019-January/030787.html
+
+On Mon, Jan 21, 2019 at 10:15:44AM +0100, Jérémy Lal wrote:
+> Le lun. 21 janv. 2019 à 10:08, Andreas Tille <andreas at an3as.eu> a écrit :
+> 
+> > Hi Jonas,
+> >
+> > On Fri, Jan 18, 2019 at 08:04:33PM +0100, Jonas Smedegaard wrote:
+> > > Quoting Andreas Tille (2019-01-18 18:39:34)
+> > > > I'd prefer
+> > > >
+> > > >  - change nodejs to build its v8 as a shared lib, and provide it it
+> > > >    makes sense because upstream nodejs do all the work of keeping ABI
+> > > >    stability,
+> > >
+> > > The libv8 part of Nodejs is currently included in Debian as a _private_
+> > > shared library part of libnode.
+> > >
+> > > I guess you can try link with that private library - as an alternative
+> > > to waiting for someone to refactor packages, have ftpmasters approve new
+> > > package names, and then have it available in experimental.
+> >
+> > I admit I do not understand what exactly I need to do to use that
+> > private shared library.  I checked the content of the packages
+> > libnode-dev and libnode64 and did not found anything that looks
+> > like libv8.  Could you give any more verbose hint how I can link
+> > against the private shared library you mentioned?
+> >
+> 
+> The headers are in libnode-dev
+>  /usr/include/nodejs/deps/v8/include/
+> and the link flag is
+> -lnode
+> (v8 being inside node). But can that work ?
+> 
+> Jérémy
+
+-- 
+http://fam-tille.de
+
+From jeroen at berkeley.edu  Tue Jan 29 18:41:34 2019
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Tue, 29 Jan 2019 10:41:34 -0800
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <20190129090440.w7qmybckqd6ols3o@an3as.eu>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu>
+Message-ID: <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com>
+
+Is there another version of libv8 available on Debian? I'm willing to
+try to port it to a newer version of V8. The issue with libv8 has
+always been that Google refuses to define a stable API, and they do a
+new release every day (no joke). So it's very hard to program against
+that.
+
+That said, Fedora is now shipping v8 6.7.17
+https://apps.fedoraproject.org/packages/v8 (in addition to
+https://apps.fedoraproject.org/packages/v8-314). So if Debian would
+ship a version of V8 with a similar version, I will try to update the
+R package to support this API.
+
+On Tue, Jan 29, 2019 at 1:04 AM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi Jeroen,
+>
+> I realised that the Debian package of V8 has de facto no chance to make
+> it into the next stable Debian release if it depends from V8 version
+> 3.14 or 3.15 (as it is enforced in its configuration step).  The reason
+> is that it depends from libv8-3.14 package which is suffering from
+> several security bugs[1].  I've started a discussion[2] with the
+> JavaScript maintainers which leaded to the suggestion to use the current
+> V8 library which is part of the libnode-dev package.  However, the
+> explicit version checks are preventing this.  I even tried to remove
+> these checks but later (not unexpected) the code failed to build.
+>
+> The problem is that the CRAN V8 package has some reverse dependencies
+> which all are affected and can not migrate to the next Debian stable
+> release which would be a real shame.  Do you see any chance to adapt V8
+> to some more recent implementation of the library?  Finally R
+> applications like Shiny etc might suffer from security issues of that
+> old and unmaintained V8 implementation.
+>
+> Kind regards
+>
+>       Andreas.
+>
+>
+> [1] https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=libv8-3.14
+> [2] https://alioth-lists.debian.net/pipermail/pkg-javascript-devel/2019-January/030787.html
+>
+> On Mon, Jan 21, 2019 at 10:15:44AM +0100, Jérémy Lal wrote:
+> > Le lun. 21 janv. 2019 à 10:08, Andreas Tille <andreas at an3as.eu> a écrit :
+> >
+> > > Hi Jonas,
+> > >
+> > > On Fri, Jan 18, 2019 at 08:04:33PM +0100, Jonas Smedegaard wrote:
+> > > > Quoting Andreas Tille (2019-01-18 18:39:34)
+> > > > > I'd prefer
+> > > > >
+> > > > >  - change nodejs to build its v8 as a shared lib, and provide it it
+> > > > >    makes sense because upstream nodejs do all the work of keeping ABI
+> > > > >    stability,
+> > > >
+> > > > The libv8 part of Nodejs is currently included in Debian as a _private_
+> > > > shared library part of libnode.
+> > > >
+> > > > I guess you can try link with that private library - as an alternative
+> > > > to waiting for someone to refactor packages, have ftpmasters approve new
+> > > > package names, and then have it available in experimental.
+> > >
+> > > I admit I do not understand what exactly I need to do to use that
+> > > private shared library.  I checked the content of the packages
+> > > libnode-dev and libnode64 and did not found anything that looks
+> > > like libv8.  Could you give any more verbose hint how I can link
+> > > against the private shared library you mentioned?
+> > >
+> >
+> > The headers are in libnode-dev
+> >  /usr/include/nodejs/deps/v8/include/
+> > and the link flag is
+> > -lnode
+> > (v8 being inside node). But can that work ?
+> >
+> > Jérémy
+>
+> --
+> http://fam-tille.de
+
+From kapouer at melix.org  Tue Jan 29 18:55:37 2019
+From: kapouer at melix.org (=?utf-8?b?SsOpcsOpbXkgTGFs?=)
+Date: Tue, 29 Jan 2019 19:55:37 +0100
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com>
+Message-ID: <CAJxTCxy8d4_xG4CmBLG-HTVt1HmKh-9peMGWg64Dcr3SXnVEhg@mail.gmail.com>
+
+Le mar. 29 janv. 2019 à 19:41, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+
+> Is there another version of libv8 available on Debian? I'm willing to
+>
+> try to port it to a newer version of V8. The issue with libv8 has
+>
+> always been that Google refuses to define a stable API, and they do a
+>
+> new release every day (no joke). So it's very hard to program against
+>
+> that.
+>
+>
+>
+> That said, Fedora is now shipping v8 6.7.17
+>
+> https://apps.fedoraproject.org/packages/v8 (in addition to
+>
+> https://apps.fedoraproject.org/packages/v8-314). So if Debian would
+>
+> ship a version of V8 with a similar version, I will try to update the
+>
+> R package to support this API.
+
+Please read the full bug report, and TL;DR:
+the best thing to do that i don't do because i lack time, is to package the v8 version
+that is in nodejs (10.15 at the moment, soon in testing).
+
+It will profit from the hard work upstream nodejs do to keep ABI-compatibility across
+nodejs versions, with the bonus of having security fixes backported.
+
+Jérémy
+>
+
+From jeroen at berkeley.edu  Tue Jan 29 19:11:20 2019
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Tue, 29 Jan 2019 11:11:20 -0800
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CAJxTCxy8d4_xG4CmBLG-HTVt1HmKh-9peMGWg64Dcr3SXnVEhg@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com> <CAJxTCxy8d4_xG4CmBLG-HTVt1HmKh-9peMGWg64Dcr3SXnVEhg@mail.gmail.com>
+Message-ID: <CABFfbXvaaLYi17yDCyS6wFZxxN35VAwP-bMFUN9vpnwfgCScpw@mail.gmail.com>
+
+On Tue, Jan 29, 2019 at 10:56 AM Jérémy Lal <kapouer at melix.org> wrote:
+>
+>
+>
+> Le mar. 29 janv. 2019 à 19:41, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+>>
+>> Is there another version of libv8 available on Debian? I'm willing to
+>> try to port it to a newer version of V8. The issue with libv8 has
+>> always been that Google refuses to define a stable API, and they do a
+>> new release every day (no joke). So it's very hard to program against
+>> that.
+>>
+>> That said, Fedora is now shipping v8 6.7.17
+>> https://apps.fedoraproject.org/packages/v8 (in addition to
+>> https://apps.fedoraproject.org/packages/v8-314). So if Debian would
+>> ship a version of V8 with a similar version, I will try to update the
+>> R package to support this API.
+>
+>
+> Please read the full bug report, and TL;DR:
+> the best thing to do that i don't do because i lack time, is to package the v8 version
+> that is in nodejs (10.15 at the moment, soon in testing).
+>
+> It will profit from the hard work upstream nodejs do to keep ABI-compatibility across
+> nodejs versions, with the bonus of having security fixes backported.
+
+OK I'll have a look. So the full libv8.so and libv8 headers will be in
+libnode-dev now? Why not separate out an actual libv8-dev package as
+part of the 'nodejs' source package, so we can install just libv8
+without all the node stuff?
+
+From jonas at jones.dk  Tue Jan 29 20:15:11 2019
+From: jonas at jones.dk (Jonas Smedegaard)
+Date: Tue, 29 Jan 2019 21:15:11 +0100
+Subject: Re: [Pkg-javascript-devel] V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <CABFfbXvaaLYi17yDCyS6wFZxxN35VAwP-bMFUN9vpnwfgCScpw@mail.gmail.com>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com> <CAJxTCxy8d4_xG4CmBLG-HTVt1HmKh-9peMGWg64Dcr3SXnVEhg@mail.gmail.com> <CABFfbXvaaLYi17yDCyS6wFZxxN35VAwP-bMFUN9vpnwfgCScpw@mail.gmail.com>
+Message-ID: <154879291182.5603.11300186248341220140@auryn.jones.dk>
+
+Quoting Jeroen Ooms (2019-01-29 20:11:20)
+> On Tue, Jan 29, 2019 at 10:56 AM Jérémy Lal <kapouer at melix.org> wrote:
+> >
+> >
+> >
+> > Le mar. 29 janv. 2019 à 19:41, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+> >>
+> >> Is there another version of libv8 available on Debian? I'm willing to
+> >> try to port it to a newer version of V8. The issue with libv8 has
+> >> always been that Google refuses to define a stable API, and they do a
+> >> new release every day (no joke). So it's very hard to program against
+> >> that.
+> >>
+> >> That said, Fedora is now shipping v8 6.7.17
+> >> https://apps.fedoraproject.org/packages/v8 (in addition to
+> >> https://apps.fedoraproject.org/packages/v8-314). So if Debian would
+> >> ship a version of V8 with a similar version, I will try to update the
+> >> R package to support this API.
+> >
+> >
+> > Please read the full bug report, and TL;DR:
+> > the best thing to do that i don't do because i lack time, is to package the v8 version
+> > that is in nodejs (10.15 at the moment, soon in testing).
+> >
+> > It will profit from the hard work upstream nodejs do to keep ABI-compatibility across
+> > nodejs versions, with the bonus of having security fixes backported.
+> 
+> OK I'll have a look. So the full libv8.so and libv8 headers will be in
+> libnode-dev now? Why not separate out an actual libv8-dev package as
+> part of the 'nodejs' source package, so we can install just libv8
+> without all the node stuff?
+
+I believe you quoted the answer to your question. ;-)
+
+ - Jonas
+
+-- 
+ * Jonas Smedegaard - idealist & Internet-arkitekt
+ * Tlf.: +45 40843136  Website: http://dr.jones.dk/
+
+ [x] quote me freely  [ ] ask before reusing  [ ] keep private
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: signature
+
+From jeroen at berkeley.edu  Tue Jan 29 23:45:35 2019
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Tue, 29 Jan 2019 15:45:35 -0800
+Subject: Re: [Pkg-javascript-devel] V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <154879291182.5603.11300186248341220140@auryn.jones.dk>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu> <CABFfbXvPsmuOkp-mtLgqwU07r9FtNaTwu68idXdAQdPGk=XbxQ@mail.gmail.com> <CAJxTCxy8d4_xG4CmBLG-HTVt1HmKh-9peMGWg64Dcr3SXnVEhg@mail.gmail.com> <CABFfbXvaaLYi17yDCyS6wFZxxN35VAwP-bMFUN9vpnwfgCScpw@mail.gmail.com> <154879291182.5603.11300186248341220140@auryn.jones.dk>
+Message-ID: <CABFfbXvSTbAFxUQJqgNxQ62j5jYHpxX7ew8gD1txGf4-r1jZTg@mail.gmail.com>
+
+On Tue, Jan 29, 2019 at 12:15 PM Jonas Smedegaard <jonas at jones.dk> wrote:
+>
+> Quoting Jeroen Ooms (2019-01-29 20:11:20)
+> > On Tue, Jan 29, 2019 at 10:56 AM Jérémy Lal <kapouer at melix.org> wrote:
+> > >
+> > >
+> > >
+> > > Le mar. 29 janv. 2019 à 19:41, Jeroen Ooms <jeroen at berkeley.edu> a écrit :
+> > >>
+> > >> Is there another version of libv8 available on Debian? I'm willing to
+> > >> try to port it to a newer version of V8. The issue with libv8 has
+> > >> always been that Google refuses to define a stable API, and they do a
+> > >> new release every day (no joke). So it's very hard to program against
+> > >> that.
+> > >>
+> > >> That said, Fedora is now shipping v8 6.7.17
+> > >> https://apps.fedoraproject.org/packages/v8 (in addition to
+> > >> https://apps.fedoraproject.org/packages/v8-314). So if Debian would
+> > >> ship a version of V8 with a similar version, I will try to update the
+> > >> R package to support this API.
+> > >
+> > >
+> > > Please read the full bug report, and TL;DR:
+> > > the best thing to do that i don't do because i lack time, is to package the v8 version
+> > > that is in nodejs (10.15 at the moment, soon in testing).
+> > >
+> > > It will profit from the hard work upstream nodejs do to keep ABI-compatibility across
+> > > nodejs versions, with the bonus of having security fixes backported.
+> >
+> > OK I'll have a look. So the full libv8.so and libv8 headers will be in
+> > libnode-dev now? Why not separate out an actual libv8-dev package as
+> > part of the 'nodejs' source package, so we can install just libv8
+> > without all the node stuff?
+>
+> I believe you quoted the answer to your question. ;-)
+
+You mean the time constraint?
+
+If there is going to be no libv8 package anymore, and libnode-dev
+doesn't have a pkg-config file or /usr/lib/v8.h or libv8.so, how are
+the bindings supposed to find the proper include and linker path to
+libv8 ?
+
+From jeroen at berkeley.edu  Wed Jan 30 21:44:04 2019
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Wed, 30 Jan 2019 13:44:04 -0800
+Subject: Re: V8 depends from outdated and unmaintained libv8 with security issues
+In-Reply-To: <20190129090440.w7qmybckqd6ols3o@an3as.eu>
+References: <20190118103730.3yji326g7lavwhz5@an3as.eu> <CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com> <20190118120430.5j65cl447uvvwqn2@an3as.eu> <CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com> <20190118173934.xhd5j3zln4in7lw2@an3as.eu> <154783827303.1962.3796423061358403993@auryn.jones.dk> <20190121090821.r2v24zrdbwnx6hye@an3as.eu> <CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com> <20190129090440.w7qmybckqd6ols3o@an3as.eu>
+Message-ID: <CABFfbXu0+tRSNssrwpRwx4EE7xZWaUoRunDWUkQpCJ-LF-SCfQ@mail.gmail.com>
+
+On Tue, Jan 29, 2019 at 1:04 AM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> The problem is that the CRAN V8 package has some reverse dependencies
+> which all are affected and can not migrate to the next Debian stable
+> release which would be a real shame.  Do you see any chance to adapt V8
+> to some more recent implementation of the library?  Finally R
+> applications like Shiny etc might suffer from security issues of that
+> old and unmaintained V8 implementation.
+
+I'm making good progress with porting the R bindings to the new libv8
+API that is part of libnode-dev.
+
+However I'm not sure how to write a portable configure script to
+actually find headers/libs from libnode-dev. The script currently
+looks for -lv8 and v8.h in the standard locations. I'm a bit reluctant
+to hardcode a hack case for Debian to include headers from
+/usr/include/nodejs/deps/v8/include and link to -lnode instead of
+-lv8. People will be installing the same R package in
+stretch/ubuntu/fedora where we do need to link to actual libv8, it
+will get messy to special case Buster.
+
+One solution would be if someone could upload a transition libv8-dev
+package in Debian that creates symlinks in the expected locations:
+
+  /usr/lib/libv8.so  -> /usr/lib/libnode.so
+  /usr/include/v8*.h  -> /usr/include/nodejs/deps/v8/include/  (10 files)
+  /usr/include/libplatfrom -> /usr/include/nodejs/deps/v8/include/libplatform
+
+I think this can prevent a lot of downstream breakage and confusion
+where it is assumed and documented that the V8 R package depends on
+libv8-dev.
+
+Thanks for your help all!
+
+From andreas at an3as.eu  Thu Jan 31 12:15:10 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 31 Jan 2019 13:15:10 +0100
+Subject: How to get the non-minimized versions of handsontable/all.min.js and others
+Message-ID: <20190131121510.qpyaar2nxeuaagto@an3as.eu>
+
+Hi Jonathan,
+
+the R packaging team in Debian has packaged your rhandsontable package
+for Debian.  Debian iconsiders minimized JavaScript as not human
+readable code and thus not considered as source code.  So we need to
+provide the non-minimized code inside the source of our packaging.
+
+In your rhandsontable package I've found
+
+  inst/htmlwidgets/lib/numbro/languages.min.js
+  inst/htmlwidgets/lib/chroma/chroma.min.js
+  inst/htmlwidgets/lib/handsontable/all.min.js
+
+where it is not easy for me to find the not minimized form (no problem
+for the other JS scripts).  For instance for handsontable I checked
+
+  https://github.com/handsontable/handsontable
+
+but the code I get there from the dist directory are way larger files
+and I have no clue what is actually behind all.min.js.  Since I need to
+ask you for this anyway I did not yet checked numbro/languages and
+chroma/chroma whether I could find the source code since it seems to be
+the more straightforward approach to ask you about this.
+
+Could you help me from where you've got these JS code and what might
+be the original source code form.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From jonathanro at gmail.com  Thu Jan 31 12:28:41 2019
+From: jonathanro at gmail.com (Jonathan Owen)
+Date: Thu, 31 Jan 2019 06:28:41 -0600
+Subject: Re: How to get the non-minimized versions of handsontable/all.min.js and others
+In-Reply-To: <20190131121510.qpyaar2nxeuaagto@an3as.eu>
+References: <20190131121510.qpyaar2nxeuaagto@an3as.eu>
+Message-ID: <CAHsBtiB68Br=eeNDRLzsBX+LG8k9v1vT2Gs-swY5DXSUUKE-CQ@mail.gmail.com>
+
+I generally pull the min.js files from the handsontable GitHub repo: https://github.com/handsontable/handsontable (see releases, dist folder).  You can find the current release version for rhandsontable in the rhandsontable/inst/htmlwidgets/rhandsontable.yaml file.  
+
+Let me know if you need us to create a new version of the library that uses non-minified files.  Switching will increase the package size significantly.
+
+Jonathan
+
+On Thu, Jan 31, 2019, 6:15 AM Andreas Tille <andreas at an3as.eu wrote:
+
+> Hi Jonathan,
+>
+>
+>
+> the R packaging team in Debian has packaged your rhandsontable package
+>
+> for Debian.  Debian iconsiders minimized _javascript_ as not human
+>
+> readable code and thus not considered as source code.  So we need to
+>
+> provide the non-minimized code inside the source of our packaging.
+>
+>
+>
+> In your rhandsontable package I've found
+>
+>
+>
+>   inst/htmlwidgets/lib/numbro/languages.min.js
+>
+>   inst/htmlwidgets/lib/chroma/chroma.min.js
+>
+>   inst/htmlwidgets/lib/handsontable/all.min.js
+>
+>
+>
+> where it is not easy for me to find the not minimized form (no problem
+>
+> for the other JS scripts).  For instance for handsontable I checked
+>
+>
+>
+>   https://github.com/handsontable/handsontable
+>
+>
+>
+> but the code I get there from the dist directory are way larger files
+>
+> and I have no clue what is actually behind all.min.js.  Since I need to
+>
+> ask you for this anyway I did not yet checked numbro/languages and
+>
+> chroma/chroma whether I could find the source code since it seems to be
+>
+> the more straightforward approach to ask you about this.
+>
+>
+>
+> Could you help me from where you've got these JS code and what might
+>
+> be the original source code form.
+>
+>
+>
+> Kind regards
+>
+>
+>
+>        Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+

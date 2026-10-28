@@ -1,0 +1,160 @@
+From andreas at an3as.eu  Wed Oct  9 09:12:51 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 9 Oct 2019 11:12:51 +0200
+Subject: Status of R packages
+Message-ID: <20191009091251.ybuoa3ehnlu72cny@an3as.eu>
+
+Hi,
+
+after release of Debian 10 I tried to catch up to update all R packages
+to recent upstream versions (since in freeze policy was forbidding this
+and we were lagging behind).
+
+Currently 7 packages are waiting for new preconditions in new queue.  I
+documented in d/changelog in Git on what package these are waiting for.
+
+However, there is also one packages I found an issue in the test suite I
+have no idea how to cope with:
+
+r-cran-fpc (2.2-3-1) UNRELEASED; urgency=medium
+
+autopkgtest is failing:
+    k=  3  flexmix error in run  1
+     Error in flexout[[optimalk]] :
+       attempt to select less than one element in get1index <real>
+    Calls: flexmixedruns -> summary
+    Execution halted
+    autopkgtest [06:15:54]: test run-unit-test: -----------------------]
+    autopkgtest [06:15:54]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+    run-unit-test        FAIL non-zero exit status 1
+
+It would be really great if some volunteer would deal with this.
+There is another issue
+
+r-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium
+
+  TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by
+    https://github.com/BenjaminVanRyseghem/numbro
+
+which seems to be complex since it requires extra JS packages.  I'd be
+really happy if someone joins in here.  I admit that I'm doing currently
+a lot to keep R packages up to date - a bit more than expected since I
+expected when we started this team.  So please keep on watching
+
+   https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/outdated_r-packages.txt
+
+the upcoming three weeks.  It would be nice if there would not be lots
+of updating work left for me in November.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Oct  9 09:37:22 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 9 Oct 2019 11:37:22 +0200
+Subject: Re: HELP: Test suite error with latest version of r-cran-fpc
+In-Reply-To: <992f5960-524d-7116-88bd-8b96490cb7bb@dal.ca>
+References: <20190826084641.chhpcwppyiibx2x2@an3as.eu> <992f5960-524d-7116-88bd-8b96490cb7bb@dal.ca>
+Message-ID: <20191009093722.cypwz2mj355ff3d3@an3as.eu>
+
+Hi Oliver,
+
+On Fri, Sep 06, 2019 at 12:04:16PM +0000, Oliver Dechant wrote:
+> Might the missing dependency be `mvtnorm`?
+
+Cool, this really helps.
+
+I just had missed that mal.  Thanks a lot, Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Oct  9 09:39:04 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 9 Oct 2019 11:39:04 +0200
+Subject: Re: Status of R packages
+In-Reply-To: <20191009091251.ybuoa3ehnlu72cny@an3as.eu>
+References: <20191009091251.ybuoa3ehnlu72cny@an3as.eu>
+Message-ID: <20191009093904.xkgpxravmqddyeiy@an3as.eu>
+
+On Wed, Oct 09, 2019 at 11:12:51AM +0200, Andreas Tille wrote:
+> r-cran-fpc (2.2-3-1) UNRELEASED; urgency=medium
+> 
+> autopkgtest is failing:
+>     k=  3  flexmix error in run  1
+>      Error in flexout[[optimalk]] :
+>        attempt to select less than one element in get1index <real>
+>     Calls: flexmixedruns -> summary
+>     Execution halted
+>     autopkgtest [06:15:54]: test run-unit-test: -----------------------]
+>     autopkgtest [06:15:54]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+>     run-unit-test        FAIL non-zero exit status 1
+
+That's clarified now thanks to a hint from Oliver Dechant.
+ 
+> r-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium
+> 
+>   TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by
+>     https://github.com/BenjaminVanRyseghem/numbro
+> 
+> which seems to be complex since it requires extra JS packages.  I'd be
+> really happy if someone joins in here.
+
+So I'll leave this for volunteers as a real challenge. ;-)
+
+Kind regards
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Oct 10 07:33:42 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 10 Oct 2019 09:33:42 +0200
+Subject: Updated status of R packages
+In-Reply-To: <20191009091251.ybuoa3ehnlu72cny@an3as.eu>
+References: <20191009091251.ybuoa3ehnlu72cny@an3as.eu>
+Message-ID: <20191010073342.c5eipnjg2mfkfnin@an3as.eu>
+
+[This is an update of my previous mail and replaces this]
+Hi,
+ 
+after release of Debian 10 I tried to catch up to update all R packages
+to recent upstream versions (since in freeze policy was forbidding this
+and we were lagging behind).
+ 
+Currently 6 packages are waiting for new preconditions in new queue.  I
+documented in d/changelog in Git on what package these are waiting for.
+
+There is one package we can not update: r-bioc-metagenomeseq
+It depends r-bioc-wrench which in turn depends r-cran-locfit which can
+not be packaged legally (see #731599).  Discussion with CRAN admins to
+remove locfit from CRAN to force users to find alternatives is ongoing.
+ 
+r-cran-rhandsontable (0.3.7+dfsg-1) UNRELEASED; urgency=medium
+ 
+   TODO: replace inst/htmlwidgets/lib/numbro/languages.min.js by
+     https://github.com/BenjaminVanRyseghem/numbro
+ 
+which seems to be complex since it requires extra JS packages.  I'd be
+really happy if someone joins in here.  I admit that I'm doing currently
+a lot to keep R packages up to date - a bit more than expected since I
+expected when we started this team.  So please keep on watching
+ 
+    https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/outdated_r-packages.txt
+ 
+the upcoming three weeks.  It would be nice if there would not be lots
+of updating work left for me in November.
+ 
+Kind regards
+ 
+       Andreas.
+
+-- 
+http://fam-tille.de
+

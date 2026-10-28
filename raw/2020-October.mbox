@@ -1,0 +1,144 @@
+From hello at shayandoust.me  Sun Oct 25 13:29:24 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Sun, 25 Oct 2020 13:29:24 +0000
+Subject: RFS r-cran-bios2cor
+Message-ID: <6042408d-591c-9490-cb0d-6371c89e5e4b@shayandoust.me>
+
+Hello,
+
+I have packaged [r-cran-bios2cor] and I believe it is close for a sponsored
+upload. However, some lintian warnings exist:
+
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/msa/human_gpcr.fa
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/msa/human_gpcr.msf
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/msa/toy2_align.fa
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/msa/toy_align.msf
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/msa/toy_helices.txt
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/rotamer/dynameomics_rotamers.csv
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/rotamer/tiny_toy_coordinates.pdb
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/rotamer/tiny_toy_dynamics.dcd
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/rotamer/toy_coordinates.pdb
+W: r-cran-bios2cor: executable-not-elf-or-script
+usr/lib/R/site-library/Bios2cor/rotamer/toy_dynamics.dcd
+
+I have never really experienced the appropriate placements of various data
+files, so would it be sensible to simply lintian override these or is there an
+appropriate placement for these files.
+
+Kind regards,
+Shayan Doust
+
+[r-cran-bios2cor]: https://salsa.debian.org/r-pkg-team/r-cran-bios2cor/
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Sun Oct 25 16:50:00 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 25 Oct 2020 17:50:00 +0100
+Subject: Re: RFS r-cran-bios2cor
+In-Reply-To: <6042408d-591c-9490-cb0d-6371c89e5e4b@shayandoust.me>
+References: <6042408d-591c-9490-cb0d-6371c89e5e4b@shayandoust.me>
+Message-ID: <20201025165000.GF12115@an3as.eu>
+
+Hi Shayan,
+
+On Sun, Oct 25, 2020 at 01:29:24PM +0000, Shayan Doust wrote:
+> Hello,
+> 
+> I have packaged [r-cran-bios2cor] and I believe it is close for a sponsored
+> upload. However, some lintian warnings exist:
+> 
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/msa/human_gpcr.fa
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/msa/human_gpcr.msf
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/msa/toy2_align.fa
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/msa/toy_align.msf
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/msa/toy_helices.txt
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/rotamer/dynameomics_rotamers.csv
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/rotamer/tiny_toy_coordinates.pdb
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/rotamer/tiny_toy_dynamics.dcd
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/rotamer/toy_coordinates.pdb
+> W: r-cran-bios2cor: executable-not-elf-or-script
+> usr/lib/R/site-library/Bios2cor/rotamer/toy_dynamics.dcd
+> 
+> I have never really experienced the appropriate placements of various data
+> files, so would it be sensible to simply lintian override these or is there an
+> appropriate placement for these files.
+
+Its not unusual that upstream set executable flag to files that are not
+really executables.  This is catched by lintian and you can fix it in
+dh_fixperms.  Just checkout my according commit.
+
+I've uploaded the package to new.
+
+Thanks for your work on this
+
+    Andreas.
+
+ 
+> [r-cran-bios2cor]: https://salsa.debian.org/r-pkg-team/r-cran-bios2cor/
+
+pub   RSA 4096/19D02395 2019-09-04 Shayan Doust (Personal EMAIL) <hello at shayandoust.me>
+> sub   RSA 4096/00484410 2020-06-26
+> 
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Fri Oct 30 09:11:25 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 30 Oct 2020 10:11:25 +0100
+Subject: Bug#973407: transition: r-api-bioc-3.12
+Message-ID: <CA+6XHwTVOmMMhZc8ijCJGnx=423Geg2hnuo2_zFUr74sjQ-GXw@mail.gmail.com>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi,
+Bioconductor 3.12 was released 2 days ago [1]. All r-bioc-* packages
+need a manual upgrade.
+
+[1] https://www.bioconductor.org/news/bioc_3_12_release/
+
+Please set up a tracker manually, since this is a transition of a
+virtual package name.
+
+Ben file:
+-----------------------------------------------------------------------------
+title = "r-api-bioc-3.12";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.12";
+is_bad = .depends ~ "r-api-bioc-3.11";
+-----------------------------------------------------------------------------
+
+Best,
+Dylan
+

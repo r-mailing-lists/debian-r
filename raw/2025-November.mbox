@@ -1,0 +1,1822 @@
+From charles.plessy at oist.jp  Thu Nov 13 23:47:12 2025
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Thu, 13 Nov 2025 23:47:12 +0000
+Subject: Bug#1120654: RM: r-bioc-titancna -- RoM; deprecated upstream
+Message-ID: <TYCP286MB308431A7286A907731E7C10F83CDA@TYCP286MB3084.JPNP286.PROD.OUTLOOK.COM>
+
+Package: ftp.debian.org
+
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hello everybody,
+
+TitanCNA is deprecated and soon going to be removed from Bioconductor. Let's remove it from Debian.
+
+Have a nice day,
+
+Charles
+
+From edd at debian.org  Tue Nov 18 22:35:57 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 18 Nov 2025 16:35:57 -0600
+Subject: r-base once again blocked by i386 autopkg tests
+Message-ID: <26908.62669.450024.842086@paul.eddelbuettel.com>
+
+Team 'Debian R':
+
+Six of your packages are holding r-base from migrating to testing as can be
+seen on the 'excuses' page for r-base:
+
+   https://qa.debian.org/excuses.php?package=r-base
+
+All failing tests are on i386, a platform which upstream (both R and CRAN,
+CC'ed here) stopped checking years ago as it is less relevant these days.
+Could we maybe arrive at a situation where you do not enable autpkg tests on
+that platform?
+
+Other ideas welcome too, and I would appreciate it if someone could
+facilitate passges of r-base to testing.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Wed Nov 19 00:27:28 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 19 Nov 2025 09:27:28 +0900
+Subject: Re: r-base once again blocked by i386 autopkg tests
+In-Reply-To: <26908.62669.450024.842086@paul.eddelbuettel.com>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com>
+Message-ID: <aR0O8Ps7rUUSlM2l@kumo.plessy.net>
+
+Le Tue, Nov 18, 2025 at 04:35:57PM -0600, Dirk Eddelbuettel a écrit :
+> 
+> Six of your packages are holding r-base from migrating to testing as can be
+> seen on the 'excuses' page for r-base:
+> 
+>    https://qa.debian.org/excuses.php?package=r-base
+> 
+> All failing tests are on i386, a platform which upstream (both R and CRAN,
+> CC'ed here) stopped checking years ago as it is less relevant these days.
+> Could we maybe arrive at a situation where you do not enable autpkg tests on
+> that platform?
+
+Hi Dirk,
+
+Short answer: I will ask today to the release team to remove these packages
+from Testing so that r-base can migrate.
+
+Longer answer: We really want to remove all the r-cran-* and r-bioc-* packages
+maintained by the "Debian R Packages Maintainers" team from the non-64-bit
+non-little-endian architectures, but I am struggling to:
+
+ - find a reliable method that predicts what other packages will need to be
+   removed as a consequence, to show that there is no blocker.
+
+ - find the shortest list of packages on which I have to open RC bugs to remove
+   them transiently from Testing.
+
+Once this is done, I will open the RC bugs to clear Testing, and then
+mass-upload the packages with architecture limitations by depending on the
+architecture-is-64-bit and architecture-is-little-endian pseudo-packages.
+For this I will probably need to wait for the approval of the Release team
+as it may cause delays in ongoing transitions.  I hope to to the pending
+Bioconductor transition at this time.
+
+This approach does not change the Architecture field and therefore it empowers
+users and porters to override our choice, and saves us from re-uploading all
+the packages in order to support new 64-bit little-endian release architctures
+when they are added.  But the drawback is that Testing must be cleared
+otherwise the new packages will never migrate. 
+
+It is very heavy work for little reward for our users, but I think that this
+is the best compromise we can make in front of the pressure that Debian puts
+on us to support architectures before or after they have a clear user base
+for a specific subset of packages like the r-cran/bioconductor ones...
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Wed Nov 19 01:06:41 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 19 Nov 2025 10:06:41 +0900
+Subject: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <26908.62669.450024.842086@paul.eddelbuettel.com>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com>
+Message-ID: <aR0YIfeFJRkx253X@kumo.plessy.net>
+
+Package: release.debian.org
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Release team,
+
+The r-base package maintained by Dirk is blocked from testing migration by
+three to six r-cran-* packages maintained by us (Debian R Packages Mainainers
+team).  The issue is problematic autopktests on i386, which is not supported
+upstream.
+
+    https://qa.debian.org/excuses.php?package=r-base
+
+Can you let r-base migrate by removing them from Testing?
+
+urgent r-base/4.5.2-1
+remove r-cran-bayestestr/0.15.2-1
+remove r-cran-bit64/4.6.0-1-4
+remove r-cran-blme/1.0-6-1
+remove r-cran-freetypeharfbuzz/0.2.6+dfsg-3
+remove r-cran-grimport2/0.3-3-1
+remove r-cran-projpred/2.8.0+dfsg-1
+
+If that removes more packages from the Debian R Packages Maintainers team, the
+Debian Med team or the Debian Science team, that is fine; we are planning to
+remove these packages from from i386 anyway, by build-depending on
+architecture-is-64-bit in a later upload.
+
+Thanks a lot for your help!
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From ginggs at debian.org  Wed Nov 19 11:43:29 2025
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 19 Nov 2025 10:43:29 -0100
+Subject: Re: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <aR0YIfeFJRkx253X@kumo.plessy.net>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com> <aR0YIfeFJRkx253X@kumo.plessy.net>
+Message-ID: <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com>
+
+Hi Charles
+
+On Wed, 19 Nov 2025 at 00:09, Charles Plessy <plessy at debian.org> wrote:
+> The r-base package maintained by Dirk is blocked from testing migration by
+> three to six r-cran-* packages maintained by us (Debian R Packages Mainainers
+> team).  The issue is problematic autopktests on i386, which is not supported
+> upstream.
+>
+>     https://qa.debian.org/excuses.php?package=r-base
+>
+> Can you let r-base migrate by removing them from Testing?
+>
+> urgent r-base/4.5.2-1
+> remove r-cran-bayestestr/0.15.2-1
+> remove r-cran-bit64/4.6.0-1-4
+> remove r-cran-blme/1.0-6-1
+> remove r-cran-freetypeharfbuzz/0.2.6+dfsg-3
+> remove r-cran-grimport2/0.3-3-1
+> remove r-cran-projpred/2.8.0+dfsg-1
+
+I didn't find any RC bugs filed against any of these packages that
+would prevent them from migrating straight back to testing after
+removal.
+
+Looking at the excuses page you linked to above, only r-cran-bit64,
+r-cran-freetypeharfbuzz and r-cran-grimport are blocking the migration
+of r-base, the remainder have "failure will be ignored".
+
+I have filed bugs for r-cran-bit64 [1], r-cran-freetypeharfbuzz [2]
+and r-cran-grimport [3].
+
+I have added removal hints for r-cran-freetypeharfbuzz and r-cran-grimport.
+
+> If that removes more packages from the Debian R Packages Maintainers team, the
+> Debian Med team or the Debian Science team, that is fine; we are planning to
+> remove these packages from from i386 anyway, by build-depending on
+> architecture-is-64-bit in a later upload.
+
+That cannot remove more packages.  The reverse-dependencies of
+cran-bit64 would need to be calculated and manually removed.
+
+In the meantime, I've added a hint to allow r-base to migrate
+regardless.  We can allow r-cran-bit64 to regress on i386 and it now
+has an RC bug filed against it.  I don't think any further action is
+required here, but I'll confirm that r-base has migrated before
+closing.
+
+Regards
+Graham
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120994
+[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120995
+[3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120997
+
+From edd at debian.org  Wed Nov 19 12:00:58 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 19 Nov 2025 06:00:58 -0600
+Subject: Re: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com> <aR0YIfeFJRkx253X@kumo.plessy.net> <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com>
+Message-ID: <26909.45434.353809.938473@paul.eddelbuettel.com>
+
+On 19 November 2025 at 10:43, Graham Inggs wrote:
+| Hi Charles
+| 
+| On Wed, 19 Nov 2025 at 00:09, Charles Plessy <plessy at debian.org> wrote:
+| > The r-base package maintained by Dirk is blocked from testing migration by
+| > three to six r-cran-* packages maintained by us (Debian R Packages Mainainers
+| > team).  The issue is problematic autopktests on i386, which is not supported
+| > upstream.
+| >
+| >     https://qa.debian.org/excuses.php?package=r-base
+| >
+| > Can you let r-base migrate by removing them from Testing?
+| >
+| > urgent r-base/4.5.2-1
+| > remove r-cran-bayestestr/0.15.2-1
+| > remove r-cran-bit64/4.6.0-1-4
+| > remove r-cran-blme/1.0-6-1
+| > remove r-cran-freetypeharfbuzz/0.2.6+dfsg-3
+| > remove r-cran-grimport2/0.3-3-1
+| > remove r-cran-projpred/2.8.0+dfsg-1
+| 
+| I didn't find any RC bugs filed against any of these packages that
+| would prevent them from migrating straight back to testing after
+| removal.
+| 
+| Looking at the excuses page you linked to above, only r-cran-bit64,
+| r-cran-freetypeharfbuzz and r-cran-grimport are blocking the migration
+| of r-base, the remainder have "failure will be ignored".
+
+Out of curiousity, and as I of course saw that too on the excuses page, which
+'state variable' governs this, and how can one set / unset it?
+ 
+| I have filed bugs for r-cran-bit64 [1], r-cran-freetypeharfbuzz [2]
+| and r-cran-grimport [3].
+
+Thanks!
+
+| I have added removal hints for r-cran-freetypeharfbuzz and r-cran-grimport.
+| 
+| > If that removes more packages from the Debian R Packages Maintainers team, the
+| > Debian Med team or the Debian Science team, that is fine; we are planning to
+| > remove these packages from from i386 anyway, by build-depending on
+| > architecture-is-64-bit in a later upload.
+| 
+| That cannot remove more packages.  The reverse-dependencies of
+| cran-bit64 would need to be calculated and manually removed.
+
+bit64 is quite widely used as it provides an important 'workaround' trick to
+offer int64_t use inside a double (with a lot of careful casting, been in use
+10 or 15 years) so yes it is widely used. New upstream maintainer too (a
+Googler) but the real issue here is that nobody looks at i386 anymore so we
+should not let it block us either.
+
+| In the meantime, I've added a hint to allow r-base to migrate
+| regardless.  We can allow r-cran-bit64 to regress on i386 and it now
+| has an RC bug filed against it.  I don't think any further action is
+| required here, but I'll confirm that r-base has migrated before
+| closing.
+
+Much appreciated!
+
+Cheers, Dirk
+ 
+| Regards
+| Graham
+| 
+| [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120994
+| [2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120995
+| [3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1120997
+| 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Wed Nov 19 14:14:09 2025
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 19 Nov 2025 13:14:09 -0100
+Subject: Re: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <26909.45434.353809.938473@paul.eddelbuettel.com>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com> <aR0YIfeFJRkx253X@kumo.plessy.net> <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com> <26909.45434.353809.938473@paul.eddelbuettel.com>
+Message-ID: <CAM8zJQtB5-W4eUS8cUxT5+Ub3BfWG+-rdCP7ij=ww_rwvinHSw@mail.gmail.com>
+
+Hi Dirk
+
+On Wed, 19 Nov 2025 at 11:01, Dirk Eddelbuettel <edd at debian.org> wrote:
+> | Looking at the excuses page you linked to above, only r-cran-bit64,
+> | r-cran-freetypeharfbuzz and r-cran-grimport are blocking the migration
+> | of r-base, the remainder have "failure will be ignored".
+>
+> Out of curiousity, and as I of course saw that too on the excuses page, which
+> 'state variable' governs this, and how can one set / unset it?
+
+In general, it is the state of a package's autopkgtests in the testing
+suite that governs this.
+e.g. r-cran-bayestestr is red [1] and r-cran-bit64 is green [2] (as of
+2025-11-08 09:13:11 UTC)
+
+One way to reset the state is to trigger the autopkgtests with the
+fake 'migration-reference/0' package.  If the autopkgtest is already
+failing in testing and the 'migration-reference/0' result turns red,
+then migration will no longer be blocked.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-bayestestr/testing/i386/
+[2] https://ci.debian.net/packages/r/r-cran-bit64/testing/i386/
+
+From bunk at debian.org  Wed Nov 19 14:53:51 2025
+From: bunk at debian.org (Adrian Bunk)
+Date: Wed, 19 Nov 2025 16:53:51 +0200
+Subject: Re: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <CAM8zJQtB5-W4eUS8cUxT5+Ub3BfWG+-rdCP7ij=ww_rwvinHSw@mail.gmail.com>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com> <aR0YIfeFJRkx253X@kumo.plessy.net> <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com> <26909.45434.353809.938473@paul.eddelbuettel.com> <CAM8zJQtB5-W4eUS8cUxT5+Ub3BfWG+-rdCP7ij=ww_rwvinHSw@mail.gmail.com>
+Message-ID: <aR3Z/+qU6GDn5JqD@localhost>
+
+On Wed, Nov 19, 2025 at 01:14:09PM -0100, Graham Inggs wrote:
+> Hi Dirk
+> 
+> On Wed, 19 Nov 2025 at 11:01, Dirk Eddelbuettel <edd at debian.org> wrote:
+> > | Looking at the excuses page you linked to above, only r-cran-bit64,
+> > | r-cran-freetypeharfbuzz and r-cran-grimport are blocking the migration
+> > | of r-base, the remainder have "failure will be ignored".
+> >
+> > Out of curiousity, and as I of course saw that too on the excuses page, which
+> > 'state variable' governs this, and how can one set / unset it?
+> 
+> In general, it is the state of a package's autopkgtests in the testing
+> suite that governs this.
+> e.g. r-cran-bayestestr is red [1] and r-cran-bit64 is green [2] (as of
+> 2025-11-08 09:13:11 UTC)
+> 
+> One way to reset the state is to trigger the autopkgtests with the
+> fake 'migration-reference/0' package.  If the autopkgtest is already
+> failing in testing and the 'migration-reference/0' result turns red,
+> then migration will no longer be blocked.
+
+The easiest way to do the latter:
+
+https://tracker.debian.org/pkg/r-base
+∙ ∙ Autopkgtest for r-cran-bit64/4.6.0-1-4: amd64: Pass, arm64: Pass, i386: Regression ♻ (reference ♻), ppc64el: Pass, riscv64: Pass, s390x: Pass
+
+Clicking on the recycle symbol ♻ after "reference" goes to a page with
+a Retry button for the migration reference test.
+
+> Regards
+> Graham
+>...
+
+cu
+Adrian
+
+From edd at debian.org  Wed Nov 19 16:52:28 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 19 Nov 2025 10:52:28 -0600
+Subject: Re: Bug#1120975: Please let r-base migrate by removing blocking packages
+In-Reply-To: <aR3Z/+qU6GDn5JqD@localhost>
+References: <26908.62669.450024.842086@paul.eddelbuettel.com> <aR0YIfeFJRkx253X@kumo.plessy.net> <CAM8zJQvWPxd7krRc-9fRu_gh60T92B=MnK2kXP7+H28NbtBdAg@mail.gmail.com> <26909.45434.353809.938473@paul.eddelbuettel.com> <CAM8zJQtB5-W4eUS8cUxT5+Ub3BfWG+-rdCP7ij=ww_rwvinHSw@mail.gmail.com> <aR3Z/+qU6GDn5JqD@localhost>
+Message-ID: <26909.62924.414162.447907@paul.eddelbuettel.com>
+
+On 19 November 2025 at 16:53, Adrian Bunk wrote:
+| On Wed, Nov 19, 2025 at 01:14:09PM -0100, Graham Inggs wrote:
+| > Hi Dirk
+| > 
+| > On Wed, 19 Nov 2025 at 11:01, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > > | Looking at the excuses page you linked to above, only r-cran-bit64,
+| > > | r-cran-freetypeharfbuzz and r-cran-grimport are blocking the migration
+| > > | of r-base, the remainder have "failure will be ignored".
+| > >
+| > > Out of curiousity, and as I of course saw that too on the excuses page, which
+| > > 'state variable' governs this, and how can one set / unset it?
+| > 
+| > In general, it is the state of a package's autopkgtests in the testing
+| > suite that governs this.
+| > e.g. r-cran-bayestestr is red [1] and r-cran-bit64 is green [2] (as of
+| > 2025-11-08 09:13:11 UTC)
+| > 
+| > One way to reset the state is to trigger the autopkgtests with the
+| > fake 'migration-reference/0' package.  If the autopkgtest is already
+| > failing in testing and the 'migration-reference/0' result turns red,
+| > then migration will no longer be blocked.
+| 
+| The easiest way to do the latter:
+| 
+| https://tracker.debian.org/pkg/r-base
+| ∙ ∙ Autopkgtest for r-cran-bit64/4.6.0-1-4: amd64: Pass, arm64: Pass, i386: Regression ♻ (reference ♻), ppc64el: Pass, riscv64: Pass, s390x: Pass
+| 
+| Clicking on the recycle symbol ♻ after "reference" goes to a page with
+| a Retry button for the migration reference test.
+
+And clicking 'retry' adds a fake package 'migration-reference/0' ? That seems odd.
+
+Dirk
+
+| > Regards
+| > Graham
+| >...
+| 
+| cu
+| Adrian
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From jspricke at debian.org  Thu Nov 27 09:01:22 2025
+From: jspricke at debian.org (Jochen Sprickerhof)
+Date: Thu, 27 Nov 2025 10:01:22 +0100
+Subject: Bug#1121479: binNMU r-* for reproduce.debian.net
+Message-ID: <176423408261.21807.108115651026088840.reportbug@fenchel>
+
+Package: release.debian.org
+Severity: normal
+X-Debbugs-Cc: debian-r at lists.debian.org, Reproducible Builds discussion list <reproducible-builds at lists.alioth.debian.org>
+User: release.debian.org at packages.debian.org
+Usertags: binnmu
+
+Hi,
+
+we propose to binNMU the r-* packages after #1089197 was closed. Note that this
+will alter the Recommends: and Suggests: of the package.
+
+Thanks
+
+Jochen and Paul (elbrus)
+
+amd64:
+
+fgarch_4033.92-1
+lme4_1.1-37-1
+r-bioc-affxparser_1.78.0-3
+r-bioc-alabaster.base_1.6.1+ds-2
+r-bioc-alabaster.matrix_1.6.1+ds-2
+r-bioc-basilisk_1.18.0+ds-2
+r-bioc-biobase_2.66.0-2
+r-bioc-biocneighbors_2.0.1+ds-2
+r-bioc-biocparallel_1.40.0-2
+r-bioc-biocsingular_1.22.0+ds-2
+r-bioc-bluster_1.16.0+dfsg-2
+r-bioc-chemminer_3.58.0+dfsg-2
+r-bioc-delayedarray_0.32.0+dfsg-2
+r-bioc-densvis_1.16.0+dfsg-2
+r-bioc-dirichletmultinomial_1.48.0-2
+r-bioc-edger_4.4.2+dfsg-1
+r-bioc-eir_1.46.0+ds-2
+r-bioc-fmcsr_1.48.0+dfsg-2
+r-bioc-graph_1.84.1-2
+r-bioc-hdf5array_1.34.0-2
+r-bioc-hilbertvis_1.64.0-2
+r-bioc-iranges_2.40.1-3
+r-bioc-limma_3.62.2+dfsg-1
+r-bioc-lpsymphony_1.34.0+dfsg-3
+r-bioc-metapod_1.14.0+dfsg-2
+r-bioc-monocle_2.34.0-2
+r-bioc-multtest_2.62.0-2
+r-bioc-pcamethods_1.98.0-2
+r-bioc-rbgl_1.82.0+dfsg-2
+r-bioc-rhdf5_2.50.2+dfsg-1
+r-bioc-rhdf5filters_1.18.1+dfsg-1
+r-bioc-rhtslib_3.2.0+dfsg-2
+r-bioc-rots_1.34.0-2
+r-bioc-s4arrays_1.6.0+dfsg-2
+r-bioc-s4vectors_0.44.0+dfsg-2
+r-bioc-snpstats_1.56.0+dfsg-2
+r-bioc-sparsearray_1.6.2+dfsg-2
+r-bioc-sparsematrixstats_1.18.0+dfsg-2
+r-bioc-xvector_0.46.0-2
+r-cran-ade4_1.7-23-1
+r-cran-adegenet_2.1.11-1
+r-cran-adephylo_1.1-17-1
+r-cran-amap_0.8-20-2
+r-cran-amelia_1.8.3-1
+r-cran-apcluster_1.4.13-1
+r-cran-ape_5.8-1-1
+r-cran-askpass_1.2.1-1
+r-cran-base64url_1.4-2
+r-cran-batchtools_0.9.17+dfsg-1
+r-cran-bayesfactor_0.9.12-4.7+dfsg-1
+r-cran-bayesm_3.1-6+dfsg-1
+r-cran-bbmisc_1.13-1
+r-cran-bdgraph_2.73+dfsg-1
+r-cran-bench_1.1.4-1
+r-cran-bigmemory_4.6.4-2
+r-cran-bindrcpp_0.2.3-1
+r-cran-bio3d_2.4-5-1
+r-cran-bit_4.6.0+dfsg-1
+r-cran-bit64_4.6.0-1-4
+r-cran-blockmodeling_1.1.5-1
+r-cran-brglm_0.7.2-1
+r-cran-brglm2_0.9.2+dfsg-1
+r-cran-brio_1.1.5-1
+r-cran-cachem_1.1.0-1
+r-cran-cairo_1.6-2-1
+r-cran-caret_7.0-1+dfsg-1
+r-cran-catools_1.18.3-1
+r-cran-cba_0.2-25-1
+r-cran-checkmate_2.3.2-1
+r-cran-classint_0.4-11+dfsg-1
+r-cran-cli_3.6.4-1
+r-cran-clock_0.7.2-1
+r-cran-clue_0.3-66-1
+r-cran-coin_1.4-3-1
+r-cran-collapse_2.1.0-1
+r-cran-colorspace_2.1-1+dfsg-1
+r-cran-commonmark_1.9.5-1
+r-cran-covr_3.6.4+dfsg-1
+r-cran-ctmcd_1.4.4+dfsg-1
+r-cran-cutpointr_1.2.0-1
+r-cran-data.table_1.17.0+dfsg-1
+r-cran-dbscan_1.2.2+ds-2
+r-cran-ddrtree_0.1.5-2
+r-cran-decor_1.0.2-1
+r-cran-deldir_2.0-4-1
+r-cran-densityclust_0.3.3-1
+r-cran-deoptim_2.2-8-1
+r-cran-desolve_1.40-1
+r-cran-dicedesign_1.10-1
+r-cran-diffobj_0.3.5-1
+r-cran-dimred_0.2.6-4
+r-cran-distr_2.9.7+dfsg-1
+r-cran-dosefinding_1.3-1-1
+r-cran-dotcall64_1.2-1
+r-cran-dplyr_1.1.4-4
+r-cran-dqrng_0.3.2+dfsg-1
+r-cran-earth_5.3.4-1
+r-cran-ecosolver_0.5.5-1
+r-cran-emoa_0.5-3-1
+r-cran-estimatr_1.0.6-1
+r-cran-etm_1.1.1-1
+r-cran-evd_2.3-7.1-1
+r-cran-exactextractr_0.10.0-1
+r-cran-exactranktests_0.8-35-1
+r-cran-expm_1.0-0-1
+r-cran-extradistr_1.10.0-1
+r-cran-factominer_2.11-1
+r-cran-fansi_1.0.6-2
+r-cran-farver_2.1.2-1
+r-cran-fastmap_1.2.0-1
+r-cran-ff_4.5.2+ds-1
+r-cran-fields_16.3.1-1
+r-cran-filelock_1.0.3-1
+r-cran-fingerprint_3.5.7-2
+r-cran-fnn_1.1.4.1-1
+r-cran-forecast_8.23.0-1
+r-cran-fracdiff_1.5-3-1
+r-cran-fs_1.6.5+dfsg-1
+r-cran-gam_1.22-5-1
+r-cran-gap_1.6+dfsg-1
+r-cran-gdtools_0.4.1-1
+r-cran-gee_4.13-29-1
+r-cran-genie_1.0.5-2
+r-cran-geometry_0.5.2-1
+r-cran-geosphere_1.5-20-1
+r-cran-gert_2.1.4+dfsg-1
+r-cran-ggforce_0.4.2-1
+r-cran-ggraph_2.2.1+dfsg-1
+r-cran-ggrepel_0.9.6-1
+r-cran-glmmtmb_1.1.10+dfsg-1
+r-cran-glmnet_4.1-8-1
+r-cran-glue_1.8.0-1
+r-cran-gmm_1.8-1
+r-cran-gmp_0.7-5-1
+r-cran-gnm_1.1-5-1
+r-cran-gower_1.0.2-1
+r-cran-graphlayouts_1.2.2-1
+r-cran-gridtext_0.1.5-2
+r-cran-haplo.stats_1.9.7-1
+r-cran-hdf5r_1.3.12+dfsg-2
+r-cran-hexbin_1.28.5-1
+r-cran-htmltools_0.5.8.1-1
+r-cran-httpuv_1.6.15+dfsg-1
+r-cran-hunspell_3.0.5+dfsg-1
+r-cran-influencer_0.1.5-1
+r-cran-interp_1.1-6-1
+r-cran-ipred_0.9-15-1
+r-cran-irace_4.2.0-1
+r-cran-isoband_0.2.7-1
+r-cran-isospecr_2.1.3-1
+r-cran-jinjar_0.3.2+dfsg-1
+r-cran-jomo_2.7-6-1
+r-cran-jsonlite_1.9.1+dfsg-1
+r-cran-keyring_1.3.2-1
+r-cran-knn.covertree_1.0-2
+r-cran-ks_1.14.3-1
+r-cran-lamw_2.2.4-1
+r-cran-later_1.4.1+dfsg-1
+r-cran-lavasearch2_2.0.3+dfsg-1
+r-cran-lazyeval_0.2.2-1
+r-cran-leidenbase_0.1.32-1
+r-cran-lexrankr_0.5.2-8
+r-cran-lhs_1.2.0-1
+r-cran-libcoin_1.0-10-1
+r-cran-lobstr_1.1.2-1
+r-cran-locfit_1.5-9.12-1
+r-cran-lubridate_1.9.4+dfsg-1
+r-cran-luminescence_1.0.1-1
+r-cran-magick_2.8.5+dfsg-1
+r-cran-magrittr_2.0.3-1
+r-cran-maldiquant_1.22.3-1
+r-cran-maotai_0.2.6-1
+r-cran-maps_3.4.2.1-1
+r-cran-marginaleffects_0.25.0-1
+r-cran-markovchain_0.10.0-1
+r-cran-matching_4.10-15-1
+r-cran-matchit_4.7.1-1
+r-cran-matrixstats_1.5.0-1
+r-cran-maxstat_0.7-25-2
+r-cran-mclust_6.1.1-1
+r-cran-mcmc_0.9-8-1
+r-cran-mda_0.5-5-1
+r-cran-memisc_0.99.31.8.2+dfsg-1
+r-cran-mets_1.3.5+dfsg-1
+r-cran-mice_3.17.0-1
+r-cran-minerva_1.5.10-1
+r-cran-minpack.lm_1.2-4-1
+r-cran-mixsqp_0.3-54-1
+r-cran-mlbench_2.1-6-1
+r-cran-mlr_2.19.2+dfsg-1
+r-cran-mnp_3.1-5-1
+r-cran-modelmetrics_1.2.2.2-1
+r-cran-msm_1.8.2-1
+r-cran-mvnfast_0.2.8+dfsg-1
+r-cran-nanoarrow_0.6.0-1
+r-cran-network_1.19.0-1
+r-cran-nmf_0.28-1
+r-cran-nnls_1.6-1
+r-cran-oaqc_2.0.0-1
+r-cran-openmx_2.21.13+dfsg-1
+r-cran-openssl_2.3.2+dfsg-1
+r-cran-ordinal_2023.12-4.1-1
+r-cran-pan_1.9-1
+r-cran-pander_0.6.6+dfsg-1
+r-cran-parallelly_1.42.0-1
+r-cran-paramhelpers_1.14.2-1
+r-cran-party_1.3-18-1
+r-cran-partykit_1.2-23-1
+r-cran-pcapp_2.0-5-1
+r-cran-pcict_0.5-4.4-1
+r-cran-pdftools_3.5.0-1
+r-cran-pec_2023.04.12-1
+r-cran-phangorn_2.12.1+dfsg-1
+r-cran-phylobase_0.8.12-1
+r-cran-pingr_2.0.5-1
+r-cran-plyr_1.8.9-1
+r-cran-poissonbinomial_1.2.7-1
+r-cran-polycub_0.9.2-1
+r-cran-princurve_2.1.6-1
+r-cran-proc_1.18.5-1
+r-cran-processx_3.8.6-1
+r-cran-profvis_0.4.0+dfsg-1
+r-cran-projpred_2.8.0+dfsg-1
+r-cran-promises_1.3.2+dfsg-1
+r-cran-prophet_1.0+dfsg-5
+r-cran-proxy_0.4-27-1
+r-cran-ps_1.9.0-1
+r-cran-pscl_1.5.9-1
+r-cran-psychotools_0.7-4-1
+r-cran-purrr_1.0.4-1
+r-cran-purrrlyr_0.0.8-1
+r-cran-qap_0.1-2-1
+r-cran-qgam_1.3.4-1
+r-cran-qgraph_1.9.8-2
+r-cran-qpdf_1.3.4+dfsg-2
+r-cran-qqconf_1.3.2+dfsg-1
+r-cran-qtl_1.70-1
+r-cran-quickjsr_1.6.0-1
+r-cran-ragg_1.3.3-1
+r-cran-randomforest_4.7-1.2-1
+r-cran-ranger_0.17.0-1
+r-cran-rann_2.6.2-1
+r-cran-rappdirs_0.3.3-1
+r-cran-rbibutils_2.3-1
+r-cran-rcppannoy_0.0.22-1
+r-cran-rcppdist_0.1.1-2
+r-cran-rcpphnsw_0.6.0+ds-1
+r-cran-rcppml_0.3.7-2
+r-cran-rcppparallel_5.1.7+dfsg-6
+r-cran-rcpproll_0.3.1-1
+r-cran-rcpptoml_0.2.3+dfsg-1
+r-cran-rcurl_1.98-1.16+dfsg-1
+r-cran-redland_1.0.17-18-1
+r-cran-regsem_1.9.5+dfsg-1
+r-cran-renv_1.1.2-1
+r-cran-reshape2_1.4.4-2
+r-cran-restfulr_0.0.15-1
+r-cran-reticulate_1.41.0.1+dfsg-1
+r-cran-rgenoud_5.9-0.11-1
+r-cran-riskregression_2023.12.21+ds-1
+r-cran-rjson_0.2.23-1
+r-cran-rlang_1.1.5-3
+r-cran-rle_0.9.2-2
+r-cran-rmariadb_1.3.3+ds-1
+r-cran-rmpfr_1.0-0-2
+r-cran-rncl_0.8.7-1
+r-cran-rnetcdf_2.9-2-1
+r-cran-roxygen2_7.3.2-1
+r-cran-rpact_4.2.0-1
+r-cran-rpf_1.0.14+dfsg-1
+r-cran-rprotobuf_0.4.23-1
+r-cran-rrcov_1.7-6-1
+r-cran-rspectra_0.16-2-1
+r-cran-rsqlite_2.3.9-1
+r-cran-rstan_2.32.7-1
+r-cran-rstanarm_2.32.1-2
+r-cran-rsvg_2.6.1-1
+r-cran-rtdists_0.11-5-1
+r-cran-rtsne_0.17-1
+r-cran-rwiener_1.3-3-1
+r-cran-s7_0.2.0-1
+r-cran-samr_3.0-2
+r-cran-sass_0.4.9+dfsg-1
+r-cran-satellite_1.0.5+dfsg-1
+r-cran-scattermore_1.2-1
+r-cran-sctransform_0.4.1-1
+r-cran-sem_3.1.16-1
+r-cran-seriation_1.5.7-1
+r-cran-sets_1.0.25+ds-1
+r-cran-seurat_5.2.1-5
+r-cran-seuratobject_5.0.2-1
+r-cran-sitmo_2.0.2-1
+r-cran-slider_0.3.2-1
+r-cran-sna_2.8-1
+r-cran-sodium_1.4.0+dfsg-1
+r-cran-sourcetools_0.1.7-1-1
+r-cran-sp_1:2.2-0+dfsg-1
+r-cran-spam_2.11-1-1
+r-cran-sparsevctrs_0.2.0-2
+r-cran-spatialreg_1.3-6+dfsg-1
+r-cran-spatstat.geom_3.3-6-1
+r-cran-spatstat.linnet_3.2-5-1
+r-cran-spatstat.model_3.3-4-1
+r-cran-spatstat.random_3.3-3-1
+r-cran-spatstat.utils_3.1-3-1
+r-cran-spdep_1.3-5+dfsg-1
+r-cran-splines2_0.5.4-1
+r-cran-stanheaders_2.32.10-1
+r-cran-statip_0.2.3-2
+r-cran-statmod_1.5.0-1
+r-cran-statnet.common_4.11.0-1
+r-cran-stringdist_0.9.15-1
+r-cran-surveillance_1.24.1-1
+r-cran-survey_4.4-2-2
+r-cran-svglite_2.1.3-2
+r-cran-sys_3.4.3-1
+r-cran-systemfonts_1.2.1-1
+r-cran-testthat_3.2.3-1
+r-cran-textshaping_0.3.7-2
+r-cran-tfmpvalue_0.0.9-1
+r-cran-tgp_2.4-23-1
+r-cran-tibble_3.2.1+dfsg-3
+r-cran-tidygraph_1.3.1-2
+r-cran-tidyr_1.3.1-1
+r-cran-tidyselect_1.2.1+dfsg-1
+r-cran-tikzdevice_0.12.6-1
+r-cran-timechange_0.3.0-2
+r-cran-timereg_2.0.6-1
+r-cran-tm_0.7-16-1
+r-cran-tmb_1.9.17-1
+r-cran-tmvtnorm_1.6-1
+r-cran-tokenizers_0.3.0-1
+r-cran-transformr_0.1.5-1
+r-cran-treespace_1.1.4.3+dfsg-1
+r-cran-triebeard_0.4.1-1
+r-cran-truncnorm_1.0-9-2
+r-cran-tsp_1.2-4-1
+r-cran-tweenr_2.0.3-1
+r-cran-ucminf_1.2.2-1
+r-cran-units_0.8-7+dfsg-2
+r-cran-urltools_1.7.3+dfsg-2
+r-cran-utf8_1.2.4-1
+r-cran-uwot_0.2.3-1
+r-cran-vctrs_0.6.5-1
+r-cran-vdiffr_1.0.8-1
+r-cran-vegan_2.6-10+dfsg-3
+r-cran-vgam_1.1-13-1
+r-cran-vim_6.2.2+dfsg-1
+r-cran-warp_0.2.1-1
+r-cran-waveslim_1.8.5-1
+r-cran-webfakes_1.3.2-1
+r-cran-webutils_1.2.2-1
+r-cran-wk_0.9.4-1
+r-cran-wordcloud_2.6-2
+r-cran-xfun_0.51+dfsg-1
+r-cran-xts_0.14.1-1
+r-cran-yaml_2.3.10-1
+r-other-kcha-psiplot_2.3.0-2
+r-other-x4r_1.0.1+git20150806.c6bd9bd-3
+
+arm64:
+
+fgarch_4033.92-1
+lme4_1.1-37-1
+r-bioc-affxparser_1.78.0-3
+r-bioc-alabaster.base_1.6.1+ds-2
+r-bioc-alabaster.matrix_1.6.1+ds-2
+r-bioc-basilisk_1.18.0+ds-2
+r-bioc-biobase_2.66.0-2
+r-bioc-biocneighbors_2.0.1+ds-2
+r-bioc-biocparallel_1.40.0-2
+r-bioc-biocsingular_1.22.0+ds-2
+r-bioc-bluster_1.16.0+dfsg-2
+r-bioc-chemminer_3.58.0+dfsg-2
+r-bioc-delayedarray_0.32.0+dfsg-2
+r-bioc-densvis_1.16.0+dfsg-2
+r-bioc-dirichletmultinomial_1.48.0-2
+r-bioc-edger_4.4.2+dfsg-1
+r-bioc-eir_1.46.0+ds-2
+r-bioc-fmcsr_1.48.0+dfsg-2
+r-bioc-graph_1.84.1-2
+r-bioc-hdf5array_1.34.0-2
+r-bioc-hilbertvis_1.64.0-2
+r-bioc-iranges_2.40.1-3
+r-bioc-limma_3.62.2+dfsg-1
+r-bioc-lpsymphony_1.34.0+dfsg-3
+r-bioc-metapod_1.14.0+dfsg-2
+r-bioc-monocle_2.34.0-2
+r-bioc-multtest_2.62.0-2
+r-bioc-pcamethods_1.98.0-2
+r-bioc-rbgl_1.82.0+dfsg-2
+r-bioc-rhdf5_2.50.2+dfsg-1
+r-bioc-rhdf5filters_1.18.1+dfsg-1
+r-bioc-rhtslib_3.2.0+dfsg-2
+r-bioc-rots_1.34.0-2
+r-bioc-s4arrays_1.6.0+dfsg-2
+r-bioc-s4vectors_0.44.0+dfsg-2
+r-bioc-snpstats_1.56.0+dfsg-2
+r-bioc-sparsearray_1.6.2+dfsg-2
+r-bioc-sparsematrixstats_1.18.0+dfsg-2
+r-bioc-xvector_0.46.0-2
+r-cran-ade4_1.7-23-1
+r-cran-adegenet_2.1.11-1
+r-cran-adephylo_1.1-17-1
+r-cran-amap_0.8-20-2
+r-cran-amelia_1.8.3-1
+r-cran-apcluster_1.4.13-1
+r-cran-ape_5.8-1-1
+r-cran-askpass_1.2.1-1
+r-cran-base64url_1.4-2
+r-cran-batchtools_0.9.17+dfsg-1
+r-cran-bayesfactor_0.9.12-4.7+dfsg-1
+r-cran-bayesm_3.1-6+dfsg-1
+r-cran-bbmisc_1.13-1
+r-cran-bdgraph_2.73+dfsg-1
+r-cran-bench_1.1.4-1
+r-cran-bigmemory_4.6.4-2
+r-cran-bindrcpp_0.2.3-1
+r-cran-bio3d_2.4-5-1
+r-cran-bit_4.6.0+dfsg-1
+r-cran-bit64_4.6.0-1-4
+r-cran-blockmodeling_1.1.5-1
+r-cran-brglm_0.7.2-1
+r-cran-brglm2_0.9.2+dfsg-1
+r-cran-brio_1.1.5-1
+r-cran-cachem_1.1.0-1
+r-cran-cairo_1.6-2-1
+r-cran-caret_7.0-1+dfsg-1
+r-cran-catools_1.18.3-1
+r-cran-cba_0.2-25-1
+r-cran-checkmate_2.3.2-1
+r-cran-classint_0.4-11+dfsg-1
+r-cran-cli_3.6.4-1
+r-cran-clock_0.7.2-1
+r-cran-clue_0.3-66-1
+r-cran-coin_1.4-3-1
+r-cran-collapse_2.1.0-1
+r-cran-colorspace_2.1-1+dfsg-1
+r-cran-commonmark_1.9.5-1
+r-cran-covr_3.6.4+dfsg-1
+r-cran-ctmcd_1.4.4+dfsg-1
+r-cran-cutpointr_1.2.0-1
+r-cran-data.table_1.17.0+dfsg-1
+r-cran-dbscan_1.2.2+ds-2
+r-cran-decor_1.0.2-1
+r-cran-deldir_2.0-4-1
+r-cran-densityclust_0.3.3-1
+r-cran-deoptim_2.2-8-1
+r-cran-desolve_1.40-1
+r-cran-dicedesign_1.10-1
+r-cran-diffobj_0.3.5-1
+r-cran-dimred_0.2.6-4
+r-cran-distr_2.9.7+dfsg-1
+r-cran-dosefinding_1.3-1-1
+r-cran-dotcall64_1.2-1
+r-cran-dplyr_1.1.4-4
+r-cran-dqrng_0.3.2+dfsg-1
+r-cran-earth_5.3.4-1
+r-cran-ecosolver_0.5.5-1
+r-cran-emoa_0.5-3-1
+r-cran-estimatr_1.0.6-1
+r-cran-etm_1.1.1-1
+r-cran-evd_2.3-7.1-1
+r-cran-exactextractr_0.10.0-1
+r-cran-exactranktests_0.8-35-1
+r-cran-expm_1.0-0-1
+r-cran-extradistr_1.10.0-1
+r-cran-factominer_2.11-1
+r-cran-fansi_1.0.6-2
+r-cran-farver_2.1.2-1
+r-cran-fastmap_1.2.0-1
+r-cran-ff_4.5.2+ds-1
+r-cran-fields_16.3.1-1
+r-cran-filelock_1.0.3-1
+r-cran-fingerprint_3.5.7-2
+r-cran-fnn_1.1.4.1-1
+r-cran-forecast_8.23.0-1
+r-cran-fracdiff_1.5-3-1
+r-cran-fs_1.6.5+dfsg-1
+r-cran-gam_1.22-5-1
+r-cran-gap_1.6+dfsg-1
+r-cran-gdtools_0.4.1-1
+r-cran-gee_4.13-29-1
+r-cran-genie_1.0.5-2
+r-cran-geometry_0.5.2-1
+r-cran-geosphere_1.5-20-1
+r-cran-gert_2.1.4+dfsg-1
+r-cran-ggforce_0.4.2-1
+r-cran-ggraph_2.2.1+dfsg-1
+r-cran-ggrepel_0.9.6-1
+r-cran-glmmtmb_1.1.10+dfsg-1
+r-cran-glmnet_4.1-8-1
+r-cran-glue_1.8.0-1
+r-cran-gmm_1.8-1
+r-cran-gmp_0.7-5-1
+r-cran-gnm_1.1-5-1
+r-cran-gower_1.0.2-1
+r-cran-graphlayouts_1.2.2-1
+r-cran-gridtext_0.1.5-2
+r-cran-haplo.stats_1.9.7-1
+r-cran-hdf5r_1.3.12+dfsg-2
+r-cran-hexbin_1.28.5-1
+r-cran-htmltools_0.5.8.1-1
+r-cran-httpuv_1.6.15+dfsg-1
+r-cran-hunspell_3.0.5+dfsg-1
+r-cran-influencer_0.1.5-1
+r-cran-interp_1.1-6-1
+r-cran-ipred_0.9-15-1
+r-cran-irace_4.2.0-1
+r-cran-isoband_0.2.7-1
+r-cran-isospecr_2.1.3-1
+r-cran-jinjar_0.3.2+dfsg-1
+r-cran-jomo_2.7-6-1
+r-cran-jsonlite_1.9.1+dfsg-1
+r-cran-keyring_1.3.2-1
+r-cran-knn.covertree_1.0-2
+r-cran-ks_1.14.3-1
+r-cran-lamw_2.2.4-1
+r-cran-later_1.4.1+dfsg-1
+r-cran-lavasearch2_2.0.3+dfsg-1
+r-cran-lazyeval_0.2.2-1
+r-cran-leidenbase_0.1.32-1
+r-cran-lexrankr_0.5.2-8
+r-cran-lhs_1.2.0-1
+r-cran-libcoin_1.0-10-1
+r-cran-lobstr_1.1.2-1
+r-cran-locfit_1.5-9.12-1
+r-cran-lubridate_1.9.4+dfsg-1
+r-cran-luminescence_1.0.1-1
+r-cran-magick_2.8.5+dfsg-1
+r-cran-magrittr_2.0.3-1
+r-cran-maldiquant_1.22.3-1
+r-cran-maotai_0.2.6-1
+r-cran-maps_3.4.2.1-1
+r-cran-marginaleffects_0.25.0-1
+r-cran-matching_4.10-15-1
+r-cran-matchit_4.7.1-1
+r-cran-matrixstats_1.5.0-1
+r-cran-maxstat_0.7-25-2
+r-cran-mclust_6.1.1-1
+r-cran-mcmc_0.9-8-1
+r-cran-mda_0.5-5-1
+r-cran-memisc_0.99.31.8.2+dfsg-1
+r-cran-mets_1.3.5+dfsg-1
+r-cran-mice_3.17.0-1
+r-cran-minerva_1.5.10-1
+r-cran-minpack.lm_1.2-4-1
+r-cran-mixsqp_0.3-54-1
+r-cran-mlbench_2.1-6-1
+r-cran-mlr_2.19.2+dfsg-1
+r-cran-mnp_3.1-5-1
+r-cran-modelmetrics_1.2.2.2-1
+r-cran-msm_1.8.2-1
+r-cran-mvnfast_0.2.8+dfsg-1
+r-cran-nanoarrow_0.6.0-1
+r-cran-network_1.19.0-1
+r-cran-nmf_0.28-1
+r-cran-nnls_1.6-1
+r-cran-oaqc_2.0.0-1
+r-cran-openmx_2.21.13+dfsg-1
+r-cran-openssl_2.3.2+dfsg-1
+r-cran-ordinal_2023.12-4.1-1
+r-cran-pan_1.9-1
+r-cran-pander_0.6.6+dfsg-1
+r-cran-parallelly_1.42.0-1
+r-cran-paramhelpers_1.14.2-1
+r-cran-party_1.3-18-1
+r-cran-partykit_1.2-23-1
+r-cran-pcapp_2.0-5-1
+r-cran-pcict_0.5-4.4-1
+r-cran-pdftools_3.5.0-1
+r-cran-pec_2023.04.12-1
+r-cran-phangorn_2.12.1+dfsg-1
+r-cran-phylobase_0.8.12-1
+r-cran-pingr_2.0.5-1
+r-cran-plyr_1.8.9-1
+r-cran-poissonbinomial_1.2.7-1
+r-cran-polycub_0.9.2-1
+r-cran-princurve_2.1.6-1
+r-cran-proc_1.18.5-1
+r-cran-processx_3.8.6-1
+r-cran-profvis_0.4.0+dfsg-1
+r-cran-projpred_2.8.0+dfsg-1
+r-cran-promises_1.3.2+dfsg-1
+r-cran-prophet_1.0+dfsg-5
+r-cran-proxy_0.4-27-1
+r-cran-ps_1.9.0-1
+r-cran-pscl_1.5.9-1
+r-cran-psychotools_0.7-4-1
+r-cran-purrr_1.0.4-1
+r-cran-purrrlyr_0.0.8-1
+r-cran-qap_0.1-2-1
+r-cran-qgam_1.3.4-1
+r-cran-qgraph_1.9.8-2
+r-cran-qpdf_1.3.4+dfsg-2
+r-cran-qqconf_1.3.2+dfsg-1
+r-cran-qtl_1.70-1
+r-cran-quickjsr_1.6.0-1
+r-cran-ragg_1.3.3-1
+r-cran-randomforest_4.7-1.2-1
+r-cran-ranger_0.17.0-1
+r-cran-rann_2.6.2-1
+r-cran-rappdirs_0.3.3-1
+r-cran-rbibutils_2.3-1
+r-cran-rcppannoy_0.0.22-1
+r-cran-rcppdist_0.1.1-2
+r-cran-rcpphnsw_0.6.0+ds-1
+r-cran-rcppml_0.3.7-2
+r-cran-rcppparallel_5.1.7+dfsg-6
+r-cran-rcpproll_0.3.1-1
+r-cran-rcpptoml_0.2.3+dfsg-1
+r-cran-rcurl_1.98-1.16+dfsg-1
+r-cran-redland_1.0.17-18-1
+r-cran-regsem_1.9.5+dfsg-1
+r-cran-renv_1.1.2-1
+r-cran-reshape2_1.4.4-2
+r-cran-restfulr_0.0.15-1
+r-cran-reticulate_1.41.0.1+dfsg-1
+r-cran-rgenoud_5.9-0.11-1
+r-cran-riskregression_2023.12.21+ds-1
+r-cran-rjson_0.2.23-1
+r-cran-rlang_1.1.5-3
+r-cran-rle_0.9.2-2
+r-cran-rlrsim_3.1-8-1
+r-cran-rmariadb_1.3.3+ds-1
+r-cran-rmpfr_1.0-0-2
+r-cran-rncl_0.8.7-1
+r-cran-rnetcdf_2.9-2-1
+r-cran-roxygen2_7.3.2-1
+r-cran-rpact_4.2.0-1
+r-cran-rpf_1.0.14+dfsg-1
+r-cran-rprotobuf_0.4.23-1
+r-cran-rrcov_1.7-6-1
+r-cran-rspectra_0.16-2-1
+r-cran-rsqlite_2.3.9-1
+r-cran-rstan_2.32.7-1
+r-cran-rstanarm_2.32.1-2
+r-cran-rsvg_2.6.1-1
+r-cran-rtdists_0.11-5-1
+r-cran-rtsne_0.17-1
+r-cran-rwiener_1.3-3-1
+r-cran-s7_0.2.0-1
+r-cran-sass_0.4.9+dfsg-1
+r-cran-satellite_1.0.5+dfsg-1
+r-cran-scattermore_1.2-1
+r-cran-sctransform_0.4.1-1
+r-cran-sem_3.1.16-1
+r-cran-seriation_1.5.7-1
+r-cran-sets_1.0.25+ds-1
+r-cran-seurat_5.2.1-5
+r-cran-seuratobject_5.0.2-1
+r-cran-sitmo_2.0.2-1
+r-cran-slider_0.3.2-1
+r-cran-sna_2.8-1
+r-cran-sodium_1.4.0+dfsg-1
+r-cran-sourcetools_0.1.7-1-1
+r-cran-sp_1:2.2-0+dfsg-1
+r-cran-spam_2.11-1-1
+r-cran-sparsesvd_0.2-2-1
+r-cran-sparsevctrs_0.2.0-2
+r-cran-spatialreg_1.3-6+dfsg-1
+r-cran-spatstat.explore_3.3-4-1
+r-cran-spatstat.geom_3.3-6-1
+r-cran-spatstat.linnet_3.2-5-1
+r-cran-spatstat.model_3.3-4-1
+r-cran-spatstat.random_3.3-3-1
+r-cran-spatstat.utils_3.1-3-1
+r-cran-spdep_1.3-5+dfsg-1
+r-cran-splines2_0.5.4-1
+r-cran-stanheaders_2.32.10-1
+r-cran-statip_0.2.3-2
+r-cran-statmod_1.5.0-1
+r-cran-statnet.common_4.11.0-1
+r-cran-stringdist_0.9.15-1
+r-cran-surveillance_1.24.1-1
+r-cran-survey_4.4-2-2
+r-cran-svglite_2.1.3-2
+r-cran-sys_3.4.3-1
+r-cran-systemfonts_1.2.1-1
+r-cran-testthat_3.2.3-1
+r-cran-textshaping_0.3.7-2
+r-cran-tfmpvalue_0.0.9-1
+r-cran-tgp_2.4-23-1
+r-cran-tibble_3.2.1+dfsg-3
+r-cran-tidygraph_1.3.1-2
+r-cran-tidyr_1.3.1-1
+r-cran-tidyselect_1.2.1+dfsg-1
+r-cran-tikzdevice_0.12.6-1
+r-cran-timechange_0.3.0-2
+r-cran-timereg_2.0.6-1
+r-cran-tm_0.7-16-1
+r-cran-tmb_1.9.17-1
+r-cran-tmvtnorm_1.6-1
+r-cran-tokenizers_0.3.0-1
+r-cran-transformr_0.1.5-1
+r-cran-treespace_1.1.4.3+dfsg-1
+r-cran-triebeard_0.4.1-1
+r-cran-truncnorm_1.0-9-2
+r-cran-tsp_1.2-4-1
+r-cran-tweenr_2.0.3-1
+r-cran-ucminf_1.2.2-1
+r-cran-units_0.8-7+dfsg-2
+r-cran-urltools_1.7.3+dfsg-2
+r-cran-utf8_1.2.4-1
+r-cran-uwot_0.2.3-1
+r-cran-vctrs_0.6.5-1
+r-cran-vdiffr_1.0.8-1
+r-cran-vegan_2.6-10+dfsg-3
+r-cran-vgam_1.1-13-1
+r-cran-vim_6.2.2+dfsg-1
+r-cran-warp_0.2.1-1
+r-cran-waveslim_1.8.5-1
+r-cran-webfakes_1.3.2-1
+r-cran-webutils_1.2.2-1
+r-cran-wk_0.9.4-1
+r-cran-wordcloud_2.6-2
+r-cran-xfun_0.51+dfsg-1
+r-cran-xts_0.14.1-1
+r-cran-yaml_2.3.10-1
+r-other-kcha-psiplot_2.3.0-2
+
+armhf:
+
+fgarch_4033.92-1
+lme4_1.1-37-1
+r-bioc-biobase_2.66.0-2
+r-bioc-s4vectors_0.44.0+dfsg-2
+r-cran-ade4_1.7-23-1
+r-cran-adegenet_2.1.11-1
+r-cran-adephylo_1.1-17-1
+r-cran-amap_0.8-20-2
+r-cran-amelia_1.8.3-1
+r-cran-apcluster_1.4.13-1
+r-cran-ape_5.8-1-1
+r-cran-askpass_1.2.1-1
+r-cran-base64url_1.4-2
+r-cran-batchtools_0.9.17+dfsg-1
+r-cran-bayesfactor_0.9.12-4.7+dfsg-1
+r-cran-bayesm_3.1-6+dfsg-1
+r-cran-bbmisc_1.13-1
+r-cran-bdgraph_2.73+dfsg-1
+r-cran-bench_1.1.4-1
+r-cran-bigmemory_4.6.4-2
+r-cran-bindrcpp_0.2.3-1
+r-cran-bio3d_2.4-5-1
+r-cran-bit_4.6.0+dfsg-1
+r-cran-bit64_4.6.0-1-4
+r-cran-blockmodeling_1.1.5-1
+r-cran-brglm_0.7.2-1
+r-cran-brglm2_0.9.2+dfsg-1
+r-cran-brio_1.1.5-1
+r-cran-cachem_1.1.0-1
+r-cran-cairo_1.6-2-1
+r-cran-caret_7.0-1+dfsg-1
+r-cran-catools_1.18.3-1
+r-cran-cba_0.2-25-1
+r-cran-checkmate_2.3.2-1
+r-cran-classint_0.4-11+dfsg-1
+r-cran-cli_3.6.4-1
+r-cran-clock_0.7.2-1
+r-cran-clue_0.3-66-1
+r-cran-coin_1.4-3-1
+r-cran-collapse_2.1.0-1
+r-cran-colorspace_2.1-1+dfsg-1
+r-cran-commonmark_1.9.5-1
+r-cran-covr_3.6.4+dfsg-1
+r-cran-ctmcd_1.4.4+dfsg-1
+r-cran-cutpointr_1.2.0-1
+r-cran-data.table_1.17.0+dfsg-1
+r-cran-dbscan_1.2.2+ds-2
+r-cran-ddrtree_0.1.5-2
+r-cran-decor_1.0.2-1
+r-cran-deldir_2.0-4-1
+r-cran-densityclust_0.3.3-1
+r-cran-deoptim_2.2-8-1
+r-cran-desolve_1.40-1
+r-cran-dicedesign_1.10-1
+r-cran-diffobj_0.3.5-1
+r-cran-distr_2.9.7+dfsg-1
+r-cran-dosefinding_1.3-1-1
+r-cran-dotcall64_1.2-1
+r-cran-dplyr_1.1.4-4
+r-cran-dqrng_0.3.2+dfsg-1
+r-cran-earth_5.3.4-1
+r-cran-ecosolver_0.5.5-1
+r-cran-emoa_0.5-3-1
+r-cran-estimatr_1.0.6-1
+r-cran-etm_1.1.1-1
+r-cran-evd_2.3-7.1-1
+r-cran-exactextractr_0.10.0-1
+r-cran-exactranktests_0.8-35-1
+r-cran-expm_1.0-0-1
+r-cran-extradistr_1.10.0-1
+r-cran-factominer_2.11-1
+r-cran-fansi_1.0.6-2
+r-cran-farver_2.1.2-1
+r-cran-fastmap_1.2.0-1
+r-cran-ff_4.5.2+ds-1
+r-cran-fields_16.3.1-1
+r-cran-filelock_1.0.3-1
+r-cran-fingerprint_3.5.7-2
+r-cran-fnn_1.1.4.1-1
+r-cran-forecast_8.23.0-1
+r-cran-fracdiff_1.5-3-1
+r-cran-fs_1.6.5+dfsg-1
+r-cran-gam_1.22-5-1
+r-cran-gap_1.6+dfsg-1
+r-cran-gdtools_0.4.1-1
+r-cran-gee_4.13-29-1
+r-cran-genie_1.0.5-2
+r-cran-geometry_0.5.2-1
+r-cran-geosphere_1.5-20-1
+r-cran-gert_2.1.4+dfsg-1
+r-cran-ggforce_0.4.2-1
+r-cran-ggraph_2.2.1+dfsg-1
+r-cran-ggrepel_0.9.6-1
+r-cran-glmnet_4.1-8-1
+r-cran-glue_1.8.0-1
+r-cran-gmm_1.8-1
+r-cran-gmp_0.7-5-1
+r-cran-gnm_1.1-5-1
+r-cran-gower_1.0.2-1
+r-cran-graphlayouts_1.2.2-1
+r-cran-gridtext_0.1.5-2
+r-cran-haplo.stats_1.9.7-1
+r-cran-hdf5r_1.3.12+dfsg-2
+r-cran-hexbin_1.28.5-1
+r-cran-htmltools_0.5.8.1-1
+r-cran-httpuv_1.6.15+dfsg-1
+r-cran-hunspell_3.0.5+dfsg-1
+r-cran-influencer_0.1.5-1
+r-cran-interp_1.1-6-1
+r-cran-ipred_0.9-15-1
+r-cran-irace_4.2.0-1
+r-cran-isoband_0.2.7-1
+r-cran-isospecr_2.1.3-1
+r-cran-jinjar_0.3.2+dfsg-1
+r-cran-jomo_2.7-6-1
+r-cran-jsonlite_1.9.1+dfsg-1
+r-cran-keyring_1.3.2-1
+r-cran-knn.covertree_1.0-2
+r-cran-ks_1.14.3-1
+r-cran-lamw_2.2.4-1
+r-cran-later_1.4.1+dfsg-1
+r-cran-lavasearch2_2.0.3+dfsg-1
+r-cran-lazyeval_0.2.2-1
+r-cran-leidenbase_0.1.32-1
+r-cran-lexrankr_0.5.2-8
+r-cran-lhs_1.2.0-1
+r-cran-libcoin_1.0-10-1
+r-cran-lobstr_1.1.2-1
+r-cran-locfit_1.5-9.12-1
+r-cran-lubridate_1.9.4+dfsg-1
+r-cran-luminescence_1.0.1-1
+r-cran-magick_2.8.5+dfsg-1
+r-cran-magrittr_2.0.3-1
+r-cran-maldiquant_1.22.3-1
+r-cran-maotai_0.2.6-1
+r-cran-maps_3.4.2.1-1
+r-cran-marginaleffects_0.25.0-1
+r-cran-markovchain_0.10.0-1
+r-cran-matching_4.10-15-1
+r-cran-matchit_4.7.1-1
+r-cran-matrixstats_1.5.0-1
+r-cran-maxstat_0.7-25-2
+r-cran-mclust_6.1.1-1
+r-cran-mcmc_0.9-8-1
+r-cran-mda_0.5-5-1
+r-cran-memisc_0.99.31.8.2+dfsg-1
+r-cran-mets_1.3.5+dfsg-1
+r-cran-mice_3.17.0-1
+r-cran-minerva_1.5.10-1
+r-cran-minpack.lm_1.2-4-1
+r-cran-mixsqp_0.3-54-1
+r-cran-mlbench_2.1-6-1
+r-cran-mlr_2.19.2+dfsg-1
+r-cran-mnp_3.1-5-1
+r-cran-modelmetrics_1.2.2.2-1
+r-cran-msm_1.8.2-1
+r-cran-mvnfast_0.2.8+dfsg-1
+r-cran-nanoarrow_0.6.0-1
+r-cran-network_1.19.0-1
+r-cran-nmf_0.28-1
+r-cran-nnls_1.6-1
+r-cran-oaqc_2.0.0-1
+r-cran-openmx_2.21.13+dfsg-1
+r-cran-openssl_2.3.2+dfsg-1
+r-cran-ordinal_2023.12-4.1-1
+r-cran-pan_1.9-1
+r-cran-pander_0.6.6+dfsg-1
+r-cran-parallelly_1.42.0-1
+r-cran-paramhelpers_1.14.2-1
+r-cran-party_1.3-18-1
+r-cran-partykit_1.2-23-1
+r-cran-pcapp_2.0-5-1
+r-cran-pcict_0.5-4.4-1
+r-cran-pdftools_3.5.0-1
+r-cran-pec_2023.04.12-1
+r-cran-phangorn_2.12.1+dfsg-1
+r-cran-phylobase_0.8.12-1
+r-cran-pingr_2.0.5-1
+r-cran-plyr_1.8.9-1
+r-cran-poissonbinomial_1.2.7-1
+r-cran-polycub_0.9.2-1
+r-cran-princurve_2.1.6-1
+r-cran-proc_1.18.5-1
+r-cran-processx_3.8.6-1
+r-cran-profvis_0.4.0+dfsg-1
+r-cran-projpred_2.8.0+dfsg-1
+r-cran-promises_1.3.2+dfsg-1
+r-cran-prophet_1.0+dfsg-5
+r-cran-proxy_0.4-27-1
+r-cran-ps_1.9.0-1
+r-cran-pscl_1.5.9-1
+r-cran-psychotools_0.7-4-1
+r-cran-purrr_1.0.4-1
+r-cran-purrrlyr_0.0.8-1
+r-cran-qap_0.1-2-1
+r-cran-qgam_1.3.4-1
+r-cran-qgraph_1.9.8-2
+r-cran-qpdf_1.3.4+dfsg-2
+r-cran-qqconf_1.3.2+dfsg-1
+r-cran-qtl_1.70-1
+r-cran-quickjsr_1.6.0-1
+r-cran-ragg_1.3.3-1
+r-cran-randomforest_4.7-1.2-1
+r-cran-ranger_0.17.0-1
+r-cran-rann_2.6.2-1
+r-cran-rappdirs_0.3.3-1
+r-cran-rbibutils_2.3-1
+r-cran-rcppannoy_0.0.22-1
+r-cran-rcppdist_0.1.1-2
+r-cran-rcpphnsw_0.6.0+ds-1
+r-cran-rcppml_0.3.7-2
+r-cran-rcppparallel_5.1.7+dfsg-6
+r-cran-rcpproll_0.3.1-1
+r-cran-rcpptoml_0.2.3+dfsg-1
+r-cran-rcurl_1.98-1.16+dfsg-1
+r-cran-redland_1.0.17-18-1
+r-cran-regsem_1.9.5+dfsg-1
+r-cran-renv_1.1.2-1
+r-cran-reshape2_1.4.4-2
+r-cran-restfulr_0.0.15-1
+r-cran-reticulate_1.41.0.1+dfsg-1
+r-cran-rgenoud_5.9-0.11-1
+r-cran-riskregression_2023.12.21+ds-1
+r-cran-rjson_0.2.23-1
+r-cran-rlang_1.1.5-3
+r-cran-rle_0.9.2-2
+r-cran-rmariadb_1.3.3+ds-1
+r-cran-rmpfr_1.0-0-2
+r-cran-rncl_0.8.7-1
+r-cran-rnetcdf_2.9-2-1
+r-cran-roxygen2_7.3.2-1
+r-cran-rpact_4.2.0-1
+r-cran-rpf_1.0.14+dfsg-1
+r-cran-rprotobuf_0.4.23-1
+r-cran-rrcov_1.7-6-1
+r-cran-rspectra_0.16-2-1
+r-cran-rsqlite_2.3.9-1
+r-cran-rstan_2.32.7-1
+r-cran-rstanarm_2.32.1-2
+r-cran-rsvg_2.6.1-1
+r-cran-rtdists_0.11-5-1
+r-cran-rtsne_0.17-1
+r-cran-rwiener_1.3-3-1
+r-cran-s7_0.2.0-1
+r-cran-samr_3.0-2
+r-cran-sass_0.4.9+dfsg-1
+r-cran-satellite_1.0.5+dfsg-1
+r-cran-scattermore_1.2-1
+r-cran-sctransform_0.4.1-1
+r-cran-sem_3.1.16-1
+r-cran-seriation_1.5.7-1
+r-cran-sets_1.0.25+ds-1
+r-cran-seurat_5.2.1-5
+r-cran-seuratobject_5.0.2-1
+r-cran-sitmo_2.0.2-1
+r-cran-slider_0.3.2-1
+r-cran-sna_2.8-1
+r-cran-sodium_1.4.0+dfsg-1
+r-cran-sourcetools_0.1.7-1-1
+r-cran-sp_1:2.2-0+dfsg-1
+r-cran-spam_2.11-1-1
+r-cran-sparsevctrs_0.2.0-2
+r-cran-spatialreg_1.3-6+dfsg-1
+r-cran-spatstat.explore_3.3-4-1
+r-cran-spatstat.geom_3.3-6-1
+r-cran-spatstat.linnet_3.2-5-1
+r-cran-spatstat.model_3.3-4-1
+r-cran-spatstat.random_3.3-3-1
+r-cran-spatstat.utils_3.1-3-1
+r-cran-spdep_1.3-5+dfsg-1
+r-cran-splines2_0.5.4-1
+r-cran-stanheaders_2.32.10-1
+r-cran-statip_0.2.3-2
+r-cran-statmod_1.5.0-1
+r-cran-statnet.common_4.11.0-1
+r-cran-stringdist_0.9.15-1
+r-cran-surveillance_1.24.1-1
+r-cran-survey_4.4-2-2
+r-cran-svglite_2.1.3-2
+r-cran-sys_3.4.3-1
+r-cran-systemfonts_1.2.1-1
+r-cran-testthat_3.2.3-1
+r-cran-textshaping_0.3.7-2
+r-cran-tfmpvalue_0.0.9-1
+r-cran-tgp_2.4-23-1
+r-cran-tibble_3.2.1+dfsg-3
+r-cran-tidygraph_1.3.1-2
+r-cran-tidyr_1.3.1-1
+r-cran-tidyselect_1.2.1+dfsg-1
+r-cran-tikzdevice_0.12.6-1
+r-cran-timechange_0.3.0-2
+r-cran-timereg_2.0.6-1
+r-cran-tm_0.7-16-1
+r-cran-tmvtnorm_1.6-1
+r-cran-tokenizers_0.3.0-1
+r-cran-transformr_0.1.5-1
+r-cran-treespace_1.1.4.3+dfsg-1
+r-cran-triebeard_0.4.1-1
+r-cran-truncnorm_1.0-9-2
+r-cran-tsp_1.2-4-1
+r-cran-tweenr_2.0.3-1
+r-cran-ucminf_1.2.2-1
+r-cran-units_0.8-7+dfsg-2
+r-cran-urltools_1.7.3+dfsg-2
+r-cran-utf8_1.2.4-1
+r-cran-uwot_0.2.3-1
+r-cran-vctrs_0.6.5-1
+r-cran-vdiffr_1.0.8-1
+r-cran-vegan_2.6-10+dfsg-3
+r-cran-vgam_1.1-13-1
+r-cran-vim_6.2.2+dfsg-1
+r-cran-warp_0.2.1-1
+r-cran-waveslim_1.8.5-1
+r-cran-webfakes_1.3.2-1
+r-cran-webutils_1.2.2-1
+r-cran-wk_0.9.4-1
+r-cran-wordcloud_2.6-2
+r-cran-xfun_0.51+dfsg-1
+r-cran-xts_0.14.1-1
+r-cran-yaml_2.3.10-1
+r-other-kcha-psiplot_2.3.0-2
+r-other-x4r_1.0.1+git20150806.c6bd9bd-3
+
+i386:
+
+fgarch_4033.92-1
+lme4_1.1-37-1
+r-bioc-biobase_2.66.0-2
+r-bioc-s4vectors_0.44.0+dfsg-2
+r-cran-ade4_1.7-23-1
+r-cran-adegenet_2.1.11-1
+r-cran-adephylo_1.1-17-1
+r-cran-amap_0.8-20-2
+r-cran-amelia_1.8.3-1
+r-cran-apcluster_1.4.13-1
+r-cran-ape_5.8-1-1
+r-cran-askpass_1.2.1-1
+r-cran-base64url_1.4-2
+r-cran-batchtools_0.9.17+dfsg-1
+r-cran-bayesfactor_0.9.12-4.7+dfsg-1
+r-cran-bayesm_3.1-6+dfsg-1
+r-cran-bbmisc_1.13-1
+r-cran-bdgraph_2.73+dfsg-1
+r-cran-bench_1.1.4-1
+r-cran-bigmemory_4.6.4-2
+r-cran-bindrcpp_0.2.3-1
+r-cran-bio3d_2.4-5-1
+r-cran-bit_4.6.0+dfsg-1
+r-cran-bit64_4.6.0-1-4
+r-cran-blockmodeling_1.1.5-1
+r-cran-brglm_0.7.2-1
+r-cran-brglm2_0.9.2+dfsg-1
+r-cran-brio_1.1.5-1
+r-cran-cachem_1.1.0-1
+r-cran-cairo_1.6-2-1
+r-cran-caret_7.0-1+dfsg-1
+r-cran-catools_1.18.3-1
+r-cran-cba_0.2-25-1
+r-cran-checkmate_2.3.2-1
+r-cran-classint_0.4-11+dfsg-1
+r-cran-cli_3.6.4-1
+r-cran-clock_0.7.2-1
+r-cran-clue_0.3-66-1
+r-cran-coin_1.4-3-1
+r-cran-collapse_2.1.0-1
+r-cran-colorspace_2.1-1+dfsg-1
+r-cran-commonmark_1.9.5-1
+r-cran-covr_3.6.4+dfsg-1
+r-cran-ctmcd_1.4.4+dfsg-1
+r-cran-cutpointr_1.2.0-1
+r-cran-data.table_1.17.0+dfsg-1
+r-cran-dbscan_1.2.2+ds-2
+r-cran-ddrtree_0.1.5-2
+r-cran-decor_1.0.2-1
+r-cran-deldir_2.0-4-1
+r-cran-densityclust_0.3.3-1
+r-cran-deoptim_2.2-8-1
+r-cran-desolve_1.40-1
+r-cran-dicedesign_1.10-1
+r-cran-diffobj_0.3.5-1
+r-cran-distr_2.9.7+dfsg-1
+r-cran-dosefinding_1.3-1-1
+r-cran-dotcall64_1.2-1
+r-cran-dplyr_1.1.4-4
+r-cran-dqrng_0.3.2+dfsg-1
+r-cran-earth_5.3.4-1
+r-cran-ecosolver_0.5.5-1
+r-cran-emoa_0.5-3-1
+r-cran-estimatr_1.0.6-1
+r-cran-etm_1.1.1-1
+r-cran-evd_2.3-7.1-1
+r-cran-exactextractr_0.10.0-1
+r-cran-exactranktests_0.8-35-1
+r-cran-expm_1.0-0-1
+r-cran-extradistr_1.10.0-1
+r-cran-factominer_2.11-1
+r-cran-fansi_1.0.6-2
+r-cran-farver_2.1.2-1
+r-cran-fastmap_1.2.0-1
+r-cran-ff_4.5.2+ds-1
+r-cran-fields_16.3.1-1
+r-cran-filelock_1.0.3-1
+r-cran-fingerprint_3.5.7-2
+r-cran-fnn_1.1.4.1-1
+r-cran-forecast_8.23.0-1
+r-cran-fracdiff_1.5-3-1
+r-cran-fs_1.6.5+dfsg-1
+r-cran-gam_1.22-5-1
+r-cran-gap_1.6+dfsg-1
+r-cran-gdtools_0.4.1-1
+r-cran-gee_4.13-29-1
+r-cran-genie_1.0.5-2
+r-cran-geometry_0.5.2-1
+r-cran-geosphere_1.5-20-1
+r-cran-gert_2.1.4+dfsg-1
+r-cran-ggforce_0.4.2-1
+r-cran-ggraph_2.2.1+dfsg-1
+r-cran-ggrepel_0.9.6-1
+r-cran-glmnet_4.1-8-1
+r-cran-glue_1.8.0-1
+r-cran-gmm_1.8-1
+r-cran-gmp_0.7-5-1
+r-cran-gnm_1.1-5-1
+r-cran-gower_1.0.2-1
+r-cran-graphlayouts_1.2.2-1
+r-cran-gridtext_0.1.5-2
+r-cran-haplo.stats_1.9.7-1
+r-cran-hdf5r_1.3.12+dfsg-2
+r-cran-hexbin_1.28.5-1
+r-cran-htmltools_0.5.8.1-1
+r-cran-httpuv_1.6.15+dfsg-1
+r-cran-hunspell_3.0.5+dfsg-1
+r-cran-influencer_0.1.5-1
+r-cran-interp_1.1-6-1
+r-cran-ipred_0.9-15-1
+r-cran-irace_4.2.0-1
+r-cran-isoband_0.2.7-1
+r-cran-isospecr_2.1.3-1
+r-cran-jinjar_0.3.2+dfsg-1
+r-cran-jomo_2.7-6-1
+r-cran-jsonlite_1.9.1+dfsg-1
+r-cran-keyring_1.3.2-1
+r-cran-knn.covertree_1.0-2
+r-cran-ks_1.14.3-1
+r-cran-lamw_2.2.4-1
+r-cran-later_1.4.1+dfsg-1
+r-cran-lavasearch2_2.0.3+dfsg-1
+r-cran-lazyeval_0.2.2-1
+r-cran-leidenbase_0.1.32-1
+r-cran-lexrankr_0.5.2-8
+r-cran-lhs_1.2.0-1
+r-cran-libcoin_1.0-10-1
+r-cran-lobstr_1.1.2-1
+r-cran-locfit_1.5-9.12-1
+r-cran-lubridate_1.9.4+dfsg-1
+r-cran-luminescence_1.0.1-1
+r-cran-magick_2.8.5+dfsg-1
+r-cran-magrittr_2.0.3-1
+r-cran-maldiquant_1.22.3-1
+r-cran-maotai_0.2.6-1
+r-cran-maps_3.4.2.1-1
+r-cran-marginaleffects_0.25.0-1
+r-cran-markovchain_0.10.0-1
+r-cran-matching_4.10-15-1
+r-cran-matchit_4.7.1-1
+r-cran-matrixstats_1.5.0-1
+r-cran-maxstat_0.7-25-2
+r-cran-mclust_6.1.1-1
+r-cran-mcmc_0.9-8-1
+r-cran-mda_0.5-5-1
+r-cran-memisc_0.99.31.8.2+dfsg-1
+r-cran-mets_1.3.5+dfsg-1
+r-cran-mice_3.17.0-1
+r-cran-minerva_1.5.10-1
+r-cran-minpack.lm_1.2-4-1
+r-cran-mixsqp_0.3-54-1
+r-cran-mlbench_2.1-6-1
+r-cran-mlr_2.19.2+dfsg-1
+r-cran-mnp_3.1-5-1
+r-cran-modelmetrics_1.2.2.2-1
+r-cran-msm_1.8.2-1
+r-cran-mvnfast_0.2.8+dfsg-1
+r-cran-nanoarrow_0.6.0-1
+r-cran-network_1.19.0-1
+r-cran-nmf_0.28-1
+r-cran-nnls_1.6-1
+r-cran-oaqc_2.0.0-1
+r-cran-openmx_2.21.13+dfsg-1
+r-cran-openssl_2.3.2+dfsg-1
+r-cran-ordinal_2023.12-4.1-1
+r-cran-pan_1.9-1
+r-cran-pander_0.6.6+dfsg-1
+r-cran-parallelly_1.42.0-1
+r-cran-paramhelpers_1.14.2-1
+r-cran-party_1.3-18-1
+r-cran-partykit_1.2-23-1
+r-cran-pcapp_2.0-5-1
+r-cran-pcict_0.5-4.4-1
+r-cran-pdftools_3.5.0-1
+r-cran-pec_2023.04.12-1
+r-cran-phangorn_2.12.1+dfsg-1
+r-cran-phylobase_0.8.12-1
+r-cran-pingr_2.0.5-1
+r-cran-plyr_1.8.9-1
+r-cran-poissonbinomial_1.2.7-1
+r-cran-polycub_0.9.2-1
+r-cran-princurve_2.1.6-1
+r-cran-proc_1.18.5-1
+r-cran-processx_3.8.6-1
+r-cran-profvis_0.4.0+dfsg-1
+r-cran-projpred_2.8.0+dfsg-1
+r-cran-promises_1.3.2+dfsg-1
+r-cran-prophet_1.0+dfsg-5
+r-cran-proxy_0.4-27-1
+r-cran-ps_1.9.0-1
+r-cran-pscl_1.5.9-1
+r-cran-psychotools_0.7-4-1
+r-cran-purrr_1.0.4-1
+r-cran-purrrlyr_0.0.8-1
+r-cran-qap_0.1-2-1
+r-cran-qgam_1.3.4-1
+r-cran-qgraph_1.9.8-2
+r-cran-qpdf_1.3.4+dfsg-2
+r-cran-qqconf_1.3.2+dfsg-1
+r-cran-qtl_1.70-1
+r-cran-quickjsr_1.6.0-1
+r-cran-ragg_1.3.3-1
+r-cran-randomforest_4.7-1.2-1
+r-cran-ranger_0.17.0-1
+r-cran-rann_2.6.2-1
+r-cran-rappdirs_0.3.3-1
+r-cran-rbibutils_2.3-1
+r-cran-rcppannoy_0.0.22-1
+r-cran-rcppdist_0.1.1-2
+r-cran-rcpphnsw_0.6.0+ds-1
+r-cran-rcppml_0.3.7-2
+r-cran-rcppparallel_5.1.7+dfsg-6
+r-cran-rcpproll_0.3.1-1
+r-cran-rcpptoml_0.2.3+dfsg-1
+r-cran-rcurl_1.98-1.16+dfsg-1
+r-cran-redland_1.0.17-18-1
+r-cran-regsem_1.9.5+dfsg-1
+r-cran-renv_1.1.2-1
+r-cran-reshape2_1.4.4-2
+r-cran-restfulr_0.0.15-1
+r-cran-reticulate_1.41.0.1+dfsg-1
+r-cran-rgenoud_5.9-0.11-1
+r-cran-riskregression_2023.12.21+ds-1
+r-cran-rjson_0.2.23-1
+r-cran-rlang_1.1.5-3
+r-cran-rle_0.9.2-2
+r-cran-rmariadb_1.3.3+ds-1
+r-cran-rmpfr_1.0-0-2
+r-cran-rncl_0.8.7-1
+r-cran-rnetcdf_2.9-2-1
+r-cran-roxygen2_7.3.2-1
+r-cran-rpact_4.2.0-1
+r-cran-rpf_1.0.14+dfsg-1
+r-cran-rprotobuf_0.4.23-1
+r-cran-rrcov_1.7-6-1
+r-cran-rspectra_0.16-2-1
+r-cran-rsqlite_2.3.9-1
+r-cran-rstan_2.32.7-1
+r-cran-rstanarm_2.32.1-2
+r-cran-rsvg_2.6.1-1
+r-cran-rtdists_0.11-5-1
+r-cran-rtsne_0.17-1
+r-cran-rwiener_1.3-3-1
+r-cran-s7_0.2.0-1
+r-cran-samr_3.0-2
+r-cran-sass_0.4.9+dfsg-1
+r-cran-satellite_1.0.5+dfsg-1
+r-cran-scattermore_1.2-1
+r-cran-sctransform_0.4.1-1
+r-cran-sem_3.1.16-1
+r-cran-seriation_1.5.7-1
+r-cran-sets_1.0.25+ds-1
+r-cran-seurat_5.2.1-5
+r-cran-seuratobject_5.0.2-1
+r-cran-sitmo_2.0.2-1
+r-cran-slider_0.3.2-1
+r-cran-sna_2.8-1
+r-cran-sodium_1.4.0+dfsg-1
+r-cran-sourcetools_0.1.7-1-1
+r-cran-sp_1:2.2-0+dfsg-1
+r-cran-spam_2.11-1-1
+r-cran-sparsevctrs_0.2.0-2
+r-cran-spatialreg_1.3-6+dfsg-1
+r-cran-spatstat.explore_3.3-4-1
+r-cran-spatstat.geom_3.3-6-1
+r-cran-spatstat.linnet_3.2-5-1
+r-cran-spatstat.model_3.3-4-1
+r-cran-spatstat.random_3.3-3-1
+r-cran-spatstat.utils_3.1-3-1
+r-cran-spdep_1.3-5+dfsg-1
+r-cran-splines2_0.5.4-1
+r-cran-stanheaders_2.32.10-1
+r-cran-statip_0.2.3-2
+r-cran-statmod_1.5.0-1
+r-cran-statnet.common_4.11.0-1
+r-cran-stringdist_0.9.15-1
+r-cran-surveillance_1.24.1-1
+r-cran-survey_4.4-2-2
+r-cran-svglite_2.1.3-2
+r-cran-sys_3.4.3-1
+r-cran-systemfonts_1.2.1-1
+r-cran-testthat_3.2.3-1
+r-cran-textshaping_0.3.7-2
+r-cran-tfmpvalue_0.0.9-1
+r-cran-tgp_2.4-23-1
+r-cran-tibble_3.2.1+dfsg-3
+r-cran-tidygraph_1.3.1-2
+r-cran-tidyr_1.3.1-1
+r-cran-tidyselect_1.2.1+dfsg-1
+r-cran-tikzdevice_0.12.6-1
+r-cran-timechange_0.3.0-2
+r-cran-timereg_2.0.6-1
+r-cran-tm_0.7-16-1
+r-cran-tmvtnorm_1.6-1
+r-cran-tokenizers_0.3.0-1
+r-cran-transformr_0.1.5-1
+r-cran-treespace_1.1.4.3+dfsg-1
+r-cran-triebeard_0.4.1-1
+r-cran-truncnorm_1.0-9-2
+r-cran-tsp_1.2-4-1
+r-cran-tweenr_2.0.3-1
+r-cran-ucminf_1.2.2-1
+r-cran-units_0.8-7+dfsg-2
+r-cran-urltools_1.7.3+dfsg-2
+r-cran-utf8_1.2.4-1
+r-cran-uwot_0.2.3-1
+r-cran-vctrs_0.6.5-1
+r-cran-vdiffr_1.0.8-1
+r-cran-vegan_2.6-10+dfsg-3
+r-cran-vgam_1.1-13-1
+r-cran-vim_6.2.2+dfsg-1
+r-cran-warp_0.2.1-1
+r-cran-waveslim_1.8.5-1
+r-cran-webfakes_1.3.2-1
+r-cran-webutils_1.2.2-1
+r-cran-wk_0.9.4-1
+r-cran-wordcloud_2.6-2
+r-cran-xfun_0.51+dfsg-1
+r-cran-xts_0.14.1-1
+r-cran-yaml_2.3.10-1
+r-other-kcha-psiplot_2.3.0-2
+r-other-x4r_1.0.1+git20150806.c6bd9bd-3
+

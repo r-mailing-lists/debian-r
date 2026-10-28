@@ -1,0 +1,1097 @@
+From ginggs at debian.org  Tue Aug  1 13:06:41 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 1 Aug 2023 13:06:41 +0000
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <84d004ca-7641-40db-8346-250a082970df@debian.org>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org>
+Message-ID: <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com>
+
+Hi Andreas
+
+You should check on the package tracker pages for all the r-bioc-*
+uploads and make sure they are ready to migrate along with
+r-bioc-biocgenerics, e.g. r-bioc-cummerbund [1].
+
+r-bioc-biocversion appears to break the autopkgtest of
+r-cran-biocmanager/1.30.21.1+dfsg-1 in testing.
+
+At least the following packages are failing their own autopkgtests in
+unstable (list not complete):
+r-bioc-cummerbund
+r-bioc-decoupler
+r-bioc-monocle
+r-bioc-scran
+r-bioc-singler
+
+r-bioc-dupradar has regressed from passing to neutral, apparently due
+to the use of 'skip-not-installable'.  Please don't use this
+restriction on all the autopkgtests in a package, otherwise there are
+no tests which are not superficial, and regressions can migrate to
+testing.
+
+Regards
+Graham
+
+[1] https://tracker.debian.org/pkg/r-bioc-cummerbund
+
+From andreas at an3as.eu  Wed Aug  2 16:57:48 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 2 Aug 2023 18:57:48 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com>
+Message-ID: <ZMqLDLobhoUE+ZlQ@an3as.eu>
+
+Hi Graham,
+
+Am Tue, Aug 01, 2023 at 01:06:41PM +0000 schrieb Graham Inggs:
+> Hi Andreas
+
+Sorry, I can't do this before August 12.  But someone from the team
+will probably do so hopefully.
+
+Kind regards
+     Andreas.
+
+> You should check on the package tracker pages for all the r-bioc-*
+> uploads and make sure they are ready to migrate along with
+> r-bioc-biocgenerics, e.g. r-bioc-cummerbund [1].
+> 
+> r-bioc-biocversion appears to break the autopkgtest of
+> r-cran-biocmanager/1.30.21.1+dfsg-1 in testing.
+> 
+> At least the following packages are failing their own autopkgtests in
+> unstable (list not complete):
+> r-bioc-cummerbund
+> r-bioc-decoupler
+> r-bioc-monocle
+> r-bioc-scran
+> r-bioc-singler
+> 
+> r-bioc-dupradar has regressed from passing to neutral, apparently due
+> to the use of 'skip-not-installable'.  Please don't use this
+> restriction on all the autopkgtests in a package, otherwise there are
+> no tests which are not superficial, and regressions can migrate to
+> testing.
+> 
+> Regards
+> Graham
+> 
+> 
+> [1] https://tracker.debian.org/pkg/r-bioc-cummerbund
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sat Aug  5 19:24:44 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 5 Aug 2023 19:24:44 +0000
+Subject: Re: The R ecosystem in Debian, versioned Depends and Breaks and autopkgtest
+In-Reply-To: <da5e1350-1e1c-9c10-9a21-a40c7a403651@debian.org>
+References: <da5e1350-1e1c-9c10-9a21-a40c7a403651@debian.org>
+Message-ID: <CAM8zJQtZ_Gyo3Ypd_Pbtus_5kykwVhAUCFTAusd1p8kDRrGkdA@mail.gmail.com>
+
+Hi All
+
+Just a quick update.
+
+On Wed, 26 Jul 2023 at 15:30, Paul Gevers <elbrus at debian.org> wrote:
+> The version in unstable triggers
+> autopkgtest failures for r-cran-ggeffects (recently updated and passes
+> in unstable), r-cran-insight (passes in unstable), r-cran-performance
+> (recently updated and passes in unstable) and r-cran-tmb (new upstream
+> version available).
+
+r-cran-glmmtmb was auto-removed from testing due to inactivity on its
+own failing autopkgtest RC bug.  This caused the autopkgtests of
+r-cran-ggeffects, r-cran-insight and r-cran-performance to regress in
+testing, therefore no longer blocking the migration of rmatrix.
+r-cran-tmb was also scheduled for auto-removal, and since its only
+reverse-(build)-dependency was r-cran-glmmtmb, I manually removed it.
+
+rmatrix 1.6-0-1 has now migrated to testing.
+
+Regards
+Graham
+
+From ginggs at debian.org  Sun Aug  6 10:44:35 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 6 Aug 2023 10:44:35 +0000
+Subject: Re: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+In-Reply-To: <CAM8zJQsECpn-Gif32KXrzMAS7FE6u=_EMfYe97smLAZJ6EkOqA@mail.gmail.com>
+References: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org> <25788.18097.336040.544443@rob.eddelbuettel.com> <3d32eb93-854d-f6b5-3633-702c7f78ec34@debian.org> <25789.6605.664905.537073@rob.eddelbuettel.com> <20230723131202.w5gr2ouiohqfk6wb@office.mailbox.org> <CAM8zJQsECpn-Gif32KXrzMAS7FE6u=_EMfYe97smLAZJ6EkOqA@mail.gmail.com>
+Message-ID: <CAM8zJQvxieOB7FJt+aE4W1vk1T0HUMkp9-pDq+tXMPea3Kcz0Q@mail.gmail.com>
+
+Hi All
+
+Just a quick update.
+
+On Sun, 23 Jul 2023 at 15:07, Graham Inggs <ginggs at debian.org> wrote:
+> For what it's worth, r-cran-afex[1] and r-cran-mertools[2] **are**
+> passing in unstable.  So perhaps whatever package fixed this condition
+> has been uploaded, but not yet migrated.
+
+Since rmatrix 1.6-0-1 migrated, these tests are now passing on i386
+and no longer blocking the migrating of lme4.
+
+> Yet r-cran-mlmrev[3] still seems to have the timeout issue in unstable.
+
+The timeout of r-cran-mlmrev's autopkgtests on i386 is the last
+blocker for lme4, so I will allow lme4 to migrate and (attempt) to
+clone this bug to r-cran-mlmrev.
+
+As Dirk wrote:
+
+On Sun, 23 Jul 2023 at 16:32, Dirk Eddelbuettel <edd at debian.org> wrote:
+> So if it were me I'd just skip that test file on i386 and move on.
+
+Maybe this is the sane option, but CC'ing the i386 porters (Hi Adrian!) anyway.
+
+Regards
+Graham
+
+From tille at debian.org  Mon Aug 14 15:58:59 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 14 Aug 2023 17:58:59 +0200
+Subject: Bug#1049359: RM: r-bioc-bitseq -- ROM; Orphaned upstream, not building in Debian any more
+Message-ID: <169202873974.3471607.17115656697800511426.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-bioc-bitseq at packages.debian.org, 1024661 at bugs.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-bioc-bitseq
+
+Hi ftpmasters,
+
+as explained in bug #1024661 r-bioc-bitseq does not build any more and is not
+supported upstream any more.  Seems there is no chance to hold this package
+in Debian.  Please be so kind and remove it from unstable / testing.
+
+Thanks a lot for your work as ftpmaster
+    Andreas.
+
+From andreas at an3as.eu  Wed Aug 16 11:24:50 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 16 Aug 2023 13:24:50 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com>
+Message-ID: <ZNyyAs2L+Y0e3NIo@an3as.eu>
+
+Hi,
+
+the last new precondition was accepted so all r-bioc-* packages are
+uploaded and built meanwhile.  The only not-transitioned package is
+r-bioc-bitseq where I filed a removal bug for[1].  So we have at least
+all r-bioc-* packages in their current version.
+
+[1] https://bugs.debian.org/1049359
+
+Am Tue, Aug 01, 2023 at 01:06:41PM +0000 schrieb Graham Inggs:
+> Hi Andreas
+> 
+> You should check on the package tracker pages for all the r-bioc-*
+> uploads and make sure they are ready to migrate along with
+> r-bioc-biocgenerics, e.g. r-bioc-cummerbund [1].
+> 
+> r-bioc-biocversion appears to break the autopkgtest of
+> r-cran-biocmanager/1.30.21.1+dfsg-1 in testing.
+
+We now have 1.30.22+dfsg-2 in unstable which passes its tests.  Do we
+need to do some further action?
+ 
+> At least the following packages are failing their own autopkgtests in
+> unstable (list not complete):
+> r-bioc-cummerbund
+> r-bioc-decoupler
+> r-bioc-monocle
+> r-bioc-scran
+> r-bioc-singler
+
+Most of those packages have autopkgtests marked as
+   Failed (not a regression)
+Am I correct that we do not need to take any action regarding the
+transition?  The only exception in this list (as far as I can see) is
+
+  https://tracker.debian.org/pkg/r-bioc-scran
+
+I'm about to verify the possibly rounding error for i386 which might be
+fixed by relaxing the boundaries or ignoring this single test.  I'm
+wondering about the issue with ppc64el where the log[2] says:
+
+ 43s   Broken autopkgtest-satdep:ppc64el Depends on r-bioc-scrnaseq:ppc64el < none @un H >
+ 43s   Considering r-bioc-scrnaseq:ppc64el 2 as a solution to autopkgtest-satdep:ppc64el -2
+ 43s   Removing autopkgtest-satdep:ppc64el rather than change r-bioc-scrnaseq:ppc64el
+
+ 
+> r-bioc-dupradar has regressed from passing to neutral, apparently due
+> to the use of 'skip-not-installable'.  Please don't use this
+> restriction on all the autopkgtests in a package, otherwise there are
+> no tests which are not superficial, and regressions can migrate to
+> testing.
+
+Could you please be more verbose about this hint (may be suggesting a
+patch that implements your suggestion since I'm afraid I do not
+understand this correctly)
+
+Do you see any further blockers?
+
+Kind regards
+    Andreas.
+ 
+
+[2] https://ci.debian.net/data/autopkgtest/testing/ppc64el/r/r-bioc-scran/36185915/log.gz 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Aug 16 15:15:38 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 16 Aug 2023 17:15:38 +0200
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org>
+Message-ID: <ZNzoGrTZcvPvfwEK@an3as.eu>
+
+Am Tue, Aug 15, 2023 at 09:32:35PM +0200 schrieb Paul Gevers:
+> Source: r-cran-rgdal
+> Version: 1.6-7+dfsg-1
+> Severity: serious
+> X-Debbugs-CC: r-cran-sp at packages.debian.org
+> Tags: sid trixie
+> User: debian-ci at lists.debian.org
+> Usertags: needs-update
+> Control: affects -1 src:r-cran-sp
+> 
+> Dear maintainer(s),
+> 
+> With a recent upload of r-cran-sp the autopkgtest of r-cran-rgdal fails in
+> testing when that autopkgtest is run with the binary packages of r-cran-sp
+> from unstable. It passes when run with only packages from testing. In
+> tabular form:
+> 
+>                        pass            fail
+> r-cran-sp              from testing    1:2.0-0+dfsg-1
+> r-cran-rgdal           from testing    1.6-7+dfsg-1
+> all others             from testing    from testing
+
+I admit I have no idea how to fix this. :-(
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Wed Aug 16 18:06:51 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 16 Aug 2023 20:06:51 +0200
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <ZNzoGrTZcvPvfwEK@an3as.eu>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org> <ZNzoGrTZcvPvfwEK@an3as.eu>
+Message-ID: <dd22bf6f-7454-41d1-a4ba-988f4315cf90@debian.org>
+
+Hi Andreas,
+
+On 16-08-2023 17:15, Andreas Tille wrote:
+> >                         pass            fail
+> > r-cran-sp              from testing    1:2.0-0+dfsg-1
+> > r-cran-rgdal           from testing    1.6-7+dfsg-1
+> > all others             from testing    from testing
+>
+>
+> I admit I have no idea how to fix this. :-(
+
+Either r-cran-sp needs to revert the change that broke the autopkgtest 
+of r-cran-rgdal, or the autopkgtest of r-cran-rgdal needs to be fixed 
+for the changed behavior of r-cran-sp. You should do the former if the 
+autopkgtest of r-cran-rgdal found a regression in the behavior of 
+r-cran-sp. You should do the latter if the changes of r-cran-sp are to 
+stay. I can't judge as a bystander, but as r-cran-sp is a key package, 
+(saying with my Release Team member hat on) it's r-cran-rgdal that needs 
+to take the action to either adapt or convince the maintainer of 
+r-cran-sp to revert.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From ginggs at debian.org  Wed Aug 16 21:23:00 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 16 Aug 2023 21:23:00 +0000
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZNyyAs2L+Y0e3NIo@an3as.eu>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu>
+Message-ID: <CAM8zJQt5bXW7jEfjPtgkM5MRJwZxumJsKFfJUT+BsGgq+-uzdA@mail.gmail.com>
+
+Hi Andreas
+
+Sorry for the incomplete reply.  I'll respond to the other points when
+I have more time.
+
+On Wed, 16 Aug 2023 at 11:24, Andreas Tille <andreas at an3as.eu> wrote:
+> Do you see any further blockers?
+
+tracker.d.o. is having some issues (see #1043546), but you can still
+access up-to-date excuses here:
+https://qa.debian.org/excuses.php?package=r-bioc-biocgenerics
+
+The current blocker I see is:
+Implicit dependency: r-bioc-biocgenerics r-bioc-decoupler (not considered)
+
+Regards
+Graham
+
+From andreas at an3as.eu  Thu Aug 17 05:52:35 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 17 Aug 2023 07:52:35 +0200
+Subject: What is the architecture name in R what we call armel/armhf
+Message-ID: <ZN21owmlJMy25DAA@an3as.eu>
+
+Hi,
+
+I tried to skip two tests in r-cran-checkmate with this patch[1]
+which is based on
+
+  arch <- R.version$arch
+  identical(arch, "i386") || identical(arch, "i686") || identical(arch, "armel") || identical(arch, "armhf")
+
+which works fo i386 but unfortunately not on the two armel architectures
+where it is executed[2].  May be that R.version$arch returns different
+architecture names as we use in Debian.  I tried to login to some porter
+machines but for whatever reason I've got "Connection refused".
+
+Any help for the proper names or possibly other reasons why the test
+might fail are welcome.
+
+Kind regards
+  Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-checkmate/-/blob/master/debian/patches/skip_two_tests_for_32bit.patch
+[2] https://ci.debian.net/data/autopkgtest/testing/armel/r/r-cran-checkmate/36892619/log.gz
+    https://ci.debian.net/data/autopkgtest/testing/armhf/r/r-cran-checkmate/36892708/log.gz
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Thu Aug 17 07:24:20 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 17 Aug 2023 07:24:20 +0000
+Subject: Re: What is the architecture name in R what we call armel/armhf
+In-Reply-To: <ZN21owmlJMy25DAA@an3as.eu>
+References: <ZN21owmlJMy25DAA@an3as.eu>
+Message-ID: <CAM8zJQuBK9n39LuRiny8wKxYYGmnz5=gUYD1WU4AQn7_QKOPVg@mail.gmail.com>
+
+Hi Andreas
+
+On Thu, 17 Aug 2023 at 05:52, Andreas Tille <andreas at an3as.eu> wrote:
+> I tried to skip two tests in r-cran-checkmate with this patch[1]
+> which is based on
+>
+>   arch <- R.version$arch
+>   identical(arch, "i386") || identical(arch, "i686") || identical(arch, "armel") || identical(arch, "armhf")
+
+Stack Overflow suggested to check .Machine$sizeof.pointer
+which will return the pointer size in bytes,
+so 8 on 64-bit and 4 on 32-bit architectures.
+
+Regards
+Graham
+
+From andreas at an3as.eu  Thu Aug 17 14:19:15 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 17 Aug 2023 16:19:15 +0200
+Subject: Please use consistent signs in version of suggested package glmnet in decoupleR
+Message-ID: <ZN4sY0x9yRXJnIfN@an3as.eu>
+
+Hi Pau,
+
+as you can read in the Debian bug tracking system[1] your choice of
+choosing the version string `glmnet (>= 4.1.0)` for the suggested
+package glmnet in the DESCRIPTION of decoupleR is a bit unfortunate for
+downstream usage as in Debian distribution.  I'm perfectly aware that in
+the R world version signs '.' and '-' are equal regarding sorting.
+However the fact that glmnet has choosen the version string '4.1-7'
+which leads to a Debian package version r-cran-glmnet (4.1-7) which is
+in the Debian world something else than r-cran-glmnet (4.1.7) and
+specifically is lower than 4.1.0:
+
+  if $(dpkg --compare-versions 4.1-7 lt 4.1.0); then echo true; fi
+
+To avoid this kind of trouble it would be really helpful if you would
+consider sticking to the same writing of version number as the package
+authors of your dependant / suggested package have decided for in your
+next release of the package.  The thing is that we are generating the
+version numbers automatically and deriving from the version spelling
+scheme might break things at our side.
+
+Kind regards and thanks for considering
+    Andreas.
+
+[1] https://bugs.debian.org/1043224
+[2] https://cran.r-project.org/package=glmnet
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Fri Aug 18 06:16:39 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 18 Aug 2023 08:16:39 +0200
+Subject: Bug#1049998: RM: r-cran-lasso2 -- ROM; Orphaned upstream, RC buggy
+Message-ID: <169233939947.68172.15016600092170721024.reportbug@energija.fam-tille.de>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-cran-lasso2 at packages.debian.org, 1042179 at bugs.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-lasso2
+
+Hi,
+
+this package has RC bug #1042179 and is orphaned upstream[1].
+There is no point in keeping it in Debian.
+
+Kind regards
+   Andreas.
+
+[1] https://cran.r-project.org/web/packages/lasso2/index.html
+
+From pau.badia at uni-heidelberg.de  Fri Aug 18 08:51:42 2023
+From: pau.badia at uni-heidelberg.de (Pau Badia i Mompel)
+Date: Fri, 18 Aug 2023 10:51:42 +0200
+Subject: Re: Please use consistent signs in version of suggested package glmnet in decoupleR
+In-Reply-To: <ZN4sY0x9yRXJnIfN@an3as.eu>
+References: <ZN4sY0x9yRXJnIfN@an3as.eu>
+Message-ID: <46629e95-4253-5c18-c04a-739302955295@uni-heidelberg.de>
+
+Hi Andreas,
+
+Thanks for letting me know. I've updated the version to `4.1-7`. Let me 
+know if something else is needed.
+
+Cheers!
+
+Pau
+
+On 17.08.23 16:19, Andreas Tille wrote:
+> Hi Pau,
+>
+> as you can read in the Debian bug tracking system[1] your choice of
+> choosing the version string `glmnet (>= 4.1.0)` for the suggested
+> package glmnet in the DESCRIPTION of decoupleR is a bit unfortunate for
+> downstream usage as in Debian distribution.  I'm perfectly aware that in
+> the R world version signs '.' and '-' are equal regarding sorting.
+> However the fact that glmnet has choosen the version string '4.1-7'
+> which leads to a Debian package version r-cran-glmnet (4.1-7) which is
+> in the Debian world something else than r-cran-glmnet (4.1.7) and
+> specifically is lower than 4.1.0:
+>
+>    if $(dpkg --compare-versions 4.1-7 lt 4.1.0); then echo true; fi
+>
+> To avoid this kind of trouble it would be really helpful if you would
+> consider sticking to the same writing of version number as the package
+> authors of your dependant / suggested package have decided for in your
+> next release of the package.  The thing is that we are generating the
+> version numbers automatically and deriving from the version spelling
+> scheme might break things at our side.
+>
+> Kind regards and thanks for considering
+>      Andreas.
+>
+>
+> [1] https://bugs.debian.org/1043224
+> [2] https://cran.r-project.org/package=glmnet
+
+From andreas at an3as.eu  Fri Aug 18 09:30:12 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 18 Aug 2023 11:30:12 +0200
+Subject: Re: Please use consistent signs in version of suggested package glmnet in decoupleR
+In-Reply-To: <46629e95-4253-5c18-c04a-739302955295@uni-heidelberg.de>
+References: <ZN4sY0x9yRXJnIfN@an3as.eu> <46629e95-4253-5c18-c04a-739302955295@uni-heidelberg.de>
+Message-ID: <ZN86JMqPYKjzOtpe@an3as.eu>
+
+Hi Pau,
+
+Am Fri, Aug 18, 2023 at 10:51:42AM +0200 schrieb Pau Badia i Mompel:
+> Thanks for letting me know. I've updated the version to `4.1-7`.
+
+Thanks a lot for your quick response,
+
+> Let me know if something else is needed.
+
+That's all.  The current package is manually fixed and the next release
+will work whenever you might issue it.
+ 
+> Cheers!
+
+Thank you for your cooperation
+    Andreas.
+ 
+> Pau
+> 
+> On 17.08.23 16:19, Andreas Tille wrote:
+> > Hi Pau,
+> > 
+> > as you can read in the Debian bug tracking system[1] your choice of
+> > choosing the version string `glmnet (>= 4.1.0)` for the suggested
+> > package glmnet in the DESCRIPTION of decoupleR is a bit unfortunate for
+> > downstream usage as in Debian distribution.  I'm perfectly aware that in
+> > the R world version signs '.' and '-' are equal regarding sorting.
+> > However the fact that glmnet has choosen the version string '4.1-7'
+> > which leads to a Debian package version r-cran-glmnet (4.1-7) which is
+> > in the Debian world something else than r-cran-glmnet (4.1.7) and
+> > specifically is lower than 4.1.0:
+> > 
+> >    if $(dpkg --compare-versions 4.1-7 lt 4.1.0); then echo true; fi
+> > 
+> > To avoid this kind of trouble it would be really helpful if you would
+> > consider sticking to the same writing of version number as the package
+> > authors of your dependant / suggested package have decided for in your
+> > next release of the package.  The thing is that we are generating the
+> > version numbers automatically and deriving from the version spelling
+> > scheme might break things at our side.
+> > 
+> > Kind regards and thanks for considering
+> >      Andreas.
+> > 
+> > 
+> > [1] https://bugs.debian.org/1043224
+> > [2] https://cran.r-project.org/package=glmnet
+> > 
+> 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Fri Aug 18 10:40:52 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 18 Aug 2023 12:40:52 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQt5bXW7jEfjPtgkM5MRJwZxumJsKFfJUT+BsGgq+-uzdA@mail.gmail.com>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu> <CAM8zJQt5bXW7jEfjPtgkM5MRJwZxumJsKFfJUT+BsGgq+-uzdA@mail.gmail.com>
+Message-ID: <ZN9KtEOa8x22a7+D@an3as.eu>
+
+Hi Graham,
+
+Am Wed, Aug 16, 2023 at 09:23:00PM +0000 schrieb Graham Inggs:
+> tracker.d.o. is having some issues (see #1043546), but you can still
+> access up-to-date excuses here:
+> https://qa.debian.org/excuses.php?package=r-bioc-biocgenerics
+> 
+> The current blocker I see is:
+> Implicit dependency: r-bioc-biocgenerics r-bioc-decoupler (not considered)
+
+I've fixed r-bioc-decoupler manually to remove this blocker quickly
+(instead of working around invalid version specifications by detecting
+these in dh-r) 
+
+Do you see any other blocker?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Aug 18 11:58:08 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 18 Aug 2023 13:58:08 +0200
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org>
+Message-ID: <ZN9c0Nqkj7KXOx2T@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Roger Bivand <Roger.Bivand at nhh.no>
+
+Hi Roger,
+
+the CI tests in Debian uncovered some conflict between recent rgdal and
+version 2.0 of sp.  As you either can see in the bug report that was
+filed[1] or in a recent CI build log[2] it fails with
+
+In CRS("+init=epsg:4326") :> sp.tr <- spTransform(sp, CRS("+init=epsg:3857"))
+ sf required for evolution_status==2L
+Error in spTransform(sp, CRS("+init=epsg:3857")) : 
+  source crs creation failed: Invalid PROJ string syntax
+Calls: spTransform -> spTransform
+
+It would be great if you could adapt rgdal to the latest version of sp.
+
+Kind regards
+    Andreas.
+
+[1] https://bugs.debian.org/1049438
+[2] https://salsa.debian.org/r-pkg-team/r-cran-rgdal/-/jobs/4562837#L790
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Aug 18 12:58:32 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 18 Aug 2023 07:58:32 -0500
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <ZN9c0Nqkj7KXOx2T@an3as.eu>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org> <ZN9c0Nqkj7KXOx2T@an3as.eu>
+Message-ID: <25823.27384.834752.590659@rob.eddelbuettel.com>
+
+On 18 August 2023 at 13:58, Andreas Tille wrote:
+| Control: tags -1 upstream
+| Control: forwarded -1 Roger Bivand <Roger.Bivand at nhh.no>
+| 
+| Hi Roger,
+| 
+| the CI tests in Debian uncovered some conflict between recent rgdal and
+| version 2.0 of sp.  As you either can see in the bug report that was
+| filed[1] or in a recent CI build log[2] it fails with
+| 
+| In CRS("+init=epsg:4326") :> sp.tr <- spTransform(sp, CRS("+init=epsg:3857"))
+|  sf required for evolution_status==2L
+| Error in spTransform(sp, CRS("+init=epsg:3857")) : 
+|   source crs creation failed: Invalid PROJ string syntax
+| Calls: spTransform -> spTransform
+| 
+| It would be great if you could adapt rgdal to the latest version of sp.
+
+Possibly related to a *planned* and *announced* phaseout.
+
+See the DESCRIPTION file entry Description upstream
+
+  [...] Please note that 'rgdal' will be retired during October 2023,
+  plan transition to sf/stars/'terra' functions using 'GDAL' and 'PROJ'
+  at your earliest convenience (see
+  <https://r-spatial.org/r/2023/05/15/evolution4.html> and earlier blogs
+  for guidance).
+
+Erlier posts are
+
+  https://r-spatial.org/r/2022/04/12/evolution.html
+  https://r-spatial.org/r/2022/12/14/evolution2.html
+  https://r-spatial.org/r/2023/04/10/evolution3.html
+
+This is exemplary for guidance from an upstream project. 
+
+Dirk
+
+| 
+| Kind regards
+|     Andreas.
+| 
+| 
+| [1] https://bugs.debian.org/1049438
+| [2] https://salsa.debian.org/r-pkg-team/r-cran-rgdal/-/jobs/4562837#L790
+| 
+| -- 
+| http://fam-tille.de
+| 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Roger.Bivand at nhh.no  Fri Aug 18 13:37:21 2023
+From: Roger.Bivand at nhh.no (Roger Bivand)
+Date: Fri, 18 Aug 2023 13:37:21 +0000
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <SV0P279MB0475079EFC7A6B4D282C6AA4EE1BA@SV0P279MB0475.NORP279.PROD.OUTLOOK.COM>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org> <ZN9c0Nqkj7KXOx2T@an3as.eu> <SV0P279MB0475079EFC7A6B4D282C6AA4EE1BA@SV0P279MB0475.NORP279.PROD.OUTLOOK.COM>
+Message-ID: <SV0P279MB04758A9AE9943E50CB3082AEEE1BA@SV0P279MB0475.NORP279.PROD.OUTLOOK.COM>
+
+Dear Andreas,
+
+Further, it looks as though r-cran-sf is not available at the point of failure, but may reading of your output may be guesswork. Are you turning warnings into errors? Locally, I cannot reproduce the problem with sf available for sp 2.0-0; when sf is not available, I do see problems (but more extensive than yours).
+
+Hope this helps,
+
+Roger
+
+--
+Roger Bivand
+Emeritus Professor
+Norwegian School of Economics
+Postboks 3490 Ytre Sandviken, 5045 Bergen, Norway
+Roger.Bivand at nhh.no
+
+________________________________________
+From: Roger Bivand <Roger.Bivand at nhh.no>
+Sent: 18 August 2023 14:54
+To: Andreas Tille; Paul Gevers; 1049438 at bugs.debian.org; Edzer Pebesma
+Cc: Debian R
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+
+Dear Andreas,
+
+No idea, but note that rgdal, rgeos, maptools and rgrass7 will be archived in October 2023.
+
+This has been drawn to the attention of those interested on mailing lists since late 2022: https://github.com/r-spatial/evolution, https://r-spatial.org/r/2022/04/12/evolution.html, https://r-spatial.org/r/2022/12/14/evolution2.html, etc.
+
+sp 2.0-0 by default uses sf, not rgdal, for all CRS and transformation, unless somehow you are setting an environment variable or an R option to look for rgdal instead. This option will stop working by the end of September 2023.
+
+So the interaction you are seeing, but which I can't reproduce, is from your build of sf with your build of PROJ and GDAL in conjuction with the  new default settings of sp to use sf not rgdal.
+
+So no updates to rgdal are going to be forthcoming, and your build system will have to move now very quickly to catch up with impending changes. rgdal will be leaving CRAN in about six weeks, you may move to forthcoming sp 2.1-0 which drops rgdal completely if that is easier.
+
+Best wishes,
+
+Roger
+
+--
+Roger Bivand
+Emeritus Professor
+Norwegian School of Economics
+Postboks 3490 Ytre Sandviken, 5045 Bergen, Norway
+Roger.Bivand at nhh.no
+
+________________________________________
+From: Andreas Tille <andreas at an3as.eu>
+Sent: 18 August 2023 13:58
+To: Paul Gevers; 1049438 at bugs.debian.org; Roger Bivand
+Cc: Debian R
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+
+Control: tags -1 upstream
+Control: forwarded -1 Roger Bivand <Roger.Bivand at nhh.no>
+
+Hi Roger,
+
+the CI tests in Debian uncovered some conflict between recent rgdal and
+version 2.0 of sp.  As you either can see in the bug report that was
+filed[1] or in a recent CI build log[2] it fails with
+
+In CRS("+init=epsg:4326") :> sp.tr <- spTransform(sp, CRS("+init=epsg:3857"))
+ sf required for evolution_status==2L
+Error in spTransform(sp, CRS("+init=epsg:3857")) :
+  source crs creation failed: Invalid PROJ string syntax
+Calls: spTransform -> spTransform
+
+It would be great if you could adapt rgdal to the latest version of sp.
+
+Kind regards
+    Andreas.
+
+[1] https://bugs.debian.org/1049438
+[2] https://salsa.debian.org/r-pkg-team/r-cran-rgdal/-/jobs/4562837#L790
+
+--
+http://fam-tille.de/
+
+From Roger.Bivand at nhh.no  Fri Aug 18 12:54:20 2023
+From: Roger.Bivand at nhh.no (Roger Bivand)
+Date: Fri, 18 Aug 2023 12:54:20 +0000
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+In-Reply-To: <ZN9c0Nqkj7KXOx2T@an3as.eu>
+References: <683749f1-9beb-4eb8-b132-17ece8c9cfef@debian.org> <ZN9c0Nqkj7KXOx2T@an3as.eu>
+Message-ID: <SV0P279MB0475079EFC7A6B4D282C6AA4EE1BA@SV0P279MB0475.NORP279.PROD.OUTLOOK.COM>
+
+Dear Andreas,
+
+No idea, but note that rgdal, rgeos, maptools and rgrass7 will be archived in October 2023.
+
+This has been drawn to the attention of those interested on mailing lists since late 2022: https://github.com/r-spatial/evolution, https://r-spatial.org/r/2022/04/12/evolution.html, https://r-spatial.org/r/2022/12/14/evolution2.html, etc.
+
+sp 2.0-0 by default uses sf, not rgdal, for all CRS and transformation, unless somehow you are setting an environment variable or an R option to look for rgdal instead. This option will stop working by the end of September 2023.
+
+So the interaction you are seeing, but which I can't reproduce, is from your build of sf with your build of PROJ and GDAL in conjuction with the  new default settings of sp to use sf not rgdal.
+
+So no updates to rgdal are going to be forthcoming, and your build system will have to move now very quickly to catch up with impending changes. rgdal will be leaving CRAN in about six weeks, you may move to forthcoming sp 2.1-0 which drops rgdal completely if that is easier.
+
+Best wishes,
+
+Roger
+
+--
+Roger Bivand
+Emeritus Professor
+Norwegian School of Economics
+Postboks 3490 Ytre Sandviken, 5045 Bergen, Norway
+Roger.Bivand at nhh.no
+
+________________________________________
+From: Andreas Tille <andreas at an3as.eu>
+Sent: 18 August 2023 13:58
+To: Paul Gevers; 1049438 at bugs.debian.org; Roger Bivand
+Cc: Debian R
+Subject: Re: Bug#1049438: r-cran-rgdal: autopkgtest needs update for new version of r-cran-sp
+
+Control: tags -1 upstream
+Control: forwarded -1 Roger Bivand <Roger.Bivand at nhh.no>
+
+Hi Roger,
+
+the CI tests in Debian uncovered some conflict between recent rgdal and
+version 2.0 of sp.  As you either can see in the bug report that was
+filed[1] or in a recent CI build log[2] it fails with
+
+In CRS("+init=epsg:4326") :> sp.tr <- spTransform(sp, CRS("+init=epsg:3857"))
+ sf required for evolution_status==2L
+Error in spTransform(sp, CRS("+init=epsg:3857")) :
+  source crs creation failed: Invalid PROJ string syntax
+Calls: spTransform -> spTransform
+
+It would be great if you could adapt rgdal to the latest version of sp.
+
+Kind regards
+    Andreas.
+
+[1] https://bugs.debian.org/1049438
+[2] https://salsa.debian.org/r-pkg-team/r-cran-rgdal/-/jobs/4562837#L790
+
+--
+http://fam-tille.de/
+
+From nilesh at riseup.net  Fri Aug 18 16:45:49 2023
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Fri, 18 Aug 2023 22:15:49 +0530
+Subject: Re: Bug#1042406: dh-r: throws "Use of uninitialized value $dep_line in substitution" warnings with some packages
+In-Reply-To: <ZMNG5svHE+6A9Fu6@an3as.eu>
+References: <169048210267.25525.3536497137442969174.reportbug@debian> <ZMLOe4dGlRIg4ETX@an3as.eu> <5BCE5992-04AA-45BB-B4C2-1586BB6679A0@nileshpatra.info> <ZMNG5svHE+6A9Fu6@an3as.eu>
+Message-ID: <856a9c25-cdc3-8e13-68b6-afd35d362e2d@riseup.net>
+
+I am starting a discussion in the mailing list regarding this change.
+
+Currently, dh-r converts test dependencies into "Recommends" and injects then into the binary
+control file as such.
+I feel that this maybe wrong, as you're essentially installing useless packages into users machine
+who may not really need those packages at all. DESCRIPTION file adds a Suggests that could make the package
+more useful but aren't entirely necessary. This aligns with the "Suggests" field (not Recommends)
+in d/control as well.
+
+However, I'm not super aware about R ecosystem's dependencies and use-cases, and seek opinions
+of others on the mailing list.
+
+PS: Do **NOT** CC me in this thread. I read the mailing list.
+
+Thanks
+Nilesh
+
+On Fri, 28 Jul 2023 06:41:10 +0200 Andreas Tille <andreas at an3as.eu> wrote:
+> Am Fri, Jul 28, 2023 at 08:07:01AM +0530 schrieb Nilesh Patra:
+> >
+> >
+> > On 28 July 2023 1:37:23 am IST, Andreas Tille <andreas at an3as.eu> wrote:
+>
+> > >> The reason that we don't see such problems in for instance
+> > >> r-bioc-bsgenome is because it has some values in the testdepends and
+> > >> recommendsinput ends up having some value[4].
+> > >>
+> > >> I have attached a patch to fix this, please check.
+>
+> > >
+> > >While reading the patch it definitely fixes the uninitialized value.
+> > >However, it does not fulfill the intended behaviour to add the
+> > >Test-Depends as Recommends.  I'm considering parsing DESCRIPTION
+> > >directly to do so.
+> >
+> > I am not sure if I understand this. The behaviour of dh-r for adding recommends with and without the patch is exactly the same, i.e. there's no regression afaics.
+>
+>
+> Yes.
+>
+> > If you're saying that relying on d/t/control for testdeps is suboptimal, then that's a different problem.
+>
+>
+> Yes.  But the problem was caused by the switch from d/t/control to
+> d/t/autopkgtest-pkg-r.conf and thus it exclusively happens in r-bioc-*
+> packages (in r-cran-* packages this did not happen).
+>
+> > However IMHO adding test dependencies as recommends is not a good idea at all and I was surprised to see it while reading the code. While I can agree that adding them as recommends can help users run tests, I think the subset of people who actually would be interested in doing so is less. Recommends are installed by default by apt and so this ends up cluttering users system with un-needed stuff.
+>
+>
+> I think it was a good idea as long as we provided
+> /usr/share/doc/r-*/{run-unit-test,README.test} since the installed
+> codebase was fitting the docs that users can test the package on their
+> local machine.  Since also these docs were not installed any more it
+> makes sense to drop the Recommends which means your patch is solving
+> the problem.
+>
+> > That said, I maybe missing the history of this decision here.
+> >
+> > What do you think?
+>
+>
+> I think this is a good point to discuss adding Test-Depends as
+> Recommends on the mailing list.  However, I'm currently a bit offlineish
+> and will not be actively involved into this discussion (which is fine for
+> me).
+>
+> Thanks a lot for bringing this up
+>
+>     Andreas.
+>
+>
+> --
+> http://fam-tille.de
+
+From ginggs at debian.org  Sun Aug 20 11:58:48 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 20 Aug 2023 11:58:48 +0000
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZNyyAs2L+Y0e3NIo@an3as.eu>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu> <84d004ca-7641-40db-8346-250a082970df@debian.org> <CAM8zJQvj48=f-LgnAMc7sOuH_QKPD2-WUrBY+RLGtpC4DTE-pw@mail.gmail.com> <ZNyyAs2L+Y0e3NIo@an3as.eu>
+Message-ID: <CAM8zJQvTE_9Uk+SDF4zn8W5ujbMx6_CY5SZmXUmwjF9ezS=ZeA@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 16 Aug 2023 at 11:24, Andreas Tille <andreas at an3as.eu> wrote:
+> Am Tue, Aug 01, 2023 at 01:06:41PM +0000 schrieb Graham Inggs:
+> > At least the following packages are failing their own autopkgtests in
+> > unstable (list not complete):
+> > r-bioc-cummerbund
+> > r-bioc-decoupler
+> > r-bioc-monocle
+> > r-bioc-scran
+> > r-bioc-singler
+>
+> Most of those packages have autopkgtests marked as
+>    Failed (not a regression)
+> Am I correct that we do not need to take any action regarding the
+> transition?
+
+Well, it means those autopkgtests already regressed in testing, but
+they do not block migration.
+Now that r-bioc-biocgenerics has migrated, you can see that at least
+r-bioc-cummerbund, r-bioc-scran and r-bioc-singler are still blocked
+by other packages which need attention.
+
+> > r-bioc-dupradar has regressed from passing to neutral, apparently due
+> > to the use of 'skip-not-installable'.  Please don't use this
+> > restriction on all the autopkgtests in a package, otherwise there are
+> > no tests which are not superficial, and regressions can migrate to
+> > testing.
+>
+> Could you please be more verbose about this hint (may be suggesting a
+> patch that implements your suggestion since I'm afraid I do not
+> understand this correctly)
+
+--- a/debian/tests/autopkgtest-pkg-r.conf
++++ b/debian/tests/autopkgtest-pkg-r.conf
+@@ -2,4 +2,3 @@
+               r-cran-knitr, \
+               r-cran-rmarkdown, \
+               r-bioc-annotationhub
+-extra_restrictions=skip-not-installable
+
+In general, skip-not-installable is no good as it does not catch when
+packages are non-installable, and during that time, it can hide other
+regressions and allow them to migrate.  It may have some special use
+cases; e.g. a test depending on a package that is only available in
+unstable (virtualbox or openjdk-8), but skip-not-installable should
+not be applied to a package's only autopkgtest, or all of them, only
+the one that actually requires it.
+
+On Fri, 18 Aug 2023 at 10:40, Andreas Tille <tille at debian.org> wrote:
+> I've fixed r-bioc-decoupler manually to remove this blocker quickly
+> (instead of working around invalid version specifications by detecting
+> these in dh-r)
+
+Thanks!  elbrus marked r-bioc-decoupler urgent, and rather than being
+blocked by the autopkgtest regression of r-bioc-metagenomeseq, I
+removed 1.40.0-1 from testing (previously removed on 2023-07-16, but
+somehow migrated again) to allow r-bioc-biocgenerics to migrate.
+
+> Do you see any other blocker?
+
+Besides those packages mentioned above, there are others still needing
+attention.  These can be seen on the team's DDPO page [1], just search
+for 'Excuse' there.
+
+Regards
+Graham
+
+[1] https://qa.debian.org/developer.php?email=r-pkg-team at alioth-lists.debian.net
+
+From ginggs at debian.org  Sat Aug 26 10:14:23 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 26 Aug 2023 10:14:23 +0000
+Subject: r-cran-glmmtmb vs r-cran-tmb
+Message-ID: <CAM8zJQvido-8Fr_3TENZtvJ4KTEtbwOX8iELqa4rLr80_swA_w@mail.gmail.com>
+
+Hi
+
+r-cran-tmb and r-cran-glmmtmb were uploaded yesterday, thanks Andreas \o/
+
+r-cran-glmmtmb's changelog says:
+
+* Rebuild against latest R and latest r-cran-tmb
+
+Unfortunately, it seems the upload of r-cran-glmmtmb was too soon
+after r-cran-tmb,
+
+Date: Fri, 25 Aug 2023 14:38:04 +0200
+vs
+Date: Fri, 25 Aug 2023 13:39:45 +0200
+
+and r-cran-glmmtmb's autopkgtests are only passing on s390x,
+autopkgtests on the other architectures still fail [1] with:
+
+215s > library('glmmTMB')
+217s Warning message:
+217s In checkDepPackageVersion(dep_pkg = "TMB") :
+217s   Package version inconsistency detected.
+217s glmmTMB was built with TMB version 1.9.4
+217s Current TMB version is 1.9.6
+217s Please re-install glmmTMB from source or restore original ‘TMB’
+package (see '?reinstalling' for more information)
+
+I will try a binNMU of r-cran-glmmtmb in the hope that it resolves the
+situation.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-glmmtmb/
+
+From tille at debian.org  Sun Aug 27 08:12:29 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 27 Aug 2023 10:12:29 +0200
+Subject: Re: r-cran-glmmtmb vs r-cran-tmb
+In-Reply-To: <CAM8zJQvido-8Fr_3TENZtvJ4KTEtbwOX8iELqa4rLr80_swA_w@mail.gmail.com>
+References: <CAM8zJQvido-8Fr_3TENZtvJ4KTEtbwOX8iELqa4rLr80_swA_w@mail.gmail.com>
+Message-ID: <ZOsFbUzvFOXgITMC@an3as.eu>
+
+Hi Graham,
+
+Am Sat, Aug 26, 2023 at 10:14:23AM +0000 schrieb Graham Inggs:
+> 
+> r-cran-glmmtmb's changelog says:
+> 
+> * Rebuild against latest R and latest r-cran-tmb
+> 
+> Unfortunately, it seems the upload of r-cran-glmmtmb was too soon
+> after r-cran-tmb,
+> 
+> Date: Fri, 25 Aug 2023 14:38:04 +0200
+> vs
+> Date: Fri, 25 Aug 2023 13:39:45 +0200
+> and r-cran-glmmtmb's autopkgtests are only passing on s390x,
+> autopkgtests on the other architectures still fail [1] with:
+
+Argh.
+ 
+> 215s > library('glmmTMB')
+> 217s Warning message:
+> 217s In checkDepPackageVersion(dep_pkg = "TMB") :
+> 217s   Package version inconsistency detected.
+> 217s glmmTMB was built with TMB version 1.9.4
+> 217s Current TMB version is 1.9.6
+> 217s Please re-install glmmTMB from source or restore original ‘TMB’
+> package (see '?reinstalling' for more information)
+> 
+> I will try a binNMU of r-cran-glmmtmb in the hope that it resolves the
+> situation.
+
+Thanks a lot!
+ 
+Kind regards
+     Andreas. 
+
+-- 
+http://fam-tille.de
+

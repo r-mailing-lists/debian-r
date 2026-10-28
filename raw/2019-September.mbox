@@ -1,0 +1,505 @@
+From andreas at an3as.eu  Wed Sep  4 13:58:05 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 4 Sep 2019 15:58:05 +0200
+Subject: Problem in test suite of sf since upgrade of proj
+Message-ID: <20190904135805.5loea5bcceqpguik@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Edzer Pebesma <edzer.pebesma at uni-muenster.de>
+
+Hi Edzer,
+
+since the upgrade to proj (6.1.1-1) the autopkgtest for sf fails:
+
+$ LC_ALL=C.UTF-8 R --no-save < testthat.R 
+
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> suppressPackageStartupMessages(library(sf))
+> 
+> test_check("sf")
+proj_create: Error -5: unknown projection id
+proj_create: Error -9: unknown elliptical parameter name
+proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+── 1. Error: $.crs works (@test_crs.R#49)  ─────────────────────────────────────
+missing value where TRUE/FALSE needed
+1: expect_true(is.numeric(st_crs("+init=epsg:3857 +units=m")$b)) at testthat/test_crs.R:49
+2: quasi_label(enquo(object), label, arg = "object")
+3: eval_bare(get_expr(quo), get_env(quo))
+4: st_crs("+init=epsg:3857 +units=m")
+5: st_crs.character("+init=epsg:3857 +units=m")
+6: make_crs(x)
+
+proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+── 2. Error: $.crs works 2 (@test_crs.R#55)  ───────────────────────────────────
+missing value where TRUE/FALSE needed
+1: expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) at testthat/test_crs.R:55
+2: quasi_label(enquo(object), label, arg = "object")
+3: eval_bare(get_expr(quo), get_env(quo))
+4: st_crs("+init=epsg:3857 +units=km")
+5: st_crs.character("+init=epsg:3857 +units=km")
+6: make_crs(x)
+
+Cannot open layer foo
+Reading layer `nospatial' from data source `/usr/lib/R/site-library/sf/gpkg/nospatial.gpkg' using driver `GP
+Reading layer `nospatial' from data source `/usr/lib/R/site-library/sf/gpkg/nospatial.gpkg' using driver `GP
+OGR: Unsupported geometry type
+Reading layer `nc' from data source `/usr/lib/R/site-library/sf/shape/nc.shp' using driver `ESRI Shapefile'
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+driver `foo' not available.
+Dataset /tmp/RtmpTlApgW/file1ffa3ef15a25.gpkg already exists: remove first, use update=TRUE to append,
+delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
+Creating layer . failed.
+Failed to create feature 1 in x
+Failed to create feature 1 in x
+Failed to create feature 1 in x
+══ testthat results  ═══════════════════════════════════════════════════════════
+[ OK: 658 | SKIPPED: 59 | WARNINGS: 6 | FAILED: 2 ]
+1. Error: $.crs works (@test_crs.R#49) 
+2. Error: $.crs works 2 (@test_crs.R#55) 
+
+Error: testthat unit tests failed
+Execution halted
+
+Could you try to port sf to the recent version of proj?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edzer.pebesma at uni-muenster.de  Wed Sep  4 20:48:09 2019
+From: edzer.pebesma at uni-muenster.de (Edzer Pebesma)
+Date: Wed, 4 Sep 2019 22:48:09 +0200
+Subject: Re: Problem in test suite of sf since upgrade of proj
+In-Reply-To: <20190904135805.5loea5bcceqpguik@an3as.eu>
+References: <20190904135805.5loea5bcceqpguik@an3as.eu>
+Message-ID: <f80c892b-c387-d1e3-220e-5518cf76b8c9@uni-muenster.de>
+
+Thanks for reporting.
+
+I see warnings of this kind:
+
+< Warning message:
+< In CPL_crs_from_proj4string(x) :
+<   GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might
+return a CRS with a non-EPSG compliant axis order.
+
+but not the errors you get with +init=epsg:xxxx ; this is with PROJ
+6.1.1RC1, and now with PROJ 6.2.0. I have no idea why.
+
+On 9/4/19 3:58 PM, Andreas Tille wrote:
+> Control: tags -1 upstream
+> Control: forwarded -1 Edzer Pebesma <edzer.pebesma at uni-muenster.de>
+> 
+> Hi Edzer,
+> 
+> since the upgrade to proj (6.1.1-1) the autopkgtest for sf fails:
+> 
+> $ LC_ALL=C.UTF-8 R --no-save < testthat.R 
+> 
+> R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+> Copyright (C) 2019 The R Foundation for Statistical Computing
+> Platform: x86_64-pc-linux-gnu (64-bit)
+> 
+> R is free software and comes with ABSOLUTELY NO WARRANTY.
+> You are welcome to redistribute it under certain conditions.
+> Type 'license()' or 'licence()' for distribution details.
+> 
+> R is a collaborative project with many contributors.
+> Type 'contributors()' for more information and
+> 'citation()' on how to cite R or R packages in publications.
+> 
+> Type 'demo()' for some demos, 'help()' for on-line help, or
+> 'help.start()' for an HTML browser interface to help.
+> Type 'q()' to quit R.
+> 
+>> library(testthat)
+>> suppressPackageStartupMessages(library(sf))
+>>
+>> test_check("sf")
+> proj_create: Error -5: unknown projection id
+> proj_create: Error -9: unknown elliptical parameter name
+> proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+> proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+> proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+> ── 1. Error: $.crs works (@test_crs.R#49)  ─────────────────────────────────────
+> missing value where TRUE/FALSE needed
+> 1: expect_true(is.numeric(st_crs("+init=epsg:3857 +units=m")$b)) at testthat/test_crs.R:49
+> 2: quasi_label(enquo(object), label, arg = "object")
+> 3: eval_bare(get_expr(quo), get_env(quo))
+> 4: st_crs("+init=epsg:3857 +units=m")
+> 5: st_crs.character("+init=epsg:3857 +units=m")
+> 6: make_crs(x)
+> 
+> proj_create: init=epsg:/init=IGNF: syntax not supported in non-PROJ4 emulation mode
+> ── 2. Error: $.crs works 2 (@test_crs.R#55)  ───────────────────────────────────
+> missing value where TRUE/FALSE needed
+> 1: expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) at testthat/test_crs.R:55
+> 2: quasi_label(enquo(object), label, arg = "object")
+> 3: eval_bare(get_expr(quo), get_env(quo))
+> 4: st_crs("+init=epsg:3857 +units=km")
+> 5: st_crs.character("+init=epsg:3857 +units=km")
+> 6: make_crs(x)
+> 
+> Cannot open layer foo
+> Reading layer `nospatial' from data source `/usr/lib/R/site-library/sf/gpkg/nospatial.gpkg' using driver `GP
+> Reading layer `nospatial' from data source `/usr/lib/R/site-library/sf/gpkg/nospatial.gpkg' using driver `GP
+> OGR: Unsupported geometry type
+> Reading layer `nc' from data source `/usr/lib/R/site-library/sf/shape/nc.shp' using driver `ESRI Shapefile'
+> Simple feature collection with 100 features and 14 fields
+> geometry type:  MULTIPOLYGON
+> dimension:      XY
+> bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+> epsg (SRID):    4267
+> proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> driver `foo' not available.
+> Dataset /tmp/RtmpTlApgW/file1ffa3ef15a25.gpkg already exists: remove first, use update=TRUE to append,
+> delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
+> Creating layer . failed.
+> Failed to create feature 1 in x
+> Failed to create feature 1 in x
+> Failed to create feature 1 in x
+> ══ testthat results  ═══════════════════════════════════════════════════════════
+> [ OK: 658 | SKIPPED: 59 | WARNINGS: 6 | FAILED: 2 ]
+> 1. Error: $.crs works (@test_crs.R#49) 
+> 2. Error: $.crs works 2 (@test_crs.R#55) 
+> 
+> Error: testthat unit tests failed
+> Execution halted
+> 
+> 
+> Could you try to port sf to the recent version of proj?
+> 
+> Kind regards
+> 
+>       Andreas.
+> 
+> 
+
+-- 
+Edzer Pebesma
+Institute for Geoinformatics
+Heisenbergstrasse 2, 48151 Muenster, Germany
+Phone: +49 251 8333081
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: pEpkey.asc
+Desc: application/pgp-keys
+
+From ol922807 at dal.ca  Fri Sep  6 12:04:16 2019
+From: ol922807 at dal.ca (Oliver Dechant)
+Date: Fri, 6 Sep 2019 12:04:16 +0000
+Subject: Re: HELP: Test suite error with latest version of r-cran-fpc
+In-Reply-To: <20190826084641.chhpcwppyiibx2x2@an3as.eu>
+References: <20190826084641.chhpcwppyiibx2x2@an3as.eu>
+Message-ID: <992f5960-524d-7116-88bd-8b96490cb7bb@dal.ca>
+
+Might the missing dependency be `mvtnorm`?
+
+I'm behind the curve on how to check this for myself. If you have
+step-by-step instructions I would attempt thise otherwise you may confirm.
+
+Many thanks,
+-- 
+Oliver Dechant
+
+From andreas at an3as.eu  Mon Sep  9 18:11:56 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 9 Sep 2019 20:11:56 +0200
+Subject: [Help] Using Debian packaged libtbb in r-cran-rcppparallel
+Message-ID: <20190909181156.3brj4w4d3cu5lwz7@an3as.eu>
+
+Hi,
+
+I tried to use the Debian packaged libtbb in r-cran-rcppparallel[1].
+This worked so far.  However, packages that are using
+r-cran-rcppparallel like r-cran-uwot fail to build with
+
+1: In fun(libname, pkgname) : TBB library  not found.
+2: In fun(libname, pkgname) : TBB malloc library  not found.
+
+I managed to get the correct linker flags in my last commit[3] but the
+warning remains since the code is checking the path to the library
+files.  I'd be happy if somebody could please check the patch and fix
+the loading of the Debian packaged libtbb.
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rcppparallel
+[2] https://salsa.debian.org/r-pkg-team/r-cran-uwot
+[3] https://salsa.debian.org/r-pkg-team/r-cran-rcppparallel/commit/8ea9127a92868f44a0a95e317c9f259ec170edb6
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Wed Sep 18 18:32:05 2019
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 18 Sep 2019 20:32:05 +0200
+Subject: Re: Open ITPs (turned into RFPs)
+In-Reply-To: <20190813230729.GB14737@beskar.mdcc.cx>
+References: <20190722174206.imawny3kc3soweao@an3as.eu> <20190813230729.GB14737@beskar.mdcc.cx>
+Message-ID: <20190918183205.evbl2iazl7r5fv5h@an3as.eu>
+
+Hi Joost,
+
+On Wed, Aug 14, 2019 at 01:07:29AM +0200, Joost van Baal-Ilić wrote:
+> 
+> Thanks for this reminder.  For both r-cran-nfactors and r-cran-semplot there
+> already _is_ work in our git at salsa.debian.org:r-pkg-team : at
+> r-cran-nfactors.git and r-cran-semplot.git .
+
+By chance I stumbled upon these packages as pre-dependencies for some
+other package.  They also needed quite some more pre-depends, but all is
+uploaded now.
+
+> So no need for
+> prepare_missing_cran_package for those.
+
+For sure I forgot and just noticed when injecting my repository failed
+since there was an existing one (same for some pre-dependencies you had
+prepared before).  I kept you as second Uploader for all those packages
+you created repositories.
+
+Admittedly the existing repositories were not really a help but rather
+extra work.  Dh-make-R became better over time and so I just have
+overridden your work with a single commit.  I guess the detailed history
+is not that important.
+ 
+> I cannot commit to maintaining these packages appear in a stable Debian
+> release: I do all my R packaging work during $dayjob; I'm mainly interested in
+> keeping the packages working on Debian stable, and somewhat in sync with
+> upsteam.  So that's technically what would end up in debian backports.
+
+I would really appreciate if you would do more official backports.  I
+need to do this as well (currently even more for Debian 9 than for
+Debian 10).  It would be really help if you would join this so we could
+share the workload.  I have some **rudimentary** script which really
+needs some work (or some research whether something better exists) here:
+
+   https://salsa.debian.org/med-team/community/helper-scripts/blob/master/do_backport
+
+It helps a bit to automatise things but its not really reliably neither
+well testet.
+
+> The
+> reason I stick the work in git @ salsa is I feel there's a chance others might
+> benefit from it too.  That's the reason I've recently not been very active in
+> actually uploading it to NEW.
+
+That's fine in general.  However, as I said, dh-make-R becomes better
+and better and there is probably no point to inject something that is
+not really actively used in production.
+ 
+> There some packages of me in our git now for which I've not yet posted ITP's.
+> I believe this interferes badly with some of your workflows.  Would it help you
+> if I actually _would_ post ITP's?  I'd be glad to.
+
+I do not think its needed to file ITPs.  Its just a script call away.
+This can be done by the maintainer who actually wants to care for the
+package.
+
+> Also, debian/copyright of most of my recent packages is still lacking.  I'll
+> try to find time to work on that (note to self: have another look at cme).
+
+That's partly what I mean.  I just added LGPL-2.1 to dh-make-R since it
+was lacking before.  In case you might have generated the packaging with
+an older dh-make-R and it has this license you need to copy-n-paste the
+text manually.  Creating from scratch would be less work. :-P
+ 
+> What do you think?
+
+I hope you can join official backporting for common profit. :-)
+ 
+> PS: thanks for your talk @ debconf, I enjoyed the video!
+
+Nice.
+
+Kind regards
+
+       Andreas.
+ 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Sep 20 08:52:09 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 20 Sep 2019 10:52:09 +0200
+Subject: Do we really need versioned depends r-base-core including Debian revision
+Message-ID: <20190920085209.ytudmrrrm23nwelo@an3as.eu>
+
+Hi,
+
+since I ended up with an R package which I was not (yet) able to install
+on my system I checked the dependencies created by dh-r.  The reason
+was that my pbuilder environment includes
+   http://incoming.debian.org/debian-buildd
+and so I ended up with a versioned Dependency of a just created
+r-cran-knitr package which had:
+
+   Depends: r-base-core (>= 3.6.1-5), r-api-3.5
+
+while 
+
+$ apt-cache policy r-base-core
+r-base-core:
+  Installiert:           3.6.1-4
+  Installationskandidat: 3.6.1-4
+  Versionstabelle:
+     3.6.1-5 50
+         50 http://incoming.debian.org/debian-buildd buildd-unstable/main amd64 Packages
+ *** 3.6.1-4 100
+         50 http://httpredir.debian.org/debian unstable/main amd64 Packages
+         50 http://ftp.debian.org/debian unstable/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+Well, this does not lead to a problem in the long run since r-cran-knitr
+will become available after r-base-core and the issue is void for normal
+users.  However, it made me wonder (again) why we really inject that
+strict versioned Build-Depends.  I assumed we intended to settle just
+with r-api - and here I'm wondering why r-api remains at 3.6.  Shouldn't
+this rather be r-api-3.6?
+
+Moreover I wonder why we need the r-base-core dependency at all if we
+would have the (correct!) r-api version.  And if we really need the
+r-base-core dependency whether it wouln't be more sensible to at least
+strip the Debian release and may be we can settle with the first two
+digits (matching the api version).  I've digged in dh-R code and found
+this three year old code of Gordon in dh/R.pm:
+
+22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 149)     chomp(my $rbase_version = qx/dpkg-query -W -f='\${Version}' r-base-dev/);
+22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 150)     say "I: Building using R version $rbase_version";
+^023f5eb (Gordon Ball   2016-09-01 16:28:08 +0200 151) 
+22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 152)     chomp(my $rapi_version = qx/dpkg-query -W -f='\${Provides}' r-base-core | grep -o 'r-api[^, ]*'/);
+22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 153)     say "I: R API version: $rapi_version";
+
+Is this just forgotten code that is just not adapted to the needs we
+have these days?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From gordon at chronitis.net  Mon Sep 23 09:19:43 2019
+From: gordon at chronitis.net (Gordon Ball)
+Date: Mon, 23 Sep 2019 09:19:43 +0000
+Subject: Re: Do we really need versioned depends r-base-core including Debian revision
+In-Reply-To: <20190920085209.ytudmrrrm23nwelo@an3as.eu>
+References: <20190920085209.ytudmrrrm23nwelo@an3as.eu>
+Message-ID: <20190923091943.5cocqgbsbsctgjra@emissary.chronitis.net>
+
+On Fri, Sep 20, 2019 at 10:52:09AM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> since I ended up with an R package which I was not (yet) able to install
+> on my system I checked the dependencies created by dh-r.  The reason
+> was that my pbuilder environment includes
+>    http://incoming.debian.org/debian-buildd
+> and so I ended up with a versioned Dependency of a just created
+> r-cran-knitr package which had:
+> 
+>    Depends: r-base-core (>= 3.6.1-5), r-api-3.5
+> 
+> while 
+> 
+> $ apt-cache policy r-base-core
+> r-base-core:
+>   Installiert:           3.6.1-4
+>   Installationskandidat: 3.6.1-4
+>   Versionstabelle:
+>      3.6.1-5 50
+>          50 http://incoming.debian.org/debian-buildd buildd-unstable/main amd64 Packages
+>  *** 3.6.1-4 100
+>          50 http://httpredir.debian.org/debian unstable/main amd64 Packages
+>          50 http://ftp.debian.org/debian unstable/main amd64 Packages
+>         100 /var/lib/dpkg/status
+> 
+> Well, this does not lead to a problem in the long run since r-cran-knitr
+> will become available after r-base-core and the issue is void for normal
+> users.  However, it made me wonder (again) why we really inject that
+> strict versioned Build-Depends.  I assumed we intended to settle just
+> with r-api - and here I'm wondering why r-api remains at 3.6.  Shouldn't
+> this rather be r-api-3.6?
+> 
+> Moreover I wonder why we need the r-base-core dependency at all if we
+> would have the (correct!) r-api version.  And if we really need the
+> r-base-core dependency whether it wouln't be more sensible to at least
+> strip the Debian release and may be we can settle with the first two
+> digits (matching the api version).  I've digged in dh-R code and found
+> this three year old code of Gordon in dh/R.pm:
+> 
+> 22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 149)     chomp(my $rbase_version = qx/dpkg-query -W -f='\${Version}' r-base-dev/);
+> 22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 150)     say "I: Building using R version $rbase_version";
+> ^023f5eb (Gordon Ball   2016-09-01 16:28:08 +0200 151) 
+> 22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 152)     chomp(my $rapi_version = qx/dpkg-query -W -f='\${Provides}' r-base-core | grep -o 'r-api[^, ]*'/);
+> 22fd80b9 (Gordon Ball   2016-09-04 12:28:57 +0200 153)     say "I: R API version: $rapi_version"; 
+> Is this just forgotten code that is just not adapted to the needs we
+> have these days?
+
+As initially written, `dh-r` was meant to produce more-or-less identical
+output to the existing `r-cran.mk` file provides by `r-base-dev`. I
+didn't have a strong reason myself to add this constraint beyond that it
+was the existing practice.
+
+Looking at the history of r-cran.mk, that constraint was added in the
+packaging for r-base 2.14.2-1 (in Feb 2012). The changelog cites:
+
+  * debian/r-cran.mk: Support "R:Depends" expansion in debian/substvars
+    as requested by Andreas Tille and Charles Plessy  (Closes:#659163)
+
+That bugs leads to this thread:
+https://lists.debian.org/debian-med/2012/02/msg00074.html
+
+The r-api- constraint was added in r-base 3.2.0-3. Changelog:
+
+  * debian/control: The r-base-core package now 'Provides: r-api-3'
+    which can be used to have r-cran-* depend on a particular API vintage.
+    (Closes: #704805)
+
+The discussion in that bug seems to suggest that it was intended to
+supercede a hard dependency on >= R build version.
+
+Unfortunately, I don't think I know the R core well enough to say
+whether the strict r-base dependency can be safely deprecated.
+I would _guess_ that in most cases, the `r-api-X` virtual dependency
+would be sufficient for pure-R packages, whereas the strict dependency
+would make sense for packages containing any compiled extension.
+
+> Kind regards
+> 
+>       Andreas.
+> 
+> -- 
+> http://fam-tille.de
+

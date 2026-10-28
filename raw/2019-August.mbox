@@ -1,0 +1,928 @@
+From andreas at an3as.eu  Tue Aug  6 09:16:38 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 6 Aug 2019 11:16:38 +0200
+Subject: Seems all our BioC watch files are broken now (Was: BioC package "tximport" not found by dh-r's prepare... script - any idea?)
+In-Reply-To: <03443580-ddfa-f597-606f-5695da798130@gmail.com>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com>
+Message-ID: <20190806091638.5ofb2dyxwjrn7ona@an3as.eu>
+
+Hi,
+
+On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:
+> It is https://bioconductor.org/packages/release/bioc/html/tximport.html
+> that I am after. Any idea how to get it found?
+
+For the tximport issue I injected it here
+
+    https://salsa.debian.org/r-pkg-team/r-bioc-tximport
+
+Feel free to continue from this (I've just put you as Uploader). 
+
+Unfortunately the issue is more serious than just tximport did not
+worked:  **ALL** our BioC watch files are not working currently!
+
+I've fixed this in prepare_missing_cran_package[1] which is now using
+
+    opts=downloadurlmangle=s?^(.*)\.\.?https://bioconductor.org/packages/release/bioc?
+
+but on the other hand the downloadurlmangle string of all existing BioC
+packages is broken now.  The good news is that we will be informed about
+new versions but the routine-update script will currently not download
+the new upstream version.
+
+I plan to fix the downloadurlmangle string if found in debian/watch
+before trying to upload the new version.  However, I'd like to have a
+second pair of eyeballs watching at this new string before implementing
+it into routine-update.
+
+Anybody wants to comment?
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/dh-r/commit/46a021dc0a88ef80cf6eb57c3e4598131f78725f
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Tue Aug  6 09:49:31 2019
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Tue, 6 Aug 2019 11:49:31 +0200
+Subject: Re: Seems all our BioC watch files are broken now (Was: BioC package "tximport" not found by dh-r's prepare... script - any idea?)
+In-Reply-To: <20190806091638.5ofb2dyxwjrn7ona@an3as.eu>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com> <20190806091638.5ofb2dyxwjrn7ona@an3as.eu>
+Message-ID: <17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>
+
+Hi Andreas,
+
+On 06.08.19 11:16, Andreas Tille wrote:
+> Hi,
+>
+> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:
+>> It is https://bioconductor.org/packages/release/bioc/html/tximport.html
+>> that I am after. Any idea how to get it found?
+> For the tximport issue I injected it here
+>
+>     https://salsa.debian.org/r-pkg-team/r-bioc-tximport
+>
+> Feel free to continue from this (I've just put you as Uploader).
+
+Thank you tons. I just found this when I wanted to create it :) I'll
+continue on it. I have even already added it to the blend's med/bio .
+
+> Unfortunately the issue is more serious than just tximport did not
+> worked:  **ALL** our BioC watch files are not working currently!
+>
+> I've fixed this in prepare_missing_cran_package[1] which is now using
+>
+>     opts=downloadurlmangle=s?^(.*)\.\.?https://bioconductor.org/packages/release/bioc?
+>
+> but on the other hand the downloadurlmangle string of all existing BioC
+> packages is broken now.
+Ouch. Mass update? Other "external to Debian" ways how to learn what is
+new to BioC and auto-update these?
+> The good news is that we will be informed about
+> new versions but the routine-update script will currently not download
+> the new upstream version.
+>
+> I plan to fix the downloadurlmangle string if found in debian/watch
+> before trying to upload the new version.  However, I'd like to have a
+> second pair of eyeballs watching at this new string before implementing
+> it into routine-update.
+>
+> Anybody wants to comment?
+
+Next week.
+
+Cheers,
+
+Steffen
+
+From andreas at an3as.eu  Tue Aug  6 10:07:42 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 6 Aug 2019 12:07:42 +0200
+Subject: Re: Seems all our BioC watch files are broken now (Was: BioC package "tximport" not found by dh-r's prepare... script - any idea?)
+In-Reply-To: <17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com> <20190806091638.5ofb2dyxwjrn7ona@an3as.eu> <17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>
+Message-ID: <20190806100742.n2g5lxgw3gnfdl62@an3as.eu>
+
+Hi Steffen,
+
+On Tue, Aug 06, 2019 at 11:49:31AM +0200, Steffen Möller wrote:
+> > For the tximport issue I injected it here
+> >
+> >     https://salsa.debian.org/r-pkg-team/r-bioc-tximport
+> >
+> > Feel free to continue from this (I've just put you as Uploader).
+> 
+> Thank you tons. I just found this when I wanted to create it :) I'll
+> continue on it. I have even already added it to the blend's med/bio .
+
+You are welcome.
+ 
+> > Unfortunately the issue is more serious than just tximport did not
+> > worked:  **ALL** our BioC watch files are not working currently!
+> >
+> > I've fixed this in prepare_missing_cran_package[1] which is now using
+> >
+> >     opts=downloadurlmangle=s?^(.*)\.\.?https://bioconductor.org/packages/release/bioc?
+> >
+> > but on the other hand the downloadurlmangle string of all existing BioC
+> > packages is broken now.
+> Ouch. Mass update? Other "external to Debian" ways how to learn what is
+> new to BioC and auto-update these?
+
+I think they just changed something in their web pages the formerly
+valid watch files now stumbled upon.  I do not see any reason for a
+mass update.  The problem occures only if somebody wants to download
+a new version by using uscan.  That's usually one of our maintainers
+in the team.  If routine-update is fixing the watch file before
+calling uscan no real harm is done (as far as I can see).
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Tue Aug  6 11:05:50 2019
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Tue, 6 Aug 2019 13:05:50 +0200
+Subject: What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?
+In-Reply-To: <20190806100742.n2g5lxgw3gnfdl62@an3as.eu>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com> <20190806091638.5ofb2dyxwjrn7ona@an3as.eu> <17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de> <20190806100742.n2g5lxgw3gnfdl62@an3as.eu>
+Message-ID: <cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>
+
+Hello,
+
+tximport comes with a blob of jquery and fonts in a non-functional
+documentation file. These should be substituted with our jquery package
+but I do not want to do anything that would interfere with the routine
+update script. And I don't really want to just remove the documentation,
+either.
+
+Do we have any policy on this? I am tempted to just leave everything as
+it is and override the lintian errors.
+
+Best,
+
+Steffen
+
+From andreas at an3as.eu  Wed Aug  7 04:36:49 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 7 Aug 2019 06:36:49 +0200
+Subject: Re: What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?
+In-Reply-To: <cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com> <20190806091638.5ofb2dyxwjrn7ona@an3as.eu> <17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de> <20190806100742.n2g5lxgw3gnfdl62@an3as.eu> <cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>
+Message-ID: <20190807043649.yix4js6dhzawgwuv@an3as.eu>
+
+Hi Steffen,
+
+On Tue, Aug 06, 2019 at 01:05:50PM +0200, Steffen Möller wrote:
+> tximport comes with a blob of jquery and fonts in a non-functional
+> documentation file. These should be substituted with our jquery package
+> but I do not want to do anything that would interfere with the routine
+> update script.
+
+Use this script:
+
+    https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/r-exclude-doc
+
+> And I don't really want to just remove the documentation,
+> either.
+
+Why?
+
+> Do we have any policy on this? I am tempted to just leave everything as
+> it is and override the lintian errors.
+
+I asked on this list two times how to recreate the doc since I was
+hoping that somebody knows.  I think the proper solution is to recreate
+what we had removed using dh-r but as long as nobody knows how to do
+this our packages come without docs that are containing non-free blobs. 
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Wed Aug  7 11:26:02 2019
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 7 Aug 2019 13:26:02 +0200
+Subject: Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)
+In-Reply-To: <20190726125916.rsqt6x42z2lr4wlm@an3as.eu>
+References: <20190723133005.t3sq6fdcsjoibhjo@an3as.eu> <CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com> <20190723225655.gkuawrrm6k65fw6n@an3as.eu> <CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com> <20190724110441.y7nc7ozn2ifzxs2o@an3as.eu> <CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com> <CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com> <CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com> <20190725104235.kose5zsc5sd7skv7@an3as.eu> <CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com> <20190726125916.rsqt6x42z2lr4wlm@an3as.eu>
+Message-ID: <ac6168b8-9d57-d134-f1ca-82cd2fabfffa@debian.org>
+
+Hi Andreas
+
+On 2019/07/26 14:59, Andreas Tille wrote:
+> > OK, great!  As per the excuses for r-base [1], once the regressions in
+> > r-cran-filehash and r-cran-haplo.stats have been fixed, I will ask
+> > Dirk to do a no-change source-only upload to resolve the "not built on
+> > buildd" issue.
+>
+>
+> If those two packages are the only blockers we might consider
+> deactivating the tests for the moment.  I'm to busy at DebConf to
+> do more complex stuff than simple uploads / upgrades but feel free
+> to "cheat" with the tests.  I just activated the tests which were
+> never be run before so deactivating them is just restoring the
+> situation we had before.  These should not block any transition.
+
+I trust you had a good DebConf!
+
+As far as I can see, these tests were activated and passed previously, 
+which is why, as you can see on the packages tracker pages [1][2], 
+britney considers them regressions, and thus block migration:
+
+autopkgtest for r-cran-filehash/2.4-2-1: amd64: Regression
+Not considered
+
+autopkgtest for r-cran-haplo.stats/1.7.9-3: amd64: Regression
+Not considered
+
+I'll quote the usual message that appears on the package tracker for 
+transitions:
+
+"Please avoid uploads unrelated to this transition, they would likely 
+delay it and require supplementary work from the release managers. On 
+the other hand, if your package has problems preventing it to migrate to 
+testing, please fix them as soon as possible."
+
+The uploads we need now are ones fixing autopkgtest regressions and 
+binaries not built on the buildds, as these are blocking the migration.
+
+I found one can search on britney's update excuses page [3] e.g. for 
+'binaries uploaded by ginggs' and find a package of mine that recently 
+cleared NEW and was not built on the buildds.
+
+Regards
+Graham
+
+[1] https://tracker.debian.org/pkg/r-cran-filehash
+[2] https://tracker.debian.org/pkg/r-cran-haplo.stats
+[3] https://release.debian.org/britney/update_excuses.html
+
+From steffen_moeller at gmx.de  Wed Aug  7 12:33:41 2019
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Wed, 7 Aug 2019 14:33:41 +0200
+Subject: Re: Seems all our BioC watch files are broken now (Was: BioC package "tximport" not found by dh-r's prepare... script - any idea?)
+In-Reply-To: <20190806091638.5ofb2dyxwjrn7ona@an3as.eu>
+References: <03443580-ddfa-f597-606f-5695da798130@gmail.com> <20190806091638.5ofb2dyxwjrn7ona@an3as.eu>
+Message-ID: <348c2db8-2ca9-0536-c72a-68cae35b55a9@gmx.de>
+
+On 06.08.19 11:16, Andreas Tille wrote:
+> Hi,
+>
+> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:
+>> It is https://bioconductor.org/packages/release/bioc/html/tximport.html
+>> that I am after. Any idea how to get it found?
+> For the tximport issue I injected it here
+>
+>     https://salsa.debian.org/r-pkg-team/r-bioc-tximport
+>
+> Feel free to continue from this (I've just put you as Uploader).
+>
+> Unfortunately the issue is more serious than just tximport did not
+> worked:  **ALL** our BioC watch files are not working currently!
+>
+> I've fixed this in prepare_missing_cran_package[1] which is now using
+>
+>     opts=downloadurlmangle=s?^(.*)\.\.?https://bioconductor.org/packages/release/bioc?
+I can confirm that this works (just the final backslash is missing on
+that line).
+> but on the other hand the downloadurlmangle string of all existing BioC
+> packages is broken now.  The good news is that we will be informed about
+> new versions but the routine-update script will currently not download
+> the new upstream version.
+>
+> I plan to fix the downloadurlmangle string if found in debian/watch
+> before trying to upload the new version.  However, I'd like to have a
+> second pair of eyeballs watching at this new string before implementing
+> it into routine-update.
+>
+> Anybody wants to comment?
+
+I just tested it - on Egon's BridgeDB - works.
+
+Cheers,
+
+Steffen
+
+From tille at debian.org  Thu Aug  8 06:22:54 2019
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 08 Aug 2019 08:22:54 +0200
+Subject: Bug#934201: RM: r-bioc-metagenomeseq/1.24.1-1
+Message-ID: <156524537457.3391.10849701988135714001.reportbug@sputnik.fam-tille.de>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: rm
+
+(explain the reason for the removal here)
+
+Please remove r-bioc-metagenomeseq from testing.  It would block the
+migration of R packages otherwise.  The reason is that we can not
+upgrade r-bioc-metagenomeseq to the new upstream version since it got a
+new dependency from a non-free package.  We are sorting this out with
+upstream but this might take time.  All other r-bioc packages are
+depending from the virtual package r-api-bioc-3.9 while
+r-bioc-metagenomeseq 1.24.1-1 depends r-api-bioc-3.8.  So there is a
+conflicting dependency which can only be resolved by a temporary removal
+of r-bioc-metagenomeseq 1.24.1-1 from testing.
+
+Kind regards
+
+      Andreas.
+
+-- System Information:
+Debian Release: 10.0
+  APT prefers testing
+  APT policy: (501, 'testing'), (50, 'buildd-unstable'), (50, 'unstable'), (5, 'experimental')
+Architecture: amd64 (x86_64)
+Foreign Architectures: i386
+
+Kernel: Linux 4.19.0-5-amd64 (SMP w/4 CPU cores)
+Locale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE=de_DE.UTF-8 (charmap=UTF-8)
+Shell: /bin/sh linked to /bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+From andreas at an3as.eu  Thu Aug  8 10:58:42 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 8 Aug 2019 12:58:42 +0200
+Subject: r-cran-haplo.stats (Was: r-base breaks 9 autopkgtests)
+In-Reply-To: <CAM8zJQtAEyh-go04rkp+TV_LFRDOFEM-RFAWZgrUFAdGwCdTeg@mail.gmail.com>
+References: <CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com> <20190723141917.i7qmq3vg5udkhf5o@an3as.eu> <CAM8zJQtAEyh-go04rkp+TV_LFRDOFEM-RFAWZgrUFAdGwCdTeg@mail.gmail.com>
+Message-ID: <20190808105842.a3y6ge4uxs457le6@an3as.eu>
+
+Hi Graham,
+
+On Wed, Aug 7, 2019  Graham Inggs wrote:
+> I trust you had a good DebConf!
+
+I had despite I was missing some friends like you.
+ 
+> As far as I can see, these tests were activated and passed previously, which is why, as you can see on the packages tracker pages [1][2], britney considers them regressions, and thus block migration:
+> 
+> 
+> autopkgtest for r-cran-filehash/2.4-2-1: amd64: Regression
+
+Fixed.
+ 
+> autopkgtest for r-cran-haplo.stats/1.7.9-3: amd64: Regression
+> Not considered
+
+That test is totally useless since all parts are failing with quite some
+diff.  Steffen, has this package any use or should we rather drop it?
+For the moment I do not see any sense in running the test and thus I
+deactivated it completely.  Could you please raise the issue with
+upstream?
+ 
+> I'll quote the usual message that appears on the package tracker for transitions:
+> 
+> 
+> "Please avoid uploads unrelated to this transition, they would likely delay it and require supplementary work from the release managers. On the other hand, if your package has problems preventing it to migrate to testing, please fix them as soon as possible."
+>
+> The uploads we need now are ones fixing autopkgtest regressions and binaries not built on the buildds, as these are blocking the migration.
+
+OK, I'll stop uploading any R packages for the moment until
+
+   https://qa.debian.org/excuses.php?package=r-base
+
+is cleared.
+
+Any help is really welcome.  I'll be basically busy with real life until
+19.8. and will not be of much help here.
+
+Kind regards
+
+        Andreas.
+ 
+> I found one can search on britney's update excuses page [3] e.g. for 'binaries uploaded by ginggs' and find a package of mine that recently cleared NEW and was not built on the buildds.
+
+You mean for these we need to do a source-only re-upload? 
+I admit I do not like this new "feature" that packages coming
+from new have no chance to migrate to testing. :-(
+
+Kind regards
+
+      Andreas.
+ 
+ 
+> [1] https://tracker.debian.org/pkg/r-cran-filehash
+> [2] https://tracker.debian.org/pkg/r-cran-haplo.stats
+> [3] https://release.debian.org/britney/update_excuses.html
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Thu Aug  8 17:17:31 2019
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 8 Aug 2019 19:17:31 +0200
+Subject: Re: r-base breaks 9 autopkgtests
+In-Reply-To: <23862.60462.279335.797924@rob.eddelbuettel.com>
+References: <CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com> <23862.56524.236264.202735@rob.eddelbuettel.com> <CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com> <23862.60462.279335.797924@rob.eddelbuettel.com>
+Message-ID: <3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>
+
+Hi Dirk
+
+I've prepared the attached list of Breaks to be added to the r-base-core 
+binary package.
+
+I believe these will ease migration.  Paul, do you concur?
+
+Regards
+Graham
+--- a/debian/control
++++ b/debian/control
+@@ -53,6 +54,31 @@
+ Conflicts:  r-gnome, r-cran-rcompgen, r-base-latex
+ Recommends: r-recommended, r-base-dev, r-doc-html
+ Suggests: elpa-ess, r-doc-info | r-doc-pdf, r-mathlib, r-base-html
++Breaks: r-bioc-graph (<< 1.62.0-1~),
++        r-cran-bbmle (<< 1.0.20-5~),
++        r-cran-biocmanager (<< 1.30.4+dfsg-2~),
++        r-cran-caret (<< 6.0-84-2~),
++        r-cran-cmprsk (<< 2.2-8-1~),
++        r-cran-coin (<< 1.3-0-1~),
++        r-cran-dendextend (<< 1.12.0+dfsg-1~),
++        r-cran-fields (<< 9.8-3-1~),
++        r-cran-filehash (<< 2.4-2-2~),
++        r-cran-future (<< 1.14.0+dfsg-1~),
++        r-cran-genetics (<< 1.3.8.1.2-1~),
++        r-cran-haplo.stats (<< 1.7.9-4~),
++        r-cran-igraph (<< 1.2.4.1-1~),
++        r-cran-lava (<< 1.6.5-1~),
++        r-cran-libcoin (<< 1.0-4-1~),
++        r-cran-msm (<< 1.6.7-1~),
++        r-cran-permute (<< 0.9-5-1~),
++        r-cran-phangorn (<< 2.5.5-1~),
++        r-cran-popepi (<< 0.4.7-1~),
++        r-cran-recipes (<< 0.1.6-1~),
++        r-cran-sp (<< 1:1.3-1-2~),
++        r-cran-spam (<< 2.2-2-1~),
++        r-cran-units (<< 0.6-3-1~),
++        r-cran-vegan (<< 2.5-5+dfsg-1~),
++        r-cran-zelig (<< 5.1.6.1-1~)
+ Description: GNU R core of statistical computation and graphics system
+  R is a system for statistical computation and graphics.  It consists 
+  of a language plus a run-time environment with graphics, a debugger, 
+
+From elbrus at debian.org  Thu Aug  8 18:38:28 2019
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 8 Aug 2019 20:38:28 +0200
+Subject: Re: r-base breaks 9 autopkgtests
+In-Reply-To: <3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>
+References: <CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com> <23862.56524.236264.202735@rob.eddelbuettel.com> <CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com> <23862.60462.279335.797924@rob.eddelbuettel.com> <3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>
+Message-ID: <217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>
+
+Hi Graham, Dirk,
+
+On 08-08-2019 19:17, Graham Inggs wrote:
+> I've prepared the attached list of Breaks to be added to the r-base-core
+> binary package.
+> 
+> I believe these will ease migration.  Paul, do you concur?
+
+Adding the breaks helps the migration, yes.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Thu Aug  8 18:57:55 2019
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 8 Aug 2019 13:57:55 -0500
+Subject: Re: r-base breaks 9 autopkgtests
+In-Reply-To: <217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>
+References: <CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com> <23862.56524.236264.202735@rob.eddelbuettel.com> <CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com> <23862.60462.279335.797924@rob.eddelbuettel.com> <3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org> <217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>
+Message-ID: <23884.28851.724153.902696@rob.eddelbuettel.com>
+
+On 8 August 2019 at 20:38, Paul Gevers wrote:
+| Hi Graham, Dirk,
+| 
+| On 08-08-2019 19:17, Graham Inggs wrote:
+| > I've prepared the attached list of Breaks to be added to the r-base-core
+| > binary package.
+| > 
+| > I believe these will ease migration.  Paul, do you concur?
+| 
+| Adding the breaks helps the migration, yes.
+
+Am I understanding this correctly in that the Breaks: block is temporary and
+once the (current) migration is complete, I should remove that block?
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Sat Aug 10 10:49:03 2019
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 10 Aug 2019 12:49:03 +0200
+Subject: Re: r-base breaks 9 autopkgtests
+In-Reply-To: <23884.28851.724153.902696@rob.eddelbuettel.com>
+References: <CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com> <23862.56524.236264.202735@rob.eddelbuettel.com> <CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com> <23862.60462.279335.797924@rob.eddelbuettel.com> <3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org> <217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org> <23884.28851.724153.902696@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQvV1ia6sFnHE2e4x4h1qBC7B+cnf7GHtL83t7q2u6izvA@mail.gmail.com>
+
+Hi Dirk
+
+On Thu, 8 Aug 2019 at 20:58, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Am I understanding this correctly in that the Breaks: block is temporary and
+> once the (current) migration is complete, I should remove that block?
+
+No, I think that block should remain until after the release of bullseye.
+
+Regards
+Graham
+
+From joostvb at debian.org  Tue Aug 13 23:07:29 2019
+From: joostvb at debian.org (=?utf-8?q?Joost_van_Baal-Ili=C4=87?=)
+Date: Wed, 14 Aug 2019 01:07:29 +0200
+Subject: Re: Open ITPs (turned into RFPs)
+In-Reply-To: <20190722174206.imawny3kc3soweao@an3as.eu>
+References: <20190722174206.imawny3kc3soweao@an3as.eu>
+Message-ID: <20190813230729.GB14737@beskar.mdcc.cx>
+
+Hi Andreas,
+
+On Mon, Jul 22, 2019 at 07:42:06PM +0200, Andreas Tille wrote:
+> 
+> you have at least two long standing ITPs (#813815 - r-cran-nfactors,
+> #835082 - r-cran-semplot, may be others) which were turned into RFPs
+> automatically.  Could you give some statement whether these packages
+> might remain interesting for you and whether we should fire up
+> prepare_missing_cran_package for these?
+
+Thanks for this reminder.  For both r-cran-nfactors and r-cran-semplot there
+already _is_ work in our git at salsa.debian.org:r-pkg-team : at
+r-cran-nfactors.git and r-cran-semplot.git .  So no need for
+prepare_missing_cran_package for those.
+
+I cannot commit to maintaining these packages appear in a stable Debian
+release: I do all my R packaging work during $dayjob; I'm mainly interested in
+keeping the packages working on Debian stable, and somewhat in sync with
+upsteam.  So that's technically what would end up in debian backports.  The
+reason I stick the work in git @ salsa is I feel there's a chance others might
+benefit from it too.  That's the reason I've recently not been very active in
+actually uploading it to NEW.
+
+There some packages of me in our git now for which I've not yet posted ITP's.
+I believe this interferes badly with some of your workflows.  Would it help you
+if I actually _would_ post ITP's?  I'd be glad to.
+
+Also, debian/copyright of most of my recent packages is still lacking.  I'll
+try to find time to work on that (note to self: have another look at cme).
+
+What do you think?
+
+Bye,
+
+Joost
+
+PS: thanks for your talk @ debconf, I enjoyed the video!
+
+From tille at debian.org  Mon Aug 19 19:16:00 2019
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 19 Aug 2019 21:16:00 +0200
+Subject: Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest
+In-Reply-To: <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>
+References: <20190819095705.scpalflufoqsyfmk@an3as.eu> <6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org> <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>
+Message-ID: <20190819191600.uj73bm3phkohm4nb@an3as.eu>
+
+Control: tags -1 help
+
+Hi Paul,
+
+On Mon, Aug 19, 2019 at 08:54:03PM +0200, Paul Gevers wrote:
+> Hi Andreas,
+> 
+> On Mon, 19 Aug 2019 11:57:05 +0200 Andreas Tille <andreas at fam-tille.de>
+> wrote:
+> > I wonder whether we can close this bug since the test is passing
+> > in unstable (with r-cran-multcomp 1.4-10-2).
+> 
+> No, because currently it is blocking the migration of r-cran-multcomp.
+> Apparently r-cran-multcomp isn't making sure that the right stuff is
+> pulled into testing when it is testing r-cran-dosefinding. I am hoping
+> that r-cran migrates soon with lots of r stuff, maybe after that it is
+> "fixed". There is still a breaks missing somewhere I guess, but I don't
+> know where.
+
+So the bug was first filed against r-cran-multcomp, reassigned to
+r-cran-dosefinding where the test is OK in sid but the issue is blocking
+the migration.  I admit I neither have any idea how to fix this.
+
+If its rather a matter of the bug severity downgrading it manually could
+enable the migration.  I have no idea whether this is the right course
+of action but otherwise it looks like a deadlock for me.
+
+Kind regards
+
+          Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Mon Aug 19 19:25:57 2019
+From: elbrus at debian.org (Paul Gevers)
+Date: Mon, 19 Aug 2019 21:25:57 +0200
+Subject: Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest
+In-Reply-To: <20190819191600.uj73bm3phkohm4nb@an3as.eu>
+References: <20190819095705.scpalflufoqsyfmk@an3as.eu> <6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org> <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org> <20190819191600.uj73bm3phkohm4nb@an3as.eu>
+Message-ID: <e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>
+
+Hi Andreas,
+
+On 19-08-2019 21:16, Andreas Tille wrote:
+> So the bug was first filed against r-cran-multcomp,
+
+The bug was filed against *both* packages, as I always do when it isn't
+totally clear from the failure to which package it belongs.
+
+> reassigned to
+> r-cran-dosefinding
+
+by edd, who refuses to look into these kind of issues.
+
+> where the test is OK in sid but the issue is blocking
+> the migration.  I admit I neither have any idea how to fix this.
+
+When the test is successful in sid, it suggests that there is a
+combination of packages that need to migrate together to bullseye to be
+successful. If we want to help r-cran-multcomp migrate, it would be
+helpful to know the combination that is needed. Then we can figure out
+which package needs to grow which kind of dependency.
+
+> If its rather a matter of the bug severity downgrading it manually could
+> enable the migration.  I have no idea whether this is the right course
+> of action but otherwise it looks like a deadlock for me.
+
+The migration is *not* blocked by this bug report, so severity doesn't
+help. The migration is blocked because the autopkgtest of
+r-cran-dosefinding in bullseye fails when run with the binary packages
+from multcomp together with a whole set of other packages deemed
+necessary (by britney based on package relations) from unstable. And
+that is the subject of this report (albeit missing the "in bullseye" part).
+
+As said, I am hoping that without doing anything, things will be all
+right in a couple of days. If not, r-base migration will simplify
+finding the issue a lot.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Mon Aug 19 19:33:08 2019
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 19 Aug 2019 14:33:08 -0500
+Subject: Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest
+In-Reply-To: <e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>
+References: <20190819095705.scpalflufoqsyfmk@an3as.eu> <6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org> <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org> <20190819191600.uj73bm3phkohm4nb@an3as.eu> <e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>
+Message-ID: <23898.63860.353116.484293@rob.eddelbuettel.com>
+
+FWIW both packages are pristinely clean at CRAN with current versions:
+
+  https://cran.r-project.org/web/checks/check_results_DoseFinding.html
+
+  https://cloud.r-project.org/web/checks/check_results_multcomp.html
+
+These problems still seem self-imposed to me.  We (maybe randomly ?) appear
+to be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)
+does not see.
+
+The whole issue is odd _because CRAN already does all the checking_ and we do
+not fundamentally alter packages, or R.  So I still think that we could
+potentially save ourselves a lot of grief if we aligned more with what CRAN
+already does.  But I said that before, and nobody seems to agree so ....
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Fri Aug 23 13:44:26 2019
+From: ginggs at debian.org (Graham Inggs)
+Date: Fri, 23 Aug 2019 15:44:26 +0200
+Subject: Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest
+In-Reply-To: <23898.63860.353116.484293@rob.eddelbuettel.com>
+References: <20190819095705.scpalflufoqsyfmk@an3as.eu> <6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org> <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org> <20190819191600.uj73bm3phkohm4nb@an3as.eu> <e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org> <23898.63860.353116.484293@rob.eddelbuettel.com>
+Message-ID: <a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>
+
+Closing the bug since multcomp has now migrated.
+
+On 2019/08/19 21:33, Dirk Eddelbuettel wrote:
+> These problems still seem self-imposed to me.  We (maybe randomly ?) appear
+> to be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)
+> does not see.
+
+Well, not randomly, we check multcomp from unstable against its 
+reverse-dependencies from testing.
+
+If one of multcomp's reverse-dependencies from testing is not compatible 
+with the new multcomp, but there is a new version in unstable that is, 
+then it is likely that adding a Breaks to multcomp will hint to the 
+package manager not to install them together, thus ensuring we don't try 
+to test incompatible versions.
+
+From edd at debian.org  Fri Aug 23 22:15:48 2019
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 23 Aug 2019 17:15:48 -0500
+Subject: Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest
+In-Reply-To: <a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>
+References: <20190819095705.scpalflufoqsyfmk@an3as.eu> <6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org> <8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org> <20190819191600.uj73bm3phkohm4nb@an3as.eu> <e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org> <23898.63860.353116.484293@rob.eddelbuettel.com> <a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>
+Message-ID: <23904.26004.850380.747286@rob.eddelbuettel.com>
+
+On 23 August 2019 at 15:44, Graham Inggs wrote:
+| Closing the bug since multcomp has now migrated.
+| 
+| 
+| On 2019/08/19 21:33, Dirk Eddelbuettel wrote:
+| > These problems still seem self-imposed to me.  We (maybe randomly ?) appear
+| > to be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)
+| > does not see.
+| 
+| Well, not randomly, we check multcomp from unstable against its 
+| reverse-dependencies from testing.
+
+Sure. But still "random" in the eyes of upstream (as the versions are purely
+ours), and orthogonal to their requirements.  See below.
+
+| If one of multcomp's reverse-dependencies from testing is not compatible 
+| with the new multcomp, but there is a new version in unstable that is, 
+| then it is likely that adding a Breaks to multcomp will hint to the 
+| package manager not to install them together, thus ensuring we don't try 
+| to test incompatible versions.
+
+As mentioned, if a new candidate version does not mesh with its reverse
+depends in what is current at CRAN, the CRAN admins will not let the new
+candidate in. CRAN does all that for the relationships that matter: Depends,
+Imports, LinkingTo but not Suggests. That ensures that CRAN almost always
+builds and works.
+
+And we can trust this.  By keeping our versions fresh and aligned we get
+their quality checks for free.
+
+There is nothing wrong with running additional version checks.  Just realize
+that the corresponding upstream authors may shrug: they work hard to keep the
+current version working, not somewhat randomly (to them) chosen arbitrary
+ones (as they happen here if a package is behind upstream).
+
+There is a bit more discussion about whether Suggests should be tested like
+Depends, Imports and LinkingTo, or not. I tend to argue no, others disagree.
+So here, to me it feels odd that we did all this for a _single optional call_
+as it was a Suggests: between these two packages.  
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat Aug 24 06:02:04 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 24 Aug 2019 08:02:04 +0200
+Subject: Re: R Packaging
+In-Reply-To: <2127082f-816a-b755-aa68-766456ffb30e@gmx.com>
+References: <2127082f-816a-b755-aa68-766456ffb30e@gmx.com>
+Message-ID: <20190824060204.qvjdy3qrrf55r7sg@an3as.eu>
+
+Hi David,
+
+On Fri, Aug 23, 2019 at 07:14:26PM -0600, David Shaub wrote:
+> Hi Andreas,
+> 
+> I saw the video of your talk at Debconf about R packaging,
+
+Nice. For the readers of this list here is the link[1]
+
+> but I cannot remember the correct way to request for an R package to be packaged in Debian. Is there a request form or mailing list on the Debian site?
+
+In Debian there is a formalism to ask for packages.  You
+file a bug against the virtual package wnpp
+
+    reportbug wnpp
+
+and select RFP (Request For Packaging).  However, chances that this will
+be picked up is usually not as high since not many people are really
+watching the bug.  Thus I would recommend to send this kind of requests
+here on the Debian R list debian-r at lists.debian.org.  I'd also like to
+encourage every newcomer to give the tools shown in the video a try.
+Its an easy way to become a member of the Debian team.  So why asking
+somebody to do something for you if you can even do it yourself?
+
+> The CRAN packages I am interested in are the following: "lintr", "rmarkdown", "xgboost", "ranger", "boruta", "forecast", and "prophet".
+
+R-cran-rmarkdown, r-cran-ranger and r-cran-forecast are packaged.  The
+others could be done (just hoping for either you as a volunteer to learn
+or some volunteer here on the list).  Regarding prophet I had some
+issues in the past[2].  It does not compile and I have no idea how to
+fix it neither anybody else here contributed some solution.  I tried
+about one year later with prophet 0.5 - no solution so far but I can try
+again in a couple of days.
+
+Kind regards and thanks for the interest in R packaging for Debian
+
+    Andreas.
+
+[1] https://caesar.ftp.acc.umu.se/pub/debian-meetings/2019/DebConf19/r-packaging-bof.webm 
+[2] https://lists.debian.org/debian-r/2018/07/msg00005.html
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Aug 26 08:46:41 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 26 Aug 2019 10:46:41 +0200
+Subject: HELP: Test suite error with latest version of r-cran-fpc
+Message-ID: <20190826084641.chhpcwppyiibx2x2@an3as.eu>
+
+Hi,
+
+I tried to upgrade r-cran-fpc to version 2.2-3.  When running the autopkgtest
+I get:
+
+Method  fuzzy  was used.
+Number of representative FPCs:  3 
+
+FPCs with less than  3  points were skipped.
+FPCs with ratio of times found to number of points less than  0.1  were skipped.
+0  iteration runs led to  0  skipped clusters.
+  Weight 1 for r^2<=  3.84  weight 0 for r^2>  7.88  
+  Constant ca=  3.84  corresponding to alpha=  0.95 
+
+ FPC  1 
+  Times found (group members):  4 
+  Ratio to size:  1.33 
+  Mean:
+[1] 6.33
+  Covariance matrix:
+      [,1]
+[1,] 0.222
+  Number of points (sum of weights):  3 
+
+ FPC  2 
+  Times found (group members):  3 
+  Ratio to size:  1 
+  Mean:
+[1] 2
+  Covariance matrix:
+      [,1]
+[1,] 0.667
+  Number of points (sum of weights):  3 
+
+ FPC  3 
+  Times found (group members):  2 
+  Ratio to size:  0.286 
+  Mean:
+[1] 4.71
+  Covariance matrix:
+     [,1]
+[1,]  6.2
+  Number of points (sum of weights):  7 
+
+Number of points (rounded weights) in intersection of representative FPCs
+     [,1] [,2] [,3]
+[1,]    3    0    3
+[2,]    0    3    3
+[3,]    3    3    7
+> 
+> set.seed(776655)
+> v1 <- rnorm(100)
+> v2 <- rnorm(100)
+> d1 <- sample(1:5,100,replace=TRUE)
+> d2 <- sample(1:4,100,replace=TRUE)
+> ldata <- cbind(v1,v2,d1,d2)
+> fr <- flexmixedruns(ldata,
++     continuous=2,discrete=2,simruns=1,initial.cluster=c(rep(1,5),rep(2,45),
++                                         rep(3,50)),
++                     control=list(minprior=0.1),
++                     n.cluster=3,allout=FALSE)
+k=  3  flexmix error in run  1  
+Error in flexout[[optimalk]] : 
+  attempt to select less than one element in get1index <real>
+Calls: flexmixedruns -> summary
+
+Strangely enough this only occures in the autopkgtest chroot but
+not on my local machine.  This is usually a sign for a missing
+test-depends.  Any idea what this might be?
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+

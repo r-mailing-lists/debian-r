@@ -1,0 +1,1179 @@
+From nilesh at onenetbeyond.org  Mon Nov  1 16:11:10 2021
+From: nilesh at onenetbeyond.org (Nilesh Patra)
+Date: Mon, 1 Nov 2021 21:41:10 +0530
+Subject: Re: New Bioconductor transitions?
+In-Reply-To: <CA+6XHwTH8bkBn3FfVm7KLVi6t-tRo8fFsk22jL-2zz-HVVBUjQ@mail.gmail.com>
+References: <086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org> <YXuLJsmY6ZVf8nGy@an3as.eu> <CA+6XHwTH8bkBn3FfVm7KLVi6t-tRo8fFsk22jL-2zz-HVVBUjQ@mail.gmail.com>
+Message-ID: <cef8f2c8-616a-6ff4-87ee-d0c53acbcf0f@onenetbeyond.org>
+
+On 10/29/21 1:51 PM, Dylan Aïssi wrote:
+> @Dirk Do you plan to upload new r-base in the next days?
+
+Looks like it is done[1]
+Although I'd have been a lot happier had this been more coordinated.
+
+But since this looks like a patch release, I hope it to be less painful to transition.
+
+[1]: https://tracker.debian.org/news/1272345/accepted-r-base-412-1-source-into-unstable/
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From steffen_moeller at gmx.de  Mon Nov  1 16:46:22 2021
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Mon, 1 Nov 2021 17:46:22 +0100
+Subject: libeditreadline and r-base-dev
+Message-ID: <55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>
+
+  
+  
+    I am currently
+          helping LinuxCNC to get closer to our distribution and they
+          have a dependency on
+
+        
+
+    $ apt-cache
+          show libeditreadline-dev
+        
+
+        Package: libeditreadline-dev
+        
+
+        Source: libedit
+        
+
+        Version: 3.1-20210910-1
+        
+
+        Installed-Size: 28
+        
+
+        Maintainer: LLVM Packaging Team
+        <pkg-llvm-team at lists.alioth.debian.org>
+        
+
+        Architecture: amd64
+        
+
+        Depends: libedit-dev
+        
+
+        Conflicts: libreadline-dev, libreadline-gplv2-dev,
+        libreadline5-dev
+        
+
+        Description-en: BSD editline and history libraries (shim
+        development files)
+        
+
+        GNU readline changed its license from GPL-2 to GPL-3 with
+        version 6,
+        
+
+        which excludes GPL-2-only programs from using current readline
+        versions.
+        
+
+        editline resembles readline functionally and with regards to its
+        API.
+        
+
+        .
+        
+
+        This is a development shim library that can be used to link a
+        GPL-2-only
+        
+
+        program that depends on readline with editline.
+
+      
+
+    which clashes with
+        libreadline-dev and hence with r-base-dev and dh-r:
+
+        
+
+      The following
+          packages will be REMOVED:
+        
+
+         dh-r libreadline-dev r-base-dev
+        
+
+        The following NEW packages will be installed:
+        
+
+         libeditreadline-dev
+        
+
+        0 upgraded, 1 newly installed, 3 to remove and 0 not upgraded.
+
+    Anyone with any idea about
+        it?
+
+    Cheers,
+
+        Steffen
+
+      
+
+    
+
+      
+
+  
+
+From andreas at fam-tille.de  Tue Nov  2 20:43:07 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 2 Nov 2021 21:43:07 +0100
+Subject: Re: What happened to r-cran-jquerylib ?
+In-Reply-To: <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>
+References: <b7955549-253d-f219-442c-852a5d8af9f0@gmx.de> <75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org> <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>
+Message-ID: <YYGi2612oRgRBmnP@an3as.eu>
+
+Hi
+
+Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:
+> 
+> On 31.10.21 19:14, Nilesh Patra wrote:
+> > On 10/31/21 11:30 PM, Steffen Möller wrote:
+> > > Hello, I think this goes out to Andreas.
+> > > 
+> > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was
+> > > on the NEW queue and somewhere deep in me I recall to have seen it on
+> > > there but it seems gone. It is not in the archive though and I do not
+> > > recall a rejection email to the list.
+> > 
+> > Right, I just did a quick check, and it does not seem to be rejected
+> > 
+> > $ ssh -t coccia.debian.org 'ls -1
+> > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc
+> > -l' 2>/dev/null
+> > 0
+
+Well, I usually CC the ITP bug in my response to a reject - so feel
+free to see here:
+
+   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867
+
+> > I manually checked in the dir as well, but I don't see any reject
+> > reason for jquerylib :/ @Andreas, did your dput job fail somehow?
+> > Was this uploaded properly?
+> 
+> I just found there is a new upstream version. I'll upload it and then
+> likely see it in new.
+
+That will be not successfully, thought.  My idea was to remove jquery
+1.x and 2.x from the package and symlink to the Debian packaged version
+of jquerylib 3.x. 
+
+Unfortunately I did not managed to do this up to now.  Feel free to
+beat me in it - but simply uploading a new version to new will just
+annoy ftpmaster.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at fam-tille.de  Tue Nov  2 20:46:40 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 2 Nov 2021 21:46:40 +0100
+Subject: Re: What happened to r-cran-jquerylib ?
+In-Reply-To: <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>
+References: <b7955549-253d-f219-442c-852a5d8af9f0@gmx.de> <75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org> <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>
+Message-ID: <YYGjsG3mwoKvQts3@an3as.eu>
+
+Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:
+> 
+> I just found there is a new upstream version. I'll upload it and then
+> likely see it in new.
+
+BTW, you just created a new changelog entry which is wrong (as far
+as I understood ftpmaster) for several reasons ... and for the obvious
+one that the wnpp bug is not closed.  Please always stick to the
+
+package (version-1) unstable; urgency=medium
+
+  * Initial release (closes: #wnppbug)
+
+ -- maintainer  date
+
+scheme for initial uploads.  By definition there is no *packaging*
+change to something that was never inside Debian.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Nov  3 06:45:59 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 3 Nov 2021 07:45:59 +0100
+Subject: Re: libeditreadline and r-base-dev
+In-Reply-To: <55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>
+References: <55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>
+Message-ID: <YYIwJ5NT35vKAn6Y@an3as.eu>
+
+Am Mon, Nov 01, 2021 at 05:46:22PM +0100 schrieb Steffen Möller:
+> I am currently helping LinuxCNC to get closer to our distribution and
+> they have a dependency on
+> 
+> $ apt-cache show libeditreadline-dev
+> Conflicts: libreadline-dev, libreadline-gplv2-dev, libreadline5-dev
+             ^^^^^^^^^^^^^^^
+
+It should feature also some
+
+  Provides: libreadline-dev
+  Replaces: libreadline-dev
+
+... in case this is a drop in replacement.  Otherwise I can not see any
+way to keep those packages that simply depend either directly or
+indirectly from libreadline-dev.
+
+Kind regards
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Wed Nov  3 11:11:27 2021
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Wed, 3 Nov 2021 12:11:27 +0100
+Subject: Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?
+In-Reply-To: <YYJsH9MT3hAJUAPC@an3as.eu>
+References: <b7955549-253d-f219-442c-852a5d8af9f0@gmx.de> <75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org> <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de> <YYGi2612oRgRBmnP@an3as.eu> <YYJsH9MT3hAJUAPC@an3as.eu>
+Message-ID: <077399ba-15de-6641-6171-2e7ceece517f@gmx.de>
+
+Many thanks and sorry, should have checked the ITP.
+
+Steffen
+
+On 03.11.21 12:01, Andreas Tille wrote:
+> Hi again Steffen,
+>
+> I'd strongly recommend to ask for rejection of your upload to NEW
+> to not create extra hassle for ftpmaster.
+>
+> Kind regards
+>       Andreas.
+>
+> Am Tue, Nov 02, 2021 at 09:43:07PM +0100 schrieb Andreas Tille:
+> > Hi
+> >
+> > Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:
+> > > On 31.10.21 19:14, Nilesh Patra wrote:
+> > > > On 10/31/21 11:30 PM, Steffen Möller wrote:
+> > > > > Hello, I think this goes out to Andreas.
+> > > > >
+> > > > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was
+> > > > > on the NEW queue and somewhere deep in me I recall to have seen it on
+> > > > > there but it seems gone. It is not in the archive though and I do not
+> > > > > recall a rejection email to the list.
+> > > >
+> > > > Right, I just did a quick check, and it does not seem to be rejected
+> > > >
+> > > > $ ssh -t coccia.debian.org 'ls -1
+> > > > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc
+> > > > -l' 2>/dev/null
+> > > > 0
+> >
+> > Well, I usually CC the ITP bug in my response to a reject - so feel
+> > free to see here:
+> >
+> >     https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867
+> >
+> > > > I manually checked in the dir as well, but I don't see any reject
+> > > > reason for jquerylib :/ @Andreas, did your dput job fail somehow?
+> > > > Was this uploaded properly?
+> > >
+> > > I just found there is a new upstream version. I'll upload it and then
+> > > likely see it in new.
+> >
+> > That will be not successfully, thought.  My idea was to remove jquery
+> > 1.x and 2.x from the package and symlink to the Debian packaged version
+> > of jquerylib 3.x.
+> >
+> > Unfortunately I did not managed to do this up to now.  Feel free to
+> > beat me in it - but simply uploading a new version to new will just
+> > annoy ftpmaster.
+> >
+> > Kind regards
+> >
+> >        Andreas.
+> >
+> > --
+> > http://fam-tille.de
+
+From andreas at fam-tille.de  Wed Nov  3 11:01:51 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 3 Nov 2021 12:01:51 +0100
+Subject: Re: What happened to r-cran-jquerylib ?
+In-Reply-To: <YYGi2612oRgRBmnP@an3as.eu>
+References: <b7955549-253d-f219-442c-852a5d8af9f0@gmx.de> <75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org> <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de> <YYGi2612oRgRBmnP@an3as.eu>
+Message-ID: <YYJsH9MT3hAJUAPC@an3as.eu>
+
+Hi again Steffen,
+
+I'd strongly recommend to ask for rejection of your upload to NEW
+to not create extra hassle for ftpmaster.
+
+Kind regards
+     Andreas.
+
+Am Tue, Nov 02, 2021 at 09:43:07PM +0100 schrieb Andreas Tille:
+> Hi
+> 
+> Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:
+> > 
+> > On 31.10.21 19:14, Nilesh Patra wrote:
+> > > On 10/31/21 11:30 PM, Steffen Möller wrote:
+> > > > Hello, I think this goes out to Andreas.
+> > > > 
+> > > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was
+> > > > on the NEW queue and somewhere deep in me I recall to have seen it on
+> > > > there but it seems gone. It is not in the archive though and I do not
+> > > > recall a rejection email to the list.
+> > > 
+> > > Right, I just did a quick check, and it does not seem to be rejected
+> > > 
+> > > $ ssh -t coccia.debian.org 'ls -1
+> > > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc
+> > > -l' 2>/dev/null
+> > > 0
+> 
+> Well, I usually CC the ITP bug in my response to a reject - so feel
+> free to see here:
+> 
+>    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867
+> 
+> > > I manually checked in the dir as well, but I don't see any reject
+> > > reason for jquerylib :/ @Andreas, did your dput job fail somehow?
+> > > Was this uploaded properly?
+> > 
+> > I just found there is a new upstream version. I'll upload it and then
+> > likely see it in new.
+> 
+> That will be not successfully, thought.  My idea was to remove jquery
+> 1.x and 2.x from the package and symlink to the Debian packaged version
+> of jquerylib 3.x. 
+> 
+> Unfortunately I did not managed to do this up to now.  Feel free to
+> beat me in it - but simply uploading a new version to new will just
+> annoy ftpmaster.
+> 
+> Kind regards
+> 
+>       Andreas.
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Nov  4 17:25:28 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 4 Nov 2021 18:25:28 +0100
+Subject: Re: Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?
+In-Reply-To: <077399ba-15de-6641-6171-2e7ceece517f@gmx.de>
+References: <b7955549-253d-f219-442c-852a5d8af9f0@gmx.de> <75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org> <8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de> <YYGi2612oRgRBmnP@an3as.eu> <YYJsH9MT3hAJUAPC@an3as.eu> <077399ba-15de-6641-6171-2e7ceece517f@gmx.de>
+Message-ID: <YYQXiBk0J7tJJab4@an3as.eu>
+
+Hi Steffen,
+
+Am Wed, Nov 03, 2021 at 12:11:27PM +0100 schrieb Steffen Möller:
+> Many thanks and sorry, should have checked the ITP.
+
+I've pushed something that might pass ftpmaster inspection to Git.
+Since its a really weak solution I'd be happy if you could at least
+test it with your application before we do another upload to new.
+
+Kind regards
+   Andreas. 
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Tue Nov  9 14:52:04 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 09 Nov 2021 20:22:04 +0530
+Subject: Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)
+Message-ID: <618a8b17.1c69fb81.7c5ab.578b@mx.google.com>
+
+> I've pushed something that might pass ftpmaster inspection to Git.
+Since its a really weak solution I'd be happy if you could at least
+test it with your application before we do another upload to new.
+
+Looks like you already uploaded by now, but Steffen, gentle ping?
+Can you test pigx-rnaseq once against it?
+
+Nilesh
+
+From tille at debian.org  Tue Nov  9 15:26:16 2021
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 9 Nov 2021 16:26:16 +0100
+Subject: Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)
+In-Reply-To: <618a8b17.1c69fb81.7c5ab.578b@mx.google.com>
+References: <618a8b17.1c69fb81.7c5ab.578b@mx.google.com>
+Message-ID: <YYqTGGDk2LvgfMxn@an3as.eu>
+
+Hi Nilesh,
+
+Am Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:
+> > I've pushed something that might pass ftpmaster inspection to Git.
+> Since its a really weak solution I'd be happy if you could at least
+> test it with your application before we do another upload to new.
+
+I was running it against the tests of other packages that are now
+needing jquerylib.
+
+> Looks like you already uploaded by now, but Steffen, gentle ping?
+
+It was me who uploaded now.
+
+> Can you test pigx-rnaseq once against it?
+
+That would be definitely helpful
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Tue Nov  9 15:43:02 2021
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Tue, 9 Nov 2021 16:43:02 +0100
+Subject: Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)
+In-Reply-To: <YYqTGGDk2LvgfMxn@an3as.eu>
+References: <618a8b17.1c69fb81.7c5ab.578b@mx.google.com> <YYqTGGDk2LvgfMxn@an3as.eu>
+Message-ID: <279298f1-6ce0-3f3a-8aa9-d3c6395bbf7e@gmx.de>
+
+On 09.11.21 16:26, Andreas Tille wrote:
+> Hi Nilesh,
+>
+> Am Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:
+> > > I've pushed something that might pass ftpmaster inspection to Git.
+> >
+> > Since its a really weak solution I'd be happy if you could at least
+> > test it with your application before we do another upload to new.
+>
+> I was running it against the tests of other packages that are now
+> needing jquerylib.
+>
+> > Looks like you already uploaded by now, but Steffen, gentle ping?
+>
+> It was me who uploaded now.
+>
+> > Can you test pigx-rnaseq once against it?
+>
+> That would be definitely helpful
+
+Go ahead for now. Need to fix other problems with pigx-rnaseq before I
+can evaluate anything with it.
+
+Best,
+Steffen
+
+From nilesh at debian.org  Tue Nov  9 16:52:08 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 09 Nov 2021 22:22:08 +0530
+Subject: Re: Fwd: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)
+In-Reply-To: <bb951475-2dc0-56c6-87de-5d4653057df8@onenetbeyond.org>
+References: <bb951475-2dc0-56c6-87de-5d4653057df8@onenetbeyond.org>
+Message-ID: <20211109165227.21B14203B5@bendel.debian.org>
+
+Quoting Steffen Moller:
+> Go ahead for now. Need to fix other problems with pigx-rnaseq before I
+> can evaluate anything with it.
+
+ACK.
+Thanks for letting us know.
+
+Nilesh
+
+From Zora at ahcxlight.com  Wed Nov 10 10:33:44 2021
+From: Zora at ahcxlight.com (Zora Cao)
+Date: Wed, 10 Nov 2021 18:33:44 +0800
+Subject: LED Lights
+Message-ID: <d8f66a35-b017-4296-9caa-1146b72c5660.Zora@ahcxlight.com>
+
+Dear
+Hello,I am Zora who is from Chenxin lighting company.
+On the website, I find we do same line ,and we have 20 years' solid experience in the lighting industry.
+And our main products are ceiling lights, down lights, ceiling lights and so on. Now our popular products are smart lights.
+If you have any interests or need,I will send the catalogue for you.
+Looking forward to your reply!
+
+Your business partner
+
+Zora Cao
+Anhui Chenxin Lighting Electrical Appliance Co.,Ltd
+Wechat:Levenon1226 Whatsapp:+86-17858999110
+Tel:+86-551-65856715 Cell:+86-17858999110
+Website:https://ahcxlight.en.alibaba.com
+
+From nilesh at debian.org  Sat Nov 13 14:46:41 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sat, 13 Nov 2021 20:16:41 +0530
+Subject: How to ask pkg-r-autopkgtests to "not" run tests?
+Message-ID: <YY/P0bjzJNSn3GhZ@debian>
+
+Hi,
+
+I was trying to exclude tests in r-bioc-organismdbi, because it needs homo.sapiens
+to run tests which is not packaged, and probably never will be.
+I did the following:
+
+* Removed d/tests
+* Remove "Testsuite: autopkgtest-pkg-r" line from d/control
+* Removed unitTests directory from being installed.
+
+However, _even after this_ pkg-r-autopkgtest launches and attempts running tests.
+How do I stop this from happening?
+
+Any help is welcome.
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Sat Nov 13 17:31:25 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 13 Nov 2021 18:31:25 +0100
+Subject: Re: How to ask pkg-r-autopkgtests to "not" run tests?
+In-Reply-To: <YY/P0bjzJNSn3GhZ@debian>
+References: <YY/P0bjzJNSn3GhZ@debian>
+Message-ID: <YY/2bbOmI2VJBztb@an3as.eu>
+
+Hi Nilesh
+
+Am Sat, Nov 13, 2021 at 08:16:41PM +0530 schrieb Nilesh Patra:
+> Hi,
+> to run tests which is not packaged, and probably never will be.
+> I did the following:
+> 
+> * Removed d/tests
+> * Remove "Testsuite: autopkgtest-pkg-r" line from d/control
+> * Removed unitTests directory from being installed.
+> 
+> However, _even after this_ pkg-r-autopkgtest launches and attempts running tests.
+> How do I stop this from happening?
+
+Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test
+from running.  No idea why this does not work.
+
+Here are some examples for alternative solutions to work around not
+(yet) packaged data / code:
+
+   https://salsa.debian.org/r-pkg-team/r-bioc-affy/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+   https://salsa.debian.org/r-pkg-team/r-bioc-bluster/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+   https://salsa.debian.org/r-pkg-team/r-bioc-purecn/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+
+In file autopkgtest-pkg-r.hook you can place code that is executed as in
+the usual run-unit-test script but without the beginning that copies the
+data to the temporary dir.
+
+Hope this helps
+
+        Andreas.
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Sat Nov 13 19:55:28 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sun, 14 Nov 2021 01:25:28 +0530
+Subject: Re: How to ask pkg-r-autopkgtests to "not" run tests?
+In-Reply-To: <YY/2bbOmI2VJBztb@an3as.eu>
+References: <YY/2bbOmI2VJBztb@an3as.eu>
+Message-ID: <YZAYMIO0cIi7wUrW@debian>
+
+On 11/13/21 11:01 PM, Andreas Tille wrote:
+> Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test
+> from running.  No idea why this does not work.
+
+This is extremely annoying; pkg-r-autopkgtests should not run. Clearly, this looks like a bug.
+So I filed Bug#999622 against dh-r w/ severity important. Feel free to lower severity if needed. 
+
+> Here are some examples for alternative solutions to work around not
+> (yet) packaged data / code:
+> 
+>     https://salsa.debian.org/r-pkg-team/r-bioc-affy/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+>     https://salsa.debian.org/r-pkg-team/r-bioc-bluster/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+>     https://salsa.debian.org/r-pkg-team/r-bioc-purecn/-/blob/master/debian/tests/autopkgtest-pkg-r.hook
+> 
+> In file autopkgtest-pkg-r.hook you can place code that is executed as in
+> the usual run-unit-test script but without the beginning that copies the
+> data to the temporary dir.
+
+Thank you very much, that helps a lot! I fixed/worked-around and uploaded.
+
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sebastien at debian.org  Sat Nov 13 20:00:28 2021
+From: sebastien at debian.org (=?utf-8?q?S=C3=A9bastien_Villemot?=)
+Date: Sat, 13 Nov 2021 21:00:28 +0100
+Subject: Re: How to ask pkg-r-autopkgtests to "not" run tests?
+In-Reply-To: <YZAYMIO0cIi7wUrW@debian>
+References: <YZAYMIO0cIi7wUrW@debian>
+Message-ID: <cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>
+
+Hi,
+
+Le dimanche 14 novembre 2021 à 01:25 +0530, Nilesh Patra a écrit :
+> On 11/13/21 11:01 PM, Andreas Tille wrote:
+> > Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test
+> > from running.  No idea why this does not work.
+> 
+> This is extremely annoying; pkg-r-autopkgtests should not run. Clearly, this looks like a bug.
+> So I filed Bug#999622 against dh-r w/ severity important. Feel free to lower severity if needed. 
+
+Note that it may simply be the consequence of autodep8 adding the tests
+automatically, based on package name:
+https://salsa.debian.org/ci-team/autodep8/-/blob/master/support/r/detect
+
+Best,
+
+-- 
+⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot
+⣾⠁⢠⠒⠀⣿⡁  Debian Developer
+⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name
+⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From edd at debian.org  Sat Nov 13 20:55:09 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 13 Nov 2021 14:55:09 -0600
+Subject: Re: How to ask pkg-r-autopkgtests to "not" run tests?
+In-Reply-To: <cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>
+References: <YZAYMIO0cIi7wUrW@debian> <cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>
+Message-ID: <24976.9773.784301.307276@rob.eddelbuettel.com>
+
+The 'R CMD check' command, which is at the inner layer of tests, runs any
+files ending in .R found in the tests/ directory -- that is how every known
+testrunner package (RUnit, testthat, tinytest, svUnit, ...) run tests.
+
+And note that R itself, as well as a package of recommend or well-known
+packages (such as data.table) rely only on this. No unit test runner needed.
+
+So I would probably start by renaming / removing / hiding the files in
+tests/*.
+
+Good luck,  Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Wed Nov 17 11:07:42 2021
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 17 Nov 2021 12:07:42 +0100
+Subject: Re: ITP: r-cran-rgooglemaps -- Overlays on Static Maps
+Message-ID: <YZTifnrHbbfK9q7e@an3as.eu>
+
+Hi Magnus,
+
+I stumbled upon your ITP when I wanted to inject this myself.  I added
+you to the pkg-r-team - please be so kind to remove your private
+repository on Salsa to avoid confusion.  In any case I've added you as
+Uploader.  I'd recommend you subscribe to the team list[1] and bounce
+your ITPs there.  I also intend to package r-cran-ggmap (as
+predependency for r-cran-choroplethr) but I'd like to wait whether
+ftpmaster might have issues with Google services before I keep on with
+this.
+
+Kind regards
+
+      Andreas.
+
+[1] https://lists.debian.org/debian-r/
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Tue Nov 23 18:02:46 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 23 Nov 2021 23:32:46 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YYgDAGsfg4o22yav@ramacher.at>
+References: <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YYgDAGsfg4o22yav@ramacher.at>
+Message-ID: <YZ0sxu3tKCfJbvhb@debian>
+
+Hi Sebastian,
+
+On Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:
+> > Hi,
+> > Bioconductor 3.14 was released [1].
+> > 
+> > [1] https://bioconductor.org/news/bioc_3_14_release/
+> > 
+> > Like for previous r-api-bioc transitions, all reverse dependencies
+> > need a manual upgrade to the new upstream releases, they are not
+> > binNMU-able. The Debian R Packages team will do so.
+> > 
+> > Please set up a tracker manually, since this is a transition of a
+> > virtual package name.
+> 
+> Let's do this one after gsl
+
+Sorry to get on your nerves, but since it has been a little more than two weeks since
+you sent this email, is there any update on gsl transition, or is it nearing completion or so?
+Can bioc start sometime soon?
+
+Let me know.
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sramacher at debian.org  Tue Nov 23 19:07:49 2021
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Tue, 23 Nov 2021 20:07:49 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YZ0sxu3tKCfJbvhb@debian>
+References: <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian>
+Message-ID: <YZ08BdKrE5bAxcxW@ramacher.at>
+
+Control: tags -1 = confirmed
+
+On 2021-11-23 23:32:46, Nilesh Patra wrote:
+> Hi Sebastian,
+> 
+> On Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:
+> > > Hi,
+> > > Bioconductor 3.14 was released [1].
+> > > 
+> > > [1] https://bioconductor.org/news/bioc_3_14_release/
+> > > 
+> > > Like for previous r-api-bioc transitions, all reverse dependencies
+> > > need a manual upgrade to the new upstream releases, they are not
+> > > binNMU-able. The Debian R Packages team will do so.
+> > > 
+> > > Please set up a tracker manually, since this is a transition of a
+> > > virtual package name.
+> > 
+> > Let's do this one after gsl
+> 
+> Sorry to get on your nerves, but since it has been a little more than two weeks since
+> you sent this email, is there any update on gsl transition, or is it nearing completion or so?
+> Can bioc start sometime soon?
+
+Please go ahead. If the two transitions need to be untangled, I'll
+temporarily remove r-bioc-dirichletmultinomial and r-bioc-tfbstools from
+testing.
+
+Cheers
+
+> 
+> Let me know.
+> 
+> Regards,
+> Nilesh
+
+-- 
+Sebastian Ramacher
+
+From nilesh at debian.org  Wed Nov 24 14:50:41 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 24 Nov 2021 20:20:41 +0530
+Subject: Bioc-transition has started (Was: Re: Bug#998057: transition: r-api-bioc-3.14)
+In-Reply-To: <YZ08BdKrE5bAxcxW@ramacher.at>
+References: <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <YZ08BdKrE5bAxcxW@ramacher.at>
+Message-ID: <YZ5RQVodMdmSH0B5@debian>
+
+On Tue, Nov 23, 2021 at 08:07:49PM +0100, Sebastian Ramacher wrote:
+> Please go ahead.
+
+Thanks a lot.
+
+@All,
+
+me and Andreas have kick started the transition. Right now, we are at dependency
+level 2.
+Should you have free cycles, do not hesitate to chime in.
+Here is the tracker for $more info[1]
+
+[1]: https://release.debian.org/transitions/html/r-api-bioc-3.14.html
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Thu Nov 25 10:02:08 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 25 Nov 2021 11:02:08 +0100
+Subject: Please specify version of ade4 with same characters in phyloseq
+Message-ID: <YZ9fID+FyQX/WP4e@an3as.eu>
+
+Hi Paul,
+
+I'm just upgrading the Debian packaging of BioConductor phyloseq to
+version 1.38.0.  In the DESCRIPTION file you are specifying
+
+   Imports: ade4 (>= 1.7.4)
+
+Ade4 authors are using a version scheme 1.7-18 (latest version) so they
+use a '-' sign for the micro version specification.  I'm perfectly aware
+that in R version number separators '.' and '-' are sorting equally.
+However, this leads to sorting issues in the Debian packaging
+dependencies.  You would do us a great favour if you simply stick to
+the same separating characters as the authors have choosen.  In other
+words, this patch
+
+diff --git a/DESCRIPTION b/DESCRIPTION
+index 457fcc8..35b6c57 100644
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,
+     Susan Holmes <susan at stat.stanford.edu>, with
+     contributions from Gregory Jordan and Scott Chamberlain
+ License: AGPL-3
+-Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),
++Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),
+         BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=
+         2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach
+         (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=
+
+would safe us some extra work.
+
+Thanks a lot for your cooperation
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sat Nov 27 10:20:33 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 27 Nov 2021 12:20:33 +0200
+Subject: r-bioc-dropletutils: what happened here?
+Message-ID: <CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>
+
+Hi
+
+I looked at the recent upload of r-bioc-dropletutils and noticed it
+dropped the changelog entry of the previous upload.  It looks like
+something went wrong with 'routine-update: New upstream version' [1].
+
+>>From what I can see the previous version was properly uploaded [2] and
+tagged [3].  Did I miss something?
+
+Regards
+Graham
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/d1bc580fc9c57df549eea64a807fb5fc330124a7
+[2] https://tracker.debian.org/news/1270068/accepted-r-bioc-dropletutils-1123ds-2-source-into-unstable/
+[3] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/tags/debian%2F1.12.3+ds-2
+
+From tille at debian.org  Sat Nov 27 16:45:20 2021
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 27 Nov 2021 17:45:20 +0100
+Subject: Re: r-bioc-dropletutils: what happened here?
+In-Reply-To: <CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>
+References: <CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>
+Message-ID: <YaJgoA6VCYmCaMJM@an3as.eu>
+
+Hi Graham,
+
+Am Sat, Nov 27, 2021 at 12:20:33PM +0200 schrieb Graham Inggs:
+> I looked at the recent upload of r-bioc-dropletutils and noticed it
+> dropped the changelog entry of the previous upload. It looks like
+> something went wrong with 'routine-update: New upstream version' [1].
+
+> >From what I can see the previous version was properly uploaded [2] and
+> tagged [3].  Did I miss something?
+
+For whatever reason I've found
+
+r-bioc-dropletutils (1.14.1+ds-1) unstable; urgency=medium
+
+  * Team upload
+  * Exclude test-hashing.R on s390x as well
+
+ -- Graham Inggs <ginggs at debian.org>  Sun, 24 Oct 2021 10:56:07 +0000
+
+as changelog entry and my changes endet up in 1.14.1+ds-2.  So I manually
+did[4] since I did not see any 1.14.1+ds-1 upload ... which was obviously
+the wrong fix.
+
+I fixed now the changelog entries to make some sense in some way.  I
+have no idea whether we can blame routine-update about this.  It is
+hard to reproduce.
+
+Thanks for pointing this out anyway
+
+     Andreas.
+
+> [1] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/d1bc580fc9c57df549eea64a807fb5fc330124a7
+> [2] https://tracker.debian.org/news/1270068/accepted-r-bioc-dropletutils-1123ds-2-source-into-unstable/
+> [3] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/tags/debian%2F1.12.3+ds-2
+
+[4] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/32b28328c7edddadeb64481f7ccbc6ef69a6c67c 
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sun Nov 28 08:15:30 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 28 Nov 2021 10:15:30 +0200
+Subject: Re: r-bioc-dropletutils: what happened here?
+In-Reply-To: <YaJgoA6VCYmCaMJM@an3as.eu>
+References: <CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com> <YaJgoA6VCYmCaMJM@an3as.eu>
+Message-ID: <CAM8zJQvzii3ci3b-B-=5S+Pd-vNnwEyLWahgNh6FtZ11X3s5_w@mail.gmail.com>
+
+Hi Andreas
+
+On Sat, 27 Nov 2021 at 18:45, Andreas Tille <tille at debian.org> wrote:
+> I fixed now the changelog entries to make some sense in some way.  I
+> have no idea whether we can blame routine-update about this.  It is
+> hard to reproduce.
+
+OK, thank you!
+
+In this case, there's no need for an immediate upload.
+
+If a bug had been closed by the missing changelog entry, then we would
+have needed an upload to un-confuse the BTS.
+
+Regards
+Graham
+
+From tille at debian.org  Mon Nov 29 19:49:39 2021
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 29 Nov 2021 20:49:39 +0100
+Subject: Re: Please specify version of ade4 with same characters in phyloseq
+In-Reply-To: <CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com>
+References: <YZ9fID+FyQX/WP4e@an3as.eu> <CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com>
+Message-ID: <YaUu06wNsgTV+fYn@an3as.eu>
+
+Hi Paul,
+
+Am Mon, Nov 29, 2021 at 09:29:37AM -0800 schrieb Paul Joseph McMurdie:
+> Andreas,
+> Sure, that's no problem. As you know it might take a little while to
+> percolate into the release branch, but I am happy to make the change now
+> and get that process started.
+
+Thanks a lot.  There is no need to hurry up since I've just patched for
+the current version and whenever you release the next version I'll simply
+drop that patch.
+
+Thanks a lot for your cooperation
+
+      Andreas.
+ 
+> On Thu, Nov 25, 2021 at 2:02 AM Andreas Tille <andreas at an3as.eu> wrote:
+> 
+> > Hi Paul,
+> >
+> > I'm just upgrading the Debian packaging of BioConductor phyloseq to
+> > version 1.38.0.  In the DESCRIPTION file you are specifying
+> >
+> >    Imports: ade4 (>= 1.7.4)
+> >
+> > Ade4 authors are using a version scheme 1.7-18 (latest version) so they
+> > use a '-' sign for the micro version specification.  I'm perfectly aware
+> > that in R version number separators '.' and '-' are sorting equally.
+> > However, this leads to sorting issues in the Debian packaging
+> > dependencies.  You would do us a great favour if you simply stick to
+> > the same separating characters as the authors have choosen.  In other
+> > words, this patch
+> >
+> > diff --git a/DESCRIPTION b/DESCRIPTION
+> > index 457fcc8..35b6c57 100644
+> > --- a/DESCRIPTION
+> > +++ b/DESCRIPTION
+> > @@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,
+> >      Susan Holmes <susan at stat.stanford.edu>, with
+> >      contributions from Gregory Jordan and Scott Chamberlain
+> >  License: AGPL-3
+> > -Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),
+> > +Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),
+> >          BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=
+> >          2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach
+> >          (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=
+> >
+> > would safe us some extra work.
+> >
+> > Thanks a lot for your cooperation
+> >
+> >       Andreas.
+> >
+> >
+> > --
+> > http://fam-tille.de
+> >
+
+-- 
+http://fam-tille.de
+
+From joey711 at gmail.com  Mon Nov 29 22:40:27 2021
+From: joey711 at gmail.com (Paul Joseph McMurdie)
+Date: Mon, 29 Nov 2021 14:40:27 -0800
+Subject: Re: Please specify version of ade4 with same characters in phyloseq
+In-Reply-To: <YaUu06wNsgTV+fYn@an3as.eu>
+References: <YZ9fID+FyQX/WP4e@an3as.eu> <CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com> <YaUu06wNsgTV+fYn@an3as.eu>
+Message-ID: <CAOng_O9QFOeVVs3QAWTBeD6dgJ2S7GYveKZB4X+K8099JoQA4Q@mail.gmail.com>
+
+Sounds good. I already made and pushed the change.Best,
+.....
+"Joey"
+
+Paul J. McMurdie
+
+On Mon, Nov 29, 2021 at 11:49 AM Andreas Tille <tille at debian.org> wrote:
+
+> Hi Paul,
+>
+>
+>
+> Am Mon, Nov 29, 2021 at 09:29:37AM -0800 schrieb Paul Joseph McMurdie:
+>
+> > Andreas,
+>
+> > Sure, that's no problem. As you know it might take a little while to
+>
+> > percolate into the release branch, but I am happy to make the change now
+>
+> > and get that process started.
+>
+>
+>
+> Thanks a lot.  There is no need to hurry up since I've just patched for
+>
+> the current version and whenever you release the next version I'll simply
+>
+> drop that patch.
+>
+>
+>
+> Thanks a lot for your cooperation
+>
+>
+>
+>       Andreas.
+>
+>
+>
+> > On Thu, Nov 25, 2021 at 2:02 AM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> >
+>
+> > > Hi Paul,
+>
+> > >
+>
+> > > I'm just upgrading the Debian packaging of BioConductor phyloseq to
+>
+> > > version 1.38.0.  In the DESCRIPTION file you are specifying
+>
+> > >
+>
+> > >    Imports: ade4 (>= 1.7.4)
+>
+> > >
+>
+> > > Ade4 authors are using a version scheme 1.7-18 (latest version) so they
+>
+> > > use a '-' sign for the micro version specification.  I'm perfectly aware
+>
+> > > that in R version number separators '.' and '-' are sorting equally.
+>
+> > > However, this leads to sorting issues in the Debian packaging
+>
+> > > dependencies.  You would do us a great favour if you simply stick to
+>
+> > > the same separating characters as the authors have choosen.  In other
+>
+> > > words, this patch
+>
+> > >
+>
+> > > diff --git a/DESCRIPTION b/DESCRIPTION
+>
+> > > index 457fcc8..35b6c57 100644
+>
+> > > --- a/DESCRIPTION
+>
+> > > +++ b/DESCRIPTION
+>
+> > > @@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,
+>
+> > >      Susan Holmes <susan at stat.stanford.edu>, with
+>
+> > >      contributions from Gregory Jordan and Scott Chamberlain
+>
+> > >  License: AGPL-3
+>
+> > > -Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),
+>
+> > > +Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),
+>
+> > >          BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=
+>
+> > >          2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach
+>
+> > >          (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=
+>
+> > >
+>
+> > > would safe us some extra work.
+>
+> > >
+>
+> > > Thanks a lot for your cooperation
+>
+> > >
+>
+> > >       Andreas.
+>
+> > >
+>
+> > >
+>
+> > > --
+>
+> > > http://fam-tille.de
+>
+> > >
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+

@@ -1,0 +1,113 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2020-02",
+  "messages": [
+    {
+      "id": "msg-4cb7c2c766ec",
+      "message_id": "<CAM8zJQuA3rQL_WR6QVHtvTdWV4dOe2QzD+GRQsp3G7SqRFQ_vg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2020-02-01T09:10:49Z",
+      "subject": "Re: Bug#949658: Different tests for r-cran-recipes - \"wrong\" test prevents migration of r-cran-testthat",
+      "subject_clean": "Bug#949658: Different tests for r-cran-recipes - \"wrong\" test prevents migration of r-cran-testthat",
+      "in_reply_to": "<20200126082658.GE27204@an3as.eu>",
+      "references": [
+        "<20200124091949.GU6895@an3as.eu>",
+        "<89004dfa-8a0b-5d4e-8d8c-04209d3b9b62@debian.org>",
+        "<CAM8zJQsTp4aZ5H_AYE96LH5Z7YqP6NWXiE383RfS7vsysL398A@mail.gmail.com>",
+        "<20200126082658.GE27204@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Sun, 26 Jan 2020 at 10:27, Andreas Tille <tille at debian.org> wrote:\n> I fail to see how this will finally help since the strange regression\n> of\n>\n>    autopkgtest for r-cran-recipes/0.1.9+dfsg-2: amd64: Regression ♻ , arm64: Test in progress\n>\n> for r-cran-testthat seems to remain.  So r-cran-testthat will not\n> migrate and the specified versioned Depends will not be fullfilled.\n\nI see r-cran-testthat migrated yesterday [1].\nSo whichever package that was causing r-cran-recipes to pass in\nunstable, has now migrated to testing, allowing it to pass there.\nLooking at britney's migrations jobs for r-cran-recipes [2], the first\npassing test with r-cran-testthat/2.3.1-1 occurred at 2020-01-30\n06:43:35 UTC.\nThe debci log for that test [3], shows the following were among the\nchanges in test packages since the last test run:\n\n@@ -136,7 +136,7 @@\n r-cran-rcppeigen 0.3.3.7.0-1\n r-cran-rcpproll 0.3.0-1\n r-cran-recipes 0.1.9+dfsg-2\n-r-cran-rlang 0.4.1-1\n+r-cran-rlang 0.4.3-1\n r-cran-robustbase 0.93-5-2\n r-cran-rpart 4.1-15-2\n r-cran-rprojroot 1.3-2-2\n@@ -150,7 +150,7 @@\n r-cran-survival 3.1-8-1\n r-cran-testthat 2.3.1-1\n r-cran-tibble 2.1.3-2\n-r-cran-tidyr 1.0.0-1\n+r-cran-tidyr 1.0.2-1\n r-cran-tidyselect 0.2.5-1\n r-cran-timedate 3043.102-1+b1\n r-cran-utf8 1.1.4-1+b1\n\nSo I suspect either r-cran-rlang or r-cran-tidyr was the culprit here.\nI think r-cran-recipes missed a versioned dependency or test\ndependency, or r-cran-testthat missed a breaks.\n\nRegards\nGraham\n\n[1] https://alioth-lists.debian.net/pipermail/r-pkg-team/2020-January/009852.html\n[2] https://ci.debian.net/user/britney/jobs?package=r-cran-recipes&suite[]=testing&arch[]=amd64\n[3] https://ci.debian.net/data/packages/testing/amd64/r/r-cran-recipes/4145364.log",
+      "body_snippet": "Hi Andreas\n\nOn Sun, 26 Jan 2020 at 10:27, Andreas Tille <tille at debian.org> wrote:\n> I fail to see how this will finally help since the strange regression\n> of\n>\n>    autopkgtest for r-cran-recipes/",
+      "thread_id": "thread-4cb7c2c766ec",
+      "thread_depth": 0,
+      "month": "2020-02"
+    },
+    {
+      "id": "msg-2d2e3e9949e8",
+      "message_id": "<20200206152927.GL3889@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-02-06T15:29:27Z",
+      "subject": "Test suite issue for BiocStyle",
+      "subject_clean": "Test suite issue for BiocStyle",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'm trying to package for Debian.  When running the test suite I get:\n\n$ LC_ALL=C R --no-save <tests/run_tests.R\n\nR version 3.6.2 (2019-12-12) -- \"Dark and Stormy Night\"\nCopyright (C) 2019 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n> BiocGenerics:::testPackage(\"BiocStyle\")\nWriting to file maketitle_test_1.tex\nProcessing code chunks with options ...\n 1 : keep.source term tex (label = style, maketitle_test_1.Rnw:5)\n\nYou can now run (pdf)latex on 'maketitle_test_1.tex'\nTiming stopped at: 1.27 0.472 1.729\nError in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : \n  Running 'texi2dvi' on 'maketitle_test_1.tex' failed.\nLaTeX errors:\n! LaTeX Error: Missing \\begin{document}.\n\nSee the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help.\n ...                                              \n! Argument of \\Hy@scantitle has an extra }.\n<inserted text> \n                \\par \nl.166 \\renewcommand{\\title}\n                           [1]{\\def\\@bioctitle{#1}\\@oldtitle{#1}}\n! Paragraph ended before \\Hy@scantitle was complete.\n<to be read again> \n                   \\par \nl.166 \\renewcommand{\\title}\n                           [1]{\\def\\@bioctitle{#1}\\@oldtitle{#1}}\n! LaTeX Error: Missing \\begin{document}.\n\nSee the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help.\n ...                                              \n! Illegal parameter number in definition of \\@.\n<to be read again> \n                   1\nl.166 \\renewcommand{\\title}[1]{\\def\\@bioctitle{#1\n                                                 }\\@oldtitle{#1}}\n! Use of \\@ doesn't match its definition.\nl.166 ...command{\\title}[1]{\\def\\@bioctitle{#1}\\@o\n                                                  ldtitle{#1}}\nIf you say, e.g., `\\def\\a1{...}', then you must always\nput `1' after `\\a', since control sequence names are\n! You can't use `macro parameter character #' in horizontal mode.\nl.166 ...title}[1]{\\def\\@bioctitle{#1}\\@oldtitle{#\n                                                  1}}\nSorry, but I'm not programmed to handle this case;\nI'll just pretend that you didn't ask for it.\n! LaTeX Error: Missing \\begin{document}.\n\nSee the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help.\n ...                                              \n\nSo I tried to check other things:\n\n  $ R CMD Sweave LatexStyle2.Rnw\n  $ pdflatex LatexStyle2.tex\nThis is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex)\n restricted \\write18 enabled.\nentering extended mode\n(./LatexStyle2.tex\nLaTeX2e <2019-10-01> patch level 3\n(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls\nDocument Class: article 2019/10/25 v1.4k Standard LaTeX document class\n(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo))\n(/usr/lib/R/site-library/BiocStyle/resources/tex/Bioconductor.sty\n\nLaTeX Warning: You have requested package `/usr/lib/R/site-library/BiocStyle/resources/tex/Bioconductor',\n               but the package provides `Bioconductor'.\n\n(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty\n(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)\n(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def)\n(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def))\n(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty\n(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))\n(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty\n(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifluatex.sty)))\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdfescape.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hycolor.sty\n(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/xcolor-patch.sty\n(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hopatch.sty)))\n(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/intcalc.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)\n(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/bitset.sty\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/bigintcalc.sty))\n(/usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty))\n(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def\n(/usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty\n(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/uniquecounter.sty)))\n(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty\n(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty)\n(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifxetex.sty))\n\nPackage geometry Warning: Over-specification in `h'-direction.\n    `width' (384.1122pt) is ignored.\n\n(/usr/share/texlive/texmf-dist/tex/latex/bera/beramono.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty\n(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))\n(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)\n(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)\n\n! LaTeX Error: Missing \\begin{document}.\n\nSee the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help.\n ...                                              \n                                                  \nl.164 \\let\\@bi\n              octitle\\@empty\n? \n\nSo this boils down to an issue in file\n\n   inst/resources/tex/Bioconductor.sty\n\n...\n163 %% Title\n164 \\let\\@bioctitle\\@empty\n165 \\let\\@oldtitle\\title\n166 \\renewcommand{\\title}[1]{\\def\\@bioctitle{#1}\\@oldtitle{#1}}\n...\n\nI admit line 164 looks not really suspicious to me - so may be\nsomething is wrong before that line.\n\nCould you please have a look?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'm trying to package for Debian.  When running the test suite I get:\n\n$ LC_ALL=C R --no-save <tests/run_tests.R\n\nR version 3.6.2 (2019-12-12) -- \"Dark and Stormy Night\"\nCopyright (C) 2019 The R ",
+      "thread_id": "thread-2d2e3e9949e8",
+      "thread_depth": 0,
+      "month": "2020-02"
+    },
+    {
+      "id": "msg-90fec2e92875",
+      "message_id": "<CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>",
+      "from_name": "Michael Crusoe",
+      "from_email_hash": "2daf7bf344942fcdb399a1763976a09faf9693679e2a71eff36bbc13c3bf2158",
+      "date": "2020-02-17T17:18:53Z",
+      "subject": "Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna",
+      "subject_clean": "Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies of it.\n\ngbp clone git at salsa.debian.org:r-pkg-team/r-cran-statnet.common.git\n\ngbp clone git at salsa.debian.org:r-pkg-team/r-cran-network.git\n\ngbp clone git at salsa.debian.org:r-pkg-team/r-cran-sna.git\n\nThanks!\n\n-- \nMichael R. Crusoe",
+      "body_snippet": "r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies of it.\n\ngbp clone git at salsa.debian.org:r-pkg-team/r-cran-statnet.common.git\n\ngbp clone git at salsa.debian.o",
+      "thread_id": "thread-90fec2e92875",
+      "thread_depth": 0,
+      "month": "2020-02"
+    },
+    {
+      "id": "msg-f995b179f51a",
+      "message_id": "<CAD=WrcKm+YFqX+KWTdUVXi_Znk3yAS7j_Xne=bCC=QzDy7rEYg@mail.gmail.com>",
+      "from_name": "Michael Crusoe",
+      "from_email_hash": "2daf7bf344942fcdb399a1763976a09faf9693679e2a71eff36bbc13c3bf2158",
+      "date": "2020-02-17T20:02:26Z",
+      "subject": "Re: Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna",
+      "subject_clean": "Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna",
+      "in_reply_to": "<CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>",
+      "references": [
+        "<CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks, Andreas Tile!\n\nOn Mon, Feb 17, 2020 at 6:18 PM Michael Crusoe <michael.crusoe at gmail.com> wrote:\n\n> r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies of it.\n>\n>\n> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-statnet.common.git\n>\n>\n> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-network.git\n>\n>\n> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-sna.git\n>\n>\n> Thanks!\n>\n>\n> --\n> Michael R. Crusoe\n\n-- \nMichael R. Crusoe",
+      "body_snippet": "Thanks, Andreas Tile!\n\nOn Mon, Feb 17, 2020 at 6:18 PM Michael Crusoe <michael.crusoe at gmail.com> wrote:\n\n> r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies o",
+      "thread_id": "thread-90fec2e92875",
+      "thread_depth": 1,
+      "month": "2020-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-4cb7c2c766ec",
+      "subject": "Bug#949658: Different tests for r-cran-recipes - \"wrong\" test prevents migration of r-cran-testthat",
+      "message_count": 1,
+      "participants": [
+        "Graham Inggs"
+      ],
+      "started": "2020-02-01T09:10:49Z",
+      "last_reply": "2020-02-01T09:10:49Z",
+      "root_message_id": "msg-4cb7c2c766ec"
+    },
+    {
+      "id": "thread-2d2e3e9949e8",
+      "subject": "Test suite issue for BiocStyle",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-02-06T15:29:27Z",
+      "last_reply": "2020-02-06T15:29:27Z",
+      "root_message_id": "msg-2d2e3e9949e8"
+    },
+    {
+      "id": "thread-90fec2e92875",
+      "subject": "Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna",
+      "message_count": 2,
+      "participants": [
+        "Michael Crusoe"
+      ],
+      "started": "2020-02-17T17:18:53Z",
+      "last_reply": "2020-02-17T20:02:26Z",
+      "root_message_id": "msg-90fec2e92875"
+    }
+  ]
+}

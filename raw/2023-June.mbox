@@ -1,0 +1,1926 @@
+From andreas at an3as.eu  Thu Jun 22 11:56:16 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 22 Jun 2023 13:56:16 +0200
+Subject: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <25744.35458.107725.470604@rob.eddelbuettel.com>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com>
+Message-ID: <ZJQ24Elw6lk80hkB@an3as.eu>
+
+Hi Adrian and Dirk,
+
+thanks a lot to Adrian for taking the time to dig into R source code for
+a fix.
+
+Am Mon, Jun 19, 2023 at 12:04:02PM -0500 schrieb Dirk Eddelbuettel:
+> | > Not sure that it is fair to point at BH / Boost though.  Anyway.
+> | > 
+> | > CRAN no longer checks / compiles 32 bit so upstream may not care, but they
+> | > are a good team (if busy).  You could ping Ben, he is at
+> | >    Benjamin K Goodrich <benjamin.goodrich at columbia.edu>
+> | >...
+> | 
+> | The patch below to r-base fixes the build of r-cran-rstan/i386 for me.
+
+I really welcome your effort in this bug.  Thanks again.
+ 
+> Shucks:  You missed a new upstream by a few days.  I'll consider a -2 but
+> note that ...
+>  
+> | This will reduce debug info in the R ecosystem on 32bit to what is 
+> | required for backtraces, but I assume realistically R on 32bit is
+> | anyway only sparsely used these days.
+
+>>From all user responses I've got so far none of them is using 32bit (for
+years).
+
+> ... 32 bit is no longer a release architecture for R upstream so this is
+> borderline either way.
+
+>>From my point of view it is simply burning CPU cycles ouf our
+autobuilders network if we stick to the probably only theoretical option
+a user might use this package on some 32bit architecture.  So I tend to
+simply drop 32bit support for r-cran-rstan (and packages that depend
+from it which will end up in a bunch of removal bugs for ftpmaster but
+if I'm honest on my "save the environment and stop 32bit support for
+this" I need to do this).
+
+If someone thinks we should keep 32bit support and apply the patch
+suggested to r-base (which Dirk seems to be willing to) please speak
+up soonish (in the next two weeks).
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jun 22 16:36:02 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 22 Jun 2023 22:06:02 +0530
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <ZJQ24Elw6lk80hkB@an3as.eu>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu>
+Message-ID: <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org>
+
+On Thu, Jun 22, 2023 at 01:56:16PM +0200, Andreas Tille wrote:
+> If someone thinks we should keep 32bit support and apply the patch
+> suggested to r-base (which Dirk seems to be willing to) please speak
+> up soonish (in the next two weeks).
+
+I think we should keep 32-bit. Some reasons I can think of are:
+
+1. rstan has got a lot of reverse-build-deps and reverse-deps
+and those reversd-deps have further more of them. rstan is kind of an
+important package in that sense, and dropping 32-bit arch for this would
+mean filing arch specific rm bugs for a lot of R packages, and I'm quite
+un-happy with the amount of noise that it will potentially create.
+
+For instance:
+| $ reverse-depends r-cran-rstan
+| Reverse-Recommends
+| ==================
+| * r-cran-bayesplot
+| * r-cran-bayestestr
+| * r-cran-broom.mixed
+| * r-cran-mice [amd64 arm64 armel armhf i386 mips64el ppc64el s390x]
+| * r-cran-rstantools
+|
+| Reverse-Depends
+| ===============
+| * r-cran-brms
+| * r-cran-prophet [amd64 arm64 armel armhf i386 mips64el ppc64el s390x]
+| * r-cran-rstanarm [amd64 arm64 armel armhf i386 mips64el ppc64el s390x]
+| * r-cran-shinystan
+
+Oh, I see shinystan and stanarm, let's check for these...
+
+| $ reverse-depends r-cran-rstanarm -b
+| Reverse-Testsuite-Triggers
+| ==========================
+| * r-cran-bayesplot
+| * r-cran-broom.mixed
+| * r-cran-datawizard
+| * r-cran-ggeffects
+| * r-cran-insight
+| * r-cran-parameters
+| * r-cran-performance
+| * r-cran-projpred
+
+As you may see, the list will get long at some point.
+
+2. We recently packages shiny-server, and there are people who would
+like to run it on a single board computer (like rpi). On a quick search
+I even managed to find a blog post about the same[1]. Now, these run on
+debian armhf and armel mostly, therefore having r-packages support it
+would be good.
+
+3. Removing this package from 32-bit will increase quite a bit of
+entropy across many cran packages that we have with some of the packages
+supporting 32-bit and a bunch of packages that do not.
+
+I do not have a very strong opinion for keeping it, and if keeping
+32-bit support is making your life un-necessarily and extremely hard,
+drop it by all means. But I do think we should consider keeping support
+when it is a possibility.
+I'd have without a second thought agreed to have dropped support for a
+debian-med team package had you asked, since most of those packages are
+leaf packages and supporting 32-bit is irrelevant for most
+bioinformatics cases, but I do not think I could say the same about R.
+
+Let me know what you think.
+
+[1]: https://andresrcs.rbind.io/2022/09/05/shiny_rstudio_server/
+[2]: https://wiki.debian.org/RaspberryPi#Raspberry_Pi_3_.283.2C_3A.2B-.2C_3B.2B-.2C_Zero_2_W.29
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Thu Jun 22 19:20:47 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 22 Jun 2023 21:20:47 +0200
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu> <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org>
+Message-ID: <ZJSfD33dYRgWfKH8@an3as.eu>
+
+Hi Nilesh,
+
+Am Thu, Jun 22, 2023 at 10:06:02PM +0530 schrieb Nilesh Patra:
+> 1. rstan has got a lot of reverse-build-deps and reverse-deps
+> and those reversd-deps have further more of them. rstan is kind of an
+> important package in that sense, and dropping 32-bit arch for this would
+> mean filing arch specific rm bugs for a lot of R packages, and I'm quite
+> un-happy with the amount of noise that it will potentially create.
+
+I'm aware of this since I'm afraid sooner or later we have to go this
+step route.
+ 
+> As you may see, the list will get long at some point.
+> 
+> 2. We recently packages shiny-server, and there are people who would
+> like to run it on a single board computer (like rpi). On a quick search
+> I even managed to find a blog post about the same[1]. Now, these run on
+> debian armhf and armel mostly, therefore having r-packages support it
+> would be good.
+
+On the other hand that's a pretty good argument which is perfectly
+convincing for me.
+ 
+> 3. Removing this package from 32-bit will increase quite a bit of
+> entropy across many cran packages that we have with some of the packages
+> supporting 32-bit and a bunch of packages that do not.
+> 
+> I do not have a very strong opinion for keeping it, and if keeping
+> 32-bit support is making your life un-necessarily and extremely hard,
+> drop it by all means. But I do think we should consider keeping support
+> when it is a possibility.
+> I'd have without a second thought agreed to have dropped support for a
+> debian-med team package had you asked, since most of those packages are
+> leaf packages and supporting 32-bit is irrelevant for most
+> bioinformatics cases, but I do not think I could say the same about R.
+
+I confirm it makes perfectly sense to me to keep general R support for
+32bit.
+ 
+> Let me know what you think.
+
+I think you have a valid point to apply the patch that might save
+32bit support for rstan.
+
+Kind regards
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Thu Jun 22 20:45:28 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 22 Jun 2023 15:45:28 -0500
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu> <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org>
+Message-ID: <25748.45800.292597.727898@rob.eddelbuettel.com>
+
+Nilesh,
+
+But nobody suggested to turn 32bit builds for R off so it was not a question
+that needed adressing. Or did I miss something here?
+
+We do have _a_ package failing.  My first suggestion always is to talk to
+upstream (and I did so on June 13 in my first post on this bug report). Has
+anybody done that?
+
+If upstream does not want to 'own' this I concur that removeal is sensible
+even for a package with dependencies.  Stan is for power users on performant
+machines and these MCMC runs take a loooooong time. Turning i386 off is a
+sensible choice in my book.
+
+Best, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Thu Jun 22 23:47:23 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 23 Jun 2023 05:17:23 +0530
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <25748.45800.292597.727898@rob.eddelbuettel.com>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu> <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org> <25748.45800.292597.727898@rob.eddelbuettel.com>
+Message-ID: <20230622234723.ydweltfubyx7l5ug@office.mailbox.org>
+
+On Thu, Jun 22, 2023 at 03:45:28PM -0500, Dirk Eddelbuettel wrote:
+> But nobody suggested to turn 32bit builds for R off so it was not a question
+> that needed adressing. Or did I miss something here?
+
+Maybe my wording was a little confusing. I meant to keep the support for
+rstan by applying the patch (which Adrian supplied) to r-base.
+
+> If upstream does not want to 'own' this I concur that removeal is sensible
+> even for a package with dependencies.  Stan is for power users on performant
+> machines and these MCMC runs take a loooooong time. Turning i386 off is a
+> sensible choice in my book.
+
+I am okay with i386 in particular being dropped (there was recently a
+discussion to even drop i386 from debian), but not all 32-bit archs that
+we support. There are many packages where upstream does not own the
+same, and we still do support it on 32-bit archs in some way. The
+maintainence cost (with the patch) does not look very high to me, so I'd
+consider keeping the support for now.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at debian.org  Thu Jun 22 23:56:15 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 23 Jun 2023 05:26:15 +0530
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <20230622234723.ydweltfubyx7l5ug@office.mailbox.org>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu> <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org> <25748.45800.292597.727898@rob.eddelbuettel.com> <20230622234723.ydweltfubyx7l5ug@office.mailbox.org>
+Message-ID: <20230622235615.cyifomh6cl7kduq2@office.mailbox.org>
+
+On Fri, Jun 23, 2023 at 05:17:38AM +0530, Nilesh Patra wrote:
+> > Stan is for power users on performant
+> > machines and these MCMC runs take a loooooong time.
+
+Oh, and I forgot to address this. You are right ofcourse, and probably
+not a lot of people would be interested in running rstan on 32-bit -
+sure.
+However pruning this off 32-bit archsn would also mean
+removing a huge chunk of other R packages which transitively depend on rstan.
+As far as I checked, not all of them are intensive to run, and it is
+likely useful for people who use 32-bit archs in some way.
+ 
+> I am okay with i386 in particular being dropped (there was recently a
+> discussion to even drop i386 from debian), but not all 32-bit archs that
+> we support. There are many packages where upstream does not own the
+> same, and we still do support it on 32-bit archs in some way. The
+> maintainence cost (with the patch) does not look very high to me, so I'd
+> consider keeping the support for now.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Fri Jun 23 09:13:30 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 23 Jun 2023 11:13:30 +0200
+Subject: Re: Opinions about removal of 32bit architecture for r-cran-rstan (Was: Bug#1037439: r-cran-rstan/armhf FTBFS with r-cran-bh 1.74)
+In-Reply-To: <20230622235615.cyifomh6cl7kduq2@office.mailbox.org>
+References: <ZIeQ8PR5WizOCuyq@homer.dodds.net> <ZIjOeeIZ3lHkPjqK@homer.dodds.net> <25736.53722.568584.556495@rob.eddelbuettel.com> <ZJBaElV7htx0ulVS@localhost> <25744.35458.107725.470604@rob.eddelbuettel.com> <ZJQ24Elw6lk80hkB@an3as.eu> <20230622163602.zgxzdaoz2hygit3v@office.mailbox.org> <25748.45800.292597.727898@rob.eddelbuettel.com> <20230622234723.ydweltfubyx7l5ug@office.mailbox.org> <20230622235615.cyifomh6cl7kduq2@office.mailbox.org>
+Message-ID: <ZJViOvcWJatcDbGE@an3as.eu>
+
+Am Fri, Jun 23, 2023 at 05:26:15AM +0530 schrieb Nilesh Patra:
+> However pruning this off 32-bit archsn would also mean
+> removing a huge chunk of other R packages which transitively depend on rstan.
+> As far as I checked, not all of them are intensive to run, and it is
+> likely useful for people who use 32-bit archs in some way.
+
+... which is IMHO the best argument to apply the existing (thanks
+again to Adrian) patch.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Jun 26 20:21:22 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 26 Jun 2023 15:21:22 -0500
+Subject: Re: Bug#1039510: mvtnorm breaks r-cran-pammtools autopkgtest: missing Breaks and/or versioned (test) Depends?
+In-Reply-To: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org>
+References: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org>
+Message-ID: <25753.62274.592522.877617@rob.eddelbuettel.com>
+
+Hi Paul,
+
+I really appreciate the diligence and detail you put into this.
+
+But I would like to offer a simple shortcut.  I am also CCing debian-r again
+as this has come up time and time again, is guaranteed to come up again for
+as long as combine autopkgtests with letting packages go stake.
+
+Point 0: Trust CRAN.
+
+  CRAN *never* lets a package onto their repo in their (complete) reverse
+  depends checks reveal anything.
+
+  Ever.  (Unless a coordinated update is made.)
+
+  E.g. I just sent a patch to uwot (aka r-cran-uwot) because my RcppAnnoy
+  package (aka r-cran-rcppannoy) updated upstream annoy, introduces a C++
+  namespace in the header and breaks downstream compilation. So I altered
+  uwot accordingly (last week), waited a few days for the maintainer to
+  update it (big-ish package, he had other pending changes), it got onto CRAN
+  today so I likely send RcppAnnoy tomorrow.
+
+  CRAN very strongly believes in 'everything works at @HEAD' so if everything
+  is current, everything is generally installable at all times.  This is
+  unparalleled in open source. No other repo gives such guarantees. I have
+  worked with them as both package maintainer (for Debian) and upstream for
+  twenty years.  The trust is earned.
+
+Point 1: So check CRAN for the newly updated package
+
+  See
+    https://cloud.r-project.org/web/packages/mvtnorm/index.html
+  and esp the results aggregation
+    https://cloud.r-project.org/web/checks/check_results_mvtnorm.html
+  which is *pristine*.
+
+  So the smoke starts to come from our corners.
+
+Point 2: So check CRAN for borked package
+
+  See
+    https://cloud.r-project.org/web/packages/pammtools/index.html
+  and note how it was update in March and is at 0.5.91
+
+  Whereas we are at 0.5.8.
+
+So I think that is not a bug in mvtnorm aka r-cran-mvtnorm.
+
+You could of course ask me to add versioning info to r-cran-mvtnorm but as I
+strongly suspect that the issue goes away once pammtools aka r-cran-pammtools
+updates, I think that that would be the wrong way to go.
+
+Sorry for the long email but there **value** in CRAN. We would be foolish to
+ignore it.
+
+Cheers, Dirk
+ 
+
+On 26 June 2023 at 21:53, Paul Gevers wrote:
+| Source: mvtnorm, r-cran-pammtools
+| Control: found -1 mvtnorm/1.2-2-1
+| Control: found -1 r-cran-pammtools/0.5.8-1
+| Severity: serious
+| Tags: sid bookworm
+| User: debian-ci at lists.debian.org
+| Usertags: breaks needs-update
+| 
+| Dear maintainer(s),
+| 
+| With a recent upload of mvtnorm the autopkgtest of r-cran-pammtools 
+| fails in testing when that autopkgtest is run with the binary packages 
+| of mvtnorm from unstable. It passes when run with only packages from 
+| testing. In tabular form:
+| 
+|                         pass            fail
+| mvtnorm                from testing    1.2-2-1
+| r-cran-pammtools       from testing    0.5.8-1
+| versioned deps [0]     from testing    from unstable
+| all others             from testing    from testing
+| 
+| I note that with both versions from unstable the test also passes, which 
+| hints at either a missing *versioned* test dependency in 
+| r-cran-pammtools (if it *only* breaks the test), or missing versioned 
+| Breaks in mvtnorm *and* a missing versioned Depends in r-cran-pammtools 
+| if r-cran-pammtools is really broken with the wrong version of mvtnorm.
+| 
+| I copied some of the output at the bottom of this report.
+| 
+| Currently this regression is blocking both the migration of mvtnorm to 
+| testing [1] and the migration of r-cran-pammtools to testing [2]. Due to 
+| the nature of this issue, I filed this bug report against both packages. 
+| Can you please investigate the situation and reassign the bug to the 
+| right package?
+| 
+| More information about this bug and the reason for filing it can be found on
+| https://wiki.debian.org/ContinuousIntegration/RegressionEmailInformation
+| 
+| Paul
+| 
+| [0] You can see what packages were added from the second line of the log 
+| file quoted below. The migration software adds source package from 
+| unstable to the list if they are needed to install packages from 
+| mvtnorm/1.2-2-1. I.e. due to versioned dependencies or breaks/conflicts.
+| [1] https://qa.debian.org/excuses.php?package=mvtnorm
+| [2] https://qa.debian.org/excuses.php?package=r-cran-pammtools
+| 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-pammtools/34886689/log.gz
+| 
+|   46s BEGIN TEST testthat.R
+|   46s  46s R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+|   46s Copyright (C) 2023 The R Foundation for Statistical Computing
+|   46s Platform: x86_64-pc-linux-gnu (64-bit)
+|   46s  46s R is free software and comes with ABSOLUTELY NO WARRANTY.
+|   46s You are welcome to redistribute it under certain conditions.
+|   46s Type 'license()' or 'licence()' for distribution details.
+|   46s  46s R is a collaborative project with many contributors.
+|   46s Type 'contributors()' for more information and
+|   46s 'citation()' on how to cite R or R packages in publications.
+|   46s  46s Type 'demo()' for some demos, 'help()' for on-line help, or
+|   46s 'help.start()' for an HTML browser interface to help.
+|   46s Type 'q()' to quit R.
+|   46s  46s > Sys.setenv("R_TESTS" = "") # see 
+| https://github.com/hadley/testthat/issues/86
+|   46s > library(testthat)
+|   46s > library(checkmate)
+|   46s > library(dplyr)
+|   47s  47s Attaching package: ‘dplyr’
+|   47s  47s The following object is masked from ‘package:testthat’:
+|   47s  47s     matches
+|   47s  47s The following objects are masked from ‘package:stats’:
+|   47s  47s     filter, lag
+|   47s  47s The following objects are masked from ‘package:base’:
+|   47s  47s     intersect, setdiff, setequal, union
+|   47s  47s > library(purrr)
+|   47s  47s Attaching package: ‘purrr’
+|   47s  47s The following object is masked from ‘package:testthat’:
+|   47s  47s     is_null
+|   47s  47s > library(tidyr)
+|   47s  47s Attaching package: ‘tidyr’
+|   47s  47s The following object is masked from ‘package:testthat’:
+|   47s  47s     matches
+|   47s  47s > # library(pammtools)
+|   47s >  47s > test_check("pammtools")
+|   47s Loading required package: pammtools
+|   48s  48s Attaching package: ‘pammtools’
+|   48s  48s The following object is masked from ‘package:stats’:
+|   48s  48s     filter
+|   48s  59s [ FAIL 2 | WARN 8 | SKIP 0 | PASS 341 ]
+|   59s  59s ══ Failed tests 
+| ════════════════════════════════════════════════════════════════
+|   59s ── Error ('test-cumulative-effect.R:29'): LL helpers and as_ped 
+| produce equivalent LL windows ──
+|   59s Error in `vectbl_assign(x[[j]], i, recycled_value[[j]])`: DLL 
+| requires the use of native symbols
+|   59s Backtrace:
+|   59s      ▆
+|   59s   1. ├─pammtools::sim_pexp(...) at test-cumulative-effect.R:29:2
+|   59s   2. │ ├─base::suppressMessages(ped <- ped %>% 
+| left_join(reduce(df2, full_join)))
+|   59s   3. │ │ └─base::withCallingHandlers(...)
+|   59s   4. │ └─ped %>% left_join(reduce(df2, full_join))
+|   59s   5. ├─dplyr::left_join(., reduce(df2, full_join))
+|   59s   6. ├─pammtools:::left_join.ped(., reduce(df2, full_join))
+|   59s   7. │ └─pammtools:::ped_classes(y)
+|   59s   8. │   └─class(ped) %in% ...
+|   59s   9. └─purrr::reduce(df2, full_join)
+|   59s  10.   └─purrr:::reduce_impl(.x, .f, ..., .init = .init, .dir = .dir)
+|   59s  11.     ├─dplyr (local) fn(out, elt, ...)
+|   59s  12.     └─dplyr:::full_join.data.frame(out, elt, ...)
+|   59s  13.       └─dplyr:::join_mutate(...)
+|   59s  14.         ├─base::`[<-`(`*tmp*`, new_rows, names(y_key), value 
+| = `<tibble[,2]>`)
+|   59s  15.         └─tibble:::`[<-.tbl_df`(`*tmp*`, new_rows, 
+| names(y_key), value = `<tibble[,2]>`)
+|   59s  16.           └─tibble:::tbl_subassign(x, i, j, value, i_arg, 
+| j_arg, substitute(value))
+|   59s  17.             └─tibble:::tbl_subassign_row(xj, i, value, i_arg, 
+| value_arg)
+|   59s  18.               ├─base::withCallingHandlers(...)
+|   59s  19.               └─tibble:::vectbl_assign(x[[j]], i, 
+| recycled_value[[j]])
+|   59s ── Error ('test-simple-transform.R:50'): Transformation of regular 
+| survival data works ──
+|   59s Error in `vectbl_assign(x[[j]], i, recycled_value[[j]])`: DLL 
+| requires the use of native symbols
+|   59s Backtrace:
+|   59s     ▆
+|   59s  1. ├─base::`[<-`(`*tmp*`, 6, "days", value = `<dbl>`) at 
+| test-simple-transform.R:50:2
+|   59s  2. └─tibble:::`[<-.tbl_df`(`*tmp*`, 6, "days", value = `<dbl>`) 
+| at test-simple-transform.R:50:2
+|   59s  3.   └─tibble:::tbl_subassign(x, i, j, value, i_arg, j_arg, 
+| substitute(value))
+|   59s  4.     └─tibble:::tbl_subassign_row(xj, i, value, i_arg, value_arg)
+|   59s  5.       ├─base::withCallingHandlers(...)
+|   59s  6.       └─tibble:::vectbl_assign(x[[j]], i, recycled_value[[j]])
+|   59s  59s [ FAIL 2 | WARN 8 | SKIP 0 | PASS 341 ]
+|   59s Error: Test failures
+|   59s Execution halted
+|   60s autopkgtest [14:19:07]: test run-unit-test
+| 
+| x[DELETED ATTACHMENT OpenPGP_signature, application/pgp-signature]
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Tue Jun 27 18:08:49 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Tue, 27 Jun 2023 20:08:49 +0200
+Subject: Re: Bug#1039510: mvtnorm breaks r-cran-pammtools autopkgtest: missing Breaks and/or versioned (test) Depends?
+In-Reply-To: <25753.62274.592522.877617@rob.eddelbuettel.com>
+References: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org> <25753.62274.592522.877617@rob.eddelbuettel.com>
+Message-ID: <67ba1607-d962-9ba9-ba97-f86661c4df7d@debian.org>
+
+Hi Dirk,
+
+On 26-06-2023 22:21, Dirk Eddelbuettel wrote:
+> I really appreciate the diligence and detail you put into this.
+>
+> But I would like to offer a simple shortcut.  I am also CCing debian-r again
+> as this has come up time and time again, is guaranteed to come up again for
+> as long as combine autopkgtests with letting packages go stake.
+
+Somehow I feel you missed my point. In Debian we also care about 
+preventing partial upgrades doing the wrong thing. I explicitly noted 
+that in unstable everything is fine, so I think I acknowledge what you 
+said. However, for the migration to automatically happen and to 
+(possibly, I leave that for you (packages maintainers) to judge) prevent 
+issues with partial upgrades there needs to be some *versioned* package 
+relation somewhere.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Tue Jun 27 19:02:43 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 27 Jun 2023 14:02:43 -0500
+Subject: Re: Bug#1039510: mvtnorm breaks r-cran-pammtools autopkgtest: missing Breaks and/or versioned (test) Depends?
+In-Reply-To: <67ba1607-d962-9ba9-ba97-f86661c4df7d@debian.org>
+References: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org> <25753.62274.592522.877617@rob.eddelbuettel.com> <67ba1607-d962-9ba9-ba97-f86661c4df7d@debian.org>
+Message-ID: <25755.12883.829983.699792@rob.eddelbuettel.com>
+
+Hi Paul,
+
+On 27 June 2023 at 20:08, Paul Gevers wrote:
+| Hi Dirk,
+| 
+| On 26-06-2023 22:21, Dirk Eddelbuettel wrote:
+| > I really appreciate the diligence and detail you put into this.
+| > 
+| > But I would like to offer a simple shortcut.  I am also CCing debian-r again
+| > as this has come up time and time again, is guaranteed to come up again for
+| > as long as combine autopkgtests with letting packages go stake.
+| 
+| Somehow I feel you missed my point. In Debian we also care about 
+| preventing partial upgrades doing the wrong thing. I explicitly noted 
+| that in unstable everything is fine, so I think I acknowledge what you 
+| said. However, for the migration to automatically happen and to 
+| (possibly, I leave that for you (packages maintainers) to judge) prevent 
+| issues with partial upgrades there needs to be some *versioned* package 
+| relation somewhere.
+
+I am not a fan of accomodating outdated packages in Debian by means of
+imposed constraints _which then differ from perfectly viable and sane
+upstream uses_ and am not here for it.  Life is too short: just under 20k
+CRAN packages, (last I checked) just over 1k in Debian -- and once you allow
+for "random" package combination (which, I repeat, are untested upstream in
+these combinations) you essentially get yourself an infinity of possible
+combinations.  There lies madness.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Wed Jun 28 08:49:24 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 28 Jun 2023 10:49:24 +0200
+Subject: Re: Bug#1039510: mvtnorm breaks r-cran-pammtools autopkgtest: missing Breaks and/or versioned (test) Depends?
+In-Reply-To: <25755.12883.829983.699792@rob.eddelbuettel.com>
+References: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org> <25753.62274.592522.877617@rob.eddelbuettel.com> <67ba1607-d962-9ba9-ba97-f86661c4df7d@debian.org> <25755.12883.829983.699792@rob.eddelbuettel.com>
+Message-ID: <ZJv0FLKDIRjjyhsh@an3as.eu>
+
+Hi Paul,
+
+just as a hint for you who might have missed periodic blaming of Dirk
+about outdated R packages.
+
+Am Tue, Jun 27, 2023 at 02:02:43PM -0500 schrieb Dirk Eddelbuettel:
+> Life is too short:
+
+Yes, so I keep on updating r-cran- packages after freeze and save my
+time to repeat myself.
+
+Kind regards
+       Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jun 28 12:03:12 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 28 Jun 2023 14:03:12 +0200
+Subject: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl>
+Message-ID: <ZJwhgDWdoyaa45s4@an3as.eu>
+
+Hi Bas,
+
+(this is just an example bug out of a lot you filed)
+
+Am Wed, Jun 28, 2023 at 08:11:05AM +0200 schrieb Bas Couwenberg:
+>  189s   DLL requires the use of native symbols
+
+I wonder, whether all those bugs against single r-* packages are
+sensible.  As far as I can see we simply need a transition for
+this r-base upgrade.  Am I missing something?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Wed Jun 28 12:37:10 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 28 Jun 2023 07:37:10 -0500
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <ZJwhgDWdoyaa45s4@an3as.eu>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu>
+Message-ID: <25756.10614.858139.8465@rob.eddelbuettel.com>
+
+On 28 June 2023 at 14:03, Andreas Tille wrote:
+| Am Wed, Jun 28, 2023 at 08:11:05AM +0200 schrieb Bas Couwenberg:
+| >  189s   DLL requires the use of native symbols
+| 
+| I wonder, whether all those bugs against single r-* packages are
+| sensible.  
+
+Yes they are. Those are bugs in the packages holding up the r-base package.
+So I appreciate e.g. the bug report #1039633 against r-bioc-bioccheck which
+happens to be the first package in the absurdly long list of 'excuses'
+against r-base. (I didn't bother checking all other ones. I clicked on one or
+two, they do not make sense to me.)
+
+| As far as I can see we simply need a transition for this r-base upgrade.
+| Am I missing something?
+
+We go through this each release cycle. You believe you know R and CRAN
+packages better than R Core and CRAN.  Generally speaking, that is not true.
+
+We do find occassional bugs because we run a wider hardware span but most of
+the time we are just creating busy work for ourselve.
+
+Dirk
+
+PS I continue to note that you can in fact trust CRAN if you do your homework
+and don't randomly mix current and not-current packages. An illustration is
+provided by r2u project which contains about 2 x 20k binaries (for amd64)
+covering each of the two most recent LTS releases as full `apt` binaries. It
+can be done.  See https://eddelbuettel.github.io/r2u. It had shipped over 5
+million .deb packages in just over a year, and ships at least 10k each
+day. Lots of automated CI jobs run it each day. You *can* and *should* trust
+the CRAN dependency network.
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Wed Jun 28 14:48:57 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 28 Jun 2023 20:18:57 +0530
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <ZJwhgDWdoyaa45s4@an3as.eu>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu>
+Message-ID: <20230628144857.zeteawv7xssf4v4n@office.mailbox.org>
+
+[[ Keeping only R list in CC ]]
+
+Hi Andreas,
+
+On Wed, Jun 28, 2023 at 02:03:12PM +0200, Andreas Tille wrote:
+> (this is just an example bug out of a lot you filed)
+> 
+> Am Wed, Jun 28, 2023 at 08:11:05AM +0200 schrieb Bas Couwenberg:
+> >  189s   DLL requires the use of native symbols
+> 
+> I wonder, whether all those bugs against single r-* packages are
+> sensible.  As far as I can see we simply need a transition for
+> this r-base upgrade.  Am I missing something?
+
+You are correct. A transition is all we need. However, in case of
+r-cran-epi simply adding a versioned dep on dplyr should do the trick.
+(epi is not a failure in excuses for dplyr).
+
+I think this particular bug is sensible because without these versioned
+depends, epi will fail it's tests (for instance while backporting). We
+can go on closing these BRs on the fly. It would also help you track all
+the dependencies a bit better.
+
+PS: Do you need a hand with this transition?
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sebastien at debian.org  Wed Jun 28 15:07:14 2023
+From: sebastien at debian.org (=?utf-8?q?S=C3=A9bastien_Villemot?=)
+Date: Wed, 28 Jun 2023 17:07:14 +0200
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <20230628144857.zeteawv7xssf4v4n@office.mailbox.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org>
+Message-ID: <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org>
+
+Le mercredi 28 juin 2023 à 20:18 +0530, Nilesh Patra a écrit :
+> On Wed, Jun 28, 2023 at 02:03:12PM +0200, Andreas Tille wrote:
+> > Am Wed, Jun 28, 2023 at 08:11:05AM +0200 schrieb Bas Couwenberg:
+> > >  189s   DLL requires the use of native symbols
+> > 
+> > I wonder, whether all those bugs against single r-* packages are
+> > sensible.  As far as I can see we simply need a transition for
+> > this r-base upgrade.  Am I missing something?
+> 
+> You are correct. A transition is all we need. However, in case of
+> r-cran-epi simply adding a versioned dep on dplyr should do the trick.
+> (epi is not a failure in excuses for dplyr).
+> 
+> I think this particular bug is sensible because without these versioned
+> depends, epi will fail it's tests (for instance while backporting). We
+> can go on closing these BRs on the fly. It would also help you track all
+> the dependencies a bit better.
+
+The question to answer to determine whether a transition is needed is
+the following: are CRAN packages compiled against R 4.2 binary-
+compatible with R 4.3? Or do they need a rebuild to work with 4.3?
+
+If a rebuild is needed, then this means that we have to go through a
+proper transition (involving the Release Team).
+
+I note that the r-base-core package Provides the virtual package r-api-
+4.0 in both versions 4.2 and 4.3. So in essence, the fact that this
+Provides field has not been updated indicates that a transition is not
+needed.
+
+If it turns out that a transition is needed, then the first step is to
+change the Provides field of r-base-core to something like r-api-4.3.
+
+Cheers,
+
+-- 
+⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot
+⣾⠁⢠⠒⠀⣿⡁  Debian Developer
+⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name
+⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From edd at debian.org  Wed Jun 28 15:24:11 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 28 Jun 2023 10:24:11 -0500
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org>
+Message-ID: <25756.20635.852693.619550@rob.eddelbuettel.com>
+
+Séb,
+
+On 28 June 2023 at 17:07, Sébastien Villemot wrote:
+| The question to answer to determine whether a transition is needed is
+| the following: are CRAN packages compiled against R 4.2 binary-
+| compatible with R 4.3? Or do they need a rebuild to work with 4.3?
+
+They are. There is no binary API transition, just as there wasn't from R 4.0
+to 4.1, or from 4.1 to 4.2.  (And as before they cheated _a little_ and
+changes the graphics API so the likes of agg, ggplot2, ... need a rebuild.)
+
+| If a rebuild is needed, then this means that we have to go through a
+| proper transition (involving the Release Team).
+| 
+| I note that the r-base-core package Provides the virtual package r-api-
+| 4.0 in both versions 4.2 and 4.3. So in essence, the fact that this
+| Provides field has not been updated indicates that a transition is not
+| needed.
+
+Correct, and fully agreed (now with my 'r-base maintainer' hat on).
+
+If dply / tidyverse break other packages (as Nilesh implied) then maybe that
+package needs a transition.  But I don't see value in pointing fingers at
+r-base when it demonstrably does not have an issue.
+
+| If it turns out that a transition is needed, then the first step is to
+| change the Provides field of r-base-core to something like r-api-4.3.
+
+We do not need to.  I should email Paul Murrell and ask him "to predict the
+future" and see if the graphics API will regularly change and we could add an
+r-graphics-api-* tag in the future.
+
+It is pretty far from R 4.4.*.  If I were a betting man I'd say chances for
+an API break increase as times goes on (we had one maybe every five-ish
+years) but then again there have not been any great changes inside R. I run
+r-devel (the branch forming the next release) just as many other (R-) package
+developers do and will know soon enough coming up to R 4.4.0 next April.
+
+But there is no current fire to extenguish here.
+
+Amicalement,  Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Wed Jun 28 15:25:14 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 28 Jun 2023 20:55:14 +0530
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org>
+Message-ID: <20230628152514.ch4suh2bn7zauo2c@office.mailbox.org>
+
+On Wed, Jun 28, 2023 at 05:07:14PM +0200, Sébastien Villemot wrote:
+> The question to answer to determine whether a transition is needed is
+> the following: are CRAN packages compiled against R 4.2 binary-
+> compatible with R 4.3? Or do they need a rebuild to work with 4.3?
+
+Looking at the NEWS section of R release here[1] gives me the impression
+that a bunch of things have changed between 4.2->4.3 so most definitely,
+a few CRAN packages need recompilation. To pick out one instance of it,
+the doc says:
+
+| GRAPHICS:
+| • The graphics engine version, R_GE_version, has been bumped to 16 and so packages
+| that provide graphics devices should be reinstalled.
+
+This is a good indication that packages in debian that use graphics API
+(like cairo or ggplot) which are compiled against 4.2 would not work
+with the new 4.3, which is also confirmed from the autopkgtest failures
+for the same.
+
+> If a rebuild is needed, then this means that we have to go through a
+> proper transition (involving the Release Team).
+
+I agree that doing binNMU for arch:any packages that need re-building
+makes sense. However, in a few cases these packages also have a new
+upstream release, which is compatible with a new r-base release.
+Hence, we have to go ahead and update then anyway.
+
+That said, I don't have a clear answer about the specific cases since I
+never really did a proper binNMU-esque analysis (i.e. re-build older
+versions and see if rest things work) for the packages in
+question.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sebastien at debian.org  Wed Jun 28 15:33:31 2023
+From: sebastien at debian.org (=?utf-8?q?S=C3=A9bastien_Villemot?=)
+Date: Wed, 28 Jun 2023 17:33:31 +0200
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <25756.20635.852693.619550@rob.eddelbuettel.com>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org> <25756.20635.852693.619550@rob.eddelbuettel.com>
+Message-ID: <f8eed28428f1ed87d458618f13c83ddca11ceaee.camel@debian.org>
+
+Thanks Dirk for the clarification.
+
+Le mercredi 28 juin 2023 à 10:24 -0500, Dirk Eddelbuettel a écrit :
+> On 28 June 2023 at 17:07, Sébastien Villemot wrote:
+> > The question to answer to determine whether a transition is needed is
+> > the following: are CRAN packages compiled against R 4.2 binary-
+> > compatible with R 4.3? Or do they need a rebuild to work with 4.3?
+> 
+> They are. There is no binary API transition, just as there wasn't from R 4.0
+> to 4.1, or from 4.1 to 4.2.  (And as before they cheated _a little_ and
+> changes the graphics API so the likes of agg, ggplot2, ... need a rebuild.)
+
+Well, so there is some ABI change, and some rebuilds needed.
+
+Since we currently have no way to distinguish between the graphics
+packages and the other ones (until we implement the r-graphics-api-*
+tag that you suggest), I’m sorry to say that this implies that a proper
+transition is needed from Debian’s point of view.
+
+The Release Team will not accept to just binNMU the graphics packages,
+because partial upgrades will be broken (i.e. it will still be possible
+to install r-base 4.3 and a non-rebuilt graphics CRAN package, a
+combination which is broken but not forbidden by the dependency
+system).
+
+Of course we could cheat and do source uploads of the affected CRAN
+packages, but that would go against good practices and our quality
+standards.
+
+Cheers,
+
+-- 
+⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot
+⣾⠁⢠⠒⠀⣿⡁  Debian Developer
+⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name
+⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From edd at debian.org  Wed Jun 28 15:33:43 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 28 Jun 2023 10:33:43 -0500
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <20230628152514.ch4suh2bn7zauo2c@office.mailbox.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org> <20230628152514.ch4suh2bn7zauo2c@office.mailbox.org>
+Message-ID: <25756.21207.239053.203237@rob.eddelbuettel.com>
+
+On 28 June 2023 at 20:55, Nilesh Patra wrote:
+| Looking at the NEWS section of R release here[1] gives me the impression
+| that a bunch of things have changed between 4.2->4.3 so most definitely,
+| a few CRAN packages need recompilation. To pick out one instance of it,
+| the doc says:
+| 
+| | GRAPHICS:
+| | • The graphics engine version, R_GE_version, has been bumped to 16 and so packages
+| | that provide graphics devices should be reinstalled.
+| 
+| This is a good indication that packages in debian that use graphics API
+| (like cairo or ggplot) which are compiled against 4.2 would not work
+| with the new 4.3, which is also confirmed from the autopkgtest failures
+| for the same.
+
+That is correct, and someone (on one of the R lists) posted a search query eg
+for GitHub's 'cran' org which is de facto a mirror of CRAN (and a superset as
+CRAN retires packages but that org does not delete them).  If we can batch
+search our git repo you can find them too.  For r2u I think I only needed to
+explicitly rebuild svglite and ragg but I didn't keep notes.  
+ 
+| I agree that doing binNMU for arch:any packages that need re-building
+| makes sense. However, in a few cases these packages also have a new
+| upstream release, which is compatible with a new r-base release.
+| Hence, we have to go ahead and update then anyway.
+
+That has always been my pragmatic take. Given the freeze many packages need
+either a catch up if they lag, or a rebuild from experimental. I did that for
+mine. 
+ 
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Wed Jun 28 20:10:47 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 28 Jun 2023 22:10:47 +0200
+Subject: Re: Seems we need a transition for r-base instead of lots of single bugs against single packages (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <25756.21207.239053.203237@rob.eddelbuettel.com>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <fc5b2b8b19f99b59a1d4c0f258634636136c31b6.camel@debian.org> <20230628152514.ch4suh2bn7zauo2c@office.mailbox.org> <25756.21207.239053.203237@rob.eddelbuettel.com>
+Message-ID: <ZJyTx9JTuE2ZXpIl@an3as.eu>
+
+Hi Dirk,
+
+Am Wed, Jun 28, 2023 at 10:33:43AM -0500 schrieb Dirk Eddelbuettel:
+> | | GRAPHICS:
+> | | • The graphics engine version, R_GE_version, has been bumped to 16 and so packages
+> | | that provide graphics devices should be reinstalled.
+> | 
+> | This is a good indication that packages in debian that use graphics API
+> | (like cairo or ggplot) which are compiled against 4.2 would not work
+> | with the new 4.3, which is also confirmed from the autopkgtest failures
+> | for the same.
+> 
+> That is correct, and someone (on one of the R lists) posted a search query eg
+> for GitHub's 'cran' org which is de facto a mirror of CRAN (and a superset as
+> CRAN retires packages but that org does not delete them).  If we can batch
+> search our git repo you can find them too.
+
+This query would be helpful.  Do you have any link.
+  
+> | I agree that doing binNMU for arch:any packages that need re-building
+> | makes sense. However, in a few cases these packages also have a new
+> | upstream release, which is compatible with a new r-base release.
+> | Hence, we have to go ahead and update then anyway.
+> 
+> That has always been my pragmatic take. Given the freeze many packages need
+> either a catch up if they lag, or a rebuild from experimental. I did that for
+> mine. 
+
+As the bug reports show not only outdated packages are affected.  We
+have also bug reports with race conditions between the actual upload and
+the bug filed.  You can take for granted that I'm busy with the post
+release upgrade.  BioC transition is pending as well but I wanted to
+cleanup CRAN first - just with the speed I can approach for the amount
+of work (@Nilesh and others help is welcome as always).
+
+Thanks for becoming constructive again.  I'd be happy if you could skip
+the offenses in your initial response in the future.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jun 29 05:17:48 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 29 Jun 2023 10:47:48 +0530
+Subject: Re: Bug#1039510: mvtnorm breaks r-cran-pammtools autopkgtest: missing Breaks and/or versioned (test) Depends?
+In-Reply-To: <ZJv0FLKDIRjjyhsh@an3as.eu>
+References: <7df39c17-2c68-916b-209b-a0a34e0b4410@debian.org> <25753.62274.592522.877617@rob.eddelbuettel.com> <67ba1607-d962-9ba9-ba97-f86661c4df7d@debian.org> <25755.12883.829983.699792@rob.eddelbuettel.com> <ZJv0FLKDIRjjyhsh@an3as.eu>
+Message-ID: <20230629051748.aabsndxc4ry7nhp4@office.mailbox.org>
+
+Dirk, Andreas,
+
+On Wed, Jun 28, 2023 at 10:49:24AM +0200, Andreas Tille wrote:
+> Yes, so I keep on updating r-cran- packages after freeze and save my
+> time to repeat myself.
+
+I probably should not be the one to add fuel to the fire, but allow me
+to present some statistics.
+The debian R team team currently has 1151 packages, and at the time of
+writing this mail, there are only 2-3 volunteers who do the job of
+maintaining this chunk of work, which means each volunteer is
+maintaining at least ~384 packages just in the R team (and I'm speaking
+this in the context of team uploads, and not according to the name
+mentioned in uploaders field). Here's upload stats[2].
+
+In addition to that, the said volunteers are also maintaining packages
+in other debian teams. For instance, my packages span across ~10-12
+different teams, and same goes for Andreas. On top of that, there's also
+RFP requests from people and we have to constantly work on packaging new
+and relevant software for debian.
+
+@Dirk, you, on the other hand have most of the packages you maintain out
+of maintainer teams, and as far as I can see, you currently have 179
+packages[3], and you mostly upload only those packages, so it is likely easier
+to bring them to cran latest at most times. I'm not trying to
+draw any comparison, but only stating facts.
+
+As you may see, the load that's on each volunteer is quite a lot, and it
+gets humanely impossible to keep all those number of packages into an
+updated state. We'd love to be at versions that CRAN (or bioconductor)
+is at currently, but there simply aren't enough cycles most of the
+times.
+
+I'd also like to point out that despite the constraints,
+during the past year, the number of stale packages were
+consistently less than '30' which is ~CRAN latest.
+
+Now is an anomally because freeze just ended, and there's a huge delta.
+
+[1]: https://qa.debian.org/developer.php?email=r-pkg-team at alioth-lists.debian.net
+[2]: http://blends.debian.net/liststats/uploaders_r-pkg.png
+[3]: https://qa.debian.org/developer.php?login=edd&comaint=yes
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Thu Jun 29 09:00:42 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 29 Jun 2023 11:00:42 +0200
+Subject: Re: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1)
+In-Reply-To: <20230628144857.zeteawv7xssf4v4n@office.mailbox.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org>
+Message-ID: <ZJ1IOpTCdKzspZZQ@an3as.eu>
+
+Am Wed, Jun 28, 2023 at 08:18:57PM +0530 schrieb Nilesh Patra:
+> You are correct. A transition is all we need. However, in case of
+> r-cran-epi simply adding a versioned dep on dplyr should do the trick.
+> (epi is not a failure in excuses for dplyr).
+
+Why exactly do you think that actually dplyr should receive a versioned
+Depends.  It is not specified in DESCRIPTION explicitly and before I
+change d/control to something which is not reproduced by dh-update-R I
+would love to understand the background of your suggestion.  Is it just
+because r-cran-dplyr belongs to the affected packages in the graphics
+API that was mentioned by Dirk?
+ 
+> I think this particular bug is sensible because without these versioned
+> depends, epi will fail it's tests (for instance while backporting).
+
+Why do you think so?
+
+> We
+> can go on closing these BRs on the fly. It would also help you track all
+> the dependencies a bit better.
+
+But what means "better".  For the moment we strictly trust DESCRIPTION.
+If the DESCRIPTION file would be wrong I'd rather file an upstream bug
+report to add the versioned dependency there.
+ 
+> PS: Do you need a hand with this transition?
+
+I'm hoping to fight through r-cran-* as far as no new packages are
+involved.  I've droped some TODOs inside d/changelog of packages that
+need deeper inspection.  I'm currently need to care for r-cran-[t-z]*.
+Packages higher in alphabeth either have issues or had new releases
+since I was there in the last two weeks,
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jun 29 09:22:34 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 29 Jun 2023 14:52:34 +0530
+Subject: Re: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1)
+In-Reply-To: <ZJ1IOpTCdKzspZZQ@an3as.eu>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <ZJ1IOpTCdKzspZZQ@an3as.eu>
+Message-ID: <20230629092234.b5y2w3e36ve2roq4@office.mailbox.org>
+
+On Thu, Jun 29, 2023 at 11:00:42AM +0200, Andreas Tille wrote:
+> Am Wed, Jun 28, 2023 at 08:18:57PM +0530 schrieb Nilesh Patra:
+> > You are correct. A transition is all we need. However, in case of
+> > r-cran-epi simply adding a versioned dep on dplyr should do the trick.
+> > (epi is not a failure in excuses for dplyr).
+> 
+> Why exactly do you think that actually dplyr should receive a versioned
+> Depends.  It is not specified in DESCRIPTION explicitly and before I
+> change d/control to something which is not reproduced by dh-update-R
+
+I don't know where you are looking, but it is very clearly mentioned in
+the imports in in the DESCRIPTION file
+
+	https://salsa.debian.org/r-pkg-team/r-cran-epi/-/blob/master/DESCRIPTION#L12
+
+It is also mentioned in the d/control (by you)
+
+	https://salsa.debian.org/r-pkg-team/r-cran-epi/-/blob/master/debian/control#L19
+
+> I would love to understand the background of your suggestion.  Is it just
+> because r-cran-dplyr belongs to the affected packages in the graphics
+> API that was mentioned by Dirk?
+
+See above. Also, logs like
+
+| 190s Error:  chunk 16
+| 190s Error in vectbl_assign(x[[j]], i, recycled_value[[j]]) :
+| 190s   DLL requires the use of native symbols
+| 190s Execution halted
+
+Point towards an ABI change, and dplyr from testing has been used in the CI
+
+| 216s Selecting previously unselected package r-cran-dplyr.
+| 216s Preparing to unpack .../091-r-cran-dplyr_1.0.10-1_amd64.deb ...
+| 216s Unpacking r-cran-dplyr (1.0.10-1) ...
+
+In addition to that, r-cran-epi is not mentioned in the excuses for
+dplyr
+
+	https://qa.debian.org/excuses.php?package=r-cran-dplyr
+
+So it is apparent that a versioned dep on dplyr is needed.
+
+> > I think this particular bug is sensible because without these versioned
+> > depends, epi will fail it's tests (for instance while backporting).
+> 
+> Why do you think so?
+
+r-cran-epi is an arch:any package that has been built against a new R
+version. It needs a version of dplyr that has also been built against
+the same R version due to graphics API changes.
+
+> > We
+> > can go on closing these BRs on the fly. It would also help you track all
+> > the dependencies a bit better.
+> 
+> But what means "better". 
+
+Well, looking at the bugs can help you track versioned deps better. But
+ignore my suggestion if that is not the case here, I won't argue.
+
+> For the moment we strictly trust DESCRIPTION.
+> If the DESCRIPTION file would be wrong I'd rather file an upstream bug
+> report to add the versioned dependency there.
+
+There's nothing that upstream can do in such a situation. This is a
+condition induced due to a transition in debian.
+
+> > PS: Do you need a hand with this transition?
+> 
+> I'm hoping to fight through r-cran-* as far as no new packages are
+> involved.  I've droped some TODOs inside d/changelog of packages that
+> need deeper inspection.  I'm currently need to care for r-cran-[t-z]*.
+> Packages higher in alphabeth either have issues or had new releases
+> since I was there in the last two weeks,
+
+OK. Let me know if you need help.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Thu Jun 29 09:59:45 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 29 Jun 2023 11:59:45 +0200
+Subject: Re: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1)
+In-Reply-To: <20230629092234.b5y2w3e36ve2roq4@office.mailbox.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <ZJ1IOpTCdKzspZZQ@an3as.eu> <20230629092234.b5y2w3e36ve2roq4@office.mailbox.org>
+Message-ID: <ZJ1WEQYgdmMOVN44@an3as.eu>
+
+Hi Nilesh,
+
+Am Thu, Jun 29, 2023 at 02:52:34PM +0530 schrieb Nilesh Patra:
+> > 
+> > Why exactly do you think that actually dplyr should receive a versioned
+                                                                  ^^^^^^^^^
+
+> > Depends.  It is not specified in DESCRIPTION explicitly and before I
+> > change d/control to something which is not reproduced by dh-update-R
+> 
+> I don't know where you are looking, but it is very clearly mentioned in
+> the imports in in the DESCRIPTION file
+> 
+> 	https://salsa.debian.org/r-pkg-team/r-cran-epi/-/blob/master/DESCRIPTION#L12
+> 
+> It is also mentioned in the d/control (by you)
+> 
+> 	https://salsa.debian.org/r-pkg-team/r-cran-epi/-/blob/master/debian/control#L19
+
+Sure.  My point was the *versioned* Depends.  It is included without any
+version.
+ 
+> > I would love to understand the background of your suggestion.  Is it just
+> > because r-cran-dplyr belongs to the affected packages in the graphics
+> > API that was mentioned by Dirk?
+> 
+> See above. Also, logs like
+> 
+> | 190s Error:  chunk 16
+> | 190s Error in vectbl_assign(x[[j]], i, recycled_value[[j]]) :
+> | 190s   DLL requires the use of native symbols
+> | 190s Execution halted
+> 
+> Point towards an ABI change, and dplyr from testing has been used in the CI
+
+Yes, I understand that a versioned depends of dplyr would avoid trying
+to pick the version from testing.  But this should be dealt by a
+transition rather than picking a "random" (??? - that is my question
+about) package from the dependencies and make it versioned.
+ 
+> | 216s Selecting previously unselected package r-cran-dplyr.
+> | 216s Preparing to unpack .../091-r-cran-dplyr_1.0.10-1_amd64.deb ...
+> | 216s Unpacking r-cran-dplyr (1.0.10-1) ...
+> 
+> In addition to that, r-cran-epi is not mentioned in the excuses for
+> dplyr
+> 
+> 	https://qa.debian.org/excuses.php?package=r-cran-dplyr
+> 
+> So it is apparent that a versioned dep on dplyr is needed.
+
+I confirm that this would help the Debian migration case.  However, I
+was trying to backup this case by any R codebase reason.  If we fiddle
+around with versioned Depends to work around a transition issue this
+will end up in a lot of manual work,
+
+I also fail to see your point in the importance of backports.
+ 
+> > > I think this particular bug is sensible because without these versioned
+> > > depends, epi will fail it's tests (for instance while backporting).
+> > 
+> > Why do you think so?
+> 
+> r-cran-epi is an arch:any package that has been built against a new R
+> version. It needs a version of dplyr that has also been built against
+> the same R version due to graphics API changes.
+
+Which is the case in unstable, isn't it?  Both are built against the new
+graphics API and I fail to see in how far dplyr and epi are in any way
+special compared for those lots of other R packages with bug reports.
+ 
+> > > We
+> > > can go on closing these BRs on the fly. It would also help you track all
+> > > the dependencies a bit better.
+> > 
+> > But what means "better". 
+> 
+> Well, looking at the bugs can help you track versioned deps better. But
+> ignore my suggestion if that is not the case here, I won't argue.
+
+Its not about ignoring your suggestion.  I simply want to understand it
+to apply it properly.  As far as I can see those versioned Depends do
+not have any internal reason when considering the R code.  They would be
+helpful to solve the trouble we are in now due a not properly announced
+transition.
+
+Every new upload of those packages of those packages that will be done
+with routine-update will remove those versioned depends again (which is
+correct IMHO) and we will end up in a manual upgrade mess.
+ 
+> > For the moment we strictly trust DESCRIPTION.
+> > If the DESCRIPTION file would be wrong I'd rather file an upstream bug
+> > report to add the versioned dependency there.
+> 
+> There's nothing that upstream can do in such a situation. This is a
+> condition induced due to a transition in debian.
+
+Ahhh, OK.  Here we agree.
+
+So we need to decide what to do.  I'm in favour of making either a full
+transition or we try to implement the r-graphics-api-* Suggestion[1].  I
+personally prefer the later one since its more clean and affects less
+packages.
+ 
+> OK. Let me know if you need help.
+
+Thanks a lot.
+
+Kind regards
+    Andreas.
+
+[1] https://lists.debian.org/debian-r/2023/06/msg00017.html
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jun 29 10:29:59 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 29 Jun 2023 15:59:59 +0530
+Subject: Re: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1)
+In-Reply-To: <ZJ1WEQYgdmMOVN44@an3as.eu>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <ZJ1IOpTCdKzspZZQ@an3as.eu> <20230629092234.b5y2w3e36ve2roq4@office.mailbox.org> <ZJ1WEQYgdmMOVN44@an3as.eu>
+Message-ID: <20230629102959.kwdiwmsjpdqqxkqy@office.mailbox.org>
+
+On Thu, Jun 29, 2023 at 11:59:45AM +0200, Andreas Tille wrote:
+> > See above. Also, logs like
+> > 
+> > | 190s Error:  chunk 16
+> > | 190s Error in vectbl_assign(x[[j]], i, recycled_value[[j]]) :
+> > | 190s   DLL requires the use of native symbols
+> > | 190s Execution halted
+> > 
+> > Point towards an ABI change, and dplyr from testing has been used in the CI
+> 
+> Yes, I understand that a versioned depends of dplyr would avoid trying
+> to pick the version from testing.  But this should be dealt by a
+> transition rather than picking a "random" (??? - that is my question
+> about) package from the dependencies and make it versioned.
+
+Yes, but at the moment AFAICS, there's no transition going on for R from
+release team side, or am I missing something? I don't see any such
+request here, at least
+
+	https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-release at lists.debian.org
+
+Why do you think it will fix itself?
+
+OR, are you treating "testing migration" as "transition", and using them
+interchangeably? (Please use words accurately in this context if that is
+the case, it can quickly lead to confusions like these).
+
+Yes, it can be fixed by a testing migration of both, r-base *and* dplyr, but
+it will simply not migrate to testing since it'd build against a version of dplyr in
+testing. You need to make it versioned to pickup the one from unstable
+OR ask the release team to trigger debci with deps from unstable, which
+they only do on a case-by-case basis.
+
+> > | 216s Selecting previously unselected package r-cran-dplyr.
+> > | 216s Preparing to unpack .../091-r-cran-dplyr_1.0.10-1_amd64.deb ...
+> > | 216s Unpacking r-cran-dplyr (1.0.10-1) ...
+> > 
+> > In addition to that, r-cran-epi is not mentioned in the excuses for
+> > dplyr
+> > 
+> > 	https://qa.debian.org/excuses.php?package=r-cran-dplyr
+> > 
+> > So it is apparent that a versioned dep on dplyr is needed.
+> 
+> I confirm that this would help the Debian migration case.  However, I
+> was trying to backup this case by any R codebase reason.
+
+I think that's currently not a possibility w/o a proper release
+transition / release-team coordinated transition. You can't get around
+avoiding this work here, unfortunately.
+
+> If we fiddle around with versioned Depends to work around a transition issue this
+> will end up in a lot of manual work,
+
+I did quite a lot of manual work for past R migrations. I
+remember handling such migration issues for past R migration to testing.
+You might not have noticed it because I did the uploads quickly after
+the said failures.
+
+> I also fail to see your point in the importance of backports.
+
+If we happen to backport R, dplyr (built against backported R) and epi
+someday, a versioned depends like this will help to get the
+autopkgtests passing and epi working in backports.
+
+But yes, this has got nothing to do with r-cran-epi or r-cran-dplyr specific "code changes"
+as such.
+
+> Which is the case in unstable, isn't it?  Both are built against the new
+> graphics API and I fail to see in how far dplyr and epi are in any way
+> special compared for those lots of other R packages with bug reports.
+
+They need to be re-compiled versions of one-another.
+
+> Its not about ignoring your suggestion.  I simply want to understand it
+> to apply it properly.  As far as I can see those versioned Depends do
+> not have any internal reason when considering the R code. 
+
+I agree, it is not about the code changes, but rather about the API
+changes at a toolchain level. I think the BRs are helpful in this
+particular case of r-base transition to 4.3.1 (but mayn't be in general).
+
+> They would be helpful to solve the trouble we are in now due a not properly announced
+> transition.
+
+I think we are trying to speak of the same things in different ways, and
+we seem to be in agreement.
+
+To answer your question - I don't think there's anyway to avoid trouble
+with un-announced r-base uploads. Like every other major
+package (like for instance htslib in debian-med). A proper binNMU
+transition coordinated with the release team is the way to go.
+Randomly bumping a whole compiler will inevitably lead to a situation we
+are currently in.
+
+> So we need to decide what to do.  I'm in favour of making either a full
+> transition or we try to implement the r-graphics-api-* Suggestion[1].  I
+> personally prefer the later one since its more clean and affects less
+> packages.
+
+Absolutely, I agree that[1] is the way to go.
+
+> [1] https://lists.debian.org/debian-r/2023/06/msg00017.html
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Thu Jun 29 11:43:07 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 29 Jun 2023 13:43:07 +0200
+Subject: What kind of transition do we want (Was: Bug#1039645: r-cran-epi: autopkgtest failure with r-base (4.3.1-1))
+In-Reply-To: <20230629102959.kwdiwmsjpdqqxkqy@office.mailbox.org>
+References: <168793266559.4119196.12730118219926646903.reportbug@osiris.linuxminded.xs4all.nl> <ZJwhgDWdoyaa45s4@an3as.eu> <20230628144857.zeteawv7xssf4v4n@office.mailbox.org> <ZJ1IOpTCdKzspZZQ@an3as.eu> <20230629092234.b5y2w3e36ve2roq4@office.mailbox.org> <ZJ1WEQYgdmMOVN44@an3as.eu> <20230629102959.kwdiwmsjpdqqxkqy@office.mailbox.org>
+Message-ID: <ZJ1uS18FrMTAA87t@an3as.eu>
+
+Am Thu, Jun 29, 2023 at 03:59:59PM +0530 schrieb Nilesh Patra:
+> > to pick the version from testing.  But this should be dealt by a
+> > transition rather than picking a "random" (??? - that is my question
+> > about) package from the dependencies and make it versioned.
+> 
+> Yes, but at the moment AFAICS, there's no transition going on for R from
+> release team side, or am I missing something? I don't see any such
+> request here, at least
+> 
+> 	https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-release at lists.debian.org
+> 
+> Why do you think it will fix itself?
+
+I do not think it will fix itself.  Thus I started the discussion here
+whether we need a transition or not.  Unfortunately I changed back
+subject of this bug since I assumed I might have missed something for
+this *specific* package you pointed to.
+ 
+> OR, are you treating "testing migration" as "transition", and using them
+> interchangeably? (Please use words accurately in this context if that is
+> the case, it can quickly lead to confusions like these).
+
+I wrote what I meant:  We have a lot of blocked testing migrations since
+there is a lack of a bug asking for a transition.  That's why I would suggest
+to solve the issue properly by asking release team for a transition (which
+should be strictly be filed by the r-base maintainer since this package
+has triggered the issue).
+ 
+> Yes, it can be fixed by a testing migration of both, r-base *and* dplyr, but
+> it will simply not migrate to testing since it'd build against a version of dplyr in
+> testing. You need to make it versioned to pickup the one from unstable
+> OR ask the release team to trigger debci with deps from unstable, which
+> they only do on a case-by-case basis.
+
+> > I confirm that this would help the Debian migration case.  However, I
+> > was trying to backup this case by any R codebase reason.
+> 
+> I think that's currently not a possibility w/o a proper release
+> transition / release-team coordinated transition. You can't get around
+> avoiding this work here, unfortunately.
+
+I do not want to get around it.  I just want to do it properly.
+ 
+> > If we fiddle around with versioned Depends to work around a transition issue this
+> > will end up in a lot of manual work,
+> 
+> I did quite a lot of manual work for past R migrations. I
+> remember handling such migration issues for past R migration to testing.
+> You might not have noticed it because I did the uploads quickly after
+> the said failures.
+
+While I highly estimate your work on this for me that's another proof
+that we should do it right at some point in time.  Beeing forced to do
+manual work while we have a working and established mechanism is a
+repeated waste of energy.  IMHO doing things right in the beginning of
+the release process will turn out to be helpful for the future.
+
+> > I also fail to see your point in the importance of backports.
+> 
+> If we happen to backport R, dplyr (built against backported R) and epi
+> someday, a versioned depends like this will help to get the
+> autopkgtests passing and epi working in backports.
+
+On the other hand if we do a transition to testing both versions will
+perfectly fit.  Even more: When backporting to stable both packages
+will be freshly build on stable and the ABI issue will not have any
+influence any more.  Thus the versioned Depends is also unneeded here.
+
+> But yes, this has got nothing to do with r-cran-epi or r-cran-dplyr specific "code changes"
+> as such.
+
+OK.
+ 
+> > Which is the case in unstable, isn't it?  Both are built against the new
+> > graphics API and I fail to see in how far dplyr and epi are in any way
+> > special compared for those lots of other R packages with bug reports.
+> 
+> They need to be re-compiled versions of one-another.
+> 
+> > Its not about ignoring your suggestion.  I simply want to understand it
+> > to apply it properly.  As far as I can see those versioned Depends do
+> > not have any internal reason when considering the R code. 
+> 
+> I agree, it is not about the code changes, but rather about the API
+> changes at a toolchain level. I think the BRs are helpful in this
+> particular case of r-base transition to 4.3.1 (but mayn't be in general).
+> 
+> > They would be helpful to solve the trouble we are in now due a not properly announced
+> > transition.
+> 
+> I think we are trying to speak of the same things in different ways, and
+> we seem to be in agreement.
+
+I absolutely agree. ;-)
+ 
+> To answer your question - I don't think there's anyway to avoid trouble
+> with un-announced r-base uploads. Like every other major
+> package (like for instance htslib in debian-med). A proper binNMU
+> transition coordinated with the release team is the way to go.
+> Randomly bumping a whole compiler will inevitably lead to a situation we
+> are currently in.
+> 
+> > So we need to decide what to do.  I'm in favour of making either a full
+> > transition or we try to implement the r-graphics-api-* Suggestion[1].  I
+> > personally prefer the later one since its more clean and affects less
+> > packages.
+> 
+> Absolutely, I agree that[1] is the way to go.
+
+Good.  So we have the following options:
+
+   1. implement the r-graphics-api-*
+      This might be a bit complex since for the moment I do not know
+      any means how to detect the packages that need this dependency
+      (and how we can implement this into dh-update-R)  So this might
+      become technically complex in the first case
+
+   2. Just do a full r-api transition
+      This would work but affects more packages than strictly
+      necessary.  My gut feeling says we will be able to finish this
+      earlier than 1. despite technically not perfect
+
+   3. Blindly ignore the fact that we need a transition and follow
+      the hackish workaround by using random versioned Depends as
+      suggested by Nilesh for r-cran-epi.
+
+By the was, option 2. has the advantage that we might be able to "sneak
+in" the BioC transition which is pending anyway.  This would also not be
+a clean but probably efficient solution - options for doing so are
+welcome.
+
+If we get any hint how to technically approach 1. (=how to decide
+whether a package depends r-graphics-api-*) I'll ask release team for
+this option, otherwise for option 2. if I do not hear anything from
+r-base maintainer why this would not be a good idea.
+
+Kind regards
+     Andreas.
+ 
+> > [1] https://lists.debian.org/debian-r/2023/06/msg00017.html
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Jun 30 12:01:55 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 30 Jun 2023 14:01:55 +0200
+Subject: Will file bug report for complete R transition (Was: Bug#1039926: svglite requires rebuild under R 4.3.*)
+In-Reply-To: <25758.2866.401970.77923@rob.eddelbuettel.com>
+References: <87cz1ewaxo.fsf@rob.eddelbuettel.com> <25758.2866.401970.77923@rob.eddelbuettel.com>
+Message-ID: <ZJ7EM+hnDELCArF6@an3as.eu>
+
+Hi Dirk,
+
+Am Thu, Jun 29, 2023 at 05:52:34PM -0500 schrieb Dirk Eddelbuettel:
+> This accidentally omitted
+> 
+>         library(svglite)
+> 
+> The package loads fine, but like the others will not create a graphics device
+> as it was built under the previous R 4.2.* series.
+
+Thanks a lot for your specific bug reports to somehow heal the R
+graphics ABI change issue.  I've got the impression there is no good
+simple rule to detect the right set of packages that need rebuilt
+against r-base 4.3.1 to fix this issue.  I also spotted that vdiffr
+needs to be rebuilt to let ggplot2 passing its test suite (and so I
+did).
+
+Thus I think it is the best solution to ask the release team for
+a full r-base transition (option 2 I suggested in [1]).
+
+BTW, when I was running the autopkgtest of svglite I've spotted an issue
+which was solved by Nilesh Patra and reported as #1039955.  I'd like to
+make you remind this kind of situation if you might fall back into your
+"do not test Debian packages, rather trust CRAN" pattern in future.  We
+do not run tests against CRAN code (despite we had spotted mistakes even
+there in the past) but we are testing Debian packages which is a
+different thing.
+
+I also spotted vdiffr because of the autopkgtest in ggplot2.  It makes
+simply sense to test what we are shipping before we ship it to our
+users (specifically if we as Debian maintainers like I am are not at
+all R experts as I expressed several times).
+
+Kind regards
+    Andreas.
+
+[1] https://lists.debian.org/debian-r/2023/06/msg00025.html
+
+-- 
+http://fam-tille.de
+
+From johannes.ranke at jrwb.de  Fri Jun 30 13:22:19 2023
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Fri, 30 Jun 2023 15:22:19 +0200
+Subject: Re: Will file bug report for complete R transition (Was: Bug#1039926: svglite requires rebuild under R 4.3.*)
+In-Reply-To: <ZJ7EM+hnDELCArF6@an3as.eu>
+References: <87cz1ewaxo.fsf@rob.eddelbuettel.com> <25758.2866.401970.77923@rob.eddelbuettel.com> <ZJ7EM+hnDELCArF6@an3as.eu>
+Message-ID: <9311046.VV5PYv0bhD@ryz>
+
+Hi,
+
+I think option 1 from [1] is the way to go, i.e. make r-base provide a 
+graphics API version according to the R changelog, and have the relevant 
+packages depend on that graphics API version. How to identify them was 
+discussed previously on this list [2]. Using the codesearch and github URLS 
+provided in that email, the list given there could be updated.
+
+Somehow Dirk is hesitant to do this, I think it is just a matter of "is this 
+really necessary"? To me, it seems there is ample evidence by now that it is 
+indeed necessary, for the mental sanity of everyone involved, and to avoid 
+future discussions about a full R API bump just because of the graphics API on 
+the one hand, and to avoid breaking things by just ignoring the issue on the 
+other hand.
+
+Kind regards,
+
+Johannes
+
+Am Freitag, 30. Juni 2023, 14:01:55 CEST schrieb Andreas Tille:
+> Hi Dirk,
+> 
+> Am Thu, Jun 29, 2023 at 05:52:34PM -0500 schrieb Dirk Eddelbuettel:
+> > This accidentally omitted
+> > 
+> >         library(svglite)
+> > 
+> > The package loads fine, but like the others will not create a graphics
+> > device as it was built under the previous R 4.2.* series.
+> 
+> Thanks a lot for your specific bug reports to somehow heal the R
+> graphics ABI change issue.  I've got the impression there is no good
+> simple rule to detect the right set of packages that need rebuilt
+> against r-base 4.3.1 to fix this issue.  I also spotted that vdiffr
+> needs to be rebuilt to let ggplot2 passing its test suite (and so I
+> did).
+> 
+> Thus I think it is the best solution to ask the release team for
+> a full r-base transition (option 2 I suggested in [1]).
+> 
+> BTW, when I was running the autopkgtest of svglite I've spotted an issue
+> which was solved by Nilesh Patra and reported as #1039955.  I'd like to
+> make you remind this kind of situation if you might fall back into your
+> "do not test Debian packages, rather trust CRAN" pattern in future.  We
+> do not run tests against CRAN code (despite we had spotted mistakes even
+> there in the past) but we are testing Debian packages which is a
+> different thing.
+> 
+> I also spotted vdiffr because of the autopkgtest in ggplot2.  It makes
+> simply sense to test what we are shipping before we ship it to our
+> users (specifically if we as Debian maintainers like I am are not at
+> all R experts as I expressed several times).
+> 
+> Kind regards
+>     Andreas.
+> 
+
+[1] https://lists.debian.org/debian-r/2023/06/msg00025.html
+[2] https://lists.debian.org/debian-r/2022/04/msg00018.html
+
+From plessy at debian.org  Fri Jun 30 13:55:59 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 30 Jun 2023 22:55:59 +0900
+Subject: Re: Will file bug report for complete R transition (Was: Bug#1039926: svglite requires rebuild under R 4.3.*)
+In-Reply-To: <9311046.VV5PYv0bhD@ryz>
+References: <87cz1ewaxo.fsf@rob.eddelbuettel.com> <25758.2866.401970.77923@rob.eddelbuettel.com> <ZJ7EM+hnDELCArF6@an3as.eu> <9311046.VV5PYv0bhD@ryz>
+Message-ID: <ZJ7e70WbaVzUQaf9@kumo.plessy.net>
+
+Hi all,
+
+pardon me the offence and the noise, but I asked ChatGPT...
+
+--------------------------
+
+Me:
+
+In Debian, updates of the r-base package sometimes break backwards
+compatibility with a small number of binary packages shipping CRAN
+packages, which have in common to use R’s graphic API. We hesitate
+between just bumping the version number of the r-base packages’ API, or
+to create a new API version scheme just for the subset of packages that
+are regularly broken. Which way would you recommend?
+
+ChatGPT:
+
+Creating a new API version scheme just for the subset of packages that
+are regularly broken might be a more efficient solution. This way, you
+can manage the updates for these specific packages separately without
+affecting the entire r-base package. However, this approach might
+require more maintenance work. Bumping the version number of the r-base
+packages' API is a simpler solution, but it might cause unnecessary
+updates for packages that are not affected by the compatibility issue.
+It's a trade-off between complexity and efficiency, and the best choice
+depends on the specific circumstances and resources available.
+
+--------------------------
+
+Sorry that it was not conclusive !
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From tille at debian.org  Fri Jun 30 19:35:31 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 30 Jun 2023 21:35:31 +0200
+Subject: Bug#1040001: transition: r-base
+Message-ID: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-Cc: r-base at packages.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-base
+
+Hi,
+
+I'm not sure that we are in the right status to ask for a transition bug
+since the affected package was just uploaded some time ago by its
+maintainer who did not considered a proper transition.  This was discussed
+on debian-r at lists.debian.org in several postings - I try to point you to
+the most relevant ones
+
+  https://lists.debian.org/debian-r/2023/06/msg00011.html
+    as a response to >30 bugs against single packages all affecting
+    the r-base migration due to (to be expected) autopkgtest errors
+    in testing.  You can basically get this list of now all RC buggy
+    packages from the tracker page or r-base[1]
+
+  https://lists.debian.org/debian-r/2023/06/msg00017.html
+    suggests r-graphics-api-* after r-base maintainer confirmed
+    "they cheated _a little_ and changes the graphics API" (probably
+    meaning ABI not API)
+
+  https://lists.debian.org/debian-r/2023/06/msg00016.html
+    Reference to the docs
+
+  https://lists.debian.org/debian-r/2023/06/msg00025.html
+    In the end of this mail three options are listed which I simply
+    repeat here for your comfort:
+
+   1. implement the r-graphics-api-*
+      This might be a bit complex since for the moment I do not know
+      any means how to detect the packages that need this dependency
+      (and how we can implement this into dh-update-R)  So this might
+      become technically complex in the first case
+
+   2. Just do a full r-api transition
+      This would work but affects more packages than strictly
+      necessary.  My gut feeling says we will be able to finish this
+      earlier than 1. despite technically not perfect
+
+   3. Blindly ignore the fact that we need a transition and follow
+      the hackish workaround by using random versioned Depends as
+      suggested by Nilesh for r-cran-epi.
+
+  https://lists.debian.org/debian-r/2023/06/msg00027.html
+    Confirmation for option 1.
+
+While I would love to hear the opinion of the release team what kind of
+transition (1. or 2.) should be prefered (if this is possible now at all
+since the affected package r-base 4.3.1 is in the archive since some
+time and also the most urgent packages are rebuild manually) or whether
+we need to fight manually through this mess (option 3.)  I confirm that
+I agree with Johannes Ranke to prefer option 1. and do it "right" to be
+safe for the next time.
+
+To support this idea I just commited some proof of concept change to
+dh-r which would support injecting a virtual package in case r-base
+would define it.  This requires confirmation of the r-base maintainer.
+
+Sorry that this transition bug is that complex.  I would have loved if
+it would went more coordinated but unfortunately that's not in my hands
+and I simply try to reassemble the pieces.
+
+Kind regards
+    Andreas.
+
+[1] https://tracker.debian.org/pkg/r-base
+[2] https://salsa.debian.org/r-pkg-team/dh-r/-/commit/f79e2573a59c1ff01c526a7dcf15b7f85263cc29
+
+Ben file:
+
+title = "r-base";
+is_affected = <Fill out>;
+is_good = <Fill out>;
+is_bad = <Fill out>;
+
+From andreas at an3as.eu  Fri Jun 30 19:58:09 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 30 Jun 2023 21:58:09 +0200
+Subject: Re: Will file bug report for complete R transition (Was: Bug#1039926: svglite requires rebuild under R 4.3.*)
+In-Reply-To: <9311046.VV5PYv0bhD@ryz>
+References: <87cz1ewaxo.fsf@rob.eddelbuettel.com> <25758.2866.401970.77923@rob.eddelbuettel.com> <ZJ7EM+hnDELCArF6@an3as.eu> <9311046.VV5PYv0bhD@ryz>
+Message-ID: <ZJ8z0TJ6Qn5C7q0R@an3as.eu>
+
+Hi Johannes,
+
+Am Fri, Jun 30, 2023 at 03:22:19PM +0200 schrieb Johannes Ranke:
+> I think option 1 from [1] is the way to go, i.e. make r-base provide a 
+> graphics API version according to the R changelog, and have the relevant 
+> packages depend on that graphics API version. How to identify them was 
+> discussed previously on this list [2]. Using the codesearch and github URLS 
+> provided in that email, the list given there could be updated.
+
+That's a good hint.  I took it as resource to draft some proof of
+concept change for dh-r.
+ 
+> Somehow Dirk is hesitant to do this, I think it is just a matter of "is this 
+> really necessary"? To me, it seems there is ample evidence by now that it is 
+> indeed necessary, for the mental sanity of everyone involved, and to avoid 
+> future discussions about a full R API bump just because of the graphics API on 
+> the one hand, and to avoid breaking things by just ignoring the issue on the 
+> other hand.
+
+I've filed bug #1040001 and we'll see what release team will decide.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+

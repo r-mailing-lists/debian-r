@@ -1,0 +1,970 @@
+From andreas at an3as.eu  Wed Sep  2 11:23:46 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 2 Sep 2020 13:23:46 +0200
+Subject: Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1
+Message-ID: <20200902112346.GR31923@an3as.eu>
+
+Hi,
+
+I'm currently trying to work down our list of not up to date packages.
+I stumbled upon r-cran-fs which has a couple of errors in the test
+suite:
+
+tthat results  ═══════════════════════════════════════════════════════════
+[ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]
+1. Failure: file_access: checks for file read and write ability (@test-access.R#14) 
+2. Failure: file_access: checks for file read and write ability (@test-access.R#15) 
+3. Failure: file_info: can be subset as a tibble (@test-file.R#43) 
+4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+1. ...
+
+Error: testthat unit tests failed
+Execution halted
+
+Any help would be welcome
+
+      Andreas.
+
+--  
+http://fam-tille.de
+
+From hello at shayandoust.me  Wed Sep  2 13:35:42 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Wed, 2 Sep 2020 14:35:42 +0100
+Subject: Re: Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1
+In-Reply-To: <20200902112346.GR31923@an3as.eu>
+References: <20200902112346.GR31923@an3as.eu>
+Message-ID: <d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>
+
+Hello Andreas,
+
+I'll just quickly chip in.
+
+I've just ran this within sbuild and I only see one failure. This is as
+follows:
+
+> 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)
+
+So, I am not sure why you are getting additional errors...
+
+I did some more investigation on line 43 of tests/testthat/test-file.R.
+The class of "x" is of a data frame, and a data frame is made up of
+lists (not tibble), which is why this is failing.
+
+Why? Well it seems like line 36 is the culprit, were there is the class
+of x being manually set to as a data frame. The patch I will push
+momentarily simply swaps the positions of these two tests, and
+autopkgtest now passes cleanly for me.
+
+I admit I was under the assumption that anything expressed within it()
+is not globalised and is only for that expression.
+
+Kind regards,
+Shayan Doust
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From hello at shayandoust.me  Wed Sep  2 14:11:25 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Wed, 2 Sep 2020 15:11:25 +0100
+Subject: Re: Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1
+In-Reply-To: <d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>
+References: <20200902112346.GR31923@an3as.eu> <d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>
+Message-ID: <bc30395a-6442-6ed4-387a-ba5ab64de7b6@shayandoust.me>
+
+Hello again Andreas,
+
+I was wrong, sorry for that. Actually, I'm not too sure why
+file_info("foo/bar") is a data frame. The only way I've seemed to have
+rectified this was by class(x) <- "tbl_df" before the expect_is() on
+line 44, which of course passes the test. I'm not sure why line 36
+exists when it is already a data frame anyways...
+
+Kind regards,
+Shayan Doust
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Thu Sep  3 09:26:46 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 3 Sep 2020 11:26:46 +0200
+Subject: Any hint for uncompressed JavaScript shipped with mathjaxr
+Message-ID: <20200903092646.GC29957@an3as.eu>
+
+Hi Wolfgang,
+
+I intend to package mathjaxr for Debian since this is a requirement of
+version 1.4 of metap (currently Debian has version 1.3 of metap).  In
+Debian compressed JavaScript is considered as "binary without source"
+which violates the Debian Free Software Guidelines where shipping
+editable source is a requirement.
+
+The JavaScript files in
+
+    inst/doc/mathjax/es5
+
+seem to be all compressed and I wonder whether you can provide some
+hints where to find the uncompressed source for these.
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep  3 10:46:25 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 3 Sep 2020 12:46:25 +0200
+Subject: Re: Any hint for uncompressed JavaScript shipped with mathjaxr
+In-Reply-To: <717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>
+References: <20200903092646.GC29957@an3as.eu> <717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>
+Message-ID: <20200903104625.GD29957@an3as.eu>
+
+Hi Wolfgang,
+
+thanks a lot for the fast and helpful response.
+
+Is there any volunteer in the pkg-r team who wants to tackle this?
+It seems a bit above my time limit I intend to spent on this the
+next 1-2 weeks.
+
+Kind regards
+
+      Andreas.
+
+On Thu, Sep 03, 2020 at 10:13:47AM +0000, Viechtbauer, Wolfgang (SP) wrote:
+> Hi Andreas,
+> 
+> The source (in TypeScript) can be found here:
+> 
+> https://github.com/mathjax/MathJax-src
+> 
+> I haven't tried to generate the compressed js files myself - I just grabbed the release from:
+> 
+> https://github.com/mathjax/MathJax
+> 
+> (which I just noticed has been updated to 3.1.0 - the CRAN release currently uses 3.0.5).
+> 
+> I guess if you want to do this yourself, you also need to look at:
+> 
+> https://github.com/mathjax/MathJax-dev
+> 
+> Best,
+> Wolfgang
+> 
+> >-----Original Message-----
+> >From: Andreas Tille [mailto:andreas at an3as.eu]
+> >Sent: Thursday, 03 September, 2020 11:27
+> >To: Wolfgang Viechtbauer; debian-r at lists.debian.org
+> >Subject: Any hint for uncompressed JavaScript shipped with mathjaxr
+> >
+> >Hi Wolfgang,
+> >
+> >I intend to package mathjaxr for Debian since this is a requirement of
+> >version 1.4 of metap (currently Debian has version 1.3 of metap).  In
+> >Debian compressed JavaScript is considered as "binary without source"
+> >which violates the Debian Free Software Guidelines where shipping
+> >editable source is a requirement.
+> >
+> >The JavaScript files in
+> >
+> >    inst/doc/mathjax/es5
+> >
+> >seem to be all compressed and I wonder whether you can provide some
+> >hints where to find the uncompressed source for these.
+> >
+> >Kind regards
+> >
+> >        Andreas.
+> >
+> >--
+> >http://fam-tille.de
+> 
+
+-- 
+http://fam-tille.de
+
+From wolfgang.viechtbauer at maastrichtuniversity.nl  Thu Sep  3 10:13:47 2020
+From: wolfgang.viechtbauer at maastrichtuniversity.nl (Viechtbauer, Wolfgang (SP))
+Date: Thu, 3 Sep 2020 10:13:47 +0000
+Subject: RE: Any hint for uncompressed JavaScript shipped with mathjaxr
+In-Reply-To: <20200903092646.GC29957@an3as.eu>
+References: <20200903092646.GC29957@an3as.eu>
+Message-ID: <717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>
+
+Hi Andreas,
+
+The source (in TypeScript) can be found here:
+
+https://github.com/mathjax/MathJax-src
+
+I haven't tried to generate the compressed js files myself - I just grabbed the release from:
+
+https://github.com/mathjax/MathJax
+
+(which I just noticed has been updated to 3.1.0 - the CRAN release currently uses 3.0.5).
+
+I guess if you want to do this yourself, you also need to look at:
+
+https://github.com/mathjax/MathJax-dev
+
+Best,
+Wolfgang
+
+>-----Original Message-----
+>From: Andreas Tille [mailto:andreas at an3as.eu]
+>Sent: Thursday, 03 September, 2020 11:27
+>To: Wolfgang Viechtbauer; debian-r at lists.debian.org
+>Subject: Any hint for uncompressed JavaScript shipped with mathjaxr
+>
+>Hi Wolfgang,
+>
+>I intend to package mathjaxr for Debian since this is a requirement of
+>version 1.4 of metap (currently Debian has version 1.3 of metap).  In
+>Debian compressed JavaScript is considered as "binary without source"
+>which violates the Debian Free Software Guidelines where shipping
+>editable source is a requirement.
+>
+>The JavaScript files in
+>
+>    inst/doc/mathjax/es5
+>
+>seem to be all compressed and I wonder whether you can provide some
+>hints where to find the uncompressed source for these.
+>
+>Kind regards
+>
+>        Andreas.
+>
+>--
+>http://fam-tille.de
+
+From james.f.hester at gmail.com  Thu Sep  3 13:29:52 2020
+From: james.f.hester at gmail.com (Jim Hester)
+Date: Thu, 3 Sep 2020 09:29:52 -0400
+Subject: Re: Test suite errors for r-cran-fs 1.5.0+dfsg-1
+In-Reply-To: <20200903082544.GB29957@an3as.eu>
+References: <20200903082544.GB29957@an3as.eu>
+Message-ID: <CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>
+
+Andreas,
+
+As far as the test-file.R#43 failure one way I could see it failing is if your test machine does _not_ have the tibble package installed. The tests assume that all Suggested dependencies are installed.
+
+I do not know why the other tests are failing.
+
+fs 1.5.0 is passing on CRAN's debian based check machines without any test failures (https://www.r-project.org/nosvn/R.check/r-devel-linux-x86_64-debian-gcc/fs-00check.html), so if it is failing in the debian build machine there must be something non-standard going on with the environment.
+
+Jim
+
+On Thu, Sep 3, 2020 at 4:25 AM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi Jim,
+>
+>
+>
+> I tried to upgrade the Debian package of fs.  Unfortunately it has a
+>
+> couple of errors in the test suite:
+>
+>
+>
+>
+>
+> tthat results  ═══════════════════════════════════════════════════════════
+>
+> [ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]
+>
+> 1. Failure: file_access: checks for file read and write ability (@test-access.R#14)
+>
+> 2. Failure: file_access: checks for file read and write ability (@test-access.R#15)
+>
+> 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)
+>
+> 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+>
+> 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+>
+> 6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+>
+> 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+>
+> 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+>
+> 9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+>
+> 1. ...
+>
+>
+>
+> Error: testthat unit tests failed
+>
+> Execution halted
+>
+>
+>
+>
+>
+> Any idea what might be wrong here?
+>
+>
+>
+> I discussed this on the debian-r mailing list first and got two answers so
+>
+> far:
+>
+>
+>
+>    https://lists.debian.org/debian-r/2020/09/msg00001.html
+>
+>    https://lists.debian.org/debian-r/2020/09/msg00002.html
+>
+>
+>
+> I do not speak R myself so I do not fully understand these answers but
+>
+> may be you can make some sense out of it.
+>
+>
+>
+> Kind regards
+>
+>
+>
+>        Andreas.
+>
+>
+>
+> PS: It would be great if you could answer in public to our list
+>
+>     debian-r at lists.debian.org
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep  3 15:33:47 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 3 Sep 2020 17:33:47 +0200
+Subject: Re: Test suite errors for r-cran-fs 1.5.0+dfsg-1
+In-Reply-To: <CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>
+References: <20200903082544.GB29957@an3as.eu> <CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>
+Message-ID: <20200903153347.GJ29957@an3as.eu>
+
+Hi Jim,
+
+thanks a lot for your fast reply.
+
+On Thu, Sep 03, 2020 at 09:29:52AM -0400, Jim Hester wrote:
+> As far as the test-file.R#43 failure one way I could see it failing is if
+> your test machine does _not_ have the tibble package installed. The tests
+> assume that all Suggested dependencies are installed.
+
+That's a very good hint.  I've added all Suggests with the exception of
+"spelling" (since this is not packaged yet) to the environment where the
+test is executed.  This leaves me now with:
+
+── 1. Failure: file_access: checks for file read and write ability (@test-access
+file_access("foo/bar", "read") not equal to c(`foo/bar` = FALSE).
+1 element mismatch
+
+── 2. Failure: file_access: checks for file read and write ability (@test-access
+file_access("foo/bar", "write") not equal to c(`foo/bar` = FALSE).
+1 element mismatch
+
+── 3. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────
+`dir_ls(".", recurse = TRUE)` did not throw an error.
+
+── 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────
+`dir_ls(fail = FALSE, recurse = TRUE)` did not produce any warnings.
+
+── 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────
+`dir_ls("foo2", fail = FALSE, recurse = TRUE)` did not produce any warnings.
+
+── 6. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────
+`dir_map(".", fun = identity, recurse = TRUE)` did not throw an error.
+
+── 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────
+`dir_map(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+── 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────
+`dir_map("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+── 9. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ────────────
+`dir_walk(".", fun = identity, recurse = TRUE)` did not throw an error.
+
+── 10. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ───────────
+`dir_walk(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+── 11. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ───────────
+`dir_walk("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+── 12. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────
+`dir_info(".", fun = identity, recurse = TRUE)` did not throw an error.
+
+── 13. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────
+`dir_info(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+── 14. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────
+`dir_info("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+
+══ testthat results  ═══════════════════════════════════════════════════════════
+[ OK: 3437 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 14 ]
+1. Failure: file_access: checks for file read and write ability (@test-access.R#14) 
+2. Failure: file_access: checks for file read and write ability (@test-access.R#15) 
+3. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) 
+6. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) 
+9. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161) 
+1. ...
+ 
+> I do not know why the other tests are failing.
+> 
+> fs 1.5.0 is passing on CRAN's debian based check machines without any test
+> failures (
+> https://www.r-project.org/nosvn/R.check/r-devel-linux-x86_64-debian-gcc/fs-00check.html),
+> so if it is failing in the debian build machine there must be something
+> non-standard going on with the environment.
+
+Well, non-standard means we install only those packages that are
+explicitly specified as Test-Depends.  As I said I added all packages
+listed in Suggests with the exception of spelling.  Do you think
+that the missing spelling might be responsible for the issues above?
+
+Or is there possibly another Test-Depends that by default is installed
+on CRAN Debian machines but not necessarily in the list of Dependencies?
+
+Kind regards
+
+      Andreas.
+ 
+> On Thu, Sep 3, 2020 at 4:25 AM Andreas Tille <andreas at an3as.eu> wrote:
+> 
+> > Hi Jim,
+> >
+> > I tried to upgrade the Debian package of fs.  Unfortunately it has a
+> > couple of errors in the test suite:
+> >
+> >
+> > tthat results  ═══════════════════════════════════════════════════════════
+> > [ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]
+> > 1. Failure: file_access: checks for file read and write ability
+> > (@test-access.R#14)
+> > 2. Failure: file_access: checks for file read and write ability
+> > (@test-access.R#15)
+> > 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)
+> > 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+> > 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+> > 6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)
+> > 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+> > 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+> > 9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)
+> > 1. ...
+> >
+> > Error: testthat unit tests failed
+> > Execution halted
+> >
+> >
+> > Any idea what might be wrong here?
+> >
+> > I discussed this on the debian-r mailing list first and got two answers so
+> > far:
+> >
+> >    https://lists.debian.org/debian-r/2020/09/msg00001.html
+> >    https://lists.debian.org/debian-r/2020/09/msg00002.html
+> >
+> > I do not speak R myself so I do not fully understand these answers but
+> > may be you can make some sense out of it.
+> >
+> > Kind regards
+> >
+> >        Andreas.
+> >
+> > PS: It would be great if you could answer in public to our list
+> >     debian-r at lists.debian.org
+> >
+> > --
+> > http://fam-tille.de
+> >
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Sep  3 16:12:12 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 3 Sep 2020 18:12:12 +0200
+Subject: Any idea why there might be two failures in r-cran-ps autopkgtest
+Message-ID: <20200903161212.GL29957@an3as.eu>
+
+Hi,
+
+I upgraded r-cran-ps[1] to its latest version but it results in two
+failures in its autopkgtest.  I admit I can not realy parse the log
+what the actual failure might be.  Can anybody reproduce this - and
+even better fix this?
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-ps
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Thu Sep  3 16:35:50 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 3 Sep 2020 11:35:50 -0500
+Subject: Re: Any idea why there might be two failures in r-cran-ps autopkgtest
+In-Reply-To: <20200903161212.GL29957@an3as.eu>
+References: <20200903161212.GL29957@an3as.eu>
+Message-ID: <24401.7014.461576.983705@rob.eddelbuettel.com>
+
+As before I suggest you consider glancing at the CRAN results, always at
+
+   https://cran.r-project.org/web/checks/check_results_${packagename}.html
+
+ie
+
+   https://cran.r-project.org/web/checks/check_results_ps.html
+
+That shows twelve different tests on twelve different configurations all giving OK.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Fri Sep  4 11:44:36 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 4 Sep 2020 13:44:36 +0200
+Subject: Re: Any idea why there might be two failures in r-cran-ps autopkgtest
+In-Reply-To: <24401.7014.461576.983705@rob.eddelbuettel.com>
+References: <20200903161212.GL29957@an3as.eu> <24401.7014.461576.983705@rob.eddelbuettel.com>
+Message-ID: <20200904114436.GF18846@an3as.eu>
+
+On Thu, Sep 03, 2020 at 11:35:50AM -0500, Dirk Eddelbuettel wrote:
+> 
+> As before I suggest you consider glancing at the CRAN results, always at
+> 
+>    https://cran.r-project.org/web/checks/check_results_${packagename}.html
+> 
+> ie
+> 
+>    https://cran.r-project.org/web/checks/check_results_ps.html
+> 
+> That shows twelve different tests on twelve different configurations all giving OK.
+
+Perfect.  This probably means that our autopkgtest has an issue.  My
+question was about that issue. 
+
+Kind regards
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Sep  4 11:47:28 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 4 Sep 2020 13:47:28 +0200
+Subject: Help needed for r-cran-shiny test failure
+Message-ID: <20200904114728.GG18846@an3as.eu>
+
+Hi,
+
+I upgraded r-cran-shiny in git but the autopkgtest has a failure:
+
+> 
+> # only test if testthat is available
+> if (require(testthat)) {
++   library(testthat)
++   library(shiny)
++ 
++   test_check("shiny")
++ }
+Loading required package: testthat
+-- 1. Error: runTests works with a dir app that calls modules that return reacti
+Shiny App Test Failures detected in
+* 107_scatterplot/tests/testthat.R
+Backtrace:
+  1. testthat::expect_output(print(runTests(app)), "Shiny App Test Results\\n\\* Success\\n  - 107_scatterplot/tests/testthat\\.R")
+ 11. shiny::runTests(app)
+
+== testthat results  ===========================================================
+[ OK: 389 | SKIPPED: 1 | WARNINGS: 0 | FAILED: 1 ]
+1. Error: runTests works with a dir app that calls modules that return reactives and use brushing (@test-test-server-app.R#53) 
+
+Error: testthat unit tests failed
+Execution halted
+
+Any help to either fix that failure or understand why it happens and
+possibly exclude that specific test since we know that it can not work
+in our autopkgtest environment is welcome.
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Sep  4 11:53:55 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 4 Sep 2020 06:53:55 -0500
+Subject: Re: Any idea why there might be two failures in r-cran-ps autopkgtest
+In-Reply-To: <20200904114436.GF18846@an3as.eu>
+References: <20200903161212.GL29957@an3as.eu> <24401.7014.461576.983705@rob.eddelbuettel.com> <20200904114436.GF18846@an3as.eu>
+Message-ID: <24402.10963.163296.419467@rob.eddelbuettel.com>
+
+On 4 September 2020 at 13:44, Andreas Tille wrote:
+| Perfect.  This probably means that our autopkgtest has an issue.
+
+Yes, and it far from the the first time this has been suggested to you.  Most
+recent other example was 'fs' as its author also told you.
+
+And e.g. the tidyverse packages have what I may call an established pattern
+of changing / breaking APIs so whenever you do see tests breaking I continue
+to recommend checking first with CRAN to see what happens there when all
+packages are in fact kept current.  But you are of course free to continue to
+entertain yourself by replicating this with more randomised sets of packages.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From hello at shayandoust.me  Sun Sep  6 16:12:51 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Sun, 6 Sep 2020 17:12:51 +0100
+Subject: Sponsored upload for r-cran-poissonbinomial
+Message-ID: <a0f8eab3-b433-b42a-6206-46b4041dd22d@shayandoust.me>
+
+Hello,
+
+I believe r-cran-poissonbinomial[1] is ready for a sponsored upload. Do
+let me know if anything needs altering.
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-poissonbinomial/
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at fam-tille.de  Mon Sep  7 09:49:36 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Mon, 7 Sep 2020 11:49:36 +0200
+Subject: Re: Sponsored upload for r-cran-poissonbinomial
+In-Reply-To: <b0152485-6dd8-79cd-a7cc-52bffdfac3c4@gmx.de>
+References: <a0f8eab3-b433-b42a-6206-46b4041dd22d@shayandoust.me> <b0152485-6dd8-79cd-a7cc-52bffdfac3c4@gmx.de>
+Message-ID: <20200907094936.GM18846@an3as.eu>
+
+Hi,
+
+On Sun, Sep 06, 2020 at 06:54:29PM +0200, Steffen Möller wrote:
+> I just skimmed through the source tree. Do you need build/*vignette.rds?
+
+These data seem to be needed to create vignettes.
+
+> Also, the files in inst/doc are autogenerated, right? Often there is a
+> nasty embedded JavaScript in those files coming from upstream. But your
+> files are clean.
+
+Lintian will tell you once this is the case.  I lintian finds this error
+I'd recommend to use the script
+
+    https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/r-exclude-doc
+
+Lintian was issuing a warning:
+
+     W: r-cran-poissonbinomial: description-starts-with-leading-spaces
+
+Please make sure the long description starts with exactly one space per
+line (not more) since otherwise the text behind lines with more than one
+indeting space will considered by several tools as verbose line.
+
+I've fixed this and uploaded.
+
+Kind regards and thanks to Shayan and Steffen for working on this package
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Sep  8 15:00:10 2020
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 8 Sep 2020 17:00:10 +0200
+Subject: =?utf-8?q?Re=3A_r-bioc-rsubread_FTBFS_on_32bit=3A_error=3A_conflicting_types_for_=E2=80=98uintptr=5Ft=E2=80=99?=
+In-Reply-To: <159608823102.28748.3337470331729793821.reportbug@localhost>
+References: <159608823102.28748.3337470331729793821.reportbug@localhost>
+Message-ID: <20200908150010.GA12717@an3as.eu>
+
+Hi,
+
+I'm hereby forwarding a problem that was detected on the Debian packaged
+version of Rsubread.  Any idea how to fix this?
+
+Kind regards
+
+       Andreas.
+
+On Thu, Jul 30, 2020 at 08:50:31AM +0300, Adrian Bunk wrote:
+> Source: r-bioc-rsubread
+> Version: 2.2.5-1
+> Severity: serious
+> Tags: ftbfs
+> 
+> https://buildd.debian.org/status/package.php?p=r-bioc-rsubread&suite=sid
+> 
+> ...
+> In file included from /usr/lib/gcc/i686-linux-gnu/10/include/stdint.h:9,
+>                  from HelperFunctions.h:139,
+>                  from R_wrapper.c:35:
+> /usr/include/stdint.h:96:23: error: conflicting types for ‘uintptr_t’
+>    96 | typedef unsigned int  uintptr_t;
+>       |                       ^~~~~~~~~
+> In file included from R_wrapper.c:30:
+> /usr/share/R/include/Rinterface.h:110:24: note: previous declaration of ‘uintptr_t’ was here
+>   110 |  typedef unsigned long uintptr_t;
+>       |                        ^~~~~~~~~
+> make[1]: *** [/usr/lib/R/etc/Makeconf:167: R_wrapper.o] Error 1
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Sep  8 18:32:53 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 8 Sep 2020 20:32:53 +0200
+Subject: [Help] Re: r-cran-rstanarm: FTBFS: error: (converted from warning) TBB library not found.
+Message-ID: <20200908183253.GC12717@an3as.eu>
+
+Control: tags -1 help
+
+Hi,
+
+any help why TBB is not found?  I think this issue is actually causes by
+r-cran-rcppparallel since the code copy of libtbb was removed there -
+but it seems to not provide the Debian packaged lib properly.
+
+Kind regards
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Sep  9 13:34:07 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 9 Sep 2020 15:34:07 +0200
+Subject: Ping: Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)
+In-Reply-To: <20200525092954.GG25190@an3as.eu>
+References: <159039737897.25558.17854156157424087902.reportbug@localhost> <20200525092148.GF25190@an3as.eu> <20200525092954.GG25190@an3as.eu>
+Message-ID: <20200909133407.GL8080@an3as.eu>
+
+Control: tags -1 help
+
+Ping on this topic.  This bug is really nasty and I do not have any
+spare cycles to tackle this.
+
+Kind regards
+
+         Andreas.
+
+On Mon, May 25, 2020 at 11:29:54AM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> On Mon, May 25, 2020 at 11:21:48AM +0200, Andreas Tille wrote:
+> > The issue is actually not causes by routine-update but rather
+> > by dh-update-R that regenerates all Depends automatically but
+> > does not respect non-R dependencies we injected for instance
+> > to provide JS files.
+> 
+> As a workaround I'm usially adding a comment
+> 
+>    # <dh-update-R>do not delete this</dh-update-R>
+> 
+> but that's for sure no acceptable solution.  Gordon (or somebody else)
+> do you have some spare cycles to make sure dh-update-R will rewrite only
+> the R Dependencies and leave other Depends we added manually alone?
+> 
+> Kind regards
+> 
+>      Andreas.
+> 
+> -- 
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Sep 11 10:49:34 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 11 Sep 2020 12:49:34 +0200
+Subject: Re: Any idea why there might be two failures in r-cran-ps autopkgtest
+In-Reply-To: <20200903161212.GL29957@an3as.eu>
+References: <20200903161212.GL29957@an3as.eu>
+Message-ID: <20200911104934.GX8080@an3as.eu>
+
+On Thu, Sep 03, 2020 at 06:12:12PM +0200, Andreas Tille wrote:
+> I upgraded r-cran-ps[1] to its latest version but it results in two
+> failures in its autopkgtest.  I admit I can not realy parse the log
+> what the actual failure might be.  Can anybody reproduce this - and
+> even better fix this?
+
+To be more verbose on this the error seems to be:
+
+--------------------------------------------------------------------------------
+v |  74       | pid reuse [0.1 s]
+x |  12 1     | posix-zombie
+--------------------------------------------------------------------------------
+test-posix-zombie.R:25: error: zombie api
+subscript out of bounds
+Backtrace:
+ 1. testthat::expect_identical(ps_terminal(p), ps_terminal(me)) test-posix-zombie.R:25:2
+ 4. ps::ps_terminal(p)
+--------------------------------------------------------------------------------
+x |  11 1     | posix [0.2 s]
+--------------------------------------------------------------------------------
+test-posix.R:15: error: terminal
+subscript out of bounds
+Backtrace:
+ 1. ps::ps_terminal(ps_handle()) test-posix.R:15:2
+
+Does anybody have a clue what this might mean and whether we should
+possibly ignore this error?  It might be even an artifact of pbuilder?
+
+Kind regards
+
+       Andreas.
+
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-ps
+
+-- 
+http://fam-tille.de
+
+From hello at shayandoust.me  Tue Sep 15 17:33:06 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Tue, 15 Sep 2020 18:33:06 +0100
+Subject: Sponsored upload for r-cran-textdata
+Message-ID: <b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>
+
+Hello,
+
+I believe r-cran-textdata[1] is almost ready for a sponsored upload. One
+thing stands is what is within the build/ directory, which is a
+non-plaintext vignette. Even removing the file has no weighing on the
+result of the package building process. Would it be preferred that this
+is repacked to exclude this directory?
+
+I'm only really mentioning this because I don't know why this is
+included within the upstream tarball in the first place, and whether
+there is any importance regarding documentation generation with this.
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-textdata
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Wed Sep 16 04:00:18 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 15 Sep 2020 23:00:18 -0500
+Subject: Re: Sponsored upload for r-cran-textdata
+In-Reply-To: <b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>
+References: <b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>
+Message-ID: <24417.36306.998686.713867@rob.eddelbuettel.com>
+
+On 15 September 2020 at 18:33, Shayan Doust wrote:
+| I believe r-cran-textdata[1] is almost ready for a sponsored upload. One
+| thing stands is what is within the build/ directory, which is a
+| non-plaintext vignette. Even removing the file has no weighing on the
+| result of the package building process. Would it be preferred that this
+| is repacked to exclude this directory?
+|
+| I'm only really mentioning this because I don't know why this is
+| included within the upstream tarball in the first place, and whether
+| there is any importance regarding documentation generation with this.
+
+Not a feature of textdata: *every* source tar.gz with a vignette has such a
+directory / file.
+
+It is produced by `R CMD build ...` when the source .tar.gz is created.
+ 
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Tue Sep 22 07:29:17 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 22 Sep 2020 09:29:17 +0200
+Subject: Solved (Was: Any idea why there might be two failures in r-cran-ps autopkgtest)
+In-Reply-To: <20200911104934.GX8080@an3as.eu>
+References: <20200903161212.GL29957@an3as.eu> <20200911104934.GX8080@an3as.eu>
+Message-ID: <20200922072917.GX28118@an3as.eu>
+
+On Fri, Sep 11, 2020 at 12:49:34PM +0200, Andreas Tille wrote:
+> Backtrace:
+>  1. testthat::expect_identical(ps_terminal(p), ps_terminal(me)) test-posix-zombie.R:25:2
+>  4. ps::ps_terminal(p)
+
+As the test says it is checking a terminal.  So it was not only xvfb-run missing but
+a terminal was needed.  Thus
+
+   /usr/bin/xvfb-run --auto-servernum --server-num=20 -s "-screen 0 1024x768x24 -noreset" xterm  -e /bin/sh -c "R --no-save < $testfile"
+
+finally solved the issue.
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+

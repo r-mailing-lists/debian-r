@@ -1,0 +1,224 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2026-09",
+  "messages": [
+    {
+      "id": "msg-c97b79feddeb",
+      "message_id": "<api4kJUzZgbmSioZ@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-03T00:11:17Z",
+      "subject": "Bioconductor and HDF5 transition clash",
+      "subject_clean": "Bioconductor and HDF5 transition clash",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Graham,\n\nmost of the Bioconductor transition went smoothly, but unfortunately it clashed\nwith the HDF5 transition.\n\nWhen Bioconductor was released, it contained core packages shipping a vendored\nversion 1.14 of HDF5, which was very close to the one in Testing.  Unvendoring\nwas very easy.  After the Bioconductor transition started, the HDF5 transition\ntook place and now we have version 2.1 in testing, and I simply do not have the\nskill to unvendor HDF5 in Bioconductor and do the major upgrade instead of\nupstream themselves.  I am CCing debian-r@ and debian-med at lists.debian.org to\nsee if somebody else wants to pick the ball, but I am pessimistic about this.\n\nThe next Bioconductor release might solve the problem, or might not.  The\nnext-next release will be in April.\n\nI think that our possibilities are:\n\n 0 Someone unvendors HDF5 in Bioconductor and ports the dependencies to be\n   compatible with the major upgrade to1 version 2.1.  I tried with Claude 4.8 in\n   OpenCode and failed after spending 20$ of OpenRouter tokens, but my AI skills\n   are still beginner level…\n\n 1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n   they will handle major security issues well.  The Bioconductor project has good\n   programmers, more than a decade of acheivements, and a full commitment to\n   security.  Also, they might migrate before the Freeze.\n\n 2 Leave the r-bioc-* packages depending on r-bioc-rhdf5lib in Sid, migrate the\n   rest and call the transition done.  The next one is next month.  Revisit the\n   issue before the Freeze.\n\n 3 Remove r-bioc-rhdf5lib and its dependencies from Debian until we can\n   unvendor HDF5.  The NEW queue is very efficient those days.\n\n 4 Give up and remove all r-bioc-* packages from Debian.  There are excellent\n   third-party repositories shipping them.  In that case we may need to move some\n   non-R dependencies to contrib, or remove them too.\n\nMy favorite is option 1.\n\nWhat shall we do?\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi Graham,\n\nmost of the Bioconductor transition went smoothly, but unfortunately it clashed\nwith the HDF5 transition.\n\nWhen Bioconductor was released, it contained core packages shipping a vendored\nve",
+      "thread_id": "thread-c97b79feddeb",
+      "thread_depth": 0,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-5e6366ed6a21",
+      "message_id": "<apkyZ0ypIVL6eEib@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2026-09-03T08:40:07Z",
+      "subject": "Re: Bioconductor and HDF5 transition clash",
+      "subject_clean": "Bioconductor and HDF5 transition clash",
+      "in_reply_to": "<api4kJUzZgbmSioZ@kumo.plessy.net>",
+      "references": [
+        "<api4kJUzZgbmSioZ@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi,\n\nAm Thu, Sep 03, 2026 at 09:11:17AM +0900 schrieb Charles Plessy:\n> most of the Bioconductor transition went smoothly, but unfortunately it clashed\n> with the HDF5 transition.\n\n:-(\n \n> When Bioconductor was released, it contained core packages shipping a vendored\n> version 1.14 of HDF5, which was very close to the one in Testing.  Unvendoring\n> was very easy.  After the Bioconductor transition started, the HDF5 transition\n> took place and now we have version 2.1 in testing, and I simply do not have the\n> skill to unvendor HDF5 in Bioconductor and do the major upgrade instead of\n> upstream themselves.  I am CCing debian-r@ and debian-med at lists.debian.org to\n> see if somebody else wants to pick the ball, but I am pessimistic about this.\n> \n> The next Bioconductor release might solve the problem, or might not.  The\n> next-next release will be in April.\n\nReally in April?  In item 2 you write \"next month\" and as far as I understood\nthere are two releases per year.\n \n> I think that our possibilities are:\n> \n>  0 Someone unvendors HDF5 in Bioconductor and ports the dependencies to be\n>    compatible with the major upgrade to1 version 2.1.  I tried with Claude 4.8 in\n>    OpenCode and failed after spending 20$ of OpenRouter tokens, but my AI skills\n>    are still beginner level…\n\nThis sounds complex and trusting AI only seems to be a bad idea.\n \n>  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n>    they will handle major security issues well.  The Bioconductor project has good\n>    programmers, more than a decade of acheivements, and a full commitment to\n>    security.  Also, they might migrate before the Freeze.\n\nI like this pragmatic approach.  I'd prefer to talk to Bioconductor\ndevelopers what they might think and what schedule they intend to\nfollow.\n\n>  2 Leave the r-bioc-* packages depending on r-bioc-rhdf5lib in Sid, migrate the\n>    rest and call the transition done.  The next one is next month.  Revisit the\n>    issue before the Freeze.\n\nMight be an option I would rank below the former option.  It has the\nproblem that we might loose time before the Freeze which we could use\nnow (by talking to Bioconductor developers).\n \n>  3 Remove r-bioc-rhdf5lib and its dependencies from Debian until we can\n>    unvendor HDF5.  The NEW queue is very efficient those days.\n\nIf its only\n\n$ apt rdepends r-bioc-rhdf5lib\nr-bioc-rhdf5lib\nReverse Depends:\n  Depends: r-bioc-rhdf5 (>= 1.33.3)\n  Depends: r-bioc-alabaster.base\n  Depends: r-bioc-rhdf5filters\n  Depends: r-bioc-alabaster.base\n  Depends: r-bioc-hdf5array\n  Depends: r-bioc-dropletutils\n\nI do not see a big problem in not shipping these for some time.  On the\nother hand since some time r-bioc-rhdf5lib has a popcon > 200 which is\nabove a lot of other Debian Med packages.\n \n>  4 Give up and remove all r-bioc-* packages from Debian.  There are excellent\n>    third-party repositories shipping them.  In that case we may need to move some\n>    non-R dependencies to contrib, or remove them too.\n\nI'm not convinced that this is in the interest of our users.\n \n> My favorite is option 1.\n\nSame here.\n\nKind regards\n    Andreas. \n\n-- \nhttps://fam-tille.de",
+      "body_snippet": "Hi,\n\nAm Thu, Sep 03, 2026 at 09:11:17AM +0900 schrieb Charles Plessy:\n> most of the Bioconductor transition went smoothly, but unfortunately it clashed\n> with the HDF5 transition.\n\n:-(\n \n> When Biocon",
+      "thread_id": "thread-c97b79feddeb",
+      "thread_depth": 1,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-665d58685df6",
+      "message_id": "<CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2026-09-03T14:56:24Z",
+      "subject": "Re: Bug#1134352: Bioconductor and HDF5 transition clash",
+      "subject_clean": "Bug#1134352: Bioconductor and HDF5 transition clash",
+      "in_reply_to": "<api4kJUzZgbmSioZ@kumo.plessy.net>",
+      "references": [
+        "<177655592384.375870.15394889310006759633.reportbug@bubu.igloo>",
+        "<api4kJUzZgbmSioZ@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi Charles\n\nOn Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:\n>  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n>    they will handle major security issues well.  The Bioconductor project has good\n>    programmers, more than a decade of acheivements, and a full commitment to\n>    security.  Also, they might migrate before the Freeze.\n\n...\n\n> My favorite is option 1.\n\nThe release team is fine with option 1.  Please see the packaging\nnotes about embedded code copies [1], and please register the affected\npackages with the security team.  Previously, you could add them\nyourself in the wiki, but now you can do it in salsa [2].\n\nRegards\nGraham\n\n[1] https://wiki.debian.org/Packaging/EmbeddedCopies\n[2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies",
+      "body_snippet": "Hi Charles\n\nOn Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:\n>  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n>    they will handle major secur",
+      "thread_id": "thread-c97b79feddeb",
+      "thread_depth": 1,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-dbfece487e0d",
+      "message_id": "<apoGiIM-99AgKvkp@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-03T23:45:12Z",
+      "subject": "Re: Bug#1134352: Bioconductor and HDF5 transition clash",
+      "subject_clean": "Bug#1134352: Bioconductor and HDF5 transition clash",
+      "in_reply_to": "<CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>",
+      "references": [
+        "<177655592384.375870.15394889310006759633.reportbug@bubu.igloo>",
+        "<api4kJUzZgbmSioZ@kumo.plessy.net>",
+        "<CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\n> On Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:\n> >  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n> >    they will handle major security issues well.  The Bioconductor project has good\n> >    programmers, more than a decade of acheivements, and a full commitment to\n> >    security.  Also, they might migrate before the Freeze.\n> \n> ...\n> \n> > My favorite is option 1.\n\nLe Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :\n> \n> The release team is fine with option 1.  Please see the packaging\n> notes about embedded code copies [1], and please register the affected\n> packages with the security team.  Previously, you could add them\n> yourself in the wiki, but now you can do it in salsa [2].\n> \n> [1] https://wiki.debian.org/Packaging/EmbeddedCopies\n> [2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies\n\nMany thanks to you and the release team for letting us doing this!\n\nI will work on it next week.\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi Graham,\n\n> On Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:\n> >  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that\n> >    they will handle major",
+      "thread_id": "thread-c97b79feddeb",
+      "thread_depth": 2,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-ed12b702d88b",
+      "message_id": "<aqCn5pVkQKxvei4L@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-09T00:27:39Z",
+      "subject": "Re: Bug#1134352: Bioconductor and HDF5 transition clash",
+      "subject_clean": "Bug#1134352: Bioconductor and HDF5 transition clash",
+      "in_reply_to": "<apoGiIM-99AgKvkp@kumo.plessy.net>",
+      "references": [
+        "<177655592384.375870.15394889310006759633.reportbug@bubu.igloo>",
+        "<api4kJUzZgbmSioZ@kumo.plessy.net>",
+        "<CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>",
+        "<apoGiIM-99AgKvkp@kumo.plessy.net>"
+      ],
+      "body_plain": "> Le Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :\n> > \n> > The release team is fine with option 1.  Please see the packaging\n> > notes about embedded code copies [1], and please register the affected\n> > packages with the security team.  Previously, you could add them\n> > yourself in the wiki, but now you can do it in salsa [2].\n> > \n> > [1] https://wiki.debian.org/Packaging/EmbeddedCopies\n> > [2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies\n\nLe Fri, Sep 04, 2026 at 08:45:12AM +0900, Charles Plessy a écrit :\n> \n> \n> Many thanks to you and the release team for letting us doing this!\n> \n> I will work on it next week.\n\nHi Graham,\n\nthanks again for the guidance and the green light.\n\nI have uploaded the packages and declared it:\n\nhttps://salsa.debian.org/security-tracker-team/security-tracker/-/commit/d74ae7f4d648f5ce6fac323e3c60d735b0093962\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "> Le Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :\n> > \n> > The release team is fine with option 1.  Please see the packaging\n> > notes about embedded code copies [1], and please regis",
+      "thread_id": "thread-c97b79feddeb",
+      "thread_depth": 3,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-13cf6680015a",
+      "message_id": "<178934309971.3076643.17357864935292908150.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-13T23:44:59Z",
+      "subject": "Bug#1147634: RM: r-bioc-zlibbioc -- ROM; RoM - abandonned upstream.",
+      "subject_clean": "Bug#1147634: RM: r-bioc-zlibbioc -- ROM; RoM - abandonned upstream.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-zlibbioc at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-zlibbioc\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\n\nDear Archives Operation team,\n\nThe Bioconductor project stopped vendoring the zlib and retired its\nzlibbbioc package.  We can celebrate and remove r-bioc-zlibbioc from\nDebian too :)\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-zlibbioc at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-zlibbioc\nUser: ftp.de",
+      "thread_id": "thread-13cf6680015a",
+      "thread_depth": 0,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-a8329fb240a1",
+      "message_id": "<178934336022.3077608.2499919272685448593.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-13T23:49:20Z",
+      "subject": "Bug#1147636: RM: r-bioc-mofa -- ROM; superseded by r-bioc-mofa2",
+      "subject_clean": "Bug#1147636: RM: r-bioc-mofa -- ROM; superseded by r-bioc-mofa2",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-mofa at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-mofa\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\n\nDear Archive Operations team,\n\nit's all in the title :)\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-mofa at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-mofa\nUser: ftp.debian.org",
+      "thread_id": "thread-a8329fb240a1",
+      "thread_depth": 0,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-38cdccb99b86",
+      "message_id": "<178934712601.3136934.15088505551758250374.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-14T00:52:06Z",
+      "subject": "Bug#1147638: RM: r-bioc-deseq -- ROM; superseded by r-bioc-deseq2",
+      "subject_clean": "Bug#1147638: RM: r-bioc-deseq -- ROM; superseded by r-bioc-deseq2",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-deseq at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-deseq\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\n\nHi again, Archives Operation team,\n\nhi all,\n\nr-bioc-deseq was superseded a long time ago by r-bioc-deseq2.  We kept\nit for multiple releases despite upstream stopped releasing it; It is\ntime to let it go.\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-deseq at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src",
+      "thread_id": "thread-38cdccb99b86",
+      "thread_depth": 0,
+      "month": "2026-09"
+    },
+    {
+      "id": "msg-9e71a9813be5",
+      "message_id": "<179055337681.1065970.3387548545719329939.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-09-27T23:56:16Z",
+      "subject": "Bug#1149187: RM: r-cran-diffobj [s390x i386] -- ROM; Not a supported architecture",
+      "subject_clean": "Bug#1149187: RM: r-cran-diffobj [s390x i386] -- ROM; Not a supported architecture",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-s390 at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-cran-diffobj\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\nUser: debian-s390 at lists.debian.org\nUsertags: s390x\nUser: debian-s390 at lists.debian.org\nUsertags: s390x\nUser: debian-hurd at lists.debian.org\nUsertags: hurd-i386\n\nDear Archive Operations Team,\n\nPlease remove r-cran-diffobj on the above architectures as they are not\nsupported by our team.\n\nAccording to the UDD this is the last request for the mass removal\nstarted earlier this year!\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-s390 at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-",
+      "thread_id": "thread-9e71a9813be5",
+      "thread_depth": 0,
+      "month": "2026-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-c97b79feddeb",
+      "subject": "Bioconductor and HDF5 transition clash",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Charles Plessy",
+        "Graham Inggs"
+      ],
+      "started": "2026-09-03T00:11:17Z",
+      "last_reply": "2026-09-09T00:27:39Z",
+      "root_message_id": "msg-c97b79feddeb"
+    },
+    {
+      "id": "thread-13cf6680015a",
+      "subject": "Bug#1147634: RM: r-bioc-zlibbioc -- ROM; RoM - abandonned upstream.",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-09-13T23:44:59Z",
+      "last_reply": "2026-09-13T23:44:59Z",
+      "root_message_id": "msg-13cf6680015a"
+    },
+    {
+      "id": "thread-a8329fb240a1",
+      "subject": "Bug#1147636: RM: r-bioc-mofa -- ROM; superseded by r-bioc-mofa2",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-09-13T23:49:20Z",
+      "last_reply": "2026-09-13T23:49:20Z",
+      "root_message_id": "msg-a8329fb240a1"
+    },
+    {
+      "id": "thread-38cdccb99b86",
+      "subject": "Bug#1147638: RM: r-bioc-deseq -- ROM; superseded by r-bioc-deseq2",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-09-14T00:52:06Z",
+      "last_reply": "2026-09-14T00:52:06Z",
+      "root_message_id": "msg-38cdccb99b86"
+    },
+    {
+      "id": "thread-9e71a9813be5",
+      "subject": "Bug#1149187: RM: r-cran-diffobj [s390x i386] -- ROM; Not a supported architecture",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-09-27T23:56:16Z",
+      "last_reply": "2026-09-27T23:56:16Z",
+      "root_message_id": "msg-9e71a9813be5"
+    }
+  ]
+}

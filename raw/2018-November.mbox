@@ -1,0 +1,331 @@
+From andreas at an3as.eu  Thu Nov  1 10:05:56 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 1 Nov 2018 11:05:56 +0100
+Subject: BioConductor update
+Message-ID: <20181101100556.g35dklrkwvqhcgkd@an3as.eu>
+
+Hi,
+
+yesterday BioConductor 3.8 was released.  Usually this need upgrades of
+packages in a certain sequence.  To know what package needs to be
+upgraded in what sequence I've created a dependency tree[1] (you can use
+the Makefile in this repository to generate a PNG).  Since I'll be busy
+with real life for three weeks starting tomorrow afternoon I will not
+touch this transition before end of November - but for sure every team
+member is perfectly welcome to fire up routine-update[2] in the
+described sequence.  If some volunteer wants to tackle this (which I'd
+really welcome!) and there might be a change in the dependency tree
+please also record this in the ditaa document.
+
+Kind regards
+
+          Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-000-dependency-scheme/blob/master/BioC_dependency-tree.ditaa
+[2] https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update
+
+-- 
+http://fam-tille.de
+
+From dechant at dal.ca  Sat Nov  3 19:48:33 2018
+From: dechant at dal.ca (Oliver Dechant)
+Date: Sat, 3 Nov 2018 19:48:33 +0000
+Subject: Re: BioConductor update
+In-Reply-To: <20181101100556.g35dklrkwvqhcgkd@an3as.eu>
+References: <20181101100556.g35dklrkwvqhcgkd@an3as.eu>
+Message-ID: <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca>
+
+On 2018-11-01 7:05 a.m., Andreas Tille wrote:
+> Hi,
+> 
+> yesterday BioConductor 3.8 was released.  Usually this need upgrades of
+> packages in a certain sequence.  To know what package needs to be
+> upgraded in what sequence I've created a dependency tree[1] (you can use
+> the Makefile in this repository to generate a PNG).  Since I'll be busy
+> with real life for three weeks starting tomorrow afternoon I will not
+> touch this transition before end of November - but for sure every team
+> member is perfectly welcome to fire up routine-update[2] in the
+> described sequence.  If some volunteer wants to tackle this (which I'd
+> really welcome!) and there might be a change in the dependency tree
+> please also record this in the ditaa document.
+> 
+> Kind regards
+> 
+>           Andreas.
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-bioc-000-dependency-scheme/blob/master/BioC_dependency-tree.ditaa
+> [2] https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update
+> 
+I am interested in this and would offer my assistance to someone who
+knows what they are doing.
+
+Many thanks,
+-- 
+Oliver
+
+From edd at debian.org  Sun Nov 25 20:47:27 2018
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 25 Nov 2018 14:47:27 -0600
+Subject: tidyverse package to give away
+Message-ID: <23547.2655.775881.318422@rob.eddelbuettel.com>
+
+Among the packages I maintain, readr aka r-cran-readr crept in at some point
+via a reverse dependency of another package.  I have no strong affinity to
+this package as I don't tend to use it myself -- and I now have a biggish
+problem on my hand with it as it uses rpath (poorly).
+
+See our bug report at
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=914633
+See the upstream bug report at
+  https://github.com/tidyverse/readr/issues/924
+
+Would anybody else want to take this one?
+
+It might otherwise block the tidyverse as it fails on autopkgtests.
+
+Thanks,  Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Mon Nov 26 07:43:38 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 26 Nov 2018 08:43:38 +0100
+Subject: Re: tidyverse package to give away
+In-Reply-To: <23547.2655.775881.318422@rob.eddelbuettel.com>
+References: <23547.2655.775881.318422@rob.eddelbuettel.com>
+Message-ID: <20181126074338.h244bvocb7xxavqa@an3as.eu>
+
+Hi Dirk,
+
+just to be sure:  You reported an issue of r-cran-readr (#914633) but
+the subject says you want to give away r-cran-tidyverse (which is just
+in team maintenance).  Could you please clarify what package is up for
+team adoption and whether there is possibly some Git repository to clone
+to keep the history?
+
+Kind regards
+
+       Andreas.
+
+On Sun, Nov 25, 2018 at 02:47:27PM -0600, Dirk Eddelbuettel wrote:
+> 
+> Among the packages I maintain, readr aka r-cran-readr crept in at some point
+> via a reverse dependency of another package.  I have no strong affinity to
+> this package as I don't tend to use it myself -- and I now have a biggish
+> problem on my hand with it as it uses rpath (poorly).
+> 
+> See our bug report at
+>   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=914633
+> See the upstream bug report at
+>   https://github.com/tidyverse/readr/issues/924
+> 
+> Would anybody else want to take this one?
+> 
+> It might otherwise block the tidyverse as it fails on autopkgtests.
+> 
+> Thanks,  Dirk
+> 
+> -- 
+> http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Nov 26 12:14:35 2018
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 26 Nov 2018 06:14:35 -0600
+Subject: Re: tidyverse package to give away
+In-Reply-To: <20181126074338.h244bvocb7xxavqa@an3as.eu>
+References: <23547.2655.775881.318422@rob.eddelbuettel.com> <20181126074338.h244bvocb7xxavqa@an3as.eu>
+Message-ID: <23547.58283.82528.725754@rob.eddelbuettel.com>
+
+On 26 November 2018 at 08:43, Andreas Tille wrote:
+| Hi Dirk,
+| 
+| just to be sure:  You reported an issue of r-cran-readr (#914633) but
+| the subject says you want to give away r-cran-tidyverse (which is just
+| in team maintenance).  Could you please clarify what package is up for
+| team adoption and whether there is possibly some Git repository to clone
+| to keep the history?
+
+Please re-read the message.  r-cran-readr has a stupid upstream bug (which I
+by now fixed).  Its bug report alreday says it would block r-cran-tidyverse
+and all that package contains.  And that is what the Subject says: A
+tidyverse package to give away. The body of the email is crystal-clear in its
+focus on readr, and anybody who understand a little about R packages knows or
+figures out how readr relates to tidyverse.
+
+In any event, moot now as I then wasted two hours on it designing a fix.  So
+currently tidyverse is not threatened by readr.
+
+Also, don't play coy. You know there are search engines.  You also know the
+pattern of package names. You know where to look up the git repo. You know we
+have the QA pages.  And yet you claim you can't find it?  Ok then.
+
+In any event, consider this offer withdrawn. I don't enjoy this email enough
+to carry on the discussion. So no need to reply.
+
+Dirk
+| 
+| Kind regards
+| 
+|        Andreas.
+| 
+| On Sun, Nov 25, 2018 at 02:47:27PM -0600, Dirk Eddelbuettel wrote:
+| > 
+| > Among the packages I maintain, readr aka r-cran-readr crept in at some point
+| > via a reverse dependency of another package.  I have no strong affinity to
+| > this package as I don't tend to use it myself -- and I now have a biggish
+| > problem on my hand with it as it uses rpath (poorly).
+| > 
+| > See our bug report at
+| >   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=914633
+| > See the upstream bug report at
+| >   https://github.com/tidyverse/readr/issues/924
+| > 
+| > Would anybody else want to take this one?
+| > 
+| > It might otherwise block the tidyverse as it fails on autopkgtests.
+| > 
+| > Thanks,  Dirk
+| > 
+| > -- 
+| > http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+| > 
+| > 
+| 
+| -- 
+| http://fam-tille.de
+| 
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Mon Nov 26 16:54:56 2018
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 26 Nov 2018 18:54:56 +0200
+Subject: Re: BioConductor update
+In-Reply-To: <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca>
+References: <20181101100556.g35dklrkwvqhcgkd@an3as.eu> <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca>
+Message-ID: <CAM8zJQueHQZqQpnJ1tCe7rJgJ8MVMZPvtDjwEs8SJXcs2puJow@mail.gmail.com>
+
+Hi All
+
+What is the current status of the transition to bioconductor 3.8?
+
+In Ubuntu I noticed some packages starting to FTBFS.
+I was able to to reproduce the failures in Debian unstable [1][2][3][4][5].
+
+Is this expected, or should I be filing bug reports?
+
+Regards
+Graham
+
+[1] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-biomformat.html
+[2] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-dnacopy.html
+[3] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-ebseq.html
+[4] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-savr.html
+[5] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-seqlogo.html
+
+From daissi at debian.org  Mon Nov 26 17:32:25 2018
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Mon, 26 Nov 2018 18:32:25 +0100
+Subject: Re: BioConductor update
+In-Reply-To: <CAM8zJQueHQZqQpnJ1tCe7rJgJ8MVMZPvtDjwEs8SJXcs2puJow@mail.gmail.com>
+References: <20181101100556.g35dklrkwvqhcgkd@an3as.eu> <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca> <CAM8zJQueHQZqQpnJ1tCe7rJgJ8MVMZPvtDjwEs8SJXcs2puJow@mail.gmail.com>
+Message-ID: <CA+6XHwT1uh2EDDa-VwBhb+voTXTacsMZ5tFv+rnd45f4rAvjmw@mail.gmail.com>
+
+Hi Graham,
+
+This is unexpected,  I will upload in few hours a new dh-r which fix this problem.
+
+Otherwise, the transition to bioc 3.8 is done. There are still 2 or 3 packages which did not yet reach testing.
+
+Best,
+Dylan
+
+Le lun. 26 nov. 2018 à 17:55, Graham Inggs <ginggs at debian.org> a écrit :
+
+> Hi All
+>
+>
+>
+> What is the current status of the transition to bioconductor 3.8?
+>
+>
+>
+> In Ubuntu I noticed some packages starting to FTBFS.
+>
+> I was able to to reproduce the failures in Debian unstable [1][2][3][4][5].
+>
+>
+>
+> Is this expected, or should I be filing bug reports?
+>
+>
+>
+> Regards
+>
+> Graham
+>
+>
+>
+>
+>
+> [1] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-biomformat.html
+>
+> [2] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-dnacopy.html
+>
+> [3] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-ebseq.html
+>
+> [4] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-savr.html
+>
+> [5] https://tests.reproducible-builds.org/debian/history/amd64/r-bioc-seqlogo.html
+
+From andreas at an3as.eu  Mon Nov 26 19:15:19 2018
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 26 Nov 2018 20:15:19 +0100
+Subject: Re: BioConductor update
+In-Reply-To: <CA+6XHwT1uh2EDDa-VwBhb+voTXTacsMZ5tFv+rnd45f4rAvjmw@mail.gmail.com>
+References: <20181101100556.g35dklrkwvqhcgkd@an3as.eu> <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca> <CAM8zJQueHQZqQpnJ1tCe7rJgJ8MVMZPvtDjwEs8SJXcs2puJow@mail.gmail.com> <CA+6XHwT1uh2EDDa-VwBhb+voTXTacsMZ5tFv+rnd45f4rAvjmw@mail.gmail.com>
+Message-ID: <20181126191519.ikg2lelpqr7ljyk7@an3as.eu>
+
+Hi Dylan,
+
+On Mon, Nov 26, 2018 at 06:32:25PM +0100, Dylan Aïssi wrote:
+> 
+> Otherwise, the transition to bioc 3.8 is done. There are still 2 or 3
+> packages which did not yet reach testing.
+
+Thanks a lot for the fine work and all the enhancements you did
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Tue Nov 27 06:32:04 2018
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 27 Nov 2018 08:32:04 +0200
+Subject: Re: BioConductor update
+In-Reply-To: <CA+6XHwT1uh2EDDa-VwBhb+voTXTacsMZ5tFv+rnd45f4rAvjmw@mail.gmail.com>
+References: <20181101100556.g35dklrkwvqhcgkd@an3as.eu> <e6e8652b-03c0-445d-aa75-61c168842b6b@dal.ca> <CAM8zJQueHQZqQpnJ1tCe7rJgJ8MVMZPvtDjwEs8SJXcs2puJow@mail.gmail.com> <CA+6XHwT1uh2EDDa-VwBhb+voTXTacsMZ5tFv+rnd45f4rAvjmw@mail.gmail.com>
+Message-ID: <CAM8zJQvfav5oGB8eWc39edLakWBD_4tUDL5y-Z1=h9p5cVVptQ@mail.gmail.com>
+
+Hi Dylan
+
+On Mon, 26 Nov 2018 at 19:32, Dylan Aïssi <daissi at debian.org> wrote:
+> This is unexpected,  I will upload in few hours a new dh-r which fix this problem.
+
+dh-r/20181126 has indeed fixed those FTBFS in Ubuntu.
+
+> Otherwise, the transition to bioc 3.8 is done. There are still 2 or 3 packages which did not yet reach testing.
+
+Thanks for your work on this!
+
+Regards
+Graham
+

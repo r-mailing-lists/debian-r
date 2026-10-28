@@ -1,0 +1,4529 @@
+From plessy at debian.org  Mon Apr 14 21:42:36 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 15 Apr 2025 06:42:36 +0900
+Subject: Shall we just remove all team-maintained r-cran-* packages from i386 or all 32-bit platforms in Trixie?
+Message-ID: <Z_2BTPio6snT6gY7@kumo.plessy.net>
+
+Hello everybody,
+
+with the amount of effort I can provide to the maintainance and release of the
+r-cran-* packages I already worry about being able to have the r-cran-* and
+r-bioc-* packages in good shape for Trixie.
+
+In that sense, I think that issues on 32-bit platforms are a total distraction.
+Especially for i386, where the kernel and installer teams do not provide
+support anymore, I do not think that we have any user who really needs our
+packages to be in Trixie.
+
+I think that the whole dance of disabling autopkgtests one by one as issues
+arise, to avoid specific package removals that take time to everybody, is
+actually very costly in the long term, if one makes the sum of the time for
+fixing each package individually.  And now we also have i386 FTBFS bugs to
+solve on top of that...
+
+I propose to remove all of our team-maintained r-cran-* packages and their
+whole dependency chain on 32-bit platforms from Trixie.  This way, it is a
+single request to the FTP team.
+
+I volunter to re-upload all team-maintained r-cran-* pakcages with the use of
+`routine-update --64`, which automatically adds architecture-is-64-bit in their
+control file.  This task fits well the way my Debian time is distributed over
+the weeks.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From joostvb+debian-r at uvt.nl  Tue Apr 15 07:57:28 2025
+From: joostvb+debian-r at uvt.nl (=?utf-8?q?Joost_van_Baal-Ili=C4=87?=)
+Date: Tue, 15 Apr 2025 09:57:28 +0200
+Subject: Re: Shall we just remove all team-maintained r-cran-* packages from i386 or all 32-bit platforms in Trixie?
+In-Reply-To: <Z_2BTPio6snT6gY7@kumo.plessy.net>
+References: <Z_2BTPio6snT6gY7@kumo.plessy.net>
+Message-ID: <Z/4RaNmR6axVyPO3@incagijs.uvt.nl>
+
+Hi,
+
+On Tue, Apr 15, 2025 at 06:42:36AM +0900, Charles Plessy wrote:
+> 
+> with the amount of effort I can provide to the maintainance and release of the
+> r-cran-* packages I already worry about being able to have the r-cran-* and
+> r-bioc-* packages in good shape for Trixie.
+> 
+> In that sense, I think that issues on 32-bit platforms are a total distraction.
+> Especially for i386, where the kernel and installer teams do not provide
+> support anymore, I do not think that we have any user who really needs our
+> packages to be in Trixie.
+> 
+> I think that the whole dance of disabling autopkgtests one by one as issues
+> arise, to avoid specific package removals that take time to everybody, is
+> actually very costly in the long term, if one makes the sum of the time for
+> fixing each package individually.  And now we also have i386 FTBFS bugs to
+> solve on top of that...
+> 
+> I propose to remove all of our team-maintained r-cran-* packages and their
+> whole dependency chain on 32-bit platforms from Trixie.  This way, it is a
+> single request to the FTP team.
+> 
+> I volunter to re-upload all team-maintained r-cran-* pakcages with the use of
+> `routine-update --64`, which automatically adds architecture-is-64-bit in their
+> control file.  This task fits well the way my Debian time is distributed over
+> the weeks.
+
+( As someone who's not very active any more in this team: )
+
+It sounds good to me, and I believe, given the resources we have, it's in the
+best interest of our users.  And we've been having this discussion before, too.
+
+Thanks for your efforts!
+
+Bye,
+
+Joost
+
+From plessy at debian.org  Wed Apr 16 14:04:47 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 16 Apr 2025 23:04:47 +0900
+Subject: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+Message-ID: <Z_-4_12vy604Nz0I@bubu.igloo>
+
+Hi all,
+
+let's be realistic, the r-cran-* packages team-maintained by me and
+others are not in a good shape.  And given their complex net of
+cross-dependencies, there is the risk of removing a large number of them
+from Trixie before the release.
+
+When I check the UDD maintainer dasboard to set my priorities, I am
+distracted by issues related to the i386 and s390x platforms.  For the
+first, I am not convinced that we have users that need us to ship
+r-cran-* packages in Trixie.  For s390x, well, the popcon score is just
+10…
+
+I do not believe that we will be able to fix everything on time, and I
+want to move the less important issues out of the way.  We have a script
+(routine-update) that clones the source package repo from Salsa, updates
+debian/control, builds the package, prepares a source-only upload and a
+command to push the changes to Salsa.  It has a --64 option that injects
+architecture-is-64-bit in the build depends and I will add a
+--little-endian one that will inject architecture-is-little-endian.
+
+After uploading the changes, I will then ask the FTP team to remove the
+team-maintained r-cran-* packages and all their reverse-dependencies
+from the excluded architectures.  I have added a DD list that tries to
+predict the potentially affected packages.  Please note that there are
+false positives, as I generated it with dak rm -Rn r-base for
+simplicity, but I am not proposing to touch r-base or the r-cran
+packages managed by Dirk.  The vast majority of the affected
+dependencies are maintained by the Debian Med and Debian Science lists,
+which I have CCed.
+
+If you need one of the team-maintained r-cran-* packages on a 32-bit or
+on a big endian architectures, which are not supported upstream, please
+contact me on the debian-r list and let's see how we can share the
+workload.  Otherwise I will start the process next week, assuming silent
+approval.  The alternative is to lose a lot of r-cran-* packages from
+amd64 as well.
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+Alba Crespi <crespialba+debian at gmail.com>
+   r-cran-data.table (U)
+   r-cran-fastmatch (U)
+   r-cran-nmf (U)
+   r-cran-nnls (U)
+   r-cran-phangorn (U)
+   r-cran-pkgmaker (U)
+   r-cran-registry (U)
+   r-cran-rngtools (U)
+
+Andreas Tille <tille at debian.org>
+   assemblytics (U)
+   bio-tradis (U)
+   dh-r (U)
+   ea-utils (U)
+   libsbml (U)
+   libvcflib (U)
+   mapdamage (U)
+   node-shiny-server (U)
+   paleomix (U)
+   picard-tools (U)
+   pique (U)
+   qcumber (U)
+   r-bioc-affy (U)
+   r-bioc-affyio (U)
+   r-bioc-all (U)
+   r-bioc-altcdfenvs (U)
+   r-bioc-annotate (U)
+   r-bioc-annotationdbi (U)
+   r-bioc-annotationfilter (U)
+   r-bioc-annotationhub (U)
+   r-bioc-aroma.light (U)
+   r-bioc-ballgown (U)
+   r-bioc-biobase (U)
+   r-bioc-biocbaseutils (U)
+   r-bioc-biocfilecache (U)
+   r-bioc-biocgenerics (U)
+   r-bioc-biocio (U)
+   r-bioc-biocparallel (U)
+   r-bioc-biocstyle (U)
+   r-bioc-biocversion (U)
+   r-bioc-biomart (U)
+   r-bioc-biomformat (U)
+   r-bioc-biostrings (U)
+   r-bioc-biovizbase (U)
+   r-bioc-bladderbatch (U)
+   r-bioc-bsgenome (U)
+   r-bioc-bsseq (U)
+   r-bioc-chemminer (U)
+   r-bioc-cner (U)
+   r-bioc-complexheatmap (U)
+   r-bioc-consensusclusterplus (U)
+   r-bioc-cummerbund (U)
+   r-bioc-decontam (U)
+   r-bioc-decoupler (U)
+   r-bioc-degreport (U)
+   r-bioc-densvis (U)
+   r-bioc-deseq (U)
+   r-bioc-deseq2 (U)
+   r-bioc-destiny (U)
+   r-bioc-dirichletmultinomial (U)
+   r-bioc-dss (U)
+   r-bioc-ebseq (U)
+   r-bioc-edaseq (U)
+   r-bioc-edger (U)
+   r-bioc-ensembldb (U)
+   r-bioc-fmcsr (U)
+   r-bioc-genefilter (U)
+   r-bioc-genelendatabase (U)
+   r-bioc-genomeinfodb (U)
+   r-bioc-genomicalignments (U)
+   r-bioc-genomicfeatures (U)
+   r-bioc-genomicranges (U)
+   r-bioc-glmgampoi (U)
+   r-bioc-go.db (U)
+   r-bioc-gosemsim (U)
+   r-bioc-goseq (U)
+   r-bioc-graph (U)
+   r-bioc-gviz (U)
+   r-bioc-hilbertvis (U)
+   r-bioc-hsmmsinglecell (U)
+   r-bioc-hypergraph (U)
+   r-bioc-ihw (U)
+   r-bioc-interactivedisplaybase (U)
+   r-bioc-ioniser (U)
+   r-bioc-iranges (U)
+   r-bioc-keggrest (U)
+   r-bioc-limma (U)
+   r-bioc-lpsymphony (U)
+   r-bioc-makecdfenv (U)
+   r-bioc-matrixgenerics (U)
+   r-bioc-metagenomeseq (U)
+   r-bioc-metapod (U)
+   r-bioc-monocle (U)
+   r-bioc-multtest (U)
+   r-bioc-mutationalpatterns (U)
+   r-bioc-pcamethods (U)
+   r-bioc-pfamanalyzer (U)
+   r-bioc-phyloseq (U)
+   r-bioc-preprocesscore (U)
+   r-bioc-protgenerics (U)
+   r-bioc-purecn (U)
+   r-bioc-pwmenrich (U)
+   r-bioc-qvalue (U)
+   r-bioc-rcpi (U)
+   r-bioc-rgsepd (U)
+   r-bioc-rhdf5 (U)
+   r-bioc-rhdf5lib (U)
+   r-bioc-rhtslib (U)
+   r-bioc-rots (U)
+   r-bioc-rsamtools (U)
+   r-bioc-rtracklayer (U)
+   r-bioc-rwikipathways (U)
+   r-bioc-s4arrays (U)
+   r-bioc-s4vectors (U)
+   r-bioc-saturn (U)
+   r-bioc-savr (U)
+   r-bioc-scaledmatrix (U)
+   r-bioc-scuttle (U)
+   r-bioc-seqlogo (U)
+   r-bioc-shortread (U)
+   r-bioc-snpstats (U)
+   r-bioc-sparsearray (U)
+   r-bioc-sparsematrixstats (U)
+   r-bioc-summarizedexperiment (U)
+   r-bioc-sva (U)
+   r-bioc-tcgabiolinks (U)
+   r-bioc-tfbstools (U)
+   r-bioc-titancna (U)
+   r-bioc-variantannotation (U)
+   r-bioc-wrench (U)
+   r-bioc-xvector (U)
+   r-cran-actuar (U)
+   r-cran-ade4 (U)
+   r-cran-adegenet (U)
+   r-cran-adegraphics (U)
+   r-cran-adephylo (U)
+   r-cran-admisc (U)
+   r-cran-aer (U)
+   r-cran-afex (U)
+   r-cran-amore (U)
+   r-cran-animation (U)
+   r-cran-aplpack (U)
+   r-cran-areal (U)
+   r-cran-arm (U)
+   r-cran-arsenal (U)
+   r-cran-askpass (U)
+   r-cran-assertive.base (U)
+   r-cran-assertthat (U)
+   r-cran-av (U)
+   r-cran-aweek (U)
+   r-cran-backports (U)
+   r-cran-base64url (U)
+   r-cran-batchjobs (U)
+   r-cran-batchtools (U)
+   r-cran-bayesfm (U)
+   r-cran-bayesplot (U)
+   r-cran-bayestestr (U)
+   r-cran-bbmisc (U)
+   r-cran-bbmle (U)
+   r-cran-bdgraph (U)
+   r-cran-benchmarkme (U)
+   r-cran-benchmarkmedata (U)
+   r-cran-biasedurn (U)
+   r-cran-bibtex (U)
+   r-cran-bindr (U)
+   r-cran-bindrcpp (U)
+   r-cran-bio3d (U)
+   r-cran-bit (U)
+   r-cran-bit64 (U)
+   r-cran-bitops (U)
+   r-cran-blme (U)
+   r-cran-blob (U)
+   r-cran-bold (U)
+   r-cran-bookdown (U)
+   r-cran-boolnet (U)
+   r-cran-bradleyterry2 (U)
+   r-cran-brew (U)
+   r-cran-brglm (U)
+   r-cran-brglm2 (U)
+   r-cran-bridgesampling (U)
+   r-cran-brio (U)
+   r-cran-brms (U)
+   r-cran-brobdingnag (U)
+   r-cran-broom (U)
+   r-cran-broom.helpers (U)
+   r-cran-broom.mixed (U)
+   r-cran-bslib (U)
+   r-cran-cachem (U)
+   r-cran-caic4 (U)
+   r-cran-cairo (U)
+   r-cran-callr (U)
+   r-cran-caret (U)
+   r-cran-catools (U)
+   r-cran-cba (U)
+   r-cran-checkmate (U)
+   r-cran-chk (U)
+   r-cran-classint (U)
+   r-cran-cli (U)
+   r-cran-cliapp (U)
+   r-cran-clock (U)
+   r-cran-clubsandwich (U)
+   r-cran-clue (U)
+   r-cran-clustergeneration (U)
+   r-cran-cmprsk (U)
+   r-cran-coarsedatatools (U)
+   r-cran-collapse (U)
+   r-cran-colorspace (U)
+   r-cran-colourpicker (U)
+   r-cran-combinat (U)
+   r-cran-commonmark (U)
+   r-cran-conditionz (U)
+   r-cran-conflicted (U)
+   r-cran-covid19us (U)
+   r-cran-covr (U)
+   r-cran-cowplot (U)
+   r-cran-cpp11 (U)
+   r-cran-crayon (U)
+   r-cran-credentials (U)
+   r-cran-crosstalk (U)
+   r-cran-crul (U)
+   r-cran-ctmcd (U)
+   r-cran-cubelyr (U)
+   r-cran-curl (U)
+   r-cran-cutpointr (U)
+   r-cran-cvst (U)
+   r-cran-d3network (U)
+   r-cran-data.table (U)
+   r-cran-datawizard (U)
+   r-cran-dbitest (U)
+   r-cran-dbplyr (U)
+   r-cran-ddalpha (U)
+   r-cran-ddrtree (U)
+   r-cran-deal (U)
+   r-cran-decor (U)
+   r-cran-deldir (U)
+   r-cran-dendextend (U)
+   r-cran-dendsort (U)
+   r-cran-densityclust (U)
+   r-cran-deoptim (U)
+   r-cran-desc (U)
+   r-cran-devtools (U)
+   r-cran-dfoptim (U)
+   r-cran-diagnosismed (U)
+   r-cran-diagram (U)
+   r-cran-dials (U)
+   r-cran-dicedesign (U)
+   r-cran-dichromat (U)
+   r-cran-diffobj (U)
+   r-cran-dimred (U)
+   r-cran-dirmult (U)
+   r-cran-discriminer (U)
+   r-cran-distory (U)
+   r-cran-distr (U)
+   r-cran-distributional (U)
+   r-cran-docopt (U)
+   r-cran-doparallel (U)
+   r-cran-dorng (U)
+   r-cran-dosefinding (U)
+   r-cran-dotcall64 (U)
+   r-cran-dplyr (U)
+   r-cran-dqrng (U)
+   r-cran-drr (U)
+   r-cran-dt (U)
+   r-cran-dygraphs (U)
+   r-cran-eaf (U)
+   r-cran-earth (U)
+   r-cran-effectsize (U)
+   r-cran-egg (U)
+   r-cran-ei (U)
+   r-cran-eipack (U)
+   r-cran-ellipse (U)
+   r-cran-emayili (U)
+   r-cran-emmeans (U)
+   r-cran-emoa (U)
+   r-cran-enrichwith (U)
+   r-cran-epi (U)
+   r-cran-epibasix (U)
+   r-cran-epicalc (U)
+   r-cran-epiestim (U)
+   r-cran-epir (U)
+   r-cran-epitools (U)
+   r-cran-erm (U)
+   r-cran-estimability (U)
+   r-cran-estimatr (U)
+   r-cran-etm (U)
+   r-cran-evaluate (U)
+   r-cran-evd (U)
+   r-cran-exactextractr (U)
+   r-cran-exactranktests (U)
+   r-cran-expint (U)
+   r-cran-expm (U)
+   r-cran-extradistr (U)
+   r-cran-fail (U)
+   r-cran-fancova (U)
+   r-cran-fansi (U)
+   r-cran-farver (U)
+   r-cran-fastcluster (U)
+   r-cran-fastdummies (U)
+   r-cran-fastmap (U)
+   r-cran-fastmatch (U)
+   r-cran-fauxpas (U)
+   r-cran-fdrtool (U)
+   r-cran-fftw (U)
+   r-cran-fields (U)
+   r-cran-filehash (U)
+   r-cran-filelock (U)
+   r-cran-fingerprint (U)
+   r-cran-flexmix (U)
+   r-cran-flextable (U)
+   r-cran-fnn (U)
+   r-cran-fontawesome (U)
+   r-cran-fontbitstreamvera (U)
+   r-cran-fontliberation (U)
+   r-cran-fontquiver (U)
+   r-cran-forecast (U)
+   r-cran-formattable (U)
+   r-cran-fpc (U)
+   r-cran-fracdiff (U)
+   r-cran-freetypeharfbuzz (U)
+   r-cran-fs (U)
+   r-cran-fts (U)
+   r-cran-furrr (U)
+   r-cran-futile.logger (U)
+   r-cran-futile.options (U)
+   r-cran-g.data (U)
+   r-cran-gamm4 (U)
+   r-cran-gargle (U)
+   r-cran-gb2 (U)
+   r-cran-gbm (U)
+   r-cran-gbrd (U)
+   r-cran-gclus (U)
+   r-cran-gdtools (U)
+   r-cran-genabel (U)
+   r-cran-genabel.data (U)
+   r-cran-generics (U)
+   r-cran-genetics (U)
+   r-cran-genie (U)
+   r-cran-genieclust (U)
+   r-cran-geoknife (U)
+   r-cran-geometry (U)
+   r-cran-geosphere (U)
+   r-cran-gert (U)
+   r-cran-getoptlong (U)
+   r-cran-gfonts (U)
+   r-cran-ggally (U)
+   r-cran-gganimate (U)
+   r-cran-ggbeeswarm (U)
+   r-cran-ggdendro (U)
+   r-cran-ggeffects (U)
+   r-cran-ggforce (U)
+   r-cran-ggfortify (U)
+   r-cran-ggm (U)
+   r-cran-ggplot.multistats (U)
+   r-cran-ggplot2 (U)
+   r-cran-ggpubr (U)
+   r-cran-ggraph (U)
+   r-cran-ggrastr (U)
+   r-cran-ggridges (U)
+   r-cran-ggsignif (U)
+   r-cran-ggstats (U)
+   r-cran-ggtext (U)
+   r-cran-ggthemes (U)
+   r-cran-ggvis (U)
+   r-cran-git2r (U)
+   r-cran-gitcreds (U)
+   r-cran-glasso (U)
+   r-cran-glmmtmb (U)
+   r-cran-glmnet (U)
+   r-cran-glue (U)
+   r-cran-gmm (U)
+   r-cran-gnm (U)
+   r-cran-goftest (U)
+   r-cran-googledrive (U)
+   r-cran-googlesheets4 (U)
+   r-cran-googlevis (U)
+   r-cran-gower (U)
+   r-cran-gparotation (U)
+   r-cran-gprofiler2 (U)
+   r-cran-graphlayouts (U)
+   r-cran-gridbase (U)
+   r-cran-gridgraphics (U)
+   r-cran-gridsvg (U)
+   r-cran-gridtext (U)
+   r-cran-grimport2 (U)
+   r-cran-gsa (U)
+   r-cran-gsl (U)
+   r-cran-gstat (U)
+   r-cran-gtable (U)
+   r-cran-guerry (U)
+   r-cran-haplo.stats (U)
+   r-cran-hardhat (U)
+   r-cran-hash (U)
+   r-cran-heatmaply (U)
+   r-cran-here (U)
+   r-cran-hexbin (U)
+   r-cran-hms (U)
+   r-cran-hsaur3 (U)
+   r-cran-htmltools (U)
+   r-cran-htmlwidgets (U)
+   r-cran-httpcode (U)
+   r-cran-httr (U)
+   r-cran-httr2 (U)
+   r-cran-huge (U)
+   r-cran-hunspell (U)
+   r-cran-hwriter (U)
+   r-cran-ids (U)
+   r-cran-igraph (U)
+   r-cran-incidence (U)
+   r-cran-insight (U)
+   r-cran-intergraph (U)
+   r-cran-interp (U)
+   r-cran-intervals (U)
+   r-cran-inum (U)
+   r-cran-ipred (U)
+   r-cran-irace (U)
+   r-cran-irlba (U)
+   r-cran-iso (U)
+   r-cran-isoweek (U)
+   r-cran-janeaustenr (U)
+   r-cran-jinjar (U)
+   r-cran-jomo (U)
+   r-cran-jquerylib (U)
+   r-cran-jsonld (U)
+   r-cran-kableextra (U)
+   r-cran-kernelheaping (U)
+   r-cran-keyring (U)
+   r-cran-km.ci (U)
+   r-cran-kmi (U)
+   r-cran-kmsurv (U)
+   r-cran-knitr (U)
+   r-cran-knn.covertree (U)
+   r-cran-kohonen (U)
+   r-cran-ks (U)
+   r-cran-kutils (U)
+   r-cran-labeling (U)
+   r-cran-labelled (U)
+   r-cran-laeken (U)
+   r-cran-lambda.r (U)
+   r-cran-lamw (U)
+   r-cran-later (U)
+   r-cran-lava (U)
+   r-cran-lavasearch2 (U)
+   r-cran-lazyeval (U)
+   r-cran-lbfgsb3c (U)
+   r-cran-learnbayes (U)
+   r-cran-leiden (U)
+   r-cran-leidenbase (U)
+   r-cran-lexrankr (U)
+   r-cran-lhs (U)
+   r-cran-libcoin (U)
+   r-cran-lifecycle (U)
+   r-cran-linprog (U)
+   r-cran-lisreltor (U)
+   r-cran-lmertest (U)
+   r-cran-lobstr (U)
+   r-cran-locfdr (U)
+   r-cran-locfit (U)
+   r-cran-logcondens (U)
+   r-cran-logger (U)
+   r-cran-logging (U)
+   r-cran-loo (U)
+   r-cran-lubridate (U)
+   r-cran-luminescence (U)
+   r-cran-lwgeom (U)
+   r-cran-magic (U)
+   r-cran-magick (U)
+   r-cran-magrittr (U)
+   r-cran-maptree (U)
+   r-cran-marginaleffects (U)
+   r-cran-matching (U)
+   r-cran-matrixstats (U)
+   r-cran-maxlik (U)
+   r-cran-maxstat (U)
+   r-cran-mclogit (U)
+   r-cran-mclust (U)
+   r-cran-mda (U)
+   r-cran-medadherence (U)
+   r-cran-mediana (U)
+   r-cran-memisc (U)
+   r-cran-memoise (U)
+   r-cran-mertools (U)
+   r-cran-metadat (U)
+   r-cran-metafor (U)
+   r-cran-metrics (U)
+   r-cran-mets (U)
+   r-cran-mice (U)
+   r-cran-minpack.lm (U)
+   r-cran-misctools (U)
+   r-cran-mitml (U)
+   r-cran-mitools (U)
+   r-cran-mixtools (U)
+   r-cran-mlbench (U)
+   r-cran-mlmetrics (U)
+   r-cran-mlmrev (U)
+   r-cran-mlr (U)
+   r-cran-mockery (U)
+   r-cran-mockr (U)
+   r-cran-modeest (U)
+   r-cran-modelmetrics (U)
+   r-cran-modelr (U)
+   r-cran-msm (U)
+   r-cran-multcompview (U)
+   r-cran-multicool (U)
+   r-cran-multidimbio (U)
+   r-cran-multilevel (U)
+   r-cran-mutoss (U)
+   r-cran-mvnfast (U)
+   r-cran-nanoarrow (U)
+   r-cran-natserv (U)
+   r-cran-ncdf4 (U)
+   r-cran-ncdfgeom (U)
+   r-cran-ncmeta (U)
+   r-cran-nfactors (U)
+   r-cran-nlp (U)
+   r-cran-nozzle.r1 (U)
+   r-cran-oaqc (U)
+   r-cran-officer (U)
+   r-cran-openmx (U)
+   r-cran-openssl (U)
+   r-cran-optimparallel (U)
+   r-cran-optimx (U)
+   r-cran-optparse (U)
+   r-cran-ordinal (U)
+   r-cran-packrat (U)
+   r-cran-palmerpenguins (U)
+   r-cran-pammtools (U)
+   r-cran-pan (U)
+   r-cran-pander (U)
+   r-cran-parallelly (U)
+   r-cran-parallelmap (U)
+   r-cran-parameters (U)
+   r-cran-paramhelpers (U)
+   r-cran-party (U)
+   r-cran-partykit (U)
+   r-cran-patchwork (U)
+   r-cran-patrick (U)
+   r-cran-pbmcapply (U)
+   r-cran-pcict (U)
+   r-cran-pdftools (U)
+   r-cran-pec (U)
+   r-cran-performance (U)
+   r-cran-permute (U)
+   r-cran-phangorn (U)
+   r-cran-pheatmap (U)
+   r-cran-phylobase (U)
+   r-cran-phytools (U)
+   r-cran-pillar (U)
+   r-cran-pingr (U)
+   r-cran-pixmap (U)
+   r-cran-pkgbuild (U)
+   r-cran-pkgcond (U)
+   r-cran-pkgconfig (U)
+   r-cran-pkgdown (U)
+   r-cran-pkgload (U)
+   r-cran-pki (U)
+   r-cran-plogr (U)
+   r-cran-plot3d (U)
+   r-cran-plotly (U)
+   r-cran-plotmo (U)
+   r-cran-plotrix (U)
+   r-cran-pls (U)
+   r-cran-plumber (U)
+   r-cran-plyr (U)
+   r-cran-png (U)
+   r-cran-polyclip (U)
+   r-cran-polycor (U)
+   r-cran-polycub (U)
+   r-cran-polynom (U)
+   r-cran-poorman (U)
+   r-cran-popepi (U)
+   r-cran-posterior (U)
+   r-cran-postlogic (U)
+   r-cran-powerlaw (U)
+   r-cran-prabclus (U)
+   r-cran-pracma (U)
+   r-cran-praise (U)
+   r-cran-prediction (U)
+   r-cran-prettycode (U)
+   r-cran-prettyunits (U)
+   r-cran-prevalence (U)
+   r-cran-princurve (U)
+   r-cran-processx (U)
+   r-cran-prodlim (U)
+   r-cran-profilemodel (U)
+   r-cran-profvis (U)
+   r-cran-progress (U)
+   r-cran-progressr (U)
+   r-cran-projpred (U)
+   r-cran-promises (U)
+   r-cran-prophet (U)
+   r-cran-proto (U)
+   r-cran-proxy (U)
+   r-cran-ps (U)
+   r-cran-psy (U)
+   r-cran-psych (U)
+   r-cran-psychometric (U)
+   r-cran-psychotools (U)
+   r-cran-psychotree (U)
+   r-cran-psychtools (U)
+   r-cran-psyphy (U)
+   r-cran-publish (U)
+   r-cran-purrr (U)
+   r-cran-purrrlyr (U)
+   r-cran-pvclust (U)
+   r-cran-pwr (U)
+   r-cran-qap (U)
+   r-cran-qgraph (U)
+   r-cran-qlcmatrix (U)
+   r-cran-qpdf (U)
+   r-cran-qqconf (U)
+   r-cran-qtl (U)
+   r-cran-quickjsr (U)
+   r-cran-qvcalc (U)
+   r-cran-r.methodss3 (U)
+   r-cran-r.oo (U)
+   r-cran-r.utils (U)
+   r-cran-randomforest (U)
+   r-cran-rappdirs (U)
+   r-cran-raster (U)
+   r-cran-ratelimitr (U)
+   r-cran-rbibutils (U)
+   r-cran-rcarb (U)
+   r-cran-rcdk (U)
+   r-cran-rcdklibs (U)
+   r-cran-rcppannoy (U)
+   r-cran-rcppml (U)
+   r-cran-rcppmlpack (U)
+   r-cran-rcppparallel (U)
+   r-cran-rcppprogress (U)
+   r-cran-rcpproll (U)
+   r-cran-rcpptoml (U)
+   r-cran-rcurl (U)
+   r-cran-rdflib (U)
+   r-cran-rdpack (U)
+   r-cran-recipes (U)
+   r-cran-redland (U)
+   r-cran-regsem (U)
+   r-cran-relsurv (U)
+   r-cran-rentrez (U)
+   r-cran-renv (U)
+   r-cran-reshape (U)
+   r-cran-reshape2 (U)
+   r-cran-restfulr (U)
+   r-cran-rex (U)
+   r-cran-rgenoud (U)
+   r-cran-rglwidget (U)
+   r-cran-rgooglemaps (U)
+   r-cran-rhandsontable (U)
+   r-cran-rhpcblasctl (U)
+   r-cran-riskregression (U)
+   r-cran-ritis (U)
+   r-cran-rlang (U)
+   r-cran-rle (U)
+   r-cran-rlist (U)
+   r-cran-rlrsim (U)
+   r-cran-rlumshiny (U)
+   r-cran-rmarkdown (U)
+   r-cran-rmutil (U)
+   r-cran-rnaturalearth (U)
+   r-cran-rnaturalearthdata (U)
+   r-cran-rncl (U)
+   r-cran-rnexml (U)
+   r-cran-robumeta (U)
+   r-cran-rockchalk (U)
+   r-cran-rocr (U)
+   r-cran-rose (U)
+   r-cran-rotl (U)
+   r-cran-roxygen2 (U)
+   r-cran-rpact (U)
+   r-cran-rpf (U)
+   r-cran-rprojroot (U)
+   r-cran-rredlist (U)
+   r-cran-rsample (U)
+   r-cran-rsconnect (U)
+   r-cran-rsolnp (U)
+   r-cran-rspectra (U)
+   r-cran-rsqlite (U)
+   r-cran-rstan (U)
+   r-cran-rstanarm (U)
+   r-cran-rstantools (U)
+   r-cran-rsvg (U)
+   r-cran-rtdists (U)
+   r-cran-rtsne (U)
+   r-cran-rtweet (U)
+   r-cran-rversions (U)
+   r-cran-rwave (U)
+   r-cran-rwiener (U)
+   r-cran-s2 (U)
+   r-cran-sampling (U)
+   r-cran-samr (U)
+   r-cran-sass (U)
+   r-cran-satellite (U)
+   r-cran-scatterd3 (U)
+   r-cran-scattermore (U)
+   r-cran-segmented (U)
+   r-cran-semplot (U)
+   r-cran-sendmailr (U)
+   r-cran-seqinr (U)
+   r-cran-seriation (U)
+   r-cran-seroincidence (U)
+   r-cran-setrng (U)
+   r-cran-seuratobject (U)
+   r-cran-sf (U)
+   r-cran-sfsmisc (U)
+   r-cran-sftime (U)
+   r-cran-shape (U)
+   r-cran-shiny (U)
+   r-cran-shinybs (U)
+   r-cran-shinycssloaders (U)
+   r-cran-shinydashboard (U)
+   r-cran-shinyfiles (U)
+   r-cran-shinystan (U)
+   r-cran-shinythemes (U)
+   r-cran-sitmo (U)
+   r-cran-sjlabelled (U)
+   r-cran-sjmisc (U)
+   r-cran-sjplot (U)
+   r-cran-sjstats (U)
+   r-cran-slider (U)
+   r-cran-smcfcs (U)
+   r-cran-smoother (U)
+   r-cran-snakecase (U)
+   r-cran-snowballc (U)
+   r-cran-snowfall (U)
+   r-cran-sodium (U)
+   r-cran-solrium (U)
+   r-cran-sourcetools (U)
+   r-cran-sp (U)
+   r-cran-spacetime (U)
+   r-cran-spam (U)
+   r-cran-sparr (U)
+   r-cran-sparsesvd (U)
+   r-cran-spatialreg (U)
+   r-cran-spatstat (U)
+   r-cran-spatstat.data (U)
+   r-cran-spatstat.explore (U)
+   r-cran-spatstat.geom (U)
+   r-cran-spatstat.linnet (U)
+   r-cran-spatstat.model (U)
+   r-cran-spatstat.random (U)
+   r-cran-spatstat.sparse (U)
+   r-cran-spatstat.utils (U)
+   r-cran-spc (U)
+   r-cran-spdata (U)
+   r-cran-spdep (U)
+   r-cran-spelling (U)
+   r-cran-splines2 (U)
+   r-cran-spp (U)
+   r-cran-squarem (U)
+   r-cran-stable (U)
+   r-cran-stanheaders (U)
+   r-cran-stars (U)
+   r-cran-startupmsg (U)
+   r-cran-statip (U)
+   r-cran-stringdist (U)
+   r-cran-stringi (U)
+   r-cran-stringr (U)
+   r-cran-surveillance (U)
+   r-cran-survey (U)
+   r-cran-survminer (U)
+   r-cran-survmisc (U)
+   r-cran-svglite (U)
+   r-cran-swagger (U)
+   r-cran-sys (U)
+   r-cran-systemfit (U)
+   r-cran-systemfonts (U)
+   r-cran-taxize (U)
+   r-cran-teachingdemos (U)
+   r-cran-tensor (U)
+   r-cran-tensora (U)
+   r-cran-terra (U)
+   r-cran-testit (U)
+   r-cran-testthat (U)
+   r-cran-textshaping (U)
+   r-cran-tfisher (U)
+   r-cran-tfmpvalue (U)
+   r-cran-tgp (U)
+   r-cran-thematic (U)
+   r-cran-themis (U)
+   r-cran-threejs (U)
+   r-cran-tibble (U)
+   r-cran-tidygraph (U)
+   r-cran-tidyr (U)
+   r-cran-tidyselect (U)
+   r-cran-tidytext (U)
+   r-cran-tikzdevice (U)
+   r-cran-timereg (U)
+   r-cran-tinytex (U)
+   r-cran-tm (U)
+   r-cran-tmb (U)
+   r-cran-tmvtnorm (U)
+   r-cran-tokenizers (U)
+   r-cran-transformr (U)
+   r-cran-treespace (U)
+   r-cran-triebeard (U)
+   r-cran-trimcluster (U)
+   r-cran-truncnorm (U)
+   r-cran-tsp (U)
+   r-cran-tweenr (U)
+   r-cran-ucminf (U)
+   r-cran-udunits2 (U)
+   r-cran-unbalanced (U)
+   r-cran-unitizer (U)
+   r-cran-units (U)
+   r-cran-urlchecker (U)
+   r-cran-urltools (U)
+   r-cran-uroot (U)
+   r-cran-utf8 (U)
+   r-cran-uwot (U)
+   r-cran-vcd (U)
+   r-cran-vcr (U)
+   r-cran-vctrs (U)
+   r-cran-vdiffr (U)
+   r-cran-vegan (U)
+   r-cran-vim (U)
+   r-cran-vioplot (U)
+   r-cran-vipor (U)
+   r-cran-waldo (U)
+   r-cran-warp (U)
+   r-cran-waveslim (U)
+   r-cran-wavethresh (U)
+   r-cran-webfakes (U)
+   r-cran-webmockr (U)
+   r-cran-webshot (U)
+   r-cran-webutils (U)
+   r-cran-whatif (U)
+   r-cran-whisker (U)
+   r-cran-whoami (U)
+   r-cran-wikidataqueryservicer (U)
+   r-cran-wikidatar (U)
+   r-cran-wikipedir (U)
+   r-cran-wikitaxa (U)
+   r-cran-withr (U)
+   r-cran-wk (U)
+   r-cran-wkutils (U)
+   r-cran-wordcloud (U)
+   r-cran-worrms (U)
+   r-cran-xfun (U)
+   r-cran-xml2 (U)
+   r-cran-xslt (U)
+   r-cran-xts (U)
+   r-cran-yulab.utils (U)
+   r-cran-zeallot (U)
+   r-other-amsmercury (U)
+   r-other-ascat (U)
+   r-other-chbutils (U)
+   r-other-curvefdp (U)
+   r-other-iwrlars (U)
+   r-other-mott-happy (U)
+   r-other-nitpick (U)
+   r-other-wasabi (U)
+   r-other-x4r (U)
+   ray (U)
+   rsem (U)
+   surankco (U)
+   transdecoder (U)
+
+Andrius Merkys <merkys at debian.org>
+   r-cran-cyclocomp (U)
+   r-cran-lintr (U)
+   r-cran-rlinsolve (U)
+   r-cran-xmlparsedata (U)
+
+Anton Gladky <gladk at debian.org>
+   vtk9 (U)
+
+Antoni Villalonga <antoni at friki.cat>
+   vt (U)
+
+Aurélien COUDERC <coucouf at debian.org>
+   cantor (U)
+
+Benjamin Eikel <debian at eikel.org>
+   r-cran-ggplot2 (U)
+   r-cran-munsell (U)
+   r-cran-scales (U)
+
+Carlos Borroto <carlos.borroto at gmail.com>
+   r-cran-plyr (U)
+
+Charles Plessy <plessy at debian.org>
+   picard-tools (U)
+   r-bioc-genomeinfodb (U)
+   r-bioc-genomeinfodbdata (U)
+   r-bioc-genomicalignments (U)
+   r-bioc-hdf5array (U)
+   r-bioc-iranges (U)
+   r-bioc-matrixgenerics (U)
+   r-bioc-rtracklayer (U)
+   r-bioc-s4arrays (U)
+   r-bioc-s4vectors (U)
+   r-bioc-summarizedexperiment (U)
+   r-bioc-xvector (U)
+   r-bioc-zlibbioc (U)
+   r-cran-biocmanager (U)
+   r-cran-cftime (U)
+   r-cran-epitools (U)
+   r-cran-genetics (U)
+   r-cran-spacefillr (U)
+   r-cran-sparsevctrs (U)
+   r-cran-spatstat.univar (U)
+
+Chris Lamb <lamby at debian.org>
+   diffoscope (U)
+
+Chris Lawrence <lawrencc at debian.org>
+   r-cran-aer (U)
+   r-cran-amelia (U)
+   r-cran-bayesm (U)
+   r-cran-coda (U)
+   r-cran-gam (U)
+   r-cran-geepack (U)
+   r-cran-gmaps (U)
+   r-cran-jsonlite (U)
+   r-cran-mapdata (U)
+   r-cran-mapproj (U)
+   r-cran-maps (U)
+   r-cran-matchit (U)
+   r-cran-mcmc (U)
+   r-cran-mcmcpack (U)
+   r-cran-mnp (U)
+   r-cran-pscl (U)
+   r-cran-psy (U)
+   r-cran-rjags (U)
+   r-cran-vgam (U)
+   r-cran-zelig (U)
+
+Christoph Berg <myon at debian.org>
+   plr (U)
+
+Christopher Hoskin <christopher.hoskin at gmail.com>
+   r-bioc-rbgl (U)
+
+Debian Emacsen team <debian-emacsen at lists.debian.org>
+   ess
+
+Debian KDE Extras Team <pkg-kde-extras at lists.alioth.debian.org>
+   rkward
+
+Debian Math Team <team+math at tracker.debian.org>
+   macaulay2
+   sagemath
+
+Debian Med Packaging Team <debian-med-packaging at lists.alioth.debian.org>
+   assemblytics
+   bio-tradis
+   ea-utils
+   fastqtl
+   libsbml
+   libvcflib
+   mapdamage
+   paleomix
+   picard-tools
+   pique
+   python-pybedtools
+   q2-dada2
+   q2-diversity-lib
+   q2-quality-control
+   qcumber
+   qtltools
+   ray
+   reapr
+   roary
+   rsem
+   surankco
+   transdecoder
+   trinityrnaseq
+   vt
+
+Debian Perl Group <pkg-perl-maintainers at lists.alioth.debian.org>
+   libstatistics-r-perl
+
+Debian PostgreSQL Maintainers <team+postgresql at tracker.debian.org>
+   plr
+
+Debian Python Team <team+python at tracker.debian.org>
+   jupyter-kernel-test
+
+Debian Qt/KDE Maintainers <debian-qt-kde at lists.debian.org>
+   cantor
+
+Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+   dh-r
+   r-bioc-affxparser
+   r-bioc-affy
+   r-bioc-affyio
+   r-bioc-alabaster.base
+   r-bioc-alabaster.matrix
+   r-bioc-alabaster.ranges
+   r-bioc-alabaster.sce
+   r-bioc-alabaster.schemas
+   r-bioc-alabaster.se
+   r-bioc-all
+   r-bioc-altcdfenvs
+   r-bioc-annotate
+   r-bioc-annotationdbi
+   r-bioc-annotationfilter
+   r-bioc-annotationhub
+   r-bioc-aroma.light
+   r-bioc-arrayexpress
+   r-bioc-assorthead
+   r-bioc-ballgown
+   r-bioc-basilisk
+   r-bioc-basilisk.utils
+   r-bioc-beachmat
+   r-bioc-biobase
+   r-bioc-biocbaseutils
+   r-bioc-bioccheck
+   r-bioc-biocfilecache
+   r-bioc-biocgenerics
+   r-bioc-biocio
+   r-bioc-biocneighbors
+   r-bioc-biocparallel
+   r-bioc-biocsingular
+   r-bioc-biocstyle
+   r-bioc-biocversion
+   r-bioc-biocviews
+   r-bioc-biomart
+   r-bioc-biomformat
+   r-bioc-biostrings
+   r-bioc-biovizbase
+   r-bioc-bladderbatch
+   r-bioc-bluster
+   r-bioc-bsgenome
+   r-bioc-bsseq
+   r-bioc-chemminer
+   r-bioc-cner
+   r-bioc-complexheatmap
+   r-bioc-consensusclusterplus
+   r-bioc-ctc
+   r-bioc-cummerbund
+   r-bioc-dada2
+   r-bioc-decontam
+   r-bioc-decoupler
+   r-bioc-degnorm
+   r-bioc-degreport
+   r-bioc-delayedarray
+   r-bioc-delayedmatrixstats
+   r-bioc-demixt
+   r-bioc-densvis
+   r-bioc-deseq
+   r-bioc-deseq2
+   r-bioc-destiny
+   r-bioc-dexseq
+   r-bioc-dir.expiry
+   r-bioc-dirichletmultinomial
+   r-bioc-dnacopy
+   r-bioc-drimseq
+   r-bioc-dropletutils
+   r-bioc-dss
+   r-bioc-dupradar
+   r-bioc-ebseq
+   r-bioc-edaseq
+   r-bioc-edger
+   r-bioc-eir
+   r-bioc-ensembldb
+   r-bioc-experimenthub
+   r-bioc-fishpond
+   r-bioc-fmcsr
+   r-bioc-genefilter
+   r-bioc-genelendatabase
+   r-bioc-geneplotter
+   r-bioc-genomeinfodb
+   r-bioc-genomeinfodbdata
+   r-bioc-genomicalignments
+   r-bioc-genomicfeatures
+   r-bioc-genomicfiles
+   r-bioc-genomicranges
+   r-bioc-geoquery
+   r-bioc-ggbio
+   r-bioc-glmgampoi
+   r-bioc-go.db
+   r-bioc-golubesets
+   r-bioc-gosemsim
+   r-bioc-goseq
+   r-bioc-graph
+   r-bioc-grohmm
+   r-bioc-gseabase
+   r-bioc-gsva
+   r-bioc-gsvadata
+   r-bioc-gviz
+   r-bioc-gypsum
+   r-bioc-hdf5array
+   r-bioc-hgu95a.db
+   r-bioc-hilbertvis
+   r-bioc-hsmmsinglecell
+   r-bioc-htsfilter
+   r-bioc-hypergraph
+   r-bioc-ihw
+   r-bioc-impute
+   r-bioc-interactivedisplaybase
+   r-bioc-ioniser
+   r-bioc-iranges
+   r-bioc-isoformswitchanalyzer
+   r-bioc-keggrest
+   r-bioc-limma
+   r-bioc-lpsymphony
+   r-bioc-makecdfenv
+   r-bioc-matrixgenerics
+   r-bioc-megadepth
+   r-bioc-mergeomics
+   r-bioc-metagenomeseq
+   r-bioc-metapod
+   r-bioc-mofa
+   r-bioc-mofa2
+   r-bioc-monocle
+   r-bioc-multiassayexperiment
+   r-bioc-multtest
+   r-bioc-mutationalpatterns
+   r-bioc-netsam
+   r-bioc-noiseq
+   r-bioc-oligo
+   r-bioc-oligoclasses
+   r-bioc-org.hs.eg.db
+   r-bioc-organismdbi
+   r-bioc-pcamethods
+   r-bioc-pfamanalyzer
+   r-bioc-phyloseq
+   r-bioc-preprocesscore
+   r-bioc-progeny
+   r-bioc-protgenerics
+   r-bioc-purecn
+   r-bioc-pwalign
+   r-bioc-pwmenrich
+   r-bioc-qtlizer
+   r-bioc-qusage
+   r-bioc-qvalue
+   r-bioc-rbgl
+   r-bioc-rcpi
+   r-bioc-rcwl
+   r-bioc-residualmatrix
+   r-bioc-rgsepd
+   r-bioc-rhdf5
+   r-bioc-rhdf5filters
+   r-bioc-rhdf5lib
+   r-bioc-rhtslib
+   r-bioc-rots
+   r-bioc-rsamtools
+   r-bioc-rsubread
+   r-bioc-rtracklayer
+   r-bioc-rwikipathways
+   r-bioc-s4arrays
+   r-bioc-s4vectors
+   r-bioc-saturn
+   r-bioc-savr
+   r-bioc-scaledmatrix
+   r-bioc-scater
+   r-bioc-scran
+   r-bioc-scrnaseq
+   r-bioc-scuttle
+   r-bioc-seqlogo
+   r-bioc-shortread
+   r-bioc-singlecellexperiment
+   r-bioc-singler
+   r-bioc-snpstats
+   r-bioc-sparsearray
+   r-bioc-sparsematrixstats
+   r-bioc-spatialexperiment
+   r-bioc-stringdb
+   r-bioc-structuralvariantannotation
+   r-bioc-summarizedexperiment
+   r-bioc-sva
+   r-bioc-tcgabiolinks
+   r-bioc-tcgabiolinksgui.data
+   r-bioc-tfbstools
+   r-bioc-titancna
+   r-bioc-txdbmaker
+   r-bioc-tximeta
+   r-bioc-tximport
+   r-bioc-tximportdata
+   r-bioc-ucsc.utils
+   r-bioc-variantannotation
+   r-bioc-wrench
+   r-bioc-xvector
+   r-bioc-zlibbioc
+   r-cran-actuar
+   r-cran-ade4
+   r-cran-adegenet
+   r-cran-adegraphics
+   r-cran-adephylo
+   r-cran-admisc
+   r-cran-aer
+   r-cran-afex
+   r-cran-airr
+   r-cran-alakazam
+   r-cran-amap
+   r-cran-amelia
+   r-cran-amore
+   r-cran-animation
+   r-cran-apcluster
+   r-cran-ape
+   r-cran-aplpack
+   r-cran-areal
+   r-cran-argparse
+   r-cran-argparser
+   r-cran-arm
+   r-cran-arsenal
+   r-cran-askpass
+   r-cran-assertive.base
+   r-cran-assertthat
+   r-cran-av
+   r-cran-aweek
+   r-cran-backports
+   r-cran-base64enc
+   r-cran-base64url
+   r-cran-batchjobs
+   r-cran-batchtools
+   r-cran-bayesfactor
+   r-cran-bayesfm
+   r-cran-bayesm
+   r-cran-bayesplot
+   r-cran-bayestestr
+   r-cran-bbmisc
+   r-cran-bbmle
+   r-cran-bdgraph
+   r-cran-bdsmatrix
+   r-cran-beeswarm
+   r-cran-bench
+   r-cran-benchmarkme
+   r-cran-benchmarkmedata
+   r-cran-biasedurn
+   r-cran-bibtex
+   r-cran-bigmemory
+   r-cran-bigmemory.sri
+   r-cran-bindr
+   r-cran-bindrcpp
+   r-cran-bio3d
+   r-cran-biocmanager
+   r-cran-bios2cor
+   r-cran-bit
+   r-cran-bit64
+   r-cran-bitops
+   r-cran-biwt
+   r-cran-blme
+   r-cran-blob
+   r-cran-blockmodeling
+   r-cran-bms
+   r-cran-bold
+   r-cran-bookdown
+   r-cran-boolnet
+   r-cran-bradleyterry2
+   r-cran-brew
+   r-cran-brglm
+   r-cran-brglm2
+   r-cran-bridgesampling
+   r-cran-brio
+   r-cran-brms
+   r-cran-brobdingnag
+   r-cran-broom
+   r-cran-broom.helpers
+   r-cran-broom.mixed
+   r-cran-bslib
+   r-cran-ca
+   r-cran-cachem
+   r-cran-caic4
+   r-cran-cairo
+   r-cran-calibrate
+   r-cran-calibratr
+   r-cran-callr
+   r-cran-cards
+   r-cran-caret
+   r-cran-catools
+   r-cran-cba
+   r-cran-cftime
+   r-cran-checkmate
+   r-cran-chk
+   r-cran-circlize
+   r-cran-circular
+   r-cran-classint
+   r-cran-cli
+   r-cran-cliapp
+   r-cran-clipr
+   r-cran-clisymbols
+   r-cran-clock
+   r-cran-clubsandwich
+   r-cran-clue
+   r-cran-clustergeneration
+   r-cran-cmdfun
+   r-cran-cmprsk
+   r-cran-cmstatr
+   r-cran-coarsedatatools
+   r-cran-coda
+   r-cran-coin
+   r-cran-collapse
+   r-cran-colorspace
+   r-cran-colourpicker
+   r-cran-combinat
+   r-cran-commonmark
+   r-cran-conditionz
+   r-cran-conflicted
+   r-cran-contfrac
+   r-cran-corpcor
+   r-cran-corrplot
+   r-cran-covid19us
+   r-cran-covr
+   r-cran-cowplot
+   r-cran-cpp11
+   r-cran-crayon
+   r-cran-credentials
+   r-cran-crosstalk
+   r-cran-crul
+   r-cran-ctmcd
+   r-cran-cubelyr
+   r-cran-curl
+   r-cran-cutpointr
+   r-cran-cvst
+   r-cran-cyclocomp
+   r-cran-d3network
+   r-cran-data.table
+   r-cran-datawizard
+   r-cran-dbitest
+   r-cran-dbplyr
+   r-cran-dbscan
+   r-cran-ddalpha
+   r-cran-ddrtree
+   r-cran-deal
+   r-cran-decor
+   r-cran-deldir
+   r-cran-dendextend
+   r-cran-dendsort
+   r-cran-densityclust
+   r-cran-deoptim
+   r-cran-desc
+   r-cran-desolve
+   r-cran-devtools
+   r-cran-dfoptim
+   r-cran-dharma
+   r-cran-diagnosismed
+   r-cran-diagram
+   r-cran-diagrammer
+   r-cran-dials
+   r-cran-dicedesign
+   r-cran-dichromat
+   r-cran-diffobj
+   r-cran-dimred
+   r-cran-diptest
+   r-cran-dirmult
+   r-cran-discriminer
+   r-cran-distory
+   r-cran-distr
+   r-cran-distributional
+   r-cran-docopt
+   r-cran-doparallel
+   r-cran-dorng
+   r-cran-dosefinding
+   r-cran-dotcall64
+   r-cran-downlit
+   r-cran-downloader
+   r-cran-dplyr
+   r-cran-dqrng
+   r-cran-drr
+   r-cran-dslabs
+   r-cran-dt
+   r-cran-dtplyr
+   r-cran-dygraphs
+   r-cran-dynamictreecut
+   r-cran-dynlm
+   r-cran-eaf
+   r-cran-earth
+   r-cran-ecosolver
+   r-cran-effectsize
+   r-cran-egg
+   r-cran-ei
+   r-cran-eipack
+   r-cran-ellipse
+   r-cran-elliptic
+   r-cran-emayili
+   r-cran-emdbook
+   r-cran-emmeans
+   r-cran-emoa
+   r-cran-enrichwith
+   r-cran-epi
+   r-cran-epibasix
+   r-cran-epicalc
+   r-cran-epiestim
+   r-cran-epir
+   r-cran-epitools
+   r-cran-erm
+   r-cran-estimability
+   r-cran-estimatr
+   r-cran-etm
+   r-cran-evaluate
+   r-cran-evd
+   r-cran-exactextractr
+   r-cran-exactranktests
+   r-cran-expint
+   r-cran-expm
+   r-cran-extradistr
+   r-cran-factoextra
+   r-cran-factominer
+   r-cran-fadist
+   r-cran-fail
+   r-cran-fancova
+   r-cran-fansi
+   r-cran-farver
+   r-cran-fastcluster
+   r-cran-fastdummies
+   r-cran-fastmap
+   r-cran-fastmatch
+   r-cran-fauxpas
+   r-cran-fdrtool
+   r-cran-ff
+   r-cran-ffield
+   r-cran-fftw
+   r-cran-fields
+   r-cran-filehash
+   r-cran-filelock
+   r-cran-findpython
+   r-cran-fingerprint
+   r-cran-fit.models
+   r-cran-fitbitscraper
+   r-cran-fitcoach
+   r-cran-fitdistrplus
+   r-cran-flashclust
+   r-cran-flexmix
+   r-cran-flextable
+   r-cran-fnn
+   r-cran-fontawesome
+   r-cran-fontbitstreamvera
+   r-cran-fontliberation
+   r-cran-fontquiver
+   r-cran-forecast
+   r-cran-formatr
+   r-cran-formattable
+   r-cran-fpc
+   r-cran-fracdiff
+   r-cran-freetypeharfbuzz
+   r-cran-fs
+   r-cran-fts
+   r-cran-furrr
+   r-cran-futile.logger
+   r-cran-futile.options
+   r-cran-future
+   r-cran-future.apply
+   r-cran-future.batchtools
+   r-cran-g.data
+   r-cran-gam
+   r-cran-gamm4
+   r-cran-gap
+   r-cran-gap.datasets
+   r-cran-gargle
+   r-cran-gb2
+   r-cran-gbm
+   r-cran-gbrd
+   r-cran-gclus
+   r-cran-gdtools
+   r-cran-gee
+   r-cran-geepack
+   r-cran-genabel
+   r-cran-genabel.data
+   r-cran-generics
+   r-cran-genetics
+   r-cran-genie
+   r-cran-genieclust
+   r-cran-genoplotr
+   r-cran-geoknife
+   r-cran-geometry
+   r-cran-geosphere
+   r-cran-gert
+   r-cran-getoptlong
+   r-cran-gfonts
+   r-cran-ggalluvial
+   r-cran-ggally
+   r-cran-gganimate
+   r-cran-ggbeeswarm
+   r-cran-ggdendro
+   r-cran-ggeffects
+   r-cran-ggforce
+   r-cran-ggfortify
+   r-cran-ggm
+   r-cran-ggplot.multistats
+   r-cran-ggplot2
+   r-cran-ggpubr
+   r-cran-ggraph
+   r-cran-ggrastr
+   r-cran-ggrepel
+   r-cran-ggridges
+   r-cran-ggsci
+   r-cran-ggseqlogo
+   r-cran-ggsignif
+   r-cran-ggstats
+   r-cran-ggtext
+   r-cran-ggthemes
+   r-cran-ggvis
+   r-cran-gh
+   r-cran-git2r
+   r-cran-gitcreds
+   r-cran-glasso
+   r-cran-glmmtmb
+   r-cran-glmnet
+   r-cran-globaloptions
+   r-cran-globals
+   r-cran-glue
+   r-cran-gmaps
+   r-cran-gmm
+   r-cran-gmp
+   r-cran-gnm
+   r-cran-goftest
+   r-cran-googledrive
+   r-cran-googlesheets4
+   r-cran-googlevis
+   r-cran-goplot
+   r-cran-gower
+   r-cran-gparotation
+   r-cran-gprofiler2
+   r-cran-graphlayouts
+   r-cran-gridbase
+   r-cran-gridgraphics
+   r-cran-gridsvg
+   r-cran-gridtext
+   r-cran-grimport2
+   r-cran-gsa
+   r-cran-gsl
+   r-cran-gstat
+   r-cran-gsubfn
+   r-cran-gtable
+   r-cran-guerry
+   r-cran-gunifrac
+   r-cran-gwidgets
+   r-cran-gwidgetstcltk
+   r-cran-haplo.stats
+   r-cran-hardhat
+   r-cran-hash
+   r-cran-hdf5r
+   r-cran-heatmaply
+   r-cran-here
+   r-cran-hexbin
+   r-cran-highr
+   r-cran-hms
+   r-cran-hsaur3
+   r-cran-htmltools
+   r-cran-htmlwidgets
+   r-cran-httpcode
+   r-cran-httptest2
+   r-cran-httpuv
+   r-cran-httr
+   r-cran-httr2
+   r-cran-huge
+   r-cran-hunspell
+   r-cran-hwriter
+   r-cran-hypergeo
+   r-cran-ica
+   r-cran-ids
+   r-cran-igraph
+   r-cran-incidence
+   r-cran-influencer
+   r-cran-ini
+   r-cran-insight
+   r-cran-intergraph
+   r-cran-interp
+   r-cran-intervals
+   r-cran-inum
+   r-cran-ipred
+   r-cran-irace
+   r-cran-irdisplay
+   r-cran-irkernel
+   r-cran-irlba
+   r-cran-iso
+   r-cran-isoband
+   r-cran-isocodes
+   r-cran-isospecr
+   r-cran-isoweek
+   r-cran-itertools
+   r-cran-janeaustenr
+   r-cran-jinjar
+   r-cran-jomo
+   r-cran-jpeg
+   r-cran-jquerylib
+   r-cran-jrc
+   r-cran-jsonld
+   r-cran-jsonlite
+   r-cran-kableextra
+   r-cran-kaos
+   r-cran-kedd
+   r-cran-kernelheaping
+   r-cran-keyring
+   r-cran-km.ci
+   r-cran-kmi
+   r-cran-kmsurv
+   r-cran-knitr
+   r-cran-knn.covertree
+   r-cran-kohonen
+   r-cran-ks
+   r-cran-ksamples
+   r-cran-kutils
+   r-cran-labdsv
+   r-cran-labeling
+   r-cran-labelled
+   r-cran-laeken
+   r-cran-lambda.r
+   r-cran-lamw
+   r-cran-later
+   r-cran-latte
+   r-cran-lava
+   r-cran-lavaan
+   r-cran-lavasearch2
+   r-cran-lazyeval
+   r-cran-lbfgsb3c
+   r-cran-leaps
+   r-cran-learnbayes
+   r-cran-leiden
+   r-cran-leidenbase
+   r-cran-lexrankr
+   r-cran-lhs
+   r-cran-libcoin
+   r-cran-lifecycle
+   r-cran-linprog
+   r-cran-lintr
+   r-cran-lisreltor
+   r-cran-listenv
+   r-cran-lmertest
+   r-cran-lobstr
+   r-cran-locfdr
+   r-cran-locfit
+   r-cran-logcondens
+   r-cran-logger
+   r-cran-logging
+   r-cran-logspline
+   r-cran-loo
+   r-cran-lsd
+   r-cran-lsei
+   r-cran-lsmeans
+   r-cran-lubridate
+   r-cran-luminescence
+   r-cran-lwgeom
+   r-cran-m2r
+   r-cran-magic
+   r-cran-magick
+   r-cran-magrittr
+   r-cran-maldiquant
+   r-cran-maldiquantforeign
+   r-cran-maotai
+   r-cran-mapdata
+   r-cran-mapproj
+   r-cran-maps
+   r-cran-maptree
+   r-cran-marginaleffects
+   r-cran-markdown
+   r-cran-markovchain
+   r-cran-matching
+   r-cran-matchit
+   r-cran-matlab
+   r-cran-matrixcalc
+   r-cran-matrixstats
+   r-cran-maxlik
+   r-cran-maxstat
+   r-cran-mclogit
+   r-cran-mclust
+   r-cran-mclustcomp
+   r-cran-mcmc
+   r-cran-mcmcpack
+   r-cran-mda
+   r-cran-medadherence
+   r-cran-mediana
+   r-cran-memisc
+   r-cran-memoise
+   r-cran-mertools
+   r-cran-metadat
+   r-cran-metafor
+   r-cran-metap
+   r-cran-metrics
+   r-cran-mets
+   r-cran-mfilter
+   r-cran-mi
+   r-cran-mice
+   r-cran-mime
+   r-cran-minerva
+   r-cran-miniui
+   r-cran-minpack.lm
+   r-cran-misctools
+   r-cran-mitml
+   r-cran-mitools
+   r-cran-mixsqp
+   r-cran-mixtools
+   r-cran-mlbench
+   r-cran-mlmetrics
+   r-cran-mlmrev
+   r-cran-mlr
+   r-cran-mnp
+   r-cran-mockery
+   r-cran-mockr
+   r-cran-modeest
+   r-cran-modeldata
+   r-cran-modelmetrics
+   r-cran-modelr
+   r-cran-modeltools
+   r-cran-mpoly
+   r-cran-msm
+   r-cran-multcompview
+   r-cran-multicool
+   r-cran-multidimbio
+   r-cran-multilevel
+   r-cran-munsell
+   r-cran-mutoss
+   r-cran-mvnfast
+   r-cran-nanoarrow
+   r-cran-natserv
+   r-cran-ncdf4
+   r-cran-ncdfgeom
+   r-cran-ncmeta
+   r-cran-network
+   r-cran-nfactors
+   r-cran-nleqslv
+   r-cran-nlp
+   r-cran-nmf
+   r-cran-nnls
+   r-cran-nozzle.r1
+   r-cran-npsurv
+   r-cran-oaqc
+   r-cran-officer
+   r-cran-openmx
+   r-cran-openssl
+   r-cran-optimalcutpoints
+   r-cran-optimparallel
+   r-cran-optimx
+   r-cran-optparse
+   r-cran-ordinal
+   r-cran-orthopolynom
+   r-cran-packrat
+   r-cran-palmerpenguins
+   r-cran-pammtools
+   r-cran-pan
+   r-cran-pander
+   r-cran-parallelly
+   r-cran-parallelmap
+   r-cran-parameters
+   r-cran-paramhelpers
+   r-cran-parmigene
+   r-cran-partitions
+   r-cran-party
+   r-cran-partykit
+   r-cran-patchwork
+   r-cran-patrick
+   r-cran-pbapply
+   r-cran-pbdzmq
+   r-cran-pbivnorm
+   r-cran-pbmcapply
+   r-cran-pcapp
+   r-cran-pcict
+   r-cran-pdftools
+   r-cran-pec
+   r-cran-performance
+   r-cran-permute
+   r-cran-phangorn
+   r-cran-pheatmap
+   r-cran-phylobase
+   r-cran-phytools
+   r-cran-pillar
+   r-cran-pingr
+   r-cran-pixmap
+   r-cran-pkgbuild
+   r-cran-pkgcond
+   r-cran-pkgconfig
+   r-cran-pkgdown
+   r-cran-pkgload
+   r-cran-pkgmaker
+   r-cran-pki
+   r-cran-plm
+   r-cran-plogr
+   r-cran-plot3d
+   r-cran-plotly
+   r-cran-plotmo
+   r-cran-plotrix
+   r-cran-pls
+   r-cran-plumber
+   r-cran-plyr
+   r-cran-png
+   r-cran-poissonbinomial
+   r-cran-polyclip
+   r-cran-polycor
+   r-cran-polycub
+   r-cran-polynom
+   r-cran-poorman
+   r-cran-popepi
+   r-cran-posterior
+   r-cran-postlogic
+   r-cran-powerlaw
+   r-cran-prabclus
+   r-cran-pracma
+   r-cran-praise
+   r-cran-prediction
+   r-cran-prettycode
+   r-cran-prettyr
+   r-cran-prettyunits
+   r-cran-prevalence
+   r-cran-princurve
+   r-cran-proc
+   r-cran-processx
+   r-cran-prodlim
+   r-cran-profilemodel
+   r-cran-profmem
+   r-cran-profvis
+   r-cran-progress
+   r-cran-progressr
+   r-cran-projpred
+   r-cran-promises
+   r-cran-propclust
+   r-cran-prophet
+   r-cran-proto
+   r-cran-proxy
+   r-cran-ps
+   r-cran-pscbs
+   r-cran-pscl
+   r-cran-psy
+   r-cran-psych
+   r-cran-psychometric
+   r-cran-psychotools
+   r-cran-psychotree
+   r-cran-psychtools
+   r-cran-psyphy
+   r-cran-publish
+   r-cran-purrr
+   r-cran-purrrlyr
+   r-cran-pvclust
+   r-cran-pwr
+   r-cran-pwt
+   r-cran-pwt8
+   r-cran-pwt9
+   r-cran-qap
+   r-cran-qgam
+   r-cran-qgraph
+   r-cran-qlcmatrix
+   r-cran-qpdf
+   r-cran-qqconf
+   r-cran-qqman
+   r-cran-qtl
+   r-cran-quickjsr
+   r-cran-qvcalc
+   r-cran-r.cache
+   r-cran-r.devices
+   r-cran-r.methodss3
+   r-cran-r.oo
+   r-cran-r.rsp
+   r-cran-r.utils
+   r-cran-r2d2
+   r-cran-r2html
+   r-cran-r6
+   r-cran-ragg
+   r-cran-randomforest
+   r-cran-randomglm
+   r-cran-ranger
+   r-cran-rann
+   r-cran-rappdirs
+   r-cran-raschsampler
+   r-cran-raster
+   r-cran-ratelimitr
+   r-cran-rbibutils
+   r-cran-rcarb
+   r-cran-rcdk
+   r-cran-rcdklibs
+   r-cran-rcmdcheck
+   r-cran-rcppannoy
+   r-cran-rcppdist
+   r-cran-rcpphnsw
+   r-cran-rcppml
+   r-cran-rcppmlpack
+   r-cran-rcppparallel
+   r-cran-rcppprogress
+   r-cran-rcpproll
+   r-cran-rcpptoml
+   r-cran-rcsdp
+   r-cran-rcurl
+   r-cran-rdbnomics
+   r-cran-rdflib
+   r-cran-rdpack
+   r-cran-readbrukerflexdata
+   r-cran-readmzxmldata
+   r-cran-recipes
+   r-cran-redland
+   r-cran-registry
+   r-cran-regsem
+   r-cran-relsurv
+   r-cran-rematch2
+   r-cran-remotes
+   r-cran-rentrez
+   r-cran-renv
+   r-cran-repr
+   r-cran-reprex
+   r-cran-reshape
+   r-cran-reshape2
+   r-cran-restfulr
+   r-cran-reticulate
+   r-cran-rex
+   r-cran-rgenoud
+   r-cran-rglwidget
+   r-cran-rgooglemaps
+   r-cran-rhandsontable
+   r-cran-rhpcblasctl
+   r-cran-riskregression
+   r-cran-ritis
+   r-cran-rjags
+   r-cran-rjson
+   r-cran-rlang
+   r-cran-rle
+   r-cran-rlinsolve
+   r-cran-rlist
+   r-cran-rlrsim
+   r-cran-rlumshiny
+   r-cran-rmariadb
+   r-cran-rmarkdown
+   r-cran-rmpfr
+   r-cran-rmutil
+   r-cran-rnaturalearth
+   r-cran-rnaturalearthdata
+   r-cran-rncl
+   r-cran-rnetcdf
+   r-cran-rnexml
+   r-cran-rngtools
+   r-cran-robumeta
+   r-cran-robust
+   r-cran-robustrankaggreg
+   r-cran-rockchalk
+   r-cran-rocr
+   r-cran-rook
+   r-cran-rose
+   r-cran-rotl
+   r-cran-roxygen2
+   r-cran-rpact
+   r-cran-rpf
+   r-cran-rpostgresql
+   r-cran-rprojroot
+   r-cran-rprotobuf
+   r-cran-rrcov
+   r-cran-rredlist
+   r-cran-rsample
+   r-cran-rsconnect
+   r-cran-rsdmx
+   r-cran-rslurm
+   r-cran-rsolnp
+   r-cran-rspectra
+   r-cran-rsqlite
+   r-cran-rstan
+   r-cran-rstanarm
+   r-cran-rstantools
+   r-cran-rstatix
+   r-cran-rsvd
+   r-cran-rsvg
+   r-cran-rtdists
+   r-cran-rtsne
+   r-cran-rtweet
+   r-cran-rversions
+   r-cran-rvest
+   r-cran-rwave
+   r-cran-rwiener
+   r-cran-s2
+   r-cran-s7
+   r-cran-sampling
+   r-cran-samr
+   r-cran-sass
+   r-cran-satellite
+   r-cran-scales
+   r-cran-scatterd3
+   r-cran-scattermore
+   r-cran-scatterplot3d
+   r-cran-sctransform
+   r-cran-sdmtools
+   r-cran-segmented
+   r-cran-selectr
+   r-cran-sem
+   r-cran-semplot
+   r-cran-semtools
+   r-cran-sendmailr
+   r-cran-seqinr
+   r-cran-seriation
+   r-cran-seroincidence
+   r-cran-sessioninfo
+   r-cran-setrng
+   r-cran-sets
+   r-cran-seurat
+   r-cran-seuratobject
+   r-cran-sf
+   r-cran-sfsmisc
+   r-cran-sftime
+   r-cran-shades
+   r-cran-shape
+   r-cran-shapes
+   r-cran-shazam
+   r-cran-shiny
+   r-cran-shinybs
+   r-cran-shinycssloaders
+   r-cran-shinydashboard
+   r-cran-shinyfiles
+   r-cran-shinyjs
+   r-cran-shinystan
+   r-cran-shinythemes
+   r-cran-sitmo
+   r-cran-sjlabelled
+   r-cran-sjmisc
+   r-cran-sjplot
+   r-cran-sjstats
+   r-cran-skimr
+   r-cran-slider
+   r-cran-smcfcs
+   r-cran-smoother
+   r-cran-sna
+   r-cran-snakecase
+   r-cran-snowballc
+   r-cran-snowfall
+   r-cran-sodium
+   r-cran-solrium
+   r-cran-sourcetools
+   r-cran-sp
+   r-cran-spacefillr
+   r-cran-spacetime
+   r-cran-spam
+   r-cran-sparql
+   r-cran-sparr
+   r-cran-sparsesvd
+   r-cran-sparsevctrs
+   r-cran-spatialreg
+   r-cran-spatstat
+   r-cran-spatstat.data
+   r-cran-spatstat.explore
+   r-cran-spatstat.geom
+   r-cran-spatstat.linnet
+   r-cran-spatstat.model
+   r-cran-spatstat.random
+   r-cran-spatstat.sparse
+   r-cran-spatstat.univar
+   r-cran-spatstat.utils
+   r-cran-spc
+   r-cran-spdata
+   r-cran-spdep
+   r-cran-spelling
+   r-cran-splines2
+   r-cran-spp
+   r-cran-sqldf
+   r-cran-squarem
+   r-cran-stable
+   r-cran-stablelearner
+   r-cran-stanheaders
+   r-cran-stars
+   r-cran-startupmsg
+   r-cran-statcheck
+   r-cran-statip
+   r-cran-statmod
+   r-cran-statnet.common
+   r-cran-stringdist
+   r-cran-stringi
+   r-cran-stringr
+   r-cran-suppdists
+   r-cran-surveillance
+   r-cran-survey
+   r-cran-survminer
+   r-cran-survmisc
+   r-cran-susier
+   r-cran-svglite
+   r-cran-svmisc
+   r-cran-svunit
+   r-cran-swagger
+   r-cran-sys
+   r-cran-systemfit
+   r-cran-systemfonts
+   r-cran-taxize
+   r-cran-tcr
+   r-cran-teachingdemos
+   r-cran-tensor
+   r-cran-tensora
+   r-cran-terra
+   r-cran-testit
+   r-cran-testthat
+   r-cran-textshaping
+   r-cran-tfisher
+   r-cran-tfmpvalue
+   r-cran-tgp
+   r-cran-thematic
+   r-cran-themis
+   r-cran-threejs
+   r-cran-tibble
+   r-cran-tidygraph
+   r-cran-tidyr
+   r-cran-tidyselect
+   r-cran-tidytext
+   r-cran-tidyverse
+   r-cran-tiff
+   r-cran-tigger
+   r-cran-tikzdevice
+   r-cran-timechange
+   r-cran-timereg
+   r-cran-tinytest
+   r-cran-tinytex
+   r-cran-tm
+   r-cran-tmb
+   r-cran-tmvtnorm
+   r-cran-tokenizers
+   r-cran-transformr
+   r-cran-treespace
+   r-cran-triebeard
+   r-cran-trimcluster
+   r-cran-truncdist
+   r-cran-truncnorm
+   r-cran-tsne
+   r-cran-tsp
+   r-cran-tufte
+   r-cran-tweenr
+   r-cran-ucminf
+   r-cran-udunits2
+   r-cran-unbalanced
+   r-cran-uniqtag
+   r-cran-unitizer
+   r-cran-units
+   r-cran-upsetr
+   r-cran-urlchecker
+   r-cran-urltools
+   r-cran-uroot
+   r-cran-usethis
+   r-cran-utf8
+   r-cran-uuid
+   r-cran-uwot
+   r-cran-v8
+   r-cran-vcd
+   r-cran-vcdextra
+   r-cran-vcr
+   r-cran-vctrs
+   r-cran-vdiffr
+   r-cran-vegan
+   r-cran-venndiagram
+   r-cran-vgam
+   r-cran-vim
+   r-cran-vioplot
+   r-cran-vipor
+   r-cran-visnetwork
+   r-cran-waldo
+   r-cran-warp
+   r-cran-waveslim
+   r-cran-wavethresh
+   r-cran-wdi
+   r-cran-webfakes
+   r-cran-webgestaltr
+   r-cran-webmockr
+   r-cran-webshot
+   r-cran-webutils
+   r-cran-wgcna
+   r-cran-whatif
+   r-cran-whisker
+   r-cran-whoami
+   r-cran-wikidataqueryservicer
+   r-cran-wikidatar
+   r-cran-wikipedir
+   r-cran-wikitaxa
+   r-cran-withr
+   r-cran-wk
+   r-cran-wkutils
+   r-cran-wordcloud
+   r-cran-worrms
+   r-cran-xfun
+   r-cran-xml2
+   r-cran-xmlparsedata
+   r-cran-xopen
+   r-cran-xslt
+   r-cran-xtable
+   r-cran-xts
+   r-cran-yaml
+   r-cran-yulab.utils
+   r-cran-zeallot
+   r-cran-zelig
+   r-other-amsmercury
+   r-other-ascat
+   r-other-chbutils
+   r-other-curvefdp
+   r-other-disgenet2r
+   r-other-iwrlars
+   r-other-kcha-psiplot
+   r-other-mott-happy
+   r-other-nitpick
+   r-other-rajewsky-dropbead
+   r-other-wasabi
+   r-other-x4r
+   rapache
+
+Debian Science Maintainers <debian-science-maintainers at alioth-lists.debian.net>
+   texmacs
+
+Debian Science Maintainers <debian-science-maintainers at lists.alioth.debian.org>
+   ompl
+   statsmodels
+   vtk9
+
+Debian Science Team <debian-science-maintainers at lists.alioth.debian.org>
+   node-shiny-server
+   vtk9
+
+Diane Trout <diane at ghic.org>
+   statsmodels (U)
+
+Dirk Eddelbuettel <edd at debian.org>
+   abind
+   acepack
+   boot
+   car
+   chron
+   cluster
+   codetools
+   date
+   dbi
+   effects
+   fassets
+   fbasics
+   fbonds
+   fcopulae
+   fextremes
+   fgarch
+   fimport
+   fmultivar
+   fnonlinear
+   foreign
+   fportfolio
+   fregression
+   ftrading
+   funitroots
+   gdata
+   gmodels
+   gplots
+   gregmisc
+   gretl
+   gtools
+   hmisc
+   kernsmooth
+   lattice
+   latticeextra
+   littler
+   lme4
+   lmtest
+   mgcv
+   misc3d
+   mnormt
+   multcomp
+   mvtnorm
+   nlme
+   polspline
+   quadprog
+   r-cran-bh
+   r-cran-cardata
+   r-cran-cellranger
+   r-cran-class
+   r-cran-conquer
+   r-cran-cubature
+   r-cran-cvar
+   r-cran-deoptimr
+   r-cran-deriv
+   r-cran-digest
+   r-cran-doby
+   r-cran-domc
+   r-cran-dosnow
+   r-cran-e1071
+   r-cran-ecodist
+   r-cran-ellipsis
+   r-cran-energy
+   r-cran-fastica
+   r-cran-forcats
+   r-cran-foreach
+   r-cran-formula
+   r-cran-gbutils
+   r-cran-getopt
+   r-cran-gridextra
+   r-cran-gss
+   r-cran-haven
+   r-cran-htmltable
+   r-cran-inline
+   r-cran-iterators
+   r-cran-kernlab
+   r-cran-lpsolve
+   r-cran-manipulatewidgets
+   r-cran-mass
+   r-cran-mathjaxr
+   r-cran-matrixmodels
+   r-cran-microbenchmark
+   r-cran-minqa
+   r-cran-mvnormtest
+   r-cran-nanotime
+   r-cran-nloptr
+   r-cran-nnet
+   r-cran-nortest
+   r-cran-numderiv
+   r-cran-openxlsx
+   r-cran-pbkrtest
+   r-cran-pkgkitten
+   r-cran-quantmod
+   r-cran-quantreg
+   r-cran-rcmdrmisc
+   r-cran-rcpparmadillo
+   r-cran-rcppcctz
+   r-cran-rcppdate
+   r-cran-rcppeigen
+   r-cran-rcppgsl
+   r-cran-rcppspdlog
+   r-cran-readr
+   r-cran-readstata13
+   r-cran-readxl
+   r-cran-reformulas
+   r-cran-rematch
+   r-cran-rinside
+   r-cran-rio
+   r-cran-rms
+   r-cran-rneos
+   r-cran-rocr (U)
+   r-cran-rsclient
+   r-cran-rstudioapi
+   r-cran-runit
+   r-cran-simplermarkdown
+   r-cran-slam
+   r-cran-sn
+   r-cran-sparsem
+   r-cran-spatial
+   r-cran-spdl
+   r-cran-stabledist
+   r-cran-tcltk2
+   r-cran-th.data
+   r-cran-timedate
+   r-cran-timeseries
+   r-cran-tmvnsim
+   r-cran-ttr
+   r-cran-tzdb
+   r-cran-viridis
+   r-cran-viridislite
+   r-cran-vroom
+   r-cran-writexl
+   r-cran-xml
+   r-cran-zip
+   r-zoo
+   rcmdr
+   rcolorbrewer
+   rcpp
+   relimp
+   rgl
+   rglpk
+   rjava
+   rmatrix
+   rmpi
+   rmysql
+   robustbase
+   rodbc
+   rpart
+   rpy2
+   rquantlib
+   rserve
+   rsymphony
+   sandwich
+   sm
+   snow
+   strucchange
+   survival
+   tkrplot
+   tseries
+   urca
+
+Don Armstrong <don at debian.org>
+   libstatistics-r-perl
+   libstatistics-r-perl (U)
+
+Doug Torrance <dtorrance at debian.org>
+   macaulay2 (U)
+   r-cran-fadist (U)
+   r-cran-m2r (U)
+   r-cran-orthopolynom (U)
+   r-cran-partitions (U)
+   r-cran-r.devices (U)
+   r-cran-r.rsp (U)
+   r-cran-sets (U)
+
+Doug Torrance <dtorrance at piedmont.edu>
+   r-cran-latte (U)
+   r-cran-mpoly (U)
+
+Dylan Aïssi <bob.dybian at gmail.com>
+   r-cran-fitbitscraper (U)
+   r-cran-fitcoach (U)
+   r-cran-ggsci (U)
+   r-cran-leaps (U)
+   r-cran-prettyr (U)
+
+Dylan Aïssi <daissi at debian.org>
+   dh-r (U)
+   fastqtl (U)
+   qtltools (U)
+   r-bioc-bioccheck (U)
+   r-bioc-biocviews (U)
+   r-bioc-impute (U)
+   r-bioc-mergeomics (U)
+   r-bioc-rhdf5filters (U)
+   r-bioc-tcgabiolinksgui.data (U)
+   r-bioc-zlibbioc (U)
+   r-cran-ape (U)
+   r-cran-beeswarm (U)
+   r-cran-bigmemory (U)
+   r-cran-bigmemory.sri (U)
+   r-cran-biocmanager (U)
+   r-cran-calibrate (U)
+   r-cran-clipr (U)
+   r-cran-clisymbols (U)
+   r-cran-devtools (U)
+   r-cran-factominer (U)
+   r-cran-flashclust (U)
+   r-cran-gee (U)
+   r-cran-ggsci (U)
+   r-cran-gh (U)
+   r-cran-ini (U)
+   r-cran-isoband (U)
+   r-cran-isospecr (U)
+   r-cran-leaps (U)
+   r-cran-locfit (U)
+   r-cran-lubridate (U)
+   r-cran-modeldata (U)
+   r-cran-qqman (U)
+   r-cran-ranger (U)
+   r-cran-rcmdcheck (U)
+   r-cran-rematch2 (U)
+   r-cran-remotes (U)
+   r-cran-reprex (U)
+   r-cran-reticulate (U)
+   r-cran-rstatix (U)
+   r-cran-rvest (U)
+   r-cran-selectr (U)
+   r-cran-sessioninfo (U)
+   r-cran-testthat (U)
+   r-cran-tidyverse (U)
+   r-cran-tinytest (U)
+   r-cran-tm (U)
+   r-cran-usethis (U)
+   r-cran-xopen (U)
+   rkward (U)
+
+Eric Brown <eb at ericebrown.com>
+   r-cran-pingr (U)
+   r-cran-skimr (U)
+
+Filippo Rusconi <lopippo at debian.org>
+   r-cran-base64enc (U)
+   r-cran-downloader (U)
+   r-cran-isospecr (U)
+   r-cran-maldiquant (U)
+   r-cran-maldiquantforeign (U)
+   r-cran-readbrukerflexdata (U)
+   r-cran-readmzxmldata (U)
+   r-cran-rnetcdf (U)
+
+Gert Wollny <gewo at debian.org>
+   vtk9 (U)
+
+Gordon Ball <gordon at chronitis.net>
+   dh-r (U)
+   r-cran-irdisplay (U)
+   r-cran-irkernel (U)
+   r-cran-pbdzmq (U)
+   r-cran-r6 (U)
+   r-cran-repr (U)
+   r-cran-uuid (U)
+
+Graham Inggs <ginggs at debian.org>
+   r-bioc-delayedarray (U)
+   r-bioc-genomeinfodbdata (U)
+
+Holger Levsen <holger at debian.org>
+   diffoscope (U)
+
+Ivo Maintz <ivo at maintz.de>
+   libsbml (U)
+
+Jerome Benoit <calculus at rezozer.net>
+   sagemath (U)
+   texmacs (U)
+
+Johannes 'josch' Schauer <josch at debian.org>
+   r-cran-tufte (U)
+
+Jonathon Love <jon at thon.cc>
+   r-cran-afex (U)
+   r-cran-bayesfactor (U)
+   r-cran-bms (U)
+   r-cran-ca (U)
+   r-cran-coin (U)
+   r-cran-contfrac (U)
+   r-cran-desolve (U)
+   r-cran-elliptic (U)
+   r-cran-estimability (U)
+   r-cran-hypergeo (U)
+   r-cran-logspline (U)
+   r-cran-lsmeans (U)
+   r-cran-modeltools (U)
+   r-cran-pbapply (U)
+   r-cran-pbivnorm (U)
+   r-cran-rprotobuf (U)
+   r-cran-vcdextra (U)
+   r-cran-xtable (U)
+
+Joost van Baal-Ilić <joostvb at debian.org>
+   r-cran-bdgraph (U)
+   r-cran-corpcor (U)
+   r-cran-d3network (U)
+   r-cran-farver (U)
+   r-cran-fdrtool (U)
+   r-cran-formatr (U)
+   r-cran-ggforce (U)
+   r-cran-ggm (U)
+   r-cran-ggrepel (U)
+   r-cran-glasso (U)
+   r-cran-highr (U)
+   r-cran-httpuv (U)
+   r-cran-huge (U)
+   r-cran-hunspell (U)
+   r-cran-knitr (U)
+   r-cran-lavaan (U)
+   r-cran-lisreltor (U)
+   r-cran-markdown (U)
+   r-cran-matrixcalc (U)
+   r-cran-mi (U)
+   r-cran-mime (U)
+   r-cran-nfactors (U)
+   r-cran-qgraph (U)
+   r-cran-rcppparallel (U)
+   r-cran-rockchalk (U)
+   r-cran-sem (U)
+   r-cran-semplot (U)
+   r-cran-semtools (U)
+   r-cran-statcheck (U)
+   r-cran-tweenr (U)
+   r-cran-yaml (U)
+
+Joseph Nahmias <jello at debian.org>
+   jupyter-kernel-test (U)
+
+Julian Gilbey <jdg at debian.org>
+   r-cran-erm (U)
+   r-cran-raschsampler (U)
+
+Julien Puydt <jpuydt at debian.org>
+   sagemath (U)
+
+Kevin Murray <kdmfoss at gmail.com>
+   r-bioc-limma (U)
+
+Leopold Palomo-Avellaneda <leo at alaxarxa.net>
+   ompl (U)
+   r-cran-miniui (U)
+   r-cran-shinyjs (U)
+   r-cran-v8 (U)
+
+Liubov Chuprikova <chuprikovalv at gmail.com>
+   q2-quality-control (U)
+
+Lucas Nussbaum <lucas at debian.org>
+   pajeng (U)
+
+Magnus Hagdorn <magnus.hagdorn at ed.ac.uk>
+   r-cran-rgooglemaps (U)
+
+Martin Quinson <mquinson at debian.org>
+   pajeng
+
+Mattia Rizzolo <mattia at debian.org>
+   diffoscope (U)
+
+Michael Hanke <michael.hanke at gmail.com>
+   statsmodels (U)
+
+Michael R. Crusoe <crusoe at debian.org>
+   python-pybedtools (U)
+   r-bioc-alabaster.base (U)
+   r-bioc-alabaster.matrix (U)
+   r-bioc-alabaster.ranges (U)
+   r-bioc-alabaster.sce (U)
+   r-bioc-alabaster.schemas (U)
+   r-bioc-alabaster.se (U)
+   r-bioc-assorthead (U)
+   r-bioc-bluster (U)
+   r-bioc-deseq2 (U)
+   r-bioc-dexseq (U)
+   r-bioc-ebseq (U)
+   r-bioc-geneplotter (U)
+   r-bioc-glmgampoi (U)
+   r-bioc-golubesets (U)
+   r-bioc-gsvadata (U)
+   r-bioc-gypsum (U)
+   r-bioc-hgu95a.db (U)
+   r-bioc-pwalign (U)
+   r-bioc-rcwl (U)
+   r-bioc-scrnaseq (U)
+   r-bioc-spatialexperiment (U)
+   r-bioc-txdbmaker (U)
+   r-bioc-tximeta (U)
+   r-bioc-tximportdata (U)
+   r-bioc-ucsc.utils (U)
+   r-cran-argparse (U)
+   r-cran-bench (U)
+   r-cran-blockmodeling (U)
+   r-cran-cards (U)
+   r-cran-dharma (U)
+   r-cran-diagrammer (U)
+   r-cran-findpython (U)
+   r-cran-future (U)
+   r-cran-gap (U)
+   r-cran-gap.datasets (U)
+   r-cran-globals (U)
+   r-cran-goplot (U)
+   r-cran-httptest2 (U)
+   r-cran-influencer (U)
+   r-cran-listenv (U)
+   r-cran-locfit (U)
+   r-cran-network (U)
+   r-cran-profmem (U)
+   r-cran-pscbs (U)
+   r-cran-qgam (U)
+   r-cran-r.cache (U)
+   r-cran-rmariadb (U)
+   r-cran-rook (U)
+   r-cran-s7 (U)
+   r-cran-sna (U)
+   r-cran-statnet.common (U)
+   r-cran-visnetwork (U)
+   rsem (U)
+   transdecoder (U)
+   trinityrnaseq (U)
+
+Michael R. Crusoe <michael.crusoe at gmail.com>
+   r-bioc-deseq2 (U)
+   r-bioc-dnacopy (U)
+   r-bioc-ebseq (U)
+   r-bioc-geneplotter (U)
+   r-cran-locfit (U)
+   r-cran-pscbs (U)
+   transdecoder (U)
+
+Nico Schlömer <nico.schloemer at gmail.com>
+   vtk9 (U)
+
+Nilesh Patra <nilesh at debian.org>
+   r-bioc-netsam (U)
+   r-bioc-qtlizer (U)
+   r-bioc-residualmatrix (U)
+   r-bioc-tximeta (U)
+   r-cran-actuar (U)
+   r-cran-bslib (U)
+   r-cran-cpp11 (U)
+   r-cran-eaf (U)
+   r-cran-genoplotr (U)
+   r-cran-gprofiler2 (U)
+   r-cran-gunifrac (U)
+   r-cran-jinjar (U)
+   r-cran-jquerylib (U)
+   r-cran-knitr (U)
+   r-cran-maotai (U)
+   r-cran-partitions (U)
+   r-cran-plumber (U)
+   r-cran-qqconf (U)
+   r-cran-rcppml (U)
+   r-cran-rcppparallel (U)
+   r-cran-rlang (U)
+   r-cran-s2 (U)
+   r-cran-sampling (U)
+   r-cran-seqinr (U)
+   r-cran-sf (U)
+   r-cran-spatstat.random (U)
+   r-cran-stablelearner (U)
+   r-cran-svmisc (U)
+   r-cran-testthat (U)
+   r-cran-timechange (U)
+   r-cran-uniqtag (U)
+
+Oliver Dechant <dechant at dal.ca>
+   r-cran-pracma (U)
+
+Olivier Sallou <osallou at debian.org>
+   picard-tools (U)
+
+Ondřej Surý <ondrej at debian.org>
+   r-cran-rpostgresql (U)
+   rapache (U)
+
+Philip Rinn <rinni at debian.org>
+   r-cran-scatterplot3d (U)
+
+Pierre Gruet <pgt at debian.org>
+   picard-tools (U)
+
+Pino Toscano <pino at debian.org>
+   cantor (U)
+
+Pranav Ballaney <ballaneypranav at gmail.com>
+   r-bioc-htsfilter (U)
+
+Rebecca N. Palmer <rebecca_palmer at zoho.com>
+   statsmodels (U)
+
+Reproducible builds folks <reproducible-builds at lists.alioth.debian.org>
+   diffoscope
+
+Rodrigo Carvalho <rodrigorsdc at gmail.com>
+   r-cran-ecosolver (U)
+   r-cran-gmp (U)
+
+Sascha Steinbiss <satta at debian.org>
+   reapr (U)
+   roary (U)
+
+Sebastian Carneiro <scarneiro at speedy.com.ar>
+   r-cran-surveillance (U)
+
+Sebastian Gibb <sgibb.debian at gmail.com>
+   r-cran-maldiquant (U)
+   r-cran-readbrukerflexdata (U)
+
+Shayan Doust <hello at shayandoust.me>
+   node-shiny-server (U)
+   r-cran-bios2cor (U)
+   r-cran-circular (U)
+   r-cran-cmstatr (U)
+   r-cran-dslabs (U)
+   r-cran-ksamples (U)
+   r-cran-poissonbinomial (U)
+   r-cran-rcppparallel (U)
+   r-cran-rmariadb (U)
+   r-cran-suppdists (U)
+
+Steffen Moeller <moeller at debian.org>
+   picard-tools (U)
+   python-pybedtools (U)
+   q2-dada2 (U)
+   q2-diversity-lib (U)
+   q2-quality-control (U)
+   r-bioc-affxparser (U)
+   r-bioc-arrayexpress (U)
+   r-bioc-basilisk (U)
+   r-bioc-basilisk.utils (U)
+   r-bioc-beachmat (U)
+   r-bioc-biocneighbors (U)
+   r-bioc-biocsingular (U)
+   r-bioc-ctc (U)
+   r-bioc-dada2 (U)
+   r-bioc-degnorm (U)
+   r-bioc-delayedmatrixstats (U)
+   r-bioc-demixt (U)
+   r-bioc-dir.expiry (U)
+   r-bioc-drimseq (U)
+   r-bioc-dropletutils (U)
+   r-bioc-dupradar (U)
+   r-bioc-eir (U)
+   r-bioc-experimenthub (U)
+   r-bioc-fishpond (U)
+   r-bioc-genomicfiles (U)
+   r-bioc-geoquery (U)
+   r-bioc-ggbio (U)
+   r-bioc-grohmm (U)
+   r-bioc-gseabase (U)
+   r-bioc-gsva (U)
+   r-bioc-hdf5array (U)
+   r-bioc-hilbertvis (U)
+   r-bioc-isoformswitchanalyzer (U)
+   r-bioc-limma (U)
+   r-bioc-megadepth (U)
+   r-bioc-mofa (U)
+   r-bioc-mofa2 (U)
+   r-bioc-multiassayexperiment (U)
+   r-bioc-noiseq (U)
+   r-bioc-oligo (U)
+   r-bioc-oligoclasses (U)
+   r-bioc-org.hs.eg.db (U)
+   r-bioc-organismdbi (U)
+   r-bioc-progeny (U)
+   r-bioc-qusage (U)
+   r-bioc-qvalue (U)
+   r-bioc-rcpi (U)
+   r-bioc-rsubread (U)
+   r-bioc-scater (U)
+   r-bioc-scran (U)
+   r-bioc-singlecellexperiment (U)
+   r-bioc-singler (U)
+   r-bioc-stringdb (U)
+   r-bioc-structuralvariantannotation (U)
+   r-bioc-tximport (U)
+   r-cran-airr (U)
+   r-cran-alakazam (U)
+   r-cran-amap (U)
+   r-cran-apcluster (U)
+   r-cran-argparser (U)
+   r-cran-bio3d (U)
+   r-cran-bitops (U)
+   r-cran-biwt (U)
+   r-cran-calibratr (U)
+   r-cran-catools (U)
+   r-cran-circlize (U)
+   r-cran-cmdfun (U)
+   r-cran-combinat (U)
+   r-cran-corrplot (U)
+   r-cran-dbscan (U)
+   r-cran-diptest (U)
+   r-cran-downlit (U)
+   r-cran-dtplyr (U)
+   r-cran-dynamictreecut (U)
+   r-cran-emdbook (U)
+   r-cran-evd (U)
+   r-cran-factoextra (U)
+   r-cran-ff (U)
+   r-cran-ffield (U)
+   r-cran-fit.models (U)
+   r-cran-fitdistrplus (U)
+   r-cran-future.apply (U)
+   r-cran-future.batchtools (U)
+   r-cran-g.data (U)
+   r-cran-genabel (U)
+   r-cran-genetics (U)
+   r-cran-ggalluvial (U)
+   r-cran-ggrepel (U)
+   r-cran-ggseqlogo (U)
+   r-cran-globaloptions (U)
+   r-cran-gsubfn (U)
+   r-cran-gwidgets (U)
+   r-cran-gwidgetstcltk (U)
+   r-cran-haplo.stats (U)
+   r-cran-hdf5r (U)
+   r-cran-ica (U)
+   r-cran-itertools (U)
+   r-cran-jpeg (U)
+   r-cran-jquerylib (U)
+   r-cran-jrc (U)
+   r-cran-kaos (U)
+   r-cran-kedd (U)
+   r-cran-labdsv (U)
+   r-cran-lsd (U)
+   r-cran-lsei (U)
+   r-cran-maotai (U)
+   r-cran-markovchain (U)
+   r-cran-matlab (U)
+   r-cran-mclustcomp (U)
+   r-cran-metap (U)
+   r-cran-minerva (U)
+   r-cran-mixsqp (U)
+   r-cran-npsurv (U)
+   r-cran-optimalcutpoints (U)
+   r-cran-parmigene (U)
+   r-cran-pcapp (U)
+   r-cran-pkgdown (U)
+   r-cran-proc (U)
+   r-cran-propclust (U)
+   r-cran-qtl (U)
+   r-cran-r2d2 (U)
+   r-cran-r2html (U)
+   r-cran-ragg (U)
+   r-cran-randomforest (U)
+   r-cran-randomglm (U)
+   r-cran-rann (U)
+   r-cran-rcppdist (U)
+   r-cran-rcpphnsw (U)
+   r-cran-rcsdp (U)
+   r-cran-rcurl (U)
+   r-cran-rmarkdown (U)
+   r-cran-rmpfr (U)
+   r-cran-robust (U)
+   r-cran-robustrankaggreg (U)
+   r-cran-rocr (U)
+   r-cran-rook (U)
+   r-cran-rrcov (U)
+   r-cran-rslurm (U)
+   r-cran-rsvd (U)
+   r-cran-sctransform (U)
+   r-cran-sdmtools (U)
+   r-cran-seurat (U)
+   r-cran-shades (U)
+   r-cran-shapes (U)
+   r-cran-shazam (U)
+   r-cran-sparql (U)
+   r-cran-sqldf (U)
+   r-cran-susier (U)
+   r-cran-svunit (U)
+   r-cran-tcr (U)
+   r-cran-tiff (U)
+   r-cran-tigger (U)
+   r-cran-tsne (U)
+   r-cran-upsetr (U)
+   r-cran-uwot (U)
+   r-cran-venndiagram (U)
+   r-cran-vioplot (U)
+   r-cran-webgestaltr (U)
+   r-cran-wgcna (U)
+   r-other-disgenet2r (U)
+   r-other-kcha-psiplot (U)
+   r-other-mott-happy (U)
+   r-other-rajewsky-dropbead (U)
+
+Sébastien Boisvert <sebastien.boisvert.3 at ulaval.ca>
+   ray (U)
+
+Sébastien Villemot <sebastien at debian.org>
+   ess (U)
+   r-cran-bdsmatrix (U)
+   r-cran-dynlm (U)
+   r-cran-isocodes (U)
+   r-cran-mfilter (U)
+   r-cran-nleqslv (U)
+   r-cran-plm (U)
+   r-cran-pwt (U)
+   r-cran-pwt8 (U)
+   r-cran-pwt9 (U)
+   r-cran-rdbnomics (U)
+   r-cran-rjson (U)
+   r-cran-rsdmx (U)
+   r-cran-statmod (U)
+   r-cran-truncdist (U)
+   r-cran-wdi (U)
+
+Thomas Dreibholz <thomas.dreibholz at gmail.com>
+   netperfmeter
+
+Thomas Friedrichsmeier <thomas.friedrichsmeier at kdemail.net>
+   rkward (U)
+
+Tiago Bortoletto Vaz <tiago at debian.org>
+   screen-message
+
+Tim Booth <tbooth at ceh.ac.uk>
+   ea-utils (U)
+
+Tobias Hansen <thansen at debian.org>
+   sagemath (U)
+
+Vincent Danjean <vdanjean at debian.org>
+   picard-tools (U)
+
+Ximin Luo <infinity0 at debian.org>
+   sagemath (U)
+
+Yaroslav Halchenko <debian at onerussian.com>
+   statsmodels (U)
+
+Étienne Mollier <emollier at debian.org>
+   fastqtl (U)
+   mapdamage (U)
+   paleomix (U)
+   q2-quality-control (U)
+
+From smcv at debian.org  Wed Apr 16 15:17:44 2025
+From: smcv at debian.org (Simon McVittie)
+Date: Wed, 16 Apr 2025 16:17:44 +0100
+Subject: Re: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+In-Reply-To: <Z_-4_12vy604Nz0I@bubu.igloo>
+References: <Z_-4_12vy604Nz0I@bubu.igloo>
+Message-ID: <Z__KGFxYGesa6Gtz@remnant.pseudorandom.co.uk>
+
+On Wed, 16 Apr 2025 at 23:04:47 +0900, Charles Plessy wrote:
+> If you need one of the team-maintained r-cran-* packages on a 32-bit or
+> on a big endian architectures, which are not supported upstream, please
+> contact me on the debian-r list and let's see how we can share the
+> workload.
+
+It might be best to re-send this to debian-arm (representing the two
+32-bit release architectures with a porter mailing list) and debian-s390
+(representing the only big-endian release architecture). Possibly also
+debian-powerpc, although the big-endian versions of that are -ports
+anyway.
+
+(I don't expect that you will realistically get contributions from those
+architectures, but it seems polite to let them know.)
+
+    smcv
+
+From elbrus at debian.org  Wed Apr 16 16:31:22 2025
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 16 Apr 2025 18:31:22 +0200
+Subject: Re: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+In-Reply-To: <Z_-4_12vy604Nz0I@bubu.igloo>
+References: <Z_-4_12vy604Nz0I@bubu.igloo>
+Message-ID: <79821b03-7f94-4261-94fa-dc4e266560e9@debian.org>
+
+Hi,
+
+On 16-04-2025 16:04, Charles Plessy wrote:
+> If you need one of the team-maintained r-cran-* packages on a 32-bit or
+> on a big endian architectures, which are not supported upstream, please
+> contact me on the debian-r list and let's see how we can share the
+> workload.  Otherwise I will start the process next week, assuming silent
+> approval.  The alternative is to lose a lot of r-cran-* packages from
+> amd64 as well.
+
+I haven't checked why they are there, but there are several packages in 
+the key package set [1]. I would be good to check beforehand what 
+happens if they are removed on those architectures. I think it's best to 
+assume for now that you can't remove them at this stage of the release.
+
+Paul
+
+[1] https://udd.debian.org/cgi-bin/key_packages.yaml.cgi
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Wed Apr 16 16:55:04 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 16 Apr 2025 11:55:04 -0500
+Subject: Re: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+In-Reply-To: <79821b03-7f94-4261-94fa-dc4e266560e9@debian.org>
+References: <Z_-4_12vy604Nz0I@bubu.igloo> <79821b03-7f94-4261-94fa-dc4e266560e9@debian.org>
+Message-ID: <26623.57576.381849.736197@rob.eddelbuettel.com>
+
+On 16 April 2025 at 18:31, Paul Gevers wrote:
+| I haven't checked why they are there, but there are several packages in 
+| the key package set [1]. I would be good to check beforehand what 
+| happens if they are removed on those architectures. I think it's best to 
+| assume for now that you can't remove them at this stage of the release.
+| 
+| [1] https://udd.debian.org/cgi-bin/key_packages.yaml.cgi
+
+That appears to be a different set of packages. It is comprised entirely of
+packages that the meta package "r-recommended" depends upon. [ The R 'engine'
+is provided by package "r-base-core" which can run on its own, the wider
+package "r-base" also depends on "r-recommended" bringing these in. It is a
+set of packages commonly used with R and curatedby upstream, that is by the
+upstream R Core team. ]  These packages are all maintained by me, and they
+build fine under i386 etc.  So no issue there as far as I can tell.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Wed Apr 16 17:24:30 2025
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 16 Apr 2025 19:24:30 +0200
+Subject: Re: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+In-Reply-To: <26623.57576.381849.736197@rob.eddelbuettel.com>
+References: <Z_-4_12vy604Nz0I@bubu.igloo> <79821b03-7f94-4261-94fa-dc4e266560e9@debian.org> <26623.57576.381849.736197@rob.eddelbuettel.com>
+Message-ID: <ef15dd89-ab80-4c4e-8b38-b08652b4f406@debian.org>
+
+Hi Dirk,
+
+On 16-04-2025 18:55, Dirk Eddelbuettel wrote:
+> | [1] https://udd.debian.org/cgi-bin/key_packages.yaml.cgi
+>
+> That appears to be a different set of packages.
+
+The packages spotted in the original list, I assume you're talking about 
+all of them except maybe cantor and vtk9?
+
+boot: r-recommended depends r-cran-boot
+cantor: kdeedu depends cantor
+cluster: r-recommended depends r-cran-cluster
+codetools: r-recommended depends r-cran-codetools
+dh-r: boot build-depends dh-r
+foreign: r-recommended depends r-cran-foreign
+kernsmooth: r-recommended depends r-cran-kernsmooth
+lattice: r-recommended depends r-cran-lattice
+mgcv: r-recommended depends r-cran-mgcv
+nlme: r-recommended depends r-cran-nlme
+r-cran-class: r-recommended depends r-cran-class
+r-cran-mass: r-recommended depends r-cran-mass
+r-cran-nnet: r-recommended depends r-cran-nnet
+r-cran-spatial: r-recommended depends r-cran-spatial
+rmatrix: r-recommended depends r-cran-matrix
+rpart: r-recommended depends r-cran-rpart
+survival: r-recommended depends r-cran-survival
+vtk9: opencv build-depends libvtk9-dev
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Wed Apr 16 18:16:49 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 16 Apr 2025 13:16:49 -0500
+Subject: Re: Planning to remove team-based R packages from 32-bit and big-endian architectures.
+In-Reply-To: <ef15dd89-ab80-4c4e-8b38-b08652b4f406@debian.org>
+References: <Z_-4_12vy604Nz0I@bubu.igloo> <79821b03-7f94-4261-94fa-dc4e266560e9@debian.org> <26623.57576.381849.736197@rob.eddelbuettel.com> <ef15dd89-ab80-4c4e-8b38-b08652b4f406@debian.org>
+Message-ID: <26623.62481.609192.965279@rob.eddelbuettel.com>
+
+On 16 April 2025 at 19:24, Paul Gevers wrote:
+| Hi Dirk,
+| 
+| On 16-04-2025 18:55, Dirk Eddelbuettel wrote:
+| > | [1] https://udd.debian.org/cgi-bin/key_packages.yaml.cgi
+| > 
+| > That appears to be a different set of packages.
+| 
+| 
+| The packages spotted in the original list, I assume you're talking about 
+| all of them except maybe cantor and vtk9?
+| boot: r-recommended depends r-cran-boot
+| cantor: kdeedu depends cantor
+| cluster: r-recommended depends r-cran-cluster
+| codetools: r-recommended depends r-cran-codetools
+| dh-r: boot build-depends dh-r
+| foreign: r-recommended depends r-cran-foreign
+| kernsmooth: r-recommended depends r-cran-kernsmooth
+| lattice: r-recommended depends r-cran-lattice
+| mgcv: r-recommended depends r-cran-mgcv
+| nlme: r-recommended depends r-cran-nlme
+| r-cran-class: r-recommended depends r-cran-class
+| r-cran-mass: r-recommended depends r-cran-mass
+| r-cran-nnet: r-recommended depends r-cran-nnet
+| r-cran-spatial: r-recommended depends r-cran-spatial
+| rmatrix: r-recommended depends r-cran-matrix
+| rpart: r-recommended depends r-cran-rpart
+| survival: r-recommended depends r-cran-survival
+| vtk9: opencv build-depends libvtk9-dev
+
+Corret. Also, dh-r is only needed at build-time.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu Apr 17 05:43:25 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 17 Apr 2025 14:43:25 +0900
+Subject: Conflict between R 4.5 and Bioc 3.20
+Message-ID: <aACU_e8asqvlnPt6@kumo.plessy.net>
+
+Hi Dirk and everybody,
+
+I just noticed that r-base 4.5.0-1 cannot migrate to Trixie because it breaks
+Bioconductor 3.20, which was developed and tested upstream against R 4.4.3.
+
+At the same time, upgrading to Bioconductor 3.21 — built and tested against R
+4.5.0 — is not an option, since it was released on April 16th and Trixie entered
+the freeze on April 15th.
+
+That leaves us with three main scenarios:
+
+ - We release with R 4.5 but without Bioconductor and its reverse dependencies.
+
+ - We release with R 4.4.3 and Bioconductor 3.20. Fixes for current RC bugs
+   would likely need to go through testing-proposed-updates, which the Release
+   Team generally prefers to avoid.
+
+ - We release with R 4.4.3 by temporarily reverting r-base in Sid to that
+   version during the freeze. Fixes for current RC bugs could then follow the
+   usual testing migration process.
+
+None of these options are ideal, and each presents drawbacks for at least one
+stakeholder. I suggest we all take a day or two to reflect on the options (and
+perhaps identify alternatives we haven’t considered yet) before continuing the
+discussion.
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Thu Apr 17 10:52:24 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 17 Apr 2025 05:52:24 -0500
+Subject: Re: Conflict between R 4.5 and Bioc 3.20
+In-Reply-To: <aACU_e8asqvlnPt6@kumo.plessy.net>
+References: <aACU_e8asqvlnPt6@kumo.plessy.net>
+Message-ID: <26624.56680.335541.809414@rob.eddelbuettel.com>
+
+On 17 April 2025 at 14:43, Charles Plessy wrote:
+| I just noticed that r-base 4.5.0-1 cannot migrate to Trixie because it breaks
+| Bioconductor 3.20, which was developed and tested upstream against R 4.4.3.
+
+Are you really there is actual 'breakage' in any of the packages in 3.20?
+
+While they were built under R 4.4.3 they continue to work with R 4.5.0 as there
+is no API / ABI change.
+
+You can easily test that under the r-base Docker container which already has
+R 4.5.0 and points at testing/unstable as usual. I just ran 'apt update -qq;
+apt install r-bioc-alabaster.sce' and it of course loads as expected. [1]
+
+I also usually mix and match on my own box and don't immediately update to
+new BioC there and never had issues. So I am not sure the situation is as
+dire as you say.
+
+Dirk
+
+[1] Quick log
+
+> search()
+ [1] ".GlobalEnv"                   "package:alabaster.sce"       
+ [3] "package:alabaster.base"       "package:SingleCellExperiment"
+ [5] "package:SummarizedExperiment" "package:Biobase"             
+ [7] "package:GenomicRanges"        "package:GenomeInfoDb"        
+ [9] "package:IRanges"              "package:S4Vectors"           
+[11] "package:BiocGenerics"         "package:stats4"              
+[13] "package:MatrixGenerics"       "package:matrixStats"         
+[15] "package:stats"                "package:graphics"            
+[17] "package:grDevices"            "package:utils"               
+[19] "package:datasets"             "package:methods"             
+[21] "Autoloads"                    "package:base"                
+> getRversion()
+[1] ‘4.5.0’
+> system("cat /etc/debian_version")
+trixie/sid
+> 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Mon Apr 21 18:18:13 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Mon, 21 Apr 2025 19:18:13 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26624.56680.335541.809414@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com>
+Message-ID: <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com>
+
+r-base 4.5.0 is currently blocked by 3 r-cran* and 6 r-bioc* packages.
+
+r-cran-ff and r-cran-pillar pass with R 4.5.0 in unstable but fail with 
+R 4.5.0 in otherwise-testing, which suggests that they'll be fine if 
+some other package migrates.  I haven't tried to find out which one.
+
+r-cran-rlang, r-bioc-graph and r-bioc-iranges fail with R 4.5.0 in both 
+unstable and otherwise-testing.  Rebuilding r-bioc-graph and 
+r-bioc-iranges with R 4.5.0 succeeds but doesn't help:
+
+https://salsa.debian.org/r-pkg-team/r-bioc-iranges/-/jobs/7472123
+https://salsa.debian.org/r-pkg-team/r-bioc-graph/-/jobs/7472135
+I haven't tried rebuilding r-bioc-biocgenerics with R 4.5.0, which might 
+help.  (Caution: to avoid potentially making the situation worse, please 
+do *not* upload any such rebuilds to sid until we know more about 
+whether they'll help.)
+
+r-bioc-delayedmatrixstats, r-bioc-pwalign and r-bioc-shortread also 
+fail, but depend on r-bioc-iranges so might be the same bug as that, 
+though only r-bioc-delayedmatrixstats is failing with an obviously 
+iranges-related error message.
+
+r-bioc-bioccheck is failing an explicit version check.
+
+From rebecca_palmer at zoho.com  Tue Apr 22 13:24:05 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 22 Apr 2025 14:24:05 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com>
+References: <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com>
+Message-ID: <0c54b819-1d68-4025-8d3d-c3a421345b29@zoho.com>
+
+r-bioc-graph and r-bioc-iranges are both segfaults attempting to access 
+an empty object, and are known to upstream.  (I'm not sure why they were 
+only exposed by R 4.5; they look like they're bugs independent of R 
+version.)
+
+I have fixed versions of both in Salsa (r4p5test branches), using the 
+upstream fix for r-bioc-graph, but my own for r-bioc-iranges because the 
+upstream fix was a large rewrite that might not be allowed at this point 
+in the freeze.
+
+As previously noted, it is likely (but untested) that the r-bioc-iranges 
+fix also fixes at least r-bioc-delayedmatrixstats, and maybe also 
+r-bioc-pwalign and r-bioc-shortread.
+
+From edd at debian.org  Tue Apr 22 14:13:09 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 22 Apr 2025 09:13:09 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com>
+Message-ID: <26631.41973.555854.213291@rob.eddelbuettel.com>
+
+On 21 April 2025 at 19:18, Rebecca N. Palmer wrote:
+| r-base 4.5.0 is currently blocked by 3 r-cran* and 6 r-bioc* packages.
+
+Thanks for bringing this up. As the one who looks after r-base this is a
+recurrent point of friction.
+ 
+| r-cran-ff and r-cran-pillar pass with R 4.5.0 in unstable but fail with 
+| R 4.5.0 in otherwise-testing, which suggests that they'll be fine if 
+| some other package migrates.  I haven't tried to find out which one.
+
+Good catch. Could possibly be testthat or rlang. Also few tests: for ff it is
+just one out of 900+, for pillar it is shenanigans with subprocesses (why ?).
+ 
+| r-cran-rlang, r-bioc-graph and r-bioc-iranges fail with R 4.5.0 in both 
+| unstable and otherwise-testing.  Rebuilding r-bioc-graph and 
+| r-bioc-iranges with R 4.5.0 succeeds but doesn't help:
+| https://salsa.debian.org/r-pkg-team/r-bioc-iranges/-/jobs/7472123
+| https://salsa.debian.org/r-pkg-team/r-bioc-graph/-/jobs/7472135
+| I haven't tried rebuilding r-bioc-biocgenerics with R 4.5.0, which might 
+| help.  (Caution: to avoid potentially making the situation worse, please 
+| do *not* upload any such rebuilds to sid until we know more about 
+| whether they'll help.)
+| 
+| r-bioc-delayedmatrixstats, r-bioc-pwalign and r-bioc-shortread also 
+| fail, but depend on r-bioc-iranges so might be the same bug as that, 
+| though only r-bioc-delayedmatrixstats is failing with an obviously 
+| iranges-related error message.
+
+It would be good to unplug this and get R 4.5.0 migrated. My approach would
+be to accommodate the constraining autopkg tests.
+
+| r-bioc-bioccheck is failing an explicit version check.
+
+I think that one is expected / designed to notice that R is no longer the 4.4
+that BioC 3.20 (of that package build) was aimed for as it is the very
+package for BioC specific checks. On the other hand it loads just fine and
+behaves:
+
+> getRversion()
+[1] ‘4.5.0’
+> library(BiocCheck)
+> search()
+ [1] ".GlobalEnv"        "package:BiocCheck" "package:stats"    
+ [4] "package:graphics"  "package:grDevices" "package:datasets" 
+ [7] "package:utils"     "package:methods"   "Autoloads"        
+[10] "package:base"     
+> 
+
+[ FWIW I also maintain (in the sense of build, distribute and look after)
+essentially all 23k CRAN packages for all three Ubuntu LTSs, along with about
+450 BioC packages. They all work reliably.  I am still at BioC 3.20 there but
+use R 4.5.0 as it is available. (The repo for these CRAN binaries is
+frequently use along with the CRAN-mirrored repo of the current.)  A fair
+number of people rely on this for CI and other regularly scheduled jobs and
+builds. As an example we had over 130k downloads yesterday, and generally
+avergage about 500k/week these days. These package _work_ reliably if you
+keep them current as CRAN does. See https://eddelbuettel.github.io/r2u ]
+
+So there is no reason to believe that, say, IRange from BioC does not work
+under R 4.5.0 even though it may come from the 3.20 believe. Hence, I do not
+agree with the overall sentiment Charles expressed that we cannot release
+this. It works, we can, and we have in the past.
+
+And once the trixie release is out of the way BioC packages can update to
+3.21 at their pace.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Tue Apr 22 17:14:55 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 22 Apr 2025 18:14:55 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26631.41973.555854.213291@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com>
+Message-ID: <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com>
+
+> On 21 April 2025 at 19:18, Rebecca N. Palmer wrote:
+> | r-cran-ff and r-cran-pillar pass with R 4.5.0 in unstable but fail with
+> | R 4.5.0 in otherwise-testing, which suggests that they'll be fine if
+> | some other package migrates.  I haven't tried to find out which one.
+
+Now identified: r-cran-pillar needs r-cran-bit64 (which should migrate 
+in 6 days if we simply wait), r-cran-ff needs r-cran-testthat (which 
+requires action, see #1099927).
+
+The failing r-cran-rlang test was already known to be unsuitable for R 
+4.5+, and upstream have simply removed it:
+
+https://github.com/r-lib/rlang/commit/76fa556b7e4eb1414f753691c0eda0c88d26e1cc
+
+For r-bioc-graph and r-bioc-iranges, see my other message.
+
+From edd at debian.org  Tue Apr 22 18:00:15 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 22 Apr 2025 13:00:15 -0500
+Subject: Re: Conflict between R 4.5 and Bioc 3.20
+In-Reply-To: <26624.56680.335541.809414@rob.eddelbuettel.com>
+References: <aACU_e8asqvlnPt6@kumo.plessy.net> <26624.56680.335541.809414@rob.eddelbuettel.com>
+Message-ID: <26631.55599.867525.126134@rob.eddelbuettel.com>
+
+On 17 April 2025 at 05:52, Dirk Eddelbuettel wrote:
+| 
+| On 17 April 2025 at 14:43, Charles Plessy wrote:
+| | I just noticed that r-base 4.5.0-1 cannot migrate to Trixie because it breaks
+| | Bioconductor 3.20, which was developed and tested upstream against R 4.4.3.
+| 
+| Are you really there is actual 'breakage' in any of the packages in 3.20?
+| 
+| While they were built under R 4.4.3 they continue to work with R 4.5.0 as there
+| is no API / ABI change.
+| 
+| You can easily test that under the r-base Docker container which already has
+| R 4.5.0 and points at testing/unstable as usual. I just ran 'apt update -qq;
+| apt install r-bioc-alabaster.sce' and it of course loads as expected. [1]
+| 
+| I also usually mix and match on my own box and don't immediately update to
+| new BioC there and never had issues. So I am not sure the situation is as
+| dire as you say.
+
+I should re-clarify that packages such as BiocManager will indeed insist
+matching pairs of BioConductor and R releases (ie 3.20 with 4.4.*, 3.21 with
+4.5.*).  R itself cares less.  As Charles outlined this does not leave us
+with many great options given the release date of BioConductor and our soft
+freeze.  Imposing that R must stay at 4.4.3 is also heavy.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Tue Apr 22 18:20:16 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 22 Apr 2025 19:20:16 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com>
+Message-ID: <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com>
+
+On 22/04/2025 18:14, Rebecca N. Palmer wrote:
+> The failing r-cran-rlang test was already known to be unsuitable for R
+> 4.5+, and upstream have simply removed it
+
+That works in Debian: 
+https://salsa.debian.org/rnpalmer-guest/r-cran-rlang/-/jobs/7476674
+
+That makes the current status
+
+r-bioc-iranges, r-bioc-graph, r-cran-rlang: have Salsa merge requests 
+with fixes.  The r-bioc-iranges patch should also fix 
+r-bioc-delayedmatrixstats but this has not actually been tested.
+
+r-cran-hdf5r, r-cran-rcmdcheck, r-cran-s2: need tests disabling on a 
+32-bit architecture (and if you prefer not to have buggy packages 
+available, the package removing on this architecture).  This will 
+unblock r-cran-testthat and hence r-cran-ff.  (These are *already* buggy 
+in R 4.4.x, but the old r-cran-testthat was too buggy to notice.)
+
+r-bioc-bioccheck: needs explicit version check disabling.
+
+r-bioc-pwalign, r-bioc-shortread: unknown - maybe the r-bioc-iranges 
+patch will also fix these, maybe not.
+
+r-cran-pillar: no action required, already fixed in r-cran-bit64.
+
+From rebecca_palmer at zoho.com  Wed Apr 23 17:22:50 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Wed, 23 Apr 2025 18:22:50 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com>
+Message-ID: <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com>
+
+3 of our FTBFS bugs (rapache, r-bioc-oligo, r-cran-sdmtools) are also 
+due to R 4.5 (removed C API aliases), but I now have patches for those 
+as well.
+
+Current status:
+
+Broken with r-base 4.5, patches in Salsa: rapache 1103202, r-bioc-graph, 
+r-bioc-iranges, r-bioc-oligo 1103199, r-cran-rlang, r-cran-sdmtools 1103228
+
+Should migrate if we just wait: r-cran-bit64 1102109, r-cran-bslib 
+1101679, r-cran-vegan 1099926
+
+Waiting for r-base 4.5, should migrate if it does: rjava 1103203, rpy2 
+1102774, r-cran-doby, r-cran-fansi 1102590, r-cran-gss, r-cran-rinside, 
+r-cran-writexl
+
+To remove/ignore on 32 bit: r-cran-caret 1103118, r-cran-dbitest 
+1103111, r-cran-epir 1103082, r-cran-hdf5r (blocks r-cran-testthat 
+1099927), r-cran-lubridate 1103068, r-cran-rcmdcheck (blocks 
+r-cran-testthat 1099927), r-cran-recipes 1103138, r-cran-rstanarm 
+1103134 (the name refers to Applied Regression Modelling not the ARM 
+architecture), r-cran-s2 (blocks r-cran-testthat 1099927), r-cran-themis 
+1103063, r-cran-tidyverse 1103110, r-cran-units 1102591, 
+r-cran-webgestaltr 1103369
+
+Miscellaneous RC bugs, patches in Salsa: r-cran-argparser 1102189, 
+r-cran-sparr 1102956, r-cran-survminer 1102345
+
+Will miss trixie, as it depends on already removed package(s): 
+r-cran-broom.helpers 1102589 (depends on r-cran-cards)
+
+Other RC bugs:
+1103217 [        ] [TU] r-bioc-affxparser: FTBFS: 
+R_affx_cel_parser.cpp:37:33: error: expected primary-expression before 
+'char'
+1103198 [        ] [TU] r-bioc-cner: FTBFS: ucsc/common.c:360:9: error: 
+too many arguments to function 'free'
+1103227 [P       ] [TU] r-bioc-grohmm: FTBFS: DecayAlgorithm.c:94:15: 
+error: expected identifier or '(' before 'false'
+1103200 [        ] [TU] r-bioc-rtracklayer: FTBFS: ucsc/common.c:249:9: 
+error: too many arguments to function 'free' (probably the same bug as cner)
+1100292 [  H   U ] [TU] r-cran-fastcluster: FTBFS: FAIL: test_vector 
+(tests.fastcluster_test.test_vector)
+1103373 [        ] [TU] rjava: FTBFS in testing/armel: configure: error: 
+One or more Java configuration variables are not set. (consider removal 
+on armel?)
+
+From edd at debian.org  Wed Apr 23 19:07:49 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 23 Apr 2025 14:07:49 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com>
+Message-ID: <26633.14981.543494.430662@rob.eddelbuettel.com>
+
+On 23 April 2025 at 18:22, Rebecca N. Palmer wrote:
+| Other RC bugs:
+| 1103373 [        ] [TU] rjava: FTBFS in testing/armel: configure: error: 
+| One or more Java configuration variables are not set. (consider removal 
+| on armel?)
+
+That was a side effect of R 4.5.0 dependees now also requiring libzstd-dev
+when building; fixed "by hand" in rpy2 and rJava, and in r-base-core 4.5.0-2
+So this also gets closed when r-base migrates to testing.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Wed Apr 23 19:15:56 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Wed, 23 Apr 2025 20:15:56 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com>
+Message-ID: <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com>
+
+On closer inspection, these FTBFS bugs also looked R 4.5 related: 
+r-bioc-affxparser 1103217, r-bioc-cner 1103198, r-bioc-rtracklayer 
+1103200 (those two look like an embedded code copy, but given that 
+they're different versions of it, now is probably not the time to deal 
+with that), r-bioc-grohmm 1103227.
+
+These now also have patches in Salsa (the r-bioc-grohmm patch isn't mine).
+
+Some of them might only appear with a recent C compiler, given that 
+upstream doesn't seem to have noticed them.
+
+From rebecca_palmer at zoho.com  Thu Apr 24 12:19:46 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Thu, 24 Apr 2025 13:19:46 +0100
+Subject: Request to join the R team (if that exists as a separate thing)
+Message-ID: <860467ef-d50a-4336-bdef-bde1b807f165@zoho.com>
+
+I am rnpalmer-guest on Salsa (I'm a DD now, but haven't bothered to 
+change username).
+
+https://wiki.debian.org/Teams/r-pkg-team#Get_involved says Science and 
+Med team members automatically have commit rights to R team packages, 
+but that isn't actually true: according to the 'Yours' tab of Salsa 
+search, I have commit rights to ~400 (out of ~1300).
+
+(It possibly *should not* be true: if you automatically 
+mass-update+upload packages without looking at them, then you 
+*shouldn't* give out commit rights to those packages to anyone who asks, 
+because anyone who can commit to such a package can get malware into 
+Debian by pushing it to Salsa and waiting for the next mass-upload. 
+When I clone a new-to-me package, I also apt-get source it, check 
+whether they match, and if not (i.e. there have been changes since the 
+last upload), review these changes; possibly routine-update should gain 
+such a feature.)
+
+If accepted, I intend to merge and upload the pull requests I currently 
+have open: r-bioc-affxparser r-bioc-cner r-bioc-graph r-bioc-iranges 
+r-bioc-oligo r-bioc-rtracklayer r-cran-argparser r-cran-rlang 
+r-cran-sdmtools r-cran-sparr r-cran-survminer rapache.
+
+From rebecca_palmer at zoho.com  Thu Apr 24 21:39:08 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Thu, 24 Apr 2025 22:39:08 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com>
+Message-ID: <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com>
+
+After uploading those fixes (thanks):
+
+r-cran-rlang and r-base have to migrate together (because the 
+r-cran-rlang built with R 4.5 is broken in R 4.4), which may mean we 
+need some Breaks: to get britney to try that.
+
+r-bioc-pwalign and r-bioc-shortread are still broken with R 4.5 (i.e. 
+the new r-bioc-iranges wasn't enough).
+
+From rebecca_palmer at zoho.com  Fri Apr 25 11:18:43 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Fri, 25 Apr 2025 12:18:43 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com>
+Message-ID: <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com>
+
+r-bioc-pwalign / r-bioc-shortread: this appears to be 
+https://github.com/Bioconductor/pwalign/issues/11 ; I have pushed the 
+upstream fix.
+
+r-cran-rlang: I have pushed a version with an r-base-core (>= 4.5.0~) 
+Depends.
+
+r-bioc-bioccheck: the explicit version check is actually in 
+r-cran-biocmanager (at 
+https://sources.debian.org/src/r-cran-biocmanager/1.30.25+dfsg-1/R/version.R/?hl=329#L329 
+), which is used by BiocCheck:::checkSingleColon and 
+BiocCheck:::checkIsPackageNameAlreadyInUse.  I have pushed a version 
+removing the tests of those functions.  (I also tried the override 
+mechanism described at 
+https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html#unsupported-r-bioconductor-versions 
++ 
+https://sources.debian.org/src/dh-r/20241218/scripts/pkg-r-autopkgtest/?hl=32#L32 
+, but it didn't work.)
+
+This version check will also fail BiocManager::install(), 
+BiocManager::available(), BiocManager::repositories(), 
+BiocCheck:::checkSingleColon, BiocCheck:::checkIsPackageNameAlreadyInUse 
+if actual users try to use them, which raises the question of whether we 
+should change the check message to say that this is expected in Debian, 
+and that users can uninstall r-bioc-* and run 
+BiocManager::install(version = "3.21") if they want an 
+upstream-supported version.
+
+(I *don't* think we should disable the check entirely: we *are* doing 
+something upstream don't recommend, and the fact that I've done so much 
+of the work is *not* intended to be an opinion on whether it was ever a 
+good idea.)
+
+From smcv at debian.org  Mon Apr 28 09:49:23 2025
+From: smcv at debian.org (Simon McVittie)
+Date: Mon, 28 Apr 2025 10:49:23 +0100
+Subject: Re: Need advice on architecture exclusion when arch: all packages are involved.
+In-Reply-To: <aA7Hx4gmpfDQ2TR2@kumo.plessy.net>
+References: <1919444.tdWV9SEqCh@ylum> <ca70222c-f50c-4bf8-a432-7a3f0c54138e@debian.org> <22675511.EfDdHjke4D@ylum> <aA7Hx4gmpfDQ2TR2@kumo.plessy.net>
+Message-ID: <aA9PIycpnQIVj6az@remnant.pseudorandom.co.uk>
+
+On Mon, 28 Apr 2025 at 09:11:51 +0900, Charles Plessy wrote:
+> on my side I have added a --64 option to the `routine-update` script (from the
+> same-named package) that adds a build-dependency on architecture-is-64-bits,
+> and plan to do the same for little-endian architectures.
+
+This seems like a sufficiently common situation to encounter that the 
+ability to automate it is a useful thing, so thank you for doing this.
+
+> I wrote recently that I plan to restrict all the team-maintained r-cran-*
+> packages to 64-bit, little-endian.  I have delayed that because of worries of
+> delaying migration of some packages with a mass upload, but...
+
+Please note that we are about halfway through the soft freeze period for 
+trixie (2025-04-15 to 2024-05-15), and the release team writes:
+
+    new transitions, new versions of packages that are part of
+    (build-)essential or large/disruptive changes remain inappropriate
+    — https://release.debian.org/testing/freeze_policy.html#soft
+
+I see from https://bugs.debian.org/release-critical/other/testing.html 
+that some of the r-bioc-* and r-cran-* family have been unable to 
+migrate to testing. How many of those bugs would be resolved by removing 
+their relevant packages from 32-bit and BE architectures, and how many 
+are orthogonal?
+
+I am not a release team member, but I suspect that if removals are 
+necessary, at the current stage in the release process the release team 
+would likely prefer the R/CRAN team to remove only the packages that 
+genuinely do not work on 32-bit or BE, plus any packages that depend on 
+them and would be broken by their removal. For other removals that are not 
+necessary to resolve RC bugs, if it was up to me, I would defer them 
+until forky opens. (It is not up to me.)
+
+I see that on #1099927, Rebecca already said some very similar things 
+about targeted removals being lower-risk and more appropriate at this 
+stage of the release process.
+
+The usual way to research "what would happen if I removed..." is to log 
+in to the developer-accessible archive mirror machine 
+(coccia.debian.org, aka mirror.ftp-master.debian.org) and run commands 
+like for example:
+
+    # Architecture: all
+    dak rm -R -n r-cran-survminer
+
+    # Architecture: any
+    dak rm -R -n r-cran-sparr
+
+At the time of writing, the results of those are that r-cran-survminer 
+could be removed without breaking anything else (it's a leaf package) 
+but r-cran-sparr could not be removed unless/until r-cran-kernelheaping was 
+also removed.
+
+For your convenience, the r-bioc-* and r-cran-* RC bugs currently 
+relevant to testing:
+
+* #1103217: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1103198: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1103227: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1103199: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1103200: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1102189: r-cran-argparser, autopkgtest regressions including 64-bit LE
+* #1102589: r-cran-broom.helpers, see below, 32-bit autopkgtest already ignored
+* #1102590: r-cran-fansi, see below
+* #1100292: r-cran-fastcluster, build-time regressions including 64-bit LE
+* #1104158: r-cran-testthat, is this fixed in 3.2.3-1?
+* #1104159: r-cran-testthat, is this fixed in 3.2.3-1?
+* #1104160: r-cran-testthat, seems i386 specific
+* #1099927: r-cran-testthat, already has some useful analysis from Rebecca
+* #1103228: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1102956: FTBFS with newer compilers, fixed in sid, just needs migration
+* #1102345: seems fixed in sid, just needs migration
+* #1103369: r-cran-webgestaltr, could be armhf specific
+* #1102591: r-cran-units, seems arm{el,hf}-specific
+
+#1104160 seems i386-specific and therefore could be helped by targeted 
+32-bit removals.
+
+In #1102591 r-cran-units migration is blocked by autopkgtest regressions 
+on arm{el,hf}. At first glance this seems arm{el,hf}-specific and 
+therefore could be helped by targeted 32-bit removals.
+
+#1103369 seems possibly armhf-specific and therefore could be helped by 
+targeted 32-bit removals, but I would suggest that a maintainer should 
+see whether the FTBFS is reproducible on 64-bit LE first (it doesn't 
+seem particularly 32-bit-specific).
+
+In #1099927 in r-cran-testthat, migration is blocked by autopkgtest 
+regressions on 32-bit architectures (for which architecture-specific 
+removals might help) but also by an autopkgtest regression on riscv64 
+(which is 64-bit LE, so will be unaffected by your proposed removals).
+
+#1104158 in r-cran-testthat refers to autopkgtest regressions. It seems 
+some of those might be fixed in 3.2.3-1? If this is the case, please 
+close the bug as fixed in the version in which it is fixed, so that the 
+release team can have some visibility into what it will take to get this 
+fixed in testing. Migration of r-cran-testthat/3.2.3-1 is blocked by 
+#1099927.
+
+#1104159 in r-cran-testthat is similar to #1104158.
+
+r-cran-broom.helpers #1102589 is blocked by #1102511 in r-cran-cards 
+(which would also require a freeze exception to get a new package into 
+trixie after the soft freeze deadline). It could be addressed by 
+removing r-cran-cards from i386, but it could also be addressed by 
+skipping one test using the patch that was already provided by Adrian 
+Bunk, which seems like a lower-risk change. Or r-cran-broom.helpers 
+could be rolled back to 1.20.0+really1.14.0 to avoid needing 
+r-cran-cards.
+
+r-cran-fansi #1102590 seems to be failing all of its autopkgtests in 
+trixie on all architectures. Maybe one or more of its dependencies needs 
+to be raised to a higher version? Or maybe it should be rolled back to 
+1.0.6+really1.0.5 as a lower risk change at this stage. I don't see how 
+architecture-specific removals would help here.
+
+#1102189, #1100292 seem like they would be a problem even if only amd64 
+was supported, so architecture-specific removals seem unlikely to help 
+here.
+
+> I would like to ask you "what about the architecture-independant packages"?
+> They will be built on amd64 and be available for the excluded architectures.
+> Is there a risk that a mixed dependency chain of architecture-specific and
+> architecture-independant packages which are all already in Trixie but will
+> disappear from some architectures in Sid will create a mess and therefore be
+> not able to migrate?
+
+I would have expected that the R/CRAN team will know better than anyone 
+else how frequent this situation is, and therefore be able to assess the 
+risk more accurately than anyone else.
+
+If you have this dependency chain:
+
+    r-cran-archall -> r-cran-archany -> other dependencies
+
+then I believe the rule is that for either r-cran-archall or 
+r-cran-archany to be allowed to migrate, the installability of 
+r-cran-archall must not regress on amd64 or arm64. (Reference: 
+NOBREAKALL_ARCHES in https://release.debian.org/britney/britney.conf)
+
+But if you have
+
+    larger-archany-package -> r-cran-archany -> ...
+
+or
+
+    larger-archany-package -> r-cran-archall -> r-cran-archany -> ...
+
+then larger-archany-package would need to be removed from the affected 
+architectures too, otherwise its installability would regress on the 
+affected architectures, which the migration scripts generally don't allow.
+
+    smcv
+    (not a release team member)
+
+From edd at debian.org  Mon Apr 28 17:19:00 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 28 Apr 2025 12:19:00 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com>
+Message-ID: <26639.47236.574986.91314@rob.eddelbuettel.com>
+
+Rebecca, Charles,
+
+Looks like we are stalling a little.  r-base is still hung up on
+
+  - BioC packages r-bioc-{bioccheck,keggrest,pwalign,shortread}
+  - CRAN package r-cran-{ff,rlang}
+
+Looking eg at the two CRAN packages, they are in pristine standing at CRAN
+itself. The update of rlang to the most recent version seems to have
+descended into an autopkg-test spiral, and it is not clear to me how we can
+climb out of such a hole, other than by disabling the tests. It seems ff
+needs the same to make tests pass (not sure why).
+
+Thoughts?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Mon Apr 28 18:06:01 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Mon, 28 Apr 2025 19:06:01 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26639.47236.574986.91314@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com>
+Message-ID: <9a7582d7-db11-4bde-bbc1-1fcf7a6ec45e@zoho.com>
+
+r-bioc-keggrest shouldn't actually be blocking R 4.5, because the 
+reference failed as well.
+
+The others are all previously mentioned issues, that I'm about to upload 
+fixes for.  (And yes, this is easy to lose track of in such a 
+complicated set.)
+
+From rebecca_palmer at zoho.com  Mon Apr 28 21:26:05 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Mon, 28 Apr 2025 22:26:05 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <9a7582d7-db11-4bde-bbc1-1fcf7a6ec45e@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <9a7582d7-db11-4bde-bbc1-1fcf7a6ec45e@zoho.com>
+Message-ID: <47bf2b8c-21ca-4973-a5fa-fa63c39aae12@zoho.com>
+
+I have now uploaded what should be enough to get r-base 4.5.0 into 
+testing (but I could easily be wrong about that).
+
+For the packages that are failing on a 32-bit architecture and blocking 
+r-cran-testthat (r-cran-hdf5r/rcmdcheck/s2), I added a warning on load 
+on 32-bit systems and skipped the autopkgtest.  Partial removal is also 
+an option, but might involve uploading quite a lot of packages, as 
+r-cran-sf/spdep and hence ~100+ packages depend on r-cran-s2.
+
+From edd at debian.org  Mon Apr 28 22:06:16 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 28 Apr 2025 17:06:16 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <47bf2b8c-21ca-4973-a5fa-fa63c39aae12@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <9a7582d7-db11-4bde-bbc1-1fcf7a6ec45e@zoho.com> <47bf2b8c-21ca-4973-a5fa-fa63c39aae12@zoho.com>
+Message-ID: <26639.64472.413495.508475@rob.eddelbuettel.com>
+
+On 28 April 2025 at 22:26, Rebecca N. Palmer wrote:
+| I have now uploaded what should be enough to get r-base 4.5.0 into 
+| testing (but I could easily be wrong about that).
+
+Big big thank you to you!
+ 
+| For the packages that are failing on a 32-bit architecture and blocking 
+| r-cran-testthat (r-cran-hdf5r/rcmdcheck/s2), I added a warning on load 
+| on 32-bit systems and skipped the autopkgtest.  Partial removal is also 
+| an option, but might involve uploading quite a lot of packages, as 
+| r-cran-sf/spdep and hence ~100+ packages depend on r-cran-s2.
+
+It's a loaded topic, as per prior emails by Charles and by Simon, but the
+simple fact remains that _upstream_ stopped supported i386 several releases
+ago [1] and given our limited resources it is likely a battle we do not
+really want to be in.
+
+Dirk
+
+[1] I had to look it up but it was apparently with R 4.2.0 three years ago.
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Mon Apr 28 23:46:08 2025
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 29 Apr 2025 08:46:08 +0900
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26639.47236.574986.91314@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com>
+Message-ID: <aBATQGz_ycd27jjc@kumo.plessy.net>
+
+Hi Dirk and Rebacca,
+
+first thank you so much Rebecca.  I would not have been able to manage the R
+4.5 transition in the context of the soft freeze as efficiently as you are
+doing now.  It is considerable work and you deserve a lot of respect for that.
+
+Also, to avoid misunderstanding, I want to state that releasing Trixie with R
+4.5 was never part of my plans, given that the release calendar clearly
+disallowed us to update Bioconductor packages to their latest version after
+April 15, which was very unfortunately between the R 4.5 and Bioc 3.21
+releases.  Also it was my understanding that "transition freeze" from March 15
+implied that R 4.5 would be uploaded to experimental, but I admit that things
+would have been easier if I had written it clearly one or two monthes ahead to
+double-check that we are on the same page.
+
+I hope that Rebecca's uploads will allow the packages to migrate.  But if it
+does not, in my point of view, it is not a problem other than making other
+migrations more complicated.  Trixie will be new a couple of monthes, and then
+be old.  I do not expect most Trixie users to be seriously impaired in their
+work if they have only R 4.4.
+
+And as Dirk wrote already, there are external archives providing more
+up-to-date r-cran-* packages for those who need them.  What is actualy at a
+stake is the non-R packages that have a dependency on a r-cran package.  If we
+do not manage to solve the transition problem, we may lose them all from
+Trixie.
+
+Turning off some autopkgtests totally instead of adding patches is totally fine
+with me at that point.
+
+I am still on business trip in Korea with very little time to contribute but
+I hope to have 1 h / day from Thursday onwards.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From rebecca_palmer at zoho.com  Tue Apr 29 12:47:59 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 29 Apr 2025 13:47:59 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <aBATQGz_ycd27jjc@kumo.plessy.net>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net>
+Message-ID: <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com>
+
+r-cran-s2 is blocked by r-cran-sf having some fail-on-warning tests 
+(which hence now fail on 32-bit systems *because* of the warning from 
+s2): what I'm planning to upload today will ignore those as well.  The 
+rest look OK.
+
+Ideally r-base should be re-uploaded with
+
+r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph 
+(<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<< 
+1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+
+(and no other changes), to let testing-excuses show now (rather than 
+when it's too late) that it will work, and to prevent non-working 
+partial upgrades.  However, that's probably not a hard requirement.
+
+> Partial removal is also an option, but might involve uploading quite a lot of packages, as r-cran-sf/spdep and hence ~100+ packages depend on r-cran-s2.
+
+This was mostly intended as a comment on how much work the partial 
+removal itself would be, not how much functionality it would lose.  I'm 
+expecting basically all 32-bit r-* to be removed after trixie release.
+
+From edd at debian.org  Tue Apr 29 13:24:11 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 29 Apr 2025 08:24:11 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com>
+Message-ID: <26640.54011.998074.532527@rob.eddelbuettel.com>
+
+On 29 April 2025 at 13:47, Rebecca N. Palmer wrote:
+| r-cran-s2 is blocked by r-cran-sf having some fail-on-warning tests 
+| (which hence now fail on 32-bit systems *because* of the warning from 
+| s2): what I'm planning to upload today will ignore those as well.  The 
+| rest look OK.
+| 
+| Ideally r-base should be re-uploaded with
+| 
+| r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph 
+| (<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<< 
+| 1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+
+Why those?  r-bioc-graph, r-bioc-irange, r-cran-rlang, r-cran-testthat are
+not on the current excuses page [1] However, r-bioc-shortread and r-cran-ff
+are and they are missing from that list.
+
+| (and no other changes), to let testing-excuses show now (rather than 
+| when it's too late) that it will work, and to prevent non-working 
+| partial upgrades.  However, that's probably not a hard requirement.
+| 
+| > Partial removal is also an option, but might involve uploading quite a lot of packages, as r-cran-sf/spdep and hence ~100+ packages depend on r-cran-s2. 
+| 
+| This was mostly intended as a comment on how much work the partial 
+| removal itself would be, not how much functionality it would lose.  I'm 
+| expecting basically all 32-bit r-* to be removed after trixie release.
+
+Yes. In favour of this. Let's simplify the overall setup.
+
+Dirk
+
+[1] https://qa.debian.org/excuses.php?package=r-base
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Tue Apr 29 15:53:11 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 29 Apr 2025 16:53:11 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26640.54011.998074.532527@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com>
+Message-ID: <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com>
+
+It looks like r-cran-rlang isn't the only case where a package built in 
+R 4.5 doesn't work in R 4.4.  In particular, at least two such packages 
+(r-cran-svglite #1103369 and r-cran-timechange #1103118) have got into 
+testing as binNMUs.
+
+This will stop being an immediate problem if R 4.5 migrates, but we 
+probably don't want it to happen again: see #1104406.  How was it 
+decided that R 4.5 didn't require incrementing r-api?
+
+On 29/04/2025 14:24, Dirk Eddelbuettel wrote:
+> On 29 April 2025 at 13:47, Rebecca N. Palmer wrote:
+> | Ideally r-base should be re-uploaded with
+> |
+> | r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph
+> | (<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<<
+> | 1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+>
+> r-bioc-graph, r-bioc-irange[s],
+
+These are not on the excuses list because their fixed versions have 
+already migrated to testing.
+
+ r-cran-rlang, r-cran-testthat are
+> not on the current excuses page [1] However, r-bioc-shortread and r-cran-ff
+> are and they are missing from that list.
+
+r-bioc-shortread is fixed by changes in r-bioc-pwalign; r-cran-ff is 
+fixed by changes in r-cran-testthat.
+
+(I'm not sure why r-cran-rlang isn't on the excuses list: possibly 
+because the autopkgtest that considered migrating them together was run 
+after the one that considered migrating r-base alone.)
+
+From edd at debian.org  Tue Apr 29 17:05:04 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 29 Apr 2025 12:05:04 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com>
+Message-ID: <26641.1728.628355.30018@rob.eddelbuettel.com>
+
+On 29 April 2025 at 16:53, Rebecca N. Palmer wrote:
+| How was it decided that R 4.5 didn't require incrementing r-api?
+
+The r-api field is for actual API changes. R 4.0.0 required a rebuild of
+everything, packages would not work otherwise. That was sclearly communicated
+by upstream.  Such changes *requiring rebuilds* are rare. I think we had
+about three in the 25 or so years I have looked after the package (as
+co-maintainer or maintainer), and 4.0.0 was the last such change. 
+
+Under normal annual updates of R (i.e. when the minor version changes) the
+rebuild is not required, and simply adding a Depends: in the client package
+is usually fine.  What you otherwise see is a warning 'package FOO was built
+under version X.Y.Z' when when X.Y.Z is larger than what you currently run
+(i.e. R 4.4.* running a R 4.5.0 build).
+
+| On 29/04/2025 14:24, Dirk Eddelbuettel wrote:
+| > 
+| > On 29 April 2025 at 13:47, Rebecca N. Palmer wrote:
+| > | Ideally r-base should be re-uploaded with
+| > |
+| > | r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph
+| > | (<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<<
+| > | 1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+| > 
+| > r-bioc-graph, r-bioc-irange[s],
+| 
+| These are not on the excuses list because their fixed versions have 
+| already migrated to testing.
+
+Ok. I still find this a bit odd. If the fixed versions are in testing (as eg
+with r-bioc-graph) do we really need a Breaks: on it?
+
+|   r-cran-rlang, r-cran-testthat are
+| > not on the current excuses page [1] However, r-bioc-shortread and r-cran-ff
+| > are and they are missing from that list.
+| 
+| r-bioc-shortread is fixed by changes in r-bioc-pwalign; r-cran-ff is 
+| fixed by changes in r-cran-testthat.
+
+And the release team will know how to connect those dots? Or should we help
+with an expanded Breaks: ?
+| 
+| (I'm not sure why r-cran-rlang isn't on the excuses list: possibly 
+| because the autopkgtest that considered migrating them together was run 
+| after the one that considered migrating r-base alone.)
+
+I can add the Breaks you suggested (we have done this before as the
+debian/control still shows (and per 'git blame' last in July 2023, so we're
+ahead this time) but I would prefer to only have to do it once.
+
+And I currently do not fully grok if the list you suggested is sufficient per
+the discussion here. So your help and guidance continues to be appreciated.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Tue Apr 29 17:25:52 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Tue, 29 Apr 2025 18:25:52 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26641.1728.628355.30018@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com>
+Message-ID: <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com>
+
+On 29/04/2025 18:05, Dirk Eddelbuettel wrote:
+
+> Under normal annual updates of R (i.e. when the minor version changes) the
+> rebuild is not required, and simply adding a Depends: in the client package
+> is usually fine.
+
+i.e. r-api is the equivalent of a normal C library's SONAME (packages 
+built with the *old* version may not work in the *new* version; 
+recompile everything when it changes)?  While dh-r is currently missing 
+the equivalent of a shlibs version (packages built with the *new* 
+version may not work in the *old* version; newly built packages get a 
+Depends: on at least this version)?
+
+I have manually added a Depends: r-base-core (>= 4.5.0~) to 
+r-cran-svglite and r-cran-timechange, but in the longer term dh-r should 
+probably start adding it.
+
+> | On 29/04/2025 14:24, Dirk Eddelbuettel wrote:
+> | >
+> | > On 29 April 2025 at 13:47, Rebecca N. Palmer wrote:
+> | > | Ideally r-base should be re-uploaded with
+> | > |
+> | > | r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph
+> | > | (<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<<
+> | > | 1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+> | >
+> | > r-bioc-graph, r-bioc-irange[s],
+> |
+> | These are not on the excuses list because their fixed versions have
+> | already migrated to testing.
+>
+> Ok. I still find this a bit odd. If the fixed versions are in testing (as eg
+> with r-bioc-graph) do we really need a Breaks: on it?
+
+This is intended to prevent users from upgrading some packages and not 
+others in ways that are known to break.  (I agree this is unlikely, so 
+if you don't want to I won't argue.)
+
+> | r-bioc-shortread is fixed by changes in r-bioc-pwalign; r-cran-ff is
+> | fixed by changes in r-cran-testthat.
+>
+> And the release team will know how to connect those dots? Or should we help
+> with an expanded Breaks: ?
+We can't set a Breaks: on r-bioc-shortread or r-cran-ff because they 
+haven't been updated, i.e. there is no fixed version.
+
+From edd at debian.org  Tue Apr 29 21:54:51 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 29 Apr 2025 16:54:51 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com>
+Message-ID: <26641.19115.394992.209425@rob.eddelbuettel.com>
+
+On 29 April 2025 at 18:25, Rebecca N. Palmer wrote:
+| On 29/04/2025 18:05, Dirk Eddelbuettel wrote:
+| 
+| > Under normal annual updates of R (i.e. when the minor version changes) the
+| > rebuild is not required, and simply adding a Depends: in the client package
+| > is usually fine.
+| 
+| i.e. r-api is the equivalent of a normal C library's SONAME (packages 
+| built with the *old* version may not work in the *new* version; 
+| recompile everything when it changes)?
+
+That is not a bad analogy!  And it is something one could ask upstream to
+set. In practice, R upstream is done by a team which has its ways and
+changing something that has worked for decades (i.e.: no encoded soname) is
+not all that likely to change.
+
+| While dh-r is currently missing the equivalent of a shlibs version
+| (packages built with the *new* version may not work in the *old* version;
+| newly built packages get a Depends: on at least this version)?
+
+The packages I maintain have always added the Depends (in almost the same
+form you use, I just don't bother with the final tilde as I know here will
+always be a Debian version).
+ 
+| I have manually added a Depends: r-base-core (>= 4.5.0~) to 
+| r-cran-svglite and r-cran-timechange, but in the longer term dh-r should 
+| probably start adding it.
+| 
+| > | On 29/04/2025 14:24, Dirk Eddelbuettel wrote:
+| > | >
+| > | > On 29 April 2025 at 13:47, Rebecca N. Palmer wrote:
+| > | > | Ideally r-base should be re-uploaded with
+| > | > |
+| > | > | r-base-core Breaks: r-bioc-bioccheck (<< 1.42.1+dfsg-2~), r-bioc-graph
+| > | > | (<< 1.84.1-2~), r-bioc-iranges (<< 2.40.1-3~), r-bioc-pwalign (<<
+| > | > | 1.2.0-3~), r-cran-rlang (<< 1.1.5-2~), r-cran-testthat (<< 3.2.3~)
+| > | >
+| > | > r-bioc-graph, r-bioc-irange[s],
+| > |
+| > | These are not on the excuses list because their fixed versions have
+| > | already migrated to testing.
+| > 
+| > Ok. I still find this a bit odd. If the fixed versions are in testing (as eg
+| > with r-bioc-graph) do we really need a Breaks: on it?
+| 
+| This is intended to prevent users from upgrading some packages and not 
+| others in ways that are known to break.  (I agree this is unlikely, so 
+| if you don't want to I won't argue.)
+
+Yes, I suspected just that, and the motivation is not a bad one. I just
+prefer to use a lighter touch so I do not rush to imposing versioned
+constraints (or Breaks). This near-release quasi transition is a good reason
+though. 
+ 
+| > | r-bioc-shortread is fixed by changes in r-bioc-pwalign; r-cran-ff is
+| > | fixed by changes in r-cran-testthat.
+| > 
+| > And the release team will know how to connect those dots? Or should we help
+| > with an expanded Breaks: ?
+| We can't set a Breaks: on r-bioc-shortread or r-cran-ff because they 
+| haven't been updated, i.e. there is no fixed version.
+
+Doh. Makes sense.
+
+Ok, I will upload a fresh 4.5.0-3 with the Breaks you argued for. Fingers crossed!
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Wed Apr 30 09:18:27 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Wed, 30 Apr 2025 10:18:27 +0100
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <26641.19115.394992.209425@rob.eddelbuettel.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com>
+Message-ID: <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com>
+
+On 29/04/2025 22:54, Dirk Eddelbuettel wrote:
+
+> That is not a bad analogy!  And it is something one could ask upstream to
+> set. In practice, R upstream is done by a team which has its ways and
+> changing something that has worked for decades (i.e.: no encoded soname) is
+> not all that likely to change.
+
+I wasn't intending to suggest such a thing, only to check my 
+understanding of what r-api is.
+
+> | While dh-r is currently missing the equivalent of a shlibs version
+> | (packages built with the *new* version may not work in the *old* version;
+> | newly built packages get a Depends: on at least this version)?
+>
+> The packages I maintain have always added the Depends
+
+...but packages using dh-r don't, which is what I'm proposing to change.
+
+> Ok, I will upload a fresh 4.5.0-3 with the Breaks you argued for. Fingers crossed!
+
+Thanks.  It has found some potential problems, but much of the point was 
+to find these now and not when it's too late to fix them:
+
+The package set from unstable it's trying in autopkgtest is bigger than 
+I expected, and includes at least 2 packages that currently aren't in 
+testing at all (r-cran-cards and r-cran-dendextend) which means it won't 
+actually migrate that set; I don't yet know why.
+
+r-bioc-stringdb/ppc64el, r-bioc-megadepth/ppc64el - look like random 
+network issues, retried
+
+r-cran-broom.helpers/multiple - is trying to migrate this package as 
+well (unsure why, I didn't intend that), which fails because the version 
+from unstable depends on packages that are not in testing
+
+r-cran-bslib/multiple, r-cran-rmarkdown/multiple - Error in 
+`compile_data(sass_input, options)`: Error: Undefined variable: 
+"$transition-collapse-width". Probably not R 4.5's fault (it has 
+previously passed with R 4.5) but a bug whatever causes it
+
+From edd at debian.org  Wed Apr 30 11:38:36 2025
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 30 Apr 2025 06:38:36 -0500
+Subject: Re: Conflict between R 4.5 and some (mostly r-bioc 3.20) R packages
+In-Reply-To: <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com>
+References: <26624.56680.335541.809414@rob.eddelbuettel.com> <c9b71132-d007-4169-af77-bc1b3d7fe327@zoho.com> <26631.41973.555854.213291@rob.eddelbuettel.com> <4144f761-6741-46c7-a22e-a028d8ba166a@zoho.com> <1d4efd23-5c9e-4964-b756-ba5f64bed0b4@zoho.com> <5e380de2-9ea4-46ee-9a4e-9fcf094a328c@zoho.com> <4e36695a-2a49-40cb-a632-2d97fefea285@zoho.com> <4ca52786-af01-4f4e-8b41-ec42cbba8b7d@zoho.com> <c2450b00-35fb-4588-b90d-55b9fdff3879@zoho.com> <26639.47236.574986.91314@rob.eddelbuettel.com> <aBATQGz_ycd27jjc@kumo.plessy.net> <ef8d97ab-8d98-4d81-8312-ab05b143026c@zoho.com> <26640.54011.998074.532527@rob.eddelbuettel.com> <cd7144ec-b08a-41e3-9d8c-7cf59be5609a@zoho.com> <26641.1728.628355.30018@rob.eddelbuettel.com> <5f827faf-a226-416b-ab51-23f2d48793c3@zoho.com> <26641.19115.394992.209425@rob.eddelbuettel.com> <7a0a90cc-48a2-4f9d-9803-725c7d77cb07@zoho.com>
+Message-ID: <26642.3004.847043.287734@rob.eddelbuettel.com>
+
+On 30 April 2025 at 10:18, Rebecca N. Palmer wrote:
+| On 29/04/2025 22:54, Dirk Eddelbuettel wrote:
+| 
+| > That is not a bad analogy!  And it is something one could ask upstream to
+| > set. In practice, R upstream is done by a team which has its ways and
+| > changing something that has worked for decades (i.e.: no encoded soname) is
+| > not all that likely to change.
+| 
+| I wasn't intending to suggest such a thing, only to check my 
+| understanding of what r-api is.
+
+Yes, sorry, I also wasn't trying to imply you did. Just trying to clarify
+what R Core upstream does or doesn't do.
+
+| > | While dh-r is currently missing the equivalent of a shlibs version
+| > | (packages built with the *new* version may not work in the *old* version;
+| > | newly built packages get a Depends: on at least this version)?
+| > 
+| > The packages I maintain have always added the Depends
+| 
+| ...but packages using dh-r don't, which is what I'm proposing to change.
+
+Yep.
+ 
+| > Ok, I will upload a fresh 4.5.0-3 with the Breaks you argued for. Fingers crossed!
+| 
+| Thanks.  It has found some potential problems, but much of the point was 
+| to find these now and not when it's too late to fix them:
+| 
+| The package set from unstable it's trying in autopkgtest is bigger than 
+| I expected, and includes at least 2 packages that currently aren't in 
+| testing at all (r-cran-cards and r-cran-dendextend) which means it won't 
+| actually migrate that set; I don't yet know why.
+| 
+| r-bioc-stringdb/ppc64el, r-bioc-megadepth/ppc64el - look like random 
+| network issues, retried
+| 
+| r-cran-broom.helpers/multiple - is trying to migrate this package as 
+| well (unsure why, I didn't intend that), which fails because the version 
+| from unstable depends on packages that are not in testing
+| 
+| r-cran-bslib/multiple, r-cran-rmarkdown/multiple - Error in 
+| `compile_data(sass_input, options)`: Error: Undefined variable: 
+| "$transition-collapse-width". Probably not R 4.5's fault (it has 
+| previously passed with R 4.5) but a bug whatever causes it
+
+>>From a glance right now I see broom.helper and bslib with some red. We may
+have to wait a day to see how things pan out. Worst case we may need a -4, we
+may also want to get input from the release team.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rebecca_palmer at zoho.com  Wed Apr 30 14:32:20 2025
+From: rebecca_palmer at zoho.com (Rebecca N. Palmer)
+Date: Wed, 30 Apr 2025 15:32:20 +0100
+Subject: How to find out why britney is trying to migrate unexpected (and unmigratable) packages?
+Message-ID: <3c12fb7a-7d07-4c0f-a63a-02d2fc2080d6@zoho.com>
+
+We recently added some Breaks: to r-base, and britney is now trying to 
+migrate a larger set of packages than I intended - including many 
+packages that *can't* migrate now because they are not in testing at all.
+
+What are good ways to investigate further (that don't involve waiting 10 
+days, because if anything needs fixing then we don't have that long)?
+
+Which version of https://salsa.debian.org/release-team/britney2 is the 
+currently running britney?  head-of-master since there aren't any tags??
+
+Packages I think we need:
+src:r-base,src:r-bioc-bioccheck,src:r-bioc-pwalign,src:r-cran-argparser,src:r-cran-hdf5r,src:r-cran-plotly,src:r-cran-rcmdcheck,src:r-cran-rlang,src:r-cran-s2,src:r-cran-sf,src:r-cran-survminer,src:r-cran-svglite,src:r-cran-testthat,src:r-cran-timechange,src:r-cran-units
+
+Packages britney actually passed to debci (see e.g. 
+https://ci.debian.net/packages/r/r-cran-testthat/testing/amd64/60313000/ ):
+
+--pin-packages=unstable=src:r-base,src:r-bioc-bioccheck,src:r-bioc-pwalign,src:r-cran-argparser,src:r-cran-bigmemory,src:r-cran-broom.helpers,src:r-cran-cards,src:r-cran-dendextend,src:r-cran-effectsize,src:r-cran-fitcoach,src:r-cran-hdf5r,src:r-cran-heatmaply,src:r-cran-mockr,src:r-cran-performance,src:r-cran-plotly,src:r-cran-rcmdcheck,src:r-cran-rlang,src:r-cran-rpact,src:r-cran-s2,src:r-cran-sf,src:r-cran-sjplot,src:r-cran-sjstats,src:r-cran-survminer,src:r-cran-svglite,src:r-cran-testthat,src:r-cran-tikzdevice,src:r-cran-timechange,src:r-cran-units,src:r-cran-zelig
+
+All the packages I wasn't expecting are not in testing at all, except 
+src:r-cran-broom.helpers, which can't migrate because the new version 
+depends on such packages.  (This is fine in itself, but I wasn't 
+expecting it to block other packages; there appear to be no 
+(Build-)Depends on it at all.)
+
+There are test-Depends (debian/tests/control) on some of the 
+not-in-testing packages, which might technically be an RC bug since it 
+fails migration-reference autopkgtests,  but I don't think Britney looks 
+at those.
+
+(Non-migration-reference autopkgtests can pass "in testing" with 
+test-Depends that are only available in unstable, because of a known 
+issue in autopkgtest that allows tests to take more packages than 
+requested from unstable:
+
+https://sources.debian.org/src/autopkgtest/5.49/runner/autopkgtest.1/#L292
+and #1084880.  This is probably how packages that test-depend on 
+not-in-testing packages were able to migrate to testing.  However, when 
+they do that, these extra packages do not appear on the --pin-packages 
+line, e.g. r-cran-dendextend in 
+https://ci.debian.net/packages/r/r-cran-plotly/testing/amd64/60145266/ . 
+ Hence, I don't think that's what happened here.)
+

@@ -1,0 +1,314 @@
+From plenae at disroot.org  Wed Jan  7 21:13:29 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Wed, 7 Jan 2026 22:13:29 +0100
+Subject: access request
+Message-ID: <5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>
+
+Dear Debian R Package Maintainers,
+
+I was helping out updating package pyrle, which has some R package test 
+dependencies. Turned out those were outdated, so I've gone and updated 
+them. Builds of my package updates run fine locally.
+
+I would like to push my updates to packages r-bioc-s4vectors and
+r-bioc-biocgenerics and need some review / guidance and sponsorship.
+
+I will contact the last uploaders for that.
+
+So, I pushed the "request access" button in salsa. Thanks for giving me 
+permission to push or guidance on what to do.
+
+Br,
+
+Pieter
+
+From plessy at debian.org  Thu Jan  8 00:52:46 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 8 Jan 2026 09:52:46 +0900
+Subject: Re: access request
+In-Reply-To: <5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>
+References: <5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>
+Message-ID: <aV7_3rN03Y8v6x_C@kumo.plessy.net>
+
+Le Wed, Jan 07, 2026 at 10:13:29PM +0100, Pieter Lenaerts a écrit :
+> 
+> I was helping out updating package pyrle, which has some R package test
+> dependencies. Turned out those were outdated, so I've gone and updated them.
+> Builds of my package updates run fine locally.
+> 
+> I would like to push my updates to packages r-bioc-s4vectors and
+> r-bioc-biocgenerics and need some review / guidance and sponsorship.
+
+Hi Pieter,
+
+thank you for offerring your help,
+
+I do not see R dependencies for pyrle, so I assume you are talking about
+reverse-dependencies?
+
+The whole set of Bioconductor packages in Debian has not been updated yet
+because we are at the middle of removing some non-supported architectures for
+the whole r-cran-* and r-bioc-* package set.  Most likely we are going to skip
+the Bioconductor 2025 October 30 release entierly until the next one in April
+(no need to stack two painful transitions in such a short time).
+
+Also, we update the packages with the routine-update script; have you used it?
+
+https://salsa.debian.org/debian/routine-update
+
+If you have general interest for R packages your contribution is welcome and
+I and others will be pleased to give you guidance.
+
+Otherwise, I am sorry if it wastes the time you invested in r-bioc-s4vectors
+and r-bioc-biocgenerics but I would prefer to not touch the packages for 
+the moment.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plenae at disroot.org  Thu Jan  8 08:06:39 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Thu, 08 Jan 2026 09:06:39 +0100
+Subject: Re: access request
+In-Reply-To: <aV7_3rN03Y8v6x_C@kumo.plessy.net>
+References: <5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org> <aV7_3rN03Y8v6x_C@kumo.plessy.net>
+Message-ID: <90c4cd00db6c28ec7944b12a784a7d7c@disroot.org>
+
+Op 2026-01-08 01:52, schreef Charles Plessy:
+
+> I do not see R dependencies for pyrle, so I assume you are talking
+> about
+>
+> reverse-dependencies?
+
+Please refer to 
+https://salsa.debian.org/python-team/packages/pyrle/-/blob/master/debian/control?ref_type=heads#L22
+
+Tests contain R scripts: 
+https://salsa.debian.org/python-team/packages/pyrle/-/tree/master/tests?ref_type=heads
+
+> The whole set of Bioconductor packages in Debian has not been updated
+> yet
+> because we are at the middle of removing some non-supported
+> architectures for
+> the whole r-cran-* and r-bioc-* package set.  Most likely we are going
+> to skip
+> the Bioconductor 2025 October 30 release entierly until the next one in
+> April
+>
+> (no need to stack two painful transitions in such a short time).
+
+Okay, does that means the R team are planning to continue maintenance on 
+r-bioc-s4vectors and r-bioc-genomicranges? That was our main concern 
+with adding those packages to the build deps of pyrle to cover more 
+tests.
+
+> Also, we update the packages with the routine-update script; have you
+> used it?
+>
+>
+> https://salsa.debian.org/debian/routine-update
+
+I haven't, will look into it, thanks.
+
+> If you have general interest for R packages your contribution is
+> welcome and
+>
+> I and others will be pleased to give you guidance.
+
+Sorry, I was just looking into pyrle build deps.
+
+> Otherwise, I am sorry if it wastes the time you invested in
+> r-bioc-s4vectors
+> and r-bioc-biocgenerics but I would prefer to not touch the packages
+> for
+>
+> the moment.
+
+That is no problem at all. They were indeed very routine updates and I 
+can use whatever practice presents itself.
+
+I think it would be a good idea to provide some more information on 
+https://wiki.debian.org/Teams/r-pkg-team, but then again, I chose to 
+start by doing some work and then reach out on the mailing list. I could 
+have reversed that.
+
+No harm done! If you can just confirm that the R team will pick up those 
+dependencies, then we're fine with pyrle depending on them I think.
+
+Best regards,
+
+Pieter
+
+From plessy at debian.org  Fri Jan  9 05:15:20 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 9 Jan 2026 14:15:20 +0900
+Subject: Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1
+In-Reply-To: <26959.4852.640897.987643@paul.eddelbuettel.com>
+References: <CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com> <aUyMqJkPHlvtM347@kumo.plessy.net> <CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com> <26959.4852.640897.987643@paul.eddelbuettel.com>
+Message-ID: <aWCO6EKzOPNldedz@kumo.plessy.net>
+
+severity 1120994 normal
+done
+
+Le Fri, Dec 26, 2025 at 04:57:56PM -0600, Dirk Eddelbuettel a écrit :
+> 
+> While I have you both here:  r-cran-bit64 still needs help or we get a big
+> autoremoval wave on Jan 11.  Charles you Dec 12 upload helped but did not
+> unblock this:  https://tracker.debian.org/pkg/r-cran-bit64
+> 
+> Do we need to remove the i386 / armhf / s390x binaries from the repo to
+> unblock this?
+
+Hi Dirk and Graham,
+
+yes, we need to remove the i386/ armhf / s390x binaries from r-cran-bit64 and
+all its reverse-dependencies from testing to prevent the removal of the other
+binaries, and this requires the removal of the i386 / armhf / s390x binaries
+from unstable.
+
+I reduced the severity of the bug to buy us some time.
+
+I am not sure if I will be allowed to ask the Archive team for a recursive
+removal, or if I will have to provide the exact list of reverse-dependencies.
+I am working on it.
+
+Dirk, I see that some of your packages depend on r-cran-bit64, so in principle
+you will need to adjust their build-dependencies so that the autobuilders do
+not produce new i386 / armhf / s390x binaries that can't migrate and will block
+the other architectures.
+
+Alternatively, you can adopt r-cran-bit64 so that the dependency network of the
+R packages you maintain is more under your control, and then you can decide how
+to deal with the failing tests: solve, ignore, or exclude the failing
+architecture.  What would you think about this?
+
+Have a nice day,
+
+Charles
+
+From edd at debian.org  Fri Jan  9 20:08:40 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 9 Jan 2026 14:08:40 -0600
+Subject: Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1
+In-Reply-To: <aWCO6EKzOPNldedz@kumo.plessy.net>
+References: <CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com> <aUyMqJkPHlvtM347@kumo.plessy.net> <CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com> <26959.4852.640897.987643@paul.eddelbuettel.com> <aWCO6EKzOPNldedz@kumo.plessy.net>
+Message-ID: <26977.24648.485335.8129@paul.eddelbuettel.com>
+
+Hi Charles,
+
+On 9 January 2026 at 14:15, Charles Plessy wrote:
+| severity 1120994 normal
+| done
+
+If this is what removed the 'autoremove' threat from two dozen packages, and
+thereby recursively likely a hundred and this goes up the tidyverse, then thank you!
+ 
+| Le Fri, Dec 26, 2025 at 04:57:56PM -0600, Dirk Eddelbuettel a écrit :
+| > 
+| > While I have you both here:  r-cran-bit64 still needs help or we get a big
+| > autoremoval wave on Jan 11.  Charles you Dec 12 upload helped but did not
+| > unblock this:  https://tracker.debian.org/pkg/r-cran-bit64
+| > 
+| > Do we need to remove the i386 / armhf / s390x binaries from the repo to
+| > unblock this?
+| 
+| Hi Dirk and Graham,
+| 
+| yes, we need to remove the i386/ armhf / s390x binaries from r-cran-bit64 and
+| all its reverse-dependencies from testing to prevent the removal of the other
+| binaries, and this requires the removal of the i386 / armhf / s390x binaries
+| from unstable.
+| 
+| I reduced the severity of the bug to buy us some time.
+| 
+| I am not sure if I will be allowed to ask the Archive team for a recursive
+| removal, or if I will have to provide the exact list of reverse-dependencies.
+| I am working on it.
+
+I once wrote RcppAPT to access the apt API programmatically (but of course
+Python has always done that...). You need libapt-pkg-dev installed to build it.
+
+> RcppAPT::reverseDepends("r-cran-bit64")
+             package version
+1      r-cran-rtweet   4.0.5
+2      r-cran-pillar        
+3  r-cran-data.table   4.0.0
+4    r-cran-collapse        
+5     r-cran-writexl        
+6       r-cran-waldo        
+7       r-cran-vroom        
+8       r-cran-vctrs        
+9      r-cran-tibble        
+10        r-cran-bit   4.0.0
+11    r-cran-rsqlite        
+12    r-cran-rnetcdf        
+13   r-cran-rmariadb        
+14   r-cran-nanotime        
+15  r-cran-nanoarrow        
+16        r-cran-mlr        
+17      r-cran-hdf5r        
+18    r-bioc-ioniser        
+19      r-bioc-rhdf5        
+> 
+
+| Dirk, I see that some of your packages depend on r-cran-bit64, so in principle
+| you will need to adjust their build-dependencies so that the autobuilders do
+| not produce new i386 / armhf / s390x binaries that can't migrate and will block
+| the other architectures.
+
+Of those 19 I appear to maintain two, three if we include Suggests.  So are
+you suggesting I use something like    r-cran-bit64 [!i386 !armhf !s390x]    ?
+
+I was under the impression that was disliked / discouraged ? 
+ 
+| Alternatively, you can adopt r-cran-bit64 so that the dependency network of the
+| R packages you maintain is more under your control, and then you can decide how
+| to deal with the failing tests: solve, ignore, or exclude the failing
+| architecture.
+
+I do not follow. My dependency network of R packages will almost surely
+almost always be intertwined with what the 'Debian R Team' maintains.  I fail
+to see what adopting bit64 would make different here.  What am I missing?
+Can you rephrase (and I may make a third pot of coffee for the day).
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Jan  9 21:43:36 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 9 Jan 2026 15:43:36 -0600
+Subject: Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1
+In-Reply-To: <26977.24648.485335.8129@paul.eddelbuettel.com>
+References: <CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com> <aUyMqJkPHlvtM347@kumo.plessy.net> <CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com> <26959.4852.640897.987643@paul.eddelbuettel.com> <aWCO6EKzOPNldedz@kumo.plessy.net> <26977.24648.485335.8129@paul.eddelbuettel.com>
+Message-ID: <26977.30344.375131.238909@paul.eddelbuettel.com>
+
+On 9 January 2026 at 14:08, Dirk Eddelbuettel wrote:
+| Of those 19 I appear to maintain two, three if we include Suggests.  So are
+| you suggesting I use something like    r-cran-bit64 [!i386 !armhf !s390x]    ?
+
+Advantage of having a large enough set of repositories here -- this is
+exactly what I for eg r-cran-rjava:
+
+ Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.0), dh-r, automake, \
+   default-jdk [!arm !hppa !kfreebsd-i386 !kfreebsd-amd64 !hurd-i386] | \
+   openjdk-10-jdk [!arm !hppa !kfreebsd-i386 !kfreebsd-amd64 !hurd-i386], \
+   libzstd-dev
+
+But we would then have to do this for every package in the full recursive
+reverse dependency path of (r-cran-)bit64 ?  That seems like a lot.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

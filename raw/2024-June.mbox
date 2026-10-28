@@ -1,0 +1,61 @@
+From andreas at an3as.eu  Thu Jun 27 09:21:44 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 27 Jun 2024 11:21:44 +0200
+Subject: bigmemory: fails to migrate to testing for too long: autopkgtest fails on arm*, ppc64el and s390x
+Message-ID: <Zn0vKLN_H_a_deOr@an3as.eu>
+
+Hi Michael,
+
+I've opened issue #115 on Github four months ago but there is no
+activity so far.  Could you please confirm that you are watching
+the issue tracker on Github or are you possibly using some other
+development platform?  Just asking since the tags lagging behind
+the versioned tarballs at CRAN.
+
+Kind regards
+    Andreas.
+
+[1] https://github.com/kaneplusplus/bigmemory/issues/115
+
+-- 
+https://fam-tille.de
+
+From glondu at debian.org  Fri Jun 28 15:47:05 2024
+From: glondu at debian.org (=?utf-8?q?St=C3=A9phane_Glondu?=)
+Date: Fri, 28 Jun 2024 17:47:05 +0200
+Subject: Re: Is it possible to use ben offline?
+In-Reply-To: <ZkVG2mSCAf1erbv9@kumo.plessy.net>
+References: <ZkKts7fKe-k2sTdN@kumo.plessy.net> <f184c14c-902f-44bb-9ffe-866eb3abdade@xs4all.nl> <ZkVG2mSCAf1erbv9@kumo.plessy.net>
+Message-ID: <a6b27fbc-273e-4633-b061-d05e0e0a3c6e@debian.org>
+
+Le 16/05/2024 à 01:35, Charles Plessy a écrit :
+> Thank you.  I am now looking at the possibiity to fork the OCaml
+> transition scripts for the purpose of running the Bioconductor
+> transition, using git-buildpackage (and pbuilder/sbuild) and
+> routine-update instead of apt-get source and dpkg-buildpackage.
+>
+> https://salsa.debian.org/debian/ben/-/tree/master/examples/ocaml-transition-scripts
+
+How did that go?
+
+As usual when I prepare a new OCaml transition, I delved again in the 
+code, and basically rewrote everything [1]:
+- use sbuild with unshare backend (instead of pbuilder and too many sudo 
+to my taste)
+
+- move OCaml-specific stuff apart
+
+[1] 
+https://salsa.debian.org/debian/ben/-/tree/master/examples/transition-scripts
+
+I also rewrote the "ben rebuild" backend to be more debuggable and added 
+a few features on the way :-)
+
+I believe the whole stuff can now be used for other transitions that 
+have the same strict ordering requirements as OCaml.
+
+Cheers,
+
+--
+Stéphane
+

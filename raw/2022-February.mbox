@@ -1,0 +1,1253 @@
+From andreas at an3as.eu  Tue Feb  8 10:51:59 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 8 Feb 2022 11:51:59 +0100
+Subject: Re: Bug#1004814: r-cran-av: FTBFS with ffmpeg 5.0
+In-Reply-To: <CABFfbXsaEbYD_peDmcOV_1Oshmmn0=2VTYpaAT6NmCKKCq4roQ@mail.gmail.com>
+References: <Yfmyu8ZuLASeV9MF@ramacher.at> <YgIAs0JFqVLDKA72@an3as.eu> <CABFfbXsaEbYD_peDmcOV_1Oshmmn0=2VTYpaAT6NmCKKCq4roQ@mail.gmail.com>
+Message-ID: <YgJLT9CJNg7TMEpL@an3as.eu>
+
+Hi Jeroen,
+
+Am Tue, Feb 08, 2022 at 11:22:17AM +0100 schrieb Jeroen Ooms:
+> Thanks, I will have a look at this.
+
+Thanks a lot.
+
+> Btw, do you know if there is any particular reason that "r-cran-v8" is
+> not updated anymore?
+
+Its a shame nobody managed yet.  The reason for the slow updates are
+new compressed JS files which always create trouble in Debian packaging.
+I'll put it higher on my todo list now and hope I'll succeed until end
+of week.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From jwb67 at bath.ac.uk  Wed Feb  9 00:00:55 2022
+From: jwb67 at bath.ac.uk (Jonathan Bartlett)
+Date: Wed, 9 Feb 2022 00:00:55 +0000
+Subject: RE: smcfcs fails its (1 imputation per core) tests
+In-Reply-To: <ee8321cc-0bd0-f1fb-98e6-9fe8b9d0d082@tchncs.de>
+References: <ee8321cc-0bd0-f1fb-98e6-9fe8b9d0d082@tchncs.de>
+Message-ID: <LO0P265MB33387FD5EEEEE6AF5380C847872E9@LO0P265MB3338.GBRP265.PROD.OUTLOOK.COM>
+
+Dear Nilesh
+
+Sorry, I just found this email from you in Outlook's junk folder.
+
+If I am interpreting the output correctly, a new argument error check I added in the new version, that the event indicator in survival data is coded as 0/1, is failing in this check of smcfcs_parallel. If that is the correct interpretation, I see now obvious explanation for it. If the new error check I added is working in the non-parallel tests in smcfcs (see bottom of https://github.com/jwb133/smcfcs/blob/master/tests/testthat/test_errorchecks.R) then it apparently failing on this smcfcs_parallel check means it is something to do with the interaction with parallel cores on Debian I guess?
+
+According to CRAN's check results on Debian (https://cran.r-project.org/web/checks/check_results_smcfcs.html) there are no problems as far as I can see?
+
+Thanks, and best wishes.
+
+Jonathan
+
+-----Original Message-----
+From: Nilesh Patra <nilesh at tchncs.de> 
+Sent: 26 January 2022 19:47
+To: Jonathan Bartlett <jwb67 at bath.ac.uk>
+Cc: Debian R team <debian-r at lists.debian.org>
+Subject: smcfcs fails its (1 imputation per core) tests
+
+[You don't often get email from nilesh at tchncs.de. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
+
+CAUTION:  This email came from outside of the University. To keep your account safe, only click on links and open attachments if you know the person who sent the email, or you expected to receive this communication.
+
+From andreas at an3as.eu  Sat Feb 12 07:52:11 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 12 Feb 2022 08:52:11 +0100
+Subject: Test issues in r-cran-emayili 0.7.5
+Message-ID: <YgdnK5KR1VUQkeoz@an3as.eu>
+
+Hi,
+
+I tried to update r-cran-emayili to version 0.7.5 but there are strange
+test suite errors[1]:
+
+   Message: object 'jinjar' not found
+
+Any idea how to fix this?
+
+Kind regards
+   Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-emayili/-/jobs/2458769#L1038
+
+-- 
+http://fam-tille.de
+
+From nilesh at tchncs.de  Sat Feb 12 10:34:23 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Sat, 12 Feb 2022 16:04:23 +0530
+Subject: Re: Test issues in r-cran-emayili 0.7.5
+In-Reply-To: <YgdnK5KR1VUQkeoz@an3as.eu>
+References: <YgdnK5KR1VUQkeoz@an3as.eu>
+Message-ID: <03192e88-2a59-cd5f-aaf9-534817fd1e95@tchncs.de>
+
+On 2/12/22 1:22 PM, Andreas Tille wrote:
+> Hi,
+>
+> I tried to update r-cran-emayili to version 0.7.5 but there are strange
+> test suite errors[1]:
+>
+>     Message: object 'jinjar' not found
+>
+> Any idea how to fix this?
+
+It need r-cran-jinjar, you will need to package this.
+
+	https://cran.r-project.org/web/packages/jinjar/index.html
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Sun Feb 13 07:23:06 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 13 Feb 2022 08:23:06 +0100
+Subject: Please use branch names master / upstream / pristine-tar
+Message-ID: <Ygix2vkwASgXG2xD@an3as.eu>
+
+Hi Doug,
+
+when using prepare_missing_cran_package the git repository is created
+with default branch name master and all tools we are using inside the
+r-pkg-team are relying on this.  I tried to run routine-update on
+r-cran-sets which failed due to the default branch name debian/master.
+
+If you want to let team members upgrade this package flawlessly please
+stick to the branch name master.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Feb 13 13:50:56 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 13 Feb 2022 14:50:56 +0100
+Subject: Re: Please use branch names master / upstream / pristine-tar
+In-Reply-To: <87bkzaykpb.fsf@piedmont.edu>
+References: <Ygix2vkwASgXG2xD@an3as.eu> <87bkzaykpb.fsf@piedmont.edu>
+Message-ID: <YgkMwN2LUBsnKrvv@an3as.eu>
+
+Hi Doug,
+
+Am Sun, Feb 13, 2022 at 01:12:21PM +0000 schrieb Torrance, Douglas:
+> > If you want to let team members upgrade this package flawlessly please
+> > stick to the branch name master.
+> 
+> Fair enough.  My rationale was that frequently upstream also uses "master", and
+> it would simplify my workflow if my local branch names were consistent with the
+> remote branch names, especially for packages where I'm also active upstream
+> (which, admittedly, is not the case for this particular package).  So I went
+> with the (old) DEP-14 recommendation, although I just noticed that this
+> recommendation has since been changed to "debian/latest". [1]
+
+I know the reasons for using something else than "master" as default
+branch for Debian packaging.  I'm also fine with following sensible
+DEP-14 suggestions in the long term.  However, this should be done
+consistently in a team wide automatic change to have all our packages
+in the same shape.
+ 
+> Would you recommend that I change the default branches of all the R package
+> Salsa repositories that I set up to use "debian/master" so that they instead
+> use "master" going forward?
+
+Yes, this would be helpful.
+ 
+> My apologies for causing problems!
+> I went ahead and uploaded the new version
+> of r-cran-sets to unstable.
+
+:-)
+
+Kind regards
+
+      Andreas.
+
+> [1] https://salsa.debian.org/dep-team/deps/-/commit/8cff331
+
+-- 
+http://fam-tille.de
+
+From dtorrance at piedmont.edu  Sun Feb 13 13:12:21 2022
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Sun, 13 Feb 2022 13:12:21 +0000
+Subject: Re: Please use branch names master / upstream / pristine-tar
+In-Reply-To: <Ygix2vkwASgXG2xD@an3as.eu>
+References: <Ygix2vkwASgXG2xD@an3as.eu>
+Message-ID: <87bkzaykpb.fsf@piedmont.edu>
+
+Hi Andreas,
+
+On Sun 13 Feb 2022 02:23:06 AM EST, Andreas Tille <andreas at an3as.eu> wrote:
+> when using prepare_missing_cran_package the git repository is created
+> with default branch name master and all tools we are using inside the
+> r-pkg-team are relying on this.  I tried to run routine-update on
+> r-cran-sets which failed due to the default branch name debian/master.
+>
+> If you want to let team members upgrade this package flawlessly please
+> stick to the branch name master.
+
+Fair enough.  My rationale was that frequently upstream also uses "master", and
+it would simplify my workflow if my local branch names were consistent with the
+remote branch names, especially for packages where I'm also active upstream
+(which, admittedly, is not the case for this particular package).  So I went
+with the (old) DEP-14 recommendation, although I just noticed that this
+recommendation has since been changed to "debian/latest". [1]
+
+Would you recommend that I change the default branches of all the R package
+Salsa repositories that I set up to use "debian/master" so that they instead
+use "master" going forward?
+
+My apologies for causing problems!  I went ahead and uploaded the new version
+of r-cran-sets to unstable.
+
+Doug
+
+[1] https://salsa.debian.org/dep-team/deps/-/commit/8cff331
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From dtorrance at piedmont.edu  Sun Feb 13 23:13:21 2022
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Sun, 13 Feb 2022 23:13:21 +0000
+Subject: Re: Please use branch names master / upstream / pristine-tar
+In-Reply-To: <YgkMwN2LUBsnKrvv@an3as.eu>
+References: <Ygix2vkwASgXG2xD@an3as.eu> <87bkzaykpb.fsf@piedmont.edu> <YgkMwN2LUBsnKrvv@an3as.eu>
+Message-ID: <875ypixsvo.fsf@piedmont.edu>
+
+On Sun 13 Feb 2022 08:50:56 AM EST, Andreas Tille <andreas at an3as.eu> wrote:
+> Hi Doug,
+>
+> Am Sun, Feb 13, 2022 at 01:12:21PM +0000 schrieb Torrance, Douglas:
+> > > If you want to let team members upgrade this package flawlessly please
+> > > stick to the branch name master.
+> >
+> > Fair enough.  My rationale was that frequently upstream also uses "master", and
+> > it would simplify my workflow if my local branch names were consistent with the
+> > remote branch names, especially for packages where I'm also active upstream
+> > (which, admittedly, is not the case for this particular package).  So I went
+> > with the (old) DEP-14 recommendation, although I just noticed that this
+> > recommendation has since been changed to "debian/latest". [1]
+>
+>
+> I know the reasons for using something else than "master" as default
+> branch for Debian packaging.  I'm also fine with following sensible
+> DEP-14 suggestions in the long term.  However, this should be done
+> consistently in a team wide automatic change to have all our packages
+> in the same shape.
+
+Makes sense.
+
+> > Would you recommend that I change the default branches of all the R package
+> > Salsa repositories that I set up to use "debian/master" so that they instead
+> > use "master" going forward?
+>
+>
+> Yes, this would be helpful.
+
+Done!  I've pushed a "master" branch to each of the r-cran-* repositories that
+I've set up, set it as the default, and update d/gbp.conf where appropriate.
+Let me know if I've missed something.
+
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Mon Feb 14 10:22:53 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 14 Feb 2022 11:22:53 +0100
+Subject: Re: Please use branch names master / upstream / pristine-tar
+In-Reply-To: <875ypixsvo.fsf@piedmont.edu>
+References: <Ygix2vkwASgXG2xD@an3as.eu> <87bkzaykpb.fsf@piedmont.edu> <YgkMwN2LUBsnKrvv@an3as.eu> <875ypixsvo.fsf@piedmont.edu>
+Message-ID: <Ygotfb1kL+vwAKhn@an3as.eu>
+
+Hi Doug,
+
+Am Sun, Feb 13, 2022 at 11:13:21PM +0000 schrieb Torrance, Douglas:
+> > Yes, this would be helpful.
+> 
+> Done!  I've pushed a "master" branch to each of the r-cran-* repositories that
+> I've set up, set it as the default, and update d/gbp.conf where appropriate.
+> Let me know if I've missed something.
+
+Thanks a lot - I'll do so.  BTW, I subscribe to the opinion that was
+rised last year that d/gbp.conf should be only used when deriving from
+the team default.  Thus in principle you should be able to remove it.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From dtorrance at piedmont.edu  Mon Feb 14 15:39:35 2022
+From: dtorrance at piedmont.edu (Torrance, Douglas)
+Date: Mon, 14 Feb 2022 15:39:35 +0000
+Subject: Re: Please use branch names master / upstream / pristine-tar
+In-Reply-To: <Ygotfb1kL+vwAKhn@an3as.eu>
+References: <Ygix2vkwASgXG2xD@an3as.eu> <87bkzaykpb.fsf@piedmont.edu> <YgkMwN2LUBsnKrvv@an3as.eu> <875ypixsvo.fsf@piedmont.edu> <Ygotfb1kL+vwAKhn@an3as.eu>
+Message-ID: <87y22dqwy0.fsf@piedmont.edu>
+
+On Mon 14 Feb 2022 05:22:53 AM EST, Andreas Tille <andreas at an3as.eu> wrote:
+> Hi Doug,
+>
+> Am Sun, Feb 13, 2022 at 11:13:21PM +0000 schrieb Torrance, Douglas:
+> > > Yes, this would be helpful.
+> >
+> > Done!  I've pushed a "master" branch to each of the r-cran-* repositories that
+> > I've set up, set it as the default, and update d/gbp.conf where appropriate.
+> > Let me know if I've missed something.
+>
+>
+> Thanks a lot - I'll do so.  BTW, I subscribe to the opinion that was
+> rised last year that d/gbp.conf should be only used when deriving from
+> the team default.  Thus in principle you should be able to remove it.
+
+That makes sense.  I went ahead and removed the "debian-branch" lines from
+each of the gbp.conf's (or removed the file entirely if there were no other
+contents) in these repositories.
+
+Doug
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Wed Feb 16 13:04:44 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 16 Feb 2022 14:04:44 +0100
+Subject: V8 fails to build *sometimes* on i386
+Message-ID: <Ygz2bMfAHbfo+Jc7@an3as.eu>
+
+Hi Jeroen,
+
+I finally managed to update V8 - sorry for the delay.  One note about a
+potential issue:  While it has built fine on all autobuilder
+architectures[1] (including i386) the build failed on our Gitlab CI for
+i386[2].  I have no idea what this might mean - may be you want to have
+a look to the second build log.
+
+Kind regards
+
+      Andreas.
+
+[1] https://buildd.debian.org/status/package.php?p=r-cran-v8
+[2] https://salsa.debian.org/r-pkg-team/r-cran-v8/-/jobs/2476134
+
+-- 
+http://fam-tille.de
+
+From jeroenooms at gmail.com  Thu Feb 17 17:09:51 2022
+From: jeroenooms at gmail.com (Jeroen Ooms)
+Date: Thu, 17 Feb 2022 18:09:51 +0100
+Subject: New upstream version for r-cran-pdftools
+Message-ID: <CABFfbXv+caUq0JpcCMmwkHNMx6tmUww_0XxYQQDP6x3yOZq1XA@mail.gmail.com>
+
+pdftools 3.1.0 is now on CRAN. This version fixes a bug that could
+cause a crash with recent versions of libpoppler, which is why
+libpoppler 22.02 in experimental has a patch
+segfault-on-unset-catalog.patch.
+
+With the new version of pdftools, this patch should no longer be needed.
+
+From nilesh at tchncs.de  Thu Feb 17 17:24:12 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Thu, 17 Feb 2022 22:54:12 +0530
+Subject: Re: New upstream version for r-cran-pdftools
+In-Reply-To: <CABFfbXv+caUq0JpcCMmwkHNMx6tmUww_0XxYQQDP6x3yOZq1XA@mail.gmail.com>
+References: <CABFfbXv+caUq0JpcCMmwkHNMx6tmUww_0XxYQQDP6x3yOZq1XA@mail.gmail.com>
+Message-ID: <9cda774e-cc39-facc-bd92-417ab0a692dc@tchncs.de>
+
+On 2/17/22 10:39 PM, Jeroen Ooms wrote:
+> pdftools 3.1.0 is now on CRAN. This version fixes a bug that could
+> cause a crash with recent versions of libpoppler, which is why
+> libpoppler 22.02 in experimental has a patch
+> segfault-on-unset-catalog.patch.
+>
+> With the new version of pdftools, this patch should no longer be needed.
+
+I just uploaded the new version. Thanks for letting us know about it, Jeroen!
+
+Regards,
+Nilesh
+ 
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From jeroen at berkeley.edu  Tue Feb 22 19:48:51 2022
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Tue, 22 Feb 2022 20:48:51 +0100
+Subject: Updating rapache
+Message-ID: <CABFfbXvYVSSgh-V+CVEbBb9KVxnTUgPW=Lzw_Vyo-56qZ-fWhw@mail.gmail.com>
+
+I was wondering if it would be possible to update the 'rapache'
+package, aka libapache2-mod-r-base.
+
+There were only minor changes, but important is that the homepage of
+the project has changed. The original website expired, the docs are
+now hosted on github: https://jeffreyhorner.github.io/rapache
+
+From tille at debian.org  Wed Feb 23 06:17:02 2022
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 23 Feb 2022 07:17:02 +0100
+Subject: Re: Updating rapache
+In-Reply-To: <CABFfbXvYVSSgh-V+CVEbBb9KVxnTUgPW=Lzw_Vyo-56qZ-fWhw@mail.gmail.com>
+References: <CABFfbXvYVSSgh-V+CVEbBb9KVxnTUgPW=Lzw_Vyo-56qZ-fWhw@mail.gmail.com>
+Message-ID: <YhXRXq3AC10DIiMR@an3as.eu>
+
+Hi Ondřej,
+
+please see below the request to update rapache.  I admit I did not found
+the project on Salsa.  If you don't mind we could maintain it inside the
+pkg-r-team.
+
+Kind regards
+
+      Andreas.
+
+Am Tue, Feb 22, 2022 at 08:48:51PM +0100 schrieb Jeroen Ooms:
+> I was wondering if it would be possible to update the 'rapache'
+> package, aka libapache2-mod-r-base.
+> 
+> There were only minor changes, but important is that the homepage of
+> the project has changed. The original website expired, the docs are
+> now hosted on github: https://jeffreyhorner.github.io/rapache
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From ondrej at sury.org  Wed Feb 23 06:20:48 2022
+From: ondrej at sury.org (=?utf-8?b?T25kxZllaiBTdXLDvQ==?=)
+Date: Wed, 23 Feb 2022 07:20:48 +0100
+Subject: Re: Updating rapache
+In-Reply-To: <YhXRXq3AC10DIiMR@an3as.eu>
+References: <YhXRXq3AC10DIiMR@an3as.eu>
+Message-ID: <977382D1-2F07-4B53-BE56-AF0909E0DF5D@sury.org>
+
+Hi Andreas, sure, go ahead and take over the package.
+
+Ondrej
+--
+Ondřej Surý <ondrej at sury.org> (He/Him)
+
+> On 23. 2. 2022, at 7:17, Andreas Tille <tille at debian.org> wrote:
+> 
+> ﻿Hi Ondřej,
+> 
+> please see below the request to update rapache.  I admit I did not found
+> the project on Salsa.  If you don't mind we could maintain it inside the
+> pkg-r-team.
+> 
+> Kind regards
+> 
+>      Andreas.
+> 
+> Am Tue, Feb 22, 2022 at 08:48:51PM +0100 schrieb Jeroen Ooms:
+>> I was wondering if it would be possible to update the 'rapache'
+>> package, aka libapache2-mod-r-base.
+>> 
+>> There were only minor changes, but important is that the homepage of
+>> the project has changed. The original website expired, the docs are
+>> now hosted on github: https://jeffreyhorner.github.io/rapache
+>> 
+>> 
+> 
+> -- 
+> http://fam-tille.de
+
+From nilesh at tchncs.de  Wed Feb 23 06:54:41 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Wed, 23 Feb 2022 12:24:41 +0530
+Subject: Packaging bslib + licensing issues
+Message-ID: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de>
+
+Hi all,
+
+[ CC'ed Andreas who last worked on this ]
+
+bslib is needed for the new rmarkdown update, and it is being used in other packages
+in the ecosystem as well, as it seems.
+
+When I looked at the source, it comes with a few minified javascript files, which have sources
+so I can manage this.
+What looked like a bit of a problem to me is that it vendors several '.woff/.woff2' font files
+(binaries) in "inst/fonts" directory, some of which is basically fetched from google fonts.
+
+Since this was potentially non free, I opened an issue upstream[1] -- they are very cooperative
+and gave prompt responses.
+As they mentioned, the license for fonts seem to be compatible with DFSG[2]. So do you think we can
+directly distribute these binaries?
+
+I am only afraid if these could be considered binaries w/o source, and lead to FTP master rejecting this?
+Do you think that's the case?
+Do you think upstream could do $something about this?
+
+Admittedly, otherwise it would affect user experience w/o these fonts, and such rejects drive me
+bonkers every time.
+
+Also, do you find anything else in the package that could be problematic?
+
+Let me know about the above mentioned questions.
+
+[1]: https://github.com/rstudio/bslib/issues/412
+[2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Wed Feb 23 07:21:38 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Feb 2022 08:21:38 +0100
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de>
+Message-ID: <YhXgggmJQ6Bl48Jm@an3as.eu>
+
+Hi Nilesh,
+
+Am Wed, Feb 23, 2022 at 12:24:41PM +0530 schrieb Nilesh Patra:
+> bslib is needed for the new rmarkdown update, and it is being used in other packages
+> in the ecosystem as well, as it seems.
+
+Thanks a lot for working on this!
+ 
+> When I looked at the source, it comes with a few minified javascript files, which have sources
+> so I can manage this.
+> What looked like a bit of a problem to me is that it vendors several '.woff/.woff2' font files
+> (binaries) in "inst/fonts" directory, some of which is basically fetched from google fonts.
+> 
+> Since this was potentially non free, I opened an issue upstream[1] -- they are very cooperative
+> and gave prompt responses.
+> As they mentioned, the license for fonts seem to be compatible with DFSG[2]. So do you think we can
+> directly distribute these binaries?
+
+I can only guess here:  My reason to delay the work on this is, that I'm
+afraid that ftpmaster wants to see the source of these font files.
+Sometimes it makes sense to package these separately.
+
+> I am only afraid if these could be considered binaries w/o source, and lead to FTP master rejecting this?
+> Do you think that's the case?
+
+I think so.
+
+> Do you think upstream could do $something about this?
+
+Providing source and binary would be helpful.  As I said above we might
+also consider adding a font package.
+
+> Admittedly, otherwise it would affect user experience w/o these fonts, and such rejects drive me
+> bonkers every time.
+
+Is there any chance that Debian has kind of very similar fonts?
+
+> Also, do you find anything else in the package that could be problematic?
+
+I admit I was very confused about the different versions of bootstrap
+(inst/lib/bs[345]).  I f we want to replace these by the Debian packaged
+versions this might become a problem.  No idea what inst/lib/bsw[345]
+might be.  I'm very weak if it comes to understand all this JavaScript
+packages and maintaining different versions in one package sounds very
+scary to me since I'm afraid it could depend from specific minor version
+numbers and the package we distribute might be broken.
+ 
+> Let me know about the above mentioned questions.
+
+Thanks again for working on this
+
+      Andreas. 
+ 
+> [1]: https://github.com/rstudio/bslib/issues/412
+> [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+> 
+> Regards,
+> Nilesh
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Feb 23 08:10:55 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Feb 2022 09:10:55 +0100
+Subject: Re: Updating rapache
+In-Reply-To: <977382D1-2F07-4B53-BE56-AF0909E0DF5D@sury.org>
+References: <YhXRXq3AC10DIiMR@an3as.eu> <977382D1-2F07-4B53-BE56-AF0909E0DF5D@sury.org>
+Message-ID: <YhXsD06cX4rnFJ1j@an3as.eu>
+
+Hi Ondřej,
+
+thanks a lot for your quick and helpful response.
+
+Am Wed, Feb 23, 2022 at 07:20:48AM +0100 schrieb Ondřej Surý:
+> Hi Andreas, sure, go ahead and take over the package.
+
+The package is now maintained at
+   https://salsa.debian.org/r-pkg-team/rapache/
+I kept you as Uploader and have granted permissions to this
+repository to enable you full access.
+
+I've updated the package to the latest upstream version and
+uploaded to unstable.
+
+One remaining question: The upstream source contains a test directory.
+Do you have any idea whether it might serve somehow to create a sensible
+autopkgtest?
+
+Kind regards
+
+     Andreas.
+ 
+> > On 23. 2. 2022, at 7:17, Andreas Tille <tille at debian.org> wrote:
+> > 
+> > ﻿Hi Ondřej,
+> > 
+> > please see below the request to update rapache.  I admit I did not found
+> > the project on Salsa.  If you don't mind we could maintain it inside the
+> > pkg-r-team.
+> > 
+> > Kind regards
+> > 
+> >      Andreas.
+> > 
+> > Am Tue, Feb 22, 2022 at 08:48:51PM +0100 schrieb Jeroen Ooms:
+> >> I was wondering if it would be possible to update the 'rapache'
+> >> package, aka libapache2-mod-r-base.
+> >> 
+> >> There were only minor changes, but important is that the homepage of
+> >> the project has changed. The original website expired, the docs are
+> >> now hosted on github: https://jeffreyhorner.github.io/rapache
+> >> 
+> >> 
+> > 
+> > -- 
+> > http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From nilesh at tchncs.de  Wed Feb 23 08:22:26 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Wed, 23 Feb 2022 13:52:26 +0530
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <YhXgggmJQ6Bl48Jm@an3as.eu>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu>
+Message-ID: <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de>
+
+On 2/23/22 12:51 PM, Andreas Tille wrote:
+> Am Wed, Feb 23, 2022 at 12:24:41PM +0530 schrieb Nilesh Patra:
+> > When I looked at the source, it comes with a few minified javascript files, which have sources
+> > so I can manage this.
+> > What looked like a bit of a problem to me is that it vendors several '.woff/.woff2' font files
+> > (binaries) in "inst/fonts" directory, some of which is basically fetched from google fonts.
+> >
+> > Since this was potentially non free, I opened an issue upstream[1] -- they are very cooperative
+> > and gave prompt responses.
+> > As they mentioned, the license for fonts seem to be compatible with DFSG[2]. So do you think we can
+> > directly distribute these binaries?
+>
+>
+> I can only guess here:  My reason to delay the work on this is, that I'm
+> afraid that ftpmaster wants to see the source of these font files.
+> Sometimes it makes sense to package these separately.
+
+This was what I was fearing.
+I need to admit that this is a 'gigantic' waste of everyone's time to be doing this.
+Even if we give out sources It looks * very * unlikely for someone to edit this in what is a part of
+an * R * package.
+ 
+> > I am only afraid if these could be considered binaries w/o source, and lead to FTP master rejecting this?
+> > Do you think that's the case?
+>
+>
+> I think so.
+
+Hmm, however, on seeking this on codesearch.debian.net, I came across shinydashboard, see here[1]
+which in principle also looks like a source-less binary and appears to be same ttf (binary) stuff
+but this is in the archive.
+
+Can you please quickly check this up with Thorsten/another FTP master over email/instant message?
+
+[1]: https://sources.debian.org/src/r-cran-shinydashboard/0.7.2-1/debian/copyright/?hl=23#L23
+
+> > Do you think upstream could do $something about this?
+>
+>
+> Providing source and binary would be helpful.  As I said above we might
+> also consider adding a font package.
+
+Yes, but we need sources for that, right?
+On quickly checking it, I could not find any 'source' package that we can get and compile.
+
+Additionally, can you address your findings on the github issue please?
+That'd help track things smoothly.
+
+> > Admittedly, otherwise it would affect user experience w/o these fonts, and such rejects drive me
+> > bonkers every time.
+>
+>
+> Is there any chance that Debian has kind of very similar fonts?
+
+Maybe we can sneak in some fonts from shinydashboard (which appears similar)
+but it does not look straightforward, provided we are maintaining it longterm, it looks
+a bit difficult to manage with syncing up code from different packages so I am not very motivated
+to do something like this, unless it is the 'same' fonts.
+ 
+> > Also, do you find anything else in the package that could be problematic?
+>
+>
+> I admit I was very confused about the different versions of bootstrap
+> (inst/lib/bs[345]).  I f we want to replace these by the Debian packaged
+> versions this might become a problem.  No idea what inst/lib/bsw[345]
+> might be.  I'm very weak if it comes to understand all this JavaScript
+> packages and maintaining different versions in one package sounds very
+> scary to me since I'm afraid it could depend from specific minor version
+> numbers and the package we distribute might be broken.
+
+I think it would be possible to manage these with symlinking and patching a bit of the code
+We should be able to get this done, IMO. Could also ask upstream once for clarification.
+
+But this does not look like a turn off form the acceptance from NEW queue (which is the main bottleneck here)
+At this point, we _really_ need bslib since rmarkdown is lagging several versions behind.
+  
+> > Let me know about the above mentioned questions.
+>
+>
+> Thanks again for working on this
+
+Please consider helping me out with the above stuff :)
+
+> > [1]: https://github.com/rstudio/bslib/issues/412
+> > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Wed Feb 23 13:09:57 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Feb 2022 14:09:57 +0100
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de>
+Message-ID: <YhYyJe7gL9ufrEKZ@an3as.eu>
+
+Am Wed, Feb 23, 2022 at 01:52:26PM +0530 schrieb Nilesh Patra:
+> 
+> This was what I was fearing.
+> I need to admit that this is a 'gigantic' waste of everyone's time to be doing this.
+
+Yes.
+
+> Even if we give out sources It looks * very * unlikely for someone to edit this in what is a part of
+> an * R * package.
+
+I'd rephrase "looks *very* unlikely" to "will never happen".
+
+Its simply since we gave ourself rules and we asked people to stick to
+those rules letter by letter.
+
+> > I think so.
+> 
+> Hmm, however, on seeking this on codesearch.debian.net, I came across shinydashboard, see here[1]
+> which in principle also looks like a source-less binary and appears to be same ttf (binary) stuff
+> but this is in the archive.
+> 
+> Can you please quickly check this up with Thorsten/another FTP master over email/instant message?
+
+Well, in the past I tried this "quickly check via <some medium>" but I
+*never* got any answer.  It only works by simply trying via new queue.
+I'd recommend trying the way that creates less work and than we'll see.
+ 
+> [1]: https://sources.debian.org/src/r-cran-shinydashboard/0.7.2-1/debian/copyright/?hl=23#L23
+> 
+> > > Do you think upstream could do $something about this?
+> > 
+> > Providing source and binary would be helpful.  As I said above we might
+> > also consider adding a font package.
+> 
+> Yes, but we need sources for that, right?
+> On quickly checking it, I could not find any 'source' package that we can get and compile.
+
+That's a shame.  In the past I tried one or two font packages where I
+was more lucky.
+ 
+> Additionally, can you address your findings on the github issue please?
+> That'd help track things smoothly.
+
+You mean to ask upstream in issue #412 to include sources and clarify
+why 3 versions of bootstrap are needed?
+ 
+> > Is there any chance that Debian has kind of very similar fonts?
+> 
+> Maybe we can sneak in some fonts from shinydashboard (which appears similar)
+> but it does not look straightforward, provided we are maintaining it longterm, it looks
+> a bit difficult to manage with syncing up code from different packages so I am not very motivated
+> to do something like this, unless it is the 'same' fonts.
+
+I can perfectly understand that such issues are draining from
+motivation (guess why I procrastinated).  But may be upstream
+can be convinced to use some more default fonts - its not that
+Debian would include a small set of fonts.
+
+> > I admit I was very confused about the different versions of bootstrap
+> > (inst/lib/bs[345]).  I f we want to replace these by the Debian packaged
+> > versions this might become a problem.  No idea what inst/lib/bsw[345]
+> > might be.  I'm very weak if it comes to understand all this JavaScript
+> > packages and maintaining different versions in one package sounds very
+> > scary to me since I'm afraid it could depend from specific minor version
+> > numbers and the package we distribute might be broken.
+> 
+> I think it would be possible to manage these with symlinking and patching a bit of the code
+> We should be able to get this done, IMO. Could also ask upstream once for clarification.
+
+The problem I see is that while patching might be possible its hard to
+find out where patching is needed.  Finally we are talking about some
+GUI we can hardly test automatically and so we never really know whether
+something is broken or not.  My experience on user behaviour is that
+in case of such problems they will simply move on with something else
+and will not report - so we will never know ...
+ 
+> But this does not look like a turn off form the acceptance from NEW queue (which is the main bottleneck here)
+
+I agree that this might be not a bottleneck - except that we possibly
+do not have all three bootstrap versions (at least not when I checked
+last time, thought).
+
+> At this point, we _really_ need bslib since rmarkdown is lagging several versions behind.
+
+I fully agree.
+
+> > Thanks again for working on this
+> 
+> Please consider helping me out with the above stuff :)
+
+So you want me to get involved into [1], right?
+
+Kind regards
+
+     Andreas.
+
+> > > [1]: https://github.com/rstudio/bslib/issues/412
+> > > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+-- 
+http://fam-tille.de
+
+From nilesh at tchncs.de  Wed Feb 23 13:41:55 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Wed, 23 Feb 2022 19:11:55 +0530
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <YhYyJe7gL9ufrEKZ@an3as.eu>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de> <YhYyJe7gL9ufrEKZ@an3as.eu>
+Message-ID: <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de>
+
+On 23 February 2022 6:39:57 pm IST, Andreas Tille <andreas at an3as.eu> wrote:
+>Am Wed, Feb 23, 2022 at 01:52:26PM +0530 schrieb Nilesh Patra:
+>> Even if we give out sources It looks * very * unlikely for someone to edit this in what is a part of
+>> an * R * package.
+>
+>I'd rephrase "looks *very* unlikely" to "will never happen".
+>
+>Its simply since we gave ourself rules and we asked people to stick to
+>those rules letter by letter.
+
+I really feel like proposing a GR right away, so we get above these hard bound rules and * actually * work on user experience
+
+>> > I think so.
+>> 
+>> Hmm, however, on seeking this on codesearch.debian.net, I came across shinydashboard, see here[1]
+>> which in principle also looks like a source-less binary and appears to be same ttf (binary) stuff
+>> but this is in the archive.
+>> 
+>> Can you please quickly check this up with Thorsten/another FTP master over email/instant message?
+>
+>Well, in the past I tried this "quickly check via <some medium>" but I
+>*never* got any answer.  It only works by simply trying via new queue.
+>I'd recommend trying the way that creates less work and than we'll see.
+
+Alright, after some discussion and asking the upstream when both you and I can agree, we will dput and see what entails
+
+>> [1]: https://sources.debian.org/src/r-cran-shinydashboard/0.7.2-1/debian/copyright/?hl=23#L23
+>> 
+>> > > Do you think upstream could do $something about this?
+>> > 
+>> > Providing source and binary would be helpful.  As I said above we might
+>> > also consider adding a font package.
+>> 
+>> Yes, but we need sources for that, right?
+>> On quickly checking it, I could not find any 'source' package that we can get and compile.
+>
+>That's a shame.  In the past I tried one or two font packages where I
+>was more lucky.
+
+Can't do much about this, to be fair; this is just luck here 
+
+>> Additionally, can you address your findings on the github issue please?
+>> That'd help track things smoothly.
+>
+>You mean to ask upstream in issue #412 to include sources and clarify
+>why 3 versions of bootstrap are needed?
+
+All your findings/questions:
+
+* Why are three versions of bootstrap needed?
+* Is it possible to provide sources for font binaries?
+* If not, can you adapt to the ones that are in debian?
+* Are there more fallbacks that you could introduce
+* Is it possible to simplify licensing for binaries?
+
+..... So on
+
+>> > Is there any chance that Debian has kind of very similar fonts?
+>> 
+>> Maybe we can sneak in some fonts from shinydashboard (which appears similar)
+>> but it does not look straightforward, provided we are maintaining it longterm, it looks
+>> a bit difficult to manage with syncing up code from different packages so I am not very motivated
+>> to do something like this, unless it is the 'same' fonts.
+>
+>I can perfectly understand that such issues are draining from
+>motivation (guess why I procrastinated).  But may be upstream
+>can be convinced to use some more default fonts - its not that
+>Debian would include a small set of fonts.
+
+Yes, I also was thinking about it and addressed it above
+
+>> I think it would be possible to manage these with symlinking and patching a bit of the code
+>> We should be able to get this done, IMO. Could also ask upstream once for clarification.
+>
+>The problem I see is that while patching might be possible its hard to
+>find out where patching is needed.  Finally we are talking about some
+>GUI we can hardly test automatically and so we never really know whether
+>something is broken or not.  My experience on user behaviour is that
+>in case of such problems they will simply move on with something else
+>and will not report - so we will never know ...
+
+As long as there's no hard dependency on the versions of those files, we should be fine. But only upstream can clarify
+
+>> But this does not look like a turn off form the acceptance from NEW queue (which is the main bottleneck here)
+>
+>I agree that this might be not a bottleneck - except that we possibly
+>do not have all three bootstrap versions (at least not when I checked
+>last time, thought).
+
+We only have one version in the archive at given point in time.
+
+>> > Thanks again for working on this
+>> 
+>> Please consider helping me out with the above stuff :)
+>
+>So you want me to get involved into [1], right?
+
+Right.
+
+Regards,
+Nilesh
+
+>> > > [1]: https://github.com/rstudio/bslib/issues/412
+>> > > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+>
+>
+
+From steffen_moeller at gmx.de  Wed Feb 23 13:54:25 2022
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Wed, 23 Feb 2022 14:54:25 +0100
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de> <YhYyJe7gL9ufrEKZ@an3as.eu> <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de>
+Message-ID: <6eee427b-9e3c-dd3b-e3d0-07db56560f7c@gmx.de>
+
+On 23.02.22 14:41, Nilesh Patra wrote:
+> On 23 February 2022 6:39:57 pm IST, Andreas Tille <andreas at an3as.eu> wrote:
+> > Am Wed, Feb 23, 2022 at 01:52:26PM +0530 schrieb Nilesh Patra:
+> > > Even if we give out sources It looks * very * unlikely for someone to edit this in what is a part of
+> > > an * R * package.
+> >
+> > I'd rephrase "looks *very* unlikely" to "will never happen".
+> >
+> > Its simply since we gave ourself rules and we asked people to stick to
+> > those rules letter by letter.
+>
+> I really feel like proposing a GR right away, so we get above these hard bound rules and * actually * work on user experience
+
+I would second this.
+
+I am not sure if I want to compromise for packages that are essential
+since this may be interpreted as not-substitutable. But everything
+transient like our R packages or whatever else fixes something in our
+Real Lifes Debian should have a less extremist stance.
+
+The problem is not only that we cannot package/redistribute it. My
+problem is that we cannot grow towards true Freeness together with
+upstream with subsequent updates.
+
+Steffen
+
+> > > > I think so.
+> > >
+> > > Hmm, however, on seeking this on codesearch.debian.net, I came across shinydashboard, see here[1]
+> > > which in principle also looks like a source-less binary and appears to be same ttf (binary) stuff
+> > > but this is in the archive.
+> > >
+> > > Can you please quickly check this up with Thorsten/another FTP master over email/instant message?
+> >
+> > Well, in the past I tried this "quickly check via <some medium>" but I
+> > *never* got any answer.  It only works by simply trying via new queue.
+> > I'd recommend trying the way that creates less work and than we'll see.
+>
+> Alright, after some discussion and asking the upstream when both you and I can agree, we will dput and see what entails
+>
+> > > [1]: https://sources.debian.org/src/r-cran-shinydashboard/0.7.2-1/debian/copyright/?hl=23#L23
+> > >
+> > > > > Do you think upstream could do $something about this?
+> > > >
+> > > > Providing source and binary would be helpful.  As I said above we might
+> > > > also consider adding a font package.
+> > >
+> > > Yes, but we need sources for that, right?
+> > > On quickly checking it, I could not find any 'source' package that we can get and compile.
+> >
+> > That's a shame.  In the past I tried one or two font packages where I
+> > was more lucky.
+>
+> Can't do much about this, to be fair; this is just luck here
+>
+> > > Additionally, can you address your findings on the github issue please?
+> > > That'd help track things smoothly.
+> >
+> > You mean to ask upstream in issue #412 to include sources and clarify
+> > why 3 versions of bootstrap are needed?
+>
+> All your findings/questions:
+>
+> * Why are three versions of bootstrap needed?
+> * Is it possible to provide sources for font binaries?
+> * If not, can you adapt to the ones that are in debian?
+> * Are there more fallbacks that you could introduce
+> * Is it possible to simplify licensing for binaries?
+>
+> ..... So on
+>
+>
+> > > > Is there any chance that Debian has kind of very similar fonts?
+> > >
+> > > Maybe we can sneak in some fonts from shinydashboard (which appears similar)
+> > > but it does not look straightforward, provided we are maintaining it longterm, it looks
+> > > a bit difficult to manage with syncing up code from different packages so I am not very motivated
+> > > to do something like this, unless it is the 'same' fonts.
+> >
+> > I can perfectly understand that such issues are draining from
+> > motivation (guess why I procrastinated).  But may be upstream
+> > can be convinced to use some more default fonts - its not that
+> > Debian would include a small set of fonts.
+>
+> Yes, I also was thinking about it and addressed it above
+>
+> > > I think it would be possible to manage these with symlinking and patching a bit of the code
+> > > We should be able to get this done, IMO. Could also ask upstream once for clarification.
+> >
+> > The problem I see is that while patching might be possible its hard to
+> > find out where patching is needed.  Finally we are talking about some
+> > GUI we can hardly test automatically and so we never really know whether
+> > something is broken or not.  My experience on user behaviour is that
+> > in case of such problems they will simply move on with something else
+> > and will not report - so we will never know ...
+>
+> As long as there's no hard dependency on the versions of those files, we should be fine. But only upstream can clarify
+>
+> > > But this does not look like a turn off form the acceptance from NEW queue (which is the main bottleneck here)
+> >
+> > I agree that this might be not a bottleneck - except that we possibly
+> > do not have all three bootstrap versions (at least not when I checked
+> > last time, thought).
+>
+> We only have one version in the archive at given point in time.
+>
+> > > > Thanks again for working on this
+> > >
+> > > Please consider helping me out with the above stuff :)
+> >
+> > So you want me to get involved into [1], right?
+>
+> Right.
+>
+> Regards,
+> Nilesh
+>
+> > > > > [1]: https://github.com/rstudio/bslib/issues/412
+> > > > > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+From andreas at an3as.eu  Wed Feb 23 15:47:27 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Feb 2022 16:47:27 +0100
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de> <YhYyJe7gL9ufrEKZ@an3as.eu> <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de>
+Message-ID: <YhZXD0HkN00i4tZm@an3as.eu>
+
+Hi Nilesh,
+
+Am Wed, Feb 23, 2022 at 07:11:55PM +0530 schrieb Nilesh Patra:
+> >Its simply since we gave ourself rules and we asked people to stick to
+> >those rules letter by letter.
+> 
+> I really feel like proposing a GR right away, so we get above these hard bound rules and * actually * work on user experience
+
+My pragmatic estimation is that this kind of GR will drain a huge lot of
+time from you and has very low chances to succeed.  We have other
+examples like PDF formated documentations.  (This was my motivation to
+invented Files-Excluded to have a simple way to do boring work.)  It
+does not make any sense to strip PDF documentation from a source package
+... but I do not see a good chance that this will be changed easily.
+
+Working on an actual package is boring but overall less frustrating,
+IMHO.
+ 
+> All your findings/questions:
+> 
+> * Why are three versions of bootstrap needed?
+> * Is it possible to provide sources for font binaries?
+> * If not, can you adapt to the ones that are in debian?
+> * Are there more fallbacks that you could introduce
+> * Is it possible to simplify licensing for binaries?
+> 
+> ..... So on
+
+OK, I'll do so later.
+
+Kind regards
+
+     Andreas.
+ 
+> >> > > [1]: https://github.com/rstudio/bslib/issues/412
+> >> > > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Feb 23 17:02:01 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Feb 2022 18:02:01 +0100
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <YhZXD0HkN00i4tZm@an3as.eu>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de> <YhYyJe7gL9ufrEKZ@an3as.eu> <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de> <YhZXD0HkN00i4tZm@an3as.eu>
+Message-ID: <YhZoiT4iU/76Yzu7@an3as.eu>
+
+Am Wed, Feb 23, 2022 at 04:47:27PM +0100 schrieb Andreas Tille:
+> > All your findings/questions:
+> > 
+> > * Why are three versions of bootstrap needed?
+> > * Is it possible to provide sources for font binaries?
+> > * If not, can you adapt to the ones that are in debian?
+> > * Are there more fallbacks that you could introduce
+> > * Is it possible to simplify licensing for binaries?
+> > 
+> > ..... So on
+> 
+> OK, I'll do so later.
+
+   https://github.com/rstudio/bslib/issues/412#issuecomment-1048977407
+   https://github.com/rstudio/bslib/issues/413
+ 
+> > >> > > [1]: https://github.com/rstudio/bslib/issues/412
+> > >> > > [2]:  https://wiki.debian.org/DFSGLicenses#The_SIL_Open_Font_License
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at tchncs.de  Wed Feb 23 17:10:13 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Wed, 23 Feb 2022 22:40:13 +0530
+Subject: Re: Packaging bslib + licensing issues
+In-Reply-To: <YhZXD0HkN00i4tZm@an3as.eu>
+References: <09c92862-c942-8162-86d5-263b1d6d098b@tchncs.de> <YhXgggmJQ6Bl48Jm@an3as.eu> <f73c2008-3740-d5d8-f64c-5560ee474907@tchncs.de> <YhYyJe7gL9ufrEKZ@an3as.eu> <1B8F9F8A-76AE-4D19-B43E-2F73805C263A@tchncs.de> <YhZXD0HkN00i4tZm@an3as.eu>
+Message-ID: <34e4297d-e621-5c91-3ca8-214e099a5212@tchncs.de>
+
+Hi Andreas,
+
+On 2/23/22 9:17 PM, Andreas Tille wrote:
+> Hi Nilesh,
+>
+> Am Wed, Feb 23, 2022 at 07:11:55PM +0530 schrieb Nilesh Patra:
+> > > Its simply since we gave ourself rules and we asked people to stick to
+> > > those rules letter by letter.
+> >
+> >
+> > I really feel like proposing a GR right away, so we get above these hard bound rules and * actually * work on user experience
+>
+>
+> My pragmatic estimation is that this kind of GR will drain a huge lot of
+> time from you and has very low chances to succeed.
+
+Yep.
+
+> We have other
+> examples like PDF formated documentations.  (This was my motivation to
+> invented Files-Excluded to have a simple way to do boring work.)  It
+> does not make any sense to strip PDF documentation from a source package
+> ... but I do not see a good chance that this will be changed easily.
+
+I always felt that stripping away pdf is very un-called for, but in most cases
+this does not cause much harm either.
+Looks like today is "I-am-just-pissed-at-FTP-masters day" for me due to the complicated
+stuff with bslib - which in no way is upstream's fault
+and also a (nitpicky) reject for r2html from new, for which I have been
+waiting for ages and is still not there. I am just upset about these and other the high friction processes.
+
+> > OK, I'll do so later.
+>
+>
+>     https://github.com/rstudio/bslib/issues/412#issuecomment-1048977407
+>     https://github.com/rstudio/bslib/issues/413
+
+Thanks a lot for this, this really helps.
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+

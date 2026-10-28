@@ -1,0 +1,1740 @@
+From edd at debian.org  Fri May  1 12:50:59 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 1 May 2020 07:50:59 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24233.50708.369377.282729@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24233.50708.369377.282729@rob.eddelbuettel.com>
+Message-ID: <24236.6963.424927.991946@rob.eddelbuettel.com>
+
+On 29 April 2020 at 13:23, Dirk Eddelbuettel wrote:
+| R 4.0.0 was released as scheduled on Friday, source packages have been in
+| experimental since Friday too.
+| 
+| There is one build failure on ppc64el but we now know what causes it so a bug
+| fix from upstream should be forthcoming shortly.  The bug can also be
+| circumvented by (on that platform only) configuring with --disable-long-double.
+| 
+| As such, we're ready, so I may I would like to nudge you towards considering
+| a start for this transition.  R is reasonably widely used language that is
+| very well supported in Debian, and it would be good to have this updated
+| upstream version be part of Debian testing and the next release.
+
+New release 4.0.0-2 also builds on ppc64el (by disabling long double support,
+which upstream may also make the default for this platform) and is ready.
+
+Please schedule a transition for r-base.
+
+I will then upload 4.0.0-3 to unstable as soon as I get your green light.
+
+Cheers, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From jeroen at berkeley.edu  Wed May  6 21:31:32 2020
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Wed, 6 May 2020 23:31:32 +0200
+Subject: Re: Help needed for r-cran-hunspell to link with Debian packaged libhunspell
+In-Reply-To: <20200324163624.GX5878@an3as.eu>
+References: <20200324163624.GX5878@an3as.eu>
+Message-ID: <CABFfbXtsZddrBcEpg_0PDQDkXkAM_gzY8zedftpN_wQHGJJshQ@mail.gmail.com>
+
+Sorry I missed this email.
+
+I bundled hunspell because I had a lot of trouble with the ever
+changing api of hunspell, and the missing parser files. So maybe it's
+easier to use the bundled version in this case.
+
+Either way, in your code it looks like you are creating
+libstathunspell.a which still contains the parser files, but you are
+not linking to it when creating the package shared library. Did you
+remove the -lstathunspell from the PKG_LIBS in src/makevars? You may
+have to keep it there if you still want to use the parser files
+(because I don't think debian has those).
+
+On Tue, Mar 24, 2020 at 5:36 PM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi,
+>
+> we could need r-cran-spelling which depends r-cran-hunspell for some test
+> suites.  I injected both into Git but I have trouble with r-cran-hunspell:
+>
+> ...
+>    dh_auto_install -O--buildsystem=R
+> I: R packages needed for DEP8: testthat
+> I: R Package: hunspell Version: 3.0
+> I: Building using R version 3.6.3-1
+> I: R API version: r-api-3.5
+> I: Using built-time from d/changelog: Tue, 24 Mar 2020 17:25:33 +0100
+>         mkdir -p /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library
+>         R CMD INSTALL -l /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . "--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'"
+> * installing *source* package 'hunspell' ...
+> files 'src/hunspell/affentry.cc', 'src/hunspell/affentry.hxx', 'src/hunspell/affixmgr.cc', 'src/hunspell/affixmgr.hxx', 'src/hunspell/atypes.hxx', 'src/hunspell/baseaffix.hxx', 'src/hunspell/csutil.cc', 'src/hunspell/filemgr.cc', 'src/hunspell/filemgr.hxx', 'src/hunspell/hashmgr.cc', 'src/hunspell/hashmgr.hxx', 'src/hunspell/hunspell.cc', 'src/hunspell/hunspell.h', 'src/hunspell/hunspell.hxx', 'src/hunspell/hunvisapi.h', 'src/hunspell/hunzip.cc', 'src/hunspell/hunzip.hxx', 'src/hunspell/langnum.hxx', 'src/hunspell/phonet.cc', 'src/hunspell/phonet.hxx', 'src/hunspell/replist.cc', 'src/hunspell/replist.hxx', 'src/hunspell/suggestmgr.cc', 'src/hunspell/suggestmgr.hxx', 'src/hunspell/utf_info.cxx', 'src/hunspell/utf_info.hxx', 'src/hunspell/w_char.hxx' are missing
+> file 'src/Makevars' has the wrong MD5 checksum
+> ** using staged installation
+> ** libs
+> make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c RcppExports.cpp -o RcppExports.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dictionary.cpp -o dictionary.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parser.cpp -o parser.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/textparser.cc -o parsers/textparser.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/latexparser.cc -o parsers/latexparser.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/manparser.cc -o parsers/manparser.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/xmlparser.cc -o parsers/xmlparser.o
+> g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/htmlparser.cc -o parsers/htmlparser.o
+> ar rcs hunspell/libstathunspell.a parsers/textparser.o parsers/latexparser.o parsers/manparser.o parsers/xmlparser.o parsers/htmlparser.o
+> g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-z,relro -o hunspell.so RcppExports.o dictionary.o parser.o -lhunspell -L/usr/lib/R/lib -lR
+> make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'
+> make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'
+> make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'
+> installing to /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs
+> ** R
+> ** inst
+> ** byte-compile and prepare package for lazy loading
+> ** help
+> *** installing help indices
+> ** building package indices
+> ** installing vignettes
+> ** testing if installed package can be loaded from temporary location
+> Error: package or namespace load failed for 'hunspell' in dyn.load(file, DLLpath = DLLpath, ...):
+>  unable to load shared object '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so':
+>   /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so: undefined symbol: _ZN10TextParser8put_lineEPKc
+> Error: loading failed
+> Execution halted
+> ERROR: loading failed
+> * removing '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/hunspell'
+> dh_auto_install: error: R CMD INSTALL -l /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . "--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'" returned exit code 1
+> make: *** [debian/rules:4: binary] Error 25
+> dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+>
+>
+>
+> I have excluded the code copy of libhunspell
+>
+>    Files-Excluded: */src/hunspell
+>
+> Is anybody able to successfully link with the Debian packaged
+> libhunspell?
+>
+> Kind regards
+>
+>      Andreas.
+>
+>
+> --
+> http://fam-tille.de
+
+From ginggs at debian.org  Wed May 13 08:15:24 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 13 May 2020 10:15:24 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24236.6963.424927.991946@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24233.50708.369377.282729@rob.eddelbuettel.com> <24236.6963.424927.991946@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>
+
+Control: tags -1 + confirmed
+
+Hi Dirk
+
+On Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Please schedule a transition for r-base.
+>
+> I will then upload 4.0.0-3 to unstable as soon as I get your green light.
+
+Please go ahead with the upload to unstable.
+
+Regards
+Graham
+
+From edd at debian.org  Wed May 13 12:22:36 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 13 May 2020 07:22:36 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24233.50708.369377.282729@rob.eddelbuettel.com> <24236.6963.424927.991946@rob.eddelbuettel.com> <CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>
+Message-ID: <24251.59020.474986.400000@rob.eddelbuettel.com>
+
+On 13 May 2020 at 10:15, Graham Inggs wrote:
+| Control: tags -1 + confirmed
+| 
+| Hi Dirk
+| 
+| On Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > Please schedule a transition for r-base.
+| >
+| > I will then upload 4.0.0-3 to unstable as soon as I get your green light.
+| 
+| Please go ahead with the upload to unstable.
+
+Great -- now building.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu May 14 19:19:55 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 15 May 2020 04:19:55 +0900
+Subject: Bioconductor transition
+Message-ID: <20200514191955.GC21485@bubu.plessy.net>
+
+Hello everybody,
+
+I would like to participate to the transition and thought I would start
+with a team upload on r-cran-biocmanager.  But my packaging skills are a
+bit rusty, so I prefer asking first…
+
+Is there anything in the source packages that we need to take the
+opportunity to upgrade in that wave of uploads, or can I just simply
+follow the Debian Policy's checklist ?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From daissi at debian.org  Thu May 14 19:41:15 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 14 May 2020 21:41:15 +0200
+Subject: Re: Bioconductor transition
+In-Reply-To: <20200514191955.GC21485@bubu.plessy.net>
+References: <20200514191955.GC21485@bubu.plessy.net>
+Message-ID: <CA+6XHwRBx-zeDm9ELn_4Zm8V=TmwsB0MSYRkZYv3GB1A5fVHWg@mail.gmail.com>
+
+Hi Charles,
+
+Le jeu. 14 mai 2020 à 21:20, Charles Plessy <plessy at debian.org> a écrit :
+
+>
+
+> I would like to participate to the transition and thought I would start
+
+> with a team upload on r-cran-biocmanager.  But my packaging skills are a
+
+> bit rusty, so I prefer asking first…
+
+>
+
+> Is there anything in the source packages that we need to take the
+
+> opportunity to upgrade in that wave of uploads, or can I just simply
+
+> follow the Debian Policy's checklist ?
+
+>
+
+You can just use "routine-update" to update packages to our last requirements.
+
+https://tracker.debian.org/pkg/routine-update
+
+Best,
+
+Dylan
+
+From edd at debian.org  Thu May 14 21:17:21 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 14 May 2020 16:17:21 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24200.54439.142307.819143@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com>
+Message-ID: <24253.46433.173016.143067@rob.eddelbuettel.com>
+
+On 4 April 2020 at 13:40, Dirk Eddelbuettel wrote:
+| 
+| On 4 April 2020 at 10:15, Sebastiaan Couwenberg wrote:
+| | On 4/3/20 8:27 PM, Dirk Eddelbuettel wrote:
+| | > Can the tracker sort by
+| | >  - maintainer
+| | >  - binary type
+| | > to help ?
+| | 
+| | With the attached script you can create a dd-list from the tracker.
+| | 
+| |  transition-dd-list.pl -u
+| | https://release.debian.org/transitions/html/r-api-4.0.html
+| 
+| Excellent, thank you!  I needed to add libmojolicious-perl but that was it.
+
+It gets me packages by maintainer.  What is missing is 'binary-arch' vs
+'binary-all' because, if I have this right, maintainers need to manually
+upload binary-all package during the now started transition.  Correct?
+
+Does anybody have a helper tool?
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Fri May 15 13:31:41 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 15 May 2020 15:31:41 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24253.46433.173016.143067@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com>
+Message-ID: <20200515133141.GL550@an3as.eu>
+
+On Thu, May 14, 2020 at 04:17:21PM -0500, Dirk Eddelbuettel wrote:
+> 
+> It gets me packages by maintainer.  What is missing is 'binary-arch' vs
+> 'binary-all' because, if I have this right, maintainers need to manually
+> upload binary-all package during the now started transition.  Correct?
+> 
+> Does anybody have a helper tool?
+
+   apt-get install routine-update
+
+However, it only works for team maintained packages in Git.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun May 17 08:11:02 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 17 May 2020 10:11:02 +0200
+Subject: R 4.0 transition might be blocked by hdf5 transition
+Message-ID: <20200517081102.GE12054@an3as.eu>
+
+Hi,
+
+I intended to do a source upload of r-other-wasabi which fails with:
+
+  Depends: r-bioc-rhdf5 but it is not installable
+
+Thus I tried to build r-bioc-rhdf5 manually but got:
+
+  dpkg-checkbuilddeps: error: Unmet build dependencies: r-bioc-rhdf5lib libhdf5-dev
+
+I'll go offline in about 30min until this evening but may be somebody
+could check the situation.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon May 18 15:14:46 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 18 May 2020 17:14:46 +0200
+Subject: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+Message-ID: <20200518151446.GO12054@an3as.eu>
+
+Hi,
+
+when trying to do an R 4.0 transition upload of r-cran-bookdown[1] I
+get:
+
+   Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+
+That's pretty strange since as far as I can see r-cran-rmarkdown was
+build against R 4.0 before.
+
+Any clue
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-bookdown
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon May 18 15:20:49 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 18 May 2020 17:20:49 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200518151446.GO12054@an3as.eu>
+References: <20200518151446.GO12054@an3as.eu>
+Message-ID: <20200518152049.GP12054@an3as.eu>
+
+Similar with r-cran-tufte where its rather:
+
+   Depends: r-cran-rmarkdown (>= 1.12) but it is not installable
+
+On Mon, May 18, 2020 at 05:14:46PM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> when trying to do an R 4.0 transition upload of r-cran-bookdown[1] I
+> get:
+> 
+> 
+>    Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+> 
+> 
+> That's pretty strange since as far as I can see r-cran-rmarkdown was
+> build against R 4.0 before.
+> 
+> Any clue
+> 
+>       Andreas.
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-bookdown
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Mon May 18 20:14:18 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 19 May 2020 05:14:18 +0900
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200518152049.GP12054@an3as.eu>
+References: <20200518151446.GO12054@an3as.eu> <20200518152049.GP12054@an3as.eu>
+Message-ID: <20200518201418.GA20798@bubu.plessy.net>
+
+Le Mon, May 18, 2020 at 05:20:49PM +0200, Andreas Tille a écrit :
+> Similar with r-cran-tufte where its rather:
+> 
+>    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable
+
+Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not
+rebuilt at that time, but I see that you are just doing that...
+
+Have a nice day,
+
+-- 
+Charles
+
+From andreas at an3as.eu  Mon May 18 20:23:29 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 18 May 2020 22:23:29 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200518201418.GA20798@bubu.plessy.net>
+References: <20200518151446.GO12054@an3as.eu> <20200518152049.GP12054@an3as.eu> <20200518201418.GA20798@bubu.plessy.net>
+Message-ID: <20200518202329.GR12054@an3as.eu>
+
+On Tue, May 19, 2020 at 05:14:18AM +0900, Charles Plessy wrote:
+> >    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable
+> 
+> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not
+> rebuilt at that time, but I see that you are just doing that...
+
+:-)
+Yes.  About one hour ago I had the idea to install the package in a sid
+chroot and got the reason.  So once r-cran-shiny has hit the mirrors we
+can probably continue with the remaining uploads.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Tue May 19 06:36:15 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Tue, 19 May 2020 08:36:15 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200518201418.GA20798@bubu.plessy.net>
+References: <20200518151446.GO12054@an3as.eu> <20200518152049.GP12054@an3as.eu> <20200518201418.GA20798@bubu.plessy.net>
+Message-ID: <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>
+
+Hi,
+
+Le lun. 18 mai 2020 à 22:14, Charles Plessy <plessy at debian.org> a écrit :
+>
+> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not
+> rebuilt at that time, but I see that you are just doing that...
+>
+
+According to the DESCRIPTION file of rmarkdown, there is no dependency
+to shiny. Shiny is only in suggests. It should not be in deps. There
+is a bug in dh-r that could lead to some circular dependency. Did I
+miss something ? I will investigate this.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Tue May 19 07:00:55 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 19 May 2020 09:00:55 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>
+References: <20200518151446.GO12054@an3as.eu> <20200518152049.GP12054@an3as.eu> <20200518201418.GA20798@bubu.plessy.net> <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>
+Message-ID: <20200519070055.GV12054@an3as.eu>
+
+On Tue, May 19, 2020 at 08:36:15AM +0200, Dylan Aïssi wrote:
+> > Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not
+> > rebuilt at that time, but I see that you are just doing that...
+> >
+> 
+> According to the DESCRIPTION file of rmarkdown, there is no dependency
+> to shiny. Shiny is only in suggests. It should not be in deps. There
+> is a bug in dh-r that could lead to some circular dependency. Did I
+> miss something ? I will investigate this.
+
+There is no need to investigate.  r-cran-shiny is mentioned *explicitly*
+in Depends since it contains some compressed JS that is shared with
+r-cran-rmarkdown and we tried to avoid duplication of nasty code.
+
+No idea whether this is the best solution - but for now we worked around.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue May 19 07:02:50 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 19 May 2020 09:02:50 +0200
+Subject: r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable
+Message-ID: <20200519070250.GW12054@an3as.eu>
+
+Hi,
+
+when trying to do the R 4.0 transition of r-bioc-pwmenrich the
+autopkgtest fails with:
+
+ r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable
+
+Any clue?
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From johannes.ranke at jrwb.de  Tue May 19 07:19:53 2020
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Tue, 19 May 2020 09:19:53 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200519070055.GV12054@an3as.eu>
+References: <20200518151446.GO12054@an3as.eu> <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com> <20200519070055.GV12054@an3as.eu>
+Message-ID: <8563573.luAJL8ri0o@ryz>
+
+> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*
+> in Depends since it contains some compressed JS that is shared with
+> r-cran-rmarkdown and we tried to avoid duplication of nasty code.
+
+Is this DFSG compliant?
+
+Cheers,
+
+Johannes
+
+From daissi at debian.org  Tue May 19 07:21:48 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Tue, 19 May 2020 09:21:48 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <20200519070055.GV12054@an3as.eu>
+References: <20200518151446.GO12054@an3as.eu> <20200518152049.GP12054@an3as.eu> <20200518201418.GA20798@bubu.plessy.net> <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com> <20200519070055.GV12054@an3as.eu>
+Message-ID: <CA+6XHwTjmvobmC=juOLSCQVb0td4JHUpQWrEzbDR_SmG7Rgsfg@mail.gmail.com>
+
+Le mar. 19 mai 2020 à 09:01, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*
+> in Depends since it contains some compressed JS that is shared with
+> r-cran-rmarkdown and we tried to avoid duplication of nasty code.
+>
+
+Ahh. I missed this part!
+
+Thanks Andreas!
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Tue May 19 07:29:09 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 19 May 2020 09:29:09 +0200
+Subject: Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable
+In-Reply-To: <8563573.luAJL8ri0o@ryz>
+References: <20200518151446.GO12054@an3as.eu> <CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com> <20200519070055.GV12054@an3as.eu> <8563573.luAJL8ri0o@ryz>
+Message-ID: <20200519072909.GX12054@an3as.eu>
+
+On Tue, May 19, 2020 at 09:19:53AM +0200, Johannes Ranke wrote:
+> > There is no need to investigate.  r-cran-shiny is mentioned *explicitly*
+> > in Depends since it contains some compressed JS that is shared with
+> > r-cran-rmarkdown and we tried to avoid duplication of nasty code.
+> 
+> Is this DFSG compliant?
+
+Sure.  R-cran-shiny was equipped with uncompressed JS + compressed from
+that source.  We just have saved the very same in another package by
+simply depending from a package where it was done properly. 
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Tue May 19 08:59:09 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Tue, 19 May 2020 10:59:09 +0200
+Subject: Re: r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable
+In-Reply-To: <20200519070250.GW12054@an3as.eu>
+References: <20200519070250.GW12054@an3as.eu>
+Message-ID: <CA+6XHwSwSMBxE3aU-pyTywFDZ3E+wXifnMjMYLEBa8vztadmMw@mail.gmail.com>
+
+Hi,
+
+Le mar. 19 mai 2020 à 09:03, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> when trying to do the R 4.0 transition of r-bioc-pwmenrich the
+> autopkgtest fails with:
+>
+>  r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable
+
+Fixed and uploaded!
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Wed May 20 08:55:56 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 20 May 2020 10:55:56 +0200
+Subject: Reduced contributions to transition until Monday
+Message-ID: <20200520085556.GI12054@an3as.eu>
+
+Hi,
+
+the transition seems to go quite well.  Thanks a lot to Dylan Aïssi who
+is also caring for BioConductor transition where I admitedly lost track
+a bit.  I'll leave the r-bioc-* packages to you for this transition
+except if you might ask for help explicitly.  I also liked the way you
+picked your upload targets in alphabethical reverse order.  That is
+exactly the strategy I tend to follow if race conditions are to be
+expected.  Its a pleasure to cooperate with you! :-)
+
+For the next days I will not be able to dedicate the same amount of time
+as up to now since we have guests.  So please everybody who wants to help
+do not hesitate to simply run
+
+    routine-update -f
+
+It works *usually* but I spotted one issue:  If there is really no
+change needed the internal call to
+
+    dch -r
+
+leads to simply changing timestamp and author of the *last* changelog
+entry.  That's a bug in routine-update which should check for a published
+package first and create a new changelog entry if the actual revision is
+available from Debian mirror.  If it might happen I do
+
+    dch -i "Source upload in R 4.0 transition"; git commit -a -m"Source upload in R 4.0 transition"
+
+and move on.  On the other hand chances for people who are not mentioned
+as Uploaders to fall into this trap are pretty low since if the maintainer
+who calls routine-update is no Uploader a new changelog entry
+
+    * Team upload
+
+is created in any case.  In short:  Please help with the transition if
+you have some spare cycles - its really only a few minutes per package.
+Just go to
+
+    https://release.debian.org/transitions/html/r-api-4.0.html
+
+pick your target package if its marked [arch:all] and do team uploads.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From stefanor at debian.org  Wed May 20 16:07:47 2020
+From: stefanor at debian.org (Stefano Rivera)
+Date: Wed, 20 May 2020 09:07:47 -0700
+Subject: Bug#961138: autodep8 uses host APT packages to generate dependencies for pkg-r-autopkgtest tests
+Message-ID: <20200520160747.y47gepkvp42k4tbl@elgar.kardiogramm.net>
+
+Package: autodep8
+Version: 0.16
+Severity: normal
+
+The autodep8 generator for pkg-r-autopkgtest uses APT lists to determine
+which R packages from DESCRIPTION exist in Debian. autodep8 is run
+outside the test runner, not inside it, so this makes the behaviour
+dependant on the packages available to the test runner host.
+
+Here's the code that introduced this approach:
+https://salsa.debian.org/ci-team/autodep8/-/merge_requests/10
+
+It all works when the autopkgtest runner has approximately the same
+packages available as the release under test, but that's not always the
+case.
+
+I noticed that the r-bioc-hdf5 package's test misses a dependency on
+r-cranc-bit64 when the test is run from an older stable release that
+predates this package.
+
+I don't know how else you can solve this particular problem, though...
+
+SR
+
+From ginggs at debian.org  Mon May 25 07:32:25 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 May 2020 09:32:25 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24253.46433.173016.143067@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>
+
+Hi All
+
+Thanks everyone for doing all the hundreds of uploads that were needed
+for this combined transition.
+All rebuilds for r-api-bioc3.11 are done [1] and there's one
+outstanding FTBFS on a release architecture for r-api-4.0 [2].
+
+Now there are a handful of autopkgtest regressions [3] that need to be
+resolved before migration can happen.
+
+As usual, please avoid uploads unrelated to this transition, they
+would likely delay it and require supplementary work from the release
+managers.
+
+Regards
+Graham
+
+[1] https://release.debian.org/transitions/html/r-api-bioc-3.11.html
+[2] https://release.debian.org/transitions/html/r-api-4.0.html
+[3] https://qa.debian.org/excuses.php?package=r-base
+
+From andreas at an3as.eu  Mon May 25 09:29:54 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 May 2020 11:29:54 +0200
+Subject: Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)
+In-Reply-To: <20200525092148.GF25190@an3as.eu>
+References: <159039737897.25558.17854156157424087902.reportbug@localhost> <20200525092148.GF25190@an3as.eu>
+Message-ID: <20200525092954.GG25190@an3as.eu>
+
+Hi,
+
+On Mon, May 25, 2020 at 11:21:48AM +0200, Andreas Tille wrote:
+> The issue is actually not causes by routine-update but rather
+> by dh-update-R that regenerates all Depends automatically but
+> does not respect non-R dependencies we injected for instance
+> to provide JS files.
+
+As a workaround I'm usially adding a comment
+
+   # <dh-update-R>do not delete this</dh-update-R>
+
+but that's for sure no acceptable solution.  Gordon (or somebody else)
+do you have some spare cycles to make sure dh-update-R will rewrite only
+the R Dependencies and leave other Depends we added manually alone?
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon May 25 11:09:57 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 May 2020 13:09:57 +0200
+Subject: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)
+In-Reply-To: <159040141005.5720.11070986205216846196.reportbug@localhost>
+References: <159040141005.5720.11070986205216846196.reportbug@localhost>
+Message-ID: <20200525110957.GH25190@an3as.eu>
+
+Hi,
+
+there is a series of build failures connected to missing r-cran-haven.
+Formerly r-cran-sjlabelled dependend from r-cran-haven - and IMHO that
+should remain that way:
+
+r-cran-sjlabelled(master) $ grep haven R/* | grep -i required
+R/as_label.R:        stop("Package 'haven' required for this function. Please install it.")
+R/get_na.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/remove_labels.R:      stop("Package 'haven' required for this function. Please install it.")
+R/remove_labels.R:    stop("Package 'haven' required for this function. Please install it.")
+R/set_labels.R:          stop("Package 'haven' required for this function. Please install it.")
+R/set_na.R:    stop("Package 'haven' required for this function. Please install it.")
+R/write.R:    stop("Package 'haven' required for this function. Please install it.")
+R/zap_labels.R:    stop("Package 'haven' required for this function. Please install it.")
+
+I think it is just wrong that DESCRIPTION of sjlabelled just
+
+   Suggests: haven (>= 1.1.2)
+
+I don't understand the difference between Depends and Imports in R
+DESCRIPTION files but both are translated to Debian Depends - and this
+should be used here.
+
+Kind regards
+
+     Andreas.
+
+On Mon, May 25, 2020 at 01:10:10PM +0300, Adrian Bunk wrote:
+> Source: r-cran-sjplot
+> Version: 2.8.3-2
+> Severity: serious
+> 
+> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-sjplot/5625656/log.gz
+> 
+> ...
+> > library(testthat)
+> > library(sjPlot)
+> > 
+> > if (length(strsplit(packageDescription("sjPlot")$Version, "\\.")[[1]]) > 3) {
+> +   Sys.setenv("RunAllsjPlotTests" = "yes")
+> + }
+> > 
+> > test_check("sjPlot")
+> ── 1. Error: (unknown) (@test-plot_model_std.R#15)  ────────────────────────────
+> Package 'haven' required for this function. Please install it.
+> Backtrace:
+>  1. sjmisc::to_factor(efc, e42dep, c172code, c161sex)
+>  2. sjmisc:::to_fac_helper(.dat[[i]], add.non.labelled, ref.lvl)
+>  5. sjlabelled::set_labels(...)
+>  6. sjlabelled:::set_labels_helper(...)
+> 
+> ══ testthat results  ═══════════════════════════════════════════════════════════
+> [ OK: 2 | SKIPPED: 0 | WARNINGS: 12 | FAILED: 1 ]
+> ...
+> 
+> 
+> r-cran-sjlabelled no longer depends on r-cran-haven.
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From d.luedecke at uke.de  Mon May 25 12:46:00 2020
+From: d.luedecke at uke.de (=?utf-8?q?Daniel_L=C3=BCdecke?=)
+Date: Mon, 25 May 2020 14:46:00 +0200
+Subject: AW: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)
+In-Reply-To: <20200525110957.GH25190@an3as.eu>
+References: <159040141005.5720.11070986205216846196.reportbug@localhost> <20200525110957.GH25190@an3as.eu>
+Message-ID: <007001d63292$71ec8bb0$55c5a310$@uke.de>
+
+Suggesting the package 'haven' is correct, because it's only used conditionally now. That change was intentional, to reduce package dependencies. See also current sjlablled on CRAN (https://cran.r-project.org/web/packages/sjlabelled/index.html).
+
+Best
+Daniel
+
+-----Ursprüngliche Nachricht-----
+Von: Andreas Tille [mailto:andreas at an3as.eu] 
+Gesendet: Montag, 25. Mai 2020 13:10
+An: Adrian Bunk <bunk at debian.org>; 961498 at bugs.debian.org; 961419 at bugs.debian.org; debian-r at lists.debian.org; Daniel Lüdecke <d.luedecke at uke.de>
+Betreff: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)
+
+Hi,
+
+there is a series of build failures connected to missing r-cran-haven.
+Formerly r-cran-sjlabelled dependend from r-cran-haven - and IMHO that should remain that way:
+
+r-cran-sjlabelled(master) $ grep haven R/* | grep -i required
+R/as_label.R:        stop("Package 'haven' required for this function. Please install it.")
+R/get_na.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/read.R:    stop("Package 'haven' required for this function. Please install it.")
+R/remove_labels.R:      stop("Package 'haven' required for this function. Please install it.")
+R/remove_labels.R:    stop("Package 'haven' required for this function. Please install it.")
+R/set_labels.R:          stop("Package 'haven' required for this function. Please install it.")
+R/set_na.R:    stop("Package 'haven' required for this function. Please install it.")
+R/write.R:    stop("Package 'haven' required for this function. Please install it.")
+R/zap_labels.R:    stop("Package 'haven' required for this function. Please install it.")
+
+I think it is just wrong that DESCRIPTION of sjlabelled just
+
+   Suggests: haven (>= 1.1.2)
+
+I don't understand the difference between Depends and Imports in R DESCRIPTION files but both are translated to Debian Depends - and this should be used here.
+
+Kind regards
+
+     Andreas.
+
+On Mon, May 25, 2020 at 01:10:10PM +0300, Adrian Bunk wrote:
+> Source: r-cran-sjplot
+> Version: 2.8.3-2
+> Severity: serious
+> 
+> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-sjplot/5
+> 625656/log.gz
+> 
+> ...
+> > library(testthat)
+> > library(sjPlot)
+> > 
+> > if (length(strsplit(packageDescription("sjPlot")$Version, 
+> > "\\.")[[1]]) > 3) {
+> +   Sys.setenv("RunAllsjPlotTests" = "yes") }
+> > 
+> > test_check("sjPlot")
+> ── 1. Error: (unknown) (@test-plot_model_std.R#15)  
+> ──────────────────────────── Package 'haven' required for this function. Please install it.
+> Backtrace:
+>  1. sjmisc::to_factor(efc, e42dep, c172code, c161sex)  2. 
+> sjmisc:::to_fac_helper(.dat[[i]], add.non.labelled, ref.lvl)  5. 
+> sjlabelled::set_labels(...)  6. sjlabelled:::set_labels_helper(...)
+> 
+> ══ testthat results  
+> ═══════════════════════════════════════════════════════════
+> [ OK: 2 | SKIPPED: 0 | WARNINGS: 12 | FAILED: 1 ] ...
+> 
+> 
+> r-cran-sjlabelled no longer depends on r-cran-haven.
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+--
+http://fam-tille.de
+
+--
+
+_____________________________________________________________________
+
+Universitätsklinikum Hamburg-Eppendorf; Körperschaft des öffentlichen Rechts; Gerichtsstand: Hamburg | www.uke.de
+Vorstandsmitglieder: Prof. Dr. Burkhard Göke (Vorsitzender), Joachim Prölß, Prof. Dr. Blanche Schwappach-Pignataro, Marya Verdel
+_____________________________________________________________________
+
+SAVE PAPER - THINK BEFORE PRINTING
+
+From npatra974 at gmail.com  Tue May 26 06:01:32 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Tue, 26 May 2020 11:31:32 +0530
+Subject: [RFS] r-cran-sjplot and r-cran-sjmisc
+Message-ID: <CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>
+
+Hi,
+Currently r-cran-sjplot, r-cran-sjmisc have failing tests, and have RC bugs - #961498 and  #961499 filed against them.
+I have fixed these and pushed my changes to the team repos here[1] and here[2].
+Need review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-sjplot
+[2]: https://salsa.debian.org/r-pkg-team/r-cran-sjmisc
+
+Thanks and regards
+Nilesh
+
+From andreas at an3as.eu  Tue May 26 07:56:01 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 26 May 2020 09:56:01 +0200
+Subject: Re: [RFS] r-cran-sjplot and r-cran-sjmisc
+In-Reply-To: <CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>
+References: <CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>
+Message-ID: <20200526075601.GT25190@an3as.eu>
+
+Hi Nilesh,
+
+same as for r-cran-sjplot:  In commit d2c969cc you move a file out of
+help system to doc and I'm not convinced that this is not dangerous.
+
+Kind regards
+
+     Andreas.
+
+On Tue, May 26, 2020 at 11:31:32AM +0530, Nilesh Patra wrote:
+> Hi,
+> Currently r-cran-sjplot, r-cran-sjmisc have failing tests, and have RC bugs
+> - #961498 and  #961499 filed against them.
+> I have fixed these and pushed my changes to the team repos here[1] and
+> here[2].
+> Need review and sponsorship.
+> 
+> [1]: https://salsa.debian.org/r-pkg-team/r-cran-sjplot
+> [2]: https://salsa.debian.org/r-pkg-team/r-cran-sjmisc
+> 
+> Thanks and regards
+> Nilesh
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Tue May 26 08:46:35 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Tue, 26 May 2020 14:16:35 +0530
+Subject: Re: [RFS] r-cran-sjplot and r-cran-sjmisc
+In-Reply-To: <20200526075601.GT25190@an3as.eu>
+References: <CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com> <20200526075601.GT25190@an3as.eu>
+Message-ID: <CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>
+
+Hi
+
+On Tue, 26 May 2020, 13:26 Andreas Tille, <andreas at an3as.eu> wrote:
+
+> Hi Nilesh,
+>
+>
+>
+> same as for r-cran-sjplot:  In commit d2c969cc you move a file out of
+>
+> help system to doc and I'm not convinced that this is not dangerous.
+
+Ahh, righty!
+I didn't realise the help system thing while moving it, and this was indeed a careless mistake. Apologies.
+
+I've reverted the commit and pushed for both the packages.
+Please consider to upload.
+
+Regards,
+Nilesh
+
+>
+
+From andreas at an3as.eu  Tue May 26 09:43:41 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 26 May 2020 11:43:41 +0200
+Subject: Re: [RFS] r-cran-sjplot and r-cran-sjmisc
+In-Reply-To: <CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>
+References: <CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com> <20200526075601.GT25190@an3as.eu> <CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>
+Message-ID: <20200526094341.GU25190@an3as.eu>
+
+Hi Nilesh,
+
+On Tue, May 26, 2020 at 02:16:35PM +0530, Nilesh Patra wrote:
+> > same as for r-cran-sjplot:  In commit d2c969cc you move a file out of
+> > help system to doc and I'm not convinced that this is not dangerous.
+> 
+> Ahh, righty!
+> I didn't realise the help system thing while moving it, and this was indeed
+> a careless mistake. Apologies.
+
+Really no need to apologise - mistakes just happen.
+ 
+> I've reverted the commit and pushed for both the packages.
+> Please consider to upload.
+
+First package uploaded, second just building.  Thanks a lot for your
+contribution
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue May 26 11:55:52 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 26 May 2020 06:55:52 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com> <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>
+Message-ID: <24269.968.695937.187924@rob.eddelbuettel.com>
+
+On 25 May 2020 at 09:32, Graham Inggs wrote:
+| Hi All
+| 
+| Thanks everyone for doing all the hundreds of uploads that were needed
+| for this combined transition.
+| All rebuilds for r-api-bioc3.11 are done [1] and there's one
+| outstanding FTBFS on a release architecture for r-api-4.0 [2].
+
+The r-cran-treescape build bug has been there for several days, hopefully
+someone can take care of this.  Also, the package is archived at CRAN, we
+could look into retiring it. And as the issue is on ppc64el, it may be long
+double related: we now configure without long double support there after
+consultation with upstream.
+ 
+| Now there are a handful of autopkgtest regressions [3] that need to be
+| resolved before migration can happen.
+
+These issues are likely self-imposed: looking at r-cran-etm and r-cran-sp we
+see clean sheets at CRAN for a variety of releases:
+  https://cloud.r-project.org/web/checks/check_results_etm.html  # etm
+  https://cloud.r-project.org/web/checks/check_results_sp.html   # sp
+
+The simplest may be to fix the apparent false positive on the package side.
+
+We're almost there. Nice work everyone!
+
+| As usual, please avoid uploads unrelated to this transition, they
+| would likely delay it and require supplementary work from the release
+| managers.
+
+Updates and package changes pile up. Eventually packages need to be built and
+updated again.
+
+Best, Dirk
+
+| Regards
+| Graham
+| 
+| 
+| [1] https://release.debian.org/transitions/html/r-api-bioc-3.11.html
+| [2] https://release.debian.org/transitions/html/r-api-4.0.html
+| [3] https://qa.debian.org/excuses.php?package=r-base
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From npatra974 at gmail.com  Wed May 27 17:19:36 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Wed, 27 May 2020 22:49:36 +0530
+Subject: [RFS] r-bioc-graph
+Message-ID: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>
+
+Hi,
+Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.
+I have fixed this and pushed my changes to the team repo here[1].
+
+Need review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-bioc-graph
+
+Thanks and regards
+Nilesh
+
+From daissi at debian.org  Wed May 27 17:58:15 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Wed, 27 May 2020 19:58:15 +0200
+Subject: Re: [RFS] r-bioc-graph
+In-Reply-To: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>
+References: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>
+Message-ID: <CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>
+
+Hi Nilesh,
+
+Le mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Hi,
+> Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.
+> I have fixed this and pushed my changes to the team repo here[1].
+> Need review and sponsorship.
+>
+
+Thanks for #961591 !!!
+
+I don't understand why you moved some test-deps to deps ?
+
+Best,
+Dylan
+
+From npatra974 at gmail.com  Wed May 27 18:04:30 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Wed, 27 May 2020 23:34:30 +0530
+Subject: Re: [RFS] r-bioc-graph
+In-Reply-To: <CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>
+References: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com> <CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>
+Message-ID: <CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>
+
+On Wed, 27 May 2020, 23:28 Dylan Aïssi, <daissi at debian.org> wrote:
+
+> Hi Nilesh,
+>
+>
+>
+> Le mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> >
+>
+> > Hi,
+>
+> > Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.
+>
+> > I have fixed this and pushed my changes to the team repo here[1].
+>
+> > Need review and sponsorship.
+>
+> >
+>
+>
+>
+> Thanks for #961591 !!!
+>
+>
+>
+> I don't understand why you moved some test-deps to deps ?
+
+The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.
+This passed on my local machine though. Since I wanted to be sure, I moved this there.
+
+Was this incorrect to do?
+Please do let me know.
+
+Regards,
+Nilesh
+
+From daissi at debian.org  Wed May 27 20:12:42 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Wed, 27 May 2020 22:12:42 +0200
+Subject: Re: [RFS] r-bioc-graph
+In-Reply-To: <CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>
+References: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com> <CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com> <CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>
+Message-ID: <CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>
+
+Hi,
+
+Le mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.
+> This passed on my local machine though. Since I wanted to be sure, I moved this there.
+
+There is probably a bug on the salsa-ci side, because both tests
+passed on my computer. Let's skip salsa-ci for now.
+
+I have moved back these dependencies to test-deps and I have updated
+your patch (str_replace_all --> gsub) to not add a new dependency.
+
+You probably already noticed, the debian/test/control files for R
+packages require a lot of manual work to keep the list of test-deps
+up-to-date. Because I don't want to do this manually, I moved the code
+to tests these packages into pkg-r-autopkgtest. The list of test-deps
+is automatically generated at run time from the DESCRIPTION file.
+Currently, it is enabled only for bioconductor packages, if there is
+no big bug with this transition, we will be able to remove the
+debian/test/control files and to enable this for other R packages.
+
+Thanks again for #961591.
+
+Best,
+Dylan
+
+From npatra974 at gmail.com  Wed May 27 20:35:01 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Thu, 28 May 2020 02:05:01 +0530
+Subject: Re: [RFS] r-bioc-graph
+In-Reply-To: <CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>
+References: <CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com> <CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com> <CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com> <CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>
+Message-ID: <CAJN19284VGCORmDuAdKk7nUiP62gAgoeZAusq099HKgG4w472w@mail.gmail.com>
+
+On Thu, 28 May 2020, 01:43 Dylan Aïssi, <daissi at debian.org> wrote:
+
+> Hi,
+>
+>
+>
+> Le mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> >
+>
+> > The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.
+>
+> > This passed on my local machine though. Since I wanted to be sure, I moved this there.
+>
+>
+>
+> There is probably a bug on the salsa-ci side, because both tests
+>
+> passed on my computer. Let's skip salsa-ci for now.
+
+Ahh, alrighty.
+
+> I have moved back these dependencies to test-deps and I have updated
+>
+> your patch (str_replace_all --> gsub) to not add a new dependency.
+
+That's good, and makes sense. I didn't know about this, possibly because I don't speak R :P
+
+> You probably already noticed, the debian/test/control files for R
+>
+> packages require a lot of manual work to keep the list of test-deps
+>
+> up-to-date. Because I don't want to do this manually, I moved the code
+>
+> to tests these packages into pkg-r-autopkgtest. The list of test-deps
+>
+> is automatically generated at run time from the DESCRIPTION file
+
+That's nice!
+
+> Currently, it is enabled only for bioconductor packages, if there is
+>
+> no big bug with this transition, we will be able to remove the
+>
+> debian/test/control files and to enable this for other R packages.
+
+Got it, thanks for the explanation.
+
+> Thanks again for #961591.
+
+:)
+And thanks a lot for letting me have this upload (i.e. my name on d/ch for this upload)
+
+Kind regards,
+Nilesh
+>
+
+From rodrigorsdc at gmail.com  Thu May 28 02:04:19 2020
+From: rodrigorsdc at gmail.com (Rodrigo Carvalho)
+Date: Wed, 27 May 2020 23:04:19 -0300
+Subject: ITP: r-cran-gmp -- Multiple Precision Arithmetic
+Message-ID: <CAOeBkLpwKe6Zrtt-_H2nrPM0hjkKTyrFJ+WdMFqga0h285TGZg@mail.gmail.com>
+
+Package: wnpp
+Severity: wishlist
+Owner: Rodrigo Carvalho <rodrigorsdc at gmail.com>
+
+* Package name    : r-cran-gmp
+  Version         : 0.5-14
+  Upstream Author : Antoine Lucas, Immanuel Scholz, Rainer Boehme,
+Sylvain Jasson, Martin Maechler
+* URL             : https://cran.r-project.org/package=gmp
+* License         : GPL-2 | GPL-3
+  Programming Lang: R and C++
+  Description     : Multiple Precision Arithmetic
+
+Multiple Precision Arithmetic (big integers and rationals,
+ prime number tests, matrix computation), "arithmetic without limitations"
+ using the C library GMP (GNU Multiple Precision Arithmetic).
+
+It will be maintained by R Packages Team
+
+From daissi at debian.org  Thu May 28 08:10:54 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 28 May 2020 10:10:54 +0200
+Subject: Bug#961709: lintian: Warn if R binary packages don't depend on virtual r-api-* package
+Message-ID: <CA+6XHwSqDR4Wr29TKxwxDk6X1VqSizkwaQvV-TBYC61TsrCe=g@mail.gmail.com>
+
+Package: lintian
+Version: 2.77.1
+Severity: wishlist
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi,
+
+I just saw a R binary package (r-cran-isospec) with wrong dependencies
+(bug not yet opened). Lintian doesn't warn about a problem in its
+dependencies, so it would be cool to add a new warning (maybe
+"missing-dependency-on-r-api") to warn if any R binary packages (
+r-{cran|bioc|other}-* ) don't depend at least to a virtual r-api-*
+package.
+
+Thanks
+
+Best,
+Dylan
+
+From rodrigorsdc at gmail.com  Thu May 28 16:48:09 2020
+From: rodrigorsdc at gmail.com (Rodrigo Carvalho)
+Date: Thu, 28 May 2020 13:48:09 -0300
+Subject: [RFS] r-cran-gmp
+Message-ID: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>
+
+Hi R team,
+
+I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].
+
+Could you review and sponsor?
+
+thanks
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-gmp
+[2] https://mentors.debian.net/package/r-cran-gmp
+
+From edd at debian.org  Thu May 28 16:58:09 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 28 May 2020 11:58:09 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com> <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>
+Message-ID: <24271.60833.357065.62828@rob.eddelbuettel.com>
+
+Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.
+
+Which is lovely as upstream is already at work with 4.0.1 which will drop on
+June 6 [1]. I'll likely make an rc upload.
+
+Special thanks to Graham for calmly pulling a few strings here and there.
+
+Cheers, Dirk
+
+[1] Details as always at http://developer.r-project.org/, and just to be
+plain it is of course _not_ a binary change needing an API change.
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From daissi at debian.org  Fri May 29 05:51:54 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 29 May 2020 07:51:54 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24271.60833.357065.62828@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com> <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com> <24271.60833.357065.62828@rob.eddelbuettel.com>
+Message-ID: <CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>
+
+Hi,
+
+Le jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :
+>
+> Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.
+>
+
+\o/
+
+Both transition trackers (r-api-4.0 and r-api-bioc-3.11) were not very
+useful to determine the order to update Bioconductor packages.
+Some Bioconductor packages were green in the first tracker but red in
+the second one, because they were automatically rebuild without an
+upgrade.
+So, it was not possible to use the first tracker to follow the upgrade
+order of Bioconductor packages.
+And the second tracker did not consider the r-api-4.0 rebuild order,
+so some packages in the first levels were not buildable until the
+dependency chain was ready for r-api-4.0.
+
+Next time there is a transition with these two r-api virtual packages,
+we should use a unique ben file for them, something like this:
+
+title = "r-api";
+is_affected = .depends ~ "r-api-3.5" | .depends ~ "r-api-4.0" |
+.depends ~ "r-api-bioc-3.10" | .depends ~ "r-api-bioc-3.11";
+is_good = .depends ~ "r-api-4.0" | .depends ~ "r-api-bioc-3.11";
+is_bad = .depends ~ "r-api-3.5" | .depends ~ "r-api-bioc-3.10";
+
+Best,
+Dylan
+
+From daissi at debian.org  Fri May 29 06:45:47 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 29 May 2020 08:45:47 +0200
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>
+Message-ID: <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>
+
+Hi Rodrigo,
+
+Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :
+>
+> I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].
+>
+
+Thanks for your work!
+
+It seems you did some work manually (I had to fix some stuff, please
+have a look at the git repo). Next time, you could use
+"prepare_missing_cran_package" and "itp_from_debian_dir " from the
+package dh-r, they will save your time ;-)
+
+Unfortunately, the package cannot be uploaded to NEW because there is
+a problem in the license. The package is under the GPL-1 (no precision
+of the version = v1), but the file src/factorize.cc seems to be under
+GPL-3+. These licenses are not compatible, you should clarify this
+with upstream devs.
+
+Best,
+Dylan
+
+From edd at debian.org  Fri May 29 12:34:44 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 29 May 2020 07:34:44 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com> <24253.46433.173016.143067@rob.eddelbuettel.com> <CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com> <24271.60833.357065.62828@rob.eddelbuettel.com> <CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>
+Message-ID: <24273.356.192970.853111@rob.eddelbuettel.com>
+
+On 29 May 2020 at 07:51, Dylan Aïssi wrote:
+| Hi,
+| 
+| Le jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :
+| >
+| > Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.
+| >
+| 
+| \o/
+| 
+| Both transition trackers (r-api-4.0 and r-api-bioc-3.11) were not very
+| useful to determine the order to update Bioconductor packages.
+| Some Bioconductor packages were green in the first tracker but red in
+| the second one, because they were automatically rebuild without an
+| upgrade.
+| So, it was not possible to use the first tracker to follow the upgrade
+| order of Bioconductor packages.
+| And the second tracker did not consider the r-api-4.0 rebuild order,
+| so some packages in the first levels were not buildable until the
+| dependency chain was ready for r-api-4.0.
+| 
+| Next time there is a transition with these two r-api virtual packages,
+| we should use a unique ben file for them, something like this:
+| 
+| title = "r-api";
+| is_affected = .depends ~ "r-api-3.5" | .depends ~ "r-api-4.0" |
+| .depends ~ "r-api-bioc-3.10" | .depends ~ "r-api-bioc-3.11";
+| is_good = .depends ~ "r-api-4.0" | .depends ~ "r-api-bioc-3.11";
+| is_bad = .depends ~ "r-api-3.5" | .depends ~ "r-api-bioc-3.10";
+
+Good point. Probably worth trying if the next transition once again has BioC
+within a week (which is common).
+
+Nobody knows what will be in R 4.1.0 next year. With some luck we may get by
+without a transition (a la R 3.6.0).
+
+Cheers, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri May 29 12:44:20 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 29 May 2020 07:44:20 -0500
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>
+Message-ID: <24273.932.973463.750953@rob.eddelbuettel.com>
+
+On 29 May 2020 at 08:45, Dylan Aïssi wrote:
+| Hi Rodrigo,
+| 
+| Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :
+| >
+| > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].
+| >
+| 
+| Thanks for your work!
+| 
+| It seems you did some work manually (I had to fix some stuff, please
+| have a look at the git repo). Next time, you could use
+| "prepare_missing_cran_package" and "itp_from_debian_dir " from the
+| package dh-r, they will save your time ;-)
+| 
+| Unfortunately, the package cannot be uploaded to NEW because there is
+| a problem in the license. The package is under the GPL-1 (no precision
+| of the version = v1), but the file src/factorize.cc seems to be under
+| GPL-3+. These licenses are not compatible, you should clarify this
+| with upstream devs.
+
+That should be no problem. Martin Maechler (now CC'ed) of the R Core team is
+one of the upstream authors. And he is the one who persuaded Ross and Robert
+in 1993 (IIRC) to make their then-little-known "R" a part of the GNU Project.
+
+Per https://github.com/cran/gmp/blob/master/ChangeLog and
+https://github.com/cran/gmp/blob/master/Changes the commits started in 2004
+so I guess it already meant GPL (>= 2) but we cannot know for sure. But I
+expect this to be fixed quite easily.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From rodrigorsdc at gmail.com  Fri May 29 16:22:32 2020
+From: rodrigorsdc at gmail.com (Rodrigo Carvalho)
+Date: Fri, 29 May 2020 13:22:32 -0300
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <24273.932.973463.750953@rob.eddelbuettel.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com> <24273.932.973463.750953@rob.eddelbuettel.com>
+Message-ID: <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>
+
+Hi Dylan
+
+Thanks for the review.
+
+I'm a layman on license stuff, but I'm reading the GPL version 1 [1]
+and I found out a stretch that says:
+
+"Each version is given a distinguishing version number.  If the Program
+specifies a version number of the license which applies to it and "any
+later version", you have the option of following the terms and conditions
+either of that version or of any later version published by the Free
+Software Foundation.  If the Program does not specify a version number of
+the license, you may choose any version ever published by the Free Software
+Foundation."
+
+Note the part:
+
+"If the Program does not specify a version number of
+the license, you may choose any version ever published by the Free Software
+Foundation"
+
+Neither DESCRIPTION file nor source files specify GPL version 1, they are just
+licensed as GPL without specifying a version, except the factorize.cc file which
+is GPL-3. So, we can choose the GPL-3 for the whole program, right?
+
+What do you think?
+
+thanks,
+
+Rodrigo
+
+[1] https://www.gnu.org/licenses/old-licenses/gpl-1.0.html
+
+Em sex., 29 de mai. de 2020 às 09:44, Dirk Eddelbuettel
+<edd at debian.org> escreveu:
+>
+>
+> On 29 May 2020 at 08:45, Dylan Aïssi wrote:
+> | Hi Rodrigo,
+> |
+> | Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :
+> | >
+> | > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].
+> | >
+> |
+> | Thanks for your work!
+> |
+> | It seems you did some work manually (I had to fix some stuff, please
+> | have a look at the git repo). Next time, you could use
+> | "prepare_missing_cran_package" and "itp_from_debian_dir " from the
+> | package dh-r, they will save your time ;-)
+> |
+> | Unfortunately, the package cannot be uploaded to NEW because there is
+> | a problem in the license. The package is under the GPL-1 (no precision
+> | of the version = v1), but the file src/factorize.cc seems to be under
+> | GPL-3+. These licenses are not compatible, you should clarify this
+> | with upstream devs.
+>
+> That should be no problem. Martin Maechler (now CC'ed) of the R Core team is
+> one of the upstream authors. And he is the one who persuaded Ross and Robert
+> in 1993 (IIRC) to make their then-little-known "R" a part of the GNU Project.
+>
+> Per https://github.com/cran/gmp/blob/master/ChangeLog and
+> https://github.com/cran/gmp/blob/master/Changes the commits started in 2004
+> so I guess it already meant GPL (>= 2) but we cannot know for sure. But I
+> expect this to be fixed quite easily.
+>
+> Dirk
+>
+> --
+> http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From maechler at r-project.org  Fri May 29 19:59:44 2020
+From: maechler at r-project.org (Martin Maechler)
+Date: Fri, 29 May 2020 21:59:44 +0200
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com> <24273.932.973463.750953@rob.eddelbuettel.com> <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>
+Message-ID: <CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>
+
+On Fri, May 29, 2020 at 6:25 PM Rodrigo Carvalho <rodrigorsdc at gmail.com> wrote:
+>
+> Hi Dylan
+>
+> Thanks for the review.
+>
+> I'm a layman on license stuff, but I'm reading the GPL version 1 [1]
+> and I found out a stretch that says:
+>
+> "Each version is given a distinguishing version number.  If the Program
+> specifies a version number of the license which applies to it and "any
+> later version", you have the option of following the terms and conditions
+> either of that version or of any later version published by the Free
+> Software Foundation.  If the Program does not specify a version number of
+> the license, you may choose any version ever published by the Free Software
+> Foundation."
+>
+> Note the part:
+>
+> "If the Program does not specify a version number of
+> the license, you may choose any version ever published by the Free Software
+> Foundation"
+>
+> Neither DESCRIPTION file nor source files specify GPL version 1, they are just
+> licensed as GPL without specifying a version, except the factorize.cc file which
+> is GPL-3. So, we can choose the GPL-3 for the whole program, right?
+>
+> What do you think?
+>
+> thanks,
+>
+> Rodrigo
+
+Thank you, Rodrigo.    Yes, I also checked the package (which was
+already "there" when I joined as co-author), and it always
+consistently uses  "GPL" without any version.
+
+I've got to know my co-authors, notably the maintainer Antoine Lucas
+quite a bit and I'm 100% sure that they never cared about licence
+numbers; (similar to myself) they are mathematicians and researchers
+who want to do science and development for the public good, and not
+spend time on boring lawyer's stuff  (;-)..   Of course, I could ask
+the other authors -- if it's ok to change to say GPL 3, and modify the
+sources accordingly, but honestly, I'd be very happy to know we could
+keep  'GPL' unversioned indeed with the intent to say
+- we want GPL,
+- but we don't want to deal with details, nor have to spend time on
+learning why we should care more ..
+
+Best,
+Martin
+>
+> [1] https://www.gnu.org/licenses/old-licenses/gpl-1.0.html
+>
+> Em sex., 29 de mai. de 2020 às 09:44, Dirk Eddelbuettel
+> <edd at debian.org> escreveu:
+> >
+> >
+> > On 29 May 2020 at 08:45, Dylan Aïssi wrote:
+> > | Hi Rodrigo,
+> > |
+> > | Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :
+> > | >
+> > | > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].
+> > | >
+> > |
+> > | Thanks for your work!
+> > |
+> > | It seems you did some work manually (I had to fix some stuff, please
+> > | have a look at the git repo). Next time, you could use
+> > | "prepare_missing_cran_package" and "itp_from_debian_dir " from the
+> > | package dh-r, they will save your time ;-)
+> > |
+> > | Unfortunately, the package cannot be uploaded to NEW because there is
+> > | a problem in the license. The package is under the GPL-1 (no precision
+> > | of the version = v1), but the file src/factorize.cc seems to be under
+> > | GPL-3+. These licenses are not compatible, you should clarify this
+> > | with upstream devs.
+> >
+> > That should be no problem. Martin Maechler (now CC'ed) of the R Core team is
+> > one of the upstream authors. And he is the one who persuaded Ross and Robert
+> > in 1993 (IIRC) to make their then-little-known "R" a part of the GNU Project.
+> >
+> > Per https://github.com/cran/gmp/blob/master/ChangeLog and
+> > https://github.com/cran/gmp/blob/master/Changes the commits started in 2004
+> > so I guess it already meant GPL (>= 2) but we cannot know for sure. But I
+> > expect this to be fixed quite easily.
+> >
+> > Dirk
+> >
+> > --
+> > http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+>
+
+-- 
+Martin Maechler,
+Seminar fuer Statistik, ETH Zurich
+
+From tille at debian.org  Sat May 30 05:21:44 2020
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 30 May 2020 07:21:44 +0200
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com> <24273.932.973463.750953@rob.eddelbuettel.com> <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com> <CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>
+Message-ID: <20200530052144.GR1820@an3as.eu>
+
+On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:
+> (similar to myself) they are mathematicians and researchers
+> who want to do science and development for the public good, and not
+> spend time on boring lawyer's stuff  (;-)..
+
+I'm physicist and can perfectly understand.  I'm doing Debian packaging
+since more than 20 years and can confirm that editing the copyright file
+is the most boring stuff in this.  Wait, even more boring is getting a
+package rejected by ftpmaster due to a license conflict is even more
+boring.  This is what will happen as Dylan said in his mail.  So if you
+ask me changing just the number takes less time than writing lots of
+e-mails about it. ;-)
+
+Kind regards and thanks a lot for your open words
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+

@@ -1,0 +1,322 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2022-03",
+  "messages": [
+    {
+      "id": "msg-ca21da72a3e5",
+      "message_id": "<Yi2imqP9nfP/ZdPY@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-03-13T07:51:54Z",
+      "subject": "One failing test in latest version of PKI",
+      "subject_clean": "One failing test in latest version of PKI",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Simon,\n\nwhen trying to build PKI for Debian I stumbled upon the following\nerror of the test suite:\n\nLC_ALL=C.UTF-8 R --no-save < tests/test.R\n\n    > ## on some systems using abs paths can break 100 byte limit\n    > ## so we must do this in the tempdir\n    > wd <- getwd()\n    > td <- tempdir()\n    > setwd(td)\n    > tar(fn, basename(tmpfn), \"none\")\n    > PKI.sign.tar(fn, key)\n    Error: (converted from warning) input string '�7zXZ' cannot be translated to UTF-8, is it valid in 'ANSI_X3.4-1968'?\n    Execution halted\n\nDo you have any idea how to fix this?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Simon,\n\nwhen trying to build PKI for Debian I stumbled upon the following\nerror of the test suite:\n\nLC_ALL=C.UTF-8 R --no-save < tests/test.R\n\n    > ## on some systems using abs paths can break 100",
+      "thread_id": "thread-ca21da72a3e5",
+      "thread_depth": 0,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-db16cf4dad79",
+      "message_id": "<f64a8006-3942-f344-bf51-e0e2e1a6aa0d@riseup.net>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "67813008573bc475426fe6cce49c87d56d13c301cfa2101192e200ce2e214a82",
+      "date": "2022-03-13T08:41:30Z",
+      "subject": "Re: One failing test in latest version of PKI",
+      "subject_clean": "One failing test in latest version of PKI",
+      "in_reply_to": "<Yi2imqP9nfP/ZdPY@an3as.eu>",
+      "references": [
+        "<Yi2imqP9nfP/ZdPY@an3as.eu>"
+      ],
+      "body_plain": "Hi Simon,\n\nOn 3/13/22 1:21 PM, Andreas Tille wrote:\n> when trying to build PKI for Debian I stumbled upon the following\n> error of the test suite:\n\nSomeone reported a patch for it, please consider applying it upstream (if deemed appropriate)\n\n\tPatch: https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1007172;filename=r-cran-pki_0.1-9-1ubuntu1.debdiff;msg=5\n\tBug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1007172\n\t\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Simon,\n\nOn 3/13/22 1:21 PM, Andreas Tille wrote:\n> when trying to build PKI for Debian I stumbled upon the following\n> error of the test suite:\n\nSomeone reported a patch for it, please consider app",
+      "thread_id": "thread-ca21da72a3e5",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-4e97756d7179",
+      "message_id": "<95560448-1C3C-415F-84D6-4664DB40C82C@R-project.org>",
+      "from_name": "Simon Urbanek",
+      "from_email_hash": "705f3de0e3c2b9f04cdf5bffe2a443ba65faf9835e4db2d3a43af10255d82925",
+      "date": "2022-03-13T20:37:45Z",
+      "subject": "Re: One failing test in latest version of PKI",
+      "subject_clean": "One failing test in latest version of PKI",
+      "in_reply_to": "<f64a8006-3942-f344-bf51-e0e2e1a6aa0d@riseup.net>",
+      "references": [
+        "<Yi2imqP9nfP/ZdPY@an3as.eu>",
+        "<f64a8006-3942-f344-bf51-e0e2e1a6aa0d@riseup.net>"
+      ],
+      "body_plain": "Nilesh,\n\nthanks, unfortunately, this has not been reported in the tracker (https://github.com/s-u/PKI/issues) so this is the first time I see it - I'll try to tease out the info from those threads and fix it.\n\nThanks,\nSimon\n\n> On Mar 13, 2022, at 9:41 PM, Nilesh Patra <nilesh at riseup.net> wrote:\n> \n> Hi Simon,\n> \n> On 3/13/22 1:21 PM, Andreas Tille wrote:\n>> when trying to build PKI for Debian I stumbled upon the following\n>> error of the test suite:\n> \n> Someone reported a patch for it, please consider applying it upstream (if deemed appropriate)\n> \n> \tPatch: https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1007172;filename=r-cran-pki_0.1-9-1ubuntu1.debdiff;msg=5\n> \tBug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1007172\n> \t\n> \n> Regards,\n> Nilesh\n>",
+      "body_snippet": "Nilesh,\n\nthanks, unfortunately, this has not been reported in the tracker (https://github.com/s-u/PKI/issues) so this is the first time I see it - I'll try to tease out the info from those threads and",
+      "thread_id": "thread-ca21da72a3e5",
+      "thread_depth": 2,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-9d484c657a83",
+      "message_id": "<CEAC4DFE-AD0B-4272-A046-751CABB8404D@R-project.org>",
+      "from_name": "Simon Urbanek",
+      "from_email_hash": "705f3de0e3c2b9f04cdf5bffe2a443ba65faf9835e4db2d3a43af10255d82925",
+      "date": "2022-03-13T23:36:56Z",
+      "subject": "Re: One failing test in latest version of PKI",
+      "subject_clean": "One failing test in latest version of PKI",
+      "in_reply_to": "<Yi2imqP9nfP/ZdPY@an3as.eu>",
+      "references": [
+        "<Yi2imqP9nfP/ZdPY@an3as.eu>"
+      ],
+      "body_plain": "Andreas,\n\nthanks for alerting me about the OpenSSL issue - this is now fixed upstream:\nhttps://github.com/s-u/PKI/commit/af3cbcafa13322d170e8ef993b919f57decf45e9\n\nAs for other error you see - that comes from\nrawToChar(magic[1:5]) == \"\\xfd7zXZ\"\nI don't have any details on your setup (I cannot replicate) so I don't know why it happens (maybe that notorious C.UTF-8 locale again?), but should be easily fixed by avoiding strings.\nhttps://github.com/s-u/PKI/issues/27\nPlease let me know if the latest version works for you.\nhttps://rforge.net/PKI/snapshot/PKI_0.1-11.tar.gz\n\nCheers,\nSimon\n\n> On Mar 13, 2022, at 8:51 PM, Andreas Tille <andreas at an3as.eu> wrote:\n> \n> Hi Simon,\n> \n> when trying to build PKI for Debian I stumbled upon the following\n> error of the test suite:\n> \n> LC_ALL=C.UTF-8 R --no-save < tests/test.R\n> \n>> ## on some systems using abs paths can break 100 byte limit\n>> ## so we must do this in the tempdir\n>> wd <- getwd()\n>> td <- tempdir()\n>> setwd(td)\n>> tar(fn, basename(tmpfn), \"none\")\n>> PKI.sign.tar(fn, key)\n>    Error: (converted from warning) input string '�7zXZ' cannot be translated to UTF-8, is it valid in 'ANSI_X3.4-1968'?\n>    Execution halted\n> \n> Do you have any idea how to fix this?\n> \n> Kind regards\n> \n>      Andreas.\n> \n> -- \n> http://fam-tille.de\n>",
+      "body_snippet": "Andreas,\n\nthanks for alerting me about the OpenSSL issue - this is now fixed upstream:\nhttps://github.com/s-u/PKI/commit/af3cbcafa13322d170e8ef993b919f57decf45e9\n\nAs for other error you see - that com",
+      "thread_id": "thread-ca21da72a3e5",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-347668ab65a0",
+      "message_id": "<Yi+b1Yu4drY/krqc@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2022-03-14T19:47:33Z",
+      "subject": "Re: One failing test in latest version of PKI",
+      "subject_clean": "One failing test in latest version of PKI",
+      "in_reply_to": "<CEAC4DFE-AD0B-4272-A046-751CABB8404D@R-project.org>",
+      "references": [
+        "<Yi2imqP9nfP/ZdPY@an3as.eu>",
+        "<CEAC4DFE-AD0B-4272-A046-751CABB8404D@R-project.org>"
+      ],
+      "body_plain": "Hi Simon,\n\nthanks a lot for your cooperation.\n\nAm Mon, Mar 14, 2022 at 12:36:56PM +1300 schrieb Simon Urbanek:\n> thanks for alerting me about the OpenSSL issue - this is now fixed upstream:\n> https://github.com/s-u/PKI/commit/af3cbcafa13322d170e8ef993b919f57decf45e9\n\nGreat!\n \n> As for other error you see - that comes from\n> rawToChar(magic[1:5]) == \"\\xfd7zXZ\"\n> I don't have any details on your setup (I cannot replicate) so I don't know why it happens (maybe that notorious C.UTF-8 locale again?), but should be easily fixed by avoiding strings.\n> https://github.com/s-u/PKI/issues/27\n\nIt turned out that success and failure are quite dependant from the CI\nenvironment.  Luckily the most relevant one for the migration of the\nDebian package succeeds. ;-)  For sure it would be less irritating if it\nwork also for me locally so I'd be happy that you are working on this.\n\n> Please let me know if the latest version works for you.\n> https://rforge.net/PKI/snapshot/PKI_0.1-11.tar.gz\n\nI admit my packaging workflow is very closely bound to CRAN releases.\nit seems that the 0.1-11 release did not hit CRAN yet.  IMHO the fix for\nthe OpenSSL issue is worth a soonish release in any case so I'd be happy\nif you push the current status to CRAN and I try to build what I can\nfind there.\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Simon,\n\nthanks a lot for your cooperation.\n\nAm Mon, Mar 14, 2022 at 12:36:56PM +1300 schrieb Simon Urbanek:\n> thanks for alerting me about the OpenSSL issue - this is now fixed upstream:\n> https://",
+      "thread_id": "thread-ca21da72a3e5",
+      "thread_depth": 2,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-705a8bc23549",
+      "message_id": "<YjYxwPb9RpdZOuUV@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2022-03-19T19:40:48Z",
+      "subject": "qqconf fails to build on !x86",
+      "subject_clean": "qqconf fails to build on !x86",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Eric,\n\nqqconf[1] fails to build on !x86 with gcc-12 compiler due to\n\"mm_malloc.h\" not being present on all architectures.\n\nI have a small patch to fix this, which you can find here[2]\nCould you please consider to apply it upstream?\n\n[1]: https://cran.r-project.org/web/packages/qqconf/index.html\n[2]: https://salsa.debian.org/r-pkg-team/r-cran-qqconf/-/blob/master/debian/patches/fix-compilation-on-non-x86.patch\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Eric,\n\nqqconf[1] fails to build on !x86 with gcc-12 compiler due to\n\"mm_malloc.h\" not being present on all architectures.\n\nI have a small patch to fix this, which you can find here[2]\nCould you ple",
+      "thread_id": "thread-705a8bc23549",
+      "thread_depth": 0,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-e8745531a974",
+      "message_id": "<YjY8j0V46VpT5nK3@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2022-03-19T20:26:55Z",
+      "subject": "r-cran-simplermarkdown needs a source-only upload",
+      "subject_clean": "r-cran-simplermarkdown needs a source-only upload",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dirk,\n\nas the QA page[1] says,\n\n| Migration status for r-cran-simplermarkdown (- to 0.0.4-1): BLOCKED: Rejected/violates migration policy/introduces a regression\n| Issues preventing migration:\n|\tNot built on buildd: arch all binaries uploaded by edd, a new source-only upload is needed to allow migration\n\nCan you do a source-only upload?\n\n[1]: https://qa.debian.org/excuses.php?package=r-cran-simplermarkdown\n\nThanks.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Dirk,\n\nas the QA page[1] says,\n\n| Migration status for r-cran-simplermarkdown (- to 0.0.4-1): BLOCKED: Rejected/violates migration policy/introduces a regression\n| Issues preventing migration:\n|\tNot b",
+      "thread_id": "thread-e8745531a974",
+      "thread_depth": 0,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-89947cdecb4a",
+      "message_id": "<YjZA8K1O1jHdAQZA@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2022-03-19T20:45:36Z",
+      "subject": "bslib and rmarkdown update",
+      "subject_clean": "bslib and rmarkdown update",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Andreas and others,\n\nThe new version of rmarkdown really needs r-cran-bslib\nwhich uses some google fonts[details here], and might trigger rejects from FTP masters.\n\nI suggest to strip these off for now, and upload to new. We need markdown soonish.\nSome functionality might be broken, but atleast we will have it working.\n\nWhat do you think?\n\n[details here]: https://lists.debian.org/debian-r/2022/02/msg00016.html\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Andreas and others,\n\nThe new version of rmarkdown really needs r-cran-bslib\nwhich uses some google fonts[details here], and might trigger rejects from FTP masters.\n\nI suggest to strip these off for no",
+      "thread_id": "thread-89947cdecb4a",
+      "thread_depth": 0,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-6a7e5ab7cbb0",
+      "message_id": "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2022-03-19T21:02:44Z",
+      "subject": "Re: qqconf fails to build on !x86",
+      "subject_clean": "qqconf fails to build on !x86",
+      "in_reply_to": "<CAO=DOOa83yFOjOQr=kn5E4aDnCsT+v-EeNO=6NduyG6imxfN0Q@mail.gmail.com>",
+      "references": [
+        "<YjYxwPb9RpdZOuUV@debian>",
+        "<CAO=DOOa83yFOjOQr=kn5E4aDnCsT+v-EeNO=6NduyG6imxfN0Q@mail.gmail.com>"
+      ],
+      "body_plain": "On 3/20/22 2:22 AM, Eric Weine wrote:\n> Thanks so much for pointing this out!\n>\n> Would you like to make a PR on our github repo (listed on [1]) just so that the fix can be attributed to you? Otherwise, I’m happy to do so myself.\n\nDone, https://github.com/eweine/qqconf/pull/22\n\nPlease consider checking.\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 3/20/22 2:22 AM, Eric Weine wrote:\n> Thanks so much for pointing this out!\n>\n> Would you like to make a PR on our github repo (listed on [1]) just so that the fix can be attributed to you? Otherwis",
+      "thread_id": "thread-6a7e5ab7cbb0",
+      "thread_depth": 0,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-d93ce58f2f75",
+      "message_id": "<CAO=DOObCJ0f0EAK17SeDbe0MhS6DK8jdef-DkxS=a1k3_Zx_CA@mail.gmail.com>",
+      "from_name": "Eric Weine",
+      "from_email_hash": "7d598f2094c147953f89cf766de4e01fd815a857cf4961f4138ff57dff6f719a",
+      "date": "2022-03-19T21:10:32Z",
+      "subject": "Re: qqconf fails to build on !x86",
+      "subject_clean": "qqconf fails to build on !x86",
+      "in_reply_to": "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>",
+      "references": [
+        "<YjYxwPb9RpdZOuUV@debian>",
+        "<CAO=DOOa83yFOjOQr=kn5E4aDnCsT+v-EeNO=6NduyG6imxfN0Q@mail.gmail.com>",
+        "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>"
+      ],
+      "body_plain": "Thanks! I’m away from my computer currently but will review ASAP. \n\nEric. \n\nOn Sat, Mar 19, 2022 at 2:02 PM Nilesh Patra <nilesh at nileshpatra.info> wrote:\n\n> On 3/20/22 2:22 AM, Eric Weine wrote:\n>\n> > Thanks so much for pointing this out!\n>\n> >\n>\n> > Would you like to make a PR on our github repo (listed on [1]) just so that the fix can be attributed to you? Otherwise, I’m happy to do so myself.\n>\n>\n>\n> Done, https://github.com/eweine/qqconf/pull/22\n>\n>\n>\n> Please consider checking.\n>\n>\n>\n> Regards,\n>\n> Nilesh",
+      "body_snippet": "Thanks! I’m away from my computer currently but will review ASAP. \n\nEric. \n\nOn Sat, Mar 19, 2022 at 2:02 PM Nilesh Patra <nilesh at nileshpatra.info> wrote:\n\n> On 3/20/22 2:22 AM, Eric Weine wrote:\n>\n",
+      "thread_id": "thread-6a7e5ab7cbb0",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-40abbd3c47ee",
+      "message_id": "<YjZX83ZG+oqJ6eoK@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-03-19T22:23:47Z",
+      "subject": "Re: bslib and rmarkdown update",
+      "subject_clean": "bslib and rmarkdown update",
+      "in_reply_to": "<YjZA8K1O1jHdAQZA@debian>",
+      "references": [
+        "<YjZA8K1O1jHdAQZA@debian>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nAm Sun, Mar 20, 2022 at 02:15:36AM +0530 schrieb Nilesh Patra:\n> Andreas and others,\n> \n> The new version of rmarkdown really needs r-cran-bslib\n> which uses some google fonts[details here], and might trigger rejects from FTP masters.\n> \n> I suggest to strip these off for now, and upload to new. We need markdown soonish.\n> Some functionality might be broken, but atleast we will have it working.\n> \n> What do you think?\n\nI think this is a sensible way to get some progress somehow.\n\nThanks a lot for working on this\n\n      Andreas.\n\n> [details here]: https://lists.debian.org/debian-r/2022/02/msg00016.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nAm Sun, Mar 20, 2022 at 02:15:36AM +0530 schrieb Nilesh Patra:\n> Andreas and others,\n> \n> The new version of rmarkdown really needs r-cran-bslib\n> which uses some google fonts[details here",
+      "thread_id": "thread-89947cdecb4a",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-da900ad745d6",
+      "message_id": "<DAFB9C33-3ADD-4008-AB19-C49E7E9984E6@riseup.net>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "67813008573bc475426fe6cce49c87d56d13c301cfa2101192e200ce2e214a82",
+      "date": "2022-03-21T11:16:23Z",
+      "subject": "Re: r-cran-simplermarkdown needs a source-only upload",
+      "subject_clean": "r-cran-simplermarkdown needs a source-only upload",
+      "in_reply_to": "<YjY8j0V46VpT5nK3@debian>",
+      "references": [
+        "<YjY8j0V46VpT5nK3@debian>"
+      ],
+      "body_plain": "And you again did a binary upload instead of source-only... Unfortunately it's still stalled.\nCan you fix it.\n\nOn 20 March 2022 1:56:55 am IST, Nilesh Patra <nilesh at debian.org> wrote:\n>Dirk,\n>\n>as the QA page[1] says,\n>\n>| Migration status for r-cran-simplermarkdown (- to 0.0.4-1): BLOCKED: Rejected/violates migration policy/introduces a regression\n>| Issues preventing migration:\n>|\tNot built on buildd: arch all binaries uploaded by edd, a new source-only upload is needed to allow migration\n>\n>Can you do a source-only upload?\n>\n>[1]: https://qa.debian.org/excuses.php?package=r-cran-simplermarkdown\n>\n>Thanks.",
+      "body_snippet": "And you again did a binary upload instead of source-only... Unfortunately it's still stalled.\nCan you fix it.\n\nOn 20 March 2022 1:56:55 am IST, Nilesh Patra <nilesh at debian.org> wrote:\n>Dirk,\n>\n>as ",
+      "thread_id": "thread-e8745531a974",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-c88f8f065b21",
+      "message_id": "<CAO=DOOb7prXib8wZM64dFhfg_NVhxYqNz_PZ3EP+Sp==H9dDfw@mail.gmail.com>",
+      "from_name": "Eric Weine",
+      "from_email_hash": "7d598f2094c147953f89cf766de4e01fd815a857cf4961f4138ff57dff6f719a",
+      "date": "2022-03-26T19:10:09Z",
+      "subject": "Re: qqconf fails to build on !x86",
+      "subject_clean": "qqconf fails to build on !x86",
+      "in_reply_to": "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>",
+      "references": [
+        "<YjYxwPb9RpdZOuUV@debian>",
+        "<CAO=DOOa83yFOjOQr=kn5E4aDnCsT+v-EeNO=6NduyG6imxfN0Q@mail.gmail.com>",
+        "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>"
+      ],
+      "body_plain": "Hey Nilesh,\n\nv1.2.2 of qqconf was pushed to CRAN and it should be available there very soon (if not already). I have merged your changes into the master branch. \n\nThanks again for pointing this out and let me know if you have any other issues!\n\nEric. \n\nOn Sat, Mar 19, 2022 at 4:02 PM Nilesh Patra <nilesh at nileshpatra.info> wrote:\n\n> On 3/20/22 2:22 AM, Eric Weine wrote:\n>\n> > Thanks so much for pointing this out!\n>\n> >\n>\n> > Would you like to make a PR on our github repo (listed on [1]) just so that the fix can be attributed to you? Otherwise, I’m happy to do so myself.\n>\n>\n>\n> Done, https://github.com/eweine/qqconf/pull/22\n>\n>\n>\n> Please consider checking.\n>\n>\n>\n> Regards,\n>\n> Nilesh",
+      "body_snippet": "Hey Nilesh,\n\nv1.2.2 of qqconf was pushed to CRAN and it should be available there very soon (if not already). I have merged your changes into the master branch. \n\nThanks again for pointing this out an",
+      "thread_id": "thread-6a7e5ab7cbb0",
+      "thread_depth": 1,
+      "month": "2022-03"
+    },
+    {
+      "id": "msg-71d8679a6099",
+      "message_id": "<YkDQRBuy7mbZkoZu@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2022-03-27T20:59:48Z",
+      "subject": "Re: qqconf fails to build on !x86",
+      "subject_clean": "qqconf fails to build on !x86",
+      "in_reply_to": "<CAO=DOOb7prXib8wZM64dFhfg_NVhxYqNz_PZ3EP+Sp==H9dDfw@mail.gmail.com>",
+      "references": [
+        "<YjYxwPb9RpdZOuUV@debian>",
+        "<CAO=DOOa83yFOjOQr=kn5E4aDnCsT+v-EeNO=6NduyG6imxfN0Q@mail.gmail.com>",
+        "<29c3dd6b-2065-f486-2812-5248b0db864c@nileshpatra.info>",
+        "<CAO=DOOb7prXib8wZM64dFhfg_NVhxYqNz_PZ3EP+Sp==H9dDfw@mail.gmail.com>"
+      ],
+      "body_plain": "On Sat, Mar 26, 2022 at 02:10:09PM -0500, Eric Weine wrote:\n> Hey Nilesh,\n> \n> v1.2.2 of qqconf was pushed to CRAN and it should be available there very\n> soon (if not already). I have merged your changes into the master branch.\n\nThanks, I had uploaded this latest version to the archive.\n \n> Thanks again for pointing this out and let me know if you have any other\n> issues!\n\nSure and thanks a lot for the quick action!\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Sat, Mar 26, 2022 at 02:10:09PM -0500, Eric Weine wrote:\n> Hey Nilesh,\n> \n> v1.2.2 of qqconf was pushed to CRAN and it should be available there very\n> soon (if not already). I have merged your cha",
+      "thread_id": "thread-6a7e5ab7cbb0",
+      "thread_depth": 2,
+      "month": "2022-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-ca21da72a3e5",
+      "subject": "One failing test in latest version of PKI",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra",
+        "Simon Urbanek"
+      ],
+      "started": "2022-03-13T07:51:54Z",
+      "last_reply": "2022-03-14T19:47:33Z",
+      "root_message_id": "msg-ca21da72a3e5"
+    },
+    {
+      "id": "thread-705a8bc23549",
+      "subject": "qqconf fails to build on !x86",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2022-03-19T19:40:48Z",
+      "last_reply": "2022-03-19T19:40:48Z",
+      "root_message_id": "msg-705a8bc23549"
+    },
+    {
+      "id": "thread-e8745531a974",
+      "subject": "r-cran-simplermarkdown needs a source-only upload",
+      "message_count": 2,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2022-03-19T20:26:55Z",
+      "last_reply": "2022-03-21T11:16:23Z",
+      "root_message_id": "msg-e8745531a974"
+    },
+    {
+      "id": "thread-89947cdecb4a",
+      "subject": "bslib and rmarkdown update",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2022-03-19T20:45:36Z",
+      "last_reply": "2022-03-19T22:23:47Z",
+      "root_message_id": "msg-89947cdecb4a"
+    },
+    {
+      "id": "thread-6a7e5ab7cbb0",
+      "subject": "qqconf fails to build on !x86",
+      "message_count": 4,
+      "participants": [
+        "Eric Weine",
+        "Nilesh Patra"
+      ],
+      "started": "2022-03-19T21:02:44Z",
+      "last_reply": "2022-03-27T20:59:48Z",
+      "root_message_id": "msg-6a7e5ab7cbb0"
+    }
+  ]
+}

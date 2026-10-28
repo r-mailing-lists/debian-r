@@ -1,0 +1,152 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2026-01",
+  "messages": [
+    {
+      "id": "msg-5c42f164008e",
+      "message_id": "<5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>",
+      "from_name": "Pieter Lenaerts",
+      "from_email_hash": "073d3c7f969b9e54b799e50e0b5b1da2113d0ac38aa02fcccf47bbd05502c8d8",
+      "date": "2026-01-07T21:13:29Z",
+      "subject": "access request",
+      "subject_clean": "access request",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Debian R Package Maintainers,\n\nI was helping out updating package pyrle, which has some R package test \ndependencies. Turned out those were outdated, so I've gone and updated \nthem. Builds of my package updates run fine locally.\n\nI would like to push my updates to packages r-bioc-s4vectors and\nr-bioc-biocgenerics and need some review / guidance and sponsorship.\n\nI will contact the last uploaders for that.\n\nSo, I pushed the \"request access\" button in salsa. Thanks for giving me \npermission to push or guidance on what to do.\n\nBr,\n\nPieter",
+      "body_snippet": "Dear Debian R Package Maintainers,\n\nI was helping out updating package pyrle, which has some R package test \ndependencies. Turned out those were outdated, so I've gone and updated \nthem. Builds of my ",
+      "thread_id": "thread-5c42f164008e",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-4922a32c1c37",
+      "message_id": "<aV7_3rN03Y8v6x_C@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-01-08T00:52:46Z",
+      "subject": "Re: access request",
+      "subject_clean": "access request",
+      "in_reply_to": "<5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>",
+      "references": [
+        "<5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>"
+      ],
+      "body_plain": "Le Wed, Jan 07, 2026 at 10:13:29PM +0100, Pieter Lenaerts a écrit :\n> \n> I was helping out updating package pyrle, which has some R package test\n> dependencies. Turned out those were outdated, so I've gone and updated them.\n> Builds of my package updates run fine locally.\n> \n> I would like to push my updates to packages r-bioc-s4vectors and\n> r-bioc-biocgenerics and need some review / guidance and sponsorship.\n\nHi Pieter,\n\nthank you for offerring your help,\n\nI do not see R dependencies for pyrle, so I assume you are talking about\nreverse-dependencies?\n\nThe whole set of Bioconductor packages in Debian has not been updated yet\nbecause we are at the middle of removing some non-supported architectures for\nthe whole r-cran-* and r-bioc-* package set.  Most likely we are going to skip\nthe Bioconductor 2025 October 30 release entierly until the next one in April\n(no need to stack two painful transitions in such a short time).\n\nAlso, we update the packages with the routine-update script; have you used it?\n\nhttps://salsa.debian.org/debian/routine-update\n\nIf you have general interest for R packages your contribution is welcome and\nI and others will be pleased to give you guidance.\n\nOtherwise, I am sorry if it wastes the time you invested in r-bioc-s4vectors\nand r-bioc-biocgenerics but I would prefer to not touch the packages for \nthe moment.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Le Wed, Jan 07, 2026 at 10:13:29PM +0100, Pieter Lenaerts a écrit :\n> \n> I was helping out updating package pyrle, which has some R package test\n> dependencies. Turned out those were outdated, so I've",
+      "thread_id": "thread-5c42f164008e",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-2793f47f0d47",
+      "message_id": "<90c4cd00db6c28ec7944b12a784a7d7c@disroot.org>",
+      "from_name": "Pieter Lenaerts",
+      "from_email_hash": "073d3c7f969b9e54b799e50e0b5b1da2113d0ac38aa02fcccf47bbd05502c8d8",
+      "date": "2026-01-08T08:06:39Z",
+      "subject": "Re: access request",
+      "subject_clean": "access request",
+      "in_reply_to": "<aV7_3rN03Y8v6x_C@kumo.plessy.net>",
+      "references": [
+        "<5b25c5e7-c603-4f90-a334-5aea060ae2e3@disroot.org>",
+        "<aV7_3rN03Y8v6x_C@kumo.plessy.net>"
+      ],
+      "body_plain": "Op 2026-01-08 01:52, schreef Charles Plessy:\n\n> I do not see R dependencies for pyrle, so I assume you are talking\n> about\n>\n> reverse-dependencies?\n\nPlease refer to \nhttps://salsa.debian.org/python-team/packages/pyrle/-/blob/master/debian/control?ref_type=heads#L22\n\nTests contain R scripts: \nhttps://salsa.debian.org/python-team/packages/pyrle/-/tree/master/tests?ref_type=heads\n\n> The whole set of Bioconductor packages in Debian has not been updated\n> yet\n> because we are at the middle of removing some non-supported\n> architectures for\n> the whole r-cran-* and r-bioc-* package set.  Most likely we are going\n> to skip\n> the Bioconductor 2025 October 30 release entierly until the next one in\n> April\n>\n> (no need to stack two painful transitions in such a short time).\n\nOkay, does that means the R team are planning to continue maintenance on \nr-bioc-s4vectors and r-bioc-genomicranges? That was our main concern \nwith adding those packages to the build deps of pyrle to cover more \ntests.\n\n> Also, we update the packages with the routine-update script; have you\n> used it?\n>\n>\n> https://salsa.debian.org/debian/routine-update\n\nI haven't, will look into it, thanks.\n\n> If you have general interest for R packages your contribution is\n> welcome and\n>\n> I and others will be pleased to give you guidance.\n\nSorry, I was just looking into pyrle build deps.\n\n> Otherwise, I am sorry if it wastes the time you invested in\n> r-bioc-s4vectors\n> and r-bioc-biocgenerics but I would prefer to not touch the packages\n> for\n>\n> the moment.\n\nThat is no problem at all. They were indeed very routine updates and I \ncan use whatever practice presents itself.\n\nI think it would be a good idea to provide some more information on \nhttps://wiki.debian.org/Teams/r-pkg-team, but then again, I chose to \nstart by doing some work and then reach out on the mailing list. I could \nhave reversed that.\n\nNo harm done! If you can just confirm that the R team will pick up those \ndependencies, then we're fine with pyrle depending on them I think.\n\nBest regards,\n\nPieter",
+      "body_snippet": "Op 2026-01-08 01:52, schreef Charles Plessy:\n\n> I do not see R dependencies for pyrle, so I assume you are talking\n> about\n>\n> reverse-dependencies?\n\nPlease refer to \nhttps://salsa.debian.org/python-t",
+      "thread_id": "thread-5c42f164008e",
+      "thread_depth": 2,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-81e35bc59ab9",
+      "message_id": "<aWCO6EKzOPNldedz@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-01-09T05:15:20Z",
+      "subject": "Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "subject_clean": "[R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "in_reply_to": "<26959.4852.640897.987643@paul.eddelbuettel.com>",
+      "references": [
+        "<CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com>",
+        "<aUyMqJkPHlvtM347@kumo.plessy.net>",
+        "<CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com>",
+        "<26959.4852.640897.987643@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "severity 1120994 normal\ndone\n\nLe Fri, Dec 26, 2025 at 04:57:56PM -0600, Dirk Eddelbuettel a écrit :\n> \n> While I have you both here:  r-cran-bit64 still needs help or we get a big\n> autoremoval wave on Jan 11.  Charles you Dec 12 upload helped but did not\n> unblock this:  https://tracker.debian.org/pkg/r-cran-bit64\n> \n> Do we need to remove the i386 / armhf / s390x binaries from the repo to\n> unblock this?\n\nHi Dirk and Graham,\n\nyes, we need to remove the i386/ armhf / s390x binaries from r-cran-bit64 and\nall its reverse-dependencies from testing to prevent the removal of the other\nbinaries, and this requires the removal of the i386 / armhf / s390x binaries\nfrom unstable.\n\nI reduced the severity of the bug to buy us some time.\n\nI am not sure if I will be allowed to ask the Archive team for a recursive\nremoval, or if I will have to provide the exact list of reverse-dependencies.\nI am working on it.\n\nDirk, I see that some of your packages depend on r-cran-bit64, so in principle\nyou will need to adjust their build-dependencies so that the autobuilders do\nnot produce new i386 / armhf / s390x binaries that can't migrate and will block\nthe other architectures.\n\nAlternatively, you can adopt r-cran-bit64 so that the dependency network of the\nR packages you maintain is more under your control, and then you can decide how\nto deal with the failing tests: solve, ignore, or exclude the failing\narchitecture.  What would you think about this?\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "severity 1120994 normal\ndone\n\nLe Fri, Dec 26, 2025 at 04:57:56PM -0600, Dirk Eddelbuettel a écrit :\n> \n> While I have you both here:  r-cran-bit64 still needs help or we get a big\n> autoremoval wave o",
+      "thread_id": "thread-81e35bc59ab9",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-63218f3390dd",
+      "message_id": "<26977.24648.485335.8129@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-01-09T20:08:40Z",
+      "subject": "Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "subject_clean": "[R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "in_reply_to": "<aWCO6EKzOPNldedz@kumo.plessy.net>",
+      "references": [
+        "<CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com>",
+        "<aUyMqJkPHlvtM347@kumo.plessy.net>",
+        "<CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com>",
+        "<26959.4852.640897.987643@paul.eddelbuettel.com>",
+        "<aWCO6EKzOPNldedz@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 9 January 2026 at 14:15, Charles Plessy wrote:\n| severity 1120994 normal\n| done\n\nIf this is what removed the 'autoremove' threat from two dozen packages, and\nthereby recursively likely a hundred and this goes up the tidyverse, then thank you!\n \n| Le Fri, Dec 26, 2025 at 04:57:56PM -0600, Dirk Eddelbuettel a écrit :\n| > \n| > While I have you both here:  r-cran-bit64 still needs help or we get a big\n| > autoremoval wave on Jan 11.  Charles you Dec 12 upload helped but did not\n| > unblock this:  https://tracker.debian.org/pkg/r-cran-bit64\n| > \n| > Do we need to remove the i386 / armhf / s390x binaries from the repo to\n| > unblock this?\n| \n| Hi Dirk and Graham,\n| \n| yes, we need to remove the i386/ armhf / s390x binaries from r-cran-bit64 and\n| all its reverse-dependencies from testing to prevent the removal of the other\n| binaries, and this requires the removal of the i386 / armhf / s390x binaries\n| from unstable.\n| \n| I reduced the severity of the bug to buy us some time.\n| \n| I am not sure if I will be allowed to ask the Archive team for a recursive\n| removal, or if I will have to provide the exact list of reverse-dependencies.\n| I am working on it.\n\nI once wrote RcppAPT to access the apt API programmatically (but of course\nPython has always done that...). You need libapt-pkg-dev installed to build it.\n\n> RcppAPT::reverseDepends(\"r-cran-bit64\")\n             package version\n1      r-cran-rtweet   4.0.5\n2      r-cran-pillar        \n3  r-cran-data.table   4.0.0\n4    r-cran-collapse        \n5     r-cran-writexl        \n6       r-cran-waldo        \n7       r-cran-vroom        \n8       r-cran-vctrs        \n9      r-cran-tibble        \n10        r-cran-bit   4.0.0\n11    r-cran-rsqlite        \n12    r-cran-rnetcdf        \n13   r-cran-rmariadb        \n14   r-cran-nanotime        \n15  r-cran-nanoarrow        \n16        r-cran-mlr        \n17      r-cran-hdf5r        \n18    r-bioc-ioniser        \n19      r-bioc-rhdf5        \n> \n\n| Dirk, I see that some of your packages depend on r-cran-bit64, so in principle\n| you will need to adjust their build-dependencies so that the autobuilders do\n| not produce new i386 / armhf / s390x binaries that can't migrate and will block\n| the other architectures.\n\nOf those 19 I appear to maintain two, three if we include Suggests.  So are\nyou suggesting I use something like    r-cran-bit64 [!i386 !armhf !s390x]    ?\n\nI was under the impression that was disliked / discouraged ? \n \n| Alternatively, you can adopt r-cran-bit64 so that the dependency network of the\n| R packages you maintain is more under your control, and then you can decide how\n| to deal with the failing tests: solve, ignore, or exclude the failing\n| architecture.\n\nI do not follow. My dependency network of R packages will almost surely\nalmost always be intertwined with what the 'Debian R Team' maintains.  I fail\nto see what adopting bit64 would make different here.  What am I missing?\nCan you rephrase (and I may make a third pot of coffee for the day).\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Charles,\n\nOn 9 January 2026 at 14:15, Charles Plessy wrote:\n| severity 1120994 normal\n| done\n\nIf this is what removed the 'autoremove' threat from two dozen packages, and\nthereby recursively likely",
+      "thread_id": "thread-81e35bc59ab9",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-e7531e10310e",
+      "message_id": "<26977.30344.375131.238909@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-01-09T21:43:36Z",
+      "subject": "Re: [R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "subject_clean": "[R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "in_reply_to": "<26977.24648.485335.8129@paul.eddelbuettel.com>",
+      "references": [
+        "<CAM8zJQtT9uZzvETG8jXtou_ahSKQaKRy0AMpr0TDb36j9b0peA@mail.gmail.com>",
+        "<aUyMqJkPHlvtM347@kumo.plessy.net>",
+        "<CAM8zJQu1Aq_XNugfhDeiczgRGS9UgbDV2sxNGBDbgqMfbw2=fg@mail.gmail.com>",
+        "<26959.4852.640897.987643@paul.eddelbuettel.com>",
+        "<aWCO6EKzOPNldedz@kumo.plessy.net>",
+        "<26977.24648.485335.8129@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "On 9 January 2026 at 14:08, Dirk Eddelbuettel wrote:\n| Of those 19 I appear to maintain two, three if we include Suggests.  So are\n| you suggesting I use something like    r-cran-bit64 [!i386 !armhf !s390x]    ?\n\nAdvantage of having a large enough set of repositories here -- this is\nexactly what I for eg r-cran-rjava:\n\n Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.0), dh-r, automake, \\\n   default-jdk [!arm !hppa !kfreebsd-i386 !kfreebsd-amd64 !hurd-i386] | \\\n   openjdk-10-jdk [!arm !hppa !kfreebsd-i386 !kfreebsd-amd64 !hurd-i386], \\\n   libzstd-dev\n\nBut we would then have to do this for every package in the full recursive\nreverse dependency path of (r-cran-)bit64 ?  That seems like a lot.\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 9 January 2026 at 14:08, Dirk Eddelbuettel wrote:\n| Of those 19 I appear to maintain two, three if we include Suggests.  So are\n| you suggesting I use something like    r-cran-bit64 [!i386 !armhf !",
+      "thread_id": "thread-81e35bc59ab9",
+      "thread_depth": 2,
+      "month": "2026-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-5c42f164008e",
+      "subject": "access request",
+      "message_count": 3,
+      "participants": [
+        "Charles Plessy",
+        "Pieter Lenaerts"
+      ],
+      "started": "2026-01-07T21:13:29Z",
+      "last_reply": "2026-01-08T08:06:39Z",
+      "root_message_id": "msg-5c42f164008e"
+    },
+    {
+      "id": "thread-81e35bc59ab9",
+      "subject": "[R-pkg-team] Bug#1123933: Bug#1123933: r-cran-glmmtmb: autopkgtest regression with r-cran-reformulas 0.4.3-1",
+      "message_count": 3,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2026-01-09T05:15:20Z",
+      "last_reply": "2026-01-09T21:43:36Z",
+      "root_message_id": "msg-81e35bc59ab9"
+    }
+  ]
+}

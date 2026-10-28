@@ -1,0 +1,126 @@
+From andreas at an3as.eu  Thu Feb  1 07:38:44 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 1 Feb 2024 08:38:44 +0100
+Subject: Re: Bug#1061828: r-cran-plotly: Can't create any plots
+In-Reply-To: <e9eb8ae9-5a8c-4927-8421-f399a1ad9926@gmail.com>
+References: <170656061580.3854.842945475583925539.reportbug@debian> <Zbk7Cqxm4DRxWuKW@an3as.eu> <e9eb8ae9-5a8c-4927-8421-f399a1ad9926@gmail.com>
+Message-ID: <ZbtKhDECgZ0rd2Vk@an3as.eu>
+
+Hi again,
+
+Am Tue, Jan 30, 2024 at 08:58:58PM +0100 schrieb Przemysław Kopa:
+> 
+> $ head -n 6 plotly_cran/lib/plotly-main-2.11.1/plotly-latest.min.js
+> /**
+> * plotly.js v2.11.1
+> * Copyright 2012-2022, Plotly, Inc.
+> * All rights reserved.
+> * Licensed under the MIT license
+> */
+
+I've updated plotly.js from upstream[1] to its latest version (2.28.0)
+and hope this is working nicely now (in Debian package 4.10.4+dfsg-2
+just uploaded to unstable).
+
+If you want to make sure the plotly Debian package works always as
+expected I would love if you could try to convince CRAN plotly authors
+to include the uncompressed plotly.js source in their download tarball.
+In Debian compressed JS is considered binary without source.  Thus I
+have to remove the compressed file and fetch the uncompressed one from
+upstream.  Unfortunately I do not do this routinely when upgrading the
+plotly package which caused the observed problem.
+
+In any case thanks for your bug report and the accordin investigation
+   Andreas.
+
+[1] https://github.com/plotly/plotly.js 
+
+-- 
+http://fam-tille.de
+
+From curtis.d at wholeseller.store  Tue Feb  6 15:08:20 2024
+From: curtis.d at wholeseller.store (Deere Curtis)
+Date: Tue, 06 Feb 2024 15:08:20 +0000
+Subject: Inquiry Regarding Product Availability and Delivery Schedule
+Message-ID: <E1rXN3e-00000009K34-2wdC.curtis-d-wholeseller-store@smtp54.i.mail.ru>
+
+Hello Sir/ Madam
+
+I trust this message finds you well. I am writing to inquire about the current availability of Agarwood essential oil in your inventory. Additionally, I would appreciate information regarding the delivery schedule for these product.
+
+Could you kindly provide details on the quantity of Agarwood oil you have in stock and any upcoming deliveries plan? Moreover, I am interested in understanding the lead time for the delivery once an order is placed.
+
+Your prompt response to these queries would be highly valued as it will assist us in planning our procurement process effectively.
+
+Thank you for your attention to this matter.
+
+Best Regards,
+Curtis Deere.
+purchase manager
+tartiera Agarwood essential oil store
+
+From edd at debian.org  Wed Feb 28 01:01:27 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 27 Feb 2024 19:01:27 -0600
+Subject: CRAN Package Matrix update and a possible transition or not
+Message-ID: <26078.34279.366167.931687@rob.eddelbuettel.com>
+
+A couple of days ago, the (effective) Maintainer and rather active developer
+of the Matrix package Mikael Jagan (CC'ed) posted on the r-package-devel list
+(the primary list for R package development) that the upcoming change of
+Matrix 1.7-0, planned for March 11, will be _very midly disruptive_ but only
+to the very small subset of Matrix dependents that _actually use its
+headers_. See the full mail at [1]. The gory detail is that Matrix embeds and
+uses an advanced sparse matrix library (called SuiteSparse) which it updates,
+and the change in headers affects those (and only those!) who compile against
+these headers.
+
+Now, Matrix currently has 1333 packages at CRAN using it [2]. But he lists 15
+(fifteen) of possibly breaking because these are the packages having a
+'LinkingTo: Matrix' [3].  That 1.113 per cent.
+
+It is similar for us. Running a simple `apt-cache rdepends r-cran-matrix | wc -l`
+gets us 145 lines (including headers and meta packages). Call it 140 that a
+transition would cover.
+
+But among the 15 affected only five are in Debian:
+
+  irlba    r-cran-irlba
+  lme4     r-cran-lme4
+  OpenMx   r-cran-openmx
+  TMP      r-cran-tmp
+  bcSeq    r-bioc-bcseq
+  
+One of these is mine (lme4), I can easily produce a sequenced update. I
+suggested we deal with the other _four packages_ by standard bug reports and
+NMUs as needed instead of forcing likely 140 packages through a transition.
+
+Note that is in fact truly different from the past two hickups with Matrix
+transition which happened at the R-only level of caching elements of its OO
+resolution and whatnot hence affecting more package. This time it really is
+compilation, and packages NOT touching the SuiteSparse headers (ie roughly
+135 or so of the 140 Debian packages using Matrix) will not be affected.
+
+That said, I of course defer to the release team. If the feeling is 'eff
+this, transition it is' that is what we do. Whether I think is overkill or
+not is moot.
+
+Feel free to CC me as I am not longer a regular on debian-devel.
+
+Cheers,  Dirk
+
+[1] https://stat.ethz.ch/pipermail/r-package-devel/2024q1/010463.html
+[2] In R:
+    > db <- tools::CRAN_package_db()
+    > matrixrevdep <- tools::package_dependencies("Matrix", reverse=TRUE, db=db)[[1]]
+    > length(matrixrevdep)    # the vector 'matrixrevdep' list all
+    [1] 1333
+    > 
+[3] LinkingTo:, despite its name, is the directive to include the package C
+    headers in the compilation. The 'db' object above allows to us to subset
+    which of the 1333 packages using Matrix also have a LinkingTo
+ 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

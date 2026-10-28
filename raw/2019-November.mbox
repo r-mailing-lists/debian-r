@@ -1,0 +1,122 @@
+From ginggs at debian.org  Sun Nov 10 06:11:25 2019
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 10 Nov 2019 08:11:25 +0200
+Subject: Re: Bug#944310: transition: r-api-bioc-3.10
+Message-ID: <CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>
+
+F.Y.I. A transition tracker has been set up:
+https://release.debian.org/transitions/html/r-api-bioc-3.10.html
+
+Andreas Beckmann wrote:
+> Package: release.debian.org
+> Severity: normal
+> User: release.debian.org at packages.debian.org
+> Usertags: transition
+>
+> Recently someone has started some R transition.
+> I have no clue how this is supposed to work, r-bioc-biocgenerics now
+>   Provides: r-api-bioc-3.10
+> but rebuilding r-bioc-genomeinfodb in sid still generated a dependency
+> on r-api-bioc-3.9 - perhaps the rebuild order must be followed strictly.
+>
+> Please set up a tracker manually, since this is a transition of a
+> virtual package name.
+>
+> Ben file:
+>
+> title = "r-api-bioc-3.10";
+> is_affected = .depends ~ /r-api-bioc/;
+> is_good = .depends ~ "r-api-bioc-3.10";
+> is_bad = .depends ~ "r-api-bioc-3.9";
+
+From daissi at debian.org  Sun Nov 10 15:49:12 2019
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sun, 10 Nov 2019 16:49:12 +0100
+Subject: Re: Bug#944310: transition: r-api-bioc-3.10
+In-Reply-To: <CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>
+References: <CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>
+Message-ID: <CA+6XHwQBjZ_b70gL53jyuoWbbCkUrKXvjDb=PVDNXXe7ghBHzA@mail.gmail.com>
+
+Hi Graham,
+
+Le dim. 10 nov. 2019 à 07:11, Graham Inggs <ginggs at debian.org> a écrit :
+>
+> F.Y.I. A transition tracker has been set up:
+> https://release.debian.org/transitions/html/r-api-bioc-3.10.html
+
+Thanks for this information! Next time, I will start by this.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Thu Nov 14 10:36:23 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 14 Nov 2019 11:36:23 +0100
+Subject: sjPlot: `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now
+Message-ID: <20191114103623.u4av22lbzheduk5y@an3as.eu>
+
+Hi,
+
+when trying to build r-cran-sjplot from Git I get:
+
+...
+* installing *source* package 'sjPlot' ...
+file 'tests/testthat/test-tab_model.R' has the wrong MD5 checksum
+** using staged installation
+** R
+** data
+** inst
+** byte-compile and prepare package for lazy loading
+Error: object 'principal_components' is not exported by 'namespace:performance'
+Execution halted
+ERROR: lazy loading failed for package 'sjPlot'
+...
+
+In r-cran-performance I've found:
+
+NEWS.md:* `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.
+
+OK, so checking ...
+
+r-cran-sjplot(master) $ grep -R principal_components
+R/sjTabItemAnalysis.R:#' @importFrom parameters principal_components
+R/sjTabItemAnalysis.R:    pr <- parameters::principal_components(df, rotation = "varimax")
+NAMESPACE:importFrom(parameters,principal_components)
+
+I wonder why the build seems to refer to performance for
+principal_components while the code says obviously parameters.
+
+Any idea?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Nov 27 16:21:26 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 27 Nov 2019 17:21:26 +0100
+Subject: Source for minimized JS app.min.js in bookdown
+Message-ID: <20191127162126.w3oswqqkrhu2wqaw@an3as.eu>
+
+Hi Yihui Xie,
+
+I intend to package bookdown for Debian (as a predependency for
+rWikiPathways).  Debian considers minimized JS as binary without source
+and thus I need to deliver the source for
+
+   inst/resources/gitbook/js/app.min.js
+
+Unfortunately I have no idea from where it is obtained from and thus I
+fail to meet the requirement to provide it.  Any hint where you got that
+file from?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+

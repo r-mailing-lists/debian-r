@@ -1,0 +1,1247 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2021-10",
+  "messages": [
+    {
+      "id": "msg-8563ae19a081",
+      "message_id": "<AB225856-6754-48C0-B2F1-86403D4912FC@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-09-30T21:45:55Z",
+      "subject": "Re: RFS: r-cran-partitions (NEW)",
+      "subject_clean": "RFS: r-cran-partitions (NEW)",
+      "in_reply_to": "<874ka26mns.fsf@piedmont.edu>",
+      "references": [
+        "<87v92ke9uf.fsf@piedmont.edu>",
+        "<a9ffaa3b-a66b-38fa-4896-11b7158246ed@nileshpatra.info>",
+        "<87sfxnei2h.fsf@piedmont.edu>",
+        "<175f2644-2d7d-af2b-6ea4-4e98aa43e701@nileshpatra.info>",
+        "<874ka26mns.fsf@piedmont.edu>"
+      ],
+      "body_plain": "On 30 September 2021 10:11:47 pm IST, \"Torrance, Douglas\" <dtorrance at piedmont.edu> wrote:\n>On Thu 30 Sep 2021 10:47:16 AM EDT, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n>   I didn't realize this and just made the change based Lintian's [...]\n\nPerfectly understandable.\nI wonder if it makes sense to open a bug report against lintian to not emit this for R packages.\n\n>> We are supposed to take versions as-is with hyphenations, and let debhelper do its job.\n>> If you agree, please ask for a reject, fix the version and I'll re-upload.\n>\n>Sounds good to me!  I've fixed the version for r-cran-partitions in git:\n>https://salsa.debian.org/r-pkg-team/r-cran-partitions\n\nThanks, I will upload once the one in NEW is scraped.\n\n>How do I ask for a reject?  Just send an email to the FTP masters, or is there\n>some official way through the BTS or something?  I haven't been able to find any\n>documentation on how to do this for packages still in the NEW queue...\n\nYou'd have got an email with the subject \"r-cran-partitions_1.10.2+ds-1_amd64.changes is NEW\"\nYou just need to reply all to that email and ask for reject.\n\nAlso, asking on #debian-ftp IRC could be quicker, if you'd like doing so.\n\n>> I also noticed that similar thing has been done in r-cran-sets and r-cran-orthopolynom. But I guess\n>> its a bit too late unfortunately to change them :/\n>> So probably you need to add an epoch at some point in time for these.\n>\n>When would an epoch be necessary?  It seems like the dot/hyphen issues I'm\n>seeing searching through the list archives (e.g., [2]) are in the opposite\n>direction, i.e., upstream uses a dot in a versioned dependency when our\n>package uses a hyphen.\n\nI agree, but it is better to follow standards than not. It otherwise makes tracking the whole thing harder.\nIt has brought more harm than good in the past, when this was done, but admittedly I wasn't in the project back in the day, so hard for me to quote examples.\n\n>I guess my question is, would it be ok to just wait for, e.g., sets 1.1-1 to\n>be released to switch r-cran-sets to use a hyphen?\n\nsets last release was in 2017, after which I don't see any commits on its GitHub mirror, so I'm not sure if a new one with this version would come out anytime soon.\n\nThat said,\nIt looks like r-cran-sets and orthopolynom would mostly be leaf packages, so probably it is just fine for them to be the way as they are now.\nBut please do keep an eye for these in future R packages!\n\n>Thanks for noticing this!\n\nThanks to you for your work!\n\n>[1] https://lists.debian.org/debian-devel/2003/12/msg02332.html\n>[2] https://lists.debian.org/debian-r/2018/06/msg00069.html\n\nNilesh\n-- \nSent from my Android device with K-9 Mail. Please excuse my brevity.",
+      "body_snippet": "On 30 September 2021 10:11:47 pm IST, \"Torrance, Douglas\" <dtorrance at piedmont.edu> wrote:\n>On Thu 30 Sep 2021 10:47:16 AM EDT, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n>   I didn't realize ",
+      "thread_id": "thread-8563ae19a081",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-4791fbcd4392",
+      "message_id": "<YVbEjDkmNjuUjM28@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-01T08:19:24Z",
+      "subject": "Re: RFS: r-cran-partitions (NEW)",
+      "subject_clean": "RFS: r-cran-partitions (NEW)",
+      "in_reply_to": "<874ka26mns.fsf@piedmont.edu>",
+      "references": [
+        "<87v92ke9uf.fsf@piedmont.edu>",
+        "<a9ffaa3b-a66b-38fa-4896-11b7158246ed@nileshpatra.info>",
+        "<87sfxnei2h.fsf@piedmont.edu>",
+        "<175f2644-2d7d-af2b-6ea4-4e98aa43e701@nileshpatra.info>",
+        "<874ka26mns.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Hi,\n\nI'd like to cover only those items not commented by Nilesh (I fully\nagree what he said in his mail).\n\nAm Thu, Sep 30, 2021 at 04:41:47PM +0000 schrieb Torrance, Douglas:\n> On Thu 30 Sep 2021 10:47:16 AM EDT, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n> > I happened to notice that you added a uversionmangle rule to convert \"1.10-2\" to \"1.10.2\"\n> > this is not good, we are not supposed to convert hyphenations into \".\" for R packages,\n> > as this goes counter-productive, for managing dependencies etc.\n> > There has been a consensus on this already in the team.\n> \n> Oops!  I didn't realize this and just made the change based Lintian's\n> hyphen-in-upstream-part-of-debian-changelog-version warning\n\nMay be we should file a bug against lintian that this warning should\nnot be issued (about changelog as well as the one in d/control about\nversioned dependencies).\n\n> and reading that,\n> in R, '-' and '.' are equivalent for sorting version numbers.  It's even\n> mentioned in the old Debian R policy [1] as an option: \"Alternatively, the\n> hyphen in the CRAN version can be translated into a dot yielding `a.b.c-d'.\"\n\nI think the term *old* is the significant part of the statement above\nand it should be more clearly pronounced that it was issued as a \"RFC on\nfirst public *draft*\" which would need a lot of comments - or rather\nsome rewrite since several things are not valid any more (for instance\nalso the \"The Debian source package can in most cases retain the\n<Rpackage> name.\" is discouraged in the pkg-r team since we always use\nthe r-cran- prefix).  Such a document should also point to the\n\n   prepare_missing_cran_package\n\nscript of the dh-r package which simply does the right job to create an\nR package.  I feel some urgency to write down such things ... but well,\nthat's as always with documentation.\n \n> When would an epoch be necessary?\n\nIt would be necessary for package r-cran-pbdzmq (see bug #898037) since\nyou are not the only one who tried to \"enhance\" the versioning scheme\n(there are other examples[3]).  We could fix the version number by using\nan epoch but since this is only the \"last resort\" we are hoping for a\nhigher version bump in those packages (unfortunately these are not\nupdated regularly by upstream).\n\n> It seems like the dot/hyphen issues I'm\n> seeing searching through the list archives (e.g., [2]) are in the opposite\n> direction, i.e., upstream uses a dot in a versioned dependency when our\n> package uses a hyphen.\n\nWe just use the version as choosen by upstream.\n \n> I guess my question is, would it be ok to just wait for, e.g., sets 1.1-1 to\n> be released to switch r-cran-sets to use a hyphen?\n\nAsking for rejection as long as it is not accepted seems the less\ncumbersome choice to me.\n \n> Thanks for noticing this!\n\n+1\n\nKind regards\n\n     Andreas.\n\n \n> [1] https://lists.debian.org/debian-devel/2003/12/msg02332.html\n> [2] https://lists.debian.org/debian-r/2018/06/msg00069.html\n[3] https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/outdated_r-packages.txt\n    (seek for \"do not mangle\")\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'd like to cover only those items not commented by Nilesh (I fully\nagree what he said in his mail).\n\nAm Thu, Sep 30, 2021 at 04:41:47PM +0000 schrieb Torrance, Douglas:\n> On Thu 30 Sep 2021 10:4",
+      "thread_id": "thread-4791fbcd4392",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-3197865d5111",
+      "message_id": "<87zgrt3qqa.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-01T11:54:22Z",
+      "subject": "Re: RFS: r-cran-partitions (NEW)",
+      "subject_clean": "RFS: r-cran-partitions (NEW)",
+      "in_reply_to": "<YVbEjDkmNjuUjM28@an3as.eu>",
+      "references": [
+        "<87v92ke9uf.fsf@piedmont.edu>",
+        "<a9ffaa3b-a66b-38fa-4896-11b7158246ed@nileshpatra.info>",
+        "<87sfxnei2h.fsf@piedmont.edu>",
+        "<175f2644-2d7d-af2b-6ea4-4e98aa43e701@nileshpatra.info>",
+        "<874ka26mns.fsf@piedmont.edu>",
+        "<YVbEjDkmNjuUjM28@an3as.eu>"
+      ],
+      "body_plain": "On Fri 01 Oct 2021 04:19:24 AM EDT, Andreas Tille <andreas at an3as.eu> wrote:\n> I'd like to cover only those items not commented by Nilesh (I fully\n> agree what he said in his mail).\n>\n> Am Thu, Sep 30, 2021 at 04:41:47PM +0000 schrieb Torrance, Douglas:\n>> On Thu 30 Sep 2021 10:47:16 AM EDT, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n>> > I happened to notice that you added a uversionmangle rule to convert \"1.10-2\" to \"1.10.2\"\n>> > this is not good, we are not supposed to convert hyphenations into \".\" for R packages,\n>> > as this goes counter-productive, for managing dependencies etc.\n>> > There has been a consensus on this already in the team.\n>> \n>> Oops!  I didn't realize this and just made the change based Lintian's\n>> hyphen-in-upstream-part-of-debian-changelog-version warning\n>\n> May be we should file a bug against lintian that this warning should\n> not be issued (about changelog as well as the one in d/control about\n> versioned dependencies).\n\nDone: http://bugs.debian.org/995446\n\n>> and reading that,\n>> in R, '-' and '.' are equivalent for sorting version numbers.  It's even\n>> mentioned in the old Debian R policy [1] as an option: \"Alternatively, the\n>> hyphen in the CRAN version can be translated into a dot yielding `a.b.c-d'.\"\n>\n> I think the term *old* is the significant part of the statement above\n> and it should be more clearly pronounced that it was issued as a \"RFC on\n> first public *draft*\" which would need a lot of comments - or rather\n> some rewrite since several things are not valid any more (for instance\n> also the \"The Debian source package can in most cases retain the\n> <Rpackage> name.\" is discouraged in the pkg-r team since we always use\n> the r-cran- prefix).  Such a document should also point to the\n>\n>    prepare_missing_cran_package\n>\n> script of the dh-r package which simply does the right job to create an\n> R package.  I feel some urgency to write down such things ... but well,\n> that's as always with documentation.\n\nI took the liberty of starting a simple \"Quick Start\" section on the team\nwiki page with some of this information:\nhttps://wiki.debian.org/Teams/r-pkg-team#Quick_Start\n\nDoug",
+      "body_snippet": "On Fri 01 Oct 2021 04:19:24 AM EDT, Andreas Tille <andreas at an3as.eu> wrote:\n> I'd like to cover only those items not commented by Nilesh (I fully\n> agree what he said in his mail).\n>\n> Am Thu, Sep ",
+      "thread_id": "thread-4791fbcd4392",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-40e26ff269ea",
+      "message_id": "<87wnmw50zg.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-01T13:27:41Z",
+      "subject": "Re: Bug#995446: lintian: don't emit hyphen-in-upstream-part-of-debian-changelog-version for R packages",
+      "subject_clean": "Bug#995446: lintian: don't emit hyphen-in-upstream-part-of-debian-changelog-version for R packages",
+      "in_reply_to": "<CAFHYt54Q7s8SFUrdqn3OJNi4vABn-Q2JvEm2bC1r74KZ20Yjgg@mail.gmail.com>",
+      "references": [
+        "<8735pl55kh.fsf@piedmont.edu>",
+        "<CAFHYt54Q7s8SFUrdqn3OJNi4vABn-Q2JvEm2bC1r74KZ20Yjgg@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri 01 Oct 2021 08:51:28 AM EDT, Felix Lechner <felix.lechner at lease-up.com> wrote:\n> Hi Douglas,\n>\n> On Fri, Oct 1, 2021 at 4:51 AM Torrance, Douglas <dtorrance at piedmont.edu> wrote:\n> > Would it be possible to avoid emitting this warning for R packages?\n>\n>\n> Yes! We have a new facility for the purpose of granting summary\n> exemptions to package groups. It is called a screen. [1]\n\nGreat!\n\n> As for your broader issue, I would actually prefer if version strings\n> were totally unrestricted, but am in the minority. [2] I will revisit\n> the details and then install a screen for you, unless we can get rid\n> of the tag altogether.\n>\n> > most R source packages can be identified easily because they generally start\n> > with \"r-\".\n>\n>\n> We do not like to group based on installable names or source names.\n> Those are a last resort because they enshrine namespaces that do not\n> exist otherwise. On average, they also do not work well for language\n> families where names vary (although it may for R). Can you think of\n> another way to identify R packages?\n\nPossibly having dh-r and/or r-base-dev in Build-Depends?  I'm still relatively\nnew to R packaging, though, so I'm Cc'ing the Debian R list for further input.\n\nThanks!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Fri 01 Oct 2021 08:51:28 AM EDT, Felix Lechner <felix.lechner at lease-up.com> wrote:\n> Hi Douglas,\n>\n> On Fri, Oct 1, 2021 at 4:51 AM Torrance, Douglas <dtorrance at piedmont.edu> wrote:\n> > Would",
+      "thread_id": "thread-40e26ff269ea",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-2ea4db0be83a",
+      "message_id": "<9176abc7f401011537f20e497839033863a4e956.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-10-01T13:37:34Z",
+      "subject": "Patch for heap-buffer-overflow in CRAN spam package",
+      "subject_clean": "Patch for heap-buffer-overflow in CRAN spam package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Reinhard,\n\nPlease find attached a patch for a heap-buffer-overflow that I have\nidentified in the CRAN spam package. The rationale for the fix is in\nthe patch header.\n\nI have applied this patch to the Debian package r-cran-spam.\n\nBest regards,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\nDescription: Fix heap-buffer-overflow in dn_eigen_f\n The “dr” and “di” array arguments of “dn_eigen_f” require double arrays of\n length “maxnev+1” (see the function prototype in src/dn_eigen.f).\n .\n The bug has been fortuitously exposed by the autopkgtest as part of the\n testing migration of lapack 3.10.0-1, on the i386 architecture.\n See https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-spam/15629153/log.gz\n .\n The too small buffer would lead to a heap-buffer-overflow triggered at line 669\n of src/dn_ARPACK.f (inside the function call sequence dn_eigen_f→dneupd→dcopy,\n triggered from line 43 of tests/testthat/test-eigen.R)\nAuthor: Sébastien Villemot <sebastien at debian.org>\nForwarded: no\nLast-Update: 2021-10-01\n---\nThis patch header follows DEP-3: http://dep.debian.net/deps/dep3/\n--- a/R/eigen.R\n+++ b/R/eigen.R\n@@ -219,8 +219,8 @@ eigen_approx <- function(x,\n                             ja        = x@colindices,\n                             ia        = x@rowpointers,\n                             v         = vector_dc(\"double\", x@dimension[1]*ncv),\n-                            dr        = vector_dc(\"double\", nev),\n-                            di        = vector_dc(\"double\", nev),\n+                            dr        = vector_dc(\"double\", nev+1),\n+                            di        = vector_dc(\"double\", nev+1),\n                             iparam    = integer_dc(8),\n                             INTENT    = c(\"r\", \"r\", \"r\", \"r\", \"r\", \"r\", \"r\", \"r\", \"r\",\n                                           \"rw\", \"rw\", \"rw\", \"rw\"),\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Dear Reinhard,\n\nPlease find attached a patch for a heap-buffer-overflow that I have\nidentified in the CRAN spam package. The rationale for the fix is in\nthe patch header.\n\nI have applied this patch to",
+      "thread_id": "thread-2ea4db0be83a",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-7d73b1865b41",
+      "message_id": "<YVcVakMmT72AGZgX@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-01T14:04:26Z",
+      "subject": "Re: RFS: r-cran-partitions (NEW)",
+      "subject_clean": "RFS: r-cran-partitions (NEW)",
+      "in_reply_to": "<87zgrt3qqa.fsf@piedmont.edu>",
+      "references": [
+        "<87v92ke9uf.fsf@piedmont.edu>",
+        "<a9ffaa3b-a66b-38fa-4896-11b7158246ed@nileshpatra.info>",
+        "<87sfxnei2h.fsf@piedmont.edu>",
+        "<175f2644-2d7d-af2b-6ea4-4e98aa43e701@nileshpatra.info>",
+        "<874ka26mns.fsf@piedmont.edu>",
+        "<YVbEjDkmNjuUjM28@an3as.eu>",
+        "<87zgrt3qqa.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Hi Doug,\n\nAm Fri, Oct 01, 2021 at 11:54:22AM +0000 schrieb Torrance, Douglas:\n> > May be we should file a bug against lintian that this warning should\n> > not be issued (about changelog as well as the one in d/control about\n> > versioned dependencies).\n> \n> Done: http://bugs.debian.org/995446\n\nVery cool!\n \n> >    prepare_missing_cran_package\n> >\n> > script of the dh-r package which simply does the right job to create an\n> > R package.  I feel some urgency to write down such things ... but well,\n> > that's as always with documentation.\n> \n> I took the liberty of starting a simple \"Quick Start\" section on the team\n> wiki page with some of this information:\n> https://wiki.debian.org/Teams/r-pkg-team#Quick_Start\n\nThanks a lot!\nMay be we should make more noise about this page (I admit I even forgot\nmyself that it exists. :-( )\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Doug,\n\nAm Fri, Oct 01, 2021 at 11:54:22AM +0000 schrieb Torrance, Douglas:\n> > May be we should file a bug against lintian that this warning should\n> > not be issued (about changelog as well as the",
+      "thread_id": "thread-4791fbcd4392",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-771647aada70",
+      "message_id": "<ec2c36bc-5838-01c9-fa2a-6a00506e0e7b@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-01T16:42:42Z",
+      "subject": "[Request for help] r-cran-plumber autopkgtests failing on i386",
+      "subject_clean": "[Request for help] r-cran-plumber autopkgtests failing on i386",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nplumber autopkgtests seem to run for a really long time, and finally choke as can be seen\nin the current ci log[1]\n\nI can reproduce this in a chroot as well. Since the previous version was working well, I took a look at the diff,\nbut nothing comes up at the top of my head.\nAny help is appreciated.\n\n[1]: https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-plumber/15624911/log.gz\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi,\n\nplumber autopkgtests seem to run for a really long time, and finally choke as can be seen\nin the current ci log[1]\n\nI can reproduce this in a chroot as well. Since the previous version was workin",
+      "thread_id": "thread-771647aada70",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-95d22c8c57d0",
+      "message_id": "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-03T20:56:42Z",
+      "subject": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Andreas,\n\nr-cran-s2 FTBFS on all 32 bit architectures[1]\nThis is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]\n\nAnd these are further stalling migration of their reverse-deps, see this[4]\n\nI did not look at all, but I guess there are many more that are affected. Since this is clearly\nan upstream issue, could you please either fix it, or follow up with upstream?\n\nI'd really appreciate if you could do either.\n\n[1]: https://buildd.debian.org/status/package.php?p=r%2dcran%2ds2\n[2]: https://qa.debian.org/excuses.php?package=r-cran-sf\n[3]: https://qa.debian.org/excuses.php?package=r-cran-spdep\n[4]: https://qa.debian.org/excuses.php?package=r-cran-spatstat\n\nThanks a lot,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Andreas,\n\nr-cran-s2 FTBFS on all 32 bit architectures[1]\nThis is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]\n\nAnd these are further stalling migration of th",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-591cf3a05954",
+      "message_id": "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-03T20:58:44Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>"
+      ],
+      "body_plain": "On 10/4/21 2:26 AM, Nilesh Patra wrote:\n> Hi Andreas,\n> \n> r-cran-s2 FTBFS on all 32 bit architectures[1]\n> This is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]\n\nAnd I checked, the new upstream release 1.0.7 (not yet uploaded) of s2 also fails on 32 bit architectures.\nSo this problem is still persistent.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/4/21 2:26 AM, Nilesh Patra wrote:\n> Hi Andreas,\n> \n> r-cran-s2 FTBFS on all 32 bit architectures[1]\n> This is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-ac0c6e731b39",
+      "message_id": "<24922.8122.799570.288322@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2021-10-03T21:25:14Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>"
+      ],
+      "body_plain": "As mentioned before, CRAN runs ~ 12 architecture tests too including some 32\nbit ones (Windows, and IIRC Solaris). Here is a build / test log of one of\nthe CRAN windows architectures showing it passes 'i386' / 32bit there:\n\n  https://www.r-project.org/nosvn/R.check/r-release-windows-ix86+x86_64/s2-00check.html\n\nSo maybe not entirely upstream?\n\nUntil R 4.2.0 comes out next April, we will have i386 upstream (for\nWindows). After that we won't so we will likely have more failure surprises.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "As mentioned before, CRAN runs ~ 12 architecture tests too including some 32\nbit ones (Windows, and IIRC Solaris). Here is a build / test log of one of\nthe CRAN windows architectures showing it passes",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-de9058bb085b",
+      "message_id": "<YVpy+duehmHDg9o+@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-04T03:20:25Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nI can not work on this before Wednesday - and I also have\nno idea how to fix this.\n\nKind regards\n\n      Andreas.\n\nAm Mon, Oct 04, 2021 at 02:28:44AM +0530 schrieb Nilesh Patra:\n> \n> \n> On 10/4/21 2:26 AM, Nilesh Patra wrote:\n> > Hi Andreas,\n> > \n> > r-cran-s2 FTBFS on all 32 bit architectures[1]\n> > This is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]\n> \n> And I checked, the new upstream release 1.0.7 (not yet uploaded) of s2 also fails on 32 bit architectures.\n> So this problem is still persistent.\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nI can not work on this before Wednesday - and I also have\nno idea how to fix this.\n\nKind regards\n\n      Andreas.\n\nAm Mon, Oct 04, 2021 at 02:28:44AM +0530 schrieb Nilesh Patra:\n> \n> \n> On ",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-d3ebdd762f38",
+      "message_id": "<YVtdlsl1hc+2Ql3q@fusion>",
+      "from_name": "Étienne Mollier",
+      "from_email_hash": "9365087d6cbbbca10f7a204a5b456e3513a557488ae7aa13b09098db8b3b6372",
+      "date": "2021-10-04T20:01:26Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<YVpy+duehmHDg9o+@an3as.eu>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas, Hi Nilesh,\n\nAndreas Tille, on 2021-10-04:\n> Am Mon, Oct 04, 2021 at 02:28:44AM +0530 schrieb Nilesh Patra:\n> > On 10/4/21 2:26 AM, Nilesh Patra wrote:\n> > > r-cran-s2 FTBFS on all 32 bit architectures[1]\n> > > This is stalling migration of packages with \"unsatisfiable-arch B-D\" for instance these[2,3]\n> > \n> > And I checked, the new upstream release 1.0.7 (not yet uploaded) of s2 also fails on 32 bit architectures.\n> > So this problem is still persistent.\n\nI located a patch on s2geometry repository [1], which I injected\nin r-cran-s2, and which seems to do the job.  The issue seems to\nappear only with specific versions of the openssl.  It might\nexplain why this has not been caught by upstream continuous\nintegration.  It looks like upstream developers of r-cran-s2\nmight be interested in refreshing their embedded copy of\ns2geometry; I'm informing them.\n\n[1]: https://github.com/google/s2geometry/pull/183\n\nHave a nice day,  :)\n-- \nÉtienne Mollier <emollier at emlwks999.eu>\nFingerprint:  8f91 b227 c7d6 f2b1 948c  8236 793c f67e 8f0d 11da\nSent from /dev/pts/2, please excuse my verbosity.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Andreas, Hi Nilesh,\n\nAndreas Tille, on 2021-10-04:\n> Am Mon, Oct 04, 2021 at 02:28:44AM +0530 schrieb Nilesh Patra:\n> > On 10/4/21 2:26 AM, Nilesh Patra wrote:\n> > > r-cran-s2 FTBFS on all 32 bit a",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 3,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-275f64669c50",
+      "message_id": "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-04T20:24:04Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<YVtdlsl1hc+2Ql3q@fusion>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>"
+      ],
+      "body_plain": "Hi Étienne,\n\nOn 10/5/21 1:31 AM, Étienne Mollier wrote:\n> I located a patch on s2geometry repository [1], which I injected\n> in r-cran-s2, and which seems to do the job.  The issue seems to\n> appear only with specific versions of the openssl.  It might\n> explain why this has not been caught by upstream continuous\n> integration.\n\nThank you very much for the help! I hope you've uploaded by now?\n\nWith this, I think all remaining CRAN packages are ready to migrate, and all pending stuff\nshould migrate in the next few days, including important ones like knitr, dplyr etc.\n\nIt might be nice if we could hold off new upstream versions uploads for the next 2-3 days, remaining\nuntil things get in to testing.\n\nAnd I checked yesterday, it seems like every single bioconductor package has migrated by now.\nThis along with fixing CRAN packages to get everything going took a lot of real effort, and I'm very\nhappy that almost everything is now resolved (for good) and the efforts have come to fruition.\n\nThanks again for helping out\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Étienne,\n\nOn 10/5/21 1:31 AM, Étienne Mollier wrote:\n> I located a patch on s2geometry repository [1], which I injected\n> in r-cran-s2, and which seems to do the job.  The issue seems to\n> appear o",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 4,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-84dfcf7b822f",
+      "message_id": "<YVtldMIe6uiW25ti@fusion>",
+      "from_name": "Étienne Mollier",
+      "from_email_hash": "9365087d6cbbbca10f7a204a5b456e3513a557488ae7aa13b09098db8b3b6372",
+      "date": "2021-10-04T20:35:00Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nNilesh Patra, on 2021-10-05:\n> Thank you very much for the help! I hope you've uploaded by now?\n\nYou're welcome!  Yes, I just received confirmation that\nprocessing by the archive is ongoing.\n\nHave a good night,  :)\n-- \nÉtienne Mollier <emollier at emlwks999.eu>\nFingerprint:  8f91 b227 c7d6 f2b1 948c  8236 793c f67e 8f0d 11da\nSent from /dev/pts/2, please excuse my verbosity.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Nilesh,\n\nNilesh Patra, on 2021-10-05:\n> Thank you very much for the help! I hope you've uploaded by now?\n\nYou're welcome!  Yes, I just received confirmation that\nprocessing by the archive is ongoin",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 5,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-9545afe68f06",
+      "message_id": "<YVvRFBpNTIylcyz5@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-10-05T04:14:12Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>"
+      ],
+      "body_plain": "Hi,\n\nAm Tue, Oct 05, 2021 at 01:54:04AM +0530 schrieb Nilesh Patra:\n> Hi Étienne,\n> \n> On 10/5/21 1:31 AM, Étienne Mollier wrote:\n> > I located a patch on s2geometry repository [1], which I injected\n> > in r-cran-s2, and which seems to do the job.  The issue seems to\n> > appear only with specific versions of the openssl.  It might\n> > explain why this has not been caught by upstream continuous\n> > integration.\n\nÉtienne, thanks a lot for catching this!\n\n> It might be nice if we could hold off new upstream versions uploads for the next 2-3 days, remaining\n> until things get in to testing.\n\nNo problem for me - I'm basically offline today as well. ;-)\n \n> And I checked yesterday, it seems like every single bioconductor package has migrated by now.\n> This along with fixing CRAN packages to get everything going took a lot of real effort, and I'm very\n> happy that almost everything is now resolved (for good) and the efforts have come to fruition.\n\nYep, thanks to you all!\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nAm Tue, Oct 05, 2021 at 01:54:04AM +0530 schrieb Nilesh Patra:\n> Hi Étienne,\n> \n> On 10/5/21 1:31 AM, Étienne Mollier wrote:\n> > I located a patch on s2geometry repository [1], which I injected\n>",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 5,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-04841ba18f6b",
+      "message_id": "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-05T05:19:15Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<YVtldMIe6uiW25ti@fusion>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+        "<YVtldMIe6uiW25ti@fusion>"
+      ],
+      "body_plain": "On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>Hi Nilesh,\n>\n>Nilesh Patra, on 2021-10-05:\n>> Thank you very much for the help! I hope you've uploaded by now?\n>\n>You're welcome!  Yes, I just received confirmation that\n>processing by the archive is ongoing.\n\nÉtienne, the build on armel is FTBFS again, this would still be a blocker. Could you please take a look and fix?\nThat's be really appreciated.\n\n[1]: https://buildd.debian.org/status/fetch.php?pkg=r-cran-s2&arch=armel&ver=1.0.7-1&stamp=1633382058&raw=0\n\nNilesh\n-- \nSent from my Android device with K-9 Mail. Please excuse my brevity.",
+      "body_snippet": "On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>Hi Nilesh,\n>\n>Nilesh Patra, on 2021-10-05:\n>> Thank you very much for the help! I hope you've uploaded by now?\n>\n",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 6,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-8e2b2c4b56d6",
+      "message_id": "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-05T11:15:19Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+        "<YVtldMIe6uiW25ti@fusion>",
+        "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>"
+      ],
+      "body_plain": "On 10/5/21 10:49 AM, Nilesh Patra wrote:\n> \n> \n> On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>> Hi Nilesh,\n>>\n>> Nilesh Patra, on 2021-10-05:\n>>> Thank you very much for the help! I hope you've uploaded by now?\n>>\n>> You're welcome!  Yes, I just received confirmation that\n>> processing by the archive is ongoing.\n> \n> Étienne, the build on armel is FTBFS again, this would still be a blocker. Could you please take a look and fix?\n> That's be really appreciated.\n\nOkay, I got some time to take a look, and I am able to get it building in an armel porter box\nwith manually adding in a '-latomic' for armel\n\nLet's see what buildd says about this.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/5/21 10:49 AM, Nilesh Patra wrote:\n> \n> \n> On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>> Hi Nilesh,\n>>\n>> Nilesh Patra, on 2021-10-05:\n>>> Thank you ve",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 7,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-9ea789894010",
+      "message_id": "<F4B9649E-0561-42CE-B596-FBB5A5588FC8@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-05T13:43:14Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+        "<YVtldMIe6uiW25ti@fusion>",
+        "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>",
+        "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>"
+      ],
+      "body_plain": "On 5 October 2021 4:45:19 pm IST, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n>Let's see what buildd says about this.\n\nAnd it works. So all good hopefully.\n-- \nSent from my Android device with K-9 Mail. Please excuse my brevity.",
+      "body_snippet": "On 5 October 2021 4:45:19 pm IST, Nilesh Patra <nilesh at nileshpatra.info> wrote:\n>Let's see what buildd says about this.\n\nAnd it works. So all good hopefully.\n-- \nSent from my Android device with K-",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 8,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-033b9fbf0066",
+      "message_id": "<YVyOVh0/6fRW4uWX@fusion>",
+      "from_name": "Étienne Mollier",
+      "from_email_hash": "9365087d6cbbbca10f7a204a5b456e3513a557488ae7aa13b09098db8b3b6372",
+      "date": "2021-10-05T17:41:42Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+        "<YVtldMIe6uiW25ti@fusion>",
+        "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>",
+        "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nNilesh Patra, on 2021-10-05:\n> On 10/5/21 10:49 AM, Nilesh Patra wrote:\n>> On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>>> Nilesh Patra, on 2021-10-05:\n>>>> Thank you very much for the help! I hope you've uploaded by now?\n>>>\n>>> You're welcome!  Yes, I just received confirmation that\n>>> processing by the archive is ongoing.\n>> \n>> Étienne, the build on armel is FTBFS again, this would still be a blocker. Could you please take a look and fix?\n>> That's be really appreciated.\n> \n> Okay, I got some time to take a look, and I am able to get it building in an armel porter box\n> with manually adding in a '-latomic' for armel\n\nSorry I didn't come back earlier; I'm glad to see that you\nmanaged to fix the issue.  powerpc and riscv64 have similar\nsymptoms; perhaps it would be possible to extend the patch to\nthese architectures as well?  This can wait until the package\ncompletes migration to testing of course.\n\nHave a nice day,  :)\n-- \nÉtienne Mollier <emollier at emlwks999.eu>\nFingerprint:  8f91 b227 c7d6 f2b1 948c  8236 793c f67e 8f0d 11da\nSent from /dev/pts/1, please excuse my verbosity.\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Nilesh,\n\nNilesh Patra, on 2021-10-05:\n> On 10/5/21 10:49 AM, Nilesh Patra wrote:\n>> On 5 October 2021 2:05:00 am IST, \"Étienne Mollier\" <emollier at emlwks999.eu> wrote:\n>>> Nilesh Patra, on 2021-1",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 8,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-97b91be33fdc",
+      "message_id": "<CAM8zJQte5n7ddYPvzVaNC1i2XVH+87nEFFLo1khtQuMg3D12Uw@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2021-10-06T10:23:45Z",
+      "subject": "Re: r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "subject_clean": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "in_reply_to": "<YVyOVh0/6fRW4uWX@fusion>",
+      "references": [
+        "<4cd06608-2545-44c4-9c78-f97efb6ee51f@nileshpatra.info>",
+        "<c4b3ea0e-4bf8-4244-0181-286b0800284b@nileshpatra.info>",
+        "<YVpy+duehmHDg9o+@an3as.eu>",
+        "<YVtdlsl1hc+2Ql3q@fusion>",
+        "<fa6ce632-cbac-294c-88fa-53b367bcc1c5@nileshpatra.info>",
+        "<YVtldMIe6uiW25ti@fusion>",
+        "<66DBA99C-C7C3-477F-8F04-CEEDAF35CA6E@nileshpatra.info>",
+        "<72d9a9b6-53b1-fd25-9188-5f5c5e87d8bf@nileshpatra.info>",
+        "<YVyOVh0/6fRW4uWX@fusion>"
+      ],
+      "body_plain": "On Tue, 5 Oct 2021 at 19:42, Étienne Mollier <emollier at emlwks999.eu> wrote:\n> Sorry I didn't come back earlier; I'm glad to see that you\n> managed to fix the issue.  powerpc and riscv64 have similar\n> symptoms; perhaps it would be possible to extend the patch to\n> these architectures as well?  This can wait until the package\n> completes migration to testing of course.\n\nAlso mipsel and m68k.  It's probably safe to link with -latomic\nunconditionally as everything is linked with --as-needed these days.",
+      "body_snippet": "On Tue, 5 Oct 2021 at 19:42, Étienne Mollier <emollier at emlwks999.eu> wrote:\n> Sorry I didn't come back earlier; I'm glad to see that you\n> managed to fix the issue.  powerpc and riscv64 have simila",
+      "thread_id": "thread-95d22c8c57d0",
+      "thread_depth": 9,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-a9184551b328",
+      "message_id": "<8735p84br2.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-11T00:59:56Z",
+      "subject": "RFS: r-cran-mpoly",
+      "subject_clean": "RFS: r-cran-mpoly",
+      "in_reply_to": "<878rz04ech.fsf@piedmont.edu>",
+      "references": [
+        "<878rz04ech.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Control: tags -1 pending\n\nI've just finished packaging r-cran-mpoly, which implements multivariate\npolynomials in R.  Since it would be headed for the NEW queue and I'm a DM,\nI'm unable to upload it.  Would anyone be able to review/sponsor?\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-mpoly\n\nThanks!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Control: tags -1 pending\n\nI've just finished packaging r-cran-mpoly, which implements multivariate\npolynomials in R.  Since it would be headed for the NEW queue and I'm a DM,\nI'm unable to upload it. ",
+      "thread_id": "thread-a9184551b328",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-f98101d15f64",
+      "message_id": "<YWPC6zs2yM7fKKbP@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-10-11T04:51:55Z",
+      "subject": "Re: RFS: r-cran-mpoly",
+      "subject_clean": "RFS: r-cran-mpoly",
+      "in_reply_to": "<8735p84br2.fsf@piedmont.edu>",
+      "references": [
+        "<878rz04ech.fsf@piedmont.edu>",
+        "<8735p84br2.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Uploaded to new.  Thank you for the preparation, Andreas.\n\nAm Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> Control: tags -1 pending\n> \n> I've just finished packaging r-cran-mpoly, which implements multivariate\n> polynomials in R.  Since it would be headed for the NEW queue and I'm a DM,\n> I'm unable to upload it.  Would anyone be able to review/sponsor?\n> \n> https://salsa.debian.org/r-pkg-team/r-cran-mpoly\n> \n> Thanks!\n> Doug\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Uploaded to new.  Thank you for the preparation, Andreas.\n\nAm Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> Control: tags -1 pending\n> \n> I've just finished packaging r-cran-mpoly",
+      "thread_id": "thread-a9184551b328",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-f1231b33adc4",
+      "message_id": "<YWPDdagBdtwOfGI0@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-10-11T04:54:13Z",
+      "subject": "Re: RFS: r-cran-mpoly",
+      "subject_clean": "RFS: r-cran-mpoly",
+      "in_reply_to": "<8735p84br2.fsf@piedmont.edu>",
+      "references": [
+        "<878rz04ech.fsf@piedmont.edu>",
+        "<8735p84br2.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Hi again,\n\nAm Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> I've just finished packaging r-cran-mpoly, which implements multivariate\n> polynomials in R.  Since it would be headed for the NEW queue and I'm a DM,\n> I'm unable to upload it.  Would anyone be able to review/sponsor?\n\nLooking at the repository layout I realise that it has debian/master\ninstead of master.  That's fine in principle but its a sign that you\ndid not used\n\n    prepare_missing_cran_package\n\nI keep on recommending to use this to save a lot of time.\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again,\n\nAm Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> I've just finished packaging r-cran-mpoly, which implements multivariate\n> polynomials in R.  Since it would be headed ",
+      "thread_id": "thread-a9184551b328",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-413fa4b71143",
+      "message_id": "<87zgrf3nv7.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-11T09:35:56Z",
+      "subject": "Re: RFS: r-cran-mpoly",
+      "subject_clean": "RFS: r-cran-mpoly",
+      "in_reply_to": "<YWPDdagBdtwOfGI0@an3as.eu>",
+      "references": [
+        "<878rz04ech.fsf@piedmont.edu>",
+        "<8735p84br2.fsf@piedmont.edu>",
+        "<YWPDdagBdtwOfGI0@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn Mon 11 Oct 2021 12:54:13 AM EDT, Andreas Tille <andreas at fam-tille.de> wrote:\n> Am Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> > I've just finished packaging r-cran-mpoly, which implements multivariate\n> > polynomials in R.  Since it would be headed for the NEW queue and I'm a DM,\n> > I'm unable to upload it.  Would anyone be able to review/sponsor?\n>\n>\n> Looking at the repository layout I realise that it has debian/master\n> instead of master.  That's fine in principle but its a sign that you\n> did not used\n>\n>     prepare_missing_cran_package\n>\n> I keep on recommending to use this to save a lot of time.\n\nI actually did use prepare_missing_cran, but made some additional tweaks\nafterwards.  Using debian/master as the packaging branch was one of these,\nto avoid clashing with upstream's master branch locally.  It's a great tool,\nand made the work very simple!\n\nThanks for the upload!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Andreas,\n\nOn Mon 11 Oct 2021 12:54:13 AM EDT, Andreas Tille <andreas at fam-tille.de> wrote:\n> Am Mon, Oct 11, 2021 at 12:59:56AM +0000 schrieb Torrance, Douglas:\n> > I've just finished packaging r",
+      "thread_id": "thread-a9184551b328",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-9e70ebd92b73",
+      "message_id": "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-20T19:28:53Z",
+      "subject": "Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nWhile updating R packages in past few days, I noticed that\nseveral \"debian/copyrights\" are wrong -- for instance stuff like upstream changed license\nto MIT, and we still have old GPL mentioned.\n\nCopyrights of some files are missing. The bad part being, many of these\nwrong-license ones are in bullseye.\n\nI think this is a resultant of using routine-update without proper scrutiny of the\ntarget package -- which is bad.\n\nSo,\n\n1) Is there some plan to fix copyrights team-wide?\n2) Can reliance on routine-update be somewhat reduced? -- Can it give some sort of warning for these things or so?\n\nThis might not sound all that important, but conflicting licenses can become RC in future, which is\nbad again, thought.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi,\n\nWhile updating R packages in past few days, I noticed that\nseveral \"debian/copyrights\" are wrong -- for instance stuff like upstream changed license\nto MIT, and we still have old GPL mentioned.\n\n",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-48971513a46b",
+      "message_id": "<0a6fe524-d6d8-4161-9b6d-ea3fc6b20f6c@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-20T19:30:37Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>"
+      ],
+      "body_plain": "On 10/21/21 12:58 AM, Nilesh Patra wrote:\n> Hi,\n>\n> While updating R packages in past few days, I noticed that\n> several \"debian/copyrights\" are wrong -- for instance stuff like upstream changed license\n> to MIT, and we still have old GPL mentioned.\n\nTo quote the recent examples, one is r-cran-testthat and r-cran-rlib.\nPretty sure there are many more lying to be fixed.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/21/21 12:58 AM, Nilesh Patra wrote:\n> Hi,\n>\n> While updating R packages in past few days, I noticed that\n> several \"debian/copyrights\" are wrong -- for instance stuff like upstream changed licen",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-fbf971650f34",
+      "message_id": "<YXB0Ag4d5cUkj2/h@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-20T19:54:42Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>"
+      ],
+      "body_plain": "Am Thu, Oct 21, 2021 at 12:58:53AM +0530 schrieb Nilesh Patra:\n> \n> I think this is a resultant of using routine-update without proper scrutiny of the\n> target package -- which is bad.\n\nI agree that routine-update makes it even more easy to not (re)inspect\nthe copyright.  However, the script is not freeing the maintainer to\ndo all necessary steps.  It is just doing what can be automatized and\nchecking copyright in general can not really be automatized.\n \n> 1) Is there some plan to fix copyrights team-wide?\n\nNot that I'm aware of.\n\n> 2) Can reliance on routine-update be somewhat reduced?\n\nThat's a personal = by maintainer question IMHO.  I personally need to\nadmit that routine-update is the only way I can manage the actual number\nof packages.  Otherwise I would leave lots of packages behind.  That's\nwhy I will stick to it.\n\n> -- Can it give some sort of warning for these things or so?\n\nI think in the special case of CRAN packages we have a pretty good\nchance to do so:\n\n  1. Diff between DESCRIPTION file of the HEAD of upstream branch\n     compared with the previous version and issue a warning if the\n     string in the License field is different should be relatively\n     easy to accomplish\n\n  2. dh-update-R could also update d/copyright if needed. \n\nAs always patches are welcome.\n\n> This might not sound all that important, but conflicting licenses can become RC in future, which is\n> bad again, thought.\n\nYes.  And once such a bug is filed we can fix it. \n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Thu, Oct 21, 2021 at 12:58:53AM +0530 schrieb Nilesh Patra:\n> \n> I think this is a resultant of using routine-update without proper scrutiny of the\n> target package -- which is bad.\n\nI agree that r",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-4871817ae123",
+      "message_id": "<903a58bb-f473-aeda-322d-a76f1722f3a0@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-20T20:11:22Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<YXB0Ag4d5cUkj2/h@an3as.eu>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<YXB0Ag4d5cUkj2/h@an3as.eu>"
+      ],
+      "body_plain": "On 10/21/21 1:24 AM, Andreas Tille wrote:\n> Am Thu, Oct 21, 2021 at 12:58:53AM +0530 schrieb Nilesh Patra:\n> > I think this is a resultant of using routine-update without proper scrutiny of the\n> > target package -- which is bad.\n>\n>\n> I agree that routine-update makes it even more easy to not (re)inspect\n> the copyright.  However, the script is not freeing the maintainer to\n> do all necessary steps.  It is just doing what can be automatized and\n> checking copyright in general can not really be automatized.\n\nAgreed, don't get me wrong, r-u is a nice tool,\nbut I really think that it has a side effect -- making maintainer sloppy (atleast sometimes), hence\nI asked questions to prevent this.\n\n>\n> > 1) Is there some plan to fix copyrights team-wide?\n>\n>\n> Not that I'm aware of.\n\nCan this happen in some sort of (mini-)sprint?\n\nAgain, this could be a nice idea for \"newcomers\" to work on -- just to get started making contributions.\nWhat say?\n\n> > 2) Can reliance on routine-update be somewhat reduced?\n>\n>\n> That's a personal = by maintainer question IMHO.  I personally need to\n> admit that routine-update is the only way I can manage the actual number\n> of packages.  Otherwise I would leave lots of packages behind.  That's\n> why I will stick to it.\n\nSure, but I urge you to check the copyrights once before upload.\nCopyrights changed from GPL to MIT will not take you more than one minute to change.\n\n> > -- Can it give some sort of warning for these things or so?\n>\n>\n> I think in the special case of CRAN packages we have a pretty good\n> chance to do so:\n>\n>    1. Diff between DESCRIPTION file of the HEAD of upstream branch\n>       compared with the previous version and issue a warning if the\n>       string in the License field is different should be relatively\n>       easy to accomplish\n\nThis sounds good.\n \n>    2. dh-update-R could also update d/copyright if needed.\n\nIt's difficult to do it in a \"reliable\" way, so I prefer avoiding automatic copyright modifications.\n \n> As always patches are welcome.\n\nNo time :(\n \n> > This might not sound all that important, but conflicting licenses can become RC in future, which is\n> > bad again, thought.\n>\n>\n> Yes.  And once such a bug is filed we can fix it.\n\nOfcourse, but again, what I wanted to say is to prevent them, instead of \"curing\" them later. Not very important,\nbut if there are a number of bug reports, it causes an enormous amount of mess to deal with when number of packages at scale\nare more.\nAnd new versions will add in new files, and thus new copyrights so this will be a never ending stream of bugs, and hence\nbring more watchful could help.\nOfcourse, I do not blame you or anyone else for not 'upto date' copyright, but we defnitely need this one-more-step after routine-update is ready to upload.\n\nNilesh",
+      "body_snippet": "On 10/21/21 1:24 AM, Andreas Tille wrote:\n> Am Thu, Oct 21, 2021 at 12:58:53AM +0530 schrieb Nilesh Patra:\n> > I think this is a resultant of using routine-update without proper scrutiny of the\n> > ta",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-23296c2e3133",
+      "message_id": "<YXB5J5PezKMXFdKC@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-10-20T20:16:39Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<903a58bb-f473-aeda-322d-a76f1722f3a0@nileshpatra.info>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<YXB0Ag4d5cUkj2/h@an3as.eu>",
+        "<903a58bb-f473-aeda-322d-a76f1722f3a0@nileshpatra.info>"
+      ],
+      "body_plain": "Am Thu, Oct 21, 2021 at 01:41:22AM +0530 schrieb Nilesh Patra:\n> Agreed, don't get me wrong, r-u is a nice tool,\n\nI did not got you wrong.  You have a valid point.\n\n> Ofcourse, I do not blame you or anyone else for not 'upto date' copyright,\n\nI did not understood your mail as blaming anyone.\n\n> but we defnitely need this one-more-step after routine-update is ready to upload.\n\nThat's correct.\n\nKind regards\n\n         Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Thu, Oct 21, 2021 at 01:41:22AM +0530 schrieb Nilesh Patra:\n> Agreed, don't get me wrong, r-u is a nice tool,\n\nI did not got you wrong.  You have a valid point.\n\n> Ofcourse, I do not blame you or a",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 3,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-7c6805240fb4",
+      "message_id": "<20211020231822.GM14009@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2021-10-20T23:18:22Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>"
+      ],
+      "body_plain": "Le Thu, Oct 21, 2021 at 12:58:53AM +0530, Nilesh Patra a écrit :\n> \n> I think this is a resultant of using routine-update without proper scrutiny of the\n> target package -- which is bad.\n\nHi all,\n\ncan routine-update grep the diff with the previous upstream release\nusing patterns such as license, author, copyright, (c), ©, etc, and emit\na warning if there is a match ?  This is what I used to do by hand when\nI had no time or interest to inspect the whole diff for other changes.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,           https://mastodon.technology/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Le Thu, Oct 21, 2021 at 12:58:53AM +0530, Nilesh Patra a écrit :\n> \n> I think this is a resultant of using routine-update without proper scrutiny of the\n> target package -- which is bad.\n\nHi all,\n\ncan",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-bf08ede7fe12",
+      "message_id": "<87r1cf42fn.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-21T01:00:29Z",
+      "subject": "RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everyone,\n\nI've just packaged R.devices, which would be headed for the NEW queue.\nWould anyone be able to review/sponsor?\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-r.devices\n\nNote: There's a little bit of a chicken-and-egg situation here.  R.devices\nrequires R.rsp (which is not in Debian yet) to build its vignettes, but R.rsp\nrequires R.devices to build its vignettes!  So currently I'm just using the\npre-built vignettes.\n\nThanks!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi everyone,\n\nI've just packaged R.devices, which would be headed for the NEW queue.\nWould anyone be able to review/sponsor?\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-r.devices\n\nNote: There's a litt",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-933c722ff9bd",
+      "message_id": "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-21T06:32:45Z",
+      "subject": "Re: RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": "<87r1cf42fn.fsf@piedmont.edu>",
+      "references": [
+        "<87r1cf42fn.fsf@piedmont.edu>"
+      ],
+      "body_plain": "Hi Doug,\n\nOn 10/21/21 6:30 AM, Torrance, Douglas wrote:\n> Hi everyone,\n>\n> I've just packaged R.devices, which would be headed for the NEW queue.\n> Would anyone be able to review/sponsor?\n\nI will sponsor, but see below\n \n> https://salsa.debian.org/r-pkg-team/r-cran-r.devices\n>\n> Note: There's a little bit of a chicken-and-egg situation here.  R.devices\n> requires R.rsp (which is not in Debian yet)\n\nDo you also need sponsoring for r-cran-r.rsp?\n\n> to build its vignettes, but R.rsp\n> requires R.devices to build its vignettes!  So currently I'm just using the\n> pre-built vignettes.\n\n(Assuming the answer to above is yes)\n\nI think circular \"Build-\"depends are fine, many packages have it as a matter of fact -- one good example I know\nis node-babel7 (babel is a very popular JS framework) having a B-D on itself\nhowever what is not okay is cirular \"Depends\"\n\nBut that said, we should try avoiding circular B-D wherever possible, and vigenettes are not that important\nto warrant for such a circular B-D, so I have two solutions/workarounds:\n\n1. Don't use the upstream pre-builds, rather write a simple script, and generate the vigenettes \"locally\",\nand move them to a dir say debian/resources, then simply install these pre-builds during dh_auto_install.\nand, mention what you did in d/README.Source\n\nThe only demerit is that with each new update, you will have to keep running the script to regenerate these vigenettes.\n\n2. Prune vigenettes altogether, don't vendor them at all -- I don't think they are very important, so you\ncan take a pass here.\n\nI don't have any problems with upstream pre-built vigenettes either, but then it's likely to be rejected.\n\nPlease consider doing either of the two, and let me know when it's ready.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Doug,\n\nOn 10/21/21 6:30 AM, Torrance, Douglas wrote:\n> Hi everyone,\n>\n> I've just packaged R.devices, which would be headed for the NEW queue.\n> Would anyone be able to review/sponsor?\n\nI will spon",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-928b990e4aec",
+      "message_id": "<YXEbqjRIZS0ZL/a3@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-21T07:50:02Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<20211020231822.GM14009@kumo.plessy.net>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<20211020231822.GM14009@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi,\n\nAm Thu, Oct 21, 2021 at 08:18:22AM +0900 schrieb Charles Plessy:\n> \n> can routine-update grep the diff with the previous upstream release\n> using patterns such as license, author, copyright, (c), ©, etc, and emit\n> a warning if there is a match ?  This is what I used to do by hand when\n> I had no time or interest to inspect the whole diff for other changes.\n\nSure it can (as I suggested in my other mail).  It just needs someone to\ncode it who considers this task as more important than other tasks.  ;-)\n(or as we say: patches welcome :-P)\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nAm Thu, Oct 21, 2021 at 08:18:22AM +0900 schrieb Charles Plessy:\n> \n> can routine-update grep the diff with the previous upstream release\n> using patterns such as license, author, copyright, (c),",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-4a4dafc1f63d",
+      "message_id": "<39c2b315-6a7a-240f-e11e-8c003e329b37@debian.org>",
+      "from_name": "Andrius Merkys",
+      "from_email_hash": "1862e79db4e0d9701548f2e5710945cf8f43280ce4744ba84ea932d4e90ee033",
+      "date": "2021-10-21T08:15:39Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<20211020231822.GM14009@kumo.plessy.net>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<20211020231822.GM14009@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi,\n\nOn 2021-10-21 02:18, Charles Plessy wrote:\n> can routine-update grep the diff with the previous upstream release\n> using patterns such as license, author, copyright, (c), ©, etc, and emit\n> a warning if there is a match ?  This is what I used to do by hand when\n> I had no time or interest to inspect the whole diff for other changes.\n\nMaybe licensecheck could be of any use here?\n\nBest,\nAndrius",
+      "body_snippet": "Hi,\n\nOn 2021-10-21 02:18, Charles Plessy wrote:\n> can routine-update grep the diff with the previous upstream release\n> using patterns such as license, author, copyright, (c), ©, etc, and emit\n> a war",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-bd20ea3257eb",
+      "message_id": "<87o87i4kp7.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-21T12:38:17Z",
+      "subject": "Re: RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>",
+      "references": [
+        "<87r1cf42fn.fsf@piedmont.edu>",
+        "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>"
+      ],
+      "body_plain": "On Thu 21 Oct 2021 02:32:45 AM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> On 10/21/21 6:30 AM, Torrance, Douglas wrote:\n> > Hi everyone,\n> > I've just packaged R.devices, which would be headed for the NEW\n> > queue.\n> > Would anyone be able to review/sponsor?\n>\n>\n> I will sponsor, but see below\n\nGreat, thank you!\n\n>  > https://salsa.debian.org/r-pkg-team/r-cran-r.devices\n> > Note: There's a little bit of a chicken-and-egg situation here.\n> > R.devices\n> >\n> > requires R.rsp (which is not in Debian yet)\n>\n>\n> Do you also need sponsoring for r-cran-r.rsp?\n\nYes, eventually, but after R.devices is in unstable.\n\n> > to build its vignettes, but R.rsp\n> > requires R.devices to build its vignettes!  So currently I'm just using the\n> > pre-built vignettes.\n>\n>\n> (Assuming the answer to above is yes)\n>\n> I think circular \"Build-\"depends are fine, many packages have it as a matter of fact -- one good example I know\n> is node-babel7 (babel is a very popular JS framework) having a B-D on itself\n> however what is not okay is cirular \"Depends\"\n>\n> But that said, we should try avoiding circular B-D wherever possible, and vigenettes are not that important\n> to warrant for such a circular B-D, so I have two solutions/workarounds:\n>\n> 1. Don't use the upstream pre-builds, rather write a simple script, and generate the vigenettes \"locally\",\n> and move them to a dir say debian/resources, then simply install these pre-builds during dh_auto_install.\n> and, mention what you did in d/README.Source\n>\n> The only demerit is that with each new update, you will have to keep running the script to regenerate these vigenettes.\n\nI've just implemented something like this now.  The source package now includes\na .tex file, generated locally using R.rsp, that is then used during build to\ngenerate the final pdf vignette.\n\n> 2. Prune vigenettes altogether, don't vendor them at all -- I don't think they are very important, so you\n> can take a pass here.\n\nI'm a big fan of documentation, so I'm going to try to avoid this option if\nat all possible.  :)\n\n> I don't have any problems with upstream pre-built vigenettes either, but then it's likely to be rejected.\n>\n> Please consider doing either of the two, and let me know when it's ready.\n\nI don't think it's quite ready yet -- I just noticed some .rds files for a test\nthat probably should be generated during build, too -- but I'll ping you when I\nthink it's good to go.\n\nThanks!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Thu 21 Oct 2021 02:32:45 AM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> On 10/21/21 6:30 AM, Torrance, Douglas wrote:\n> > Hi everyone,\n> > I've just packaged R.devices, which would be h",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-ecb180b004e4",
+      "message_id": "<YXFh4+tVgCqd7T2n@bubu.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2021-10-21T12:49:39Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<39c2b315-6a7a-240f-e11e-8c003e329b37@debian.org>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<20211020231822.GM14009@kumo.plessy.net>",
+        "<39c2b315-6a7a-240f-e11e-8c003e329b37@debian.org>"
+      ],
+      "body_plain": "> On 2021-10-21 02:18, Charles Plessy wrote:\n> > can routine-update grep the diff with the previous upstream release\n> > using patterns such as license, author, copyright, (c), ©, etc, and emit\n> > a warning if there is a match ?  This is what I used to do by hand when\n> > I had no time or interest to inspect the whole diff for other changes.\n\nLe Thu, Oct 21, 2021 at 11:15:39AM +0300, Andrius Merkys a écrit :\n> \n> Maybe licensecheck could be of any use here?\n\nHi all,\n\nI have a prototype.\n\nGit allows an external diff command to be run, using the `GIT_EXTERNAL_DIFF`\nenvironment variable.  Here is a quote from its manual page:\n\n> GIT_EXTERNAL_DIFF\n>\n>    When the environment variable GIT_EXTERNAL_DIFF is set, the program\n>    named by it is called to generate diffs, and Git does not use its\n>    builtin diff machinery. For a path that is added, removed, or\n>    modified, GIT_EXTERNAL_DIFF is called with 7 parameters:\n>\n>        path old-file old-hex old-mode new-file new-hex new-mode\n\nSo I wrote a small command that runs licensecheck on the old and new\nfile, and diffs the results.  I have to pipe them through sed because\nat least one of the files is in a temporary folder, whose name is\nincluded in the output of licensecheck.\n\n    $ cat diff-licensecheck\n    #!/bin/bash\n    diff -u <(licensecheck $2 | sed s,$2,$1, ) <(licensecheck $5 | sed s,$5,$1,)\n    exit 0\n\nThen, I created a test git repository in which I commited one file\ndetected as under the Apache License, then replaced its contents by\nsomething detected as under the BSD license the next commmmit.\n\nAnd voilà\n\n    $ GIT_EXTERNAL_DIFF=./diff-licensecheck git diff HEAD^\n    --- /dev/fd/63  2021-10-21 21:35:27.071663271 +0900\n    +++ /dev/fd/62  2021-10-21 21:35:27.071663271 +0900\n    @@ -1 +1 @@\n    -testfile: *No copyright* Apache License 2.0\n    +testfile: BSD 3-clause \"New\" or \"Revised\" License\n\nI then tested it on the `upstream` branch of one of our source packages\nand... licensecheck is really too slow...\n\nI tested the alternative ninka and it is much faster, but might have\nmore false positives.  For instance in r-cran-testthat, the NEWS.md\nfile pops up:\n\n    git diff 5e69a2ce025417258572a9322e4b720f8ab389a2^ 5e69a2ce025417258572a9322e4b720f8ab389a2\n\n    --- /dev/fd/63  2021-10-21 21:44:31.377404307 +0900\n    +++ /dev/fd/62  2021-10-21 21:44:31.377404307 +0900\n    @@ -1 +1 @@\n    -NEWS.md;SeeFile,SeeFile,SeeFile;3;3;0;1;2;1,1,IntelPart08,UNKNOWN,UNKNOWN,1\n    +NEWS.md;SeeFile,SeeFile;2;2;0;1;3;UNKNOWN,1,1,IntelPart08,UNKNOWN,UNKNOWN\n\nAnother thing is that new files or deleted files obviously pop up a\ndiff, but it must be easy to suppress that by not running the diff\ncommand if either the old or the new file is empty or /dev/null.\n\nThat is all from me today, now it is time to sleep !\n\nCheers,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,           https://mastodon.technology/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "> On 2021-10-21 02:18, Charles Plessy wrote:\n> > can routine-update grep the diff with the previous upstream release\n> > using patterns such as license, author, copyright, (c), ©, etc, and emit\n> > a ",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 3,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-1d6eb5bff14a",
+      "message_id": "<a712f258-1bee-c42c-07ec-cbcfff584d46@debian.org>",
+      "from_name": "Andrius Merkys",
+      "from_email_hash": "1862e79db4e0d9701548f2e5710945cf8f43280ce4744ba84ea932d4e90ee033",
+      "date": "2021-10-21T14:14:17Z",
+      "subject": "Re: Several copyrights wrong in R packages",
+      "subject_clean": "Several copyrights wrong in R packages",
+      "in_reply_to": "<YXFh4+tVgCqd7T2n@bubu.plessy.net>",
+      "references": [
+        "<25dd1f25-1f28-6453-d44e-c92cbd693959@onenetbeyond.org>",
+        "<20211020231822.GM14009@kumo.plessy.net>",
+        "<39c2b315-6a7a-240f-e11e-8c003e329b37@debian.org>",
+        "<YXFh4+tVgCqd7T2n@bubu.plessy.net>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 2021-10-21 15:49, Charles Plessy wrote:\n> So I wrote a small command that runs licensecheck on the old and new\n> file, and diffs the results.  I have to pipe them through sed because\n> at least one of the files is in a temporary folder, whose name is\n> included in the output of licensecheck.\n\nThis looks great to me - thanks a lot for coming up with this idea.\n\n> I then tested it on the `upstream` branch of one of our source packages\n> and... licensecheck is really too slow...\n\nIt might be slow, but reliable. Anyway this surely is acceptable to me.\n\nThanks again,\nAndrius",
+      "body_snippet": "Hi Charles,\n\nOn 2021-10-21 15:49, Charles Plessy wrote:\n> So I wrote a small command that runs licensecheck on the old and new\n> file, and diffs the results.  I have to pipe them through sed because\n>",
+      "thread_id": "thread-9e70ebd92b73",
+      "thread_depth": 4,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-3205b0689423",
+      "message_id": "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "6707f83842e189467f57f23ffd9f5248ac8399f7ca9199b7adc721a6fe16ed4f",
+      "date": "2021-10-21T15:26:51Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<20210813141007.GZ25911@an3as.eu>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>"
+      ],
+      "body_plain": "Hi, I finally got to look at this,\n\n> I just had a quick view and not much time for investigating but when trying\n> to build the new version of r-cran-rmarkdown I get:\n> [...]\n\nI got it building with replacing R/html_dependencies.R file from the last version.\nAs it looks, bslib is needed for new update, which is not in the archive\nso for now I propagated this \"hack\"\nWould be nice if you package and dput.\n\nFor now,\nif you can review rmarkdown and upload or give me a green signal to do so ....\n\nThanks!!!\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi, I finally got to look at this,\n\n> I just had a quick view and not much time for investigating but when trying\n> to build the new version of r-cran-rmarkdown I get:\n> [...]\n\nI got it building with ",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-300f356f0887",
+      "message_id": "<39207b56-d852-1386-00f0-be0617709926@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-21T15:33:59Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>"
+      ],
+      "body_plain": "On 10/21/21 8:56 PM, Nilesh Patra wrote:\n> I got it building with replacing R/html_dependencies.R file from the last version.\n> As it looks, bslib is needed for new update, which is not in the archive\n> so for now I propagated this \"hack\"\n\nBeing more verbose.... I pulled out the R/html_dependencies.R from the last markdown version\nand propagated that file with a patch\n\nThis did not have much to do with the JS it vendors.\n\n> Would be nice if you package and dput.\n\npackage => if you could package bslib and upload. As it looks, shiny need it as well.\n \n> For now,\n> if you can review rmarkdown and upload or give me a green signal to do so ....\n\nPlease also consider checking once that nothing breaks, autopkgtests pass though\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/21/21 8:56 PM, Nilesh Patra wrote:\n> I got it building with replacing R/html_dependencies.R file from the last version.\n> As it looks, bslib is needed for new update, which is not in the archive",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-c02d8ec42b1c",
+      "message_id": "<9db3b1cb-9b19-7bab-5bd3-b0c2d040b1a3@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-21T15:45:21Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<39207b56-d852-1386-00f0-be0617709926@onenetbeyond.org>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+        "<39207b56-d852-1386-00f0-be0617709926@onenetbeyond.org>"
+      ],
+      "body_plain": "On 10/21/21 9:03 PM, Nilesh Patra wrote:\n> > For now,\n> > if you can review rmarkdown and upload or give me a green signal to do so ....\n>\n>\n> Please also consider checking once that nothing breaks, autopkgtests pass though\n\nI enabled more tests to *really* run now, and some of them fail because of missing bslib\nTests need bslib -- though it is a sugests, and not mandatory.\n\nPlease take in a look and disable tests if you feel this'd be fair.\n\nNilesh",
+      "body_snippet": "On 10/21/21 9:03 PM, Nilesh Patra wrote:\n> > For now,\n> > if you can review rmarkdown and upload or give me a green signal to do so ....\n>\n>\n> Please also consider checking once that nothing breaks, a",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-246201c254c2",
+      "message_id": "<35ccf6b3-e7d9-6d5a-8f4a-667bc3092053@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-10-21T15:56:34Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>"
+      ],
+      "body_plain": "On 21.10.21 17:26, Nilesh Patra wrote:\n> Hi, I finally got to look at this,\n>\n> > I just had a quick view and not much time for investigating but when\n> > trying\n> > to build the new version of r-cran-rmarkdown I get:\n> > [...]\n>\n>\n> I got it building with replacing R/html_dependencies.R file from the\n> last version.\n> As it looks, bslib is needed for new update, which is not in the archive\n> so for now I propagated this \"hack\"\n> Would be nice if you package and dput.\n>\n> For now,\n> if you can review rmarkdown and upload or give me a green signal to do\n> so ....\n\nAdmittedly I am not too much of a fan to modify packages but bslib is a\nbit tricky and its dependency jquerylib is also not yet in the archive\n(Andreas submitted it to new a few weeks ago). Have not tested your\nrmarkdown work yet but you have my ok :)\n\nBest,\nSteffen",
+      "body_snippet": "On 21.10.21 17:26, Nilesh Patra wrote:\n> Hi, I finally got to look at this,\n>\n> > I just had a quick view and not much time for investigating but when\n> > trying\n> > to build the new version of r-cran",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-af857b9aac90",
+      "message_id": "<YXGSmvM8y2uBsUFC@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-21T16:17:30Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>"
+      ],
+      "body_plain": "Am Thu, Oct 21, 2021 at 08:56:51PM +0530 schrieb Nilesh Patra:\n> I got it building with replacing R/html_dependencies.R file from the last version.\n> As it looks, bslib is needed for new update, which is not in the archive\n> so for now I propagated this \"hack\"\n> Would be nice if you package and dput.\n> \n> For now,\n> if you can review rmarkdown and upload or give me a green signal to do so ....\n\nI simply trust you without checking and put bslib on my todo list.\n\nThanks a lot for checking\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Thu, Oct 21, 2021 at 08:56:51PM +0530 schrieb Nilesh Patra:\n> I got it building with replacing R/html_dependencies.R file from the last version.\n> As it looks, bslib is needed for new update, which",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-3b8e9139bdaa",
+      "message_id": "<YXGTF1LD7qxsefjm@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-21T16:19:35Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<35ccf6b3-e7d9-6d5a-8f4a-667bc3092053@gmx.de>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+        "<35ccf6b3-e7d9-6d5a-8f4a-667bc3092053@gmx.de>"
+      ],
+      "body_plain": "Am Thu, Oct 21, 2021 at 05:56:34PM +0200 schrieb Steffen Möller:\n> \n> Admittedly I am not too much of a fan to modify packages but bslib is a\n> bit tricky and its dependency jquerylib is also not yet in the archive\n> (Andreas submitted it to new a few weeks ago). Have not tested your\n> rmarkdown work yet but you have my ok :)\n\nI have an idea how to proceed with jquerylib ... just need some time.\n\nKind regards\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Thu, Oct 21, 2021 at 05:56:34PM +0200 schrieb Steffen Möller:\n> \n> Admittedly I am not too much of a fan to modify packages but bslib is a\n> bit tricky and its dependency jquerylib is also not yet ",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-cc69e31f02d0",
+      "message_id": "<445BB89C-1BE3-4A94-A9D5-943AF4E17527@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-21T16:21:55Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<YXGSmvM8y2uBsUFC@an3as.eu>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+        "<YXGSmvM8y2uBsUFC@an3as.eu>"
+      ],
+      "body_plain": "On 21 October 2021 9:47:30 pm IST, Andreas Tille <andreas at an3as.eu> wrote:\n>Am Thu, Oct 21, 2021 at 08:56:51PM +0530 schrieb Nilesh Patra:\n>> I got it building with replacing R/html_dependencies.R file from the last version.\n>> As it looks, bslib is needed for new update, which is not in the archive\n>> so for now I propagated this \"hack\"\n>> Would be nice if you package and dput.\n>> \n>> For now,\n>> if you can review rmarkdown and upload or give me a green signal to do so ....\n>\n>I simply trust you without checking and put bslib on my todo list.\n\nWell, I didn't do a lot of scrutiny either, and I'm not too sure if it's even right to have this new version without bslib -- being not an end user, it's hard for me to make a judgement.\n\nShould we hold off the new version upload for now until we have bslib, or should I just go ahead and dput?\nAgain, I'm not entirely sure though tests (which don't need bslib) passing is a good sign\n\nLet me know?\n\nNilesh",
+      "body_snippet": "On 21 October 2021 9:47:30 pm IST, Andreas Tille <andreas at an3as.eu> wrote:\n>Am Thu, Oct 21, 2021 at 08:56:51PM +0530 schrieb Nilesh Patra:\n>> I got it building with replacing R/html_dependencies.R ",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-4f03f6708dc6",
+      "message_id": "<87sfwujlwu.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-21T18:03:02Z",
+      "subject": "Re: RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": "<87o87i4kp7.fsf@piedmont.edu>",
+      "references": [
+        "<87r1cf42fn.fsf@piedmont.edu>",
+        "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>",
+        "<87o87i4kp7.fsf@piedmont.edu>"
+      ],
+      "body_plain": "On Thu 21 Oct 2021 08:38:17 AM EDT, Torrance, Douglas <dtorrance at piedmont.edu> wrote:\n> On Thu 21 Oct 2021 02:32:45 AM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> > On 10/21/21 6:30 AM, Torrance, Douglas wrote:\n> > > Hi everyone,\n> > > I've just packaged R.devices, which would be headed for the NEW\n> > > queue.\n> > > Would anyone be able to review/sponsor?\n> >\n> >\n> > I will sponsor, but see below\n>\n>\n> Great, thank you!\n>\n> >  > https://salsa.debian.org/r-pkg-team/r-cran-r.devices\n> > > Note: There's a little bit of a chicken-and-egg situation\n> > > here. R.devices\n> > > requires R.rsp (which is not in Debian yet)\n> >\n> >\n> > Do you also need sponsoring for r-cran-r.rsp?\n>\n>\n> Yes, eventually, but after R.devices is in unstable.\n>\n> > > to build its vignettes, but R.rsp\n> > > requires R.devices to build its vignettes!  So currently I'm just using the\n> > > pre-built vignettes.\n> >\n> >\n> > (Assuming the answer to above is yes)\n> >\n> > I think circular \"Build-\"depends are fine, many packages have it as a matter of fact -- one good example I know\n> > is node-babel7 (babel is a very popular JS framework) having a B-D on itself\n> > however what is not okay is cirular \"Depends\"\n> >\n> > But that said, we should try avoiding circular B-D wherever possible, and vigenettes are not that important\n> > to warrant for such a circular B-D, so I have two solutions/workarounds:\n> >\n> > 1. Don't use the upstream pre-builds, rather write a simple script, and generate the vigenettes \"locally\",\n> > and move them to a dir say debian/resources, then simply install these pre-builds during dh_auto_install.\n> > and, mention what you did in d/README.Source\n> >\n> > The only demerit is that with each new update, you will have to keep running the script to regenerate these vigenettes.\n>\n>\n> I've just implemented something like this now.  The source package now includes\n> a .tex file, generated locally using R.rsp, that is then used during build to\n> generate the final pdf vignette.\n>\n> > 2. Prune vigenettes altogether, don't vendor them at all -- I don't think they are very important, so you\n> > can take a pass here.\n>\n>\n> I'm a big fan of documentation, so I'm going to try to avoid this option if\n> at all possible.  :)\n>\n> > I don't have any problems with upstream pre-built vigenettes either, but then it's likely to be rejected.\n> >\n> > Please consider doing either of the two, and let me know when it's ready.\n>\n>\n> I don't think it's quite ready yet -- I just noticed some .rds files for a test\n> that probably should be generated during build, too -- but I'll ping you when I\n> think it's good to go.\n\nAlrighty, I think it's ready now.\n\nOne question -- does anyone know a simple way to find the version of the R\ngraphics engine in R itself?  I ended up writing a little C program to do this,\nbut it seems like there must be an easier way!\n\nThanks!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Thu 21 Oct 2021 08:38:17 AM EDT, Torrance, Douglas <dtorrance at piedmont.edu> wrote:\n> On Thu 21 Oct 2021 02:32:45 AM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> > On 10/21/21 6:30 AM,",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 3,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-f61aca70753e",
+      "message_id": "<c9e9d60c-ad4e-6ab4-9ee7-29e75601ba8b@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-21T18:31:29Z",
+      "subject": "Re: RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": "<87sfwujlwu.fsf@piedmont.edu>",
+      "references": [
+        "<87r1cf42fn.fsf@piedmont.edu>",
+        "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>",
+        "<87o87i4kp7.fsf@piedmont.edu>",
+        "<87sfwujlwu.fsf@piedmont.edu>"
+      ],
+      "body_plain": "On 10/21/21 11:33 PM, Torrance, Douglas wrote:\n> > Yes, eventually, but after R.devices is in unstable.\n\nIt is not necessary for wait for upload until pre-conditions are in unstable,\nit is possible to upload pre-conditions and targets both to NEW as well (done this many times) -- this saves time\nso if R.rsp is ready, let me know.\n\n> Alrighty, I think it's ready now.\n\nGreat, uploaded.\n \n> One question -- does anyone know a simple way to find the version of the R\n> graphics engine in R itself?  I ended up writing a little C program to do this,\n> but it seems like there must be an easier way!\n\nR_GE_definitions is the only way I know of, admittedly I don't know a better way to do it,\nthan you did already.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/21/21 11:33 PM, Torrance, Douglas wrote:\n> > Yes, eventually, but after R.devices is in unstable.\n\nIt is not necessary for wait for upload until pre-conditions are in unstable,\nit is possible to",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 4,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-d639ddfc4294",
+      "message_id": "<YXG6SoSRM8AZiH2m@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-10-21T19:06:50Z",
+      "subject": "Re: New version of r-cran-rmarkdown does not build",
+      "subject_clean": "New version of r-cran-rmarkdown does not build",
+      "in_reply_to": "<445BB89C-1BE3-4A94-A9D5-943AF4E17527@onenetbeyond.org>",
+      "references": [
+        "<20210813141007.GZ25911@an3as.eu>",
+        "<75e25e2f-8b07-33d8-c6b5-5d9176d52697@nileshpatra.info>",
+        "<YXGSmvM8y2uBsUFC@an3as.eu>",
+        "<445BB89C-1BE3-4A94-A9D5-943AF4E17527@onenetbeyond.org>"
+      ],
+      "body_plain": "Am Thu, Oct 21, 2021 at 09:51:55PM +0530 schrieb Nilesh Patra:\n> >I simply trust you without checking and put bslib on my todo list.\n> \n> Well, I didn't do a lot of scrutiny either, and I'm not too sure if it's even right to have this new version without bslib -- being not an end user, it's hard for me to make a judgement.\n> \n> Should we hold off the new version upload for now until we have bslib, or should I just go ahead and dput?\n> Again, I'm not entirely sure though tests (which don't need bslib) passing is a good sign\n\nIt would be great to have rmarkdown soon since some other packages\ndepend from it.  We all know that waiting for packages in new is hardly\npredictable.  So if you have a solution that its passing the tests that\nshould be sufficient.  With \"grown up\" users we get bug reports if\nsome issue might remain problematic.\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Thu, Oct 21, 2021 at 09:51:55PM +0530 schrieb Nilesh Patra:\n> >I simply trust you without checking and put bslib on my todo list.\n> \n> Well, I didn't do a lot of scrutiny either, and I'm not too su",
+      "thread_id": "thread-3205b0689423",
+      "thread_depth": 3,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-2363d0756b67",
+      "message_id": "<87mtn2jg2o.fsf@piedmont.edu>",
+      "from_name": "Torrance, Douglas",
+      "from_email_hash": "9c6edc635a2dc037653da23e4ffdfdabadcee7dcff504e3cf221cc2943a7670e",
+      "date": "2021-10-21T20:09:08Z",
+      "subject": "Re: RFS: r-cran-r.devices",
+      "subject_clean": "RFS: r-cran-r.devices",
+      "in_reply_to": "<c9e9d60c-ad4e-6ab4-9ee7-29e75601ba8b@onenetbeyond.org>",
+      "references": [
+        "<87r1cf42fn.fsf@piedmont.edu>",
+        "<06701b58-2d3a-9fed-efa7-72ea2b6d931d@onenetbeyond.org>",
+        "<87o87i4kp7.fsf@piedmont.edu>",
+        "<87sfwujlwu.fsf@piedmont.edu>",
+        "<c9e9d60c-ad4e-6ab4-9ee7-29e75601ba8b@onenetbeyond.org>"
+      ],
+      "body_plain": "On Thu 21 Oct 2021 02:31:29 PM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> On 10/21/21 11:33 PM, Torrance, Douglas wrote:\n> > > Yes, eventually, but after R.devices is in unstable.\n>\n>\n> It is not necessary for wait for upload until pre-conditions are in unstable,\n> it is possible to upload pre-conditions and targets both to NEW as well (done this many times) -- this saves time\n> so if R.rsp is ready, let me know.\n\nOh ok, cool -- I've never considered that.  R.rsp isn't ready quite yet, but\nI may work on it sooner rather than waiting for R.devices to appear in\nunstable.\n\n> > Alrighty, I think it's ready now.\n>\n>\n> Great, uploaded.\n\nThank you!\nDoug\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Thu 21 Oct 2021 02:31:29 PM EDT, Nilesh Patra <nilesh at onenetbeyond.org> wrote:\n> On 10/21/21 11:33 PM, Torrance, Douglas wrote:\n> > > Yes, eventually, but after R.devices is in unstable.\n>\n>\n> I",
+      "thread_id": "thread-bf08ede7fe12",
+      "thread_depth": 5,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-a97f64d7e51b",
+      "message_id": "<086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-28T14:01:07Z",
+      "subject": "New Bioconductor transitions?",
+      "subject_clean": "New Bioconductor transitions?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Andreas, Dylan, all,\n\nLooks like Bioconductor 3.14 was released yesterday[1]\nand several bioconductor packages need update now.\n\nWhat might be a good time to carry forward this transition (with the release team)?\n\n[1]: https://bioconductor.org/news/bioc_3_14_release/\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Andreas, Dylan, all,\n\nLooks like Bioconductor 3.14 was released yesterday[1]\nand several bioconductor packages need update now.\n\nWhat might be a good time to carry forward this transition (with the",
+      "thread_id": "thread-a97f64d7e51b",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-17da3699a1a3",
+      "message_id": "<YXuLJsmY6ZVf8nGy@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-10-29T05:48:22Z",
+      "subject": "Re: New Bioconductor transitions?",
+      "subject_clean": "New Bioconductor transitions?",
+      "in_reply_to": "<086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org>",
+      "references": [
+        "<086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org>"
+      ],
+      "body_plain": "Hi,\n\nAm Thu, Oct 28, 2021 at 07:31:07PM +0530 schrieb Nilesh Patra:\n> Looks like Bioconductor 3.14 was released yesterday[1]\n> and several bioconductor packages need update now.\n> \n> What might be a good time to carry forward this transition (with the release team)?\n\nI think there is no \"good or bad\" time for this but we should try to\ndo it soonish.  Dylan, will you volunteer to organise the transition?\n\nKind regards\n\n      Andreas.\n \n> [1]: https://bioconductor.org/news/bioc_3_14_release/\n> \n> Nilesh\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nAm Thu, Oct 28, 2021 at 07:31:07PM +0530 schrieb Nilesh Patra:\n> Looks like Bioconductor 3.14 was released yesterday[1]\n> and several bioconductor packages need update now.\n> \n> What might be a g",
+      "thread_id": "thread-a97f64d7e51b",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-5e341883fcb4",
+      "message_id": "<CA+6XHwTH8bkBn3FfVm7KLVi6t-tRo8fFsk22jL-2zz-HVVBUjQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2021-10-29T08:21:59Z",
+      "subject": "Re: New Bioconductor transitions?",
+      "subject_clean": "New Bioconductor transitions?",
+      "in_reply_to": "<YXuLJsmY6ZVf8nGy@an3as.eu>",
+      "references": [
+        "<086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org>",
+        "<YXuLJsmY6ZVf8nGy@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nLe ven. 29 oct. 2021 à 07:48, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> Am Thu, Oct 28, 2021 at 07:31:07PM +0530 schrieb Nilesh Patra:\n> > Looks like Bioconductor 3.14 was released yesterday[1]\n> > and several bioconductor packages need update now.\n> >\n> > What might be a good time to carry forward this transition (with the release team)?\n>\n> I think there is no \"good or bad\" time for this but we should try to\n> do it soonish.  Dylan, will you volunteer to organise the transition?\n>\n\nI can file a transition bug, but probably I won't have time to update packages.\nWhat I really need to do is to document how to do the transition, I\nforget every time.\n\n@Dirk Do you plan to upload new r-base in the next days?\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe ven. 29 oct. 2021 à 07:48, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> Am Thu, Oct 28, 2021 at 07:31:07PM +0530 schrieb Nilesh Patra:\n> > Looks like Bioconductor 3.14 was released yester",
+      "thread_id": "thread-a97f64d7e51b",
+      "thread_depth": 2,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-81f82a39fb82",
+      "message_id": "<CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2021-10-29T08:32:25Z",
+      "subject": "Bug#998057: transition: r-api-bioc-3.14",
+      "subject_clean": "Bug#998057: transition: r-api-bioc-3.14",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: transition\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\nBioconductor 3.14 was released [1].\n\n[1] https://bioconductor.org/news/bioc_3_14_release/\n\nLike for previous r-api-bioc transitions, all reverse dependencies\nneed a manual upgrade to the new upstream releases, they are not\nbinNMU-able. The Debian R Packages team will do so.\n\nPlease set up a tracker manually, since this is a transition of a\nvirtual package name.\n\nBen file:\n-----------------------------------------------------------------------------\ntitle = \"r-api-bioc-3.14\";\nis_affected = .depends ~ /r-api-bioc/;\nis_good = .depends ~ \"r-api-bioc-3.14\";\nis_bad = .depends ~ \"r-api-bioc-3.13\";\n-----------------------------------------------------------------------------\n\nBest,\nDylan",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: transition\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\nBioconductor 3.14 was released [1].\n\n[",
+      "thread_id": "thread-81f82a39fb82",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-ca8b9d360f1e",
+      "message_id": "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-10-31T18:00:19Z",
+      "subject": "What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello, I think this goes out to Andreas.\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\non the NEW queue and somewhere deep in me I recall to have seen it on\nthere but it seems gone. It is not in the archive though and I do not\nrecall a rejection email to the list.\n\nr-cran-dt needs it, and I need r-cran-dt :)\n\nMany thanks!\nSteffen",
+      "body_snippet": "Hello, I think this goes out to Andreas.\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\non the NEW queue and somewhere deep in me I recall to have seen it on\nthere but it se",
+      "thread_id": "thread-ca8b9d360f1e",
+      "thread_depth": 0,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-9fb5a4c47b42",
+      "message_id": "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-10-31T18:14:08Z",
+      "subject": "Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>"
+      ],
+      "body_plain": "On 10/31/21 11:30 PM, Steffen Möller wrote:\n> Hello, I think this goes out to Andreas.\n>\n> https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> on the NEW queue and somewhere deep in me I recall to have seen it on\n> there but it seems gone. It is not in the archive though and I do not\n> recall a rejection email to the list.\n\nRight, I just did a quick check, and it does not seem to be rejected\n\n$ ssh -t coccia.debian.org 'ls -1 /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc -l' 2>/dev/null\n0\n\nI manually checked in the dir as well, but I don't see any reject reason for jquerylib :/ @Andreas, did your dput job fail somehow?\nWas this uploaded properly?\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/31/21 11:30 PM, Steffen Möller wrote:\n> Hello, I think this goes out to Andreas.\n>\n> https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> on the NEW queue and somewhere dee",
+      "thread_id": "thread-ca8b9d360f1e",
+      "thread_depth": 1,
+      "month": "2021-10"
+    },
+    {
+      "id": "msg-79ada6469198",
+      "message_id": "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-10-31T18:16:44Z",
+      "subject": "Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>"
+      ],
+      "body_plain": "On 31.10.21 19:14, Nilesh Patra wrote:\n> On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > Hello, I think this goes out to Andreas.\n> >\n> > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> > on the NEW queue and somewhere deep in me I recall to have seen it on\n> > there but it seems gone. It is not in the archive though and I do not\n> > recall a rejection email to the list.\n>\n>\n> Right, I just did a quick check, and it does not seem to be rejected\n>\n> $ ssh -t coccia.debian.org 'ls -1\n> /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc\n> -l' 2>/dev/null\n> 0\n>\n> I manually checked in the dir as well, but I don't see any reject\n> reason for jquerylib :/ @Andreas, did your dput job fail somehow?\n> Was this uploaded properly?\n\nI just found there is a new upstream version. I'll upload it and then\nlikely see it in new.\n\nBest,\nSteffen",
+      "body_snippet": "On 31.10.21 19:14, Nilesh Patra wrote:\n> On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > Hello, I think this goes out to Andreas.\n> >\n> > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states t",
+      "thread_id": "thread-ca8b9d360f1e",
+      "thread_depth": 2,
+      "month": "2021-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-8563ae19a081",
+      "subject": "RFS: r-cran-partitions (NEW)",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2021-09-30T21:45:55Z",
+      "last_reply": "2021-09-30T21:45:55Z",
+      "root_message_id": "msg-8563ae19a081"
+    },
+    {
+      "id": "thread-4791fbcd4392",
+      "subject": "RFS: r-cran-partitions (NEW)",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Torrance, Douglas"
+      ],
+      "started": "2021-10-01T08:19:24Z",
+      "last_reply": "2021-10-01T14:04:26Z",
+      "root_message_id": "msg-4791fbcd4392"
+    },
+    {
+      "id": "thread-40e26ff269ea",
+      "subject": "Bug#995446: lintian: don't emit hyphen-in-upstream-part-of-debian-changelog-version for R packages",
+      "message_count": 1,
+      "participants": [
+        "Torrance, Douglas"
+      ],
+      "started": "2021-10-01T13:27:41Z",
+      "last_reply": "2021-10-01T13:27:41Z",
+      "root_message_id": "msg-40e26ff269ea"
+    },
+    {
+      "id": "thread-2ea4db0be83a",
+      "subject": "Patch for heap-buffer-overflow in CRAN spam package",
+      "message_count": 1,
+      "participants": [
+        "Sébastien Villemot"
+      ],
+      "started": "2021-10-01T13:37:34Z",
+      "last_reply": "2021-10-01T13:37:34Z",
+      "root_message_id": "msg-2ea4db0be83a"
+    },
+    {
+      "id": "thread-771647aada70",
+      "subject": "[Request for help] r-cran-plumber autopkgtests failing on i386",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2021-10-01T16:42:42Z",
+      "last_reply": "2021-10-01T16:42:42Z",
+      "root_message_id": "msg-771647aada70"
+    },
+    {
+      "id": "thread-95d22c8c57d0",
+      "subject": "r-cran-s2 failing builds on 32 bit arches stall migration of many packages",
+      "message_count": 13,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Graham Inggs",
+        "Nilesh Patra",
+        "Étienne Mollier"
+      ],
+      "started": "2021-10-03T20:56:42Z",
+      "last_reply": "2021-10-06T10:23:45Z",
+      "root_message_id": "msg-95d22c8c57d0"
+    },
+    {
+      "id": "thread-a9184551b328",
+      "subject": "RFS: r-cran-mpoly",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Torrance, Douglas"
+      ],
+      "started": "2021-10-11T00:59:56Z",
+      "last_reply": "2021-10-11T09:35:56Z",
+      "root_message_id": "msg-a9184551b328"
+    },
+    {
+      "id": "thread-9e70ebd92b73",
+      "subject": "Several copyrights wrong in R packages",
+      "message_count": 10,
+      "participants": [
+        "Andreas Tille",
+        "Andrius Merkys",
+        "Charles Plessy",
+        "Nilesh Patra"
+      ],
+      "started": "2021-10-20T19:28:53Z",
+      "last_reply": "2021-10-21T14:14:17Z",
+      "root_message_id": "msg-9e70ebd92b73"
+    },
+    {
+      "id": "thread-bf08ede7fe12",
+      "subject": "RFS: r-cran-r.devices",
+      "message_count": 6,
+      "participants": [
+        "Nilesh Patra",
+        "Torrance, Douglas"
+      ],
+      "started": "2021-10-21T01:00:29Z",
+      "last_reply": "2021-10-21T20:09:08Z",
+      "root_message_id": "msg-bf08ede7fe12"
+    },
+    {
+      "id": "thread-3205b0689423",
+      "subject": "New version of r-cran-rmarkdown does not build",
+      "message_count": 8,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2021-10-21T15:26:51Z",
+      "last_reply": "2021-10-21T19:06:50Z",
+      "root_message_id": "msg-3205b0689423"
+    },
+    {
+      "id": "thread-a97f64d7e51b",
+      "subject": "New Bioconductor transitions?",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi",
+        "Nilesh Patra"
+      ],
+      "started": "2021-10-28T14:01:07Z",
+      "last_reply": "2021-10-29T08:21:59Z",
+      "root_message_id": "msg-a97f64d7e51b"
+    },
+    {
+      "id": "thread-81f82a39fb82",
+      "subject": "Bug#998057: transition: r-api-bioc-3.14",
+      "message_count": 1,
+      "participants": [
+        "Dylan Aïssi"
+      ],
+      "started": "2021-10-29T08:32:25Z",
+      "last_reply": "2021-10-29T08:32:25Z",
+      "root_message_id": "msg-81f82a39fb82"
+    },
+    {
+      "id": "thread-ca8b9d360f1e",
+      "subject": "What happened to r-cran-jquerylib ?",
+      "message_count": 3,
+      "participants": [
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2021-10-31T18:00:19Z",
+      "last_reply": "2021-10-31T18:16:44Z",
+      "root_message_id": "msg-ca8b9d360f1e"
+    }
+  ]
+}

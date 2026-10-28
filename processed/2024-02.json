@@ -1,0 +1,94 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2024-02",
+  "messages": [
+    {
+      "id": "msg-a83cd9fd19c6",
+      "message_id": "<ZbtKhDECgZ0rd2Vk@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2024-02-01T07:38:44Z",
+      "subject": "Re: Bug#1061828: r-cran-plotly: Can't create any plots",
+      "subject_clean": "Bug#1061828: r-cran-plotly: Can't create any plots",
+      "in_reply_to": "<e9eb8ae9-5a8c-4927-8421-f399a1ad9926@gmail.com>",
+      "references": [
+        "<170656061580.3854.842945475583925539.reportbug@debian>",
+        "<Zbk7Cqxm4DRxWuKW@an3as.eu>",
+        "<e9eb8ae9-5a8c-4927-8421-f399a1ad9926@gmail.com>"
+      ],
+      "body_plain": "Hi again,\n\nAm Tue, Jan 30, 2024 at 08:58:58PM +0100 schrieb Przemysław Kopa:\n> \n> $ head -n 6 plotly_cran/lib/plotly-main-2.11.1/plotly-latest.min.js\n> /**\n> * plotly.js v2.11.1\n> * Copyright 2012-2022, Plotly, Inc.\n> * All rights reserved.\n> * Licensed under the MIT license\n> */\n\nI've updated plotly.js from upstream[1] to its latest version (2.28.0)\nand hope this is working nicely now (in Debian package 4.10.4+dfsg-2\njust uploaded to unstable).\n\nIf you want to make sure the plotly Debian package works always as\nexpected I would love if you could try to convince CRAN plotly authors\nto include the uncompressed plotly.js source in their download tarball.\nIn Debian compressed JS is considered binary without source.  Thus I\nhave to remove the compressed file and fetch the uncompressed one from\nupstream.  Unfortunately I do not do this routinely when upgrading the\nplotly package which caused the observed problem.\n\nIn any case thanks for your bug report and the accordin investigation\n   Andreas.\n\n[1] https://github.com/plotly/plotly.js \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again,\n\nAm Tue, Jan 30, 2024 at 08:58:58PM +0100 schrieb Przemysław Kopa:\n> \n> $ head -n 6 plotly_cran/lib/plotly-main-2.11.1/plotly-latest.min.js\n> /**\n> * plotly.js v2.11.1\n> * Copyright 2012-202",
+      "thread_id": "thread-a83cd9fd19c6",
+      "thread_depth": 0,
+      "month": "2024-02"
+    },
+    {
+      "id": "msg-b97b5c812ce7",
+      "message_id": "<E1rXN3e-00000009K34-2wdC.curtis-d-wholeseller-store@smtp54.i.mail.ru>",
+      "from_name": "Deere Curtis",
+      "from_email_hash": "0dabf45d3b8e8aee1d86a0850d0a7f45bdc4dd200d3025def3c664e24efdc488",
+      "date": "2024-02-06T15:08:20Z",
+      "subject": "Inquiry Regarding Product Availability and Delivery Schedule",
+      "subject_clean": "Inquiry Regarding Product Availability and Delivery Schedule",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello Sir/ Madam\n\nI trust this message finds you well. I am writing to inquire about the current availability of Agarwood essential oil in your inventory. Additionally, I would appreciate information regarding the delivery schedule for these product.\n\nCould you kindly provide details on the quantity of Agarwood oil you have in stock and any upcoming deliveries plan? Moreover, I am interested in understanding the lead time for the delivery once an order is placed.\n\nYour prompt response to these queries would be highly valued as it will assist us in planning our procurement process effectively.\n\nThank you for your attention to this matter.\n\nBest Regards,\nCurtis Deere.\npurchase manager\ntartiera Agarwood essential oil store",
+      "body_snippet": "Hello Sir/ Madam\n\nI trust this message finds you well. I am writing to inquire about the current availability of Agarwood essential oil in your inventory. Additionally, I would appreciate information ",
+      "thread_id": "thread-b97b5c812ce7",
+      "thread_depth": 0,
+      "month": "2024-02"
+    },
+    {
+      "id": "msg-f7545eb368cc",
+      "message_id": "<26078.34279.366167.931687@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2024-02-28T01:01:27Z",
+      "subject": "CRAN Package Matrix update and a possible transition or not",
+      "subject_clean": "CRAN Package Matrix update and a possible transition or not",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "A couple of days ago, the (effective) Maintainer and rather active developer\nof the Matrix package Mikael Jagan (CC'ed) posted on the r-package-devel list\n(the primary list for R package development) that the upcoming change of\nMatrix 1.7-0, planned for March 11, will be _very midly disruptive_ but only\nto the very small subset of Matrix dependents that _actually use its\nheaders_. See the full mail at [1]. The gory detail is that Matrix embeds and\nuses an advanced sparse matrix library (called SuiteSparse) which it updates,\nand the change in headers affects those (and only those!) who compile against\nthese headers.\n\nNow, Matrix currently has 1333 packages at CRAN using it [2]. But he lists 15\n(fifteen) of possibly breaking because these are the packages having a\n'LinkingTo: Matrix' [3].  That 1.113 per cent.\n\nIt is similar for us. Running a simple `apt-cache rdepends r-cran-matrix | wc -l`\ngets us 145 lines (including headers and meta packages). Call it 140 that a\ntransition would cover.\n\nBut among the 15 affected only five are in Debian:\n\n  irlba    r-cran-irlba\n  lme4     r-cran-lme4\n  OpenMx   r-cran-openmx\n  TMP      r-cran-tmp\n  bcSeq    r-bioc-bcseq\n  \nOne of these is mine (lme4), I can easily produce a sequenced update. I\nsuggested we deal with the other _four packages_ by standard bug reports and\nNMUs as needed instead of forcing likely 140 packages through a transition.\n\nNote that is in fact truly different from the past two hickups with Matrix\ntransition which happened at the R-only level of caching elements of its OO\nresolution and whatnot hence affecting more package. This time it really is\ncompilation, and packages NOT touching the SuiteSparse headers (ie roughly\n135 or so of the 140 Debian packages using Matrix) will not be affected.\n\nThat said, I of course defer to the release team. If the feeling is 'eff\nthis, transition it is' that is what we do. Whether I think is overkill or\nnot is moot.\n\nFeel free to CC me as I am not longer a regular on debian-devel.\n\nCheers,  Dirk\n\n[1] https://stat.ethz.ch/pipermail/r-package-devel/2024q1/010463.html\n[2] In R:\n    > db <- tools::CRAN_package_db()\n    > matrixrevdep <- tools::package_dependencies(\"Matrix\", reverse=TRUE, db=db)[[1]]\n    > length(matrixrevdep)    # the vector 'matrixrevdep' list all\n    [1] 1333\n    > \n[3] LinkingTo:, despite its name, is the directive to include the package C\n    headers in the compilation. The 'db' object above allows to us to subset\n    which of the 1333 packages using Matrix also have a LinkingTo\n \n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "A couple of days ago, the (effective) Maintainer and rather active developer\nof the Matrix package Mikael Jagan (CC'ed) posted on the r-package-devel list\n(the primary list for R package development) ",
+      "thread_id": "thread-f7545eb368cc",
+      "thread_depth": 0,
+      "month": "2024-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-a83cd9fd19c6",
+      "subject": "Bug#1061828: r-cran-plotly: Can't create any plots",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2024-02-01T07:38:44Z",
+      "last_reply": "2024-02-01T07:38:44Z",
+      "root_message_id": "msg-a83cd9fd19c6"
+    },
+    {
+      "id": "thread-b97b5c812ce7",
+      "subject": "Inquiry Regarding Product Availability and Delivery Schedule",
+      "message_count": 1,
+      "participants": [
+        "Deere Curtis"
+      ],
+      "started": "2024-02-06T15:08:20Z",
+      "last_reply": "2024-02-06T15:08:20Z",
+      "root_message_id": "msg-b97b5c812ce7"
+    },
+    {
+      "id": "thread-f7545eb368cc",
+      "subject": "CRAN Package Matrix update and a possible transition or not",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2024-02-28T01:01:27Z",
+      "last_reply": "2024-02-28T01:01:27Z",
+      "root_message_id": "msg-f7545eb368cc"
+    }
+  ]
+}

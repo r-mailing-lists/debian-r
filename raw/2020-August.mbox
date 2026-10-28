@@ -1,0 +1,438 @@
+From hello at shayandoust.me  Wed Aug  5 11:33:00 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Wed, 5 Aug 2020 12:33:00 +0100
+Subject: Sponsored upload for r-cran-ksamples
+Message-ID: <790065eb-038e-21da-7e73-cc65fb8f1de4@shayandoust.me>
+
+Hello,
+
+I believe r-cran-ksamples[1] is ready for a sponsored upload. Do let me
+know if anything needs altering.
+
+With this package, I had to remove the debian/tests directory. I am not
+sure why this was generated, and I simply cannot find any test *.R files
+for this.
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-ksamples
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Wed Aug  5 14:09:26 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 5 Aug 2020 16:09:26 +0200
+Subject: Re: Sponsored upload for r-cran-ksamples
+In-Reply-To: <790065eb-038e-21da-7e73-cc65fb8f1de4@shayandoust.me>
+References: <790065eb-038e-21da-7e73-cc65fb8f1de4@shayandoust.me>
+Message-ID: <20200805140926.GF7363@an3as.eu>
+
+Hi Shayan,
+
+On Wed, Aug 05, 2020 at 12:33:00PM +0100, Shayan Doust wrote:
+> I believe r-cran-ksamples[1] is ready for a sponsored upload. Do let me
+> know if anything needs altering.
+
+You need to be carefully with Build-Depends.  r-cran-suppdists was missing
+since its not yet in Debian.  Since dh-make-R only includes existing
+packages this needs to be added manually (which I did).
+ 
+> With this package, I had to remove the debian/tests directory. I am not
+> sure why this was generated, and I simply cannot find any test *.R files
+> for this.
+
+I observed something like this in the past and have no good idea.  Somehow
+dh-make-R has a bug - but I was to lazy to check these rare cases. 
+
+I've uploaded the package to new - thanks for working on this
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From hello at shayandoust.me  Thu Aug 20 17:21:16 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Thu, 20 Aug 2020 18:21:16 +0100
+Subject: Sponsored upload for r-cran-cmstatr
+Message-ID: <1728b70f-2f4e-1969-03ad-522894bbc552@shayandoust.me>
+
+Hello,
+
+I believe r-cran-cmstatr[1] is ready for a sponsored upload. Do let me
+know if anything needs altering.
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-cmstatr
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From johannes.ranke at jrwb.de  Fri Aug 21 03:58:48 2020
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Fri, 21 Aug 2020 05:58:48 +0200
+Subject: Build-Depends for CRAN packages
+Message-ID: <5271336.eimzHP8Gue@ryz>
+
+Hi all,
+
+yesterday I wondered why the Build-Depends of CRAN packages that are uploaded 
+to unstable are adapted to the current R version, as mentioned in the 
+Changelog e.g. of yesterdays upload of mgcv:
+
+--------------------
+
+Betreff: Accepted mgcv 1.8-32-1 (source) into unstable
+Datum: Donnerstag, 20. August 2020, 18:06:49 CEST
+Von: Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+An: debian-devel-changes at lists.debian.org
+
+Format: 1.8
+Date: Thu, 20 Aug 2020 10:41:33 -0500
+Source: mgcv
+Architecture: source
+Version: 1.8-32-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Dirk Eddelbuettel <edd at debian.org>
+Changed-By: Dirk Eddelbuettel <edd at debian.org>
+Changes:
+ mgcv (1.8-32-1) unstable; urgency=medium
+ .
+   * New upstream release
+ .
+   * debian/control: Set Build-Depends: to current R version
+
+--------------------
+
+I never got the point of why the adaptation of the build dependency is 
+necessary or beneficial for these uploads of CRAN packages to unstable. 
+Shouldn't they build at least on the previous R version, as demonstrated by 
+the CRAN checks on r-oldrel [1]? It seems to me that compatibility with the 
+previous release is implicitly required and -- at least to some degree -- 
+guaranteed by these checks.
+
+Johannes
+
+[1] https://cran.r-project.org/web/checks/check_flavors.html
+
+From edd at debian.org  Fri Aug 21 04:18:21 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 20 Aug 2020 23:18:21 -0500
+Subject: Re: Build-Depends for CRAN packages
+In-Reply-To: <5271336.eimzHP8Gue@ryz>
+References: <5271336.eimzHP8Gue@ryz>
+Message-ID: <24383.19213.833449.199529@rob.eddelbuettel.com>
+
+On 21 August 2020 at 05:58, Johannes Ranke wrote:
+| Hi all,
+| 
+| yesterday I wondered why the Build-Depends of CRAN packages that are uploaded 
+| to unstable are adapted to the current R version, as mentioned in the 
+| Changelog e.g. of yesterdays upload of mgcv:
+| 
+| --------------------
+| 
+| Betreff: Accepted mgcv 1.8-32-1 (source) into unstable
+| Datum: Donnerstag, 20. August 2020, 18:06:49 CEST
+| Von: Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+| An: debian-devel-changes at lists.debian.org
+| 
+| Format: 1.8
+| Date: Thu, 20 Aug 2020 10:41:33 -0500
+| Source: mgcv
+| Architecture: source
+| Version: 1.8-32-1
+| Distribution: unstable
+| Urgency: medium
+| Maintainer: Dirk Eddelbuettel <edd at debian.org>
+| Changed-By: Dirk Eddelbuettel <edd at debian.org>
+| Changes:
+|  mgcv (1.8-32-1) unstable; urgency=medium
+|  .
+|    * New upstream release
+|  .
+|    * debian/control: Set Build-Depends: to current R version
+| 
+| --------------------
+| 
+| I never got the point of why the adaptation of the build dependency is 
+| necessary or beneficial for these uploads of CRAN packages to unstable. 
+| Shouldn't they build at least on the previous R version, as demonstrated by 
+| the CRAN checks on r-oldrel [1]? It seems to me that compatibility with the 
+| previous release is implicitly required and -- at least to some degree -- 
+| guaranteed by these checks.
+
+Debian is independent of CRAN.
+
+So when I as a Debian developer upload to _Debian unstable_ we ensure it
+builds with Debian unstable in order to migrate to testing in order to be
+cast one day into a new stable release.
+
+That is simply a different set of requirements than we have at CRAN (where I
+also upload a few things as a CRAN package author -- but into a very
+different system).
+
+| [1] https://cran.r-project.org/web/checks/check_flavors.html
+
+While CRAN has Debian flavours for testing, these tend to be the "testing"
+rolling releases so we can't directly rely on them.
+
+I think we are in basic agreement, and having done this here for so long I
+often wondered if we could not have a more formal Debian <-> CRAN link.  But
+we don't right now.  Hence Debian requirements only in the upload.
+
+That said, it is also possible to systematically patch this.  Michael seems
+to cope fine at his PPA with the over 4600 r-cran-* packages for three Ubuntu
+flavours.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From johannes.ranke at jrwb.de  Fri Aug 21 07:12:00 2020
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Fri, 21 Aug 2020 09:12:00 +0200
+Subject: Re: Build-Depends for CRAN packages
+In-Reply-To: <24383.19213.833449.199529@rob.eddelbuettel.com>
+References: <5271336.eimzHP8Gue@ryz> <24383.19213.833449.199529@rob.eddelbuettel.com>
+Message-ID: <2449589.H5UqOGPbXK@ryz>
+
+Am Freitag, 21. August 2020, 06:18:21 CEST schrieb Dirk Eddelbuettel:
+> On 21 August 2020 at 05:58, Johannes Ranke wrote:
+> | Hi all,
+> | 
+> | yesterday I wondered why the Build-Depends of CRAN packages that are
+> | uploaded to unstable are adapted to the current R version, as mentioned
+> | in the Changelog e.g. of yesterdays upload of mgcv:
+> | 
+> | --------------------
+> | 
+> | Betreff: Accepted mgcv 1.8-32-1 (source) into unstable
+> | Datum: Donnerstag, 20. August 2020, 18:06:49 CEST
+> | Von: Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+> | An: debian-devel-changes at lists.debian.org
+> | 
+> | Format: 1.8
+> | Date: Thu, 20 Aug 2020 10:41:33 -0500
+> | Source: mgcv
+> | Architecture: source
+> | Version: 1.8-32-1
+> | Distribution: unstable
+> | Urgency: medium
+> | Maintainer: Dirk Eddelbuettel <edd at debian.org>
+> | Changed-By: Dirk Eddelbuettel <edd at debian.org>
+> | 
+> | Changes:
+> |  mgcv (1.8-32-1) unstable; urgency=medium
+> |  .
+> |  
+> |    * New upstream release
+> |  
+> |  .
+> |  
+> |    * debian/control: Set Build-Depends: to current R version
+> | 
+> | --------------------
+> | 
+> | I never got the point of why the adaptation of the build dependency is
+> | necessary or beneficial for these uploads of CRAN packages to unstable.
+> | Shouldn't they build at least on the previous R version, as demonstrated
+> | by
+> | the CRAN checks on r-oldrel [1]? It seems to me that compatibility with
+> | the
+> | previous release is implicitly required and -- at least to some degree --
+> | guaranteed by these checks.
+> 
+> Debian is independent of CRAN.
+
+Good point. But it would still appear reasonable to me to make use of our 
+knowledge of the CRAN testing infrastructure when packaging for Debian.
+ 
+> So when I as a Debian developer upload to _Debian unstable_ we ensure it
+> builds with Debian unstable in order to migrate to testing in order to be
+> cast one day into a new stable release.
+
+I do not think that this build dependency is necessary for this. In my 
+experience, CRAN packages build on the previous R version as well. Migration 
+of binary packages can sufficiently be controlled by the r-api version as far as 
+I understand.
+
+> That is simply a different set of requirements than we have at CRAN (where I
+> also upload a few things as a CRAN package author -- but into a very
+> different system).
+> 
+> | [1] https://cran.r-project.org/web/checks/check_flavors.html
+> 
+> While CRAN has Debian flavours for testing, these tend to be the "testing"
+> rolling releases so we can't directly rely on them.
+
+Well, the checks on r-oldrel that I am referring to are for Windows and Mac 
+anyways. So my argument is not specifically strong here.
+ 
+> I think we are in basic agreement, and having done this here for so long I
+> often wondered if we could not have a more formal Debian <-> CRAN link.  But
+> we don't right now.  Hence Debian requirements only in the upload.
+> 
+> That said, it is also possible to systematically patch this.  Michael seems
+> to cope fine at his PPA with the over 4600 r-cran-* packages for three
+> Ubuntu flavours.
+
+This is what I started doing in 2008 [2] for the backports to Debian. I 
+recently removed this code [3] as I generally compile CRAN packages using the 
+current R version backported from unstable, so the build dependency is 
+fulfilled anyways.
+
+I do not want to push this too hard. The discussion already helped my to 
+understand it better.
+
+Thanks,
+
+Johannes
+
+[2] https://cgit.jrwb.de/r-backports/commit/?id=ea37b5789aec00d47c
+[3] https://cgit.jrwb.de/r-backports/commit/?id=b0e1bc37ded73e
+
+From info at 217software.com  Fri Aug 21 10:25:10 2020
+From: info at 217software.com (John)
+Date: Fri, 21 Aug 2020 10:25:10 +0000
+Subject: Fwd: Re: Would You please give me web hosting comparison link?
+Message-ID: <a878e825f01216636a302a48ba253535@217software.com>
+
+On 2020-08-12 13:22, John wrote:
+> Thanks. I am going to mail it to my webmaster.
+> 
+> On 2020-08-12 13:28, Kris wrote:
+>> Good Day John,
+>>
+>> Of course, here You go- c4y.eu/hosting-compare
+>> 
+>> On 2020-08-12 13:33, John wrote:
+>>> Good Day Kris,
+>>> 
+>>> we will start two php webpages projects so we are going to need web hosting, would You please send me that web-hosting compare web-site, that You mentioned Yesterday?
+>>> 
+>> 
+>
+
+From edd at debian.org  Fri Aug 21 12:13:05 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 21 Aug 2020 07:13:05 -0500
+Subject: Re: Build-Depends for CRAN packages
+In-Reply-To: <2449589.H5UqOGPbXK@ryz>
+References: <5271336.eimzHP8Gue@ryz> <24383.19213.833449.199529@rob.eddelbuettel.com> <2449589.H5UqOGPbXK@ryz>
+Message-ID: <24383.47697.674654.30255@rob.eddelbuettel.com>
+
+On 21 August 2020 at 09:12, Johannes Ranke wrote:
+| Am Freitag, 21. August 2020, 06:18:21 CEST schrieb Dirk Eddelbuettel:
+| > Debian is independent of CRAN.
+| 
+| Good point. But it would still appear reasonable to me to make use of our 
+| knowledge of the CRAN testing infrastructure when packaging for Debian.
+|  
+| > So when I as a Debian developer upload to _Debian unstable_ we ensure it
+| > builds with Debian unstable in order to migrate to testing in order to be
+| > cast one day into a new stable release.
+| 
+| I do not think that this build dependency is necessary for this. In my 
+| experience, CRAN packages build on the previous R version as well. Migration 
+| of binary packages can sufficiently be controlled by the r-api version as far as 
+| I understand.
+
+I think I built our first r-cran-* package around 2003, almost seventeen
+years ago. And since I always thought we could do better than we do---I fully
+agree with you that the _existing CRAN checks_ are _de-facto_ sufficient.
+
+Debian being Debian, as volunteers we (mostly) still treat each of the CRAN
+packages individually.  Which can never scale to CRAN size. Which means we'd
+have to do something outside of Debian where we lack (build and host)
+systems. A catch twenty-two. I once had a small grant to build something but
+that never really got started simply for lack of time.
+
+An interesting alternative approach is now available over in Fedora-land.
+Inaki builds _all_ of CRAN. 16k binaries.
+
+(And he has a clever littler R package 'bspm' on CRAN that "bridges to the
+package manager"--and I helped with apt. On a properly configured packages
+[see my r-bspm containers within Rocker] the install.packages() call now
+dispatches to apt (for us) or dnf (for him). Pretty awesome as you now get
+around 1k r-cran-* binaries [and some bioc] for Debian, and Michael's 4600+
+r-cran-* binaries for Ubuntu. Attractive for R users who will reason in names
+of R packages, things like automating CI and more. It's getting closer to a
+wider announcement as it is already pretty useful as is.)
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat Aug 22 09:24:59 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 22 Aug 2020 11:24:59 +0200
+Subject: Re: Sponsored upload for r-cran-cmstatr
+In-Reply-To: <1728b70f-2f4e-1969-03ad-522894bbc552@shayandoust.me>
+References: <1728b70f-2f4e-1969-03ad-522894bbc552@shayandoust.me>
+Message-ID: <20200822092459.GD29215@an3as.eu>
+
+Hi Shayan,
+
+On Thu, Aug 20, 2020 at 06:21:16PM +0100, Shayan Doust wrote:
+> I believe r-cran-cmstatr[1] is ready for a sponsored upload. Do let me
+> know if anything needs altering.
+
+Uploaded.  Thanks for your work on this
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sat Aug 22 10:01:54 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 22 Aug 2020 12:01:54 +0200
+Subject: Re: Build-Depends for CRAN packages
+In-Reply-To: <2449589.H5UqOGPbXK@ryz>
+References: <5271336.eimzHP8Gue@ryz> <24383.19213.833449.199529@rob.eddelbuettel.com> <2449589.H5UqOGPbXK@ryz>
+Message-ID: <20200822100154.GE29215@an3as.eu>
+
+On Fri, Aug 21, 2020 at 09:12:00AM +0200, Johannes Ranke wrote:
+> > So when I as a Debian developer upload to _Debian unstable_ we ensure it
+> > builds with Debian unstable in order to migrate to testing in order to be
+> > cast one day into a new stable release.
+> 
+> I do not think that this build dependency is necessary for this.
+
+It is definitely not necessary as all packages uploaded by other
+developers than Dirk are proving nicely.  Adding those unnecessary build
+requirements are also making backporting harder.  I've discussed this
+previously with Dirk but was obviously not convincing enough.
+
+BTW, when using dh-make-R / dh-update-R as I'd recommend no unneeded
+versioned Build-Depends are added.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+

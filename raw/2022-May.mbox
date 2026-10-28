@@ -1,0 +1,1198 @@
+From daissi at debian.org  Sun May  1 09:42:07 2022
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sun, 1 May 2022 11:42:07 +0200
+Subject: Bug#1010422: transition: r-api-bioc-3.15
+Message-ID: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi,
+Bioconductor 3.15 has been released [1].
+
+[1] https://bioconductor.org/news/bioc_3_15_release/
+
+Like for previous r-api-bioc transitions, all reverse dependencies
+need a manual upgrade to the new upstream releases, they are not
+binNMU-able. The Debian R Packages team will do so.
+
+Please set up a tracker manually, since this is a transition of a
+virtual package name.
+
+Ben file:
+-----------------------------------------------------------------------------
+title = "r-api-bioc-3.15";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.15";
+is_bad = .depends ~ "r-api-bioc-3.14";
+-----------------------------------------------------------------------------
+
+Best,
+Dylan
+
+From nilesh at debian.org  Mon May  2 04:09:25 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Mon, 2 May 2022 09:39:25 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com>
+References: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com>
+Message-ID: <Ym9ZdWR7u/HJjKY3@debian>
+
+On Sun, 1 May 2022 11:42:07 +0200 =?UTF-8?B?RHlsYW4gQcOvc3Np?= <daissi at debian.org> wrote:
+> Hi,
+> Bioconductor 3.15 has been released [1].
+
+Please hold this off until r-base migrates (which should be soon)
+
+--
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Mon May  2 06:24:34 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 2 May 2022 08:24:34 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <Ym9ZdWR7u/HJjKY3@debian>
+References: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <Ym9ZdWR7u/HJjKY3@debian>
+Message-ID: <Ym95IjKRO7P3Toyk@an3as.eu>
+
+Am Mon, May 02, 2022 at 09:39:25AM +0530 schrieb Nilesh Patra:
+> On Sun, 1 May 2022 11:42:07 +0200 =?UTF-8?B?RHlsYW4gQcOvc3Np?= <daissi at debian.org> wrote:
+> > Hi,
+> > Bioconductor 3.15 has been released [1].
+> 
+> Please hold this off until r-base migrates (which should be soon)
+
+As far as I can see the testing migration is blocked by
+
+  ∙ autopkgtest for r-cran-thematic/0.1.2.1-2: amd64: Pass, arm64: Regression ♻ (reference ♻), armhf: Pass, i386: Pass, ppc64el: Pass, s390x: Pass
+
+where the autopkgtest log[1] says:
+
+...
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Error (test-base.R:9:3): base baselines ─────────────────────────────────────
+Error in `svglite_(filename, bg, width, height, pointsize, standalone, 
+    always_valid)`: Graphics API version mismatch
+Backtrace:
+    ▆
+ 1. └─thematic:::expect_doppelganger(...) at test-base.R:9:2
+ 2.   └─vdiffr::expect_doppelganger(name, p, ...) at tests/testthat/helper-vdiffr.R:12:2
+ 3.     └─vdiffr writer(fig, testcase, title)
+ 4.       └─vdiffr:::svglite(file)
+ 5.         └─vdiffr:::svglite_(...)
+── Error (test-ggplot.R:31:3): ggplot baselines ────────────────────────────────
+Error in `svglite_(filename, bg, width, height, pointsize, standalone, 
+    always_valid)`: Graphics API version mismatch
+Backtrace:
+    ▆
+ 1. └─thematic:::expect_doppelganger(...) at test-ggplot.R:31:2
+ 2.   └─vdiffr::expect_doppelganger(name, p, ...) at tests/testthat/helper-vdiffr.R:12:2
+ 3.     └─vdiffr writer(fig, testcase, title)
+ 4.       └─vdiffr:::svglite(file)
+ 5.         └─vdiffr:::svglite_(...)
+── Error (test-ggplot.R:149:3): Scale defaults can be overridden ───────────────
+Error in `svglite_(filename, bg, width, height, pointsize, standalone, 
+    always_valid)`: Graphics API version mismatch
+...
+
+Isn't this the just discussed Graphics API issue?
+
+I guess your recent upload of 0.1.2.1-3 is supposed to fix this and
+is intended to enable the migration, right?
+
+Kind regards
+
+      Andreas.
+
+[1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-cran-thematic/21293099/log.gz
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Mon May  2 06:41:36 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Mon, 02 May 2022 12:11:36 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <Ym95IjKRO7P3Toyk@an3as.eu>
+References: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <Ym9ZdWR7u/HJjKY3@debian> <Ym95IjKRO7P3Toyk@an3as.eu>
+Message-ID: <8EC5FCE3-A793-472D-808D-69B0FCFD3313@debian.org>
+
+On 2 May 2022 11:54:34 am IST, Andreas Tille <tille at debian.org> wrote:
+>Am Mon, May 02, 2022 at 09:39:25AM +0530 schrieb Nilesh Patra:
+>> On Sun, 1 May 2022 11:42:07 +0200 =?UTF-8?B?RHlsYW4gQcOvc3Np?= <daissi at debian.org> wrote:
+>> > Hi,
+>> > Bioconductor 3.15 has been released [1].
+>> 
+>> Please hold this off until r-base migrates (which should be soon)
+>
+>As far as I can see the testing migration is blocked by
+>
+>Isn't this the just discussed Graphics API issue?
+
+There were many more of 'em blocking the transition. I cleaned that up yesterday and reduced it to the one remaining.
+
+>I guess your recent upload of 0.1.2.1-3 is supposed to fix this and
+>is intended to enable the migration, right?
+>
+
+Yes, let's wait until r-base migrates, I guess it'd take a day or two maybe.
+Anyway we need to wait for bioc transition until we get a thumbs up from release team.
+
+Migrating the graphics packages are also a mess now due to no-binNMUs. Need to propagate hacks to get these in testing. All of it could have been avoided if it was properly coordinated, but anyway.
+
+>[1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-cran-thematic/21293099/log.gz
+>
+
+--
+Best,
+Nilesh
+
+From andreas at an3as.eu  Mon May  2 07:49:37 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 2 May 2022 09:49:37 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <8EC5FCE3-A793-472D-808D-69B0FCFD3313@debian.org>
+References: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <Ym9ZdWR7u/HJjKY3@debian> <Ym95IjKRO7P3Toyk@an3as.eu> <8EC5FCE3-A793-472D-808D-69B0FCFD3313@debian.org>
+Message-ID: <Ym+NEeGNsNPR7cX9@an3as.eu>
+
+Hi Nilesh,
+
+Am Mon, May 02, 2022 at 12:11:36PM +0530 schrieb Nilesh Patra:
+> >Isn't this the just discussed Graphics API issue?
+> 
+> There were many more of 'em blocking the transition. I cleaned that up yesterday and reduced it to the one remaining.
+
+Thanks a lot for all your work!
+ 
+> >I guess your recent upload of 0.1.2.1-3 is supposed to fix this and
+> >is intended to enable the migration, right?
+> >
+> 
+> Yes, let's wait until r-base migrates, I guess it'd take a day or two maybe.
+> Anyway we need to wait for bioc transition until we get a thumbs up from release team.
+
+Sure.  I guess it is sensible to not fiddle around with R package
+updates for the moment.
+ 
+> Migrating the graphics packages are also a mess now due to no-binNMUs. Need to propagate hacks to get these in testing. All of it could have been avoided if it was properly coordinated, but anyway.
+
+I agree 100%.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon May  2 18:51:35 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 2 May 2022 13:51:35 -0500
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <8EC5FCE3-A793-472D-808D-69B0FCFD3313@debian.org>
+References: <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <Ym9ZdWR7u/HJjKY3@debian> <Ym95IjKRO7P3Toyk@an3as.eu> <8EC5FCE3-A793-472D-808D-69B0FCFD3313@debian.org>
+Message-ID: <25200.10295.851856.591393@rob.eddelbuettel.com>
+
+On 2 May 2022 at 12:11, Nilesh Patra wrote:
+| Yes, let's wait until r-base migrates,
+
+It is actually not optional as BioConductor releases have dependencies on
+releases of R, and this 3.15 release required R 4.2.0.  
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Tue May  3 05:06:45 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 3 May 2022 10:36:45 +0530
+Subject: Re: R 4.2.0 suggests a rebuild of graphics packages
+In-Reply-To: <YmzlvJoAs1yEzWo3@debian>
+References: <YmzlvJoAs1yEzWo3@debian>
+Message-ID: <YnC4ZYuvObZ60g4c@debian>
+
+On Sat, Apr 30, 2022 at 01:01:13PM +0530, Nilesh Patra wrote:
+> I will try to get stuff rebuilt and help complete the transition.
+
+https://tracker.debian.org/news/1322277/r-base-420-1-migrated-to-testing/
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at debian.org  Tue May  3 05:48:05 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 3 May 2022 11:18:05 +0530
+Subject: Re: transition: r-api-bioc-3.15
+Message-ID: <YnDCFajK14RLmbpw@debian>
+
+On 2 May 2022 at 12:11, Nilesh Patra wrote:
+>| Yes, let's wait until r-base migrates,
+>
+> It is actually not optional as BioConductor releases have dependencies on
+> releases of R, and this 3.15 release required R 4.2.0.  
+
+It does not make a difference whether or not it is optional.
+dh-R would inject a r-base-core (>= 4.2.0-1) for any uploads, so
+the transition cannot happen without r-base being in sync. Or the other option
+is to do bioc and r-base together.
+
+Anyway, r-base has migrated now.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From nilesh at debian.org  Tue May  3 13:51:22 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 3 May 2022 19:21:22 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <Ym+NEeGNsNPR7cX9@an3as.eu>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu>
+Message-ID: <YnEzWhClLsYEikIV@debian>
+
+Andreas Tille wrote:
+>> >I guess your recent upload of 0.1.2.1-3 is supposed to fix this and
+>> >is intended to enable the migration, right?
+>> >
+>> 
+>> Yes, let's wait until r-base migrates, I guess it'd take a day or two maybe.
+>> Anyway we need to wait for bioc transition until we get a thumbs up from release team.
+>
+> Sure. I guess it is sensible to not fiddle around with R package
+> updates for the moment.
+
+I am now trying to get ggplot2 and friends in testing. Please give
+it time until this weekend to migrate after which I will remove
+my hacks and re-upload.
+
+Let's start bioc transition after this is done.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From ginggs at debian.org  Tue May  3 14:04:22 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 3 May 2022 16:04:22 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <YnEzWhClLsYEikIV@debian>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian>
+Message-ID: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com>
+
+Control: tags -1 + moreinfo
+
+Hi Nilesh
+
+On Tue, 3 May 2022 at 15:51, Nilesh Patra <nilesh at debian.org> wrote:
+>
+> Andreas Tille wrote:
+> >> >I guess your recent upload of 0.1.2.1-3 is supposed to fix this and
+> >> >is intended to enable the migration, right?
+> >> >
+> >>
+> >> Yes, let's wait until r-base migrates, I guess it'd take a day or two maybe.
+> >> Anyway we need to wait for bioc transition until we get a thumbs up from release team.
+> >
+> > Sure. I guess it is sensible to not fiddle around with R package
+> > updates for the moment.
+>
+> I am now trying to get ggplot2 and friends in testing. Please give
+> it time until this weekend to migrate after which I will remove
+> my hacks and re-upload.
+
+Please also look at rmatrix, it is a build-dependency of several
+r-bioc-* packages.
+
+> Let's start bioc transition after this is done.
+
+Please remove the moreinfo tag once you are ready.
+
+Regards
+Graham
+
+From nilesh at debian.org  Tue May  3 14:07:47 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Tue, 3 May 2022 19:37:47 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com>
+Message-ID: <YnE3M9zperpHZozL@debian>
+
+On Tue, May 03, 2022 at 04:04:22PM +0200, Graham Inggs wrote:
+> Control: tags -1 + moreinfo
+> > I am now trying to get ggplot2 and friends in testing. Please give
+> > it time until this weekend to migrate after which I will remove
+> > my hacks and re-upload.
+> 
+> Please also look at rmatrix, it is a build-dependency of several
+> r-bioc-* packages.
+
+That'd get in once ggplot2 and friends transition. Should be soonish.
+
+> > Let's start bioc transition after this is done.
+> 
+> Please remove the moreinfo tag once you are ready.
+
+Sure, thanks Graham!
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Tue May  3 18:52:55 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 3 May 2022 20:52:55 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <YnEzWhClLsYEikIV@debian>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian>
+Message-ID: <YnF6B9GWUSdUcCBn@an3as.eu>
+
+Am Tue, May 03, 2022 at 07:21:22PM +0530 schrieb Nilesh Patra:
+> Andreas Tille wrote:
+> > Sure. I guess it is sensible to not fiddle around with R package
+> > updates for the moment.
+> 
+> I am now trying to get ggplot2 and friends in testing. Please give
+> it time until this weekend to migrate after which I will remove
+> my hacks and re-upload.
+> 
+> Let's start bioc transition after this is done.
+
+Just give the signal once this is done (hopefully the release team
+will have started the transition).
+
+Kind regards
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Fri May  6 12:40:52 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 6 May 2022 18:10:52 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com>
+Message-ID: <YnUXVEzpjTuLdGOL@debian>
+
+Control: tags -1 - moreinfo
+
+Hi Graham/Andreas,
+
+On Tue, May 03, 2022 at 04:04:22PM +0200, Graham Inggs wrote:
+> On Tue, 3 May 2022 at 15:51, Nilesh Patra <nilesh at debian.org> wrote:
+> > I am now trying to get ggplot2 and friends in testing. Please give
+> > it time until this weekend to migrate after which I will remove
+> > my hacks and re-upload.
+> 
+> Please also look at rmatrix, it is a build-dependency of several
+> r-bioc-* packages.
+
+I think I did the changes as I wanted to, all graphics packages and all the
+important cran packages for that matter (including rmatrix) have now migrated.
+ 
+> > Let's start bioc transition after this is done.
+> 
+> Please remove the moreinfo tag once you are ready.
+
+I have done so, I think we can start the transition. Please consider pushing
+the buttons to get the tracker up :)
+
+PS: I will not be able to contribute in any capacity to bioc transition and hope
+Andreas, you, Dylan et. al. would complete this :)
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Fri May  6 17:57:17 2022
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 6 May 2022 19:57:17 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <YnUXVEzpjTuLdGOL@debian>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian>
+Message-ID: <YnVhfUTXsld+EVbA@an3as.eu>
+
+Hi Nilesh,
+
+Am Fri, May 06, 2022 at 06:10:52PM +0530 schrieb Nilesh Patra:
+> 
+> I think I did the changes as I wanted to, all graphics packages and all the
+> important cran packages for that matter (including rmatrix) have now migrated.
+
+Thanks a lot.
+  
+> > Please remove the moreinfo tag once you are ready.
+> 
+> I have done so, I think we can start the transition. Please consider pushing
+> the buttons to get the tracker up :)
+
+:-)
+ 
+> PS: I will not be able to contribute in any capacity to bioc transition and hope
+> Andreas, you, Dylan et. al. would complete this :)
+
+Same for me this weekend and start of next week.  I'm traveling and have
+intentionally just my "traveling" laptop.  So I'm extremely limited with
+contributions ... things will last as long they need.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue May 10 12:14:49 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 10 May 2022 07:14:49 -0500
+Subject: CRANapt
+Message-ID: <25210.22329.344935.742085@rob.eddelbuettel.com>
+
+This may be of interest to some of you: I just posted what is below to the
+r-sig-debian list. It relies in good part on the RSPM binaries which are
+repackaged properly as .deb files -- and as the RSPM system does not cover
+Debian (booh!!) it is unlikely to be extended to Debian in the short term. 
+
+Dirk
+
+   From: Dirk Eddelbuettel <edd at debian.org>
+   To: r-sig-debian at r-project.org
+   Subject: [R-sig-Debian] New repo 'CRANapt' with 19k packages for Ubuntu
+    20.04 + 22.04
+   Date: Tue, 10 May 2022 06:34:02 -0500
+   
+   
+   Two tweets last week [1] announced something I have worked on for the last
+   few weeks: CRANapt.  Documentation is at https://eddelbuettel.github.io/r2u/
+   
+   It covers all of CRAN (minus three packages blacklisted for lack of build
+   dependencies [2], and about three that do build for other reasons) so just
+   under 19k packages each [3] along with about 180 packages from BioConductor.
+   
+   It all works quite well and fast. The tweets, and docs site, show two
+   recorded gifs showing installation of ALL required r-cran-* packages for,
+   respectively, tidyverse and brms in 18 and 13 seconds each (!!).  Better
+   still, this uses bspm so we bridge from install.packages() to apt use and
+   have FULL system integration.
+   
+   Everything has been built for R 4.2.0, and the BioConductor packages use 3.15
+   so we are current.
+   
+   Give it a spin -- there are setup instructions, short setup scripts, Docker
+   containers and a GitPod integration meaning that if you are on GitHub and are
+   / or can sign up to GitPod.io you get to run a session (off the Docker
+   container) in your browser (!!) which is neat (up to 50h / months for free).
+   Please ask questions here (on list) or as issues at the GitHub repo.
+   
+   This is not (yet at least) meant to replace cran2deb4ubuntu. Many of us rely
+   on it (for our systems, and/or CI) as it is built on solid infrastructure we
+   can rely on (the Launchpad system by Canonical) and uses the official formal
+   build process which is good and time-tested. However, as two friends had
+   built 'full' coverage for OpenSUSE and Fedora, respectively, I also wanted to
+   give this another try [4] with a lighter-weight build approach to see if I
+   could move coverage beyond its 5k package. Which worked so here we are. (On a
+   system running it you can keep cran2deb4ubuntu entries, or replace them as
+   CRANapt has a superset of packages. Please do add a pinning file as a handful
+   of packages in the distro have an (accidentally) higher version number (from
+   adding '+dfsg' and alike).
+    
+   Cheers, Dirk
+   
+   
+   [1] https://twitter.com/eddelbuettel/status/1522731846831902721 and
+       https://twitter.com/eddelbuettel/status/1523376755548979201
+   [2] ROracle and Rcplex need commercial software, BRugs needs a binary
+   [3] CRAN has been pruning since hitting 19k in March and is now at 18.7. I
+       have yet to add a script to remove CRAN-removed packages from CRANapt.
+   [4] I have been on and off on this since the 2000s building initally on
+       Albrecht Gebhardt's work, then another iniative, plus brilliant GSoC work
+       I mentored and extended for a bit (til a machine crash took it out); Don
+       Armstrong had a full system too (til a crash a fully-RAIDed system took
+       it out) and so on.
+       
+   -- 
+   dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+   
+   _______________________________________________
+   R-SIG-Debian mailing list
+   R-SIG-Debian at r-project.org
+   https://stat.ethz.ch/mailman/listinfo/r-sig-debian
+   
+   
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From daissi at debian.org  Wed May 11 08:36:08 2022
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Wed, 11 May 2022 10:36:08 +0200
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <YnVhfUTXsld+EVbA@an3as.eu>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu>
+Message-ID: <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com>
+
+Hi all,
+
+> Am Fri, May 06, 2022 at 06:10:52PM +0530 schrieb Nilesh Patra:
+> >
+> > I have done so, I think we can start the transition. Please consider pushing
+> > the buttons to get the tracker up :)
+>
+
+To be sure, have we the green light from the release team to start
+this transition?
+
+Best,
+Dylan
+
+From nilesh at debian.org  Wed May 11 09:31:41 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 11 May 2022 15:01:41 +0530
+Subject: Re: transition: r-api-bioc-3.15
+In-Reply-To: <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com>
+Message-ID: <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org>
+
+On 11 May 2022 2:06:08 pm IST, "Dylan Aïssi" <daissi at debian.org> wrote:
+>Hi all,
+>
+>> Am Fri, May 06, 2022 at 06:10:52PM +0530 schrieb Nilesh Patra:
+>> >
+>> > I have done so, I think we can start the transition. Please consider pushing
+>> > the buttons to get the tracker up :)
+>>
+>
+>To be sure, have we the green light from the release team to start
+>this transition?
+
+@Graham, could you let us know? -- Should we start?
+
+--
+Best,
+Nilesh
+
+From ginggs at debian.org  Wed May 11 10:34:14 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 11 May 2022 12:34:14 +0200
+Subject: Re: Bug#1010422: transition: r-api-bioc-3.15
+In-Reply-To: <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org>
+Message-ID: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com>
+
+Control: tags -1 = confirmed
+
+Hi Nilesh, Dylan
+
+On Wed, 11 May 2022 at 11:33, Nilesh Patra <nilesh at debian.org> wrote:
+>
+>
+>
+> On 11 May 2022 2:06:08 pm IST, "Dylan Aïssi" <daissi at debian.org> wrote:
+> >Hi all,
+> >
+> >> Am Fri, May 06, 2022 at 06:10:52PM +0530 schrieb Nilesh Patra:
+> >> >
+> >> > I have done so, I think we can start the transition. Please consider pushing
+> >> > the buttons to get the tracker up :)
+> >>
+> >
+> >To be sure, have we the green light from the release team to start
+> >this transition?
+>
+>
+> @Graham, could you let us know? -- Should we start?
+
+Yes, please go ahead.
+
+Tracker is at:
+https://release.debian.org/transitions/html/r-api-bioc-3.15.html
+
+Regards
+Graham
+
+From andreas at an3as.eu  Mon May 16 12:20:52 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 16 May 2022 14:20:52 +0200
+Subject: Re: [Bioconductor/Biostrings] S.h seems to be deprecated (Issue #66)
+In-Reply-To: <Ylcm/Wbl9iPgx0Tk@an3as.eu>
+References: <Bioconductor/Biostrings/issues/66@github.com> <Bioconductor/Biostrings/issues/66/1098269986@github.com> <Ylcm/Wbl9iPgx0Tk@an3as.eu>
+Message-ID: <YoJBpOlvz7RXBsTd@an3as.eu>
+
+Hi again Hervé,
+> @tillea And most importantly, it seems that Debian is building the wrong version of Bioconductor. The `S.h` file was removed from R 4.2 and they are reporting a bug for **Biostrings** 2.62.0, which belongs to Bioconductor 3.14 (the current release). BioC 3.14 should only be used with R 4.1: it has been expressly designed and tested against this version of R.
+> If you are using R 4.2, you should build Bioconductor 3.15, which is still in development and [will be released on April 27](https://bioconductor.org/developers/release-schedule/). **Biostrings** is currently at version 2.63.3. This version belongs to BioC 3.15 and works with R 4.2.
+
+I intended to upgrade groHMM to version 1.29.1 which has remaining references to S.h
+
+$ grep -R S\.h
+src/MLEfit.c:#include <S.h>
+src/DecayAlgorithm.c:#include <S.h>
+src/hmmMiscFunctions.c:#include <S.h>
+src/hmmFwBw.c:#include <S.h>
+src/hmmViterbi.c:#include <S.h>
+src/hmmEM.c:#include <S.h>
+src/Windowing.c:#include <S.h>
+
+Am I missing something?  Should I use the groHMM Github issue tracke?
+
+Kind regards
+    Andreas.
+
+From elbrus at debian.org  Thu May 19 07:40:23 2022
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 19 May 2022 09:40:23 +0200
+Subject: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com>
+Message-ID: <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+
+Package: release.debian.org
+User: release.debian.org at packages.debian.org
+Usertag: britney
+
+Hi,
+
+On 11-05-2022 12:34, Graham Inggs wrote:
+> Yes, please go ahead.
+>
+> Tracker is at:
+> https://release.debian.org/transitions/html/r-api-bioc-3.15.html
+
+There's three package still waiting for an upload, r-bioc-progeny, 
+r-bioc-monocle and r-bioc-scater. When is the ETA for those?
+
+Apart from these missing uploads, there's a bunch of autopkgtest 
+regressions blocking the migration of the set [1]. I have a hunch that 
+quite some regressions are caused by missing *versioned* (test) 
+dependencies that cause incompatible sets to be tested. Thinking more 
+about it that could very well be a bug in our migration software failing 
+to properly handle the Provides which glues this all together and which 
+is uniquely provided by r-bioc-biocgenerics. Remember that our migration 
+software tries to determine the minimal (source based) set (deducted 
+from real package relations, i.e. Depends, Conflicts and Breaks) that 
+needs to come from unstable to be tested in testing. You can see which 
+source packages it deducted from the third line of each autopkgtest log. 
+E.g. [2] has:
+
+--pin-packages=unstable=src:r-bioc-megadepth,src:r-bioc-biocgenerics
+
+And than later:
+The following packages have unmet dependencies:
+ r-bioc-rtracklayer : Depends: r-api-bioc-3.14
+                      Depends: r-bioc-rsamtools (>= 1.31.2) but it is 
+not going to be installed
+                      Depends: r-bioc-genomicalignments (>= 1.15.6) but 
+it is not going to be installed
+
+I'll see if some manual addition pinning helps, but checking the status 
+in unstable may also be a good way to see what the status is. In the 
+mean time, this mail is also a bug report against britney, if the manual 
+pinning helps, we'll need to see how to improve it.
+
+Paul
+
+[1] https://people.debian.org/~elbrus/ci/regressions.html
+[2] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-megadepth/21776746/log.gz
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From ginggs at debian.org  Thu May 19 08:04:52 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 19 May 2022 10:04:52 +0200
+Subject: Re: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+Message-ID: <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com>
+
+Hi
+
+On Thu, 19 May 2022 at 09:45, Paul Gevers <elbrus at debian.org> wrote:
+> There's three package still waiting for an upload, r-bioc-progeny,
+> r-bioc-monocle and r-bioc-scater. When is the ETA for those?
+
+In addition, there is r-bioc-grohmm which I happened to notice dropped
+off the tracker during the transition.
+i.e. it lost its dependency on r-api-bioc-3.14, but did not pick up
+one on r-api-bioc-3.15.
+
+I do not know if there were any others.
+
+Regards
+Graham
+
+From nilesh at debian.org  Thu May 19 08:11:12 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 19 May 2022 13:41:12 +0530
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+References: <Ym+NEeGNsNPR7cX9@an3as.eu> <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+Message-ID: <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org>
+
+Hi,
+
+On 19 May 2022 1:10:23 pm IST, Paul Gevers <elbrus at debian.org> wrote:
+>Package: release.debian.org
+>User: release.debian.org at packages.debian.org
+>Usertag: britney
+>
+>Hi,
+>
+>On 11-05-2022 12:34, Graham Inggs wrote:
+>> Yes, please go ahead.
+>> 
+>> Tracker is at:
+>> https://release.debian.org/transitions/html/r-api-bioc-3.15.html
+>
+>There's three package still waiting for an upload, r-bioc-progeny, r-bioc-monocle and r-bioc-scater. When is the ETA for those?
+
+They are blocked by packages in NEW so whenever FTP masters accept these.
+
+I think we can workaround these anyway by editing the DESCRIPTION file -- maybe I'll do so and upload either late in the night today or early morning Tom.
+
+>Apart from these missing uploads, there's a bunch of autopkgtest regressions blocking the migration of the set [1]. I have a hunch that quite some regressions are caused by missing *versioned* (test) dependencies that cause incompatible sets to be tested.
+
+Many of these are also due to versioned depends I guess.
+
+> Thinking more about it that could very well be a bug in our migration software failing to properly handle the Provides which glues this all together and which is uniquely provided by r-bioc-biocgenerics. Remember that our migration software tries to determine the minimal (source based) [...]
+
+I know, if that could be improved, it'd be awesome otherwise it's a pain to deal with. Even for an earlier r-base transition, I had to do bogus uploads to make Britney happy.
+
+It does not make much sense to me to add a breaks for things and clutter d/control. There's no real usecase to be honest since there's already a version dep on r/r-api-bioc respectively.
+
+> if the manual pinning helps, we'll need to see how to improve it.
+
+Thanks Paul for your work!
+
+>[1]
+https://people.debian.org/~elbrus/ci/regressions.html
+>[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-megadepth/21776746/log.gz
+
+--
+Best,
+Nilesh
+
+From tille at debian.org  Thu May 19 08:53:26 2022
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 19 May 2022 10:53:26 +0200
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+References: <YnEzWhClLsYEikIV@debian> <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org>
+Message-ID: <YoYFhp6TmzCwa2aU@an3as.eu>
+
+Am Thu, May 19, 2022 at 09:40:23AM +0200 schrieb Paul Gevers:
+> Package: release.debian.org
+> User: release.debian.org at packages.debian.org
+> Usertag: britney
+> 
+> Hi,
+> 
+> On 11-05-2022 12:34, Graham Inggs wrote:
+> > Yes, please go ahead.
+> > 
+> > Tracker is at:
+> > https://release.debian.org/transitions/html/r-api-bioc-3.15.html
+> 
+> There's three package still waiting for an upload, r-bioc-progeny,
+> r-bioc-monocle and r-bioc-scater. When is the ETA for those?
+
+Once their new (Build-)Depends
+
+    r-cran-leidenbase
+    r-cran-rcppml
+    r-bioc-metapod
+
+will have cleared new.  Since this is really hard to predict it might
+possibly help to remove the said packages from testing meanwhile.
+ 
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu May 19 08:55:23 2022
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 19 May 2022 10:55:23 +0200
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org>
+References: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org>
+Message-ID: <YoYF+7kfYWZIfrT+@an3as.eu>
+
+Hi Nilesh,
+
+Am Thu, May 19, 2022 at 01:41:12PM +0530 schrieb Nilesh Patra:
+> 
+> I think we can workaround these anyway by editing the DESCRIPTION file -- maybe I'll do so and upload either late in the night today or early morning Tom.
+
+I do not think that editing DESCRIPTION is the prefered way to
+fix our transition.  As I wrote in my other mail removing them
+from testing manually should do the trick as well, IMHO.
+ 
+> Thanks Paul for your work!
+
++1
+ 
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Thu May 19 11:07:59 2022
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 19 May 2022 13:07:59 +0200
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <YoYF+7kfYWZIfrT+@an3as.eu>
+References: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org> <YoYF+7kfYWZIfrT+@an3as.eu>
+Message-ID: <5f0543b0-7220-732a-6fab-3728848b17e5@debian.org>
+
+Hi,
+
+On 19-05-2022 10:55, Andreas Tille wrote:
+> Am Thu, May 19, 2022 at 01:41:12PM +0530 schrieb Nilesh Patra:
+> > I think we can workaround these anyway by editing the DESCRIPTION file -- maybe I'll do so and upload either late in the night today or early morning Tom.
+>
+>
+> I do not think that editing DESCRIPTION is the prefered way to
+> fix our transition.  As I wrote in my other mail removing them
+> from testing manually should do the trick as well, IMHO.
+
+Well, I just learned that some/most of these "required" uploads in this 
+transition are not needed because of incompatibility of the package with 
+the new api, but just your tooling being broken (in my opinion). If 
+packages requiring r-api-bioc-* work with the next version, they should 
+just pick up the r-api-bioc-* version when they are rebuild, like we do 
+with nearly all other ecosystem in Debian. Only packages that don't work 
+need an upload.
+
+If all it takes is this;
+https://salsa.debian.org/r-pkg-team/r-bioc-mofa/-/blob/7b010dcd1947e2b8b26da3ab49b957715cb83b5c/debian/patches/bioc-3.15.patch
+to get the package working with the fresh bioconducter, that really 
+shouldn't need manual changes and should be able to be picked up 
+automatically.
+
+@tille, removals are work for *us*, they are not free lunch. Please fix 
+the package that prevent migration.
+
+Paul
+
+PS: for every transition we ask packages that need to go through NEW to 
+be prepared in experimental such that during the transition, we don't 
+need to wait for it.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at debian.org  Thu May 19 12:39:33 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Thu, 19 May 2022 18:09:33 +0530
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <YoYF+7kfYWZIfrT+@an3as.eu>
+References: <CAM8zJQsR5=n9P_-MrVUYwgYknpEx9ZtRuugSbsJ9k7iwQBpYhg@mail.gmail.com> <YnUXVEzpjTuLdGOL@debian> <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org> <YoYF+7kfYWZIfrT+@an3as.eu>
+Message-ID: <E048D69E-68D6-4825-AC9F-A8838C8490AA@debian.org>
+
+On 19 May 2022 2:25:23 pm IST, Andreas Tille <tille at debian.org> wrote:
+>Am Thu, May 19, 2022 at 01:41:12PM +0530 schrieb Nilesh Patra:
+>> 
+>> I think we can workaround these anyway by editing the DESCRIPTION file -- maybe I'll do so and upload either late in the night today or early morning Tom.
+>
+>I do not think that editing DESCRIPTION is the prefered way to
+>fix our transition.  As I wrote in my other mail removing them
+>from testing manually should do the trick as well, IMHO.
+
+I disagree.
+
+I don't really think stalling the migration just for a couple of packages is a sensible thing to do.
+
+There is not a functional difference (real API change) so keeping a couple of packages outdated (and that too because pre-deps are in new) is no big deal.
+
+We already have tons of cran stuff being backdated due to several reasons, I don't think this situation is very different. I know the bioc api is different but there's no functional difference in working of package at all.
+
+I would rather do what it takes and complete the transition, so as to unbreak packages and also not consume un-necessary bandwidth of release team members.
+
+And so, I'd continue to patch description and upload anyway. If you're very/extremely against it, please do let me know soon so we figure out something else.
+
+--
+Best,
+Nilesh
+
+From tille at debian.org  Thu May 19 16:09:15 2022
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 19 May 2022 18:09:15 +0200
+Subject: Re: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <5f0543b0-7220-732a-6fab-3728848b17e5@debian.org>
+References: <YnVhfUTXsld+EVbA@an3as.eu> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CA+6XHwS1rCCxNh_G+JV-_jsj3c_3gZdYvOmS3QR5js3O-EzpAA@mail.gmail.com> <B87B184C-9B25-436A-B5F0-9BC171067ECE@debian.org> <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <0DB5BA58-6F9F-461F-9833-E17CC6E658A6@debian.org> <YoYF+7kfYWZIfrT+@an3as.eu> <5f0543b0-7220-732a-6fab-3728848b17e5@debian.org>
+Message-ID: <YoZrq8UqqBnbwOdG@an3as.eu>
+
+Hi Paul,
+
+Am Thu, May 19, 2022 at 01:07:59PM +0200 schrieb Paul Gevers:
+> @tille, removals are work for *us*, they are not free lunch. Please fix the
+> package that prevent migration.
+
+There is no clean fix.  The packages featuring r-bioc-api-3.15 just need
+some new predependencies.  These are hanging in new since some days.
+Just pretending the new predependencies are not needed is not a fix,
+IMHO.  So we can do nothing but wait.
+ 
+> PS: for every transition we ask packages that need to go through NEW to be
+> prepared in experimental such that during the transition, we don't need to
+> wait for it.
+
+I agree that in principle experimental would be cleaner.  On the other
+hand its a lot more manual work.  I wonder whether it is a real problem
+to leave the new r-bioc-* packages waiting in unstable until the
+preconditions might have cleared NEW.  Is this not yet finished
+transition in some way creating work?  I mean we have uploaded lots of
+packages pretty fast - hopefully faster than in other transitions.  So
+we are now waiting a bit.  May be my view on transitions is to naive and
+there is really a problem if its delayed a couple of days more.  I plan
+to give some hint to ftpmaster in the beginning of next week but I do
+not want to create more pressure than needed.
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at nileshpatra.info  Sat May 21 04:51:24 2022
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Sat, 21 May 2022 10:21:24 +0530
+Subject: Re: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com>
+Message-ID: <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info>
+
+Hi Graham,
+
+I did some work to cleanup the rest stuff meanwhile, and need
+your help to ignore some of the CI temporarily to complete the migration; and
+also because unstable counterparts pass.
+
+I have pasted a list at the end of this email, please see to it.
+
+--
+Best,
+Nilesh
+
+Package						Reverse dependency
+
+r-bioc-annotationdbi        set ignore for r-bioc-annotationhub (version in unstable passes)
+r-bioc-scran/beachmat       Please run tests with new version of biocparallel
+r-bioc-biocneighbors        set r-bioc-bluster to ignore (version in unstable passes)
+r-bioc-biocparallel			set r-bioc-bluster to ignore (version in unstable passes)
+
+Other caveats:
+r-bioc-singler/r-bioc-scran (at the time of writing this email) need to run with new version
+of biocparallel in unstable
+and the versions of reverse-deps should point to its unstable version
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From ginggs at debian.org  Sat May 21 10:09:14 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 21 May 2022 12:09:14 +0200
+Subject: Re: Bug#1010422: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com> <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info>
+Message-ID: <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com>
+
+Hi Nilesh
+
+On Sat, 21 May 2022 at 07:03, Nilesh Patra <nilesh at nileshpatra.info> wrote:
+
+It looks like britney has already figured these out:
+
+> r-bioc-annotationdbi        set ignore for r-bioc-annotationhub (version in unstable passes)
+> r-bioc-scran/beachmat       Please run tests with new version of biocparallel
+
+I'll wait a bit to see if these get resolved once r-bioc-bluster is a candidate:
+
+> r-bioc-biocneighbors        set r-bioc-bluster to ignore (version in unstable passes)
+> r-bioc-biocparallel                     set r-bioc-bluster to ignore (version in unstable passes)
+
+Regards
+Graham
+
+From ginggs at debian.org  Sun May 22 07:09:01 2022
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 22 May 2022 09:09:01 +0200
+Subject: Re: Bug#1010422: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com> <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info> <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com>
+Message-ID: <CAM8zJQs__o3JXL=hGz=OOCKesGvrwB60qhZ16VzOeFGikM0WTw@mail.gmail.com>
+
+Hi Nilesh
+
+It looks like the only blocker now is waiting for r-bioc-scater [1] to age:
+
+Too young, only 2 of 5 days old
+
+It doesn't get 2-day migration because its autopkgtest regressed in
+testing, sometime around 2021-09-23 [2].
+
+I'll file a separate bug for that.
+
+Regards
+Graham
+
+[1] https://tracker.debian.org/pkg/r-bioc-scater
+[2] https://ci.debian.net/packages/r/r-bioc-scater/testing/amd64/
+
+From tille at debian.org  Sun May 22 13:35:18 2022
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 22 May 2022 15:35:18 +0200
+Subject: Re: Bug#1010422: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <CAM8zJQs__o3JXL=hGz=OOCKesGvrwB60qhZ16VzOeFGikM0WTw@mail.gmail.com>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com> <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info> <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com> <CAM8zJQs__o3JXL=hGz=OOCKesGvrwB60qhZ16VzOeFGikM0WTw@mail.gmail.com>
+Message-ID: <Yoo8Fm9c5jlih7zI@an3as.eu>
+
+Hi Graham,
+
+Am Sun, May 22, 2022 at 09:09:01AM +0200 schrieb Graham Inggs:
+> It looks like the only blocker now is waiting for r-bioc-scater [1] to age:
+> 
+> Too young, only 2 of 5 days old
+> 
+> It doesn't get 2-day migration because its autopkgtest regressed in
+> testing, sometime around 2021-09-23 [2].
+
+I've just commited a patch thet ignores the not yet packaged test
+dependency which causes the test failure.  In any case r-bioc-scater
+needs to wait for r-cran-rcppml in new - may be some removal from
+testing is needed in any case.
+ 
+> I'll file a separate bug for that.
+
+Feel free to do so but for the moment the issue is fixed in Git and
+will be uploaded once the new Build-Depends is available.
+
+Kind regards
+
+      Andreas.
+ 
+> [1] https://tracker.debian.org/pkg/r-bioc-scater
+> [2] https://ci.debian.net/packages/r/r-bioc-scater/testing/amd64/
+
+-- 
+http://fam-tille.de
+
+From nilesh at nileshpatra.info  Sun May 22 14:13:35 2022
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Sun, 22 May 2022 19:43:35 +0530
+Subject: Re: Bug#1010422: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <Yoo8Fm9c5jlih7zI@an3as.eu>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com> <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info> <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com> <CAM8zJQs__o3JXL=hGz=OOCKesGvrwB60qhZ16VzOeFGikM0WTw@mail.gmail.com> <Yoo8Fm9c5jlih7zI@an3as.eu>
+Message-ID: <803241DD-0427-4CAD-82EC-C09360224E11@nileshpatra.info>
+
+On 22 May 2022 7:05:18 pm IST, Andreas Tille <tille at debian.org> wrote:
+>Hi Graham,
+>
+>Am Sun, May 22, 2022 at 09:09:01AM +0200 schrieb Graham Inggs:
+>> It looks like the only blocker now is waiting for r-bioc-scater [1] to age:
+>> 
+>> Too young, only 2 of 5 days old
+>> 
+>> It doesn't get 2-day migration because its autopkgtest regressed in
+>> testing, sometime around 2021-09-23 [2].
+>
+>I've just commited a patch thet ignores the not yet packaged test
+>dependency which causes the test failure.  In any case r-bioc-scater
+
+Then please make an upload.
+
+>needs to wait for r-cran-rcppml in new - may be some removal from
+>testing is needed in any case.
+
+No, not really. I had already edited the description file in the last upload to unbreak the transition, although I didn't observe the failing test locally.
+
+>> [1] https://tracker.debian.org/pkg/r-bioc-scater
+>> [2] https://ci.debian.net/packages/r/r-bioc-scater/testing/amd64/
+>
+
+-- 
+Regards,
+Nilesh
+
+From andreas at an3as.eu  Sun May 22 20:32:31 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 22 May 2022 22:32:31 +0200
+Subject: Re: Bug#1010422: Bug#1011265: Britney fails to pin complete set in "Provides" api transitions [Was: Bug#1010422: transition: r-api-bioc-3.15]
+In-Reply-To: <803241DD-0427-4CAD-82EC-C09360224E11@nileshpatra.info>
+References: <CAM8zJQtrC+69D9vU2+ggY7QgMdYGsJrPWW1Af-ztPSgdEUnJjw@mail.gmail.com> <b934aca7-5067-63e3-c841-7f0b298bf9f7@debian.org> <CA+6XHwRaicFnG7bNg7Azr4CvHFjgbgj+KfZmm7Hcxz3QP18BEA@mail.gmail.com> <CAM8zJQtk-er5A1wPXWn8NZayaS7B_axqB+K7rWH2K7ACPZTCxQ@mail.gmail.com> <9ad2904d-8805-6b98-443f-33594a5a207d@nileshpatra.info> <CAM8zJQs_To5+kW0ApKd+QJ2oxw48uYu=7yXgXmnM-9-3h0h1UA@mail.gmail.com> <CAM8zJQs__o3JXL=hGz=OOCKesGvrwB60qhZ16VzOeFGikM0WTw@mail.gmail.com> <Yoo8Fm9c5jlih7zI@an3as.eu> <803241DD-0427-4CAD-82EC-C09360224E11@nileshpatra.info>
+Message-ID: <Yoqd36CLBwjooUNe@an3as.eu>
+
+Am Sun, May 22, 2022 at 07:43:35PM +0530 schrieb Nilesh Patra:
+> >I've just commited a patch thet ignores the not yet packaged test
+> >dependency which causes the test failure.  In any case r-bioc-scater
+> 
+> Then please make an upload.
+
+https://salsa.debian.org/r-pkg-team/r-bioc-scater/-/jobs/2796964
+
+   ->>   builddeps:. : Depends: r-cran-rcppml but it is not installable
+         E: Unable to correct problems, you have held broken packages.
+
+There was no other patch than the one I created ... and I think it
+makes sense to wait for Build-Depends clearing new.  Thus I've set
+a "block by".
+
+> >needs to wait for r-cran-rcppml in new - may be some removal from
+> >testing is needed in any case.
+> 
+> No, not really. I had already edited the description file in the last upload to unbreak the transition, although I didn't observe the failing test locally.
+
+Are you sure you pushed?
+
+Kind regards
+
+    Andreas.
+
+> >> [1] https://tracker.debian.org/pkg/r-bioc-scater
+> >> [2] https://ci.debian.net/packages/r/r-bioc-scater/testing/amd64/
+ 
+
+-- 
+http://fam-tille.de
+

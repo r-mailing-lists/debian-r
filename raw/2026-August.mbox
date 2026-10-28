@@ -1,0 +1,112 @@
+From steffen_moeller at gmx.de  Sun Aug  2 15:52:59 2026
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Sun, 2 Aug 2026 15:52:59 +0000
+Subject: routine-update of BioConductor data packages -> d/watch
+References: <trinity-512e62e9-2752-4bb7-986d-99c7152b2a90-1785685635297@trinity-msg-rest-gmx-gmx-live-75f46566bb-qsl76>
+Message-ID: <trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>
+
+Hello,
+
+https://bioconductor.org/packages/release/data/experiment/html/tximportData.html
+
+r-bioc-tximportdata has a different home page than the more algorithmic packages and thus needs a different d/watch template.
+Routine-update should anticipate that but happily applies the wrong one. And then does not find the updated version of the package.
+I have reverted routine-update's change to d/watch as a quick hack.
+
+Someone of yours certainly has this more less under their fingers, I am confident :)
+
+Cheers,
+Steffen
+
+From plessy at debian.org  Thu Aug  6 23:59:42 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 7 Aug 2026 08:59:42 +0900
+Subject: Re: routine-update of BioConductor data packages -> d/watch
+In-Reply-To: <trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>
+References: <trinity-512e62e9-2752-4bb7-986d-99c7152b2a90-1785685635297@trinity-msg-rest-gmx-gmx-live-75f46566bb-qsl76> <trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>
+Message-ID: <anUf7ickxQe-4at7@bubu.igloo>
+
+Le Sun, Aug 02, 2026 at 03:52:59PM +0000, Steffen Möller a écrit :
+> https://bioconductor.org/packages/release/data/experiment/html/tximportData.html
+> r-bioc-tximportdata has a different home page than the more algorithmic
+> packages and thus needs a different d/watch template.
+
+Hi Steffen,
+
+you are right; sorry for not catching it up earlier.
+
+I will fix the uscan templates but in the meantime you need to add the
+following line to experiment data packages (and something similar
+for annotation packages).
+
+    Download-Url-Mangle: s%.*/src/contrib/%https://bioconductor.org/packages/release/data/experiment/src/contrib/%
+
+I have added the following line to routine-update as a transiennt fix.
+
+    grep -q ExperimentData DESCRIPTION && echo 'Downloadurlmangle: s%.*/src/contrib/%https://bioconductor.org/packages/release/data/experiment/src/contrib/%' >> debian/watch
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Wed Aug 12 06:15:33 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 12 Aug 2026 15:15:33 +0900
+Subject: Bug#1144191: RM: r-bioc-interactivedisplaybase -- ROM; Abandonned upstream
+Message-ID: <178651533300.408835.3677805775874655456.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-interactivedisplaybase at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-interactivedisplaybase
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Dear Archives Operation team,
+
+r-bioc-interactivedisplaybase is not maintained anymore upstream and has
+a popcon vote score that can be counted on a single hand, so let's
+remove it from Debian too.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Fri Aug 21 04:06:22 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 21 Aug 2026 13:06:22 +0900
+Subject: Bug#1144974: RM: r-cran-diffobj [armel armhf s390x] -- ROM; Not supported on these architectures.
+Message-ID: <178728518285.2464642.5372404194519353994.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-diffobj
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armel armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armel armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hi Thorsten and all,
+
+It looks like r-cran-diffobj slipped between the previous waves or
+r-cran* arch-specific removals.  Can you remove it?
+
+Have a nice day,
+
+Charles
+

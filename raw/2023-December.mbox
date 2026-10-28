@@ -1,0 +1,1500 @@
+From andreas at an3as.eu  Sun Dec  3 08:02:19 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 3 Dec 2023 09:02:19 +0100
+Subject: Can't fetch new upstream version of r-bioc-dss
+Message-ID: <ZWw2C8ZW3n2RPOX_@an3as.eu>
+
+Hi,
+
+I'm currently busy with real life so maybe someone can check why the
+watch file does not fetch r-bioc-dss.  Maybe the download page is broken
+and someone could contact upstream.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Dec  3 08:16:34 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 3 Dec 2023 09:16:34 +0100
+Subject: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de>
+Message-ID: <ZWw5YsCw_hjsQkZq@an3as.eu>
+
+Hi,
+
+Charles Plessy and I uploaded r-bioc-* packages until level 11.
+Unfortunately building of some packages seems to be blocked for
+
+  A: some pandoc dependency reason
+      pandoc depends on missing:
+         - pandoc-data:amd64 (< 2.17.1.1-3.~)
+
+    https://buildd.debian.org/status/package.php?p=r-bioc-biovizbase
+
+  B: for non-obvious reasons
+
+    https://buildd.debian.org/status/package.php?p=r-bioc-ioniser
+    https://buildd.debian.org/status/package.php?p=r-bioc-scrnaseq
+    https://buildd.debian.org/status/package.php?p=r-bioc-tximeta
+
+I have no idea how to work around this.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Dec  3 10:30:55 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 3 Dec 2023 11:30:55 +0100
+Subject: Re: Bug#1057203: r-bioc-rhdf5filters: missing build-dependency on big-endian architectures
+In-Reply-To: <CAM8zJQuh6Q3rM9zBHTLg2PdYf4SAOLvKGcYWONYzY74z8=E7FA@mail.gmail.com>
+References: <CAM8zJQuEAdnd+LSOarQx018kstNseQhFHGtEo2gaE1N=6kmFrA@mail.gmail.com> <ZWwyrawMfiM0P7Xg@an3as.eu> <CAM8zJQsuOXY_ncR=THV9phtPW2TJHmz9adt2hH08_HQKUh9g9Q@mail.gmail.com> <CAM8zJQuh6Q3rM9zBHTLg2PdYf4SAOLvKGcYWONYzY74z8=E7FA@mail.gmail.com>
+Message-ID: <ZWxY32zxz3vwKTPu@an3as.eu>
+
+Hi Graham,
+
+Am Sun, Dec 03, 2023 at 08:56:09AM -0100 schrieb Graham Inggs:
+> 
+> Yet it seems 1.12.1+dfsg2-1 was uploaded with vbz compression still enabled:
+> 
+>    [ Nilesh Patra ]
+>    * Enable VBZ compression as well
+> 
+> Perhaps the fastest solution here is to revert enabling vbz support in
+> r-bioc-rhdf5filters for now.
+
+I confirm this might be a fast solution.  However, this would mean to
+restrict the functionality of the package for architectures where the
+package is used just to work around a compilation error where the
+package is not used in practice.  I do not think this is the best
+solution for our users.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sun Dec  3 10:46:31 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 3 Dec 2023 09:46:31 -0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZWw5YsCw_hjsQkZq@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu>
+Message-ID: <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com>
+
+Hi Andreas
+
+On Sun, 3 Dec 2023 at 07:21, Andreas Tille <andreas at an3as.eu> wrote:
+> Charles Plessy and I uploaded r-bioc-* packages until level 11.
+> Unfortunately building of some packages seems to be blocked for
+>
+>   A: some pandoc dependency reason
+>       pandoc depends on missing:
+>          - pandoc-data:amd64 (< 2.17.1.1-3.~)
+
+This seems to be due to the restructuring of src:pandoc [1].
+src:haskell-pandoc [2] recently cleared NEW into unstable, and the
+updated src:pandoc has not been uploaded yet.
+
+This is probably a good example for why new packages should be
+uploaded to experimental first, instead of directly to unstable.
+
+>     https://buildd.debian.org/status/package.php?p=r-bioc-biovizbase
+>
+>   B: for non-obvious reasons
+
+These seem to be the same as A above.
+
+Regards
+Graham
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053686
+[2] https://tracker.debian.org/pkg/haskell-pandoc
+
+From ginggs at debian.org  Sun Dec  3 12:33:59 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 3 Dec 2023 11:33:59 -0100
+Subject: Re: Bug#1057203: r-bioc-rhdf5filters: missing build-dependency on big-endian architectures
+In-Reply-To: <ZWxY32zxz3vwKTPu@an3as.eu>
+References: <ZWwyrawMfiM0P7Xg@an3as.eu> <CAM8zJQsuOXY_ncR=THV9phtPW2TJHmz9adt2hH08_HQKUh9g9Q@mail.gmail.com> <CAM8zJQuEAdnd+LSOarQx018kstNseQhFHGtEo2gaE1N=6kmFrA@mail.gmail.com> <CAM8zJQuh6Q3rM9zBHTLg2PdYf4SAOLvKGcYWONYzY74z8=E7FA@mail.gmail.com> <ZWxY32zxz3vwKTPu@an3as.eu>
+Message-ID: <CAM8zJQuiZOx7Nk07hJTZ+2Z=WUaJ9sipzJGjrC5RX7TFfUU7TQ@mail.gmail.com>
+
+Control: tags -1 + patch
+
+Hi Andreas
+
+On Sun, 3 Dec 2023 at 09:31, Andreas Tille <andreas at an3as.eu> wrote:
+> I confirm this might be a fast solution.  However, this would mean to
+> restrict the functionality of the package for architectures where the
+> package is used just to work around a compilation error where the
+> package is not used in practice.  I do not think this is the best
+> solution for our users.
+
+Fair enough.
+
+I think the vbz compression is not actually enabled by upstream for
+all architectures (amd64 and arm64 only?).
+So restricting the architectures of the build-dependency on
+libvbz-hdf-plugin-dev might be sufficient.
+At least, the patch below was enough to get r-bioc-rhdf5filters
+building on s390x for me, and it does not seem to be affected by the
+pandoc/haskell-pandoc issue.
+
+Regards
+Graham
+
+--- a/debian/control
++++ b/debian/control
+@@ -17,7 +17,7 @@
+                libhdf5-dev,
+                libzstd-dev,
+                libsnappy-dev,
+-               libvbz-hdf-plugin-dev
++               libvbz-hdf-plugin-dev [!s390x !hppa !m68k !powerpc
+!ppc64 !sparc64]
+ Testsuite: autopkgtest-pkg-r
+
+From elbrus at debian.org  Sun Dec  3 20:51:38 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 3 Dec 2023 21:51:38 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com>
+Message-ID: <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org>
+
+Hi,
+
+On 03-12-2023 11:46, Graham Inggs wrote:
+> This seems to be due to the restructuring of src:pandoc [1].
+> src:haskell-pandoc [2] recently cleared NEW into unstable, and the
+> updated src:pandoc has not been uploaded yet.
+>
+> This is probably a good example for why new packages should be
+> uploaded to experimental first, instead of directly to unstable.
+
+And it also means that r-bioc-biocgenerics is now blocked on the haskell 
+transition. Lovely. Good thing that pandoc is supposed to be the last 
+piece in that several months long transition.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From bunk at debian.org  Sun Dec  3 21:14:03 2023
+From: bunk at debian.org (Adrian Bunk)
+Date: Sun, 3 Dec 2023 23:14:03 +0200
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com>
+Message-ID: <ZWzvm9EhN0T6dqw6@localhost>
+
+On Sun, Dec 03, 2023 at 09:46:31AM -0100, Graham Inggs wrote:
+>...
+> This is probably a good example for why new packages should be
+> uploaded to experimental first, instead of directly to unstable.
+>...
+
+Not really.
+
+It is rare that a new source package takes over a binary package from 
+another binary package, and in this case the same might have happened
+during an upgrade of the pandoc packages not involving NEW at all.
+
+> Regards
+> Graham
+>...
+
+cu
+Adrian
+
+From bunk at debian.org  Sun Dec  3 21:15:49 2023
+From: bunk at debian.org (Adrian Bunk)
+Date: Sun, 3 Dec 2023 23:15:49 +0200
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com> <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org>
+Message-ID: <ZWzwBR+Rpzi7U9i6@localhost>
+
+On Sun, Dec 03, 2023 at 09:51:38PM +0100, Paul Gevers wrote:
+>...
+> And it also means that r-bioc-biocgenerics is now blocked on the haskell
+> transition. Lovely. Good thing that pandoc is supposed to be the last piece
+> in that several months long transition.
+
+It's only blocked by the pandoc part of the Haskell transition, 
+it shouldn't be blocked by the other remaining parts of the
+transition or by getting the transition into testing.
+
+> Paul
+
+cu
+Adrian
+
+From tille at debian.org  Mon Dec  4 05:33:58 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 4 Dec 2023 06:33:58 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com> <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org>
+Message-ID: <ZW1kxpGuU8O6DQcE@an3as.eu>
+
+Hi,
+
+Am Sun, Dec 03, 2023 at 09:51:38PM +0100 schrieb Paul Gevers:
+> 
+> And it also means that r-bioc-biocgenerics is now blocked on the haskell
+> transition. Lovely. Good thing that pandoc is supposed to be the last piece
+> in that several months long transition.
+
+... which on the other hand shows, that new packages have never been the
+main blocker in r-bioc-* transitions (even if I confirm I'm happy that
+you convinced us to get rid of this reason).
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Dec  4 12:15:54 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 4 Dec 2023 13:15:54 +0100
+Subject: Re: Removed in Bioconductor 3.18: NanoStringQCPro
+In-Reply-To: <ZWiQ7eJm2iX4gBNB@an3as.eu>
+References: <ZWiQ7eJm2iX4gBNB@an3as.eu>
+Message-ID: <ZW3C-jz8g8tcV6FI@an3as.eu>
+
+Ping?  Any statement would be helpful.  Thank you, Andreas.
+
+Am Thu, Nov 30, 2023 at 02:41:01PM +0100 schrieb Andreas Tille:
+> Hi Steffen,
+> 
+> you are listed as Uploader of r-bioc-nanostringqcpro.  This package
+> was removed by Bioconductor in release 3.18.  Please decide what to
+> do with this package and act accodingly.
+> 
+> Kind regards
+>     Andreas.
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Dec  5 13:29:26 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 5 Dec 2023 14:29:26 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZWzwBR+Rpzi7U9i6@localhost>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com> <76da8de6-9fd3-40aa-a9fc-bfec679c0de4@debian.org> <ZWzwBR+Rpzi7U9i6@localhost>
+Message-ID: <ZW8ltvc-t6qo6-DU@an3as.eu>
+
+Hi Adrian,
+
+Am Sun, Dec 03, 2023 at 11:15:49PM +0200 schrieb Adrian Bunk:
+> > And it also means that r-bioc-biocgenerics is now blocked on the haskell
+> > transition. Lovely. Good thing that pandoc is supposed to be the last piece
+> > in that several months long transition.
+> 
+> It's only blocked by the pandoc part of the Haskell transition, 
+> it shouldn't be blocked by the other remaining parts of the
+> transition or by getting the transition into testing.
+
+Is there any chance to upload a working pandoc to unstable?
+
+Nearly all r-* package tests I tried in upgrades are broken and I'd like
+to know when it makes sense again to touch those packages.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Tue Dec  5 14:45:43 2023
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Tue, 5 Dec 2023 15:45:43 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZWzvm9EhN0T6dqw6@localhost>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQstwAmzVNCq-WnV+sC5mW=9a_ALJg65Z+1rK7rfx6XWdQ@mail.gmail.com> <ZWzvm9EhN0T6dqw6@localhost>
+Message-ID: <ZW83l1rvEuQzwtK2@ramacher.at>
+
+On 2023-12-03 23:14:03 +0200, Adrian Bunk wrote:
+> On Sun, Dec 03, 2023 at 09:46:31AM -0100, Graham Inggs wrote:
+> >...
+> > This is probably a good example for why new packages should be
+> > uploaded to experimental first, instead of directly to unstable.
+> >...
+> 
+> Not really.
+> 
+> It is rare that a new source package takes over a binary package from 
+> another binary package, and in this case the same might have happened
+> during an upgrade of the pandoc packages not involving NEW at all.
+
+It really is the best example why you perform such reorganizations in
+experimental first and then upload in one go to unstable. pandoc is now
+impacting at least two transitions.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From tille at debian.org  Wed Dec  6 19:43:29 2023
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 06 Dec 2023 20:43:29 +0100
+Subject: Bug#1057658: RM: r-cran-testextra -- ROM; Unmaintained upstream, not needed in Debian
+Message-ID: <170189180991.1798316.1653162129103347343.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-cran-testextra at packages.debian.org, 994847 at bugs.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-testextra
+
+Hi ftpmasters,
+
+r-cran-testextra is unmaintained on CRAN and not needed on Debian thus
+it can be removed.  It affects bug #994847 (r-cran-parsetools:
+Unmaintained, has been removed from CRAN) since once r-cran-testextra
+is removed we can also remove r-cran-parsetools.
+
+Kind regards and thanks for your work as ftpmaster
+    Andreas. 
+
+From ginggs at debian.org  Thu Dec  7 14:37:02 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 7 Dec 2023 13:37:02 -0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZWw5YsCw_hjsQkZq@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu>
+Message-ID: <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com>
+
+Hi Andreas
+
+On Sun, 3 Dec 2023 at 07:21, Andreas Tille <andreas at an3as.eu> wrote:
+> I have no idea how to work around this.
+
+I found a workaround; demote pandoc from a Depends to a Recommends in
+the r-cran-rmarkdown package.  It seems that pandoc is not used for
+building, at least for r-bioc-biovizbase, -degnorm, -ioniser, scrnaseq
+and -tximeta, which I tried.
+
+Do you know why r-bioc-metagenomeseq is considered neither good nor
+bad in the tracker?
+Also, why do r-bioc-netsam and r-bioc-org.hs.eg.db not even appear on
+the tracker?
+
+Regards
+Graham
+
+--- r-cran-rmarkdown-2.25+dfsg/debian/control
++++ r-cran-rmarkdown-2.25+dfsg/debian/control
+@@ -37,10 +37,9 @@
+          libjs-prettify,
+          r-cran-jquerylib,
+          fonts-font-awesome,
+-         pandoc,
+          r-cran-shiny,
+          node-html5shiv
+-Recommends: ${R:Recommends}
++Recommends: ${R:Recommends}, pandoc
+ Suggests: ${R:Suggests}
+ Description: convert R markdown documents into a variety of formats
+  R Markdown is a framework for creating documents that mix R code with
+
+From tille at debian.org  Thu Dec  7 15:09:28 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 7 Dec 2023 16:09:28 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com>
+Message-ID: <ZXHgKAKTb-hZI_Wb@an3as.eu>
+
+Hi Graham,
+
+Am Thu, Dec 07, 2023 at 01:37:02PM -0100 schrieb Graham Inggs:
+> On Sun, 3 Dec 2023 at 07:21, Andreas Tille <andreas at an3as.eu> wrote:
+> > I have no idea how to work around this.
+> 
+> I found a workaround; demote pandoc from a Depends to a Recommends in
+> the r-cran-rmarkdown package.  It seems that pandoc is not used for
+> building, at least for r-bioc-biovizbase, -degnorm, -ioniser, scrnaseq
+> and -tximeta, which I tried.
+
+Thanks for the patch - applied and uploaded.
+ 
+> Do you know why r-bioc-metagenomeseq is considered neither good nor
+> bad in the tracker?
+
+Argh, upstream has messed up DESCRIPTION/git_branch which we trust to
+detect r-bioc-api.  This is fixed[1] and uploaded.  I'll take this
+occurence as a reason to fail with an error in dh-r to avoid such cases
+in future.
+
+> Also, why do r-bioc-netsam and r-bioc-org.hs.eg.db not even appear on
+> the tracker?
+
+I was always wondering about this but I have no clue.  r-bioc-go.db is
+the third example in this row.  I was updating these in past transitions
+manually which is IMHO no big harm - but I simply don't understand.
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-metagenomeseq/-/blob/master/debian/patches/fix_git_branch.patch
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu Dec  7 15:34:14 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 7 Dec 2023 16:34:14 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXHgKAKTb-hZI_Wb@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu>
+Message-ID: <ZXHl9l7gtCFaJ7aR@an3as.eu>
+
+Am Thu, Dec 07, 2023 at 04:09:28PM +0100 schrieb Andreas Tille:
+> I'll take this
+> occurence as a reason to fail with an error in dh-r to avoid such cases
+> in future.
+
+Done in
+
+   https://salsa.debian.org/r-pkg-team/dh-r/-/commit/e4c348832b3d99ba7bc8f7670085b9b21323f7b6
+
+The check could be even more strict but should be sufficient for those
+practical cases that occured in the past.
+
+Thanks for Graham for spotting the issue
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu Dec  7 18:38:36 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 07 Dec 2023 19:38:36 +0100
+Subject: Bug#1057735: RM: r-cran-parsetools -- ROM; Unmaintained upstream, not needed in Debian
+Message-ID: <170197431640.2193660.12398692431243774956.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-cran-parsetools at packages.debian.org, 994847 at bugs.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-parsetools
+
+Hi ftpmasters,
+
+since you have closed #1057658 by removing r-cran-testextra (thank you
+for this) we can now remove r-cran-parsetools which would close bug
+#994847 requesting the removal of this package which is unmaintained and
+not needed in Debian any more.
+
+Kind regards and thanks for working as ftpmaster
+    Andreas.
+
+From bunk at debian.org  Thu Dec  7 18:35:21 2023
+From: bunk at debian.org (Adrian Bunk)
+Date: Thu, 7 Dec 2023 20:35:21 +0200
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXHgKAKTb-hZI_Wb@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu>
+Message-ID: <ZXIQaSS1h1xwHDlJ@localhost>
+
+On Thu, Dec 07, 2023 at 04:09:28PM +0100, Andreas Tille wrote:
+>...
+> Am Thu, Dec 07, 2023 at 01:37:02PM -0100 schrieb Graham Inggs:
+>...
+> > Also, why do r-bioc-netsam and r-bioc-org.hs.eg.db not even appear on
+> > the tracker?
+> 
+> I was always wondering about this but I have no clue.  r-bioc-go.db is
+> the third example in this row.  I was updating these in past transitions
+> manually which is IMHO no big harm - but I simply don't understand.
+
+Finding the root cause would be investigating the question why no 
+dependency on r-api-bioc-* is generated for them.
+
+Either that's not required and the packages are technically not part of 
+the transition, or there is an (RC) bug that should be fixed.
+
+> Kind regards
+>     Andreas.
+>...
+
+cu
+Adrian
+
+From andreas at an3as.eu  Fri Dec  8 15:01:17 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 8 Dec 2023 16:01:17 +0100
+Subject: Source download of DeMixT broken
+Message-ID: <ZXMvvdr2Zml8IBKH@an3as.eu>
+
+Hi,
+
+when looking at
+
+    https://bioconductor.org/packages/release/bioc/html/DeMixT.html
+
+and following the link "Source Archive" at bottom of the page linking
+to
+    https://bioconductor.org/packages/3.18/bioc/src/contrib/Archive/DeMixT/
+
+I can only see
+
+   Page Not Found
+   The page you were looking for was not found. 
+
+I'm trying to upgrade the Debian package of DeMixT to its latest version
+and would need the source tarball which can be usually downloaded from
+the "Source Archive" link.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at fam-tille.de  Fri Dec  8 15:04:27 2023
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Fri, 8 Dec 2023 16:04:27 +0100
+Subject: Source archive of DSS missing
+Message-ID: <ZXMwezCadT35oHt-@an3as.eu>
+
+Hi,
+
+when looking at
+
+    https://bioconductor.org/packages/release/bioc/html/DSS.html
+
+and following the link "Source Archive" at bottom of the page linking
+to
+    https://bioconductor.org/packages/3.18/bioc/src/contrib/Archive/DSS/
+
+I can only see
+
+   Page Not Found
+   The page you were looking for was not found. 
+
+I'm trying to upgrade the Debian package of DSS to its latest version
+and would need the source tarball which can be usually downloaded from
+the "Source Archive" link.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Fri Dec  8 16:06:55 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 9 Dec 2023 01:06:55 +0900
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com>
+Message-ID: <ZXM_H0XomFC1nAO3@bubu.igloo>
+
+Hi Graham and Andreas,
+
+Le Thu, Dec 07, 2023 at 01:37:02PM -0100, Graham Inggs a écrit :
+> 
+> Also, why do r-bioc-netsam and r-bioc-org.hs.eg.db not even appear on
+> the tracker?
+
+I do not know for r-bioc-netsam, but for r-bioc-org.hs.eg.db and similar
+packages, it is because it is an "annotation package" made of data and
+therefore not managed the same way as the other Bioconductor packages.
+
+This is why it DESCRIPTION file does not mention its Bioconductor Git
+branch.  This is also why its version number matches the Bioconductor
+release number.  Also, its homepage resolves to
+https://bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html
+while for regular packages there is no data/annotation/html in the URL.
+
+I think that it does not have to depend on the bioc api pseudo-package.
+
+I hope it helps,
+
+Charles
+
+From edd at debian.org  Fri Dec  8 16:32:00 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 8 Dec 2023 10:32:00 -0600
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXM_H0XomFC1nAO3@bubu.igloo>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXM_H0XomFC1nAO3@bubu.igloo>
+Message-ID: <25971.17664.75554.654798@rob.eddelbuettel.com>
+
+On 9 December 2023 at 01:06, Charles Plessy wrote:
+| I do not know for r-bioc-netsam, but for r-bioc-org.hs.eg.db and similar
+| packages, it is because it is an "annotation package" made of data and
+| therefore not managed the same way as the other Bioconductor packages.
+| 
+| This is why it DESCRIPTION file does not mention its Bioconductor Git
+| branch.  This is also why its version number matches the Bioconductor
+| release number.  Also, its homepage resolves to
+| https://bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html
+| while for regular packages there is no data/annotation/html in the URL.
+| 
+| I think that it does not have to depend on the bioc api pseudo-package.
+
+When r2u builds all of CRAN plus the ~ 200 BioC that are implied plus ~ 200
+more that either in Debian or high on BioC's own 'karma' list, I query all
+four repositories as one must.  That is basically what the BioC installer
+helpers always did for twenty-some years.  My code (quicker for me to find)
+is
+
+            ## cf  contrib.url(BiocManager::repositories())
+            ##     [1] "https://bioconductor.org/packages/3.14/bioc/src/contrib"
+            ##     [2] "https://bioconductor.org/packages/3.14/data/annotation/src/contrib"
+            ##     [3] "https://bioconductor.org/packages/3.14/data/experiment/src/contrib"
+            biocrepo <- paste0("https://bioconductor.org/packages/", .getConfig("bioc_version"), "/bioc")
+            apBIOC <- data.table(ap="Bioc", as.data.frame(available.packages(repos=biocrepo)))
+            biocdataannrepo <- paste0("https://bioconductor.org/packages/", .getConfig("bioc_version"), "/data/annotation")
+            apBIOCdataann <- data.table(ap="Bioc", as.data.frame(available.packages(repos=biocdataannrepo)))
+            apBIOC <- merge(apBIOC, apBIOCdataann, all=TRUE)
+            biocdataexprepo <- paste0("https://bioconductor.org/packages/", .getConfig("bioc_version"), "/data/experiment")
+            apBIOCdataexp <- data.table(ap="Bioc", as.data.frame(available.packages(repos=biocdataexprepo)))
+            apBIOC <- merge(apBIOC, apBIOCdataexp, all=TRUE)
+
+Ah, and younger Dirk left a message for current Dirk that this does indeed
+show it too:
+
+    > contrib.url(BiocManager::repositories())
+    'getOption("repos")' replaces Bioconductor standard repositories, see
+    'help("repositories", package = "BiocManager")' for details.
+    Replacement repositories:
+        CRAN: https://cloud.r-project.org
+    [1] "https://bioconductor.org/packages/3.18/bioc/src/contrib"           
+    [2] "https://bioconductor.org/packages/3.18/data/annotation/src/contrib"
+    [3] "https://bioconductor.org/packages/3.18/data/experiment/src/contrib"
+    [4] "https://bioconductor.org/packages/3.18/workflows/src/contrib"      
+    [5] "https://bioconductor.org/packages/3.18/books/src/contrib"          
+    [6] "https://cloud.r-project.org/src/contrib"                           
+    > 
+
+And when I bulk-updated the BioC packages for my 20.04 and 22.04 build in
+r2u, I did notice that some of the 'non-R-package packages' in annotations
+and experiment did not update.  One could always ask BioC which of these are
+/ are not considered release dependent.  Their slack is open and pretty
+friendly, I hang there too.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From sramacher at debian.org  Mon Dec 11 10:29:24 2023
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Mon, 11 Dec 2023 11:29:24 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXHgKAKTb-hZI_Wb@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu>
+Message-ID: <ZXbkhMw3YhNpXoBc@ramacher.at>
+
+Hi Andreas
+
+On 2023-12-07 16:09:28 +0100, Andreas Tille wrote:
+> Hi Graham,
+> 
+> Am Thu, Dec 07, 2023 at 01:37:02PM -0100 schrieb Graham Inggs:
+> > On Sun, 3 Dec 2023 at 07:21, Andreas Tille <andreas at an3as.eu> wrote:
+> > > I have no idea how to work around this.
+> > 
+> > I found a workaround; demote pandoc from a Depends to a Recommends in
+> > the r-cran-rmarkdown package.  It seems that pandoc is not used for
+> > building, at least for r-bioc-biovizbase, -degnorm, -ioniser, scrnaseq
+> > and -tximeta, which I tried.
+> 
+> Thanks for the patch - applied and uploaded.
+
+This change broke autopkgtests of reverse dependencies.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From tille at debian.org  Mon Dec 11 12:28:59 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 11 Dec 2023 13:28:59 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXbkhMw3YhNpXoBc@ramacher.at>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu> <ZXbkhMw3YhNpXoBc@ramacher.at>
+Message-ID: <ZXcAi9i26KW5M9ol@an3as.eu>
+
+Hi Sebastian,
+
+Am Mon, Dec 11, 2023 at 11:29:24AM +0100 schrieb Sebastian Ramacher:
+> > > I found a workaround; demote pandoc from a Depends to a Recommends in
+> > > the r-cran-rmarkdown package.  It seems that pandoc is not used for
+> > > building, at least for r-bioc-biovizbase, -degnorm, -ioniser, scrnaseq
+> > > and -tximeta, which I tried.
+> > 
+> > Thanks for the patch - applied and uploaded.
+> 
+> This change broke autopkgtests of reverse dependencies.
+
+OK, but what is your suggestion?  Reverting and have broken tests due to
+the pandoc issue?
+
+Kind regards
+   Andreas. 
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Mon Dec 11 12:36:38 2023
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Mon, 11 Dec 2023 13:36:38 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXcAi9i26KW5M9ol@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu> <ZXbkhMw3YhNpXoBc@ramacher.at> <ZXcAi9i26KW5M9ol@an3as.eu>
+Message-ID: <ZXcCVvcG-F-bvfUB@ramacher.at>
+
+On 2023-12-11 13:28:59 +0100, Andreas Tille wrote:
+> Hi Sebastian,
+> 
+> Am Mon, Dec 11, 2023 at 11:29:24AM +0100 schrieb Sebastian Ramacher:
+> > > > I found a workaround; demote pandoc from a Depends to a Recommends in
+> > > > the r-cran-rmarkdown package.  It seems that pandoc is not used for
+> > > > building, at least for r-bioc-biovizbase, -degnorm, -ioniser, scrnaseq
+> > > > and -tximeta, which I tried.
+> > > 
+> > > Thanks for the patch - applied and uploaded.
+> > 
+> > This change broke autopkgtests of reverse dependencies.
+> 
+> OK, but what is your suggestion?  Reverting and have broken tests due to
+> the pandoc issue?
+
+pandoc is fixed in unstable.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From tille at debian.org  Mon Dec 11 15:57:34 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 11 Dec 2023 16:57:34 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXcCVvcG-F-bvfUB@ramacher.at>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu> <ZXbkhMw3YhNpXoBc@ramacher.at> <ZXcAi9i26KW5M9ol@an3as.eu> <ZXcCVvcG-F-bvfUB@ramacher.at>
+Message-ID: <ZXcxbj93dGen46iN@an3as.eu>
+
+Am Mon, Dec 11, 2023 at 01:36:38PM +0100 schrieb Sebastian Ramacher:
+> > OK, but what is your suggestion?  Reverting and have broken tests due to
+> > the pandoc issue?
+> 
+> pandoc is fixed in unstable.
+
+Really?  Salsa CI[1] says:
+
+   pandoc : Depends: pandoc-data (>= 3.0.1+ds) but 3.0.1-3 is to be installed
+
+I uploaded anyway and hope this will be cured somehow.
+
+Kind regards
+   Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rmarkdown/-/jobs/5026534
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Mon Dec 11 16:47:23 2023
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Mon, 11 Dec 2023 17:47:23 +0100
+Subject: Re: Bug#1054657: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZXcxbj93dGen46iN@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <CAM8zJQsR6-C_YF1pTiiFb2REw7CcG-Np7+oJBBAM_LL9G50Hqw@mail.gmail.com> <ZXHgKAKTb-hZI_Wb@an3as.eu> <ZXbkhMw3YhNpXoBc@ramacher.at> <ZXcAi9i26KW5M9ol@an3as.eu> <ZXcCVvcG-F-bvfUB@ramacher.at> <ZXcxbj93dGen46iN@an3as.eu>
+Message-ID: <ZXc9G30PvN3T4atd@ramacher.at>
+
+On 2023-12-11 16:57:34 +0100, Andreas Tille wrote:
+> Am Mon, Dec 11, 2023 at 01:36:38PM +0100 schrieb Sebastian Ramacher:
+> > > OK, but what is your suggestion?  Reverting and have broken tests due to
+> > > the pandoc issue?
+> > 
+> > pandoc is fixed in unstable.
+> 
+> Really?  Salsa CI[1] says:
+> 
+>    pandoc : Depends: pandoc-data (>= 3.0.1+ds) but 3.0.1-3 is to be installed
+> 
+> I uploaded anyway and hope this will be cured somehow.
+
+This issue was fixed in 3.0.1+ds-3 which was uploaded today.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From andreas at fam-tille.de  Tue Dec 12 14:07:05 2023
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 12 Dec 2023 15:07:05 +0100
+Subject: Re: Source download of DeMixT broken
+In-Reply-To: <ZXMvvdr2Zml8IBKH@an3as.eu>
+References: <ZXMvvdr2Zml8IBKH@an3as.eu>
+Message-ID: <ZXhpCc4WJS0l3yFy@an3as.eu>
+
+Hi again,
+
+could someone please have a look at the source download?
+
+Thank you
+    Andreas.
+
+Am Fri, Dec 08, 2023 at 04:01:17PM +0100 schrieb Andreas Tille:
+> Hi,
+> 
+> when looking at
+> 
+>     https://bioconductor.org/packages/release/bioc/html/DeMixT.html
+> 
+> and following the link "Source Archive" at bottom of the page linking
+> to
+>     https://bioconductor.org/packages/3.18/bioc/src/contrib/Archive/DeMixT/
+> 
+> I can only see
+> 
+>    Page Not Found
+>    The page you were looking for was not found. 
+> 
+> I'm trying to upgrade the Debian package of DeMixT to its latest version
+> and would need the source tarball which can be usually downloaded from
+> the "Source Archive" link.
+> 
+> Kind regards
+>     Andreas.
+> 
+> -- 
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From andreas at fam-tille.de  Tue Dec 12 14:09:29 2023
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 12 Dec 2023 15:09:29 +0100
+Subject: Re: Source archive of DSS missing
+In-Reply-To: <ZXMwezCadT35oHt-@an3as.eu>
+References: <ZXMwezCadT35oHt-@an3as.eu>
+Message-ID: <ZXhpmfGttmdK_ooA@an3as.eu>
+
+Hi,
+
+could someone please have a look at the source download?
+
+Thank you
+   Andreas.
+
+Am Fri, Dec 08, 2023 at 04:04:27PM +0100 schrieb Andreas Tille:
+> Hi,
+> 
+> when looking at
+> 
+>     https://bioconductor.org/packages/release/bioc/html/DSS.html
+> 
+> and following the link "Source Archive" at bottom of the page linking
+> to
+>     https://bioconductor.org/packages/3.18/bioc/src/contrib/Archive/DSS/
+> 
+> I can only see
+> 
+>    Page Not Found
+>    The page you were looking for was not found. 
+> 
+> I'm trying to upgrade the Debian package of DSS to its latest version
+> and would need the source tarball which can be usually downloaded from
+> the "Source Archive" link.
+> 
+> Kind regards
+>     Andreas.
+> 
+> -- 
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Dec 13 10:43:56 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 13 Dec 2023 11:43:56 +0100
+Subject: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZWw5YsCw_hjsQkZq@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu>
+Message-ID: <ZXmK7Kjt_QsXJNbf@an3as.eu>
+
+Hi,
+
+as you might have noticed the upstream source for r-bioc-dss and
+r-bioc-demixt are missing and upstream did not answered two mails about
+this.  Since the transition looks clean for me so far[1] after I fixed
+two autopkgtest issues yesterday I (naively) think we could remove
+r-bioc-dss and r-bioc-demixt from testing and all other packages can
+migrate to finish the transition from r-bioc perspective.
+
+I'm wondering what I can do in some cases that are caused by the pandoc
+issue like shortread[2] which should be solved in principle.  I'm worried
+about issues in r-rcan-rmarkdown[3] and r-cran-flextable[4] which are
+caused by pandoc errors on ppc64el architecture *only*.  That's really
+strange and might mean that pandoc on this architecture is broken?
+
+Regarding pandoc I've just uploaded a fix for pypandoc (fixing bugs
+#1057946 and #1058153)
+
+I have neither any clue nor any time to check nbconvert.
+
+Kind regards
+      Andreas.
+
+[1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+[2] https://tracker.debian.org/pkg/r-bioc-shortread
+[3] https://ci.debian.net/packages/r/r-cran-rmarkdown/testing/ppc64el/40945637/
+[4] https://ci.debian.net/packages/r/r-cran-flextable/testing/ppc64el/40945625/
+
+-- 
+http://fam-tille.de
+
+From bunk at debian.org  Wed Dec 13 12:17:14 2023
+From: bunk at debian.org (Adrian Bunk)
+Date: Wed, 13 Dec 2023 14:17:14 +0200
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZXmK7Kjt_QsXJNbf@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu>
+Message-ID: <ZXmgyl41sVwaRiQz@localhost>
+
+On Wed, Dec 13, 2023 at 11:43:56AM +0100, Andreas Tille wrote:
+>...
+> I'm worried
+> about issues in r-rcan-rmarkdown[3] and r-cran-flextable[4] which are
+> caused by pandoc errors on ppc64el architecture *only*.  That's really
+> strange and might mean that pandoc on this architecture is broken?
+>...
+
+ppc64el has Lua support disabled[1] due to [2] (#1057857),
+AFAIK that's the last non-trivial issue of the Haskell transition.
+
+I haven't confirmed that this is related, but that would be my first 
+guess for the ppc64el-only [3] in pandoc.
+
+> Kind regards
+>       Andreas.
+>...
+
+cu
+Adrian
+
+[1] https://tracker.debian.org/media/packages/p/pandoc/control-3.0.1ds-3
+[2] https://buildd.debian.org/status/package.php?p=haskell-lua
+[3] https://tracker.debian.org/pkg/pandoc
+
+From ginggs at debian.org  Wed Dec 13 13:13:54 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 13 Dec 2023 12:13:54 -0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZXmK7Kjt_QsXJNbf@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu>
+Message-ID: <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 13 Dec 2023 at 09:45, Andreas Tille <andreas at an3as.eu> wrote:
+> as you might have noticed the upstream source for r-bioc-dss and
+> r-bioc-demixt are missing and upstream did not answered two mails about
+> this.  Since the transition looks clean for me so far[1] after I fixed
+> two autopkgtest issues yesterday I (naively) think we could remove
+> r-bioc-dss and r-bioc-demixt from testing and all other packages can
+> migrate to finish the transition from r-bioc perspective.
+
+I've added removal hints for r-bioc-dss and r-bioc-demixt.  Please
+file an RC bug for r-bioc-dss to prevent it from migrating straight
+back (r-bioc-demixt already has #1058278).
+
+One problem I see at [1]:
+
+Not built on buildd: arch all binaries uploaded by tille, a new
+source-only upload is needed to allow migration
+
+Remember, all r-bioc-* packages need to migrate together, so all of
+your uploads need to be ready before r-bioc-biocgenerics can migrate.
+I checked only the first few "Migrates after" links from [1], and
+found at least these packages still show autopkgtest regressions
+[2][3][4][5][6].
+
+Regards
+Graham
+
+> [1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+
+[2] https://tracker.debian.org/pkg/r-bioc-beachmat
+[3] https://tracker.debian.org/pkg/r-bioc-biobase
+[4] https://tracker.debian.org/pkg/r-bioc-biocbaseutils
+[5] https://tracker.debian.org/pkg/r-bioc-biocio
+[6] https://tracker.debian.org/pkg/r-bioc-biostrings
+
+From tille at debian.org  Wed Dec 13 16:08:03 2023
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 13 Dec 2023 17:08:03 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com>
+Message-ID: <ZXnW47kccCqgI8Jp@an3as.eu>
+
+Hi Graham,
+
+Am Wed, Dec 13, 2023 at 12:13:54PM -0100 schrieb Graham Inggs:
+> I've added removal hints for r-bioc-dss and r-bioc-demixt.  Please
+> file an RC bug for r-bioc-dss to prevent it from migrating straight
+> back (r-bioc-demixt already has #1058278).
+
+Done for r-bioc-dss.
+ 
+> One problem I see at [1]:
+> 
+> Not built on buildd: arch all binaries uploaded by tille, a new
+> source-only upload is needed to allow migration
+
+I do not understand this line.  What exact package needs a source-only
+upload?
+
+> Remember, all r-bioc-* packages need to migrate together, so all of
+> your uploads need to be ready before r-bioc-biocgenerics can migrate.
+> I checked only the first few "Migrates after" links from [1], and
+> found at least these packages still show autopkgtest regressions
+> [2][3][4][5][6].
+
+Thank you for these links.  Could you please explain how I can obtain
+these myself?  Is there any page I could look at for some kind of
+summary?
+
+Now to these links:
+ 
+> > [1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+
+OK, no idea what source-only upload is needed (see above).
+
+> [2] https://tracker.debian.org/pkg/r-bioc-beachmat
+
+This shows:
+  autopkgtest for r-bioc-biocsingular/1.16.0+ds-1: amd64: Regression or new test...
+but that version of r-bioc-biocsingular is in testing and bound
+to fail.  Version 1.18.0+ds matches to BioC API 3.18.
+Autopkgtest in Salsa CI works as expected.  When looking
+in debci (https://ci.debian.net/packages/r/r-bioc-biocsingular/unstable/amd64/40579344/)
+the test suite error is caused by pandoc.
+
+> [3] https://tracker.debian.org/pkg/r-bioc-biobase
+
+Same here:
+  autopkgtest for r-bioc-degreport/1.36.0+dfsg-1: amd64: Regression or new test...
+we have r-bioc-degreport 1.38.3+dfsg-1 in unstable matching BioC API
+3.18.  Failures with any former version is bound to fail.
+
+Similarly:
+  autopkgtest for r-bioc-multiassayexperiment/1.26.0+dfsg-1: amd64: Regression or new test...
+version in testing not unstable
+
+> [4] https://tracker.debian.org/pkg/r-bioc-biocbaseutils
+
+See above
+  autopkgtest for r-bioc-multiassayexperiment/1.26.0+dfsg-1: amd64: Regression or new test...
+
+> [5] https://tracker.debian.org/pkg/r-bioc-biocio
+> [6] https://tracker.debian.org/pkg/r-bioc-biostrings
+
+Same problem as above
+  autopkgtest for r-bioc-bsgenome/1.68.0-1: amd64: Regression or new test...
+in both cases.
+
+I admit I have no idea what to do.  If the migration issues are
+caused by running tests against versions in testing which can't
+pass something is broken.  As you wrote above
+
+> Remember, all r-bioc-* packages need to migrate together,
+
+... yes, that's why running debci tests is not needed - at least as far
+as I understood the purpose of a transition.  Please let me know if I
+can do something to fix the situation, but for the moment I have no idea
+what to do.
+
+Sorry if I'm a bit slow to catch on.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Wed Dec 13 20:56:14 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 13 Dec 2023 21:56:14 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZXnW47kccCqgI8Jp@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu>
+Message-ID: <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org>
+
+Hi,
+
+On 13-12-2023 17:08, Andreas Tille wrote:
+> > Not built on buildd: arch all binaries uploaded by tille, a new
+> > source-only upload is needed to allow migration
+>
+>
+> I do not understand this line.  What exact package needs a source-only
+> upload?
+
+You uploaded binaries together with the source. Because this is an 
+arch:all binary we can't binNMU in a meaningful way and we don't accept 
+uploader built binaries in testing anymore. Currently the only way to 
+solve this is by doing a source-only (so, no binaries) upload (of 
+r-bioc-biocgenerics).
+
+> > Remember, all r-bioc-* packages need to migrate together, so all of
+> > your uploads need to be ready before r-bioc-biocgenerics can migrate.
+> > I checked only the first few "Migrates after" links from [1], and
+> > found at least these packages still show autopkgtest regressions
+> > [2][3][4][5][6].
+>
+>
+> Thank you for these links.  Could you please explain how I can obtain
+> these myself?  Is there any page I could look at for some kind of
+> summary?
+
+I read in Graham's message that he started at [1] and just clicked the 
+links. I don't think there's a great web site yet ([tracker] comes 
+close), except udd has all the information which can be queried and 
+*all* excuses can be viewed too [excuses] (or processed [yaml]).
+
+> > [2] https://tracker.debian.org/pkg/r-bioc-beachmat
+>
+>
+> This shows:
+>    autopkgtest for r-bioc-biocsingular/1.16.0+ds-1: amd64: Regression or new test...
+
+> but that version of r-bioc-biocsingular is in testing and bound
+> to fail.  Version 1.18.0+ds matches to BioC API 3.18.
+
+I wonder if it might be that britney2 doesn't notice that if it needs to 
+take r-bioc-biocgenerics from unstable to run a test, that 
+r-api-bioc-3.17 is no longer provided and hence also the test needs to 
+come from unstable. Obviously there's room for improvement there, but 
+the amount of code to determine the set of pinned packages from unstable 
+is already rather long. [britney2]
+
+> I admit I have no idea what to do.  If the migration issues are
+> caused by running tests against versions in testing which can't
+> pass something is broken.
+
+They *should* be scheduled with the test from unstable, as the binaries 
+depend on r-api-bioc-3.17 which will no longer be available when 
+r-bioc-biocgenerics is used from unstable.
+
+> Please let me know if I
+> can do something to fix the situation, but for the moment I have no idea
+> what to do.
+
+Patches for britney2 please ;).
+
+I'll try to do some manual triggering of tests tonight/tomorrow, but 
+after a quick glance, that might be too much to handle manually.
+
+Paul
+
+[1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+[tracker] https://tracker.debian.org/teams/r-pkg-team/ the piece below 
+Packages with test failures: if it goes from passing in testing to fail 
+in unstable there is potentially a problem
+
+[excuses] https://release.debian.org/britney/update_excuses.html
+[yaml] https://release.debian.org/britney/excuses.yaml.gz
+[britney2] 
+https://salsa.debian.org/release-team/britney2/-/blob/master/britney2/policies/autopkgtest.py#L622 
+until line 743
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Thu Dec 14 07:58:37 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 14 Dec 2023 08:58:37 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org>
+Message-ID: <ZXq1rcjj0onfrPP3@an3as.eu>
+
+Hi Paul,
+
+Am Wed, Dec 13, 2023 at 09:56:14PM +0100 schrieb Paul Gevers:
+> > > Not built on buildd: arch all binaries uploaded by tille, a new
+> > > source-only upload is needed to allow migration
+> > 
+> > I do not understand this line.  What exact package needs a source-only
+> > upload?
+> 
+> You uploaded binaries together with the source. Because this is an arch:all
+> binary we can't binNMU in a meaningful way and we don't accept uploader
+> built binaries in testing anymore. Currently the only way to solve this is
+> by doing a source-only (so, no binaries) upload (of r-bioc-biocgenerics).
+
+This must have been by pure accident since I never do so except for
+packages targeting new.  I did a source-only upload for
+r-bioc-biocgenerics.
+ 
+> > Please let me know if I
+> > can do something to fix the situation, but for the moment I have no idea
+> > what to do.
+> 
+> Patches for britney2 please ;).
+
+I'm using this chance to thank you for all your work in the release team
+and patchinbg britney2 at least to the current state.
+ 
+> I'll try to do some manual triggering of tests tonight/tomorrow, but after a
+> quick glance, that might be too much to handle manually.
+> 
+> Paul
+> 
+> [1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+> [tracker] https://tracker.debian.org/teams/r-pkg-team/ the piece below
+> Packages with test failures: if it goes from passing in testing to fail in
+> unstable there is potentially a problem
+
+This tracker page was new to me and is extremely helpful!  Thanks to
+whoever this thanks deserves.  Very helpful also for other teams I'm
+working in.
+
+> [excuses] https://release.debian.org/britney/update_excuses.html
+> [yaml] https://release.debian.org/britney/excuses.yaml.gz
+
+Well, it also points to several pandoc related issues which I can't
+do anything about.
+
+> [britney2] https://salsa.debian.org/release-team/britney2/-/blob/master/britney2/policies/autopkgtest.py#L622
+> until line 743
+
+Please let me know when I (realistically) can do more than just that
+source-only upload mentioned above.
+
+Kind regards
+   Andreas.
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Sun Dec 17 09:19:26 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 17 Dec 2023 10:19:26 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZXq1rcjj0onfrPP3@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org> <ZXq1rcjj0onfrPP3@an3as.eu>
+Message-ID: <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org>
+
+Hi,
+
+On 14-12-2023 08:58, Andreas Tille wrote:
+> Please let me know when I (realistically) can do more than just that
+> source-only upload mentioned above.
+
+Waiting seems to have been enough. I pulled some strings on the back 
+side and the whole set migrated yesterday.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Sun Dec 17 14:17:44 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 17 Dec 2023 15:17:44 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org> <ZXq1rcjj0onfrPP3@an3as.eu> <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org>
+Message-ID: <ZX8DCCqxS5zxN26T@an3as.eu>
+
+Am Sun, Dec 17, 2023 at 10:19:26AM +0100 schrieb Paul Gevers:
+> > Please let me know when I (realistically) can do more than just that
+> > source-only upload mentioned above.
+> 
+> Waiting seems to have been enough. I pulled some strings on the back side
+> and the whole set migrated yesterday.
+
+Thanks a lot for your successful pulling on the strings
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sun Dec 17 15:11:47 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 17 Dec 2023 14:11:47 -0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZX8DCCqxS5zxN26T@an3as.eu>
+References: <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZXq1rcjj0onfrPP3@an3as.eu> <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org> <ZX8DCCqxS5zxN26T@an3as.eu>
+Message-ID: <CAM8zJQtW+ykCjPtenAbvNQ6QUAdZN9yhqeYyVpGsVo7ZJ7YE0A@mail.gmail.com>
+
+Hi Andreas
+
+There are some packages that have still not migrated since the
+previous r-api-bioc-3.17 transition in July 2023.
+
+Links to their tracker pages, which should tell you what is needed, follow:
+
+https://tracker.debian.org/pkg/r-bioc-cner
+https://tracker.debian.org/pkg/r-bioc-dada2
+https://tracker.debian.org/pkg/r-bioc-edaseq
+https://tracker.debian.org/pkg/r-bioc-ioniser
+https://tracker.debian.org/pkg/r-bioc-megadepth
+https://tracker.debian.org/pkg/r-bioc-scater
+https://tracker.debian.org/pkg/r-bioc-shortread
+https://tracker.debian.org/pkg/r-bioc-tcgabiolinks
+https://tracker.debian.org/pkg/r-bioc-tfbstools
+
+As a bonus, here's another, not related to the transition, but from a
+similar time:
+https://tracker.debian.org/pkg/r-cran-dials
+
+Regards
+Graham
+
+From tille at debian.org  Mon Dec 18 09:07:55 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 18 Dec 2023 10:07:55 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <CAM8zJQtW+ykCjPtenAbvNQ6QUAdZN9yhqeYyVpGsVo7ZJ7YE0A@mail.gmail.com>
+References: <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZXq1rcjj0onfrPP3@an3as.eu> <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org> <ZX8DCCqxS5zxN26T@an3as.eu> <CAM8zJQtW+ykCjPtenAbvNQ6QUAdZN9yhqeYyVpGsVo7ZJ7YE0A@mail.gmail.com>
+Message-ID: <ZYAL6xUwUTfuCXHV@an3as.eu>
+
+Hi Graham,
+
+Am Sun, Dec 17, 2023 at 02:11:47PM -0100 schrieb Graham Inggs:
+> There are some packages that have still not migrated since the
+> previous r-api-bioc-3.17 transition in July 2023.
+> 
+> Links to their tracker pages, which should tell you what is needed, follow:
+> 
+> https://tracker.debian.org/pkg/r-bioc-cner
+
+Fixed.
+
+> https://tracker.debian.org/pkg/r-bioc-dada2
+> https://tracker.debian.org/pkg/r-bioc-edaseq
+> https://tracker.debian.org/pkg/r-bioc-ioniser
+
+Due to shortread.
+
+> https://tracker.debian.org/pkg/r-bioc-megadepth
+
+d/tests/control has
+
+   Architecture: !s390x
+
+Why is it considered failing on s390x anyway?
+
+> https://tracker.debian.org/pkg/r-bioc-scater
+
+While this is an Architecture:all package it Depends from r-bioc-densvis
+which exists only on amd64 and arm64 due to the Build-Depends:
+r-bioc-basiklisk.  Thus tests on other architectures are failing since
+r-bioc-densvis is not installable.  What solution do you suggest in this
+case?
+
+> https://tracker.debian.org/pkg/r-bioc-shortread
+
+Fixed.
+
+> https://tracker.debian.org/pkg/r-bioc-tcgabiolinks
+
+Reported upstream ( https://github.com/BioinformaticsFMRP/TCGAbiolinks/issues/612 )
+
+> https://tracker.debian.org/pkg/r-bioc-tfbstools
+
+Due to cner which is fixed.
+ 
+> As a bonus, here's another, not related to the transition, but from a
+> similar time:
+> https://tracker.debian.org/pkg/r-cran-dials
+
+Forgot source-only upload - done.
+
+Thanks a lot for the links
+
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Mon Dec 18 18:34:04 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Mon, 18 Dec 2023 19:34:04 +0100
+Subject: Re: Bug#1054657: Transition ready? (Was: Transition seems to be blocked (Was: Bug#1054657: transition: r-bioc-biocgenerics))
+In-Reply-To: <ZYAL6xUwUTfuCXHV@an3as.eu>
+References: <ZWw5YsCw_hjsQkZq@an3as.eu> <ZXmK7Kjt_QsXJNbf@an3as.eu> <CAM8zJQtaZjLnbcN5MAh6hsj16vhxfyH7zOwey_aipR1THHOxGQ@mail.gmail.com> <ZXnW47kccCqgI8Jp@an3as.eu> <30885a65-a771-472d-afdd-3054e2e4edfe@debian.org> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZXq1rcjj0onfrPP3@an3as.eu> <3bcff6da-fe14-40e7-bf90-0d476ff1f73d@debian.org> <ZX8DCCqxS5zxN26T@an3as.eu> <CAM8zJQtW+ykCjPtenAbvNQ6QUAdZN9yhqeYyVpGsVo7ZJ7YE0A@mail.gmail.com> <ZYAL6xUwUTfuCXHV@an3as.eu>
+Message-ID: <132c53bb-d2d5-4b40-89e8-db3f3edc62f1@debian.org>
+
+Hi
+
+On 18-12-2023 10:07, Andreas Tille wrote:
+> > https://tracker.debian.org/pkg/r-bioc-megadepth
+>
+>
+> d/tests/control has
+>
+>     Architecture: !s390x
+>
+> Why is it considered failing on s390x anyway?
+
+The log has this at the end:
+127s run-unit-test        SKIP Test declares architecture as not 
+supported: s390x
+127s run-unit-test        SKIP Test declares architecture as not 
+supported: s390x
+
+127s pkg-r-autopkgtest    FAIL non-zero exit status 1
+
+pkg-r-autopkgtest comes from autodep8. You didn't tell autodep8 that you 
+wanted s390x to be excluded also from that test.
+
+> > https://tracker.debian.org/pkg/r-bioc-scater
+>
+>
+> While this is an Architecture:all package it Depends from r-bioc-densvis
+> which exists only on amd64 and arm64 due to the Build-Depends:
+> r-bioc-basiklisk.  Thus tests on other architectures are failing since
+> r-bioc-densvis is not installable.  What solution do you suggest in this
+> case?
+
+Well, mark the test as amd64 and arm64 only? Were this due to Depends 
+(and thus the package not installable) the test would *automatically* 
+not be scheduled if I'm correct, but it works differently for test 
+dependencies.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+

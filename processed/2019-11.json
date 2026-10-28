@@ -1,0 +1,109 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-11",
+  "messages": [
+    {
+      "id": "msg-1075eef2d680",
+      "message_id": "<CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-11-10T06:11:25Z",
+      "subject": "Re: Bug#944310: transition: r-api-bioc-3.10",
+      "subject_clean": "Bug#944310: transition: r-api-bioc-3.10",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "F.Y.I. A transition tracker has been set up:\nhttps://release.debian.org/transitions/html/r-api-bioc-3.10.html\n\nAndreas Beckmann wrote:\n> Package: release.debian.org\n> Severity: normal\n> User: release.debian.org at packages.debian.org\n> Usertags: transition\n>\n> Recently someone has started some R transition.\n> I have no clue how this is supposed to work, r-bioc-biocgenerics now\n>   Provides: r-api-bioc-3.10\n> but rebuilding r-bioc-genomeinfodb in sid still generated a dependency\n> on r-api-bioc-3.9 - perhaps the rebuild order must be followed strictly.\n>\n> Please set up a tracker manually, since this is a transition of a\n> virtual package name.\n>\n> Ben file:\n>\n> title = \"r-api-bioc-3.10\";\n> is_affected = .depends ~ /r-api-bioc/;\n> is_good = .depends ~ \"r-api-bioc-3.10\";\n> is_bad = .depends ~ \"r-api-bioc-3.9\";",
+      "body_snippet": "F.Y.I. A transition tracker has been set up:\nhttps://release.debian.org/transitions/html/r-api-bioc-3.10.html\n\nAndreas Beckmann wrote:\n> Package: release.debian.org\n> Severity: normal\n> User: release.",
+      "thread_id": "thread-1075eef2d680",
+      "thread_depth": 0,
+      "month": "2019-11"
+    },
+    {
+      "id": "msg-c650b4fbb1f2",
+      "message_id": "<CA+6XHwQBjZ_b70gL53jyuoWbbCkUrKXvjDb=PVDNXXe7ghBHzA@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2019-11-10T15:49:12Z",
+      "subject": "Re: Bug#944310: transition: r-api-bioc-3.10",
+      "subject_clean": "Bug#944310: transition: r-api-bioc-3.10",
+      "in_reply_to": "<CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsA6uOinHxut1ckTkqwD0gSULb4Mmr1Lure6wF7qqq7dg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nLe dim. 10 nov. 2019 à 07:11, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> F.Y.I. A transition tracker has been set up:\n> https://release.debian.org/transitions/html/r-api-bioc-3.10.html\n\nThanks for this information! Next time, I will start by this.\n\nBest,\nDylan",
+      "body_snippet": "Hi Graham,\n\nLe dim. 10 nov. 2019 à 07:11, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> F.Y.I. A transition tracker has been set up:\n> https://release.debian.org/transitions/html/r-api-bioc-3.10.h",
+      "thread_id": "thread-1075eef2d680",
+      "thread_depth": 1,
+      "month": "2019-11"
+    },
+    {
+      "id": "msg-0750d0c8e4d7",
+      "message_id": "<20191114103623.u4av22lbzheduk5y@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-11-14T10:36:23Z",
+      "subject": "sjPlot: `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now",
+      "subject_clean": "sjPlot: `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen trying to build r-cran-sjplot from Git I get:\n\n...\n* installing *source* package 'sjPlot' ...\nfile 'tests/testthat/test-tab_model.R' has the wrong MD5 checksum\n** using staged installation\n** R\n** data\n** inst\n** byte-compile and prepare package for lazy loading\nError: object 'principal_components' is not exported by 'namespace:performance'\nExecution halted\nERROR: lazy loading failed for package 'sjPlot'\n...\n\nIn r-cran-performance I've found:\n\nNEWS.md:* `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.\n\nOK, so checking ...\n\nr-cran-sjplot(master) $ grep -R principal_components\nR/sjTabItemAnalysis.R:#' @importFrom parameters principal_components\nR/sjTabItemAnalysis.R:    pr <- parameters::principal_components(df, rotation = \"varimax\")\nNAMESPACE:importFrom(parameters,principal_components)\n\nI wonder why the build seems to refer to performance for\nprincipal_components while the code says obviously parameters.\n\nAny idea?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen trying to build r-cran-sjplot from Git I get:\n\n...\n* installing *source* package 'sjPlot' ...\nfile 'tests/testthat/test-tab_model.R' has the wrong MD5 checksum\n** using staged installation\n*",
+      "thread_id": "thread-0750d0c8e4d7",
+      "thread_depth": 0,
+      "month": "2019-11"
+    },
+    {
+      "id": "msg-0afd605a5b7b",
+      "message_id": "<20191127162126.w3oswqqkrhu2wqaw@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-11-27T16:21:26Z",
+      "subject": "Source for minimized JS app.min.js in bookdown",
+      "subject_clean": "Source for minimized JS app.min.js in bookdown",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Yihui Xie,\n\nI intend to package bookdown for Debian (as a predependency for\nrWikiPathways).  Debian considers minimized JS as binary without source\nand thus I need to deliver the source for\n\n   inst/resources/gitbook/js/app.min.js\n\nUnfortunately I have no idea from where it is obtained from and thus I\nfail to meet the requirement to provide it.  Any hint where you got that\nfile from?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Yihui Xie,\n\nI intend to package bookdown for Debian (as a predependency for\nrWikiPathways).  Debian considers minimized JS as binary without source\nand thus I need to deliver the source for\n\n   ins",
+      "thread_id": "thread-0afd605a5b7b",
+      "thread_depth": 0,
+      "month": "2019-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-1075eef2d680",
+      "subject": "Bug#944310: transition: r-api-bioc-3.10",
+      "message_count": 2,
+      "participants": [
+        "Dylan Aïssi",
+        "Graham Inggs"
+      ],
+      "started": "2019-11-10T06:11:25Z",
+      "last_reply": "2019-11-10T15:49:12Z",
+      "root_message_id": "msg-1075eef2d680"
+    },
+    {
+      "id": "thread-0750d0c8e4d7",
+      "subject": "sjPlot: `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-11-14T10:36:23Z",
+      "last_reply": "2019-11-14T10:36:23Z",
+      "root_message_id": "msg-0750d0c8e4d7"
+    },
+    {
+      "id": "thread-0afd605a5b7b",
+      "subject": "Source for minimized JS app.min.js in bookdown",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-11-27T16:21:26Z",
+      "last_reply": "2019-11-27T16:21:26Z",
+      "root_message_id": "msg-0afd605a5b7b"
+    }
+  ]
+}

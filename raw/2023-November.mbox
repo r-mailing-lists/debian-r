@@ -1,0 +1,3135 @@
+From plessy at debian.org  Wed Nov  1 07:31:31 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 1 Nov 2023 16:31:31 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com>
+Message-ID: <ZUH-0zqxZDOpT_Lh@kumo.plessy.net>
+
+Le Sun, Oct 29, 2023 at 02:57:01PM -0100, Graham Inggs a écrit :
+> 
+> No, after the NEW packages have cleared NEW and the moreinfo tag is
+> removed, we'll consider a slot for the transition.  We would like to
+> avoid stalling the transition with multiple packages going through
+> NEW, and putting pressure on FTP Masters by telling them a package is
+> needed for a transition is not nice either.
+
+Hi Graham,
+
+although the previous transition introduced a lot of NEW packages
+transitively depending on each other, this was quite exceptional.  We do
+not expect that core parts of the dependency chain will change again
+this time.
+
+With this in mind, can I ask why is it necessary to upload to
+experimental first?  We never had to do it before, and it is a lot of
+extra work.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From ginggs at debian.org  Wed Nov  1 10:02:10 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 1 Nov 2023 09:02:10 -0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZT6Q_I0ryRLEHMFB@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu>
+Message-ID: <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com>
+
+HI Andreas
+
+On Sun, 29 Oct 2023 at 16:06, Andreas Tille <tille at debian.org> wrote:
+> Sorry, my question was probably confusing.  I was not talking about the
+> new packages.  I was talking about the 170 r-bioc-* packages.  If I
+> upload these to experimental, will it be necessary to upload these to
+> unstable again or can these be moved to unstable in one rush.  Also
+> interesting in this connection:  Will the tracker display the levels
+> of packages uploaded to experimental?
+
+I still don't think this has ever been possible.
+
+> I'm comfortable with doing source-only uploads of packages that have
+> passed NEW.  I'm not comfortable with uploading 170 packages twice -
+> once to experimmental and once again to unstable.  Given that all
+> this work has mainly ended up on my shoulders I would prefer to
+> upload directly to unstable and simply bear with the waiting time
+> in NEW.
+
+Why do you want to upload 170 packages to experimental?  We are only
+asking that the NEW packages involved be uploaded to experimental and
+clear NEW review before we start the transition.
+
+> But you just mentioned the tracker in your previous mail[1].
+
+The tracker is visible [0], but is still in the 'Some planned
+transitions' section along with many others.
+
+> I admit I personally see the bigger drawback on spending my time twice
+> on 170 packages than waiting for new packages.  Please explain (again)
+> the real drawback of a transition that was delayed due to waiting for
+> new packages in total by estimated (not verified) by about two weeks.
+
+>>From what I saw in the last transition, r-bioc-biocgenerics was
+uploaded on 2023-07-17, and the last package (I think) to clear NEW
+was r-bioc-pfamanalyzer, which was accepted on 2023-08-15, almost one
+month after the transition started.
+
+Again, we are not asking for the entire transition to happen in
+experimental.  We are only asking for the NEW packages, so that NEW
+processing happens before the transition, and not during.
+
+Regards
+Graham
+
+[0] https://release.debian.org/transitions/
+
+From tille at debian.org  Wed Nov  1 10:28:38 2023
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 1 Nov 2023 11:28:38 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com>
+Message-ID: <ZUIoVnoW7py5c5SO@an3as.eu>
+
+Hi Graham,
+
+Am Wed, Nov 01, 2023 at 09:02:10AM -0100 schrieb Graham Inggs:
+> > Sorry, my question was probably confusing.  I was not talking about the
+> > new packages.  I was talking about the 170 r-bioc-* packages.  If I
+> > upload these to experimental, will it be necessary to upload these to
+> > unstable again or can these be moved to unstable in one rush.  Also
+> > interesting in this connection:  Will the tracker display the levels
+> > of packages uploaded to experimental?
+> 
+> I still don't think this has ever been possible.
+
+Thanks for the clarification.  In the last transition someone stated
+this might be possible.
+ 
+> > I'm comfortable with doing source-only uploads of packages that have
+> > passed NEW.  I'm not comfortable with uploading 170 packages twice -
+> > once to experimmental and once again to unstable.  Given that all
+> > this work has mainly ended up on my shoulders I would prefer to
+> > upload directly to unstable and simply bear with the waiting time
+> > in NEW.
+> 
+> Why do you want to upload 170 packages to experimental?  We are only
+> asking that the NEW packages involved be uploaded to experimental and
+> clear NEW review before we start the transition.
+
+The point is that we simply have no better means to know what new
+packages might be required.  We simply learn about new requirements by
+building the new version of the r-bioc-* packages == in the process of
+the transition.  Thus someone suggested to do the transition completely
+inside experimental.  If there is no chance to move packages from
+experimental to unstable without a fresh upload (which I doubted myself
+- thanks for confirming) its in fact no option to build everything
+in experimental first.
+ 
+> > But you just mentioned the tracker in your previous mail[1].
+> 
+> The tracker is visible [0], but is still in the 'Some planned
+> transitions' section along with many others.
+
+Ahhh, OK.
+ 
+> > I admit I personally see the bigger drawback on spending my time twice
+> > on 170 packages than waiting for new packages.  Please explain (again)
+> > the real drawback of a transition that was delayed due to waiting for
+> > new packages in total by estimated (not verified) by about two weeks.
+> 
+> >From what I saw in the last transition, r-bioc-biocgenerics was
+> uploaded on 2023-07-17, and the last package (I think) to clear NEW
+> was r-bioc-pfamanalyzer, which was accepted on 2023-08-15, almost one
+> month after the transition started.
+
+Maybe it has lasted for one month.  I admit I personally see no drawback
+in this time frame but possibly I'm to less involved of the work of the
+release team to understand this.  If it is a real problem I might
+imagine to remove those (few, mostly not more than 5-10) leaf packages
+that really need those new dependencies from testing so the majority of
+the packages can migrate?  I honestly try to understand this issue since
+for the moment our only strategy to upgrade to new BioConductor is to
+simply build the tree of dependencies and see what is happening.
+
+> Again, we are not asking for the entire transition to happen in
+> experimental.  We are only asking for the NEW packages, so that NEW
+> processing happens before the transition, and not during.
+
+Understood this item now - but I'm lacking any clue how to find out
+what new packages are needed.
+
+Kind regards and thanks a lot for your patience
+
+     Andreas.
+
+> [0] https://release.debian.org/transitions/
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Nov  2 14:13:55 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 2 Nov 2023 15:13:55 +0100
+Subject: Re: Bug#1054323: r-cran-tmb: autopkgtest needs update for new version of rmatrix: Package version inconsistency detected
+In-Reply-To: <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com>
+References: <fda1bd9d-f714-4f5c-8bfa-0ea88dcc040b@debian.org> <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com>
+Message-ID: <ZUOuoyO_cFQ8_QMb@an3as.eu>
+
+Hi Graham,
+
+Am Sun, Oct 29, 2023 at 10:12:56AM -0100 schrieb Graham Inggs:
+> I found that in debian/control, r-cran-tmb has Depends:
+> r-cran-matrix (>= 1.5-3-1~), but this is somehow replaced in the
+> binary package, presumably by dh-r?
+
+dh-r creates a variable R:Depends
+ 
+> Andreas, would it be possible for dh-r to always replace the version
+> in r-cran-tmb's Depends with r-cran-matrix (>= [the version of
+> r-cran-matrix it was built with]) ?
+
+Well, the *version* was correct even in r-cran-tmb 1.9.6-4.  However,
+due to the '-' in the GNU R Matrix version the dpkg sorting mechanism
+failed and we need the correct revision of the Debian package.  To
+approach this I decided against hacking this exception into dh-r but
+rather added override_dh_gencontrol to d/rules where I'm editing the
+variable accordingly to have the r-cran-matrix Debian package revision
+that was used at build time.
+
+> Then you can avoid modifying Build-Depends and upstream's DESCRIPTION,
+> and will allow r-cran-tmb to be binNMU'd when needed.  It should also
+> allow for easier backporting.
+
+I hope this will also work for backporting but with the current
+dependency of TMB it also needs Matrix from testing.
+
+There is probably one remaining problem.  As per file R/zzz.R[2] the
+function checkMatrixPackageVersion verifies that TMB is running always
+with the Matrix version it was built against.  Do you see some automatic
+method to approach this which is better than simply waiting for a CI
+test to fail (which should happen once a r-cran-matrix package of a new
+Matrix version is uploaded)?
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/rules#L10-13
+[2] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/R/zzz.R
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Thu Nov  2 18:23:55 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 2 Nov 2023 19:23:55 +0100
+Subject: Re: Bug#1054323: r-cran-tmb: autopkgtest needs update for new version of rmatrix: Package version inconsistency detected
+In-Reply-To: <ZUOuoyO_cFQ8_QMb@an3as.eu>
+References: <fda1bd9d-f714-4f5c-8bfa-0ea88dcc040b@debian.org> <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com> <ZUOuoyO_cFQ8_QMb@an3as.eu>
+Message-ID: <16466d70-9391-42e7-9a68-809a03ec9675@debian.org>
+
+Hi,
+
+On 02-11-2023 15:13, Andreas Tille wrote:
+> There is probably one remaining problem.  As per file R/zzz.R[2] the
+> function checkMatrixPackageVersion verifies that TMB is running always
+> with the Matrix version it was built against.
+
+Well, I suggested before to just patch that check out. Is it really 
+doing any good? If the test suite is remotely well done, it should catch 
+the case where rmatrix breaks the package, while enabling running it 
+against any version that works.
+
+> Do you see some automatic
+> method to approach this which is better than simply waiting for a CI
+> test to fail (which should happen once a r-cran-matrix package of a new
+> Matrix version is uploaded)?
+Well, if you get the version tightly recorded, the migration software 
+will refuse to migrate r-cran-matrix because it would break the version 
+in testing. No CI is needed for that. But tight version relations are a 
+pain, i.e. they limit apt in finding upgrade orders, so if too many 
+packages do that, it might prevent people from upgrading their system.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Fri Nov  3 00:56:13 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 3 Nov 2023 09:56:13 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUIoVnoW7py5c5SO@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu>
+Message-ID: <ZURFLf7NBuMaCbQT@kumo.plessy.net>
+
+> Am Wed, Nov 01, 2023 at 09:02:10AM -0100 schrieb Graham Inggs:
+> > Again, we are not asking for the entire transition to happen in
+> > experimental.  We are only asking for the NEW packages, so that NEW
+> > processing happens before the transition, and not during.
+
+Le Wed, Nov 01, 2023 at 11:28:38AM +0100, Andreas Tille a écrit :
+> Understood this item now - but I'm lacking any clue how to find out
+> what new packages are needed.
+
+Hi Graham and Andreas,
+
+I just finished inspecting by eye the homepage of each of the 69 new
+Bioconductor packages.  None of them declare a reverse-dependency to
+an existing Bioc package that we ship in Debian.  Therefore, I do not
+expect that this transition will require NEW processing.
+
+https://bioconductor.org/news/bioc_3_18_release/
+
+Graham, please let us know when we can start uploading.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From tille at debian.org  Fri Nov  3 06:11:56 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 3 Nov 2023 07:11:56 +0100
+Subject: Re: Bug#1054323: r-cran-tmb: autopkgtest needs update for new version of rmatrix: Package version inconsistency detected
+In-Reply-To: <16466d70-9391-42e7-9a68-809a03ec9675@debian.org>
+References: <fda1bd9d-f714-4f5c-8bfa-0ea88dcc040b@debian.org> <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com> <ZUOuoyO_cFQ8_QMb@an3as.eu> <16466d70-9391-42e7-9a68-809a03ec9675@debian.org>
+Message-ID: <ZUSPLAADcuiMD9ai@an3as.eu>
+
+Hi Paul,
+
+Am Thu, Nov 02, 2023 at 07:23:55PM +0100 schrieb Paul Gevers:
+> On 02-11-2023 15:13, Andreas Tille wrote:
+> > There is probably one remaining problem.  As per file R/zzz.R[2] the
+> > function checkMatrixPackageVersion verifies that TMB is running always
+> > with the Matrix version it was built against.
+> 
+> Well, I suggested before to just patch that check out. Is it really doing
+> any good?
+
+Sorry for my weak memory.  I have no idea whether it is really doing any
+good.
+
+> If the test suite is remotely well done, it should catch the case
+> where rmatrix breaks the package, while enabling running it against any
+> version that works.
+
+I might open an Issue about this.
+ 
+> > Do you see some automatic
+> > method to approach this which is better than simply waiting for a CI
+> > test to fail (which should happen once a r-cran-matrix package of a new
+> > Matrix version is uploaded)?
+> Well, if you get the version tightly recorded, the migration software will
+> refuse to migrate r-cran-matrix because it would break the version in
+> testing. No CI is needed for that. But tight version relations are a pain,
+> i.e. they limit apt in finding upgrade orders, so if too many packages do
+> that, it might prevent people from upgrading their system.
+
+I did not used a tight Depends (see r-cran-matrix (>= $${rmbversion}) in
+[1]) but I think the check you suggested to patch out will fire for new
+Matrix versions.  Since I understand way to less about the internals I'm
+hesitating to patch out something upstream considers necessary without
+discussing.
+
+BTW, now we have a new kind of regression[2]
+
+ 56s Error: (converted from warning) package ‘TMB’ was built under R version 4.3.2
+
+I have no idea how to fix this from my side.
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/rules#L10-13
+[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-tmb/39490349/log.gz
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Fri Nov  3 19:26:09 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Fri, 3 Nov 2023 20:26:09 +0100
+Subject: Re: Bug#1054323: r-cran-tmb: autopkgtest needs update for new version of rmatrix: Package version inconsistency detected
+In-Reply-To: <ZUSPLAADcuiMD9ai@an3as.eu>
+References: <fda1bd9d-f714-4f5c-8bfa-0ea88dcc040b@debian.org> <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com> <ZUOuoyO_cFQ8_QMb@an3as.eu> <16466d70-9391-42e7-9a68-809a03ec9675@debian.org> <ZUSPLAADcuiMD9ai@an3as.eu>
+Message-ID: <7405ead6-3aff-485f-b863-c195995e9d17@debian.org>
+
+Hi Andreas,
+
+On 03-11-2023 07:11, Andreas Tille wrote:
+> I did not used a tight Depends (see r-cran-matrix (>= $${rmbversion}) in
+> [1]) but I think the check you suggested to patch out will fire for new
+> Matrix versions.
+
+Hence, if you really want to do this version dance (which I prefer we 
+don't, but I agree aligning with upstream is good), I think we prefer 
+the tight versioned dependency. Because than it shows up in the 
+transition overview and it's clear it needs a rebuild (I guess binNMU 
+now should work). A "mere" regression just blocks r-cran-matrix until 
+somebody informs you (typically me, but only after one month), which is 
+annoying for everyone involved.
+
+> BTW, now we have a new kind of regression[2]
+>
+>   56s Error: (converted from warning) package ‘TMB’ was built under R version 4.3.2
+>
+> I have no idea how to fix this from my side.
+
+Well, exactly the same trick, but instead of r-cran-matrix on one of the 
+core r things? Or block that "converted from warning" thing from 
+converting warnings to errors.
+
+Paul
+
+[1] https://release.debian.org/transitions/
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Tue Nov  7 05:42:27 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 7 Nov 2023 06:42:27 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZURFLf7NBuMaCbQT@kumo.plessy.net>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net>
+Message-ID: <ZUnOQz6O-4cDKB3Z@an3as.eu>
+
+Control: tags -1 - moreinfo
+
+Removing moreinfo tag since according to the investigation of Charles
+gave some data points that we do not expect any new Bioconductor
+packages (while we did not checked for any new CRAN packages.)
+
+If this is not sufficient please be so kind to explain the problem of a
+one month lasting transition.  I would estimate it takes also about one
+month for a single developer to check the full dependency tree.
+
+Kind regards
+    Andreas.
+
+Am Fri, Nov 03, 2023 at 09:56:13AM +0900 schrieb Charles Plessy:
+> > Am Wed, Nov 01, 2023 at 09:02:10AM -0100 schrieb Graham Inggs:
+> > > Again, we are not asking for the entire transition to happen in
+> > > experimental.  We are only asking for the NEW packages, so that NEW
+> > > processing happens before the transition, and not during.
+> 
+> Le Wed, Nov 01, 2023 at 11:28:38AM +0100, Andreas Tille a écrit :
+> > Understood this item now - but I'm lacking any clue how to find out
+> > what new packages are needed.
+> 
+> Hi Graham and Andreas,
+> 
+> I just finished inspecting by eye the homepage of each of the 69 new
+> Bioconductor packages.  None of them declare a reverse-dependency to
+> an existing Bioc package that we ship in Debian.  Therefore, I do not
+> expect that this transition will require NEW processing.
+> 
+> https://bioconductor.org/news/bioc_3_18_release/
+> 
+> Graham, please let us know when we can start uploading.
+> 
+> Have a nice day,
+> 
+> Charles
+> 
+> -- 
+> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+> Debian Med packaging team         http://www.debian.org/devel/debian-med
+> Tooting from home                  https://framapiaf.org/@charles_plessy
+> - You  do not have  my permission  to use  this email  to train  an AI -
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Nov  7 09:50:02 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 7 Nov 2023 10:50:02 +0100
+Subject: Re: Bug#1054323: r-cran-tmb: autopkgtest needs update for new version of rmatrix: Package version inconsistency detected
+In-Reply-To: <7405ead6-3aff-485f-b863-c195995e9d17@debian.org>
+References: <fda1bd9d-f714-4f5c-8bfa-0ea88dcc040b@debian.org> <CAM8zJQt8cJnoLykvDoQ6-Td53GBmrzZ6BJ-dD_Fqn5Wz-PTc6A@mail.gmail.com> <ZUOuoyO_cFQ8_QMb@an3as.eu> <16466d70-9391-42e7-9a68-809a03ec9675@debian.org> <ZUSPLAADcuiMD9ai@an3as.eu> <7405ead6-3aff-485f-b863-c195995e9d17@debian.org>
+Message-ID: <ZUoISnrK3a2CIyHZ@an3as.eu>
+
+Hi Paul,
+
+Am Fri, Nov 03, 2023 at 08:26:09PM +0100 schrieb Paul Gevers:
+> On 03-11-2023 07:11, Andreas Tille wrote:
+> > I did not used a tight Depends (see r-cran-matrix (>= $${rmbversion}) in
+> > [1]) but I think the check you suggested to patch out will fire for new
+> > Matrix versions.
+> 
+> Hence, if you really want to do this version dance (which I prefer we don't,
+> but I agree aligning with upstream is good), I think we prefer the tight
+> versioned dependency.
+
+Implemented in recent upload of 1.9.6-6.
+
+> Because than it shows up in the transition overview
+> and it's clear it needs a rebuild (I guess binNMU now should work). A "mere"
+> regression just blocks r-cran-matrix until somebody informs you (typically
+> me, but only after one month), which is annoying for everyone involved.
+
+This was the background of my question to reduce manual work for
+everybody who is involved.
+
+> > BTW, now we have a new kind of regression[2]
+> > 
+> >   56s Error: (converted from warning) package ‘TMB’ was built under R version 4.3.2
+> > 
+> > I have no idea how to fix this from my side.
+> 
+> Well, exactly the same trick, but instead of r-cran-matrix on one of the
+> core r things? Or block that "converted from warning" thing from converting
+> warnings to errors.
+
+Done as well.
+
+I also added some comment to an existing upstream issue about the
+compatibility requirements.[1]
+
+Kind regards
+    Andreas.
+
+[1] https://github.com/kaskr/adcomp/issues/387
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Tue Nov  7 13:01:55 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 7 Nov 2023 22:01:55 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUoI_BVxXDclOpfC@ramacher.at>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at>
+Message-ID: <ZUo1Q/slO2fUK+yY@bubu.igloo>
+
+Le Tue, Nov 07, 2023 at 10:53:00AM +0100, Sebastian Ramacher a écrit :
+> 
+> We do not care about new reverse dependencies.
+
+Hi Sebastian,
+
+I am sorry that the information that I sent appears to have wasted your
+time.  I still think that it does have some relevance, but I probably
+did not explain my thougts well, and I worry that you have no appetite
+for reading a longer version.
+
+By the way, I work in a multicultural environment where most people are
+not native speakers of English and we take great care of not hurting
+each other in our oral and written communications.  Nobody would ever
+start an answer like you did, and I feel like saying that I am not used
+any more to that kind of communication.  Hence the unease that you can
+probably feel from my reply.
+
+> We care about new dependencies of packages currently in the archive.
+> So what's the status of new the dependencies?
+
+The tools available to us to answer your question are quite inexistant.
+Until now we would just wait for the release team's green light to
+ensure that we do not disturb other transitions.  The previous one was
+more painful than usual, but in our experience it is quite rare.  I wish
+you would trust our word instead of requiring quantitative evidence.
+
+One possible direction would be to leverage the work done by Dirk and
+others in r2u, where the Bioc transition is over, and for each package
+in Debian, look if the r2u equivalent has a dependency not in Debian.
+
+https://fediscience.org/@eddelbuettel at mastodon.social/111359074099802189
+
+Still, that is quite an extensive amount of work, only to ensure that
+the risk of asking the FTP team to fast-track a package is lowered to a
+minimum.  We have done such requests in the past, and the response was
+usually cheerful so unless you received complains form the FTP team, may
+I suggest that you might be worrying too much?  And again, we are not
+under the impression that this transition will be as demanding as the
+past one.
+
+Please let me I ask again for your kind understanding and allow us to do
+the transition despite not being able to tell you if and how much the
+transition will require the processing of packages through the NEW
+queue.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From tille at debian.org  Tue Nov  7 13:38:13 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 7 Nov 2023 14:38:13 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUoI_BVxXDclOpfC@ramacher.at>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at>
+Message-ID: <ZUo9xdTPTaltbqd1@an3as.eu>
+
+Hi Sebastian,
+
+Am Tue, Nov 07, 2023 at 10:53:00AM +0100 schrieb Sebastian Ramacher:
+> Control: tags -1 moreinfo
+
+I admit I'm not really happy about the bug ping-pong.
+ 
+> > I just finished inspecting by eye the homepage of each of the 69 new
+> > Bioconductor packages.  None of them declare a reverse-dependency to
+> > an existing Bioc package that we ship in Debian.
+> 
+> We do not care about new reverse dependencies.
+
+Seems there is some misunderstanding.  Charles has inspected pacckages
+*outside* Debian whether they might be pulled by new versions of
+packages *inside* Debian.  These would be candidates for new packages.
+
+> We care about new
+> dependencies of packages currently in the archive. So what's the status
+> of new the dependencies?
+
+Charles and I tried to explain in different ways: We do not have simple
+means to answer this question.  But I had a different question;  What
+exactly is the problem of a transition taking about 1 month due to some
+delay by waiting for packages in new?
+ 
+I somehow have the feeling that this transition is currently delayed by
+some bug-mail / tagging ping-pong which is demotivating for both sides.
+You make a request to some volunteers to do some extra work that was not
+requested before and we volunteers explained that it is really hard
+work.  I think it is fair to ask for the reasons you want us to do some
+work which is definitely hard to do and for us painful and unproductive.
+
+I have also no answer yet to some compromise to simply remove those
+packages from testing that need new dependencies.  By doing so at least
+to my naive understanding the transition should not create any blocker.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue Nov  7 13:40:38 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 7 Nov 2023 07:40:38 -0600
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUo1Q/slO2fUK+yY@bubu.igloo>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo1Q/slO2fUK+yY@bubu.igloo>
+Message-ID: <25930.15958.287316.132239@rob.eddelbuettel.com>
+
+On 7 November 2023 at 22:01, Charles Plessy wrote:
+| One possible direction would be to leverage the work done by Dirk and
+| others in r2u, where the Bioc transition is over, and for each package
+| in Debian, look if the r2u equivalent has a dependency not in Debian.
+| 
+| https://fediscience.org/@eddelbuettel at mastodon.social/111359074099802189
+
+Thanks for the endorsement, Charles.
+
+As you brought r2u up, allow me to add my perspective. I have done so before
+without changing anyone's mind but once every few years I get to howl at
+these windmills.
+
+So I have been maintaining CRAN packages in Debian for 20 years [1], and I
+said for twenty years that we can trust CRAN. I meant that then, I mean it
+now.  Ditto for BioConductor.
+
+Doubling all our testing up, and also throwing spanners into our own wheels
+via the autopkgtests, is (to me) a waste of our (limited !!) volunteer time.
+We *do* add value to CRAN (and BioConductor) because we build on much more
+exotic platforms than they do.  But testing _again_ on core platforms like
+x86_64 is (to me) simply does not seem all that efficient.
+
+My r2u [2] is a case in point. As of last Friday, I had ~ 270 BioConductor
+packages in it (that is for Ubuntu LTS release 20.04 and 22.04, and of course
+in addition to the 22k CRAN packages each already has).  I then rebuilt those
+270 first for 'focal' (20.04) and then 'jammy' (22.04) on my machine [3] and
+uploaded them.
+
+After that, I realized I could and should check against BioConductor's own
+'popularity context' [4,5] and ensured I had the top 200+ packages. And I
+also ran a `setdiff()` against the package 'testing' knew. So I added from
+both these source on the weekend. So r2u is now at 391 or so BioConductor
+packages, all at 3.18, for both 20.04 and 22.04. And 22.2k for CRAN.
+
+This does provide the obvious existence proof that yes, right after a
+BioConductor release their stuff of course works: they have AFAIK paid staff
+to ensure this.
+
+r2u has been running for a little over 1 1/2 years. It has shipped over 10
+million packages (and I luckily have access to a well-connected mirror on the
+U of Illinois campus as I teach there part-time). It had a download spike in
+October (from a European research center, I have access to download logs)
+fetching 3+ million in two days (!!). It now sees a daily (!!) download from
+a 'well known US west coast tech giant' taking in about 5200 packages _each
+day_ from what looks like a cron job. It serves about 1000 unique IPs each
+day. There is clear demand for this.
+
+So if we wanted to do something useful, we should extend r2u to Debian. I
+have limited 'personal' bandwidth and hardware but if someone wanted to join
+we could make some hay here.  People trust apt.  The technology is there and
+works as we all know.
+
+It might be worth discussing how we can offer the 19.9k packages on CRAN [6]
+and all/most of BioConductor. We may want to do that in a to-be-determined
+form outside the distro as the ftpmasters (whose work I so appreciate, so let
+me say a big thanks here) cannot possibly 'manually' check 20+k thousand
+packages.
+
+But as I said on the outset: We *can* trust CRAN and BioConductor and take
+advantage and leverage their work which (among many other things) contains
+the same authorship, copyright, IP, ... tests we do.
+
+Thanks for listening for my sermon. I will now be quiet again and concentrate
+on these (in aggregate coming up on) 45k packages. I do appreciate everything
+that everybody does here -- we are after all a bunch of committed volunteers.
+
+Cheers, Dirk
+
+[1] The very first one we had was IIRC my r-cran-rodbc as ODBC headers always
+    baffled users; and still do
+[2] See https://eddelbuettel.github.io/r2u
+[3] For BioConductor I cannot (?) use pre-made binaries as I do for (most of)
+    CRAN via R-style binaries from p3m.dev which I turn into proper .deb files.
+[4] They call it somethings else, and 'score' downloads by unique IP over a
+    rolling (12 months if I recall) window
+[5] See https://bioconductor.org/packages/stats/bioc/bioc_pkg_scores.tab
+[6] CRAN purges reasonably aggressively which is how r2u is now at 22.2k
+    while CRAN is at 19.9k.
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Nov  7 13:58:47 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 7 Nov 2023 14:58:47 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <25930.15958.287316.132239@rob.eddelbuettel.com>
+References: <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo1Q/slO2fUK+yY@bubu.igloo> <25930.15958.287316.132239@rob.eddelbuettel.com>
+Message-ID: <ZUpCl8ag0WopMwRz@an3as.eu>
+
+Hi Dirk,
+
+Am Tue, Nov 07, 2023 at 07:40:38AM -0600 schrieb Dirk Eddelbuettel:
+> 
+> On 7 November 2023 at 22:01, Charles Plessy wrote:
+> | One possible direction would be to leverage the work done by Dirk and
+> | others in r2u, where the Bioc transition is over, and for each package
+> | in Debian, look if the r2u equivalent has a dependency not in Debian.
+> | 
+> | https://fediscience.org/@eddelbuettel at mastodon.social/111359074099802189
+> 
+> As you brought r2u up, allow me to add my perspective. I have done so before
+> ...
+
+Do you see any way to answer the question that is discussed in this
+thread by r2u how to know whether new Bioconductor packages might have
+new dependencies not yet packaged for Debian?
+
+This would be really helpful
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Tue Nov  7 14:12:39 2023
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Tue, 7 Nov 2023 15:12:39 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUo9xdTPTaltbqd1@an3as.eu>
+References: <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu>
+Message-ID: <ZUpF13OS3IUw6iVN@ramacher.at>
+
+On 2023-11-07 14:38:13 +0100, Andreas Tille wrote:
+> Hi Sebastian,
+> 
+> Am Tue, Nov 07, 2023 at 10:53:00AM +0100 schrieb Sebastian Ramacher:
+> > Control: tags -1 moreinfo
+> 
+> I admit I'm not really happy about the bug ping-pong.
+>  
+> > > I just finished inspecting by eye the homepage of each of the 69 new
+> > > Bioconductor packages.  None of them declare a reverse-dependency to
+> > > an existing Bioc package that we ship in Debian.
+> > 
+> > We do not care about new reverse dependencies.
+> 
+> Seems there is some misunderstanding.  Charles has inspected pacckages
+> *outside* Debian whether they might be pulled by new versions of
+> packages *inside* Debian.  These would be candidates for new packages.
+> 
+> > We care about new
+> > dependencies of packages currently in the archive. So what's the status
+> > of new the dependencies?
+> 
+> Charles and I tried to explain in different ways: We do not have simple
+> means to answer this question.
+
+Picking a random r-bioc-* package:
+https://salsa.debian.org/r-pkg-team/r-bioc-aroma.light/-/blob/master/DESCRIPTION
+has an "Imports" field. Those are mapped to dependencies in the package.
+So I presume that when importing those packages into the packaging
+repository, changes to this field can be identified and checked. I would
+excpect this information to be enough to identify any currently missing
+packages.
+
+> But I had a different question;  What
+> exactly is the problem of a transition taking about 1 month due to some
+> delay by waiting for packages in new?
+>  
+> I somehow have the feeling that this transition is currently delayed by
+> some bug-mail / tagging ping-pong which is demotivating for both sides.
+> You make a request to some volunteers to do some extra work that was not
+> requested before and we volunteers explained that it is really hard
+> work.  I think it is fair to ask for the reasons you want us to do some
+> work which is definitely hard to do and for us painful and unproductive.
+
+We should have requested this information for all transitions in the
+past. We did not and thus had the same problems for the last couple of
+transitions including missing packages and a significant number of
+autopkgtest regressions.
+
+The r-bioc-* transition is special in the sense that it requires all
+involved packages to be ready to migrate at the same time. This is where
+delays become an issue. It essentially blocks all other transitions that
+could potentially overlap (e.g., auto-hdf5) from being started or
+progressing.
+
+All of that binds resources on our side to track down the remaining bits
+and pieces to make everything migrate at the same time. This is usually
+not an issue with a typical shared library transition. Hence we are
+asking you to identify possible NEW packages that will be required to
+complete the transition.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From tille at debian.org  Tue Nov  7 17:01:25 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 7 Nov 2023 18:01:25 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUpF13OS3IUw6iVN@ramacher.at>
+References: <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at>
+Message-ID: <ZUptZYWpX9MuGMYk@an3as.eu>
+
+Hi Sebastian,
+
+Am Tue, Nov 07, 2023 at 03:12:39PM +0100 schrieb Sebastian Ramacher:
+> > Charles and I tried to explain in different ways: We do not have simple
+> > means to answer this question.
+> 
+> Picking a random r-bioc-* package:
+> https://salsa.debian.org/r-pkg-team/r-bioc-aroma.light/-/blob/master/DESCRIPTION
+> has an "Imports" field. Those are mapped to dependencies in the package.
+> So I presume that when importing those packages into the packaging
+> repository, changes to this field can be identified and checked. I would
+> excpect this information to be enough to identify any currently missing
+> packages.
+
+Well, I'm one of the authors of dh-r.  I know where to find the
+dependencies since we are parsing this file.  We even go further:  When
+trying to build an R package and find a missing dependency this will be
+nearly ready packaged automatically.  This is NOT the problem.  The
+point is that this workflow is completely automated.  Parsing 170
+DESCRIPTION files of not yet packaged versions is not automated and thus
+quite some manual work.  And I would really like to hear better reasons
+why you want us to do this manual work in addition to something which is
+done automatically.
+ 
+> > But I had a different question;  What
+> > exactly is the problem of a transition taking about 1 month due to some
+> > delay by waiting for packages in new?
+> >  
+> > I somehow have the feeling that this transition is currently delayed by
+> > some bug-mail / tagging ping-pong which is demotivating for both sides.
+> > You make a request to some volunteers to do some extra work that was not
+> > requested before and we volunteers explained that it is really hard
+> > work.  I think it is fair to ask for the reasons you want us to do some
+> > work which is definitely hard to do and for us painful and unproductive.
+> 
+> We should have requested this information for all transitions in the
+> past. We did not and thus had the same problems for the last couple of
+> transitions including missing packages and a significant number of
+> autopkgtest regressions.
+
+The autopkgtest regressions are not caused due to missing new packages.
+They are mostly due to issues on some architectures.  We can stop those
+by restricting Bioconductor packages to those tested by upstream by
+loosing the advantages Debian provides to the community.  In fact
+dealing with the regressions has taken us usually longer than the
+missing packages.  I'm not proud on it that it takes so long to deal
+with the regressions but cutting from our time constraints even more
+will not help at all.
+ 
+> The r-bioc-* transition is special in the sense that it requires all
+> involved packages to be ready to migrate at the same time. This is where
+> delays become an issue. It essentially blocks all other transitions that
+> could potentially overlap (e.g., auto-hdf5) from being started or
+> progressing.
+
+We can wait until auto-hdf5 transition is done.
+ 
+> All of that binds resources on our side to track down the remaining bits
+> and pieces to make everything migrate at the same time. This is usually
+> not an issue with a typical shared library transition. Hence we are
+> asking you to identify possible NEW packages that will be required to
+> complete the transition.
+
+You did not yet answered the question I asked twice whether we can find
+a compromise by simply removing packages with missing new dependencies
+from testing.  I consider this a compromise which I would really love to
+discuss honestly.
+
+I try to repeat:  Please trust me that finding those packages is not as
+simple as picking a random DESCRIPTION.  We need time for it, time were
+other packages (RC bugs, autopkgtest regressions etc. are suffering).
+I'm not yet convinced that we should do this extra work for a couple of
+days win.  If you insist on your position I will escalate the issue to
+the technical committee.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue Nov  7 18:28:22 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 7 Nov 2023 12:28:22 -0600
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUpCl8ag0WopMwRz@an3as.eu>
+References: <CAM8zJQvqNDUguDi0zXqv-1yifDwTPTW5HKuXHfcHrMmQwOXHDg@mail.gmail.com> <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo1Q/slO2fUK+yY@bubu.igloo> <25930.15958.287316.132239@rob.eddelbuettel.com> <ZUpCl8ag0WopMwRz@an3as.eu>
+Message-ID: <25930.33222.629711.307472@rob.eddelbuettel.com>
+
+On 7 November 2023 at 14:58, Andreas Tille wrote:
+| Do you see any way to answer the question that is discussed in this
+| thread by r2u how to know whether new Bioconductor packages might have
+| new dependencies not yet packaged for Debian?
+
+"Kinda. Sorta. Not fully." I have written related code doing most of this
+during the many attempt for 'turning CRAN into .deb packages'.
+
+I.e. when I recompile BioC packages in r2u as I did this weekend I start from
+all BioC packages I have already built within r2u (same for you here for a
+'within Debian' check), use available.packages() etc to get the package
+database (in the R sense) and use that to map out dependencies.  In my case I
+sort strip off CRAN (already built) and base R packages to get a count of
+'pure BioC depends'. I then sort and first build all of these with a
+dependency count of zero, refresh the index so that these become available,
+then all with a count of one and so. (Max count this weekend was 41.)
+
+The one step I did not do (as I didn't need it) was to check 'is package X
+already available'. When it wasn't I just built it :) But you can do all that
+from either shell into apt-cache, or R via my RcppAPT package, or via
+python-apt and friends.
+
+My code is in R with use of data.table for the mangling so it is somewhat
+'internal'. It is based on R's own 'tools::package_dependencies()'. There
+must also be suitable code in R itself which I never pulled out because R can
+run a package's reverse dependencies.  But anyway here is a minimal sketch
+using R and its data.table package.
+
+> AP <- suppressMessages( data.table(available.packages(repos = BiocManager::repositories())) )
+> AP[, lcpkg := tolower(Package)]
+> basePkgs <- c("base", "class", "codetools", "datasets", "graphics", "grid", "lattice",
++ "Matrix", "mgcv", "nnet", "rpart", "splines", "stats4", "tcltk", "translations",
++ "boot", "cluster", "compiler", "foreign", "grDevices", "KernSmooth", "MASS",
++ "methods", "nlme", "parallel", "spatial", "stats", "survival", "tools", "utils")
+> cranPkgs <- AP[Repository=="https://cloud.r-project.org/src/contrib", Package]
+> biocPkgs <- AP[Repository!="https://cloud.r-project.org/src/contrib", Package]
+> 
+> pkg <- "SingleCellExperiment"
+> deps <- tools::package_dependencies(pkg, AP, recursive=TRUE)[[1]]
+> nAll <- length(deps)
+> nBase <- length(intersect(deps, basePkgs))
+> nCran <- length(intersect(deps, cranPkgs))
+> nBioc <- length(intersect(deps, biocPkgs))
+> 
+> intersect(deps, biocPkgs)
+ [1] "SummarizedExperiment" "S4Vectors"            "BiocGenerics"         "GenomicRanges"       
+ [5] "DelayedArray"         "MatrixGenerics"       "IRanges"              "S4Arrays"            
+ [9] "GenomeInfoDb"         "XVector"              "Biobase"              "GenomeInfoDbData"    
+[13] "zlibbioc"            
+> 
+
+So for all packages you are interested in (here I look just at
+'SingleCellExperiment') you construct the BioC (or maybe CRAN and BioC)
+dependencies, and then create an aggregate list of the unique
+combination. Those are the packages you need and apt-cache and related will
+tell you if they exist.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Nov  7 20:01:04 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 7 Nov 2023 21:01:04 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <25930.33222.629711.307472@rob.eddelbuettel.com>
+References: <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo1Q/slO2fUK+yY@bubu.igloo> <25930.15958.287316.132239@rob.eddelbuettel.com> <ZUpCl8ag0WopMwRz@an3as.eu> <25930.33222.629711.307472@rob.eddelbuettel.com>
+Message-ID: <ZUqXgJP_fejSQhJQ@an3as.eu>
+
+Hi Dirk,
+
+Am Tue, Nov 07, 2023 at 12:28:22PM -0600 schrieb Dirk Eddelbuettel:
+> 
+> "Kinda. Sorta. Not fully." I have written related code doing most of this
+> during the many attempt for 'turning CRAN into .deb packages'.
+> ...
+
+Sounds like another idea how this problem can be turned into code
+(alternatively we could re-use some code from dh-r or rewrite in
+Python to parse previously downloaded DESCRIPTION files).  But all
+final code needs time and testing ... which I'd like to avoid (but
+for sure working code contributions are welcome).
+ 
+> So for all packages you are interested in (here I look just at
+> 'SingleCellExperiment') you construct the BioC (or maybe CRAN and BioC)
+> dependencies, and then create an aggregate list of the unique
+> combination. Those are the packages you need and apt-cache and related will
+> tell you if they exist.
+
+Thanks a lot for your ideas anyway
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Wed Nov  8 18:43:14 2023
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 08 Nov 2023 19:43:14 +0100
+Subject: Bug#1055606: RM: r-cran-rgdal -- ROM; Unmaintained upstream, fails with gdal in experimental leading to RC bug once this migrates to unstable
+Message-ID: <169946899489.3640260.12183433587478872606.reportbug@energija.fam-tille.de>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-cran-rgdal at packages.debian.org, 1050223 at bugs.debian.org, 1055589 at bugs.debian.org, 1049438 at bugs.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-rgdal
+
+Hi,
+
+as explained by upstream as response in our bug report[1] r-cran-rgdal
+is not supported upstream any more.  In bug #1055589 a conflict to the
+upcoming GDAL 3.8.0 is stated.  So for the moment r-cran-rgdal is
+blocking the GDAL migration from experimental to unstable and even if
+this problem is ignored bug #1055589 will become RC with no hope to get
+it fixed.
+
+For the moment there is a single reference inside the package pool to
+this package.  R-cran-rgdal is suggested by r-cran-satellite which is
+due to the automatic generation of dependencies by dh-r.  I'd prefer to
+wait until r-cran-rgdal is removed and than regenerate the
+r-cran-satellite to get this dependency fixed over fiddling around
+manually with the control file.
+
+So I consider it save to remove r-cran-rgdal from unstable.
+
+Kind regards and thanks for your work as ftpmaster
+    Andreas.
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1049438#31
+
+From elbrus at debian.org  Thu Nov  9 13:01:57 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 9 Nov 2023 14:01:57 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUptZYWpX9MuGMYk@an3as.eu>
+References: <ZT3uvIS-3O-AO-k6@an3as.eu> <CAM8zJQuS54Wi82_mHG6UZifSejueYqnDmWph+fzzyz6A578qdw@mail.gmail.com> <ZT6Q_I0ryRLEHMFB@an3as.eu> <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <ZUptZYWpX9MuGMYk@an3as.eu>
+Message-ID: <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org>
+
+Hi Andreas,
+
+On 07-11-2023 18:01, Andreas Tille wrote:
+> You did not yet answered the question I asked twice whether we can find
+> a compromise by simply removing packages with missing new dependencies
+> from testing.  I consider this a compromise which I would really love to
+> discuss honestly.
+
+I'll try to give at least one answer to this question and also add some 
+other remarks after that.
+
+The first and foremost reason why we're not enthusiastic about 
+defaulting to removal of packages from testing is that that's a 
+disservice to our users of testing. Yes, we (auto)remove packages from 
+testing, but we mostly do that to remove RC buggy packages that aren't 
+fixed in time. Removal out of the blue is rare. For the current 
+transition, if we remove packages from testing because they are not 
+ready and the transition migrates, these removed packages will suddenly 
+cause systems where any of these packages is installed to hold back a 
+lot of related packages and the user will have to figure out which one 
+is causing the situation, why and how to solve it for their personal 
+situation. (Were we to remove packages in other situations, still 
+installed packages may suddenly fail to run without a proper bug report 
+explaining the situation. In this case that's prevented by the 
+r-api-bioc relation.)
+
+Apart from the reasons already mentioned by Sebastian, another reason 
+why at least I am not looking forward to an r-bioc-biocgenerics 
+transition is that I have the *feeling* (which might be unjust, but then 
+consider past interactions) that we often need to tell you about issues 
+and how to solve them. If the r-bioc team were to actively monitor the 
+situation and respond to failures and other problems (you might be 
+already doing this, it might just be a visibility problem) then it would 
+be easier on us even if a transition last a bit. As Sebastian said, for 
+most other transitions the period that requires quite some attention 
+from us is shorter, which means less pushing and popping from stack, and 
+thus a lower mental load. We're doing quite a lot of transitions, longer 
+lasting ones are never nice.
+
+Several other ecosystems, e.g. perl, python and ruby, do preparation 
+outside of the Debian archive and often have some idea (or know quite 
+well) of what to expect during the transition. It's that pro-activeness 
+that makes a difference to us; it *sounds* much better than "let's start 
+and find out how much work it is". Maybe it's just the tone, but we're 
+all humans.
+
+I realize that the current tools and way of working in the r-bioc 
+ecosystem isn't yet geared towards our ideal mode of operation. If you 
+could try and work towards that, that would be appreciated.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Thu Nov  9 13:59:23 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 9 Nov 2023 22:59:23 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org>
+References: <CAM8zJQsZD1voijh7LzuT7ZHWGST+i_edek32Nx+NOu=_J2COiA@mail.gmail.com> <ZUIoVnoW7py5c5SO@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org>
+Message-ID: <ZUzlu87PkGKpgAVs@kumo.plessy.net>
+
+Le Thu, Nov 09, 2023 at 02:01:57PM +0100, Paul Gevers a écrit :
+> 
+> The first and foremost reason why we're not enthusiastic about defaulting to
+> removal of packages from testing is that that's a disservice to our users of
+> testing.
+
+Hi Paul,
+
+I understand that you feel responsible for the state of testing, but
+please consider that the r-bioc-* package users are our users too.  Some
+of them are our colleagues, or our friends.  Those who we do not know,
+we see their blogs, their toots, their Dockerfiles.  We meet them at
+conferences.  We also feel responsible and we have the intuition that
+having the packages absent from testing for a couple of weeks is not
+going to cause too much trouble.
+
+> I have the *feeling* (which might be unjust, but then consider past
+> interactions) that we often need to tell you about issues and how to solve
+> them.
+
+A lot of the issues are due to continuous integrations tests, where we
+uncover bugs on architectures unsupported upstream (who only builds on
+amd64 and Apple arm64).  One of the reasons we sometimes take time to
+make a visible action in response to CI failures is that we, like you,
+are limited in our time.  But if this is important for you we can surely
+write ack messages faster.
+
+> If the r-bioc team were to actively monitor the situation
+
+I read the R and Bioc devel mailing list.  I am upstream developer of a
+Bioconductor package.  Yes, I have been caught by surprise in the last
+transition by the addition of new packages at the core of the dependency
+tree.  Yes, reputation is easy to lose and hard to gain.  If I tell you
+that I have been more careful because I wanted to avoid it to happen
+again, you are free to think that the previous mistake proves my
+incompetence, and that it means that my care and monitoring are useless.
+This is what I feel when I see the new request from your team coming at
+the last minute and not as a debriefing of the previous transition.
+
+> Several other ecosystems, e.g. perl, python and ruby, do preparation outside
+> of the Debian archive and often have some idea (or know quite well) of what
+> to expect during the transition. It's that pro-activeness that makes a
+> difference to us; it *sounds* much better than "let's start and find out how
+> much work it is". Maybe it's just the tone, but we're all humans.
+
+Please trust us this time, and if you think that next time you need to
+monitor our monitoring, I can for instance toot regularly under a
+pre-decided hashtag about our preparation and you can review it at the
+time of the transition, (in about 5 months; the clock is ticking).
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From andreas at an3as.eu  Thu Nov  9 19:12:46 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 9 Nov 2023 20:12:46 +0100
+Subject: News from dh-r
+Message-ID: <ZU0vLoCeJUdO3k8c@an3as.eu>
+
+Hi,
+
+I'd like to point out some recent features of dh-r which are
+easing the work with a couple of r-* packages:
+
+dh-r (20231109)
+
+  * Deal with wrongly specified versions in DESCRIPTION files for
+    instance Matrix (>= 1.6.1) --> r-cran-matrix (>= 1.6-1)
+
+  Note: This works for wrongly specified versions of packages
+        gwidgets, matrix, rcolorbrewer, sf  [1]
+        since these were the ones that needed patching in some
+        packages and some comment from seuratobject upstream[2]
+        convinced me that it is sometimes hard for upstream to
+        solve an issue we raised.
+
+dh-r (20231024) unstable; urgency=medium
+
+  * Parse debian/rules for extra Build-Depends to enable recreating docs
+
+  Note: Sometimes we need to remove some docs that might contain
+        compressed JS.  Nilesh found a way[3] to recreate these docs
+        at build time.  However, this requires new Build-Depends that
+        were formerly automatically removed from d/control by
+        dh-update-R.  This is fixed now and no manual correction is
+        needed any more.  I've done this in preparation of smoothing
+        Bioconductor migration
+
+dh-r (20230912) unstable; urgency=medium
+
+  * Enable the field "Test-Command" in debian/tests/control
+
+  Note: The Test-Depends are now rewritten according to the field
+        Suggests inside DESCRIPTION.  This makes sure all possible
+        tests are run (and not possible due to not yet packaged
+        Test-Depends are avoided)
+  Additional remark: In case there was no test for the package
+  before you need to manually add the run-unit-test script and
+  also add some missing fields to d/t/control.  Sorry about this
+  but luckily this does not happen very frequently.  Feel free
+  to bother me about brocken autopkgtest.
+
+Hope you like these changes
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L53
+[2] https://github.com/mojaveazure/seurat-object/issues/145#issuecomment-1802667237
+[3] https://salsa.debian.org/r-pkg-team/r-bioc-ballgown/-/blob/master/debian/rules#L7
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Nov  9 20:06:39 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 10 Nov 2023 01:36:39 +0530
+Subject: Re: News from dh-r
+In-Reply-To: <ZU0vLoCeJUdO3k8c@an3as.eu>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu>
+Message-ID: <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org>
+
+On Thu, Nov 09, 2023 at 08:12:46PM +0100, Andreas Tille wrote:
+>         However, this requires new Build-Depends that
+>         were formerly automatically removed from d/control by
+>         dh-update-R.  This is fixed now and no manual correction is
+>         needed any more.  I've done this in preparation of smoothing
+>         Bioconductor migration
+
+I suppose this means dh-update-R will not remove new build-deps?
+Does this also work the same way for Depends?
+
+Thanks for this in any case. It was super annoying to always get useful
+stuff removed by dh-update-R.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From plessy at debian.org  Fri Nov 10 08:43:43 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 10 Nov 2023 17:43:43 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZUzlu87PkGKpgAVs@kumo.plessy.net>
+References: <ZUIoVnoW7py5c5SO@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net>
+Message-ID: <ZU3tP4vz4MMoABub@kumo.plessy.net>
+
+Hi Paul and everybody,
+
+we are finding a way to compare the R dependencies of the Bioconductor
+packages in Debian and in Bioc 3.18.  It uncovers some core packages
+introduced in Bioc 3.17, but which only start to have
+reverse-dependencies in 3.18, meaning that they are not in Debian yet
+since we did not have a reason to package them at that time.
+
+It seems that I was too confident that no new core dependencies would be
+introduced, and I feel guilty for that.  Still I need to add that
+despite the stress on both sides, I really would like no not be told "We
+do not care about [the information you sent]" again, while "I am sorry
+but I do not see the relevance" or "I am sorry but this is not enough"
+is so much more informative and less conflictual.  I did appreciate a lot
+the care you took in expressing your criticisms in your email yesterday.
+
+We will complete the checks and package the new dependencies and submit
+the to NEW next week.  I suppose that we just have to go through he
+whole process and notify you when it is done?
+
+Have a good week-end,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From tille at debian.org  Fri Nov 10 10:56:15 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 10 Nov 2023 11:56:15 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZU3tP4vz4MMoABub@kumo.plessy.net>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net>
+Message-ID: <ZU4MT6Wuqwv8DReF@an3as.eu>
+
+Control: tags -1 - moreinfo
+
+Hi,
+
+Am Fri, Nov 10, 2023 at 05:43:43PM +0900 schrieb Charles Plessy:
+> Hi Paul and everybody,
+
+I admit Paul's mail was convincing enough to dive deeper into this.  I
+also need to admit that hacking together some scripts doing the job was
+less effort than I expected, finally.  Sorry for sounding stubborn in
+the beginning.
+ 
+> We will complete the checks and package the new dependencies and submit
+> the to NEW next week
+
+The only new dependency we need is SparseArray.  However, we cannot
+upload the package to new since it needs r-bioc-s4arrays (>= 1.1.6) for
+building it.  In other words: We need to start the transition before we
+can package SparseArray.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Nov 10 10:59:39 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 10 Nov 2023 11:59:39 +0100
+Subject: Re: News from dh-r
+In-Reply-To: <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org>
+Message-ID: <ZU4NG1npBEWBD1aR@an3as.eu>
+
+Am Fri, Nov 10, 2023 at 01:36:39AM +0530 schrieb Nilesh Patra:
+> On Thu, Nov 09, 2023 at 08:12:46PM +0100, Andreas Tille wrote:
+> >         However, this requires new Build-Depends that
+> >         were formerly automatically removed from d/control by
+> >         dh-update-R.  This is fixed now and no manual correction is
+> >         needed any more.  I've done this in preparation of smoothing
+> >         Bioconductor migration
+> 
+> I suppose this means dh-update-R will not remove new build-deps?
+
+It will not remove build-deps that are mentioned in d/rules.  Everything
+else has not changed compared to the versions before.
+
+> Does this also work the same way for Depends?
+
+There is no influence on Depends since the packages to recreate the
+docs are not Depends.
+
+> Thanks for this in any case. It was super annoying to always get useful
+> stuff removed by dh-update-R.
+
+100% ACK.  Finally annoying enough to take action. ;-)
+Please let me know if you realise some further unwanted removals.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Fri Nov 10 19:39:18 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Fri, 10 Nov 2023 20:39:18 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZU4MT6Wuqwv8DReF@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZURFLf7NBuMaCbQT@kumo.plessy.net> <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <ZU4MT6Wuqwv8DReF@an3as.eu>
+Message-ID: <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org>
+
+Hi,
+
+On 10-11-2023 11:56, Andreas Tille wrote:
+> The only new dependency we need is SparseArray.  However, we cannot
+> upload the package to new since it needs r-bioc-s4arrays (>= 1.1.6) for
+> building it.  In other words: We need to start the transition before we
+> can package SparseArray.
+
+You're totally free use experimental for that to get SparseArray through 
+NEW. I assume you don't need 100% of the transition, but only a 
+(hopefully tiny) bit. So you could upload the newer version of 
+r-bioc-biocgenerics and reverse depending packages up to where you need 
+it to build SparseArray.
+
+Alternatively, you can send packages to NEW that you build with locally 
+newer versions (however you create them). Once accepted, the buildds 
+will only build the non-uploaded archs once the right version becomes 
+available. In other words, uploads to NEW don't require all their build 
+dependencies already (at the right version) in Debian. We need to 
+rebuild that package anyways to make it eligible for migration, so an 
+(maybe from your perspective) early upload is not more waste of time 
+with the current archive settings, but of course the preparation in 
+experimental is a bit more work from your side. However, that's what we 
+request in nearly all transitions: prepare as much as possible *before* 
+we actually start the transition.
+
+On 09-11-2023 14:59, Charles Plessy wrote:
+> But if this is important for you we can
+> surely write ack messages faster.
+I'm convinced it would help. Having said that, that doesn't need to be 
+long proza, mostly a sign "we're on top of this and that". (Which 
+doesn't mean you have to work 24/7 to fix it, of course you are also a 
+volunteer). When we know what's on your radar, we can also more 
+effectively point at potential gaps that we may spot.
+
+> This is what I feel when I see the new request from your team coming
+> at the last minute and not as a debriefing of the previous
+> transition.
+I'm sorry to hear that it felt like a new request. I think for us it 
+felt more like "lets treat this more like we do other transitions". And 
+yes, maybe we should do debriefings once in a while, but we are not 
+accustomed to do that and I believe that in the cases that would benefit 
+most from a debriefing those involved rather want to move on.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Fri Nov 10 22:26:21 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 10 Nov 2023 23:26:21 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org>
+References: <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <ZU4MT6Wuqwv8DReF@an3as.eu> <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org>
+Message-ID: <ZU6uDTCiAcJT3c6X@an3as.eu>
+
+Hi Paul,
+
+Am Fri, Nov 10, 2023 at 08:39:18PM +0100 schrieb Paul Gevers:
+> On 10-11-2023 11:56, Andreas Tille wrote:
+> > The only new dependency we need is SparseArray.  However, we cannot
+> > upload the package to new since it needs r-bioc-s4arrays (>= 1.1.6) for
+> > building it.  In other words: We need to start the transition before we
+> > can package SparseArray.
+> 
+> You're totally free use experimental for that to get SparseArray through
+> NEW. I assume you don't need 100% of the transition, but only a (hopefully
+> tiny) bit. So you could upload the newer version of r-bioc-biocgenerics and
+> reverse depending packages up to where you need it to build SparseArray.
+> ...
+
+What about a compromise.  We start the transition, r-bioc-s4arrays is in
+level 3 and given that ftpmaster might accept the new package in 3-5 days
+when we ping kindly it will be available before we are in the last level.
+
+I'd like to remind that quite some delays are caused by autopkgtest
+errors on rarely used architectures.  My experience of past transitions
+tells me that a single new package in the beginning will not have some
+measurable effect on the total length of the transition.
+
+Kind regards and thanks for your work as release team
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Sat Nov 11 00:44:34 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 11 Nov 2023 09:44:34 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZU6u9SJpxwgCQsno@ramacher.at>
+References: <ZUoI_BVxXDclOpfC@ramacher.at> <ZUo9xdTPTaltbqd1@an3as.eu> <ZUpF13OS3IUw6iVN@ramacher.at> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <ZU6u9SJpxwgCQsno@ramacher.at>
+Message-ID: <ZU7OcmJziM_7nsqB@kumo.plessy.net>
+
+Le Fri, Nov 10, 2023 at 11:30:13PM +0100, Sebastian Ramacher a écrit :
+> 
+> Can you please clarify whether you are talking about new dependencies or
+> reverse dependencies above? Thanks.
+
+Hi Sebastian,
+
+I am talking about the reverse-dependencies of the packages that we need
+to upload to NEW.  These are new dependencies of packages that need to
+go through the Bioconductor transition.
+
+Here is an example:
+
+In Bioconductor 3.17, the new package S4Arrays was depended on by
+DelayedArray.  This reverse dependency of a new package in Bioconductor
+is a new dependency on a new package in Debian (r-bioc-delayed array
+started to depend on r-bioc-s4arrays).  The upload of r-bioc-s4arrays
+during the 3.17 transition is one of the causes of the delays.
+
+Last week I thought that looking at the reverse-dependencies of packages
+that are new in Bioconductor 3.18 would be a good heuristic to find if
+we will need to introduce new packages in Debian.  This is the main
+reason I expresesd my thoughts in terms of reverse-dependency of new
+packages, instead of new dependencies on new packages.  However
+yesterday me and Andreas figured out that this was not a good heuristic.
+
+Here is an example:
+
+In Bioconductor 3.18, DelayedArray starts to depend on SparseArray.
+However, SparseArray is not new in Bioconductor 3.18.  It was
+introudced in Bioconductor 3.17 but we did not notice and package it
+because nothing was depending on it.
+
+In conclusion, taking the point of view of reverse-dependencies of new
+packages in Bioconductor was not as fruitful as I thought and I will try
+to stick to the point of view of new dependencies on new packages in
+Debian to avoid further confusions.
+
+I hope it clarifies.
+
+-- 
+Charles
+
+From nilesh at nileshpatra.info  Sun Nov 12 12:10:07 2023
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Sun, 12 Nov 2023 17:40:07 +0530
+Subject: Re: News from dh-r
+In-Reply-To: <ZU4NG1npBEWBD1aR@an3as.eu>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu>
+Message-ID: <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info>
+
+On 10 November 2023 4:29:39 pm IST, Andreas Tille <andreas at an3as.eu> wrote:
+>> Does this also work the same way for Depends?
+>
+>There is no influence on Depends since the packages to recreate the
+>docs are not Depends.
+
+In some relatively cases, where a depends in DESCRIPTION has a version that does not confirm with debian version (for instance something like 1.3-1-2) it wasn't possible to even patch the description file since dh-r would convert the dash to dot so I had to patch that out completely and add it to depends. I need to find specific example here.
+
+If I remember correctly but dh-update-r would remove these useful depends. So if you could fix this up as well, it'd be great.
+
+Thanks,
+Nilesh
+
+From andreas at fam-tille.de  Sun Nov 12 15:53:28 2023
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sun, 12 Nov 2023 16:53:28 +0100
+Subject: Re: News from dh-r
+In-Reply-To: <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu> <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info>
+Message-ID: <ZVD0-Cpj0YvwAXxK@an3as.eu>
+
+Am Sun, Nov 12, 2023 at 05:40:07PM +0530 schrieb Nilesh Patra:
+> In some relatively cases, where a depends in DESCRIPTION has a version that does not confirm with debian version (for instance something like 1.3-1-2) it wasn't possible to even patch the description file since dh-r would convert the dash to dot so I had to patch that out completely and add it to depends. I need to find specific example here.
+> 
+> If I remember correctly but dh-update-r would remove these useful depends. So if you could fix this up as well, it'd be great.
+
+It would be great if you have some example to test the code (and make
+sure I really understood the problem properly).
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Nov 13 09:21:19 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 13 Nov 2023 10:21:19 +0100
+Subject: Re: r-bioc-sparsearray_1.0.12+dfsg-1_amd64.changes is NEW
+In-Reply-To: <E1r2Suv-00ANxi-Fp@fasolo.debian.org>
+References: <E1r2Suv-00ANxi-Fp@fasolo.debian.org>
+Message-ID: <ZVHqjx2riH75dDcP@an3as.eu>
+
+Hi ftpmasters,
+
+we want to start the transition from Bioconductor version 3.17 to 3.18.
+The release team asked us to make sure there will be no packages missing
+in Debian that needs to pass new queue first to maintain some smooth
+transition.  Thus I uploaded the only missing package
+r-bioc-sparsearray.
+
+If your time permits it would be great to give this package some
+preference to enable us starting the transition.
+
+Kind regards
+    Andreas.
+
+Am Mon, Nov 13, 2023 at 09:07:37AM +0000 schrieb Debian FTP Masters:
+> binary:r-bioc-sparsearray is NEW.
+> binary:r-bioc-sparsearray is NEW.
+> source:r-bioc-sparsearray is NEW.
+> 
+> Your package has been put into the NEW queue, which requires manual action
+> from the ftpteam to process. The upload was otherwise valid (it had a good
+> OpenPGP signature and file hashes are valid), so please be patient.
+> 
+> Packages are routinely processed through to the archive, and do feel
+> free to browse the NEW queue[1].
+> 
+> If there is an issue with the upload, you will receive an email from a
+> member of the ftpteam.
+> 
+> If you have any questions, you may reply to this email.
+> 
+> [1]: https://ftp-master.debian.org/new.html
+>      or https://ftp-master.debian.org/backports-new.html for *-backports
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+> 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Nov 13 10:10:28 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 13 Nov 2023 11:10:28 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZU6uDTCiAcJT3c6X@an3as.eu>
+References: <ZUpF13OS3IUw6iVN@ramacher.at> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <ZU4MT6Wuqwv8DReF@an3as.eu> <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org> <ZU6uDTCiAcJT3c6X@an3as.eu>
+Message-ID: <ZVH2FPhlTmWJPqmc@an3as.eu>
+
+Am Fri, Nov 10, 2023 at 11:26:21PM +0100 schrieb Andreas Tille:
+> 
+> What about a compromise.  We start the transition, r-bioc-s4arrays is in
+> ...
+
+Thanks to the hint from Charles I found that SparseArray is not new in
+Bioconductor and we can build the previous version with the current
+packages in unstable which I did and uploaded to new.
+
+Kind regards
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Nov 13 13:23:06 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 13 Nov 2023 07:23:06 -0600
+Subject: Matrix update triggering need for four rebuilds
+Message-ID: <25938.9018.668395.112489@rob.eddelbuettel.com>
+
+Package Matrix is having a new and energetic maintainer/contributor in Mikael
+Jagan who is tidying up a few loose corners (and inter alia sent me a patch
+to RcppEigen that resulted in a coordinated CRAN update of RcppEigen, lme4,
+and OpenMx).
+
+Mikael also identified two sets of packages needed a rebuild in messages to
+the r-package-devel list (the more-or-less official place in the R Project to
+ask / discuss package changes, it is a decent to be on) following private
+mails between him and me. See 
+
+https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010051.html
+https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010054.html
+
+The first concerns packages using a LinkingTo: Matrix and building against
+Matrix _headers_. The second concerns caching of S4 signatures (which bit us
+at work because of SeuratObject [not in Debian] and how I got onto this).
+
+Most of these are not in Debian but I think we need binary rebuilds of
+
+   irlba		because of headers
+   OpenMx               because of headers, a new upstream 2.21.10 is out too
+   TMB                  because of headers
+   MatrixModels         because of S4 caching
+
+I would appreciate it if someone could tickle rebuilds. To me a quick
+informal touch of debian/changelog would do; if someone thinks this needs a
+formal transition go for it.
+
+The R Core team and the CRAN maintainers are aware of the implicit problem
+with signalling the need for binary rebuilds. They are discussing this, but
+do not have an answer. Historically, CRAN has informally rebuilt its binaries
+for windows and macOS, but that of course does not help binary distributors
+such as us, other Linux distros, Conda, r2u, ... at all.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Nov 14 10:06:08 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 14 Nov 2023 11:06:08 +0100
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25938.9018.668395.112489@rob.eddelbuettel.com>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com>
+Message-ID: <ZVNGkOqGNsWCBIRL@an3as.eu>
+
+Hi Dirk,
+
+Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+> Most of these are not in Debian but I think we need binary rebuilds of
+> 
+>    irlba		because of headers
+>    OpenMx               because of headers, a new upstream 2.21.10 is out too
+>    TMB                  because of headers
+
+Uploaded yesterday since I realised the need.
+
+>    MatrixModels         because of S4 caching
+> 
+> I would appreciate it if someone could tickle rebuilds. To me a quick
+> informal touch of debian/changelog would do; if someone thinks this needs a
+> formal transition go for it.
+
+In principle upgrading four packages at request is cheap.  However, I
+have the feeling that we are technically more safe if we would introduce
+some r-tmb-api which would technically raise a signal for tmb
+dependencies.  I've "hacked" some workaround into r-cran-tmb since I
+was motivated by the github issue discussing the relation to Matrix[1]
+to fix a very specifix Matrix version.  I've put the release team in
+CC since they were involved into the according discussion.
+
+I consider it necessary to make those dependencies technically
+transparent and some according API seems to be the usual way to do this.
+
+> The R Core team and the CRAN maintainers are aware of the implicit problem
+> with signalling the need for binary rebuilds. They are discussing this, but
+> do not have an answer. Historically, CRAN has informally rebuilt its binaries
+> for windows and macOS, but that of course does not help binary distributors
+> such as us, other Linux distros, Conda, r2u, ... at all.
+
+May be its interesting to hear the opinion of the said CRAN maintainers
+whether they consider the suggested means as appropriate to deal with 
+this issue.
+
+Kind regards
+    Andreas.
+
+[1] https://github.com/kaskr/adcomp/issues/387 
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Tue Nov 14 10:15:04 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 14 Nov 2023 09:15:04 -0100
+Subject: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2
+Message-ID: <CAM8zJQuS3vg8BT-wbj1PMc=7-0YkB392Y3rsHj6h0d7YTVCZhg@mail.gmail.com>
+
+Source: rmatrix
+Version: 1.6-2-1
+Severity: serious
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Hi Dirk
+
+I'm opening this bug as a place for discussion and to track the
+affected packages.  It can be closed once rmatrix and its
+reverse-dependencies are ready to migrate.
+
+I've copied your email to the debian-r mailing list [1] below.
+
+Regards
+Graham
+
+[1] https://lists.debian.org/debian-r/2023/11/msg00033.html
+
+Package Matrix is having a new and energetic maintainer/contributor in Mikael
+Jagan who is tidying up a few loose corners (and inter alia sent me a patch
+to RcppEigen that resulted in a coordinated CRAN update of RcppEigen, lme4,
+and OpenMx).
+
+Mikael also identified two sets of packages needed a rebuild in messages to
+the r-package-devel list (the more-or-less official place in the R Project to
+ask / discuss package changes, it is a decent to be on) following private
+mails between him and me. See
+
+https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010051.html
+https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010054.html
+
+The first concerns packages using a LinkingTo: Matrix and building against
+Matrix _headers_. The second concerns caching of S4 signatures (which bit us
+at work because of SeuratObject [not in Debian] and how I got onto this).
+
+Most of these are not in Debian but I think we need binary rebuilds of
+
+   irlba                because of headers
+   OpenMx               because of headers, a new upstream 2.21.10 is out too
+   TMB                  because of headers
+   MatrixModels         because of S4 caching
+
+I would appreciate it if someone could tickle rebuilds. To me a quick
+informal touch of debian/changelog would do; if someone thinks this needs a
+formal transition go for it.
+
+The R Core team and the CRAN maintainers are aware of the implicit problem
+with signalling the need for binary rebuilds. They are discussing this, but
+do not have an answer. Historically, CRAN has informally rebuilt its binaries
+for windows and macOS, but that of course does not help binary distributors
+such as us, other Linux distros, Conda, r2u, ... at all.
+
+From andreas at an3as.eu  Tue Nov 14 16:39:03 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 14 Nov 2023 17:39:03 +0100
+Subject: Possible encoding issue (Was: r-cran-hunspell: please don't use internal en_US and en_GB dictionaries)
+Message-ID: <ZVOip0XWUY5QveGl@an3as.eu>
+
+Hi,
+
+I finally wanted to give this bug another chance to be solved and pushed
+the patches to git.  Unfortunately the problem of two failed tests
+persists[1].  Before asking upstream about this (which is always a bit
+complicated if we use different files then them - the Debian packaged
+dictionaries) I wonder whether someone might have some clue.
+
+May be an easiy way to test it is to build+install the package in Git
+and run the script debian/tests/run-unit-test[2].
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/jobs/4924880#L467
+[2] https://salsa.debian.org/r-pkg-team/r-cran-hunspell/-/blob/master/debian/tests/run-unit-test
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue Nov 14 22:17:59 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 14 Nov 2023 16:17:59 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <ZVNGkOqGNsWCBIRL@an3as.eu>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com> <ZVNGkOqGNsWCBIRL@an3as.eu>
+Message-ID: <25939.61975.29072.958636@rob.eddelbuettel.com>
+
+On 14 November 2023 at 11:06, Andreas Tille wrote:
+| Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+| > Most of these are not in Debian but I think we need binary rebuilds of
+| > 
+| >    irlba		because of headers
+| >    OpenMx               because of headers, a new upstream 2.21.10 is out too
+| >    TMB                  because of headers
+| 
+| Uploaded yesterday since I realised the need.
+
+Thank you!
+
+The rest is an open issue and not clear. I had a number of emails with both
+the active maintainer of Matrix (Mikael) who is considering declaring an API
+version at the package level, and one of the maintainers of an affected
+package (my colleague who is upstream for SeuratObject which was bitten by
+the S4 signature/namespace caching).  I am also in some emails with CRAN and
+R Core but no resolution there.
+
+So for now this is "just an unfortunate one-off" and not yet something ready
+for a more systematic change.
+
+| >    MatrixModels         because of S4 caching
+| > 
+| > I would appreciate it if someone could tickle rebuilds. To me a quick
+| > informal touch of debian/changelog would do; if someone thinks this needs a
+| > formal transition go for it.
+| 
+| In principle upgrading four packages at request is cheap.  However, I
+| have the feeling that we are technically more safe if we would introduce
+| some r-tmb-api which would technically raise a signal for tmb
+| dependencies.  I've "hacked" some workaround into r-cran-tmb since I
+| was motivated by the github issue discussing the relation to Matrix[1]
+| to fix a very specifix Matrix version.  I've put the release team in
+| CC since they were involved into the according discussion.
+
+I did not follow this closely but was that rather 'change in TMB driving
+issues in glmmTMB and alike' whereas this email is about 'TMB as a client of
+Matrix' ?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Tue Nov 14 22:49:01 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 14 Nov 2023 16:49:01 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25939.61975.29072.958636@rob.eddelbuettel.com>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com> <ZVNGkOqGNsWCBIRL@an3as.eu> <25939.61975.29072.958636@rob.eddelbuettel.com>
+Message-ID: <25939.63837.655441.697706@rob.eddelbuettel.com>
+
+On 14 November 2023 at 16:17, Dirk Eddelbuettel wrote:
+| 
+| On 14 November 2023 at 11:06, Andreas Tille wrote:
+| | Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+| | > Most of these are not in Debian but I think we need binary rebuilds of
+| | > 
+| | >    irlba		because of headers
+| | >    OpenMx               because of headers, a new upstream 2.21.10 is out too
+| | >    TMB                  because of headers
+| | 
+| | Uploaded yesterday since I realised the need.
+| 
+| Thank you!
+
+I misread that, I think. So you updated TMB.  Good.  One done, three to go.
+
+irlba is widely used, OpenMx is big and I think MatrixModels also pops up.
+If you could do a sweep over those I would appreciate it.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Wed Nov 15 06:00:59 2023
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 15 Nov 2023 07:00:59 +0100
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25939.63837.655441.697706@rob.eddelbuettel.com>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com> <ZVNGkOqGNsWCBIRL@an3as.eu> <25939.61975.29072.958636@rob.eddelbuettel.com> <25939.63837.655441.697706@rob.eddelbuettel.com>
+Message-ID: <ZVRem09srq8gYQ9c@an3as.eu>
+
+Am Tue, Nov 14, 2023 at 04:49:01PM -0600 schrieb Dirk Eddelbuettel:
+> 
+> On 14 November 2023 at 16:17, Dirk Eddelbuettel wrote:
+> | 
+> | On 14 November 2023 at 11:06, Andreas Tille wrote:
+> | | Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+> | | > Most of these are not in Debian but I think we need binary rebuilds of
+> | | > 
+> | | >    irlba		because of headers
+> | | >    OpenMx               because of headers, a new upstream 2.21.10 is out too
+> | | >    TMB                  because of headers
+> | | 
+> | | Uploaded yesterday since I realised the need.
+> | 
+> | Thank you!
+> 
+> I misread that, I think. So you updated TMB.  Good.  One done, three to go.
+
+Yes, that is what I intended to express.
+ 
+> irlba is widely used, OpenMx is big and I think MatrixModels also pops up.
+> If you could do a sweep over those I would appreciate it.
+
+I'll happily update these as soon as possible.  However, I'd like to
+know what might be some sensible means to catch this quickly in future.
+For r-cran-tmb the strict version checking in d/rules (which is not the
+best thing to do according to the release team) was raising some signal.
+
+I'd like to clarify first, whether there will be some better solution
+via some r-matrix-api before I upload those other packages.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Wed Nov 15 11:23:58 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 15 Nov 2023 05:23:58 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <ZVRem09srq8gYQ9c@an3as.eu>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com> <ZVNGkOqGNsWCBIRL@an3as.eu> <25939.61975.29072.958636@rob.eddelbuettel.com> <25939.63837.655441.697706@rob.eddelbuettel.com> <ZVRem09srq8gYQ9c@an3as.eu>
+Message-ID: <25940.43598.403823.273119@rob.eddelbuettel.com>
+
+On 15 November 2023 at 07:00, Andreas Tille wrote:
+| Am Tue, Nov 14, 2023 at 04:49:01PM -0600 schrieb Dirk Eddelbuettel:
+| > 
+| > On 14 November 2023 at 16:17, Dirk Eddelbuettel wrote:
+| > | 
+| > | On 14 November 2023 at 11:06, Andreas Tille wrote:
+| > | | Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+| > | | > Most of these are not in Debian but I think we need binary rebuilds of
+| > | | > 
+| > | | >    irlba		because of headers
+| > | | >    OpenMx               because of headers, a new upstream 2.21.10 is out too
+| > | | >    TMB                  because of headers
+| > | | 
+| > | | Uploaded yesterday since I realised the need.
+| > | 
+| > | Thank you!
+| > 
+| > I misread that, I think. So you updated TMB.  Good.  One done, three to go.
+| 
+| Yes, that is what I intended to express.
+|  
+| > irlba is widely used, OpenMx is big and I think MatrixModels also pops up.
+| > If you could do a sweep over those I would appreciate it.
+| 
+| I'll happily update these as soon as possible.  However, I'd like to
+| know what might be some sensible means to catch this quickly in future.
+| For r-cran-tmb the strict version checking in d/rules (which is not the
+| best thing to do according to the release team) was raising some signal.
+| 
+| I'd like to clarify first, whether there will be some better solution
+| via some r-matrix-api before I upload those other packages.
+
+I relayed information I got from Matrix upstream in private email which then
+also lead to the emails written to r-package-devel I already referenced:
+
+  https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010051.html
+  https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010054.html
+
+There is nothing more at this point.
+
+But we know the remaining Debian packages
+
+  r-cran-irlba
+  r-cran-openmx
+  r-cran-matrixmodels
+
+require a rebuild.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Nov 17 16:12:02 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 17 Nov 2023 10:12:02 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25940.43598.403823.273119@rob.eddelbuettel.com>
+References: <25938.9018.668395.112489@rob.eddelbuettel.com> <ZVNGkOqGNsWCBIRL@an3as.eu> <25939.61975.29072.958636@rob.eddelbuettel.com> <25939.63837.655441.697706@rob.eddelbuettel.com> <ZVRem09srq8gYQ9c@an3as.eu> <25940.43598.403823.273119@rob.eddelbuettel.com>
+Message-ID: <25943.37074.182719.59781@rob.eddelbuettel.com>
+
+On 15 November 2023 at 05:23, Dirk Eddelbuettel wrote:
+| 
+| On 15 November 2023 at 07:00, Andreas Tille wrote:
+| | Am Tue, Nov 14, 2023 at 04:49:01PM -0600 schrieb Dirk Eddelbuettel:
+| | > 
+| | > On 14 November 2023 at 16:17, Dirk Eddelbuettel wrote:
+| | > | 
+| | > | On 14 November 2023 at 11:06, Andreas Tille wrote:
+| | > | | Am Mon, Nov 13, 2023 at 07:23:06AM -0600 schrieb Dirk Eddelbuettel:
+| | > | | > Most of these are not in Debian but I think we need binary rebuilds of
+| | > | | > 
+| | > | | >    irlba		because of headers
+| | > | | >    OpenMx               because of headers, a new upstream 2.21.10 is out too
+| | > | | >    TMB                  because of headers
+| | > | | 
+| | > | | Uploaded yesterday since I realised the need.
+| | > | 
+| | > | Thank you!
+| | > 
+| | > I misread that, I think. So you updated TMB.  Good.  One done, three to go.
+| | 
+| | Yes, that is what I intended to express.
+| |  
+| | > irlba is widely used, OpenMx is big and I think MatrixModels also pops up.
+| | > If you could do a sweep over those I would appreciate it.
+| | 
+| | I'll happily update these as soon as possible.  However, I'd like to
+| | know what might be some sensible means to catch this quickly in future.
+| | For r-cran-tmb the strict version checking in d/rules (which is not the
+| | best thing to do according to the release team) was raising some signal.
+| | 
+| | I'd like to clarify first, whether there will be some better solution
+| | via some r-matrix-api before I upload those other packages.
+| 
+| I relayed information I got from Matrix upstream in private email which then
+| also lead to the emails written to r-package-devel I already referenced:
+| 
+|   https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010051.html
+|   https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010054.html
+| 
+| There is nothing more at this point.
+| 
+| But we know the remaining Debian packages
+| 
+|   r-cran-irlba
+|   r-cran-openmx
+|   r-cran-matrixmodels
+| 
+| require a rebuild.
+
+r-cran-matrixmodels is actually one of mine, and they just put a new upstream
+out so I'll update now.  Leaving
+
+   r-cran-irlba
+   r-cran-openmx
+
+for you (unless you got to it already).
+
+Dirk
+
+| 
+| Dirk
+| 
+| 
+| -- 
+| dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Fri Nov 17 16:34:39 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 17 Nov 2023 22:04:39 +0530
+Subject: Re: News from dh-r
+In-Reply-To: <ZVD0-Cpj0YvwAXxK@an3as.eu>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu> <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info> <ZVD0-Cpj0YvwAXxK@an3as.eu>
+Message-ID: <20231117163439.uichej3lgylduidw@office.mailbox.org>
+
+On Sun, Nov 12, 2023 at 04:53:28PM +0100, Andreas Tille wrote:
+> Am Sun, Nov 12, 2023 at 05:40:07PM +0530 schrieb Nilesh Patra:
+> > In some relatively cases, where a depends in DESCRIPTION has a version that does not confirm with debian version (for instance something like 1.3-1-2) it wasn't possible to even patch the description file since dh-r would convert the dash to dot so I had to patch that out completely and add it to depends. I need to find specific example here.
+> > 
+> > If I remember correctly but dh-update-r would remove these useful depends. So if you could fix this up as well, it'd be great.
+> 
+> It would be great if you have some example to test the code (and make
+> sure I really understood the problem properly).
+
+For instance r-cran-tmb repository on salsa has:
+
+$ cat debian/control| grep -A5 ^Depends:
+Depends: ${R:Depends},
+         ${shlibs:Depends},
+         ${misc:Depends},
+# <dh-update-R>do not delete this</dh-update-R>
+         r-cran-matrix (>= 1.5-3-1~)
+
+$ dh-update-R
+...
+
+ cat debian/control| grep -A5 ^Depends:
+Depends: ${R:Depends},
+         ${shlibs:Depends},
+         ${misc:Depends}
+Recommends: ${R:Recommends}
+Suggests: ${R:Suggests}
+
+$ apt policy dh-r 2>/dev/null | grep Installed
+  Installed: 20231109
+
+I feel this needs fixing.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Fri Nov 17 17:40:56 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 17 Nov 2023 18:40:56 +0100
+Subject: Re: News from dh-r
+In-Reply-To: <20231117163439.uichej3lgylduidw@office.mailbox.org>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu> <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info> <ZVD0-Cpj0YvwAXxK@an3as.eu> <20231117163439.uichej3lgylduidw@office.mailbox.org>
+Message-ID: <ZVelqK87WJfwsDpR@an3as.eu>
+
+Am Fri, Nov 17, 2023 at 10:04:39PM +0530 schrieb Nilesh Patra:
+> For instance r-cran-tmb repository on salsa has:
+> 
+> $ cat debian/control| grep -A5 ^Depends:
+> Depends: ${R:Depends},
+>          ${shlibs:Depends},
+>          ${misc:Depends},
+> # <dh-update-R>do not delete this</dh-update-R>
+>          r-cran-matrix (>= 1.5-3-1~)
+> 
+> $ dh-update-R
+> ...
+> 
+>  cat debian/control| grep -A5 ^Depends:
+> Depends: ${R:Depends},
+>          ${shlibs:Depends},
+>          ${misc:Depends}
+> Recommends: ${R:Recommends}
+> Suggests: ${R:Suggests}
+> 
+> $ apt policy dh-r 2>/dev/null | grep Installed
+>   Installed: 20231109
+> 
+> I feel this needs fixing.
+
+That's fixed via
+
+   https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/rules#L10-15
+
+Its perfectly correct that r-cran-matrix is not specified explicitly in
+d/control.  You can check this by building and see the result.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Fri Nov 17 17:43:06 2023
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 17 Nov 2023 18:43:06 +0100
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25943.37074.182719.59781@rob.eddelbuettel.com>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com>
+Message-ID: <ZVemKltpcCa8pv8e@an3as.eu>
+
+Am Fri, Nov 17, 2023 at 10:12:02AM -0600 schrieb Dirk Eddelbuettel:
+> Leaving
+> 
+>    r-cran-irlba
+>    r-cran-openmx
+> 
+> for you (unless you got to it already).
+
+To make it pretty clear: I will not simply rebuild these packages before
+we have a promising solution for the future.  If you do not agree with
+this you can either
+
+   * Ask for Bin-NMU which should be sufficient
+   * Do a team upload
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Fri Nov 17 17:48:50 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 17 Nov 2023 23:18:50 +0530
+Subject: Re: News from dh-r
+In-Reply-To: <ZVelqK87WJfwsDpR@an3as.eu>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu> <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info> <ZVD0-Cpj0YvwAXxK@an3as.eu> <20231117163439.uichej3lgylduidw@office.mailbox.org> <ZVelqK87WJfwsDpR@an3as.eu>
+Message-ID: <20231117174850.pmwzrkq3b43oq743@office.mailbox.org>
+
+On Fri, Nov 17, 2023 at 06:40:56PM +0100, Andreas Tille wrote:
+> That's fixed via
+> 
+>    https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/rules#L10-15
+> 
+> Its perfectly correct that r-cran-matrix is not specified explicitly in
+> d/control.  You can check this by building and see the result.
+
+This was just meant to be an example. dh-update-R is doing things
+correctly for this package - however removing it altogether without
+sanity checking is not correct.
+
+If dh-update-R is actually checking for such versioninfo via some
+mechanism and not blindly removing such deps, I would concur that it
+works well.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From edd at debian.org  Fri Nov 17 18:04:21 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 17 Nov 2023 12:04:21 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <ZVemKltpcCa8pv8e@an3as.eu>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu>
+Message-ID: <25943.43813.630405.84663@rob.eddelbuettel.com>
+
+On 17 November 2023 at 18:43, Andreas Tille wrote:
+| Am Fri, Nov 17, 2023 at 10:12:02AM -0600 schrieb Dirk Eddelbuettel:
+| > Leaving
+| > 
+| >    r-cran-irlba
+| >    r-cran-openmx
+| > 
+| > for you (unless you got to it already).
+| 
+| To make it pretty clear: I will not simply rebuild these packages before
+| we have a promising solution for the future.  If you do not agree with
+| this you can either
+| 
+|    * Ask for Bin-NMU which should be sufficient
+|    * Do a team upload
+
+"Our users are our preference".  Debian Social Contract.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at nileshpatra.info  Fri Nov 17 18:20:31 2023
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Fri, 17 Nov 2023 23:50:31 +0530
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25943.43813.630405.84663@rob.eddelbuettel.com>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com>
+Message-ID: <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info>
+
+On 17 November 2023 11:34:21 pm IST, Dirk Eddelbuettel <edd at debian.org> wrote:
+>
+>On 17 November 2023 at 18:43, Andreas Tille wrote:
+>| Am Fri, Nov 17, 2023 at 10:12:02AM -0600 schrieb Dirk Eddelbuettel:
+>| > Leaving
+>| > 
+>| >    r-cran-irlba
+>| >    r-cran-openmx
+>| > 
+>| > for you (unless you got to it already).
+>| 
+>| To make it pretty clear: I will not simply rebuild these packages before
+>| we have a promising solution for the future.  If you do not agree with
+>| this you can either
+>| 
+>|    * Ask for Bin-NMU which should be sufficient
+>|    * Do a team upload
+>
+>"Our users are our preference".  Debian Social Contract.
+
+You don't get to play this card with uncoordinated transitions.
+
+Nobody is stopping you from doing team uploads for these packages fwiw.
+
+From edd at debian.org  Fri Nov 17 18:44:37 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 17 Nov 2023 12:44:37 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info>
+Message-ID: <25943.46229.645847.844460@rob.eddelbuettel.com>
+
+On 17 November 2023 at 23:50, Nilesh Patra wrote:
+| 
+| 
+| On 17 November 2023 11:34:21 pm IST, Dirk Eddelbuettel <edd at debian.org> wrote:
+| >
+| >On 17 November 2023 at 18:43, Andreas Tille wrote:
+| >| Am Fri, Nov 17, 2023 at 10:12:02AM -0600 schrieb Dirk Eddelbuettel:
+| >| > Leaving
+| >| > 
+| >| >    r-cran-irlba
+| >| >    r-cran-openmx
+| >| > 
+| >| > for you (unless you got to it already).
+| >| 
+| >| To make it pretty clear: I will not simply rebuild these packages before
+| >| we have a promising solution for the future.  If you do not agree with
+| >| this you can either
+| >| 
+| >|    * Ask for Bin-NMU which should be sufficient
+| >|    * Do a team upload
+| >
+| >"Our users are our preference".  Debian Social Contract.
+| 
+| You don't get to play this card with uncoordinated transitions.
+| 
+| Nobody is stopping you from doing team uploads for these packages fwiw.
+
+I tried to explain that upstream (both the package and CRAN) have no real
+handle on this so it is by _definition_ what you refer to (in a denigrating
+tone) an uncoordinated transition.
+
+In which a rebuild is good enough for upstream. And I have done one for my
+affected packages. My role ends there. If you guys think you must ambush your
+users and leave known broken packages in that state then that is your choice.
+At least you are saying so out loud.  I'll will retreat and focus on things I
+can control.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at nileshpatra.info  Fri Nov 17 18:56:35 2023
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Sat, 18 Nov 2023 00:26:35 +0530
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25943.46229.645847.844460@rob.eddelbuettel.com>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info> <25943.46229.645847.844460@rob.eddelbuettel.com>
+Message-ID: <6B17D95D-6AA4-4875-BC3F-A91F2C4AC264@nileshpatra.info>
+
+On 18 November 2023 12:14:37 am IST, Dirk Eddelbuettel <edd at debian.org> wrote:
+>
+>On 17 November 2023 at 23:50, Nilesh Patra wrote:
+>| 
+>| 
+>| On 17 November 2023 11:34:21 pm IST, Dirk Eddelbuettel <edd at debian.org> wrote:
+>| >
+>| >On 17 November 2023 at 18:43, Andreas Tille wrote:
+>| >| Am Fri, Nov 17, 2023 at 10:12:02AM -0600 schrieb Dirk Eddelbuettel:
+>| >| > Leaving
+>| >| > 
+>| >| >    r-cran-irlba
+>| >| >    r-cran-openmx
+>| >| > 
+>| >| > for you (unless you got to it already).
+>| >| 
+>| >| To make it pretty clear: I will not simply rebuild these packages before
+>| >| we have a promising solution for the future.  If you do not agree with
+>| >| this you can either
+>| >| 
+>| >|    * Ask for Bin-NMU which should be sufficient
+>| >|    * Do a team upload
+>| >
+>| >"Our users are our preference".  Debian Social Contract.
+>| 
+>| You don't get to play this card with uncoordinated transitions.
+>| 
+>| Nobody is stopping you from doing team uploads for these packages fwiw.
+>
+>I tried to explain that upstream (both the package and CRAN) have no real
+>handle on this so it is by _definition_ what you refer to (in a denigrating
+>tone) an uncoordinated transition.
+
+The transition that's being talked about is the debian one (not the upstream one).
+
+This one to be clear:
+
+<https://wiki.debian.org/Teams/ReleaseTeam/Transitions>
+
+It is being brought up from time to time of you noticed.
+
+>I'll will retreat and focus on things I
+>can control.
+
+Likewise.
+
+From andreas at an3as.eu  Fri Nov 17 21:30:02 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Nov 2023 22:30:02 +0100
+Subject: Re: News from dh-r
+In-Reply-To: <20231117174850.pmwzrkq3b43oq743@office.mailbox.org>
+References: <ZU0vLoCeJUdO3k8c@an3as.eu> <20231109200639.dom5hcsgn3ohjxds@office.mailbox.org> <ZU4NG1npBEWBD1aR@an3as.eu> <7B74589E-CEE3-4DBD-BAC5-A11F000B616E@nileshpatra.info> <ZVD0-Cpj0YvwAXxK@an3as.eu> <20231117163439.uichej3lgylduidw@office.mailbox.org> <ZVelqK87WJfwsDpR@an3as.eu> <20231117174850.pmwzrkq3b43oq743@office.mailbox.org>
+Message-ID: <ZVfbWhqU6c4qih5y@an3as.eu>
+
+Am Fri, Nov 17, 2023 at 11:18:50PM +0530 schrieb Nilesh Patra:
+> On Fri, Nov 17, 2023 at 06:40:56PM +0100, Andreas Tille wrote:
+> > That's fixed via
+> > 
+> >    https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/debian/rules#L10-15
+> > 
+> > Its perfectly correct that r-cran-matrix is not specified explicitly in
+> > d/control.  You can check this by building and see the result.
+> 
+> This was just meant to be an example. dh-update-R is doing things
+> correctly for this package - however removing it altogether without
+> sanity checking is not correct.
+> 
+> If dh-update-R is actually checking for such versioninfo via some
+> mechanism and not blindly removing such deps, I would concur that it
+> works well.
+
+Its hard to tell dh-update-R what to remove and what not.  It calls
+for user interaction when it finds that the string
+
+  # <dh-update-R>do not delete this</dh-update-R>
+
+was removed.  That's not optimal but its not really blindly.  In the
+r-cran-tmb case no user interaction is needed (any more) since the
+problem is solved inside the packaging.  At least this is the idea
+of this "do not delete" hack.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Nov 17 21:33:53 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Nov 2023 22:33:53 +0100
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <25943.46229.645847.844460@rob.eddelbuettel.com>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info> <25943.46229.645847.844460@rob.eddelbuettel.com>
+Message-ID: <ZVfcQfEY5wlF39u7@an3as.eu>
+
+Am Fri, Nov 17, 2023 at 12:44:37PM -0600 schrieb Dirk Eddelbuettel:
+> I'll will retreat and focus on things I
+> can control.
+
+I told you even two ways you can control yourself.  Pick one and be so
+kind to spare your fellow DDs public accusations. 
+
+Kind regards
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Nov 17 22:25:21 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 17 Nov 2023 16:25:21 -0600
+Subject: Re: Matrix update triggering need for four rebuilds
+In-Reply-To: <ZVfcQfEY5wlF39u7@an3as.eu>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info> <25943.46229.645847.844460@rob.eddelbuettel.com> <ZVfcQfEY5wlF39u7@an3as.eu>
+Message-ID: <25943.59473.699185.996030@rob.eddelbuettel.com>
+
+On 17 November 2023 at 22:33, Andreas Tille wrote:
+| Am Fri, Nov 17, 2023 at 12:44:37PM -0600 schrieb Dirk Eddelbuettel:
+| > I'll will retreat and focus on things I
+| > can control.
+| 
+| I told you even two ways you can control yourself.  Pick one and be so
+| kind to spare your fellow DDs public accusations. 
+
+Rest assured that I will *always* correct when you are both PLAIN wrong and
+also silly about it. Upstream asked for rebuilds in the messages I linked to
+here twice. There is nothing more. I rebuilt my packages and now move on. 
+
+But sure it is better for all of us when you run around telling upstream that
+their (perfectly CRAN compliant) packages need to be changed because they do
+not fit your tool and apparently do not like sed.  Got it.
+
+Please do not bother emailing me. 
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat Nov 18 08:05:18 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 18 Nov 2023 09:05:18 +0100
+Subject: Code of conduct and freedom of speach (Was: Matrix update triggering need for four rebuilds)
+In-Reply-To: <25943.59473.699185.996030@rob.eddelbuettel.com>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info> <25943.46229.645847.844460@rob.eddelbuettel.com> <ZVfcQfEY5wlF39u7@an3as.eu> <25943.59473.699185.996030@rob.eddelbuettel.com>
+Message-ID: <ZVhwPlKOe13z63Kk@an3as.eu>
+
+Hi Dirk,
+
+Am Fri, Nov 17, 2023 at 04:25:21PM -0600 schrieb Dirk Eddelbuettel:
+> 
+> On 17 November 2023 at 22:33, Andreas Tille wrote:
+> | Am Fri, Nov 17, 2023 at 12:44:37PM -0600 schrieb Dirk Eddelbuettel:
+> | > I'll will retreat and focus on things I
+> | > can control.
+> | 
+> | I told you even two ways you can control yourself.  Pick one and be so
+> | kind to spare your fellow DDs public accusations. 
+> 
+> Rest assured that I will *always* correct when you are both PLAIN wrong and
+> also silly about it.
+
+I do not comment on statements violating our code of conduct[1].  Last
+warning before I report this kind of conversation.
+
+> Upstream asked for rebuilds in the messages I linked to
+> here twice. There is nothing more. I rebuilt my packages and now move on. 
+
+Can you confirm that you understood the concept of Bin-NUM[2]?
+ 
+> But sure it is better for all of us when you run around telling upstream that
+> their (perfectly CRAN compliant) packages need to be changed because they do
+> not fit your tool and apparently do not like sed.  Got it.
+
+Just to explain this off-topic comment for the readers of this list.  I
+assume Dirk is refering to issues like this.  Just have a look at this
+Github issue
+
+    https://github.com/PeteHaitch/DelayedMatrixStats/issues/88
+
+which is a friendly conversation between upstream and me which was not
+spotted by Dirk,  The readers of this list might compare this to this
+issue
+
+    https://github.com/mojaveazure/seurat-object/issues/145
+
+where I discussed with upstream about the same topic, understood the
+reasons why upstream has trouble to do the change I asked them to do
+and ended with "OK, understood ...".
+
+After this Dirk felt the need to teach me what I should not do (as he
+did in several previous cases).  Dirk has done so several times in the
+past trying to stop me talking to other people.
+
+Dirk, to say it clearly: Stop trying to restrict my freedom to speach to
+other Free Software developers.  I consider it even offending to them
+since you ignore that they are grown up and can speak for themselves.
+Please also stop bringing this up in threads where it is off topic.
+
+Kind regards
+    Andreas.
+
+[1] https://www.debian.org/code_of_conduct
+[2] https://wiki.debian.org/binNMU
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Sat Nov 18 17:11:37 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sat, 18 Nov 2023 22:41:37 +0530
+Subject: Leaving the Debian-R team [Was: Code of conduct and freedom of speach (Was: Matrix update triggering need for four rebuilds)]
+In-Reply-To: <ZVhwPlKOe13z63Kk@an3as.eu>
+References: <25943.37074.182719.59781@rob.eddelbuettel.com> <ZVemKltpcCa8pv8e@an3as.eu> <25943.43813.630405.84663@rob.eddelbuettel.com> <FDDF269F-B588-4ADD-B902-42CDAD678D73@nileshpatra.info> <25943.46229.645847.844460@rob.eddelbuettel.com> <ZVfcQfEY5wlF39u7@an3as.eu> <25943.59473.699185.996030@rob.eddelbuettel.com> <ZVhwPlKOe13z63Kk@an3as.eu>
+Message-ID: <20231118171137.ybqrl4yk2wxyk7y4@office.mailbox.org>
+
+Hi Andreas and the Debian-R team,
+
+On Sat, Nov 18, 2023 at 09:05:18AM +0100, Andreas Tille wrote:
+> Am Fri, Nov 17, 2023 at 04:25:21PM -0600 schrieb Dirk Eddelbuettel:
+> > 
+> > On 17 November 2023 at 22:33, Andreas Tille wrote:
+> > | Am Fri, Nov 17, 2023 at 12:44:37PM -0600 schrieb Dirk Eddelbuettel:
+> > | > I'll will retreat and focus on things I
+> > | > can control.
+> > | 
+> > | I told you even two ways you can control yourself.  Pick one and be so
+> > | kind to spare your fellow DDs public accusations. 
+> > 
+> > Rest assured that I will *always* correct when you are both PLAIN wrong and
+> > also silly about it.
+> 
+> I do not comment on statements violating our code of conduct[1].  Last
+> warning before I report this kind of conversation.
+> <snip>
+> Just to explain this off-topic comment for the readers of this list.
+> ...
+
+After a good sleep and some thinking, I have decided to leave the debian R team effectively immediately.
+Hence, all the packages where I am listed as the only uploader should be up for grabs.
+I've left the team on salsa and will be unsubscribing from this mailing list shortly.
+
+Please remove my name from Uploaders in r-team packages if/when you touch them (sorry, I was
+lazy and did not feel like doing so myself) - there are not many of them.
+
+My real life situation has changed quite a bit since I first joined the team.
+These days, I simply do not have the energy and time to spend on uncalled for discussions/delibrations due to
+core R packages (r-base, rmatrix etc) with ABI changes being bumped and pushed to unstable without following
+the proper "debian" procedure to do so.
+This accounts for lot of extra work for the team and there have been instances when
+you were not available (i.e. on VAC which is perfectly OK) and I had to handle such transitions end-to-end on my own with
+pushing a bunch of re-build changes.
+
+In addition to that, I do not have the time to engage in unfounded accusations on public mailing lists that we both get from time
+to time from the R package maintainer. I think there are simply better places that I should spend my debian time on.
+
+Lastly, I am also not a user of the debian r-team packages I have helped in maintaining all these years and the amount of R I use
+for anythng is fairly minimal (I mostly do python). Hence, the motivation to keep contributing to r-packages is even less.
+
+That being said, if you ever need my help in any R specific bug; for instance in stanheaders where we are maintaining some
+debian specific patches, do not hesitate to reach out to me privately.
+
+Looking back, as per teammetrics stats[1-2], I have done quite some work with 776 uploads and 1879 commits. It was definitely
+fun while it lasted. I will keep working with you (and other folks) in other teams where we are both active.
+
+I wish you and the rest of the Debian R team all the very best!
+
+> [1] https://www.debian.org/code_of_conduct
+> [2] https://wiki.debian.org/binNMU
+[3] http://blends.debian.net/liststats/uploaders_r-pkg.png
+[4] http://blends.debian.net/liststats/commitstat_pkg-r.png
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Sat Nov 18 20:18:13 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 18 Nov 2023 21:18:13 +0100
+Subject: Re: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2
+In-Reply-To: <25943.46701.169692.438277@rob.eddelbuettel.com>
+References: <CAM8zJQuS3vg8BT-wbj1PMc=7-0YkB392Y3rsHj6h0d7YTVCZhg@mail.gmail.com> <25939.28609.433944.601534@rob.eddelbuettel.com> <CAM8zJQuHJ2F2RMri=4WrC9_kyhJ5qN4fAQ93hwj7W9CSd+rSzQ@mail.gmail.com> <25939.31060.636442.996270@rob.eddelbuettel.com> <25943.46701.169692.438277@rob.eddelbuettel.com>
+Message-ID: <ZVkcBemFbd7O7jI5@an3as.eu>
+
+Am Fri, Nov 17, 2023 at 12:52:29PM -0600 schrieb Dirk Eddelbuettel:
+> | Anyway. Now that you made it a bug I let you drive this.  Upstream just made
+> | an unrelated bugfix Matrix 1.6-3 which I just sent to unstable.
+> 
+> There are two known failures left which the maintainer(s) do not want to fix.
+
+Again: Please stop blaming other maintainers for not doing what you
+want.  We need some means to follow ABI changes.  In Debian we could use
+something like r-matrix-abi-VERSION.  As long as you not discussing this
+in a qualified wording I will not upload any package that is affected
+since I see my time wasted to discuss this in the next ABI change again
+and again.
+
+You were teached by Nilesh[1] about the right way to go (BTW, thanks for
+scaring away Nilesh[2].)
+ 
+> As I have fixed my dependents of package Matrix, I continue to find it unfair
+> that I am being to an open bug requiring fixes via builds in other packages
+> that are not mine.  <shrug>   So I guess this bug will stay open 'forever' or
+> until those packages get normal routine updates.
+
+You were also told that even this statement is wrong.[3]
+
+Finger pointing to others and claiming you can't do anything is what
+I call unfair.
+
+Kind regards
+    Andreas.
+
+[1] https://lists.debian.org/debian-r/2023/11/msg00049.html
+[2] https://lists.debian.org/debian-r/2023/11/msg00054.html
+[3] https://lists.debian.org/debian-r/2023/11/msg00044.html
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Nov 20 07:59:24 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 20 Nov 2023 08:59:24 +0100
+Subject: Re: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2
+In-Reply-To: <CAM8zJQt_VBHtMKBFV+CnAh12Wbny1FPXxVft=rPv2ZKwYBkqaQ@mail.gmail.com>
+References: <CAM8zJQuS3vg8BT-wbj1PMc=7-0YkB392Y3rsHj6h0d7YTVCZhg@mail.gmail.com> <25939.28609.433944.601534@rob.eddelbuettel.com> <CAM8zJQuHJ2F2RMri=4WrC9_kyhJ5qN4fAQ93hwj7W9CSd+rSzQ@mail.gmail.com> <25939.31060.636442.996270@rob.eddelbuettel.com> <25943.46701.169692.438277@rob.eddelbuettel.com> <ZVkcBemFbd7O7jI5@an3as.eu> <CAM8zJQt_VBHtMKBFV+CnAh12Wbny1FPXxVft=rPv2ZKwYBkqaQ@mail.gmail.com>
+Message-ID: <ZVsR3KxcdLYt5rkw@an3as.eu>
+
+Hi Graham,
+
+Am Sun, Nov 19, 2023 at 01:55:04PM -0100 schrieb Graham Inggs:
+> On Sat, 18 Nov 2023 at 19:18, Andreas Tille <andreas at an3as.eu> wrote:
+> > We need some means to follow ABI changes.  In Debian we could use
+> > something like r-matrix-abi-VERSION.
+> 
+> Indeed, this is one solution.  As you saw in [1], upstream now provide
+> an ABI version and a way to extract it:
+> > Matrix will commence ABI versioning in 1.6-2.  The ABI version will be available
+> > in R as Matrix.Version()[["abi"]] and in C as R_MATRIX_ABI_VERSION (from header
+> > Matrix/Matrix.h).  It is numeric_version("1") in Matrix 1.6-2 and _implicitly_
+> > numeric_version("0") in Matrix < 1.6-2.
+
+I'd personally would prefer, if we would implement this ABI versioning
+in our packaging in the long term.
+ 
+> However, since rmatrix has over 100 reverse-dependencies, and only a
+> very small number of these are broken by the ABI change, we feel this
+> may be overkill, but wouldn't dissuade anyone from proposing patches
+> to implement this.
+
+This somehow reminds me to bug #1040038 where r-graphics-engine was
+implemented in r-base.  I'm willing to help with the implementation of
+R_MATRIX_ABI_VERSION but my motivation would be increased if the
+authorship of the patches would be mentioned at least in d/changelog
+(which was not the case for r-graphics-engine).
+ 
+> Another option is simply to add a versioned dependency on
+> r-cran-matrix to the affected packages, e.g.:
+> Depends: r-cran-matrix (>= 1.6-2-1)
+> ...but this requires a source change and an upload, is error-prone,
+> and a binNMU would not be sufficient.
+> 
+> We liked the change you made to r-cran-tmb [2], as this allows the
+> affected packages to be binNMU'd and gain a versioned dependency on
+> r-cran-matrix.  Would you please apply this to the other affected
+> packages (only r-cran-irlba and r-cran-openmx, if I understand
+> correctly)?
+
+Done.
+ 
+> Unfortunately, it seems the two-sided dependency introduced
+> subsequently [3], which produces:
+> r-cran-matrix (>= 1.6-2-1), r-cran-matrix (<= 1.6-2-199)
+> ...is too strict, and r-cran-tmb already needs another rebuild due to
+> the upload of rmatrix 1.6-3-1.  Would you please revert that change
+> and upload?
+
+I've reverted this but in previous discussion[4] with Paul we agreed
+upon the strict version dependency.  I think this is only necessary for
+r-cran-tmb (where upstream is enforcing this with a test I'm hesitating
+to patch out).  But maybe upstream can work with the freshly implemented
+R_MATRIX_ABI_VERSION and thus we can come back to upstream if the
+autopkgtest will fire next time (which will happen now after the next
+r-cran-matrix update).
+
+Kind regards
+   Andreas.
+ 
+> [1] https://stat.ethz.ch/pipermail/r-sig-mac/2023-October/014890.html
+> [2] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/commit/92579f72c2db4d51a45cf317f580d790da158f4f
+> [3] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/commit/0a4d35d10f9c875863fa0238287cee8ab25aecdd
+
+[4] https://lists.debian.org/debian-r/2023/11/msg00007.html 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Nov 22 19:46:17 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 22 Nov 2023 20:46:17 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZVH2FPhlTmWJPqmc@an3as.eu>
+References: <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <ZU4MT6Wuqwv8DReF@an3as.eu> <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org> <ZU6uDTCiAcJT3c6X@an3as.eu> <ZVH2FPhlTmWJPqmc@an3as.eu>
+Message-ID: <ZV5aiRC7cdByQKn_@an3as.eu>
+
+Control: tags -1 - moreinfo
+
+r-bioc-sparsearray is accepted in unstable.
+
+Kind regards
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Tue Nov 28 00:22:18 2023
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 28 Nov 2023 09:22:18 +0900
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZV5aiRC7cdByQKn_@an3as.eu>
+References: <ZUptZYWpX9MuGMYk@an3as.eu> <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZU4MT6Wuqwv8DReF@an3as.eu> <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org> <ZU6uDTCiAcJT3c6X@an3as.eu> <ZVH2FPhlTmWJPqmc@an3as.eu> <ZV5aiRC7cdByQKn_@an3as.eu>
+Message-ID: <ZWUyurRhDzioL6QA@kumo.plessy.net>
+
+Le Wed, Nov 22, 2023 at 08:46:17PM +0100, Andreas Tille a écrit :
+> Control: tags -1 - moreinfo
+> 
+> r-bioc-sparsearray is accepted in unstable.
+
+Hello everybody,
+
+would it be possible to have an estimation about when we can expect to
+start the Bioconductor transition ?  I am contributing to Debian mostly
+on my work time and it would be super useful for me to have this
+information in order to better integrate it in my planning.
+
+Regarding my unavailable dates: it is Dec 2nd to 11th, and 23rd to Jan
+8th.
+
+The next Bioconductor release has not been announced but will probably
+take place in April or May 2024.  As time passes I am starting to wonder
+if we should just skip the current one...
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From andreas at an3as.eu  Tue Nov 28 09:10:45 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 28 Nov 2023 10:10:45 +0100
+Subject: Re: Transition issue for r-cran-rstanarm (Was: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2)
+In-Reply-To: <ZWNwSxT2FtGcGz_h@an3as.eu>
+References: <ZVkcBemFbd7O7jI5@an3as.eu> <CAM8zJQt_VBHtMKBFV+CnAh12Wbny1FPXxVft=rPv2ZKwYBkqaQ@mail.gmail.com> <ZVsR3KxcdLYt5rkw@an3as.eu> <CAM8zJQu_6auEZRms2SJG+nYS9jhEymfBVi4LxLBwMGQciMiWxw@mail.gmail.com> <ZVtoKyzIO1xTCCOt@an3as.eu> <CAM8zJQs5cwcVxUavacLYRidAFurOnWbc-3Z9Z=w4zeD=95CuYQ@mail.gmail.com> <ZV0LnhwRa65GTI6F@an3as.eu> <CAM8zJQvYcwKjTGxqDCFyUmwKWSDHVFK51rFc9HKz_W22i-jnLA@mail.gmail.com> <ZWETpom0oe_fNtt7@an3as.eu> <ZWNwSxT2FtGcGz_h@an3as.eu>
+Message-ID: <ZWWulUwKgZZFJ2mi@an3as.eu>
+
+Hi again,
+
+Am Sun, Nov 26, 2023 at 05:20:27PM +0100 schrieb Andreas Tille:
+> > > The remaining regressions seen are caused by unrelated uploads of
+> > > r-cran-seurat/r-cran-seuratobject on 2023-11-01 and
+> 
+> r-cran-seuratobject 5.0.1-1 has migrated to testing today.
+> r-cran-seurat had not passed waiting time.
+
+I have no idea why r-cran-seurat is not profiting from reduced waiting
+time for the transition.
+ 
+> > > r-cran-rstan/r-cran-rstanarm on 2023-10-27 which have not yet
+> > > migrated.
+> 
+> I've asked ftpmaster for removal (see bug #1056913) of some architecture
+> builds for r-cran-rstan which is preventing the migration of this
+> package.
+> 
+> There is another issue for r-cran-rstan which affects a regression
+> for r-cran-projpred for ppc64el architecture[1] which boils down to:
+> 
+>  53s Unpacking pandoc (2.17.1.1-3) ...
+>  54s dpkg-deb: error: <decompress> subprocess was killed by signal (Killed)
+>  54s dpkg: error processing archive /tmp/apt-dpkg-install-geka0F/120-pandoc_2.17.1.1-3_ppc64el.deb (--unpack):
+>  54s  cannot copy extracted data for './usr/bin/pandoc' to '/usr/bin/pandoc.dpkg-new': unexpected end of file or stream
+>  ...
+>  71s Errors were encountered while processing:
+>  71s  /tmp/apt-dpkg-install-geka0F/120-pandoc_2.17.1.1-3_ppc64el.deb
+>  72s E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+It seems this is solved now.  Currently r-cran-rstan seems to wait
+only for r-cran-quickjsr (which I uploaded yesterday unfortunately
+but this should be done tomorrow so even before the unexpectedly
+long waiting period for r-cran-seurat will end).
+ 
+Kind regards
+    Andreas.
+ 
+> [1] https://ci.debian.net/data/autopkgtest/testing/ppc64el/r/r-cran-projpred/40151666/log.gz
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Nov 28 09:16:52 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 28 Nov 2023 10:16:52 +0100
+Subject: Re: Bug#1054657: transition: r-bioc-biocgenerics
+In-Reply-To: <ZWUyurRhDzioL6QA@kumo.plessy.net>
+References: <e6bb2347-9ef3-4de8-a251-1c9121977646@debian.org> <ZUzlu87PkGKpgAVs@kumo.plessy.net> <ZU3tP4vz4MMoABub@kumo.plessy.net> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZU4MT6Wuqwv8DReF@an3as.eu> <8cea56c4-2ed9-4a1a-af05-bbf70c0485d1@debian.org> <ZU6uDTCiAcJT3c6X@an3as.eu> <ZVH2FPhlTmWJPqmc@an3as.eu> <ZV5aiRC7cdByQKn_@an3as.eu> <ZWUyurRhDzioL6QA@kumo.plessy.net>
+Message-ID: <ZWWwBLFgSsC7Z2XI@an3as.eu>
+
+Am Tue, Nov 28, 2023 at 09:22:18AM +0900 schrieb Charles Plessy:
+> would it be possible to have an estimation about when we can expect to
+> start the Bioconductor transition ?  I am contributing to Debian mostly
+> on my work time and it would be super useful for me to have this
+> information in order to better integrate it in my planning.
+
+See my other mail about the current delay.  Probably we both missed
+the "and" in the condition to remove the moreinfo tag[1]
+ 
+> Regarding my unavailable dates: it is Dec 2nd to 11th, and 23rd to Jan
+> 8th.
+> 
+> The next Bioconductor release has not been announced but will probably
+> take place in April or May 2024.  As time passes I am starting to wonder
+> if we should just skip the current one...
+
+I do not think we should skip any release since we might face unexpected
+effects from that skip.  Release team has spotted the unexpected new
+packages as blocker - fine, we seem to have dealt with this.  If now
+real life of lack of developer time will come in as an alternative
+blocker and the transition will take longer than usual this is probably
+nothing we can fix technically.
+
+Kind regards
+    Andreas.
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1054657#189 
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Tue Nov 28 09:31:01 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Tue, 28 Nov 2023 10:31:01 +0100
+Subject: Re: Bug#1054657: Transition issue for r-cran-rstanarm (Was: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2)
+In-Reply-To: <ZWWulUwKgZZFJ2mi@an3as.eu>
+References: <ZVkcBemFbd7O7jI5@an3as.eu> <CAM8zJQt_VBHtMKBFV+CnAh12Wbny1FPXxVft=rPv2ZKwYBkqaQ@mail.gmail.com> <ZVsR3KxcdLYt5rkw@an3as.eu> <CAM8zJQu_6auEZRms2SJG+nYS9jhEymfBVi4LxLBwMGQciMiWxw@mail.gmail.com> <ZVtoKyzIO1xTCCOt@an3as.eu> <CAM8zJQs5cwcVxUavacLYRidAFurOnWbc-3Z9Z=w4zeD=95CuYQ@mail.gmail.com> <ZV0LnhwRa65GTI6F@an3as.eu> <CAM8zJQvYcwKjTGxqDCFyUmwKWSDHVFK51rFc9HKz_W22i-jnLA@mail.gmail.com> <ZWETpom0oe_fNtt7@an3as.eu> <ZWNwSxT2FtGcGz_h@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWWulUwKgZZFJ2mi@an3as.eu>
+Message-ID: <5fe8757f-00d8-4185-96e5-f50bc4cc2f4a@debian.org>
+
+Hi,
+
+On 28-11-2023 10:10, Andreas Tille wrote:
+> I have no idea why r-cran-seurat is not profiting from reduced waiting
+> time for the transition.
+
+Because its tests fail on armel. The reduction of waiting time is only 
+for tests that run successfully on all architectures where they are 
+triggered (as in, where at least some of the binaries build by the 
+source are installable). As the failure isn't a regression, the 
+migration isn't blocked, though.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From ginggs at debian.org  Tue Nov 28 10:29:41 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 28 Nov 2023 09:29:41 -0100
+Subject: Re: Bug#1054657: Transition issue for r-cran-rstanarm (Was: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2)
+In-Reply-To: <5fe8757f-00d8-4185-96e5-f50bc4cc2f4a@debian.org>
+References: <ZVkcBemFbd7O7jI5@an3as.eu> <CAM8zJQt_VBHtMKBFV+CnAh12Wbny1FPXxVft=rPv2ZKwYBkqaQ@mail.gmail.com> <ZVsR3KxcdLYt5rkw@an3as.eu> <CAM8zJQu_6auEZRms2SJG+nYS9jhEymfBVi4LxLBwMGQciMiWxw@mail.gmail.com> <ZVtoKyzIO1xTCCOt@an3as.eu> <CAM8zJQs5cwcVxUavacLYRidAFurOnWbc-3Z9Z=w4zeD=95CuYQ@mail.gmail.com> <ZV0LnhwRa65GTI6F@an3as.eu> <CAM8zJQvYcwKjTGxqDCFyUmwKWSDHVFK51rFc9HKz_W22i-jnLA@mail.gmail.com> <ZWETpom0oe_fNtt7@an3as.eu> <ZWNwSxT2FtGcGz_h@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWWulUwKgZZFJ2mi@an3as.eu> <5fe8757f-00d8-4185-96e5-f50bc4cc2f4a@debian.org>
+Message-ID: <CAM8zJQtgDvcRbwmfYJ+kbAz0dMkbnTC6S+LfZ7nJNt0qfkMhzg@mail.gmail.com>
+
+Hi All
+
+I'm catching up after some AFK time, so I will just fill in some
+details where I can.
+
+On Tue, 28 Nov 2023 at 08:31, Paul Gevers <elbrus at debian.org> wrote:
+> > I have no idea why r-cran-seurat is not profiting from reduced waiting
+> > time for the transition.
+>
+> Because its tests fail on armel. The reduction of waiting time is only
+> for tests that run successfully on all architectures where they are
+> triggered (as in, where at least some of the binaries build by the
+> source are installable). As the failure isn't a regression, the
+> migration isn't blocked, though.
+
+I noticed this today, and added an age hint for r-cran-seurat so it
+should migrate soon.
+
+On Mon, 27 Nov 2023 at 23:22, Charles Plessy <plessy at debian.org> wrote:
+> would it be possible to have an estimation about when we can expect to
+> start the Bioconductor transition ?
+
+We recently announced that britney now considers mips64el to be an
+out-of-sync architecture [1].  We are finding other systems; e.g. UDD
+and BTS, also need changes to accommodate this.  We hope to have this
+resolved and for you to be able to start your transition within the
+next few days.  We don't want to start a big transition and have it
+blocked on missing builds or installability issues on mips64el.
+
+On Sun, 26 Nov 2023 at 15:20, Andreas Tille <andreas at an3as.eu> wrote:
+> > > r-cran-rstan/r-cran-rstanarm on 2023-10-27 which have not yet
+> > > migrated.
+>
+> I've asked ftpmaster for removal (see bug #1056913) of some architecture
+> builds for r-cran-rstan which is preventing the migration of this
+> package.
+
+It seems the armel build was retried by someone and it succeeded [2].
+Fixing the riscv64 build (where it built previously) would be nice, as
+riscv64 is aiming to be a release architecture for trixie, but I do
+not see that being a blocker for this transition.
+
+> There is another issue for r-cran-rstan which affects a regression
+> for r-cran-projpred for ppc64el architecture[1] which boils down to:
+> ...
+> It seems something on this architecture is broken I can't do anything
+> about.  Could you provide help here?
+
+It looks like this was also retried and succeeded [3].
+
+Regards
+Graham
+
+[1] https://lists.debian.org/debian-devel-announce/2023/11/msg00005.html
+[2] https://buildd.debian.org/status/package.php?p=r-cran-rstanarm
+[3] https://ci.debian.net/packages/r/r-cran-projpred/testing/ppc64el/
+
+From tille at debian.org  Tue Nov 28 14:49:56 2023
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 28 Nov 2023 15:49:56 +0100
+Subject: Re: Bug#1054657: Transition issue for r-cran-rstanarm (Was: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2)
+In-Reply-To: <CAM8zJQtgDvcRbwmfYJ+kbAz0dMkbnTC6S+LfZ7nJNt0qfkMhzg@mail.gmail.com>
+References: <ZVtoKyzIO1xTCCOt@an3as.eu> <CAM8zJQs5cwcVxUavacLYRidAFurOnWbc-3Z9Z=w4zeD=95CuYQ@mail.gmail.com> <ZV0LnhwRa65GTI6F@an3as.eu> <CAM8zJQvYcwKjTGxqDCFyUmwKWSDHVFK51rFc9HKz_W22i-jnLA@mail.gmail.com> <ZWETpom0oe_fNtt7@an3as.eu> <ZWNwSxT2FtGcGz_h@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWWulUwKgZZFJ2mi@an3as.eu> <5fe8757f-00d8-4185-96e5-f50bc4cc2f4a@debian.org> <CAM8zJQtgDvcRbwmfYJ+kbAz0dMkbnTC6S+LfZ7nJNt0qfkMhzg@mail.gmail.com>
+Message-ID: <ZWX-FBSOIzT3d1Tw@an3as.eu>
+
+Hi Graham,
+
+Am Tue, Nov 28, 2023 at 09:29:41AM -0100 schrieb Graham Inggs:
+> > for tests that run successfully on all architectures where they are
+> > triggered (as in, where at least some of the binaries build by the
+> > source are installable). As the failure isn't a regression, the
+> > migration isn't blocked, though.
+> 
+> I noticed this today, and added an age hint for r-cran-seurat so it
+> should migrate soon.
+
+Thanks a lot for this.
+ 
+> On Mon, 27 Nov 2023 at 23:22, Charles Plessy <plessy at debian.org> wrote:
+> > would it be possible to have an estimation about when we can expect to
+> > start the Bioconductor transition ?
+> 
+> We recently announced that britney now considers mips64el to be an
+> out-of-sync architecture [1].  We are finding other systems; e.g. UDD
+> and BTS, also need changes to accommodate this.  We hope to have this
+> resolved and for you to be able to start your transition within the
+> next few days.  We don't want to start a big transition and have it
+> blocked on missing builds or installability issues on mips64el.
+
+Perfectly understandable.
+
+> On Sun, 26 Nov 2023 at 15:20, Andreas Tille <andreas at an3as.eu> wrote:
+> > I've asked ftpmaster for removal (see bug #1056913) of some architecture
+> > builds for r-cran-rstan which is preventing the migration of this
+> > package.
+> 
+> It seems the armel build was retried by someone and it succeeded [2].
+> Fixing the riscv64 build (where it built previously) would be nice, as
+> riscv64 is aiming to be a release architecture for trixie, but I do
+> not see that being a blocker for this transition.
+
+I confirm having all achitectures building would be great, specifically
+all 64bit architectures which are potentially used architectures,
+thought.  As a general statement I'm personally lacking knowledge and
+time to resolve issues like this but try to inform upstream at least.
+Actually risc64 is not affected by #1056913 which seems to have resolved
+now for all architectures except mips64el which is to be expected.  Thus
+I will close the said bug.
+ 
+> > There is another issue for r-cran-rstan which affects a regression
+> > for r-cran-projpred for ppc64el architecture[1] which boils down to:
+> > ...
+> > It seems something on this architecture is broken I can't do anything
+> > about.  Could you provide help here?
+> 
+> It looks like this was also retried and succeeded [3].
+
+Looks good.  So if I understood correctly we are now rather waiting for
+some infrastructure issues to start the transition and we should simply
+sit-n-wait for the green light, right?
+
+Kind regards
+    Andreas.
+ 
+> [1] https://lists.debian.org/debian-devel-announce/2023/11/msg00005.html
+> [2] https://buildd.debian.org/status/package.php?p=r-cran-rstanarm
+> [3] https://ci.debian.net/packages/r/r-cran-projpred/testing/ppc64el/
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Wed Nov 29 13:29:24 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 29 Nov 2023 12:29:24 -0100
+Subject: Re: Bug#1054657: Transition issue for r-cran-rstanarm (Was: Bug#1055922: rmatrix: ABI change in Matrix 1.6-2)
+In-Reply-To: <ZWX-FBSOIzT3d1Tw@an3as.eu>
+References: <ZVtoKyzIO1xTCCOt@an3as.eu> <CAM8zJQs5cwcVxUavacLYRidAFurOnWbc-3Z9Z=w4zeD=95CuYQ@mail.gmail.com> <ZV0LnhwRa65GTI6F@an3as.eu> <CAM8zJQvYcwKjTGxqDCFyUmwKWSDHVFK51rFc9HKz_W22i-jnLA@mail.gmail.com> <ZWETpom0oe_fNtt7@an3as.eu> <ZWNwSxT2FtGcGz_h@an3as.eu> <169841522342.703069.106792157411170494.reportbug@energija.fam-tille.de> <ZWWulUwKgZZFJ2mi@an3as.eu> <5fe8757f-00d8-4185-96e5-f50bc4cc2f4a@debian.org> <CAM8zJQtgDvcRbwmfYJ+kbAz0dMkbnTC6S+LfZ7nJNt0qfkMhzg@mail.gmail.com> <ZWX-FBSOIzT3d1Tw@an3as.eu>
+Message-ID: <CAM8zJQtdMn_CU3Hj7x2_OTZbBNSe8xiYPL6E9xa=NxtqYK2i0A@mail.gmail.com>
+
+Control: tags -1 + confirmed
+
+Hi Andreas
+
+On Tue, 28 Nov 2023 at 13:50, Andreas Tille <tille at debian.org> wrote:
+> Looks good.  So if I understood correctly we are now rather waiting for
+> some infrastructure issues to start the transition and we should simply
+> sit-n-wait for the green light, right?
+
+Please go ahead.  Thank you for your patience.
+
+Regards
+Graham
+
+From andreas at an3as.eu  Thu Nov 30 13:41:01 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 30 Nov 2023 14:41:01 +0100
+Subject: Removed in Bioconductor 3.18: NanoStringQCPro
+Message-ID: <ZWiQ7eJm2iX4gBNB@an3as.eu>
+
+Hi Steffen,
+
+you are listed as Uploader of r-bioc-nanostringqcpro.  This package
+was removed by Bioconductor in release 3.18.  Please decide what to
+do with this package and act accodingly.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+

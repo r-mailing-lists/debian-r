@@ -1,0 +1,112 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2026-08",
+  "messages": [
+    {
+      "id": "msg-83361343c47c",
+      "message_id": "<trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2026-08-02T15:52:59Z",
+      "subject": "routine-update of BioConductor data packages -> d/watch",
+      "subject_clean": "routine-update of BioConductor data packages -> d/watch",
+      "in_reply_to": null,
+      "references": [
+        "<trinity-512e62e9-2752-4bb7-986d-99c7152b2a90-1785685635297@trinity-msg-rest-gmx-gmx-live-75f46566bb-qsl76>"
+      ],
+      "body_plain": "Hello,\n\nhttps://bioconductor.org/packages/release/data/experiment/html/tximportData.html\n\nr-bioc-tximportdata has a different home page than the more algorithmic packages and thus needs a different d/watch template.\nRoutine-update should anticipate that but happily applies the wrong one. And then does not find the updated version of the package.\nI have reverted routine-update's change to d/watch as a quick hack.\n\nSomeone of yours certainly has this more less under their fingers, I am confident :)\n\nCheers,\nSteffen",
+      "body_snippet": "Hello,\n\nhttps://bioconductor.org/packages/release/data/experiment/html/tximportData.html\n\nr-bioc-tximportdata has a different home page than the more algorithmic packages and thus needs a different d/",
+      "thread_id": "thread-83361343c47c",
+      "thread_depth": 0,
+      "month": "2026-08"
+    },
+    {
+      "id": "msg-bb5d621d7b0e",
+      "message_id": "<anUf7ickxQe-4at7@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-08-06T23:59:42Z",
+      "subject": "Re: routine-update of BioConductor data packages -> d/watch",
+      "subject_clean": "routine-update of BioConductor data packages -> d/watch",
+      "in_reply_to": "<trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>",
+      "references": [
+        "<trinity-512e62e9-2752-4bb7-986d-99c7152b2a90-1785685635297@trinity-msg-rest-gmx-gmx-live-75f46566bb-qsl76>",
+        "<trinity-52f7de8b-75d5-468d-b8b3-835f777df83d-1785685979249@trinity-msg-rest-gmx-gmx-live-75f46566bb-6m8gx>"
+      ],
+      "body_plain": "Le Sun, Aug 02, 2026 at 03:52:59PM +0000, Steffen Möller a écrit :\n> https://bioconductor.org/packages/release/data/experiment/html/tximportData.html\n> r-bioc-tximportdata has a different home page than the more algorithmic\n> packages and thus needs a different d/watch template.\n\nHi Steffen,\n\nyou are right; sorry for not catching it up earlier.\n\nI will fix the uscan templates but in the meantime you need to add the\nfollowing line to experiment data packages (and something similar\nfor annotation packages).\n\n    Download-Url-Mangle: s%.*/src/contrib/%https://bioconductor.org/packages/release/data/experiment/src/contrib/%\n\nI have added the following line to routine-update as a transiennt fix.\n\n    grep -q ExperimentData DESCRIPTION && echo 'Downloadurlmangle: s%.*/src/contrib/%https://bioconductor.org/packages/release/data/experiment/src/contrib/%' >> debian/watch\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Le Sun, Aug 02, 2026 at 03:52:59PM +0000, Steffen Möller a écrit :\n> https://bioconductor.org/packages/release/data/experiment/html/tximportData.html\n> r-bioc-tximportdata has a different home page th",
+      "thread_id": "thread-83361343c47c",
+      "thread_depth": 1,
+      "month": "2026-08"
+    },
+    {
+      "id": "msg-fc31d149e5c2",
+      "message_id": "<178651533300.408835.3677805775874655456.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-08-12T06:15:33Z",
+      "subject": "Bug#1144191: RM: r-bioc-interactivedisplaybase -- ROM; Abandonned upstream",
+      "subject_clean": "Bug#1144191: RM: r-bioc-interactivedisplaybase -- ROM; Abandonned upstream",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-interactivedisplaybase at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-bioc-interactivedisplaybase\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\n\nDear Archives Operation team,\n\nr-bioc-interactivedisplaybase is not maintained anymore upstream and has\na popcon vote score that can be counted on a single hand, so let's\nremove it from Debian too.\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-bioc-interactivedisplaybase at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl:",
+      "thread_id": "thread-fc31d149e5c2",
+      "thread_depth": 0,
+      "month": "2026-08"
+    },
+    {
+      "id": "msg-35a982b0e6cd",
+      "message_id": "<178728518285.2464642.5372404194519353994.reportbug@grsu-plessy-xps.oist.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-08-21T04:06:22Z",
+      "subject": "Bug#1144974: RM: r-cran-diffobj [armel armhf s390x] -- ROM; Not supported on these architectures.",
+      "subject_clean": "Bug#1144974: RM: r-cran-diffobj [armel armhf s390x] -- ROM; Not supported on these architectures.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org\nControl: affects -1 + src:r-cran-diffobj\nUser: ftp.debian.org at packages.debian.org\nUsertags: remove\nUser: debian-arm at lists.debian.org\nUsertags: armel armhf\nUser: debian-s390 at lists.debian.org\nUsertags: s390x\nUser: debian-arm at lists.debian.org\nUsertags: armel armhf\nUser: debian-s390 at lists.debian.org\nUsertags: s390x\nUser: debian-hurd at lists.debian.org\nUsertags: hurd-i386\n\nHi Thorsten and all,\n\nIt looks like r-cran-diffobj slipped between the previous waves or\nr-cran* arch-specific removals.  Can you remove it?\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: ftp.debian.org\nSeverity: normal\nX-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hu",
+      "thread_id": "thread-35a982b0e6cd",
+      "thread_depth": 0,
+      "month": "2026-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-83361343c47c",
+      "subject": "routine-update of BioConductor data packages -> d/watch",
+      "message_count": 2,
+      "participants": [
+        "Charles Plessy",
+        "Steffen Möller"
+      ],
+      "started": "2026-08-02T15:52:59Z",
+      "last_reply": "2026-08-06T23:59:42Z",
+      "root_message_id": "msg-83361343c47c"
+    },
+    {
+      "id": "thread-fc31d149e5c2",
+      "subject": "Bug#1144191: RM: r-bioc-interactivedisplaybase -- ROM; Abandonned upstream",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-08-12T06:15:33Z",
+      "last_reply": "2026-08-12T06:15:33Z",
+      "root_message_id": "msg-fc31d149e5c2"
+    },
+    {
+      "id": "thread-35a982b0e6cd",
+      "subject": "Bug#1144974: RM: r-cran-diffobj [armel armhf s390x] -- ROM; Not supported on these architectures.",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-08-21T04:06:22Z",
+      "last_reply": "2026-08-21T04:06:22Z",
+      "root_message_id": "msg-35a982b0e6cd"
+    }
+  ]
+}

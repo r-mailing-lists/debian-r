@@ -1,0 +1,1562 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2018-04",
+  "messages": [
+    {
+      "id": "msg-820391db2b67",
+      "message_id": "<23234.12349.764337.393239@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-02T13:29:33Z",
+      "subject": "Minor dh-r bug",
+      "subject_clean": "Minor dh-r bug",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "'Priority: recommended' is not picked up as it is compared to 'Recommended'\n(ie with a capital R), so packages like r-cran-cluster and r-cran-matrix,\nwhich used to go to /usr/lib/R/library by our convention now end up in\n/usr/lib/R/site-library like all others.\n\nI changed line 102 in R.pm from\n\n    if (${desc}->{Priority} eq \"Recommended\") {\n\nto recognise both cases, but somehow it didn't propagate.\n\nCould one of you please look into this?\n\nThanks,  Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "'Priority: recommended' is not picked up as it is compared to 'Recommended'\n(ie with a capital R), so packages like r-cran-cluster and r-cran-matrix,\nwhich used to go to /usr/lib/R/library by our conv",
+      "thread_id": "thread-820391db2b67",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-9c8e0b3d8d9b",
+      "message_id": "<20180403131830.foojtrjamgfdnth6@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-03T13:18:30Z",
+      "subject": "Re: Minor dh-r bug",
+      "subject_clean": "Minor dh-r bug",
+      "in_reply_to": "<23234.12349.764337.393239@rob.eddelbuettel.com>",
+      "references": [
+        "<23234.12349.764337.393239@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nOn Mon, Apr 02, 2018 at 08:29:33AM -0500, Dirk Eddelbuettel wrote:\n> \n> 'Priority: recommended' is not picked up as it is compared to 'Recommended'\n> (ie with a capital R), so packages like r-cran-cluster and r-cran-matrix,\n> which used to go to /usr/lib/R/library by our convention now end up in\n> /usr/lib/R/site-library like all others.\n> \n> I changed line 102 in R.pm from\n> \n>     if (${desc}->{Priority} eq \"Recommended\") {\n> \n> to recognise both cases, but somehow it didn't propagate.\n\nIt would help if you could somehow provide your preliminary packaging to\ntest the changes without doing the migration work you probably have\ndone.  May be you also post your actual attempt to patch R.pm.\nSomething like this\n\n$ git diff\ndiff --git a/dh/R.pm b/dh/R.pm\nindex f70905d..ea62392 100644\n--- a/dh/R.pm\n+++ b/dh/R.pm\n@@ -99,7 +99,7 @@ sub install {\n \n     # Priority: Recommended should go in /library instead of /site-library\n     my $libdir = \"usr/lib/R/site-library\";\n-    if ($desc->{Priority} eq \"Recommended\") {\n+    if (lc($desc->{Priority}) eq \"recommended\") {\n         $libdir = \"usr/lib/R/library\";\n         say \"I: R package with Priority: $desc->{Priority}, installing in $libdir\";\n     }\n\nshould work.\n\n> Could one of you please look into this?\n\nI think its better to file a bug report.  I would have tagged it with\n\"more info: please provide your actual usage of dh-r\" to make it easier\nto check.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dirk,\n\nOn Mon, Apr 02, 2018 at 08:29:33AM -0500, Dirk Eddelbuettel wrote:\n> \n> 'Priority: recommended' is not picked up as it is compared to 'Recommended'\n> (ie with a capital R), so packages like ",
+      "thread_id": "thread-820391db2b67",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-be29c093e686",
+      "message_id": "<23235.33667.593136.352775@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-03T13:37:07Z",
+      "subject": "Re: Minor dh-r bug",
+      "subject_clean": "Minor dh-r bug",
+      "in_reply_to": "<20180403131830.foojtrjamgfdnth6@an3as.eu>",
+      "references": [
+        "<23234.12349.764337.393239@rob.eddelbuettel.com>",
+        "<20180403131830.foojtrjamgfdnth6@an3as.eu>"
+      ],
+      "body_plain": "On 3 April 2018 at 15:18, Andreas Tille wrote:\n| It would help if you could somehow provide your preliminary packaging to\n| test the changes without doing the migration work you probably have\n\nhttps://salsa.debian.org/edd/r-cran-cluster\nhttps://salsa.debian.org/edd/r-cran-matrix\n\n| done.  May be you also post your actual attempt to patch R.pm.\n\nI did essentially what you did below.  But I wasn't thinking straight as I\ndidn't change it in my pbuilder.  Not enough coffee yesterday it seems.\n\nThe diff below should work. \n\nDirk\n\n| Something like this\n| \n| $ git diff\n| diff --git a/dh/R.pm b/dh/R.pm\n| index f70905d..ea62392 100644\n| --- a/dh/R.pm\n| +++ b/dh/R.pm\n| @@ -99,7 +99,7 @@ sub install {\n|  \n|      # Priority: Recommended should go in /library instead of /site-library\n|      my $libdir = \"usr/lib/R/site-library\";\n| -    if ($desc->{Priority} eq \"Recommended\") {\n| +    if (lc($desc->{Priority}) eq \"recommended\") {\n|          $libdir = \"usr/lib/R/library\";\n|          say \"I: R package with Priority: $desc->{Priority}, installing in $libdir\";\n|      }\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 3 April 2018 at 15:18, Andreas Tille wrote:\n| It would help if you could somehow provide your preliminary packaging to\n| test the changes without doing the migration work you probably have\n\nhttps:/",
+      "thread_id": "thread-820391db2b67",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-c625ec445370",
+      "message_id": "<20180403142416.hy35xtlmwo7y5rwq@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-03T14:24:16Z",
+      "subject": "Re: Minor dh-r bug",
+      "subject_clean": "Minor dh-r bug",
+      "in_reply_to": "<23235.33667.593136.352775@rob.eddelbuettel.com>",
+      "references": [
+        "<23234.12349.764337.393239@rob.eddelbuettel.com>",
+        "<20180403131830.foojtrjamgfdnth6@an3as.eu>",
+        "<23235.33667.593136.352775@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Tue, Apr 03, 2018 at 08:37:07AM -0500, Dirk Eddelbuettel wrote:\n> | done.  May be you also post your actual attempt to patch R.pm.\n> \n> I did essentially what you did below.  But I wasn't thinking straight as I\n> didn't change it in my pbuilder.  Not enough coffee yesterday it seems.\n> \n> The diff below should work. \n\nOK, feel free to Build-Depend: dh-r (>= 20180403) (just uploaded).\n\nHope this helps\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Apr 03, 2018 at 08:37:07AM -0500, Dirk Eddelbuettel wrote:\n> | done.  May be you also post your actual attempt to patch R.pm.\n> \n> I did essentially what you did below.  But I wasn't thinking ",
+      "thread_id": "thread-820391db2b67",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-bf89a6b6d194",
+      "message_id": "<23235.38282.907146.903066@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-03T14:54:02Z",
+      "subject": "Re: Minor dh-r bug",
+      "subject_clean": "Minor dh-r bug",
+      "in_reply_to": "<20180403142416.hy35xtlmwo7y5rwq@an3as.eu>",
+      "references": [
+        "<23234.12349.764337.393239@rob.eddelbuettel.com>",
+        "<20180403131830.foojtrjamgfdnth6@an3as.eu>",
+        "<23235.33667.593136.352775@rob.eddelbuettel.com>",
+        "<20180403142416.hy35xtlmwo7y5rwq@an3as.eu>"
+      ],
+      "body_plain": "On 3 April 2018 at 16:24, Andreas Tille wrote:\n| OK, feel free to Build-Depend: dh-r (>= 20180403) (just uploaded).\n\nThanks.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 3 April 2018 at 16:24, Andreas Tille wrote:\n| OK, feel free to Build-Depend: dh-r (>= 20180403) (just uploaded).\n\nThanks.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "thread_id": "thread-820391db2b67",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-02e7500530fe",
+      "message_id": "<20180404054635.yhn3rxfstltop752@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-04T05:46:35Z",
+      "subject": "[bob.dybian at gmail.com: Re: dh-r_20180403_source.changes REJECTED]",
+      "subject_clean": "[bob.dybian at gmail.com: Re: dh-r_20180403_source.changes REJECTED]",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Re-uploaded (thanks for watching me)\n\n     Andreas.\n\n----- Forwarded message from Dylan Aïssi <bob.dybian at gmail.com> -----\n\nDate: Tue, 3 Apr 2018 22:20:54 +0200\nFrom: Dylan Aïssi <bob.dybian at gmail.com>\nTo: Andreas Tille <tille at debian.org>\nCc: Debian Science Maintainers <debian-science-maintainers at lists.alioth.debian.org>\nSubject: Re: dh-r_20180403_source.changes REJECTED\n\nHi Andreas,\n\n2018-04-03 17:05 GMT+02:00 Debian FTP Masters <ftpmaster at ftp-master.debian.org>:\n>\n> Source-only uploads to NEW are not allowed.\n>\n> binary:pkg-r-autopkgtest is NEW.\n>\n\nThanks for the upload of dh-r, unfortunately it was rejected because a\nnew binary package is generated. The new binary package is\npkg-r-autopkgtest which is design to improve the Testsuite:\nautopkgtest-pkg-r. Could you upload it again to NEW?\n\nThanks.\n\nBest,\nDylan\n\n----- End forwarded message -----\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Re-uploaded (thanks for watching me)\n\n     Andreas.\n\n----- Forwarded message from Dylan Aïssi <bob.dybian at gmail.com> -----\n\nDate: Tue, 3 Apr 2018 22:20:54 +0200\nFrom: Dylan Aïssi <bob.dybian at gma",
+      "thread_id": "thread-02e7500530fe",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-0f9f9e028c31",
+      "message_id": "<152292831337.14122.2566228157500258506.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-05T11:38:33Z",
+      "subject": "Bug#894899: ITP: r-cran-mda -- GNU R mixture and flexible discriminant analysis",
+      "subject_clean": "Bug#894899: ITP: r-cran-mda -- GNU R mixture and flexible discriminant analysis",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-mda\n  Version         : 0.4-10\n  Upstream Author : Trevor Hastie <hastie at stanford.edu>\n* URL             : https://cran.r-project.org/package=mda\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R mixture and flexible discriminant analysis\n This package provides GNU R mixture and flexible discriminant analysis,\n multivariate adaptive regression splines (MARS), BRUTO, ...\n\nRemark: This package is needed to run the test suite of r-cran-caret.\nIt is maintained by the r-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-mda",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-mda\n  Version         : 0.4-10\n  Upstream Author : Trevor Hastie <hastie at stanford.edu>\n* URL ",
+      "thread_id": "thread-0f9f9e028c31",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-067309e09e3b",
+      "message_id": "<152292856895.14191.16620038340385447012.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-05T11:42:48Z",
+      "subject": "Bug#894900: ITP: r-cran-plotmo -- GNU R plot a model's response and residuals",
+      "subject_clean": "Bug#894900: ITP: r-cran-plotmo -- GNU R plot a model's response and residuals",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-plotmo\n  Version         : 3.3.6\n  Upstream Author : Stephen Milborrow <milbo at sonic.net>\n* URL             : https://cran.r-project.org/package=plotmo\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R plot a model's response and residuals\n Plot model surfaces for a wide variety of models\n using partial dependence plots and other techniques.\n Also plot model residuals and other information on the model.\n\nRemark: This package is a predependency of r-cran-earth which is\nneeded to run the test suite of r-cran-caret.\nIt is maintained by the r-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-plotmo",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-plotmo\n  Version         : 3.3.6\n  Upstream Author : Stephen Milborrow <milbo at sonic.net>\n* UR",
+      "thread_id": "thread-067309e09e3b",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-d4d214b3a722",
+      "message_id": "<152292876180.14258.14218727779049843185.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-05T11:46:01Z",
+      "subject": "Bug#894902: ITP: r-cran-earth -- GNU R multivariate adaptive regression splines",
+      "subject_clean": "Bug#894902: ITP: r-cran-earth -- GNU R multivariate adaptive regression splines",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-earth\n  Version         : 4.6.2\n  Upstream Author : Stephen Milborrow <milbo at sonic.net>\n* URL             : https://cran.r-project.org/package=earth\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R multivariate adaptive regression splines\n This GNU R package builds regression models using the techniques in\n Friedman's papers \"Fast MARS\" and \"Multivariate Adaptive Regression\n Splines\" <doi:10.1214/aos/1176347963>.\n (The term \"MARS\" is trademarked and thus not used in the name of the\n package.)\n\nRemark: This package is needed to run the test suite of r-cran-caret.\nIt is maintained by the r-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-earth",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-earth\n  Version         : 4.6.2\n  Upstream Author : Stephen Milborrow <milbo at sonic.net>\n* URL",
+      "thread_id": "thread-d4d214b3a722",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-242d34220b92",
+      "message_id": "<152293072331.15568.5582103384881041619.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-05T12:18:43Z",
+      "subject": "Bug#894904: ITP: r-cran-mlmetrics -- GNU R machine learning evaluation metrics",
+      "subject_clean": "Bug#894904: ITP: r-cran-mlmetrics -- GNU R machine learning evaluation metrics",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-mlmetrics\n  Version         : 1.1.1\n  Upstream Author : Yachen Yan <yanyachen21 at gmail.com>\n* URL             : https://cran.r-project.org/package=MLmetrics\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R machine learning evaluation metrics\n This package contains a collection of evaluation metrics for GNU R,\n including loss, score and utility functions, that measure regression,\n classification and ranking performance.\n\nRemark: This package is needed to run the test suite of r-cran-caret.\nIt is maintained by the r-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-mlmetrics",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-mlmetrics\n  Version         : 1.1.1\n  Upstream Author : Yachen Yan <yanyachen21 at gmail.com>\n* ",
+      "thread_id": "thread-242d34220b92",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-6a1a0071bdb4",
+      "message_id": "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-05T17:01:56Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n| The schedule is now on developer.r-project.org:\n| \n|   Friday 2018-03-23: START\n|   Monday 2018-03-26: GRAND-FEATURE FREEZE (3.5.0 alpha)\n|   Monday 2018-04-09: FEATURE FREEZE (3.5.0 beta)\n|   Monday 2018-04-16: CODE FREEZE (3.5.0 RC)\n|   Friday 2018-04-20: PRERELEASE\n|   Monday 2018-04-23: RELEASE (3.5.0)\n| \n| I guess I can start with experimental uploads around the beta release, rc at\n| the latest.\n\nI put a first r-base 3.4.4.20180405 into experimental.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n| The schedule is now on developer.r-project.org:\n| \n|   Friday 2018-03-23: START\n|   Monday 2018-03-26: GRAND-FEATURE FREEZE (3.5.0 alpha)\n|   Mond",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-3120bef164f5",
+      "message_id": "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-06T01:04:02Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<23238.22148.633279.632987@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n> \n> On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n> | The schedule is now on developer.r-project.org:\n> | \n> |   Friday 2018-03-23: START\n> |   Monday 2018-03-26: GRAND-FEATURE FREEZE (3.5.0 alpha)\n> |   Monday 2018-04-09: FEATURE FREEZE (3.5.0 beta)\n> |   Monday 2018-04-16: CODE FREEZE (3.5.0 RC)\n> |   Friday 2018-04-20: PRERELEASE\n> |   Monday 2018-04-23: RELEASE (3.5.0)\n> | \n> | I guess I can start with experimental uploads around the beta release, rc at\n> | the latest.\n> \n> I put a first r-base 3.4.4.20180405 into experimental.\n\nThanks Dirk,\n\nI wanted to install it, but it needs the packages listed in\nr-recommended to be rebuilt against it.  Do you plan to upload\nthem to experimental as well ?\n\nHave a nice day,\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n> \n> On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n> | The schedule is now on developer.r-project.org:\n> | \n> |   Friday 201",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-862e0627b3a4",
+      "message_id": "<23238.58659.292618.688909@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-06T03:10:27Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+        "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>"
+      ],
+      "body_plain": "On 6 April 2018 at 10:04, Charles Plessy wrote:\n| Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n| > \n| > On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n| > | The schedule is now on developer.r-project.org:\n| > | \n| > |   Friday 2018-03-23: START\n| > |   Monday 2018-03-26: GRAND-FEATURE FREEZE (3.5.0 alpha)\n| > |   Monday 2018-04-09: FEATURE FREEZE (3.5.0 beta)\n| > |   Monday 2018-04-16: CODE FREEZE (3.5.0 RC)\n| > |   Friday 2018-04-20: PRERELEASE\n| > |   Monday 2018-04-23: RELEASE (3.5.0)\n| > | \n| > | I guess I can start with experimental uploads around the beta release, rc at\n| > | the latest.\n| > \n| > I put a first r-base 3.4.4.20180405 into experimental.\n| \n| Thanks Dirk,\n| \n| I wanted to install it, but it needs the packages listed in\n| r-recommended to be rebuilt against it.  Do you plan to upload\n| them to experimental as well ?\n\nGood catch. I better do that too.\n\nOut of curiousity, can you get by if you install just r-base-core ?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 6 April 2018 at 10:04, Charles Plessy wrote:\n| Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n| > \n| > On 21 March 2018 at 08:36, Dirk Eddelbuettel wrote:\n| > | The schedule ",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-54d25f4b256c",
+      "message_id": "<20180406034747.jpfk3naokhcdi2m5@anx191.gsc.riken.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-06T03:47:47Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23238.58659.292618.688909@rob.eddelbuettel.com>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+        "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>",
+        "<23238.58659.292618.688909@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "> | Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n> | > \n> | > I put a first r-base 3.4.4.20180405 into experimental.\n\n> On 6 April 2018 at 10:04, Charles Plessy wrote:\n> | \n> | I wanted to install it, but it needs the packages listed in\n> | r-recommended to be rebuilt against it.  Do you plan to upload\n> | them to experimental as well ?\n\nLe Thu, Apr 05, 2018 at 10:10:27PM -0500, Dirk Eddelbuettel a écrit :\n> \n> Good catch. I better do that too.\n> \n> Out of curiousity, can you get by if you install just r-base-core ?\n\nIndeed, installing r-base-core worked, and then I could install R\npackages from CRAN.  Thanks for the hint.\n\nCheers,\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "> | Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n> | > \n> | > I put a first r-base 3.4.4.20180405 into experimental.\n\n> On 6 April 2018 at 10:04, Charles Plessy wrote:\n> | \n> ",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-886cee9037b1",
+      "message_id": "<23239.59277.287860.46964@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-06T21:33:01Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<20180406034747.jpfk3naokhcdi2m5@anx191.gsc.riken.jp>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+        "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>",
+        "<23238.58659.292618.688909@rob.eddelbuettel.com>",
+        "<20180406034747.jpfk3naokhcdi2m5@anx191.gsc.riken.jp>"
+      ],
+      "body_plain": "On 6 April 2018 at 12:47, Charles Plessy wrote:\n| > | Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n| > | > \n| > | > I put a first r-base 3.4.4.20180405 into experimental.\n| \n| > On 6 April 2018 at 10:04, Charles Plessy wrote:\n| > | \n| > | I wanted to install it, but it needs the packages listed in\n| > | r-recommended to be rebuilt against it.  Do you plan to upload\n| > | them to experimental as well ?\n| \n| Le Thu, Apr 05, 2018 at 10:10:27PM -0500, Dirk Eddelbuettel a écrit :\n| > \n| > Good catch. I better do that too.\n| > \n| > Out of curiousity, can you get by if you install just r-base-core ?\n| \n| Indeed, installing r-base-core worked, and then I could install R\n| packages from CRAN.  Thanks for the hint.\n\nGreat, that's much better. Because some of these packages are used by others,\nI think I would have to fiddle with my pbuilder to also look at experimental\nwhich I'd rather avoid.  So just r-base for now.  Ok?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 6 April 2018 at 12:47, Charles Plessy wrote:\n| > | Le Thu, Apr 05, 2018 at 12:01:56PM -0500, Dirk Eddelbuettel a écrit :\n| > | > \n| > | > I put a first r-base 3.4.4.20180405 into experimental.\n| \n|",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-5e6bf6b99bbd",
+      "message_id": "<20180407003209.rf3j3cuhi5j3zbbn@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-07T00:32:09Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23239.59277.287860.46964@rob.eddelbuettel.com>",
+      "references": [
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<23238.22148.633279.632987@rob.eddelbuettel.com>",
+        "<20180406010402.f4rngietteqxz4jh@anx191.gsc.riken.jp>",
+        "<23238.58659.292618.688909@rob.eddelbuettel.com>",
+        "<20180406034747.jpfk3naokhcdi2m5@anx191.gsc.riken.jp>",
+        "<23239.59277.287860.46964@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "> On 6 April 2018 at 12:47, Charles Plessy wrote:\n> | \n> | Indeed, installing r-base-core worked, and then I could install R\n> | packages from CRAN.  Thanks for the hint.\n\nLe Fri, Apr 06, 2018 at 04:33:01PM -0500, Dirk Eddelbuettel a écrit :\n> \n> Great, that's much better. Because some of these packages are used by others,\n> I think I would have to fiddle with my pbuilder to also look at experimental\n> which I'd rather avoid.  So just r-base for now.  Ok?\n\nOK !\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "> On 6 April 2018 at 12:47, Charles Plessy wrote:\n> | \n> | Indeed, installing r-base-core worked, and then I could install R\n> | packages from CRAN.  Thanks for the hint.\n\nLe Fri, Apr 06, 2018 at 04:3",
+      "thread_id": "thread-6a1a0071bdb4",
+      "thread_depth": 5,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-d34554bd5ac3",
+      "message_id": "<152351835576.8648.17706594312376280991.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-12T07:32:35Z",
+      "subject": "Bug#895509: ITP: r-cran-dorng -- GNU R generic reproducible parallel backend for 'foreach' loops",
+      "subject_clean": "Bug#895509: ITP: r-cran-dorng -- GNU R generic reproducible parallel backend for 'foreach' loops",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-dorng\n  Version         : 1.6.6\n  Upstream Author : Renaud Gaujoux <renaud at tx.technion.ac.il>\n* URL             : https://cran.r-project.org/package=doRNG\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R generic reproducible parallel backend for 'foreach' loops\n This GNU R package provides functions to perform\n reproducible parallel foreach loops, using independent\n random streams as generated by L'Ecuyer's combined\n multiple-recursive generator [L'Ecuyer (1999), <DOI:10.1287/opre.47.1.159>].\n It enables to easily convert standard %dopar% loops into\n fully reproducible loops, independently of the number\n of workers, the task scheduling strategy, or the chosen\n parallel environment and associated foreach backend.\n\nRemark: This package is needed to upgrade r-cran-blockmodeling to its latest\nupstream version.  It will be maintained by the R-pkg team at\n    https://salsa.debian.org/r-pkg-team/r-cran-dorng",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-dorng\n  Version         : 1.6.6\n  Upstream Author : Renaud Gaujoux <renaud at tx.technion.ac.il>",
+      "thread_id": "thread-d34554bd5ac3",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-48bf5ca1b8d6",
+      "message_id": "<152352638964.11544.15128888932581154170.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-12T09:46:29Z",
+      "subject": "Bug#895523: ITP: r-cran-magic -- GNU R create and investigate magic squares",
+      "subject_clean": "Bug#895523: ITP: r-cran-magic -- GNU R create and investigate magic squares",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-magic\n  Version         : 1.5-8-1\n  Upstream Author : Robin K. S. Hankin\n* URL             : https://cran.r-project.org/package=magic\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R create and investigate magic squares\n A collection of efficient, vectorized algorithms for the\n creation and investigation of magic squares and hypercubes, including\n a variety of functions for the manipulation and analysis of\n arbitrarily dimensioned arrays.  The package includes methods for\n creating normal magic squares of any order greater than 2.  The\n ultimate intention is for the package to be a computerized embodiment\n all magic square knowledge, including direct numerical verification\n of properties of magic squares (such as recent results on the\n determinant of odd-ordered semimagic squares).  Some antimagic\n functionality is included.  The package also\n serves as a rebuttal to the often-heard comment \"I thought R\n was just for statistics\".\n\nRemark: This package is needed as a dependency for r-cran-geometry which\nin turn is a new dependency to upgrade r-cran-ddalpha to its latest\nupstream version.  It is maintained by the R-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-magic",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-magic\n  Version         : 1.5-8-1\n  Upstream Author : Robin K. S. Hankin\n* URL             : htt",
+      "thread_id": "thread-48bf5ca1b8d6",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-ae72d05f0282",
+      "message_id": "<152352740156.12020.502176665830713360.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-12T10:03:21Z",
+      "subject": "Bug#895529: ITP: r-cran-geometry -- GNU R mesh generation and surface tesselation",
+      "subject_clean": "Bug#895529: ITP: r-cran-geometry -- GNU R mesh generation and surface tesselation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-geometry\n  Version         : 0.3-6-1\n  Upstream Author : David C. Sterratt <david.c.sterratt at ed.ac.uk>\n* URL             : https://cran.r-project.org/package=geometry\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R mesh generation and surface tesselation\n This GNU R package makes the qhull library (www.qhull.org)\n available in R, in a similar manner as in Octave and MATLAB. Qhull\n computes convex hulls, Delaunay triangulations, halfspace\n intersections about a point, Voronoi diagrams, furthest-site\n Delaunay triangulations, and furthest-site Voronoi diagrams. It\n runs in 2-d, 3-d, 4-d, and higher dimensions. It implements the\n Quickhull algorithm for computing the convex hull. Qhull does not\n support constrained Delaunay triangulations, or mesh generation of\n non-convex objects, but the package does include some R functions\n that allow for this. Currently the package only gives access to\n Delaunay triangulation and convex hull computation.\n\nRemark: This package is needed to upgrade r-cran-ddalpha to its latest\nupstream version.  It is maintained by the R-pkg team at\n   https://salsa.debian.org/r-pkg-team/r-cran-geometry",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-geometry\n  Version         : 0.3-6-1\n  Upstream Author : David C. Sterratt <david.c.sterratt at ",
+      "thread_id": "thread-ae72d05f0282",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-852d4b6e0a0a",
+      "message_id": "<23251.44774.638784.209403@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-15T19:58:30Z",
+      "subject": "More git workflow",
+      "subject_clean": "More git workflow",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Quick word of thanks, again, to Seb and others for earlier help with getting\nthe git workflow right.  I am slowly converting my package to use salsa repos.\n\nI currently have two questions I can't answer but which may be easy pickings\nfor someone here:\n\n- I just had to do an 'out of sequence' package with a security patch for\n  stable (uploaded, DSA forthcoming)\n\n  What is the best way to get that into the proper place in the git repo?\n  Re-import by dsc?\n\n- Once a repo exists, the 'gbp import-orig --uscan' workflow is nice. But it\n  seems that when I done building and finish on 'debcommit -r && git push' I\n  only push master but not pristine-tar and upstream.  Am I missing a git\n  option or setting here?\n\nThanks in advance for any help,  Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Quick word of thanks, again, to Seb and others for earlier help with getting\nthe git workflow right.  I am slowly converting my package to use salsa repos.\n\nI currently have two questions I can't answ",
+      "thread_id": "thread-852d4b6e0a0a",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-9824e1b51c52",
+      "message_id": "<20180415202517.dqcwt3sgs555k4nn@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-15T20:25:17Z",
+      "subject": "Re: More git workflow",
+      "subject_clean": "More git workflow",
+      "in_reply_to": "<23251.44774.638784.209403@rob.eddelbuettel.com>",
+      "references": [
+        "<23251.44774.638784.209403@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk,\n\nOn Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n\n> I currently have two questions I can't answer but which may be easy pickings\n> for someone here:\n> \n> - I just had to do an 'out of sequence' package with a security patch for\n>   stable (uploaded, DSA forthcoming)\n> \n>   What is the best way to get that into the proper place in the git repo?\n>   Re-import by dsc?\n\nI usually deal with this situation by creating a git branch (with the same name\nas the targeted Debian stable release, e.g. \"stretch\"), which starts from the\ngit tag corresponding to the version initially in stable. Then you can work on\nthat branch as you would on master, except that you have to use the\n--git-debian-branch (or --debian-branch, depends on the tool) option of gbp to\nspecify that you are working there.\n\nFor importing an existing .dsc, you could do:\n\n  gbp import-dsc --debian-branch=stretch ${DSC_FILE}\n\n> - Once a repo exists, the 'gbp import-orig --uscan' workflow is nice. But it\n>   seems that when I done building and finish on 'debcommit -r && git push' I\n>   only push master but not pristine-tar and upstream.  Am I missing a git\n>   option or setting here?\n\nYou can use \"git push --all\" (followed by \"git push --tags\").\n\nAn alternative is to use \"gbp push\" (which takes care of everything), but this\nis only available in unstable (not in stretch).\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Dirk,\n\nOn Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n\n> I currently have two questions I can't answer but which may be easy pickings\n> for someone here:\n> \n> - I just had to do",
+      "thread_id": "thread-852d4b6e0a0a",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-943ef67fc3de",
+      "message_id": "<23251.47155.425072.817997@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-15T20:38:11Z",
+      "subject": "Re: More git workflow",
+      "subject_clean": "More git workflow",
+      "in_reply_to": "<20180415202517.dqcwt3sgs555k4nn@villemot.name>",
+      "references": [
+        "<23251.44774.638784.209403@rob.eddelbuettel.com>",
+        "<20180415202517.dqcwt3sgs555k4nn@villemot.name>"
+      ],
+      "body_plain": "Hi Seb,\n\nOn 15 April 2018 at 22:25, Sébastien Villemot wrote:\n| Hi Dirk,\n| \n| On Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n| \n| > I currently have two questions I can't answer but which may be easy pickings\n| > for someone here:\n| > \n| > - I just had to do an 'out of sequence' package with a security patch for\n| >   stable (uploaded, DSA forthcoming)\n| > \n| >   What is the best way to get that into the proper place in the git repo?\n| >   Re-import by dsc?\n| \n| I usually deal with this situation by creating a git branch (with the same name\n| as the targeted Debian stable release, e.g. \"stretch\"), which starts from the\n| git tag corresponding to the version initially in stable. Then you can work on\n| that branch as you would on master, except that you have to use the\n| --git-debian-branch (or --debian-branch, depends on the tool) option of gbp to\n| specify that you are working there.\n| \n| For importing an existing .dsc, you could do:\n| \n|   gbp import-dsc --debian-branch=stretch ${DSC_FILE}\n\nThat is nice.  Can that also 'hook' the branch to a particular commit?\n\n| > - Once a repo exists, the 'gbp import-orig --uscan' workflow is nice. But it\n| >   seems that when I done building and finish on 'debcommit -r && git push' I\n| >   only push master but not pristine-tar and upstream.  Am I missing a git\n| >   option or setting here?\n| \n| You can use \"git push --all\" (followed by \"git push --tags\").\n\nSilly me. Makes sense.  In 'normal git work' I generally just push from one\n(master or feature) branch.\n \n| An alternative is to use \"gbp push\" (which takes care of everything), but this\n| is only available in unstable (not in stretch).\n\nGood to know!\n\nThanks again,  Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Seb,\n\nOn 15 April 2018 at 22:25, Sébastien Villemot wrote:\n| Hi Dirk,\n| \n| On Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n| \n| > I currently have two questions I can't answer bu",
+      "thread_id": "thread-852d4b6e0a0a",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-52dcc401d056",
+      "message_id": "<20180415205839.viamureu3og2zar4@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-15T20:58:39Z",
+      "subject": "Re: More git workflow",
+      "subject_clean": "More git workflow",
+      "in_reply_to": "<23251.47155.425072.817997@rob.eddelbuettel.com>",
+      "references": [
+        "<23251.44774.638784.209403@rob.eddelbuettel.com>",
+        "<20180415202517.dqcwt3sgs555k4nn@villemot.name>",
+        "<23251.47155.425072.817997@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Sun, Apr 15, 2018 at 03:38:11PM -0500, Dirk Eddelbuettel wrote:\n> On 15 April 2018 at 22:25, Sébastien Villemot wrote:\n> | On Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n> | \n> | > I currently have two questions I can't answer but which may be easy pickings\n> | > for someone here:\n> | > \n> | > - I just had to do an 'out of sequence' package with a security patch for\n> | >   stable (uploaded, DSA forthcoming)\n> | > \n> | >   What is the best way to get that into the proper place in the git repo?\n> | >   Re-import by dsc?\n> | \n> | I usually deal with this situation by creating a git branch (with the same name\n> | as the targeted Debian stable release, e.g. \"stretch\"), which starts from the\n> | git tag corresponding to the version initially in stable. Then you can work on\n> | that branch as you would on master, except that you have to use the\n> | --git-debian-branch (or --debian-branch, depends on the tool) option of gbp to\n> | specify that you are working there.\n> | \n> | For importing an existing .dsc, you could do:\n> | \n> |   gbp import-dsc --debian-branch=stretch ${DSC_FILE}\n> \n> That is nice.  Can that also 'hook' the branch to a particular commit?\n\nNo. You have first to create the \"stretch\" branch by hand using regular git tools.\nTypically:\n\n  git branch stretch ${TAG_OR_COMMIT_ID}\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Sun, Apr 15, 2018 at 03:38:11PM -0500, Dirk Eddelbuettel wrote:\n> On 15 April 2018 at 22:25, Sébastien Villemot wrote:\n> | On Sun, Apr 15, 2018 at 02:58:30PM -0500, Dirk Eddelbuettel wrote:\n> | \n> ",
+      "thread_id": "thread-852d4b6e0a0a",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-b7eee0ed190c",
+      "message_id": "<23251.49145.814814.97710@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-15T21:11:21Z",
+      "subject": "Re: More git workflow",
+      "subject_clean": "More git workflow",
+      "in_reply_to": "<20180415205839.viamureu3og2zar4@villemot.name>",
+      "references": [
+        "<23251.44774.638784.209403@rob.eddelbuettel.com>",
+        "<20180415202517.dqcwt3sgs555k4nn@villemot.name>",
+        "<23251.47155.425072.817997@rob.eddelbuettel.com>",
+        "<20180415205839.viamureu3og2zar4@villemot.name>"
+      ],
+      "body_plain": "On 15 April 2018 at 22:58, Sébastien Villemot wrote:\n| On Sun, Apr 15, 2018 at 03:38:11PM -0500, Dirk Eddelbuettel wrote:\n| > On 15 April 2018 at 22:25, Sébastien Villemot wrote:\n| > | For importing an existing .dsc, you could do:\n| > | \n| > |   gbp import-dsc --debian-branch=stretch ${DSC_FILE}\n| > \n| > That is nice.  Can that also 'hook' the branch to a particular commit?\n| \n| No. You have first to create the \"stretch\" branch by hand using regular git tools.\n| Typically:\n| \n|   git branch stretch ${TAG_OR_COMMIT_ID}\n\nThat once again makes perfect sense, thank you.\n\n(My standard flow is 'git checkcout -b somebranch' which I presume can also\ntake a commit_id.)\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 15 April 2018 at 22:58, Sébastien Villemot wrote:\n| On Sun, Apr 15, 2018 at 03:38:11PM -0500, Dirk Eddelbuettel wrote:\n| > On 15 April 2018 at 22:25, Sébastien Villemot wrote:\n| > | For importing a",
+      "thread_id": "thread-852d4b6e0a0a",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-70ae99ecd08d",
+      "message_id": "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-17T21:30:19Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+      "references": [
+        "<23217.19208.488758.339627@rob.eddelbuettel.com>",
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>"
+      ],
+      "body_plain": "On 23 March 2018 at 14:55, Sébastien Villemot wrote:\n| On Wed, Mar 21, 2018 at 02:38:30PM -0400, Chris Lawrence wrote:\n| > On Mar 21, Sébastien Villemot wrote:\n| > > This proposed scheme does not help for the case where we have to rebuild both\n| > > arch:any and arch:all. But it helps when only arch:any need rebuilds (as for\n| > > the R 3.4 transition).\n| > \n| > Query - is it strictly necessary for us to have a hard dependency on\n| > the r-api-x.y version in the arch:all packages? My understanding is\n| > these should only have R/S code in them, and the R language is pretty\n| > stable, so unless there's a backward-incompatible change in the core\n| > language (like fundamental changes in syntax, like getting rid of the\n| > legacy \"_\"-as-assignment was) can't we just rely on a standard minimum\n| > dependency on R (>= 3.4.0-1)?\n| \n| Even though arch:all packages ship only R code, they still get bytecompiled\n| (into .rds file), so there is a potentially an ABI-compatibility issue if that\n| format changes.\n\nThe argument is a bit of a straw man because R Core signals rather clearly\n_when_ such a change occurs. In the twenty years that I have been behind this\npackage (or helped Doug in the first few of those) we had at most two such\nchanges: One was when the help system format changed; there may have been\nanother. In short, this corresponds to MAJOR changes in R. Which are rare.\n(Binary change happens more often and can happen with minor releases such as\nthe upcoming one.)\n \n| Still, the ABI tracking for arch:all is very different from that for arch:any,\n| so this could justify using two different ABI-like pseudo-packages, as I\n| advocated earlier in this thread.\n\nOr just do away with the api-* virtual package for the binary:arch packages?\n\n| > Obviously this wouldn't help with the 3.5 transition but it would\n| > dramatically simplify things for future ones if we could go ahead and\n| > remove the r-api-x.y dependencies in arch:all packages while doing\n| > the 3.5 transition, assuming there's not something I'm missing\n| > here. All we'd need to do is adjust the arch:all packages to use a\n| > different substvar omitting r-api-x.y, which is a little more work\n| > than a manual rebuild but probably could be automated to some extent.\n| \n| I agree that *right now* is the ideal timing to implement a change in the ABI\n| tracking machinery, since we are going to update all packages if a few weeks.\n\nWhich brings us to the change come Monday?  What shall we do?  \n\nWe have the pre-releases I made in experimental, but that is just (source)\npackage r-base.  Come Monday, how do we go about calling for and scheduling a\ntransition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\nabout all this?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 23 March 2018 at 14:55, Sébastien Villemot wrote:\n| On Wed, Mar 21, 2018 at 02:38:30PM -0400, Chris Lawrence wrote:\n| > On Mar 21, Sébastien Villemot wrote:\n| > > This proposed scheme does not help",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-8f42020d1614",
+      "message_id": "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-17T21:39:51Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+      "references": [
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n\n> We have the pre-releases I made in experimental, but that is just (source)\n> package r-base.  Come Monday, how do we go about calling for and scheduling a\n> transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n> about all this?\n\nThe process it that you upload 3.5.0 to experimental ASAP, and one of us opens\na bug against the release.debian.org pseudopackage. Then we wait for the\nRelease Team's green light (which can possibly take a couple or days, sometimes\neven a few weeks). Only then do you upload 3.5.0 to unstable.\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n\n> We have the pre-releases I made in experimental, but that is just (source)\n> package r-base.  Come Monday, how do we go about call",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-3dbbcf25e291",
+      "message_id": "<23254.27855.60061.205053@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-17T21:53:19Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+      "references": [
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+        "<20180417213951.aty5cuyl53kpb234@villemot.name>"
+      ],
+      "body_plain": "On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| \n| > We have the pre-releases I made in experimental, but that is just (source)\n| > package r-base.  Come Monday, how do we go about calling for and scheduling a\n| > transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n| > about all this?\n| \n| The process it that you upload 3.5.0 to experimental ASAP, and one of us opens\n| a bug against the release.debian.org pseudopackage. Then we wait for the\n| Release Team's green light (which can possibly take a couple or days, sometimes\n| even a few weeks). Only then do you upload 3.5.0 to unstable.\n\nExcellent, that'll work.\n\nR 3.5.0 will be released Monday morning (your timezone) and I usually get to\nit the same morning (my timezone).  I'll poke you then. The alpha, beta and\nrc releases for R 3.5.0 all worked without a hitch, so I expect no issues.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| \n| > We have the pre-releases I made in experimental, but that is just (sour",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-bac58b72b387",
+      "message_id": "<20180418013928.niq6xlly5rcq3lop@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-18T01:39:28Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+      "references": [
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Le Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel a écrit :\n> \n> In the twenty years that I have been behind this package (or helped\n> Doug in the first few of those) we had at most two such changes: One\n> was when the help system format changed; there may have been another.\n\nMaybe the requirement for NAMESPACE files ?\n\n> We have the pre-releases I made in experimental, but that is just (source)\n> package r-base.  Come Monday, how do we go about calling for and scheduling a\n> transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n> about all this?\n\nYes, once the transition starts I hope that this time I will be able to\ndo some uploads from work.\n\nRegarding the first version uploaded to experimental, I could use it to\ninstall a Bioconductor package from scratch with no visible problem.\nThis is not heavy testing, but it is a good sign.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "Le Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel a écrit :\n> \n> In the twenty years that I have been behind this package (or helped\n> Doug in the first few of those) we had at most two such",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-e5ef356d8854",
+      "message_id": "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-18T01:46:09Z",
+      "subject": "Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "subject_clean": "Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nThe 3.7 release of Bioconductor is planned for May 1st.\n\nOn that day, the packages that are currently in the \"devel\" branch will\ngo in the \"current\" branch, which our watch files are tracking.\n\nBioconductor 3.6 is developed and tested on R 3.4, and Bioconductor 3.7\nis developed and tested on R 3.5, for which the transition will soon\nstart Debian.\n\nTherefore, I recommend to wait for Bioconductor 3.7 before rebuilding\nthe r-bioc-* packages against r-base 3.5.  This will save some work.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "Hi all,\n\nThe 3.7 release of Bioconductor is planned for May 1st.\n\nOn that day, the packages that are currently in the \"devel\" branch will\ngo in the \"current\" branch, which our watch files are tracking",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-67b13596eb03",
+      "message_id": "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-18T11:28:02Z",
+      "subject": "Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nGiven that we are going to do source uploads of all arch:all R packages, I\nthink this is a good opportunity to update the Maintainer field of those\npackage to reflect the creation of the Debian R Packages team (and incidentally\nmake things like DDPO/QA and Debian Maintainer Dashboard work for the team, so\nthat we no longer have to reinvent the wheel to see, for example, which\npackages are outdated).\n\nThere has already been a discussion on this topic on debian-science@, to which\nyou can refer for more context.¹\n\nBasically we have two options:\n\n1) team+r-pkg-team at tracker.debian.org\n   Pros: allows fine-tuning of DAK/BTS message subscriptions\n   Cons: human messages go to /dev/null (but this is temporary, see #891504)\n\n2) debian-r at lists.debian.org\n   Pros: simplicity (only one email address for the team, no need to subscribe\n         to tracker.debian.org)\n   Cons: everyone receives all emails for all packages, no tuning possibility\n\nMy preference goes for 1), though I would also be fine with 2).\n\nBest,\n\n¹ https://lists.debian.org/debian-science/2018/01/msg00120.html\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi all,\n\nGiven that we are going to do source uploads of all arch:all R packages, I\nthink this is a good opportunity to update the Maintainer field of those\npackage to reflect the creation of the Debi",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-ded294691017",
+      "message_id": "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-18T12:44:15Z",
+      "subject": "Re: Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>"
+      ],
+      "body_plain": "Hi Sébastien,\n\nOn Wed, Apr 18, 2018 at 01:28:02PM +0200, Sébastien Villemot wrote:\n> Given that we are going to do source uploads of all arch:all R packages, I\n> think this is a good opportunity to update the Maintainer field of those\n> package to reflect the creation of the Debian R Packages team (and incidentally\n> make things like DDPO/QA and Debian Maintainer Dashboard work for the team, so\n> that we no longer have to reinvent the wheel to see, for example, which\n> packages are outdated).\n\nI agree that it is a good point in time and I'd be really happy to end the\nsituation of having at least three maintainer addresses.\n \n> There has already been a discussion on this topic on debian-science@, to which\n> you can refer for more context.¹\n> \n> Basically we have two options:\n> \n> 1) team+r-pkg-team at tracker.debian.org\n>    Pros: allows fine-tuning of DAK/BTS message subscriptions\n>    Cons: human messages go to /dev/null (but this is temporary, see #891504)\n\nWhen reading the bug log of #891504 I do not have the impression that\nthere is any short term solution.  The issue is just recorded but no\nresponse if or when it will be solved.\n \n> 2) debian-r at lists.debian.org\n>    Pros: simplicity (only one email address for the team, no need to subscribe\n>          to tracker.debian.org)\n>    Cons: everyone receives all emails for all packages, no tuning possibility\n\nI think bluring this list with automatic messages, specifically we seem\nto trigger way more of these than human messages also does not seem to\nbe a good idea.\n \n> My preference goes for 1), though I would also be fine with 2).\n\nI slightly agree since the cons of 1) are not as worse as for 2) but I\nsomehow wished we would have a real maintainers list as it was usual in\nthe \"good old days\" of Alioth. ;-)  So I'm somehow wondering whether\ncreating a new list on alioth-lists.debian.net might be a third option.\nIf this is not I'd say:  I do not disagree with 1) but I'm not happy\nabout it.\n\nKind regards\n\n         Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nOn Wed, Apr 18, 2018 at 01:28:02PM +0200, Sébastien Villemot wrote:\n> Given that we are going to do source uploads of all arch:all R packages, I\n> think this is a good opportunity to up",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-c39a045bed8f",
+      "message_id": "<CA+6XHwRYOmux_krzOJ8cBJ_cx-fzCe9+ceDtm1B6mF37z3eZcw@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "00f300ac908213c02a0366ad6b603fb261f552f0600849bd5e9b25dc53cf09ff",
+      "date": "2018-04-18T20:22:01Z",
+      "subject": "dh-r 20180403~bpo9+1",
+      "subject_clean": "dh-r 20180403~bpo9+1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nCould someone upload it? I request this backport to get the new\npackage pkg-r-autopkgtest in Stretch.\n\nThanks\n\nBest,\nDylan\n\ndh-r (20180403~bpo9+1) stretch-backports; urgency=medium\n\n  * Rebuild for stretch-backports.\n\n -- Dylan Aïssi <bob.dybian at gmail.com>  Wed, 18 Apr 2018 21:54:31 +0200",
+      "body_snippet": "Hi,\n\nCould someone upload it? I request this backport to get the new\npackage pkg-r-autopkgtest in Stretch.\n\nThanks\n\nBest,\nDylan\n\ndh-r (20180403~bpo9+1) stretch-backports; urgency=medium\n\n  * Rebuild f",
+      "thread_id": "thread-c39a045bed8f",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-e5b658533c40",
+      "message_id": "<20180418204646.l32dosoeehij4jtf@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-18T20:46:46Z",
+      "subject": "Re: dh-r 20180403~bpo9+1",
+      "subject_clean": "dh-r 20180403~bpo9+1",
+      "in_reply_to": "<CA+6XHwRYOmux_krzOJ8cBJ_cx-fzCe9+ceDtm1B6mF37z3eZcw@mail.gmail.com>",
+      "references": [
+        "<CA+6XHwRYOmux_krzOJ8cBJ_cx-fzCe9+ceDtm1B6mF37z3eZcw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan,\n\nOn Wed, Apr 18, 2018 at 10:22:01PM +0200, Dylan Aïssi wrote:\n> Could someone upload it? I request this backport to get the new\n> package pkg-r-autopkgtest in Stretch.\n> \n> dh-r (20180403~bpo9+1) stretch-backports; urgency=medium\n> \n>   * Rebuild for stretch-backports.\n> \n>  -- Dylan Aïssi <bob.dybian at gmail.com>  Wed, 18 Apr 2018 21:54:31 +0200\n\nMay be you forgot to `git push --all` - so I created the changelog\non my own and uploaded.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dylan,\n\nOn Wed, Apr 18, 2018 at 10:22:01PM +0200, Dylan Aïssi wrote:\n> Could someone upload it? I request this backport to get the new\n> package pkg-r-autopkgtest in Stretch.\n> \n> dh-r (20180403~bp",
+      "thread_id": "thread-c39a045bed8f",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-5ea8ae51652b",
+      "message_id": "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-18T23:22:11Z",
+      "subject": "Re: Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>"
+      ],
+      "body_plain": "On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n\n> > Basically we have two options:\n> > \n> > 1) team+r-pkg-team at tracker.debian.org\n> >    Pros: allows fine-tuning of DAK/BTS message subscriptions\n> >    Cons: human messages go to /dev/null (but this is temporary, see #891504)\n> \n> When reading the bug log of #891504 I do not have the impression that\n> there is any short term solution.  The issue is just recorded but no\n> response if or when it will be solved.\n\nI remember having read on irc that this buxy considered this a bug that he\nwould fix. But there is no ETA, so some uncertainty indeed surrounds this.\n\nAlso note that human emails sent at $PACKAGE at packages.debian.org are not lost,\nonly those directly sent to team+r-pkg-team at tracker.debian.org currently are.\n\n> > 2) debian-r at lists.debian.org\n> >    Pros: simplicity (only one email address for the team, no need to subscribe\n> >          to tracker.debian.org)\n> >    Cons: everyone receives all emails for all packages, no tuning possibility\n> \n> I think bluring this list with automatic messages, specifically we seem\n> to trigger way more of these than human messages also does not seem to\n> be a good idea.\n>  \n> > My preference goes for 1), though I would also be fine with 2).\n> \n> I slightly agree since the cons of 1) are not as worse as for 2) but I\n> somehow wished we would have a real maintainers list as it was usual in\n> the \"good old days\" of Alioth. ;-)  So I'm somehow wondering whether\n> creating a new list on alioth-lists.debian.net might be a third option.\n> If this is not I'd say:  I do not disagree with 1) but I'm not happy\n> about it.\n\nI was not aware of that 3rd option on alioth-lists.debian.net. Are you sure\nthat there is the possibility of creating a new list there? This does not seem\nto be mentioned anywhere.\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n\n> > Basically we have two options:\n> > \n> > 1) team+r-pkg-team at tracker.debian.org\n> >    Pros: allows fine-tuning of DAK/BTS message ",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-ba0a6d9f8ae0",
+      "message_id": "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-19T06:08:48Z",
+      "subject": "Re: Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>"
+      ],
+      "body_plain": "On Thu, Apr 19, 2018 at 01:22:11AM +0200, Sébastien Villemot wrote:\n> On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n> \n> > When reading the bug log of #891504 I do not have the impression that\n> > there is any short term solution.  The issue is just recorded but no\n> > response if or when it will be solved.\n> \n> I remember having read on irc that this buxy considered this a bug that he\n> would fix. But there is no ETA, so some uncertainty indeed surrounds this.\n\nYes, that's my point.\n \n> Also note that human emails sent at $PACKAGE at packages.debian.org are not lost,\n> only those directly sent to team+r-pkg-team at tracker.debian.org currently are.\n\nYes, but $PACKAGE at packages.debian.org is something else than the\nMaintainer address. \n\n> > I slightly agree since the cons of 1) are not as worse as for 2) but I\n> > somehow wished we would have a real maintainers list as it was usual in\n> > the \"good old days\" of Alioth. ;-)  So I'm somehow wondering whether\n> > creating a new list on alioth-lists.debian.net might be a third option.\n> > If this is not I'd say:  I do not disagree with 1) but I'm not happy\n> > about it.\n> \n> I was not aware of that 3rd option on alioth-lists.debian.net. Are you sure\n> that there is the possibility of creating a new list there? This does not seem\n> to be mentioned anywhere.\n\nAs far as I remember this is not mentioned anywhere (may be even the\ncontrary was mentioned).  But may be just nobody has asked for that\noption?  I can not imagine that the \"alioth-lists-savers\" did extra\nmeans to disable the \"create new list feature\" and maintenance wise\nhaving some new lists should be not more work.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Apr 19, 2018 at 01:22:11AM +0200, Sébastien Villemot wrote:\n> On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n> \n> > When reading the bug log of #891504 I do not have the impres",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-f52612217c9b",
+      "message_id": "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-19T06:36:00Z",
+      "subject": "Re: Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>"
+      ],
+      "body_plain": "On Thu, Apr 19, 2018 at 08:08:48AM +0200, Andreas Tille wrote:\n> On Thu, Apr 19, 2018 at 01:22:11AM +0200, Sébastien Villemot wrote:\n> > On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n> > > I slightly agree since the cons of 1) are not as worse as for 2) but I\n> > > somehow wished we would have a real maintainers list as it was usual in\n> > > the \"good old days\" of Alioth. ;-)  So I'm somehow wondering whether\n> > > creating a new list on alioth-lists.debian.net might be a third option.\n> > > If this is not I'd say:  I do not disagree with 1) but I'm not happy\n> > > about it.\n> > \n> > I was not aware of that 3rd option on alioth-lists.debian.net. Are you sure\n> > that there is the possibility of creating a new list there? This does not seem\n> > to be mentioned anywhere.\n> \n> As far as I remember this is not mentioned anywhere (may be even the\n> contrary was mentioned).  But may be just nobody has asked for that\n> option?  I can not imagine that the \"alioth-lists-savers\" did extra\n> means to disable the \"create new list feature\" and maintenance wise\n> having some new lists should be not more work.\n\nAlso remember that alioth-lists.debian.net is only a temporary solution. So if\nwe adopt that (assuming it is possible), we will have to change again in a\ncouple of years.\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Thu, Apr 19, 2018 at 08:08:48AM +0200, Andreas Tille wrote:\n> On Thu, Apr 19, 2018 at 01:22:11AM +0200, Sébastien Villemot wrote:\n> > On Wed, Apr 18, 2018 at 02:44:15PM +0200, Andreas Tille wrote:\n",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-cb51f910b1e4",
+      "message_id": "<CA+6XHwT8xAVMm7jzHsYYc1jCUj4WLwYD2r29wa==LbEavG2NsQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "00f300ac908213c02a0366ad6b603fb261f552f0600849bd5e9b25dc53cf09ff",
+      "date": "2018-04-19T08:04:16Z",
+      "subject": "Re: dh-r 20180403~bpo9+1",
+      "subject_clean": "dh-r 20180403~bpo9+1",
+      "in_reply_to": "<20180418204646.l32dosoeehij4jtf@an3as.eu>",
+      "references": [
+        "<CA+6XHwRYOmux_krzOJ8cBJ_cx-fzCe9+ceDtm1B6mF37z3eZcw@mail.gmail.com>",
+        "<20180418204646.l32dosoeehij4jtf@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\n2018-04-18 22:46 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n>\n> May be you forgot to `git push --all` - so I created the changelog\n> on my own and uploaded.\n>\n\nI did it :-) You created a new branch with a different name than mine.\nBut doesn't matter, I removed my useless branch. Thanks for the upload.\n\nBest,\nDylan",
+      "body_snippet": "Hi Andreas,\n\n2018-04-18 22:46 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n>\n> May be you forgot to `git push --all` - so I created the changelog\n> on my own and uploaded.\n>\n\nI did it :-) You create",
+      "thread_id": "thread-c39a045bed8f",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-90a45bbd0e03",
+      "message_id": "<20180419090911.64evf3a76pydmxiv@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-19T09:09:11Z",
+      "subject": "Re: Choice of a Maintainer address for the team",
+      "subject_clean": "Choice of a Maintainer address for the team",
+      "in_reply_to": "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+        "<20180419063600.3it65c7blfjfmkzc@villemot.name>"
+      ],
+      "body_plain": "On Thu, Apr 19, 2018 at 08:36:00AM +0200, Sébastien Villemot wrote:\n> > > I was not aware of that 3rd option on alioth-lists.debian.net. Are you sure\n> > > that there is the possibility of creating a new list there? This does not seem\n> > > to be mentioned anywhere.\n> > \n> > As far as I remember this is not mentioned anywhere (may be even the\n> > contrary was mentioned).  But may be just nobody has asked for that\n> > option?  I can not imagine that the \"alioth-lists-savers\" did extra\n> > means to disable the \"create new list feature\" and maintenance wise\n> > having some new lists should be not more work.\n> \n> Also remember that alioth-lists.debian.net is only a temporary solution.\n\nIn German there is a saying that there is nothing on this world that\nlives longer than a provisional arrangement. :-P\n\n> So if\n> we adopt that (assuming it is possible), we will have to change again in a\n> couple of years.\n\nI agree that's a possible scenario.  However, we share this situation\nwith lots of other Debian teams and I'm convinced that there will be\nsome solution we do not need to invent just for r-pkg team.  But your\nargument is definitely on the side of \"Cons\" for this option 3) (of\nwhich we even do not know whether it exists).\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Apr 19, 2018 at 08:36:00AM +0200, Sébastien Villemot wrote:\n> > > I was not aware of that 3rd option on alioth-lists.debian.net. Are you sure\n> > > that there is the possibility of creating a ",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 5,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-39e631007f96",
+      "message_id": "<20180419091209.6gnwflqizzvirktx@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-19T09:12:09Z",
+      "subject": "Re: dh-r 20180403~bpo9+1",
+      "subject_clean": "dh-r 20180403~bpo9+1",
+      "in_reply_to": "<CA+6XHwT8xAVMm7jzHsYYc1jCUj4WLwYD2r29wa==LbEavG2NsQ@mail.gmail.com>",
+      "references": [
+        "<CA+6XHwRYOmux_krzOJ8cBJ_cx-fzCe9+ceDtm1B6mF37z3eZcw@mail.gmail.com>",
+        "<20180418204646.l32dosoeehij4jtf@an3as.eu>",
+        "<CA+6XHwT8xAVMm7jzHsYYc1jCUj4WLwYD2r29wa==LbEavG2NsQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan,\n\nOn Thu, Apr 19, 2018 at 10:04:16AM +0200, Dylan Aïssi wrote:\n> 2018-04-18 22:46 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n> > May be you forgot to `git push --all` - so I created the changelog\n> > on my own and uploaded.\n> \n> I did it :-) You created a new branch with a different name than mine.\n> But doesn't matter, I removed my useless branch. Thanks for the upload.\n\nUps sorry - I simply looked in that branch that I'm used to for\nbackporting.  Sorry for not looking more closely.  You are welcome for\nthe upload and thanks for excusing my ignorance ;-)\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dylan,\n\nOn Thu, Apr 19, 2018 at 10:04:16AM +0200, Dylan Aïssi wrote:\n> 2018-04-18 22:46 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n> > May be you forgot to `git push --all` - so I created the c",
+      "thread_id": "thread-c39a045bed8f",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-c94abc374ba0",
+      "message_id": "<20180419093806.g52khzib5awmnsoi@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-19T09:38:06Z",
+      "subject": "Is there an option to create new lists on alioth-lists.debian.net?",
+      "subject_clean": "Is there an option to create new lists on alioth-lists.debian.net?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi alioth-lists.debian.net admins,\n\nat first thanks a lot for the effort you did to safe alioth lists.\nThat's very much appreciated.\n\nThe R-pkg team was founded basically in the process of moving from\nAlioth to Salsa.  Packages containing GNU R code was maintained by\nDebian Science, Debian Med and Debichem and we decided to leave those\nteams and found a common r-pkg team.  Since the creation of lists\non Alioth was not possible at this time any more we are discussing\nnow the options for a common Maintainer field[1].\n\nMy question is now:  Do you consider it a possible option to create a\nnew list on alioth-lists.debian.net we could use as maintainer address.\nI remember this option was never officially announced but I simply\nthink that asking can not really harm.  So would the creation of a\nnew list drain from your time / space resources to much so we do not\neven need to discuss this third option or is this something you could\nimagine in exceptional cases?\n\nKind regards and thanks again for your effort\n\n     Andreas.\n\n[1] https://lists.debian.org/debian-r/2018/04/msg00029.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi alioth-lists.debian.net admins,\n\nat first thanks a lot for the effort you did to safe alioth lists.\nThat's very much appreciated.\n\nThe R-pkg team was founded basically in the process of moving from",
+      "thread_id": "thread-c94abc374ba0",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-360a8097f03b",
+      "message_id": "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-19T09:43:02Z",
+      "subject": "Re: Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "subject_clean": "Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "in_reply_to": "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn Wed, Apr 18, 2018 at 10:46:09AM +0900, Charles Plessy wrote:\n\n> The 3.7 release of Bioconductor is planned for May 1st.\n> \n> On that day, the packages that are currently in the \"devel\" branch will\n> go in the \"current\" branch, which our watch files are tracking.\n> \n> Bioconductor 3.6 is developed and tested on R 3.4, and Bioconductor 3.7\n> is developed and tested on R 3.5, for which the transition will soon\n> start Debian.\n> \n> Therefore, I recommend to wait for Bioconductor 3.7 before rebuilding\n> the r-bioc-* packages against r-base 3.5.  This will save some work.\n\nWe are tied here by the timing of the R transition: we will have to do the\nrebuilds quickly once R 3.5 is uploaded to unstable, which might happen before\nBioconductor 3.7 is released.\n\nHowever, rebuilds come at no cost for arch:any package. For arch:all we have to\ndo sourceful uploads, but this can be automated to some extent.\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Charles,\n\nOn Wed, Apr 18, 2018 at 10:46:09AM +0900, Charles Plessy wrote:\n\n> The 3.7 release of Bioconductor is planned for May 1st.\n> \n> On that day, the packages that are currently in the \"devel\"",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-e2872906c885",
+      "message_id": "<20180419095841.mkenc2bquer2llkp@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-19T09:58:41Z",
+      "subject": "Re: Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "subject_clean": "Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "in_reply_to": "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+        "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>"
+      ],
+      "body_plain": "Hi Sébastien,\n\nOn Thu, Apr 19, 2018 at 11:43:02AM +0200, Sébastien Villemot wrote:\n> > \n> > Therefore, I recommend to wait for Bioconductor 3.7 before rebuilding\n> > the r-bioc-* packages against r-base 3.5.  This will save some work.\n> \n> We are tied here by the timing of the R transition: we will have to do the\n> rebuilds quickly once R 3.5 is uploaded to unstable, which might happen before\n> Bioconductor 3.7 is released.\n> \n> However, rebuilds come at no cost for arch:any package. For arch:all we have to\n> do sourceful uploads, but this can be automated to some extent.\n\nApropos automatisation.  I've spent some time in testing a script that's\njust implementing all routine calls I did for upgrading r-* packages.\nDespite it needs a not yet released version of libconfig-model-dpkg-perl\nI pushed it to\n\n   https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update\n\nfor the comfort of anybody who wants to help keeping R packages up to\ndate.  I would not have announced this before libconfig-model-dpkg-perl\nversion 2.108 is released but this is to be expected soon[1] and the\ntopic of our thread here just fits.  I think after further testing of\nothers and thorough inspection of the results we might move it over to\nthe dh-r package.\n\nHave fun\n\n     Andreas.\n\n[1] https://lists.debian.org/debian-perl/2018/04/msg00020.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nOn Thu, Apr 19, 2018 at 11:43:02AM +0200, Sébastien Villemot wrote:\n> > \n> > Therefore, I recommend to wait for Bioconductor 3.7 before rebuilding\n> > the r-bioc-* packages against r-ba",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-bc6188408ca8",
+      "message_id": "<20180420070658.qwmhtfv6iavt6x4m@urchin.earth.li>",
+      "from_name": "Dominic Hargreaves",
+      "from_email_hash": "7d9d394a8a1a0913ced09c6e44448cabbb794c008bdea722e0b0aa03de7fa11e",
+      "date": "2018-04-20T07:06:58Z",
+      "subject": "Re: Is there an option to create new lists on alioth-lists.debian.net?",
+      "subject_clean": "Is there an option to create new lists on alioth-lists.debian.net?",
+      "in_reply_to": "<20180419093806.g52khzib5awmnsoi@an3as.eu>",
+      "references": [
+        "<20180419093806.g52khzib5awmnsoi@an3as.eu>"
+      ],
+      "body_plain": "On Thu, Apr 19, 2018 at 11:38:06AM +0200, Andreas Tille wrote:\n> Hi alioth-lists.debian.net admins,\n> \n> at first thanks a lot for the effort you did to safe alioth lists.\n> That's very much appreciated.\n> \n> The R-pkg team was founded basically in the process of moving from\n> Alioth to Salsa.  Packages containing GNU R code was maintained by\n> Debian Science, Debian Med and Debichem and we decided to leave those\n> teams and found a common r-pkg team.  Since the creation of lists\n> on Alioth was not possible at this time any more we are discussing\n> now the options for a common Maintainer field[1].\n> \n> My question is now:  Do you consider it a possible option to create a\n> new list on alioth-lists.debian.net we could use as maintainer address.\n> I remember this option was never officially announced but I simply\n> think that asking can not really harm.  So would the creation of a\n> new list drain from your time / space resources to much so we do not\n> even need to discuss this third option or is this something you could\n> imagine in exceptional cases?\n\nHi,\n\nI'm torn on this point. On the one hand it seems wrong to set up new\naddresses on the service when the infrastructure is supposed to be\ntemporary (even if it's for a few years). On the other hand, I see that\nit's definitely still a strong candidate given the various downsides of\nthe other options.\n\nSo yes, creatng new lists for these types of circumstances is definitely\na possibility.\n\nDominic.",
+      "body_snippet": "On Thu, Apr 19, 2018 at 11:38:06AM +0200, Andreas Tille wrote:\n> Hi alioth-lists.debian.net admins,\n> \n> at first thanks a lot for the effort you did to safe alioth lists.\n> That's very much appreciat",
+      "thread_id": "thread-c94abc374ba0",
+      "thread_depth": 1,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-e9f568c79080",
+      "message_id": "<20180420073306.ylfiuragmgs2wte4@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-20T07:33:06Z",
+      "subject": "Re: Is there an option to create new lists on alioth-lists.debian.net?",
+      "subject_clean": "Is there an option to create new lists on alioth-lists.debian.net?",
+      "in_reply_to": "<20180420070658.qwmhtfv6iavt6x4m@urchin.earth.li>",
+      "references": [
+        "<20180419093806.g52khzib5awmnsoi@an3as.eu>",
+        "<20180420070658.qwmhtfv6iavt6x4m@urchin.earth.li>"
+      ],
+      "body_plain": "Hi Dominic,\n\nOn Fri, Apr 20, 2018 at 08:06:58AM +0100, Dominic Hargreaves wrote:\n> I'm torn on this point. On the one hand it seems wrong to set up new\n> addresses on the service when the infrastructure is supposed to be\n> temporary (even if it's for a few years). On the other hand, I see that\n> it's definitely still a strong candidate given the various downsides of\n> the other options.\n> \n> So yes, creatng new lists for these types of circumstances is definitely\n> a possibility.\n\nThanks a lot for this very helpful answer.  We'll let you know once we\nhave a final decision.  I admit it would be my prefered option compared\nto the others but it is not only my decision.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dominic,\n\nOn Fri, Apr 20, 2018 at 08:06:58AM +0100, Dominic Hargreaves wrote:\n> I'm torn on this point. On the one hand it seems wrong to set up new\n> addresses on the service when the infrastructu",
+      "thread_id": "thread-c94abc374ba0",
+      "thread_depth": 2,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-527f9f43aa68",
+      "message_id": "<20180420083931.qpez4allamzjlski@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-20T08:39:31Z",
+      "subject": "Re: Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "subject_clean": "Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "in_reply_to": "<20180419090911.64evf3a76pydmxiv@an3as.eu>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+        "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+        "<20180419090911.64evf3a76pydmxiv@an3as.eu>"
+      ],
+      "body_plain": "Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\nhave three options for the Maintainer field:\n\n1) team+r-pkg-team at tracker.debian.org\n   Cons: humain emails go to /dev/null (considered as a bug, see #891504), no archive\n\n2) debian-r at lists.debian.org\n   Cons: no fine-tuning of package subscribtions, automated messages will be mixed with\n   packagers' discussions\n\n3) a new list at alioth-lists.debian.net\n   Cons: no fine-tuning of package subscribtions, temporary (a few years)\n\nMy ranking is: 1 > 3 > 2\n\nIt would be good if others on this list could express their preference, so that\nwe can reach a decision point.\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\nhave three options for the Maintainer field:\n\n1) team+r-pkg-team at tracker.debian.org\n   Cons: humain emails go to /dev/",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 6,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-22a9b4f6d25e",
+      "message_id": "<20180420084608.h3dqszm5vpznwgwo@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-20T08:46:08Z",
+      "subject": "Re: Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "subject_clean": "Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "in_reply_to": "<20180420083931.qpez4allamzjlski@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+        "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+        "<20180419090911.64evf3a76pydmxiv@an3as.eu>",
+        "<20180420083931.qpez4allamzjlski@villemot.name>"
+      ],
+      "body_plain": "On Fri, Apr 20, 2018 at 10:39:31AM +0200, Sébastien Villemot wrote:\n> Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\n> have three options for the Maintainer field:\n> \n> 1) team+r-pkg-team at tracker.debian.org\n>    Cons: humain emails go to /dev/null (considered as a bug, see #891504), no archive\n> \n> 2) debian-r at lists.debian.org\n>    Cons: no fine-tuning of package subscribtions, automated messages will be mixed with\n>    packagers' discussions\n> \n> 3) a new list at alioth-lists.debian.net\n>    Cons: no fine-tuning of package subscribtions, temporary (a few years)\n> \n> My ranking is: 1 > 3 > 2\n\nJust for completeness here is my ranking:\n\n    3 > 1 > 2\n \n> It would be good if others on this list could express their preference, so that\n> we can reach a decision point.\n\n+1\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, Apr 20, 2018 at 10:39:31AM +0200, Sébastien Villemot wrote:\n> Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\n> have three options for the Maintainer field:\n> \n>",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 7,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-b8371f350af1",
+      "message_id": "<CA+6XHwQwaWCh6F=4qDOQtmR8j-GFJvZgEYrLw0Cb2m4VcaHsWA@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "00f300ac908213c02a0366ad6b603fb261f552f0600849bd5e9b25dc53cf09ff",
+      "date": "2018-04-20T08:50:18Z",
+      "subject": "Re: Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "subject_clean": "Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "in_reply_to": "<20180420083931.qpez4allamzjlski@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+        "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+        "<20180419090911.64evf3a76pydmxiv@an3as.eu>",
+        "<20180420083931.qpez4allamzjlski@villemot.name>"
+      ],
+      "body_plain": "Hi Sébastien,\n\n2018-04-20 10:39 GMT+02:00 Sébastien Villemot <sebastien at debian.org>:\n>\n> 1) team+r-pkg-team at tracker.debian.org\n>    Cons: humain emails go to /dev/null (considered as a bug, see #891504), no archive\n>\n> 2) debian-r at lists.debian.org\n>    Cons: no fine-tuning of package subscribtions, automated messages will be mixed with\n>    packagers' discussions\n>\n> 3) a new list at alioth-lists.debian.net\n>    Cons: no fine-tuning of package subscribtions, temporary (a few years)\n\n1 > 3 > 2\n\nBest,\nDylan",
+      "body_snippet": "Hi Sébastien,\n\n2018-04-20 10:39 GMT+02:00 Sébastien Villemot <sebastien at debian.org>:\n>\n> 1) team+r-pkg-team at tracker.debian.org\n>    Cons: humain emails go to /dev/null (considered as a bug, see ",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 7,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-eda4420b3641",
+      "message_id": "<20180420085545.wzpa3xluwrwqapm3@anx191.gsc.riken.jp>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2018-04-20T08:55:45Z",
+      "subject": "Re: Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "subject_clean": "Choice of a Maintainer address for the team [EVERYONE PLEASE REPLY]",
+      "in_reply_to": "<20180420083931.qpez4allamzjlski@villemot.name>",
+      "references": [
+        "<20180418112802.mk75alsflwvilpsa@villemot.name>",
+        "<20180418124415.j4vh5huenlsfyowv@an3as.eu>",
+        "<20180418232211.gjdwhecl5ks4uvf2@villemot.name>",
+        "<20180419060848.dqimwezfxsqkb7gj@an3as.eu>",
+        "<20180419063600.3it65c7blfjfmkzc@villemot.name>",
+        "<20180419090911.64evf3a76pydmxiv@an3as.eu>",
+        "<20180420083931.qpez4allamzjlski@villemot.name>"
+      ],
+      "body_plain": "Le Fri, Apr 20, 2018 at 10:39:31AM +0200, Sébastien Villemot a écrit :\n> Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\n> have three options for the Maintainer field:\n> \n> 1) team+r-pkg-team at tracker.debian.org\n>    Cons: humain emails go to /dev/null (considered as a bug, see #891504), no archive\n> \n> 2) debian-r at lists.debian.org\n>    Cons: no fine-tuning of package subscribtions, automated messages will be mixed with\n>    packagers' discussions\n> \n> 3) a new list at alioth-lists.debian.net\n>    Cons: no fine-tuning of package subscribtions, temporary (a few years)\n> \n\nHi all,\n\nas long as there is nobody promising to solve #891504, my preference is:\n\n3 > 2 > 1\n\nIf #891504 were solved or soon to be solved: 1 > 3 > 2\n\nIn any case, I will not complain.\n\nHave a nice week-end,\n\n-- \nCharles Plessy\nTsurumi, Kanagawa, Japan",
+      "body_snippet": "Le Fri, Apr 20, 2018 at 10:39:31AM +0200, Sébastien Villemot a écrit :\n> Ok, so given the positive answer of the alioth-lists.debian.net admins, we now\n> have three options for the Maintainer field:\n>",
+      "thread_id": "thread-67b13596eb03",
+      "thread_depth": 7,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-1f8d237bd82b",
+      "message_id": "<23261.49880.186923.106747@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-23T11:26:16Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23254.27855.60061.205053@rob.eddelbuettel.com>",
+      "references": [
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+        "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+        "<23254.27855.60061.205053@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Seb,\n\nOn 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| \n| On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| | On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| | \n| | > We have the pre-releases I made in experimental, but that is just (source)\n| | > package r-base.  Come Monday, how do we go about calling for and scheduling a\n| | > transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n| | > about all this?\n| | \n| | The process it that you upload 3.5.0 to experimental ASAP, and one of us opens\n| | a bug against the release.debian.org pseudopackage. Then we wait for the\n| | Release Team's green light (which can possibly take a couple or days, sometimes\n| | even a few weeks). Only then do you upload 3.5.0 to unstable.\n| \n| Excellent, that'll work.\n| \n| R 3.5.0 will be released Monday morning (your timezone) and I usually get to\n| it the same morning (my timezone).  I'll poke you then. The alpha, beta and\n| rc releases for R 3.5.0 all worked without a hitch, so I expect no issues.\n\nR 3.5.0 was just uploaded to experimental.\n\nCan you please open the transition bug report against release.debian.org?\n\nThanks, Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Seb,\n\nOn 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| \n| On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| | On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| | \n| | > We",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-8f05e38f3fe9",
+      "message_id": "<20180423115707.g2sndev3lzcyo376@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-23T11:57:07Z",
+      "subject": "Bug#896667: transition: r-base-3.5",
+      "subject_clean": "Bug#896667: transition: r-base-3.5",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: transition\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nDear Release Team,\n\nPlease schedule a transition for R 3.5, which has just been uploaded to\nexperimental.\n\nDue to changes in R internals, all R extension packages must be recompiled,\nthat is 573 packages (of which 260 are arch:all, and will therefore need\nsourceful uploads).\n\nThe transition will be managed jointly by Dirk Eddelbuettel and the Debian R\nPackages Team¹ (which ideally should be kept in CC of replies).\n\nWe have not tried to recompile the 500+ packages, but we don’t expect any major\nissue. And should some arise, we stand ready to fix them.\n\nBest,\n\nBen file:\n\ntitle = \"r-base\";\nis_affected = .depends ~ \"r-api-3.4\" | .depends ~ \"r-api-3.5\";\nis_good = .depends ~ \"r-api-3.5\";\nis_bad = .depends ~ \"r-api-3.4\";\n\n¹ https://wiki.debian.org/Teams/r-pkg-team\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: transition\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nDear Release Team,\n\nPlease schedule a tran",
+      "thread_id": "thread-8f05e38f3fe9",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-f4e6076b08fc",
+      "message_id": "<20180423120111.phbk5urcear3l5kr@villemot.name>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2018-04-23T12:01:11Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23261.49880.186923.106747@rob.eddelbuettel.com>",
+      "references": [
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+        "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+        "<23254.27855.60061.205053@rob.eddelbuettel.com>",
+        "<23261.49880.186923.106747@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "OBOn Mon, Apr 23, 2018 at 06:26:16AM -0500, Dirk Eddelbuettel wrote:\n\n> On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n> | \n> | On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n> | | On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n> | | \n> | | > We have the pre-releases I made in experimental, but that is just (source)\n> | | > package r-base.  Come Monday, how do we go about calling for and scheduling a\n> | | > transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n> | | > about all this?\n> | | \n> | | The process it that you upload 3.5.0 to experimental ASAP, and one of us opens\n> | | a bug against the release.debian.org pseudopackage. Then we wait for the\n> | | Release Team's green light (which can possibly take a couple or days, sometimes\n> | | even a few weeks). Only then do you upload 3.5.0 to unstable.\n> | \n> | Excellent, that'll work.\n> | \n> | R 3.5.0 will be released Monday morning (your timezone) and I usually get to\n> | it the same morning (my timezone).  I'll poke you then. The alpha, beta and\n> | rc releases for R 3.5.0 all worked without a hitch, so I expect no issues.\n> \n> R 3.5.0 was just uploaded to experimental.\n> \n> Can you please open the transition bug report against release.debian.org?\n\nThere you go => #896667.\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "OBOn Mon, Apr 23, 2018 at 06:26:16AM -0500, Dirk Eddelbuettel wrote:\n\n> On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n> | \n> | On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n> | | On Tue, ",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-28fe67db0b26",
+      "message_id": "<23261.52122.435138.717060@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-23T12:03:38Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<23261.49880.186923.106747@rob.eddelbuettel.com>",
+      "references": [
+        "<20180320214839.zuf3r2avtsb6dpp5@villemot.name>",
+        "<23217.34732.166963.740400@rob.eddelbuettel.com>",
+        "<20180321093819.2rm3bt4plnzbncme@villemot.name>",
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+        "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+        "<23254.27855.60061.205053@rob.eddelbuettel.com>",
+        "<23261.49880.186923.106747@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Seb,\n\nOn 23 April 2018 at 06:26, Dirk Eddelbuettel wrote:\n| \n| Seb,\n| \n| On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| | \n| | On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| | | On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| | | \n| | | > We have the pre-releases I made in experimental, but that is just (source)\n| | | > package r-base.  Come Monday, how do we go about calling for and scheduling a\n| | | > transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n| | | > about all this?\n| | | \n| | | The process it that you upload 3.5.0 to experimental ASAP, and one of us opens\n| | | a bug against the release.debian.org pseudopackage. Then we wait for the\n| | | Release Team's green light (which can possibly take a couple or days, sometimes\n| | | even a few weeks). Only then do you upload 3.5.0 to unstable.\n| | \n| | Excellent, that'll work.\n| | \n| | R 3.5.0 will be released Monday morning (your timezone) and I usually get to\n| | it the same morning (my timezone).  I'll poke you then. The alpha, beta and\n| | rc releases for R 3.5.0 all worked without a hitch, so I expect no issues.\n| \n| R 3.5.0 was just uploaded to experimental.\n| \n| Can you please open the transition bug report against release.debian.org?\n\nIn case you need motivation for the bug report, doc/NEWS (lines 395-397) has\n\n    * The object header layout has been changed to support merging the\n      ALTREP branch. This requires re-installing packages that use\n      compiled code.\n\nThe package is now part of experimental.\n\nhttps://tracker.debian.org/news/951640/accepted-r-base-350-1-source-amd64-all-into-experimental/\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Seb,\n\nOn 23 April 2018 at 06:26, Dirk Eddelbuettel wrote:\n| \n| Seb,\n| \n| On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| | \n| | On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| | | On Tue,",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-428e29e4c6e5",
+      "message_id": "<23261.53214.134789.33697@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-23T12:21:50Z",
+      "subject": "Re: R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "subject_clean": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "in_reply_to": "<20180423120111.phbk5urcear3l5kr@villemot.name>",
+      "references": [
+        "<23218.23504.905715.413205@rob.eddelbuettel.com>",
+        "<20180321132602.eu6ggyh3d4shwnmf@villemot.name>",
+        "<23218.24526.276359.874085@rob.eddelbuettel.com>",
+        "<20180321135322.x7ap4ftr56f3nwby@villemot.name>",
+        "<20180321183830.GA4264@lordsutch.dyndns.org>",
+        "<20180323135513.j7qnvfujhzj5bh5o@villemot.name>",
+        "<23254.26475.233114.614496@rob.eddelbuettel.com>",
+        "<20180417213951.aty5cuyl53kpb234@villemot.name>",
+        "<23254.27855.60061.205053@rob.eddelbuettel.com>",
+        "<23261.49880.186923.106747@rob.eddelbuettel.com>",
+        "<20180423120111.phbk5urcear3l5kr@villemot.name>"
+      ],
+      "body_plain": "On 23 April 2018 at 14:01, Sébastien Villemot wrote:\n| OBOn Mon, Apr 23, 2018 at 06:26:16AM -0500, Dirk Eddelbuettel wrote:\n| \n| > On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| > | \n| > | On 17 April 2018 at 23:39, Sébastien Villemot wrote:\n| > | | On Tue, Apr 17, 2018 at 04:30:19PM -0500, Dirk Eddelbuettel wrote:\n| > | | \n| > | | > We have the pre-releases I made in experimental, but that is just (source)\n| > | | > package r-base.  Come Monday, how do we go about calling for and scheduling a\n| > | | > transition?  Seb, Charles, ... can you lend me a hand as I am a wee bit green\n| > | | > about all this?\n| > | | \n| > | | The process it that you upload 3.5.0 to experimental ASAP, and one of us opens\n| > | | a bug against the release.debian.org pseudopackage. Then we wait for the\n| > | | Release Team's green light (which can possibly take a couple or days, sometimes\n| > | | even a few weeks). Only then do you upload 3.5.0 to unstable.\n| > | \n| > | Excellent, that'll work.\n| > | \n| > | R 3.5.0 will be released Monday morning (your timezone) and I usually get to\n| > | it the same morning (my timezone).  I'll poke you then. The alpha, beta and\n| > | rc releases for R 3.5.0 all worked without a hitch, so I expect no issues.\n| > \n| > R 3.5.0 was just uploaded to experimental.\n| > \n| > Can you please open the transition bug report against release.debian.org?\n| \n| There you go => #896667.\n\nAwesome, thanks!\n\n[ Had not seen this yet when I wrote this, had not meant to nag. ;-) ]\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 23 April 2018 at 14:01, Sébastien Villemot wrote:\n| OBOn Mon, Apr 23, 2018 at 06:26:16AM -0500, Dirk Eddelbuettel wrote:\n| \n| > On 17 April 2018 at 16:53, Dirk Eddelbuettel wrote:\n| > | \n| > | On 1",
+      "thread_id": "thread-70ae99ecd08d",
+      "thread_depth": 5,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-d8e108b130c1",
+      "message_id": "<20180424065257.iak64sqneatmm3aa@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-24T06:52:57Z",
+      "subject": "Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "subject_clean": "Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "in_reply_to": "<20180419095841.mkenc2bquer2llkp@an3as.eu>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+        "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+        "<20180419095841.mkenc2bquer2llkp@an3as.eu>"
+      ],
+      "body_plain": "On Thu, Apr 19, 2018 at 11:58:41AM +0200, Andreas Tille wrote:\n> Apropos automatisation.  I've spent some time in testing a script that's\n> just implementing all routine calls I did for upgrading r-* packages.\n> Despite it needs a not yet released version of libconfig-model-dpkg-perl\n> I pushed it to\n> \n>    https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/routine-update\n> \n> for the comfort of anybody who wants to help keeping R packages up to\n> date.\n\nThis works now with latest cme + libconfig-model-dpkg-perl from\nunstable.  I'm just calling this script for new versions of R packages\n(and other packages but that's not relevant here) and only check the\nbuild result before uploading.  Thus upgrading packages becomes quite\neasy.  I'd invite others to give it a try.\n\nFor the now needed rebuild we need to enhance the script to work even if\nno new upstream version is available and we should also add a change of\nthe (to be finally decided) Maintainer address.\n\n> I think after further testing of\n> others and thorough inspection of the results we might move it over to\n> the dh-r package.\n\nWhat do you think about this?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Apr 19, 2018 at 11:58:41AM +0200, Andreas Tille wrote:\n> Apropos automatisation.  I've spent some time in testing a script that's\n> just implementing all routine calls I did for upgrading r-* ",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 3,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-afa38767aaa2",
+      "message_id": "<CA+6XHwSGwDR63KFo+yUCEhjihAGOV_5HOqHvKoN857=8k5xmjA@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "00f300ac908213c02a0366ad6b603fb261f552f0600849bd5e9b25dc53cf09ff",
+      "date": "2018-04-24T09:03:21Z",
+      "subject": "Re: Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "subject_clean": "Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "in_reply_to": "<20180424065257.iak64sqneatmm3aa@an3as.eu>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+        "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+        "<20180419095841.mkenc2bquer2llkp@an3as.eu>",
+        "<20180424065257.iak64sqneatmm3aa@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\n2018-04-24 8:52 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n>> I think after further testing of\n>> others and thorough inspection of the results we might move it over to\n>> the dh-r package.\n>\n> What do you think about this?\n>\n\nThanks for this, yes this will be useful as well for the\ncreate_README.source script. I have just two comments:\n\n1. For the routine-update script:\nI think it's not necessary to check if debian/tests exists to add\nTestsuite: autopkgtest-pkg-r into d/control.\nIf I remember well, when both are present (Testsuite:\nautopkgtest-pkg-r and some tests into debian/tests), only tests into\ndebian/tests are executed (I will check it).\nAs I am working to improve autopkgtest-pkg-r (and make useless common\ntests in debian/tests), the \"Testsuite: autopkgtest-pkg-r\" field could\nalways be present into d/control so we will only have to remove tests\nfrom debian/tests in favor of autopkgtest-pkg-r.\n\n2. For the create_README.source script:\nAs suggested by lamby [1], it could be useful to have a more\nmachine-readable format than the current README.source.\nIt should not a big deal but we have to agree on which format do we\nwant, then just let your script do the job to fill the file.\nMaybe we can take this opportunity, to make this file more general and\nnot only useful for RData files. i.e. by adding information about\nother binary data, I'm thinking about feather data files [2] for\nexample.\n\nBest,\nDylan\n\n[1] https://bugs.debian.org/891231\n[2] https://cran.r-project.org/package=feather",
+      "body_snippet": "Hi Andreas,\n\n2018-04-24 8:52 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n>> I think after further testing of\n>> others and thorough inspection of the results we might move it over to\n>> the dh-r pa",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 4,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-fbdeff633a37",
+      "message_id": "<20180424124646.uq2z4iuddl5zep66@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-24T12:46:46Z",
+      "subject": "Re: Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "subject_clean": "Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "in_reply_to": "<CA+6XHwSGwDR63KFo+yUCEhjihAGOV_5HOqHvKoN857=8k5xmjA@mail.gmail.com>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+        "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+        "<20180419095841.mkenc2bquer2llkp@an3as.eu>",
+        "<20180424065257.iak64sqneatmm3aa@an3as.eu>",
+        "<CA+6XHwSGwDR63KFo+yUCEhjihAGOV_5HOqHvKoN857=8k5xmjA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan,\n\nOn Tue, Apr 24, 2018 at 11:03:21AM +0200, Dylan Aïssi wrote:\n> 2018-04-24 8:52 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n> >> I think after further testing of\n> >> others and thorough inspection of the results we might move it over to\n> >> the dh-r package.\n> >\n> > What do you think about this?\n> \n> Thanks for this, yes this will be useful as well for the\n> create_README.source script. I have just two comments:\n\n:-)\n \n> 1. For the routine-update script:\n> I think it's not necessary to check if debian/tests exists to add\n> Testsuite: autopkgtest-pkg-r into d/control.\n> If I remember well, when both are present (Testsuite:\n> autopkgtest-pkg-r and some tests into debian/tests), only tests into\n> debian/tests are executed (I will check it).\n\nIf you have both you get a lintian warning about useless \n  Testsuite: autopkgtest-pkg-r\nHowever, as I recently learned on debian-python list you can use\n\n   debian/tests/control.autodep8\n\ninstead and than both is possible.  May be you verify whether my\nunderstanding is correct and than it would help if we always add\n\n  Testsuite: autopkgtest-pkg-r\n\nand use control.autodep8 if we have some specific test for a package.\n\n> As I am working to improve autopkgtest-pkg-r (and make useless common\n> tests in debian/tests), the \"Testsuite: autopkgtest-pkg-r\" field could\n> always be present into d/control so we will only have to remove tests\n> from debian/tests in favor of autopkgtest-pkg-r.\n\nI was motivated to get rid of a lintian warning - probably the test\nitself was OK.\n\nBTW, I'm currently experimenting with adding dh-update-R to the\nroutine-update script which needs a patch to dh-update-R to keep the\nformatting as done by cme.  I have a rough hack created with my poor\nPerl knowledge.  I'll test with some more packages and will puch then\nbut will ask for further inspection to not break anything.\n \n> 2. For the create_README.source script:\n> As suggested by lamby [1], it could be useful to have a more\n> machine-readable format than the current README.source.\n\nMuhaha, what a bug report.  You try to create more work for us. :-)\n\nHonestly, IMHO that way of documenting binary data field is just a means\nto increase the bureaucracy inbetween maintainers of R packages and\nftpmaster.  I do not see the slightest use for any of our users and I\nwould rather love to see that file go for good than to spent even more\ntime on something where I totally fail to see its use.  The only reason\nwhy this file exists was to convince ftpmaster to let binary files slip\nthrough.  It is obviously redundant documentation since I have proven by\ncreate_README.source that it can be auto generated.  What you are\nrequesting inside the bug report is whether the autogeneration works.\n\n> It should not a big deal but we have to agree on which format do we\n> want, then just let your script do the job to fill the file.\n\nPlease leave me out of this discussion and make sure there will be a\nsomehow working script to call.  I would really love to avoid a\nconversion process from one useless file to another.  I do not think\nthat this bureaucracy is in the interest of our users which should\nhave priority.\n\n> Maybe we can take this opportunity, to make this file more general and\n> not only useful for RData files. i.e. by adding information about\n> other binary data, I'm thinking about feather data files [2] for\n> example.\n\nNo idea what this is and not really motivated to check.\n\nKind regards - but despite my obvious displeasure, thanks anyway to try\nto get things straight and correct which in general is a very good\nfeature\n\n       Andreas.\n\n \n> [1] https://bugs.debian.org/891231\n> [2] https://cran.r-project.org/package=feather\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Dylan,\n\nOn Tue, Apr 24, 2018 at 11:03:21AM +0200, Dylan Aïssi wrote:\n> 2018-04-24 8:52 GMT+02:00 Andreas Tille <andreas at an3as.eu>:\n> >> I think after further testing of\n> >> others and thorough ",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 5,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-35bb5f6c06e1",
+      "message_id": "<23263.47010.918669.186993@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-24T23:02:58Z",
+      "subject": "Re: Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "subject_clean": "Semi-automatic upgrades to new upstream versions (Was: Upcoming Bioconductor 3.7 release, developed for R 3.5.0)",
+      "in_reply_to": "<CA+6XHwSGwDR63KFo+yUCEhjihAGOV_5HOqHvKoN857=8k5xmjA@mail.gmail.com>",
+      "references": [
+        "<20180418014609.zywykatoutocp46u@kumo.plessy.net>",
+        "<20180419094302.t2gg2hl4sntm5t6v@villemot.name>",
+        "<20180419095841.mkenc2bquer2llkp@an3as.eu>",
+        "<20180424065257.iak64sqneatmm3aa@an3as.eu>",
+        "<CA+6XHwSGwDR63KFo+yUCEhjihAGOV_5HOqHvKoN857=8k5xmjA@mail.gmail.com>"
+      ],
+      "body_plain": "On 24 April 2018 at 11:03, Dylan Aïssi wrote:\n| not only useful for RData files. i.e. by adding information about\n| other binary data, I'm thinking about feather data files [2] for\n| example.\n\nFeather is interesting, but potentially 'dead' given all the effort (by the\nsame folks) into Apache Arrow. (They also got IMHO some design aspects wrong,\nignoring compression would be one.)\n\nAnother R-only project that is very good is fst: http://www.fstpackage.org/\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 24 April 2018 at 11:03, Dylan Aïssi wrote:\n| not only useful for RData files. i.e. by adding information about\n| other binary data, I'm thinking about feather data files [2] for\n| example.\n\nFeather",
+      "thread_id": "thread-e5ef356d8854",
+      "thread_depth": 5,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-e023d04571c1",
+      "message_id": "<152482015621.24772.16406575295792758223.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-27T09:09:16Z",
+      "subject": "Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "subject_clean": "Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: debhelper\nSeverity: normal\n\nHi,\n\nthe package dh-r contains a script dh-make-R which creates a debian/\ndir.  This script calls an R module which contains:\n\n   use base 'Debian::Debhelper::Buildsystem';\n\nSince debhelper 11.2 I get:\n\n$ dh-make-R \ndh-make-R: \"debian/control\" not found. Are you sure you are in the correct directory?\nCompilation failed in require at /usr/share/perl5/Debian/Debhelper/Buildsystem.pm line 14.\nBEGIN failed--compilation aborted at /usr/share/perl5/Debian/Debhelper/Buildsystem.pm line 14.\nCompilation failed in require at /usr/share/perl/5.26/base.pm line 136.\n        ...propagated at /usr/share/perl/5.26/base.pm line 158.\nBEGIN failed--compilation aborted at /usr/share/perl5/Debian/Debhelper/Buildsystem/R.pm line 13.\nCompilation failed in require at /usr/bin/dh-make-R line 5.\nBEGIN failed--compilation aborted at /usr/bin/dh-make-R line 5.\n\nI went versions from snapshot.d.o down to 11.1.6 which works nicely and\ndoes not show this error.  Could you please revert the change from\ndebhelper 11.1.6 to 11.2 which makes the existence of debian/control\nrequired?\n\nThanks a lot for maintaining debhelper\n\n      Andreas.\n\n-- System Information:\nDebian Release: 9.0\n  APT prefers stable-updates\n  APT policy: (500, 'stable-updates'), (500, 'stable')\nArchitecture: amd64 (x86_64)\n\nKernel: Linux 4.9.0-5-amd64 (SMP w/1 CPU core)\nLocale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE=de_DE.UTF-8 (charmap=UTF-8)\nShell: /bin/sh linked to /bin/dash\nInit: systemd (via /run/systemd/system)\n\nVersions of packages debhelper depends on:\npn  autotools-dev            <none>\nii  binutils                 2.28-5\npn  dh-autoreconf            <none>\npn  dh-strip-nondeterminism  <none>\nii  dpkg                     1.18.24\npn  dpkg-dev                 <none>\nii  file                     1:5.30-1+deb9u1\nii  libdpkg-perl             1.18.24\nii  man-db                   2.7.6.1-2\nii  perl                     5.24.1-3+deb9u3\npn  po-debconf               <none>\n\ndebhelper recommends no packages.\n\nVersions of packages debhelper suggests:\npn  dh-make  <none>\npn  dwz      <none>",
+      "body_snippet": "Package: debhelper\nSeverity: normal\n\nHi,\n\nthe package dh-r contains a script dh-make-R which creates a debian/\ndir.  This script calls an R module which contains:\n\n   use base 'Debian::Debhelper::Buil",
+      "thread_id": "thread-e023d04571c1",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-1477886a6a6a",
+      "message_id": "<152482346189.26644.16724094462645944863.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-27T10:04:21Z",
+      "subject": "Bug#897030: ITP: r-cran-later -- GNU R utilities for delaying function execution",
+      "subject_clean": "Bug#897030: ITP: r-cran-later -- GNU R utilities for delaying function execution",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-later\n  Version         : 0.7.1\n  Upstream Author : Joe Cheng <joe at rstudio.com>\n* URL             : https://cran.r-project.org/package=later\n* License         : GPL\n  Programming Lang: GNU R\n  Description     : GNU R utilities for delaying function execution\n This GNU R packages enables the execution of arbitrary R or C functions\n some time after the current time, after the R execution stack has\n emptied.\n\nRemark: This package is needed to upgrade r-cran-httpuv to its latest\nupstream version.  It will be maintained by the r-pkg team at\n     https://salsa.debian.org/r-pkg-team/r-cran-later",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-later\n  Version         : 0.7.1\n  Upstream Author : Joe Cheng <joe at rstudio.com>\n* URL        ",
+      "thread_id": "thread-1477886a6a6a",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-6beb671fc078",
+      "message_id": "<152482421725.27969.3136847059566602013.reportbug@mail.an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2018-04-27T10:16:57Z",
+      "subject": "Bug#897033: ITP: r-cran-promises -- GNU R abstractions for promise-based asynchronous programming",
+      "subject_clean": "Bug#897033: ITP: r-cran-promises -- GNU R abstractions for promise-based asynchronous programming",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-promises\n  Version         : 1.0.1\n  Upstream Author : Joe Cheng <joe at rstudio.com>\n* URL             : https://cran.r-project.org/package=promises\n* License         : MIT\n  Programming Lang: GNU R\n  Description     : GNU R abstractions for promise-based asynchronous programming\n Provides fundamental abstractions for doing asynchronous programming\n in R using promises. Asynchronous programming is useful for allowing a single\n R process to orchestrate multiple tasks in the background while also attending\n to something else. Semantics are similar to 'JavaScript' promises, but with a\n syntax that is idiomatic R.\n\nRemark: This package is needed to upgrade r-cran-httpuv to the latest\nupstream version.  It also depenends from the just packaged r-cran-later\nso this needs to be accepted first in new queue by ftpmaster.  The\npackaging will be maintained by thr r-pkg team at\n    https://salsa.debian.org/r-pkg-team/r-cran-promises",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Andreas Tille <tille at debian.org>\n\n* Package name    : r-cran-promises\n  Version         : 1.0.1\n  Upstream Author : Joe Cheng <joe at rstudio.com>\n* URL     ",
+      "thread_id": "thread-6beb671fc078",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-38698cf75afd",
+      "message_id": "<20180428084835.t6rkvfevczvo5rki@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-28T08:48:35Z",
+      "subject": "Please check my latest commit to dh-r with changes to dh-update-R",
+      "subject_clean": "Please check my latest commit to dh-r with changes to dh-update-R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nin my last commit to dh-r[1] I tried to approach the same formatting\nafter calling dh-update-R as cme is creating to get no diff when calling\ndh-update-R and cme in a sequence.  I'm not a Perl programmer and I\nconsider my solution working for the examples I tested but hackish.\n\nI'd be really happy if someone would review this hack.  Once we found\na solution we are happy with we should probably use this formatting for\ndh-make-R as well.\n\nKind regards\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/dh-r/commit/bce1fa1f9379e2d7a1d38152d8b89fd3ca516a5d\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nin my last commit to dh-r[1] I tried to approach the same formatting\nafter calling dh-update-R as cme is creating to get no diff when calling\ndh-update-R and cme in a sequence.  I'm not a Perl pr",
+      "thread_id": "thread-38698cf75afd",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-6fb4897d6404",
+      "message_id": "<20180428085912.pp64cqecbackojbn@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-04-28T08:59:12Z",
+      "subject": "Re: Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "subject_clean": "Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "in_reply_to": "<11ed5a0f-8a5c-b40f-5492-537c1c6de464@thykier.net>",
+      "references": [
+        "<152482015621.24772.16406575295792758223.reportbug@mail.an3as.eu>",
+        "<11ed5a0f-8a5c-b40f-5492-537c1c6de464@thykier.net>"
+      ],
+      "body_plain": "Hi Niels,\n\nOn Sat, Apr 28, 2018 at 07:02:00AM +0000, Niels Thykier wrote:\n> I am sorry to hear that debhelper/11.2 broke dh-make-R.\n> \n> It is not going to be trivial as trivial as I would like to \"undo\" this\n> issue on the debhelper side.  I would basically have to revert the\n> support for \"cmake+ninja\" (etc.) or lock debhelper into never using\n> compat at load/\"compile\" time of the Buildsystem class hierarchy (which\n> will require some needlessly complicated tricks and I fear it will grow\n> unwieldy over time).\n> \n> I have then analysed dh-make-R and it turns out that dh-make-R (and\n> dh-update-R) only needs the \"parse_depends\" function from\n> \"Debian::Debhelper::Buildsystem::R\".  Said function seems like it can\n> easily be extracted into a separate Perl package and imported from there\n> into dh-make-R, dh-update-R and \"Debian::Debhelper::Buildsystem::R\".\n> \n>  * Would this be an option for you?\n\nDefinitely.\n \n> This would avoid hacks on my side and make dh-make-R + dh-update-R less\n> sensitive to \"unrelated\" changes to the Debhelper buildsystem ABI.\n\nPerfectly fine.\n\n> PS: The \"use Debian::Debhelper::Buildsystem::R qw(parse_deps)\" line in\n> dh-make-R and dh-update-R appear to reference a non-existing an unused\n> parse_deps instead of parse_depends.\n\nI admit I'm not a Perl programmer nor did I dived deeply into the\ndh-*-R code.  I'm CCing the list - patches welcome as always.\n\nThanks for your quick response.  Please let me know if there is anything\nunreleased I could test and confirm.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Niels,\n\nOn Sat, Apr 28, 2018 at 07:02:00AM +0000, Niels Thykier wrote:\n> I am sorry to hear that debhelper/11.2 broke dh-make-R.\n> \n> It is not going to be trivial as trivial as I would like to \"un",
+      "thread_id": "thread-6fb4897d6404",
+      "thread_depth": 0,
+      "month": "2018-04"
+    },
+    {
+      "id": "msg-3d4f6f1af734",
+      "message_id": "<23268.39737.470109.797215@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2018-04-28T16:03:05Z",
+      "subject": "New dh-r issue (Was: dpkg-gencontrol mystery and ${R:Depends} error)",
+      "subject_clean": "New dh-r issue (Was: dpkg-gencontrol mystery and ${R:Depends} error)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "(tl;dr: Found it, read to end)\n\nI was about to write the following:\n\n  I am spinnig my wheels here, and am a loss.  I was trying to see if I could\n  build a quick local repo with just r-base-core and r-recommended (to be used\n  in the Docker container for R I maintain), and all of a sudden I noticed that\n  the r-api-* field is no longer substituted. In other words, I see the error\n  \n       dh_gencontrol -O--buildsystem=R\n    dpkg-gencontrol: warning: Depends field of package r-cran-lattice: unknown substitution variable ${R:Depends}\n    dpkg-gencontrol: warning: Depends field of package r-cran-lattice: unknown substitution variable ${R:Depends}\n  \n  during builds, and of course the resulting .deb misses the fields.\n  \n  Things I looked at and tried and excluded:\n  \n  - It is NOT my pbuilder as I can build one package of yours and I get r-api-3.5\n    (I randomly picked r-cran-sourcetools) so things should in fact work\n    \n  - I used different debian/compat values (9 or 11); no effect\n  \n  - I used different Build-Depends: settings for debhelper; no effect\n  \n  - I used different Depends: settings for debhelper (and also added\n    Suggests/Recommends); no effect\n  \n  - I don't think my debian/control etc are broken, but I made a bazillion\n    different attempts without any luck.\n  \n  Pbuilder is otherwise current. I get the same error if I set up a Docker\n  container with unstable:\n  \n    root@09fbf13f719a:/mnt/tmp/cluster-2.0.7-1# dh_gencontrol -O--buildsystem=R                              \n    dpkg-gencontrol: warning: Depends field of package r-cran-cluster: unknown substitution variable ${R:Depends}\n    dpkg-gencontrol: warning: Depends field of package r-cran-cluster: unknown substitution variable ${R:Depends}\n    root@09fbf13f719a:/mnt/tmp/cluster-2.0.7-1# \n  \n  I used the r-base-core etc package uploaded to experimental on Monday, and it\n  does work with some debian/* setups.\n  \n  I tested its support for r-api-3.5 weeks ago when I made the first upload to\n  experimental. It worked then.  I think we used the same dh-r package all along.\n  \n  Any ideas?\n\nand I finally noticed that it is a side-effect of 'Priority: recommended'.\n\nIf I remove that, or try another package, all is well.\n\nSo that would be a dh-r issue.\n\nCould one you who is more familiar with dh-r please look into this? It seems\nthe ${R:Depends} substitution is also affected by the R package priority\n(possibly because it leads to the different install path /usr/lib/R/library/\nfor these packages rather than /usr/local/lib/R/site-library).\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "(tl;dr: Found it, read to end)\n\nI was about to write the following:\n\n  I am spinnig my wheels here, and am a loss.  I was trying to see if I could\n  build a quick local repo with just r-base-core and ",
+      "thread_id": "thread-3d4f6f1af734",
+      "thread_depth": 0,
+      "month": "2018-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-820391db2b67",
+      "subject": "Minor dh-r bug",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2018-04-02T13:29:33Z",
+      "last_reply": "2018-04-03T14:54:02Z",
+      "root_message_id": "msg-820391db2b67"
+    },
+    {
+      "id": "thread-02e7500530fe",
+      "subject": "[bob.dybian at gmail.com: Re: dh-r_20180403_source.changes REJECTED]",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-04T05:46:35Z",
+      "last_reply": "2018-04-04T05:46:35Z",
+      "root_message_id": "msg-02e7500530fe"
+    },
+    {
+      "id": "thread-0f9f9e028c31",
+      "subject": "Bug#894899: ITP: r-cran-mda -- GNU R mixture and flexible discriminant analysis",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-05T11:38:33Z",
+      "last_reply": "2018-04-05T11:38:33Z",
+      "root_message_id": "msg-0f9f9e028c31"
+    },
+    {
+      "id": "thread-067309e09e3b",
+      "subject": "Bug#894900: ITP: r-cran-plotmo -- GNU R plot a model's response and residuals",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-05T11:42:48Z",
+      "last_reply": "2018-04-05T11:42:48Z",
+      "root_message_id": "msg-067309e09e3b"
+    },
+    {
+      "id": "thread-d4d214b3a722",
+      "subject": "Bug#894902: ITP: r-cran-earth -- GNU R multivariate adaptive regression splines",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-05T11:46:01Z",
+      "last_reply": "2018-04-05T11:46:01Z",
+      "root_message_id": "msg-d4d214b3a722"
+    },
+    {
+      "id": "thread-242d34220b92",
+      "subject": "Bug#894904: ITP: r-cran-mlmetrics -- GNU R machine learning evaluation metrics",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-05T12:18:43Z",
+      "last_reply": "2018-04-05T12:18:43Z",
+      "root_message_id": "msg-242d34220b92"
+    },
+    {
+      "id": "thread-6a1a0071bdb4",
+      "subject": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "message_count": 6,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2018-04-05T17:01:56Z",
+      "last_reply": "2018-04-07T00:32:09Z",
+      "root_message_id": "msg-6a1a0071bdb4"
+    },
+    {
+      "id": "thread-d34554bd5ac3",
+      "subject": "Bug#895509: ITP: r-cran-dorng -- GNU R generic reproducible parallel backend for 'foreach' loops",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-12T07:32:35Z",
+      "last_reply": "2018-04-12T07:32:35Z",
+      "root_message_id": "msg-d34554bd5ac3"
+    },
+    {
+      "id": "thread-48bf5ca1b8d6",
+      "subject": "Bug#895523: ITP: r-cran-magic -- GNU R create and investigate magic squares",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-12T09:46:29Z",
+      "last_reply": "2018-04-12T09:46:29Z",
+      "root_message_id": "msg-48bf5ca1b8d6"
+    },
+    {
+      "id": "thread-ae72d05f0282",
+      "subject": "Bug#895529: ITP: r-cran-geometry -- GNU R mesh generation and surface tesselation",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-12T10:03:21Z",
+      "last_reply": "2018-04-12T10:03:21Z",
+      "root_message_id": "msg-ae72d05f0282"
+    },
+    {
+      "id": "thread-852d4b6e0a0a",
+      "subject": "More git workflow",
+      "message_count": 5,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Sébastien Villemot"
+      ],
+      "started": "2018-04-15T19:58:30Z",
+      "last_reply": "2018-04-15T21:11:21Z",
+      "root_message_id": "msg-852d4b6e0a0a"
+    },
+    {
+      "id": "thread-70ae99ecd08d",
+      "subject": "R 3.5.0 on April 23 -- new r-api-3.5 and full rebuilds needed",
+      "message_count": 8,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel",
+        "Sébastien Villemot"
+      ],
+      "started": "2018-04-17T21:30:19Z",
+      "last_reply": "2018-04-23T12:21:50Z",
+      "root_message_id": "msg-70ae99ecd08d"
+    },
+    {
+      "id": "thread-e5ef356d8854",
+      "subject": "Upcoming Bioconductor 3.7 release, developed for R 3.5.0",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Charles Plessy",
+        "Dirk Eddelbuettel",
+        "Dylan Aïssi",
+        "Sébastien Villemot"
+      ],
+      "started": "2018-04-18T01:46:09Z",
+      "last_reply": "2018-04-24T23:02:58Z",
+      "root_message_id": "msg-e5ef356d8854"
+    },
+    {
+      "id": "thread-67b13596eb03",
+      "subject": "Choice of a Maintainer address for the team",
+      "message_count": 10,
+      "participants": [
+        "Andreas Tille",
+        "Charles Plessy",
+        "Dylan Aïssi",
+        "Sébastien Villemot"
+      ],
+      "started": "2018-04-18T11:28:02Z",
+      "last_reply": "2018-04-20T08:55:45Z",
+      "root_message_id": "msg-67b13596eb03"
+    },
+    {
+      "id": "thread-c39a045bed8f",
+      "subject": "dh-r 20180403~bpo9+1",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi"
+      ],
+      "started": "2018-04-18T20:22:01Z",
+      "last_reply": "2018-04-19T09:12:09Z",
+      "root_message_id": "msg-c39a045bed8f"
+    },
+    {
+      "id": "thread-c94abc374ba0",
+      "subject": "Is there an option to create new lists on alioth-lists.debian.net?",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Dominic Hargreaves"
+      ],
+      "started": "2018-04-19T09:38:06Z",
+      "last_reply": "2018-04-20T07:33:06Z",
+      "root_message_id": "msg-c94abc374ba0"
+    },
+    {
+      "id": "thread-8f05e38f3fe9",
+      "subject": "Bug#896667: transition: r-base-3.5",
+      "message_count": 1,
+      "participants": [
+        "Sébastien Villemot"
+      ],
+      "started": "2018-04-23T11:57:07Z",
+      "last_reply": "2018-04-23T11:57:07Z",
+      "root_message_id": "msg-8f05e38f3fe9"
+    },
+    {
+      "id": "thread-e023d04571c1",
+      "subject": "Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-27T09:09:16Z",
+      "last_reply": "2018-04-27T09:09:16Z",
+      "root_message_id": "msg-e023d04571c1"
+    },
+    {
+      "id": "thread-1477886a6a6a",
+      "subject": "Bug#897030: ITP: r-cran-later -- GNU R utilities for delaying function execution",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-27T10:04:21Z",
+      "last_reply": "2018-04-27T10:04:21Z",
+      "root_message_id": "msg-1477886a6a6a"
+    },
+    {
+      "id": "thread-6beb671fc078",
+      "subject": "Bug#897033: ITP: r-cran-promises -- GNU R abstractions for promise-based asynchronous programming",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-27T10:16:57Z",
+      "last_reply": "2018-04-27T10:16:57Z",
+      "root_message_id": "msg-6beb671fc078"
+    },
+    {
+      "id": "thread-38698cf75afd",
+      "subject": "Please check my latest commit to dh-r with changes to dh-update-R",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-28T08:48:35Z",
+      "last_reply": "2018-04-28T08:48:35Z",
+      "root_message_id": "msg-38698cf75afd"
+    },
+    {
+      "id": "thread-6fb4897d6404",
+      "subject": "Bug#897026: debhelper: Debian::Debhelper::Buildsystem should not require debian/control",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-04-28T08:59:12Z",
+      "last_reply": "2018-04-28T08:59:12Z",
+      "root_message_id": "msg-6fb4897d6404"
+    },
+    {
+      "id": "thread-3d4f6f1af734",
+      "subject": "New dh-r issue (Was: dpkg-gencontrol mystery and ${R:Depends} error)",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2018-04-28T16:03:05Z",
+      "last_reply": "2018-04-28T16:03:05Z",
+      "root_message_id": "msg-3d4f6f1af734"
+    }
+  ]
+}

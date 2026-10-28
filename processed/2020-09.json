@@ -1,0 +1,527 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2020-09",
+  "messages": [
+    {
+      "id": "msg-f40f672291b1",
+      "message_id": "<20200902112346.GR31923@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-02T11:23:46Z",
+      "subject": "Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "subject_clean": "Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'm currently trying to work down our list of not up to date packages.\nI stumbled upon r-cran-fs which has a couple of errors in the test\nsuite:\n\ntthat results  ═══════════════════════════════════════════════════════════\n[ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]\n1. Failure: file_access: checks for file read and write ability (@test-access.R#14) \n2. Failure: file_access: checks for file read and write ability (@test-access.R#15) \n3. Failure: file_info: can be subset as a tibble (@test-file.R#43) \n4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n1. ...\n\nError: testthat unit tests failed\nExecution halted\n\nAny help would be welcome\n\n      Andreas.\n\n--  \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'm currently trying to work down our list of not up to date packages.\nI stumbled upon r-cran-fs which has a couple of errors in the test\nsuite:\n\ntthat results  ══════════════════════════════════",
+      "thread_id": "thread-f40f672291b1",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-6e0b66477bf9",
+      "message_id": "<d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>",
+      "from_name": "Shayan Doust",
+      "from_email_hash": "1b53962d5a9eb6504108845e58f03f6a25d8c0c8b63f09e1640c9cdce30c1f9c",
+      "date": "2020-09-02T13:35:42Z",
+      "subject": "Re: Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "subject_clean": "Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "in_reply_to": "<20200902112346.GR31923@an3as.eu>",
+      "references": [
+        "<20200902112346.GR31923@an3as.eu>"
+      ],
+      "body_plain": "Hello Andreas,\n\nI'll just quickly chip in.\n\nI've just ran this within sbuild and I only see one failure. This is as\nfollows:\n\n> 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)\n\nSo, I am not sure why you are getting additional errors...\n\nI did some more investigation on line 43 of tests/testthat/test-file.R.\nThe class of \"x\" is of a data frame, and a data frame is made up of\nlists (not tibble), which is why this is failing.\n\nWhy? Well it seems like line 36 is the culprit, were there is the class\nof x being manually set to as a data frame. The patch I will push\nmomentarily simply swaps the positions of these two tests, and\nautopkgtest now passes cleanly for me.\n\nI admit I was under the assumption that anything expressed within it()\nis not globalised and is only for that expression.\n\nKind regards,\nShayan Doust\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: 0x6D7D441919D02395.asc\nDesc: application/pgp-keys\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hello Andreas,\n\nI'll just quickly chip in.\n\nI've just ran this within sbuild and I only see one failure. This is as\nfollows:\n\n> 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)\n\nSo, ",
+      "thread_id": "thread-f40f672291b1",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-254c61b57183",
+      "message_id": "<bc30395a-6442-6ed4-387a-ba5ab64de7b6@shayandoust.me>",
+      "from_name": "Shayan Doust",
+      "from_email_hash": "1b53962d5a9eb6504108845e58f03f6a25d8c0c8b63f09e1640c9cdce30c1f9c",
+      "date": "2020-09-02T14:11:25Z",
+      "subject": "Re: Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "subject_clean": "Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "in_reply_to": "<d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>",
+      "references": [
+        "<20200902112346.GR31923@an3as.eu>",
+        "<d39b18c7-834a-4109-562b-7cf31b60c85f@shayandoust.me>"
+      ],
+      "body_plain": "Hello again Andreas,\n\nI was wrong, sorry for that. Actually, I'm not too sure why\nfile_info(\"foo/bar\") is a data frame. The only way I've seemed to have\nrectified this was by class(x) <- \"tbl_df\" before the expect_is() on\nline 44, which of course passes the test. I'm not sure why line 36\nexists when it is already a data frame anyways...\n\nKind regards,\nShayan Doust\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: 0x6D7D441919D02395.asc\nDesc: application/pgp-keys\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hello again Andreas,\n\nI was wrong, sorry for that. Actually, I'm not too sure why\nfile_info(\"foo/bar\") is a data frame. The only way I've seemed to have\nrectified this was by class(x) <- \"tbl_df\" befo",
+      "thread_id": "thread-f40f672291b1",
+      "thread_depth": 2,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-72d0d9f7c310",
+      "message_id": "<20200903092646.GC29957@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-03T09:26:46Z",
+      "subject": "Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "subject_clean": "Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Wolfgang,\n\nI intend to package mathjaxr for Debian since this is a requirement of\nversion 1.4 of metap (currently Debian has version 1.3 of metap).  In\nDebian compressed JavaScript is considered as \"binary without source\"\nwhich violates the Debian Free Software Guidelines where shipping\neditable source is a requirement.\n\nThe JavaScript files in\n\n    inst/doc/mathjax/es5\n\nseem to be all compressed and I wonder whether you can provide some\nhints where to find the uncompressed source for these.\n\nKind regards\n\n        Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Wolfgang,\n\nI intend to package mathjaxr for Debian since this is a requirement of\nversion 1.4 of metap (currently Debian has version 1.3 of metap).  In\nDebian compressed JavaScript is considered as",
+      "thread_id": "thread-72d0d9f7c310",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-37912c13f894",
+      "message_id": "<717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>",
+      "from_name": "Viechtbauer, Wolfgang (SP)",
+      "from_email_hash": "fe20b3a5fb546662c9e482cc51bdbcbf36f93cf33ff40a37be639675351fb4ee",
+      "date": "2020-09-03T10:13:47Z",
+      "subject": "RE: Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "subject_clean": "Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "in_reply_to": "<20200903092646.GC29957@an3as.eu>",
+      "references": [
+        "<20200903092646.GC29957@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nThe source (in TypeScript) can be found here:\n\nhttps://github.com/mathjax/MathJax-src\n\nI haven't tried to generate the compressed js files myself - I just grabbed the release from:\n\nhttps://github.com/mathjax/MathJax\n\n(which I just noticed has been updated to 3.1.0 - the CRAN release currently uses 3.0.5).\n\nI guess if you want to do this yourself, you also need to look at:\n\nhttps://github.com/mathjax/MathJax-dev\n\nBest,\nWolfgang\n\n>-----Original Message-----\n>From: Andreas Tille [mailto:andreas at an3as.eu]\n>Sent: Thursday, 03 September, 2020 11:27\n>To: Wolfgang Viechtbauer; debian-r at lists.debian.org\n>Subject: Any hint for uncompressed JavaScript shipped with mathjaxr\n>\n>Hi Wolfgang,\n>\n>I intend to package mathjaxr for Debian since this is a requirement of\n>version 1.4 of metap (currently Debian has version 1.3 of metap).  In\n>Debian compressed JavaScript is considered as \"binary without source\"\n>which violates the Debian Free Software Guidelines where shipping\n>editable source is a requirement.\n>\n>The JavaScript files in\n>\n>    inst/doc/mathjax/es5\n>\n>seem to be all compressed and I wonder whether you can provide some\n>hints where to find the uncompressed source for these.\n>\n>Kind regards\n>\n>        Andreas.\n>\n>--\n>http://fam-tille.de",
+      "body_snippet": "Hi Andreas,\n\nThe source (in TypeScript) can be found here:\n\nhttps://github.com/mathjax/MathJax-src\n\nI haven't tried to generate the compressed js files myself - I just grabbed the release from:\n\nhttps",
+      "thread_id": "thread-72d0d9f7c310",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-ade8cb10570d",
+      "message_id": "<20200903104625.GD29957@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-03T10:46:25Z",
+      "subject": "Re: Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "subject_clean": "Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "in_reply_to": "<717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>",
+      "references": [
+        "<20200903092646.GC29957@an3as.eu>",
+        "<717b47b6338c44c2a654bc4b8a2c1c43@UM-MAIL3213.unimaas.nl>"
+      ],
+      "body_plain": "Hi Wolfgang,\n\nthanks a lot for the fast and helpful response.\n\nIs there any volunteer in the pkg-r team who wants to tackle this?\nIt seems a bit above my time limit I intend to spent on this the\nnext 1-2 weeks.\n\nKind regards\n\n      Andreas.\n\nOn Thu, Sep 03, 2020 at 10:13:47AM +0000, Viechtbauer, Wolfgang (SP) wrote:\n> Hi Andreas,\n> \n> The source (in TypeScript) can be found here:\n> \n> https://github.com/mathjax/MathJax-src\n> \n> I haven't tried to generate the compressed js files myself - I just grabbed the release from:\n> \n> https://github.com/mathjax/MathJax\n> \n> (which I just noticed has been updated to 3.1.0 - the CRAN release currently uses 3.0.5).\n> \n> I guess if you want to do this yourself, you also need to look at:\n> \n> https://github.com/mathjax/MathJax-dev\n> \n> Best,\n> Wolfgang\n> \n> >-----Original Message-----\n> >From: Andreas Tille [mailto:andreas at an3as.eu]\n> >Sent: Thursday, 03 September, 2020 11:27\n> >To: Wolfgang Viechtbauer; debian-r at lists.debian.org\n> >Subject: Any hint for uncompressed JavaScript shipped with mathjaxr\n> >\n> >Hi Wolfgang,\n> >\n> >I intend to package mathjaxr for Debian since this is a requirement of\n> >version 1.4 of metap (currently Debian has version 1.3 of metap).  In\n> >Debian compressed JavaScript is considered as \"binary without source\"\n> >which violates the Debian Free Software Guidelines where shipping\n> >editable source is a requirement.\n> >\n> >The JavaScript files in\n> >\n> >    inst/doc/mathjax/es5\n> >\n> >seem to be all compressed and I wonder whether you can provide some\n> >hints where to find the uncompressed source for these.\n> >\n> >Kind regards\n> >\n> >        Andreas.\n> >\n> >--\n> >http://fam-tille.de\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Wolfgang,\n\nthanks a lot for the fast and helpful response.\n\nIs there any volunteer in the pkg-r team who wants to tackle this?\nIt seems a bit above my time limit I intend to spent on this the\nnext ",
+      "thread_id": "thread-72d0d9f7c310",
+      "thread_depth": 2,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-d5543b0122fc",
+      "message_id": "<CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>",
+      "from_name": "Jim Hester",
+      "from_email_hash": "04a7b20104a1161729ea6b432cba15d55d1714ff77e18f457105f2e4d93bfb22",
+      "date": "2020-09-03T13:29:52Z",
+      "subject": "Re: Test suite errors for r-cran-fs 1.5.0+dfsg-1",
+      "subject_clean": "Test suite errors for r-cran-fs 1.5.0+dfsg-1",
+      "in_reply_to": "<20200903082544.GB29957@an3as.eu>",
+      "references": [
+        "<20200903082544.GB29957@an3as.eu>"
+      ],
+      "body_plain": "Andreas,\n\nAs far as the test-file.R#43 failure one way I could see it failing is if your test machine does _not_ have the tibble package installed. The tests assume that all Suggested dependencies are installed.\n\nI do not know why the other tests are failing.\n\nfs 1.5.0 is passing on CRAN's debian based check machines without any test failures (https://www.r-project.org/nosvn/R.check/r-devel-linux-x86_64-debian-gcc/fs-00check.html), so if it is failing in the debian build machine there must be something non-standard going on with the environment.\n\nJim\n\nOn Thu, Sep 3, 2020 at 4:25 AM Andreas Tille <andreas at an3as.eu> wrote:\n\n> Hi Jim,\n>\n>\n>\n> I tried to upgrade the Debian package of fs.  Unfortunately it has a\n>\n> couple of errors in the test suite:\n>\n>\n>\n>\n>\n> tthat results  ═══════════════════════════════════════════════════════════\n>\n> [ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]\n>\n> 1. Failure: file_access: checks for file read and write ability (@test-access.R#14)\n>\n> 2. Failure: file_access: checks for file read and write ability (@test-access.R#15)\n>\n> 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)\n>\n> 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n>\n> 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n>\n> 6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n>\n> 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n>\n> 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n>\n> 9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n>\n> 1. ...\n>\n>\n>\n> Error: testthat unit tests failed\n>\n> Execution halted\n>\n>\n>\n>\n>\n> Any idea what might be wrong here?\n>\n>\n>\n> I discussed this on the debian-r mailing list first and got two answers so\n>\n> far:\n>\n>\n>\n>    https://lists.debian.org/debian-r/2020/09/msg00001.html\n>\n>    https://lists.debian.org/debian-r/2020/09/msg00002.html\n>\n>\n>\n> I do not speak R myself so I do not fully understand these answers but\n>\n> may be you can make some sense out of it.\n>\n>\n>\n> Kind regards\n>\n>\n>\n>        Andreas.\n>\n>\n>\n> PS: It would be great if you could answer in public to our list\n>\n>     debian-r at lists.debian.org\n>\n>\n>\n> --\n>\n> http://fam-tille.de",
+      "body_snippet": "Andreas,\n\nAs far as the test-file.R#43 failure one way I could see it failing is if your test machine does _not_ have the tibble package installed. The tests assume that all Suggested dependencies are",
+      "thread_id": "thread-d5543b0122fc",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-7b21139075f8",
+      "message_id": "<20200903153347.GJ29957@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-03T15:33:47Z",
+      "subject": "Re: Test suite errors for r-cran-fs 1.5.0+dfsg-1",
+      "subject_clean": "Test suite errors for r-cran-fs 1.5.0+dfsg-1",
+      "in_reply_to": "<CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>",
+      "references": [
+        "<20200903082544.GB29957@an3as.eu>",
+        "<CAD6tx94L4WSXPX27nDmvxydz53WDv6P6nKfHCu+2c5Tgp9UWUg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jim,\n\nthanks a lot for your fast reply.\n\nOn Thu, Sep 03, 2020 at 09:29:52AM -0400, Jim Hester wrote:\n> As far as the test-file.R#43 failure one way I could see it failing is if\n> your test machine does _not_ have the tibble package installed. The tests\n> assume that all Suggested dependencies are installed.\n\nThat's a very good hint.  I've added all Suggests with the exception of\n\"spelling\" (since this is not packaged yet) to the environment where the\ntest is executed.  This leaves me now with:\n\n── 1. Failure: file_access: checks for file read and write ability (@test-access\nfile_access(\"foo/bar\", \"read\") not equal to c(`foo/bar` = FALSE).\n1 element mismatch\n\n── 2. Failure: file_access: checks for file read and write ability (@test-access\nfile_access(\"foo/bar\", \"write\") not equal to c(`foo/bar` = FALSE).\n1 element mismatch\n\n── 3. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────\n`dir_ls(\".\", recurse = TRUE)` did not throw an error.\n\n── 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────\n`dir_ls(fail = FALSE, recurse = TRUE)` did not produce any warnings.\n\n── 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)  ───────────────\n`dir_ls(\"foo2\", fail = FALSE, recurse = TRUE)` did not produce any warnings.\n\n── 6. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────\n`dir_map(\".\", fun = identity, recurse = TRUE)` did not throw an error.\n\n── 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────\n`dir_map(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n── 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)  ─────────────\n`dir_map(\"foo2\", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n── 9. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ────────────\n`dir_walk(\".\", fun = identity, recurse = TRUE)` did not throw an error.\n\n── 10. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ───────────\n`dir_walk(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n── 11. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161)  ───────────\n`dir_walk(\"foo2\", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n── 12. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────\n`dir_info(\".\", fun = identity, recurse = TRUE)` did not throw an error.\n\n── 13. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────\n`dir_info(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n── 14. Failure: dir_info: warns if fail == FALSE (@test-list.R#192)  ───────────\n`dir_info(\"foo2\", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.\n\n══ testthat results  ═══════════════════════════════════════════════════════════\n[ OK: 3437 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 14 ]\n1. Failure: file_access: checks for file read and write ability (@test-access.R#14) \n2. Failure: file_access: checks for file read and write ability (@test-access.R#15) \n3. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78) \n6. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111) \n9. Failure: dir_walk: warns if fail == FALSE (@test-list.R#161) \n1. ...\n \n> I do not know why the other tests are failing.\n> \n> fs 1.5.0 is passing on CRAN's debian based check machines without any test\n> failures (\n> https://www.r-project.org/nosvn/R.check/r-devel-linux-x86_64-debian-gcc/fs-00check.html),\n> so if it is failing in the debian build machine there must be something\n> non-standard going on with the environment.\n\nWell, non-standard means we install only those packages that are\nexplicitly specified as Test-Depends.  As I said I added all packages\nlisted in Suggests with the exception of spelling.  Do you think\nthat the missing spelling might be responsible for the issues above?\n\nOr is there possibly another Test-Depends that by default is installed\non CRAN Debian machines but not necessarily in the list of Dependencies?\n\nKind regards\n\n      Andreas.\n \n> On Thu, Sep 3, 2020 at 4:25 AM Andreas Tille <andreas at an3as.eu> wrote:\n> \n> > Hi Jim,\n> >\n> > I tried to upgrade the Debian package of fs.  Unfortunately it has a\n> > couple of errors in the test suite:\n> >\n> >\n> > tthat results  ═══════════════════════════════════════════════════════════\n> > [ OK: 3436 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 15 ]\n> > 1. Failure: file_access: checks for file read and write ability\n> > (@test-access.R#14)\n> > 2. Failure: file_access: checks for file read and write ability\n> > (@test-access.R#15)\n> > 3. Failure: file_info: can be subset as a tibble (@test-file.R#43)\n> > 4. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n> > 5. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n> > 6. Failure: dir_ls: warns if fail == FALSE (@test-list.R#78)\n> > 7. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n> > 8. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n> > 9. Failure: dir_map: warns if fail == FALSE (@test-list.R#111)\n> > 1. ...\n> >\n> > Error: testthat unit tests failed\n> > Execution halted\n> >\n> >\n> > Any idea what might be wrong here?\n> >\n> > I discussed this on the debian-r mailing list first and got two answers so\n> > far:\n> >\n> >    https://lists.debian.org/debian-r/2020/09/msg00001.html\n> >    https://lists.debian.org/debian-r/2020/09/msg00002.html\n> >\n> > I do not speak R myself so I do not fully understand these answers but\n> > may be you can make some sense out of it.\n> >\n> > Kind regards\n> >\n> >        Andreas.\n> >\n> > PS: It would be great if you could answer in public to our list\n> >     debian-r at lists.debian.org\n> >\n> > --\n> > http://fam-tille.de\n> >\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Jim,\n\nthanks a lot for your fast reply.\n\nOn Thu, Sep 03, 2020 at 09:29:52AM -0400, Jim Hester wrote:\n> As far as the test-file.R#43 failure one way I could see it failing is if\n> your test machine ",
+      "thread_id": "thread-d5543b0122fc",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-fc9836f3c86d",
+      "message_id": "<20200903161212.GL29957@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-03T16:12:12Z",
+      "subject": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "subject_clean": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI upgraded r-cran-ps[1] to its latest version but it results in two\nfailures in its autopkgtest.  I admit I can not realy parse the log\nwhat the actual failure might be.  Can anybody reproduce this - and\neven better fix this?\n\nKind regards\n\n       Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-ps\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI upgraded r-cran-ps[1] to its latest version but it results in two\nfailures in its autopkgtest.  I admit I can not realy parse the log\nwhat the actual failure might be.  Can anybody reproduce th",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-9497a60de03d",
+      "message_id": "<24401.7014.461576.983705@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-09-03T16:35:50Z",
+      "subject": "Re: Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "subject_clean": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "in_reply_to": "<20200903161212.GL29957@an3as.eu>",
+      "references": [
+        "<20200903161212.GL29957@an3as.eu>"
+      ],
+      "body_plain": "As before I suggest you consider glancing at the CRAN results, always at\n\n   https://cran.r-project.org/web/checks/check_results_${packagename}.html\n\nie\n\n   https://cran.r-project.org/web/checks/check_results_ps.html\n\nThat shows twelve different tests on twelve different configurations all giving OK.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "As before I suggest you consider glancing at the CRAN results, always at\n\n   https://cran.r-project.org/web/checks/check_results_${packagename}.html\n\nie\n\n   https://cran.r-project.org/web/checks/check",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-3d114456faa1",
+      "message_id": "<20200904114436.GF18846@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-04T11:44:36Z",
+      "subject": "Re: Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "subject_clean": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "in_reply_to": "<24401.7014.461576.983705@rob.eddelbuettel.com>",
+      "references": [
+        "<20200903161212.GL29957@an3as.eu>",
+        "<24401.7014.461576.983705@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Thu, Sep 03, 2020 at 11:35:50AM -0500, Dirk Eddelbuettel wrote:\n> \n> As before I suggest you consider glancing at the CRAN results, always at\n> \n>    https://cran.r-project.org/web/checks/check_results_${packagename}.html\n> \n> ie\n> \n>    https://cran.r-project.org/web/checks/check_results_ps.html\n> \n> That shows twelve different tests on twelve different configurations all giving OK.\n\nPerfect.  This probably means that our autopkgtest has an issue.  My\nquestion was about that issue. \n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Sep 03, 2020 at 11:35:50AM -0500, Dirk Eddelbuettel wrote:\n> \n> As before I suggest you consider glancing at the CRAN results, always at\n> \n>    https://cran.r-project.org/web/checks/check_res",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 2,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-725947c6ca5c",
+      "message_id": "<20200904114728.GG18846@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-04T11:47:28Z",
+      "subject": "Help needed for r-cran-shiny test failure",
+      "subject_clean": "Help needed for r-cran-shiny test failure",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI upgraded r-cran-shiny in git but the autopkgtest has a failure:\n\n> \n> # only test if testthat is available\n> if (require(testthat)) {\n+   library(testthat)\n+   library(shiny)\n+ \n+   test_check(\"shiny\")\n+ }\nLoading required package: testthat\n-- 1. Error: runTests works with a dir app that calls modules that return reacti\nShiny App Test Failures detected in\n* 107_scatterplot/tests/testthat.R\nBacktrace:\n  1. testthat::expect_output(print(runTests(app)), \"Shiny App Test Results\\\\n\\\\* Success\\\\n  - 107_scatterplot/tests/testthat\\\\.R\")\n 11. shiny::runTests(app)\n\n== testthat results  ===========================================================\n[ OK: 389 | SKIPPED: 1 | WARNINGS: 0 | FAILED: 1 ]\n1. Error: runTests works with a dir app that calls modules that return reactives and use brushing (@test-test-server-app.R#53) \n\nError: testthat unit tests failed\nExecution halted\n\nAny help to either fix that failure or understand why it happens and\npossibly exclude that specific test since we know that it can not work\nin our autopkgtest environment is welcome.\n\nKind regards\n\n        Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI upgraded r-cran-shiny in git but the autopkgtest has a failure:\n\n> \n> # only test if testthat is available\n> if (require(testthat)) {\n+   library(testthat)\n+   library(shiny)\n+ \n+   test_check(",
+      "thread_id": "thread-725947c6ca5c",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-ec991536dcdd",
+      "message_id": "<24402.10963.163296.419467@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-09-04T11:53:55Z",
+      "subject": "Re: Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "subject_clean": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "in_reply_to": "<20200904114436.GF18846@an3as.eu>",
+      "references": [
+        "<20200903161212.GL29957@an3as.eu>",
+        "<24401.7014.461576.983705@rob.eddelbuettel.com>",
+        "<20200904114436.GF18846@an3as.eu>"
+      ],
+      "body_plain": "On 4 September 2020 at 13:44, Andreas Tille wrote:\n| Perfect.  This probably means that our autopkgtest has an issue.\n\nYes, and it far from the the first time this has been suggested to you.  Most\nrecent other example was 'fs' as its author also told you.\n\nAnd e.g. the tidyverse packages have what I may call an established pattern\nof changing / breaking APIs so whenever you do see tests breaking I continue\nto recommend checking first with CRAN to see what happens there when all\npackages are in fact kept current.  But you are of course free to continue to\nentertain yourself by replicating this with more randomised sets of packages.\n\nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 4 September 2020 at 13:44, Andreas Tille wrote:\n| Perfect.  This probably means that our autopkgtest has an issue.\n\nYes, and it far from the the first time this has been suggested to you.  Most\nrec",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 3,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-9b2c97833b49",
+      "message_id": "<a0f8eab3-b433-b42a-6206-46b4041dd22d@shayandoust.me>",
+      "from_name": "Shayan Doust",
+      "from_email_hash": "1b53962d5a9eb6504108845e58f03f6a25d8c0c8b63f09e1640c9cdce30c1f9c",
+      "date": "2020-09-06T16:12:51Z",
+      "subject": "Sponsored upload for r-cran-poissonbinomial",
+      "subject_clean": "Sponsored upload for r-cran-poissonbinomial",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI believe r-cran-poissonbinomial[1] is ready for a sponsored upload. Do\nlet me know if anything needs altering.\n\nKind regards,\nShayan Doust\n\n[1]: https://salsa.debian.org/r-pkg-team/r-cran-poissonbinomial/\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: 0x6D7D441919D02395.asc\nDesc: application/pgp-keys\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hello,\n\nI believe r-cran-poissonbinomial[1] is ready for a sponsored upload. Do\nlet me know if anything needs altering.\n\nKind regards,\nShayan Doust\n\n[1]: https://salsa.debian.org/r-pkg-team/r-cran-poi",
+      "thread_id": "thread-9b2c97833b49",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-81513b588535",
+      "message_id": "<20200907094936.GM18846@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2020-09-07T09:49:36Z",
+      "subject": "Re: Sponsored upload for r-cran-poissonbinomial",
+      "subject_clean": "Sponsored upload for r-cran-poissonbinomial",
+      "in_reply_to": "<b0152485-6dd8-79cd-a7cc-52bffdfac3c4@gmx.de>",
+      "references": [
+        "<a0f8eab3-b433-b42a-6206-46b4041dd22d@shayandoust.me>",
+        "<b0152485-6dd8-79cd-a7cc-52bffdfac3c4@gmx.de>"
+      ],
+      "body_plain": "Hi,\n\nOn Sun, Sep 06, 2020 at 06:54:29PM +0200, Steffen Möller wrote:\n> I just skimmed through the source tree. Do you need build/*vignette.rds?\n\nThese data seem to be needed to create vignettes.\n\n> Also, the files in inst/doc are autogenerated, right? Often there is a\n> nasty embedded JavaScript in those files coming from upstream. But your\n> files are clean.\n\nLintian will tell you once this is the case.  I lintian finds this error\nI'd recommend to use the script\n\n    https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/r-exclude-doc\n\nLintian was issuing a warning:\n\n     W: r-cran-poissonbinomial: description-starts-with-leading-spaces\n\nPlease make sure the long description starts with exactly one space per\nline (not more) since otherwise the text behind lines with more than one\nindeting space will considered by several tools as verbose line.\n\nI've fixed this and uploaded.\n\nKind regards and thanks to Shayan and Steffen for working on this package\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nOn Sun, Sep 06, 2020 at 06:54:29PM +0200, Steffen Möller wrote:\n> I just skimmed through the source tree. Do you need build/*vignette.rds?\n\nThese data seem to be needed to create vignettes.\n\n> Al",
+      "thread_id": "thread-81513b588535",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-580212dbc363",
+      "message_id": "<20200908150010.GA12717@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-09-08T15:00:10Z",
+      "subject": "Re: r-bioc-rsubread FTBFS on 32bit: error: conflicting types for ‘uintptr_t’",
+      "subject_clean": "r-bioc-rsubread FTBFS on 32bit: error: conflicting types for ‘uintptr_t’",
+      "in_reply_to": "<159608823102.28748.3337470331729793821.reportbug@localhost>",
+      "references": [
+        "<159608823102.28748.3337470331729793821.reportbug@localhost>"
+      ],
+      "body_plain": "Hi,\n\nI'm hereby forwarding a problem that was detected on the Debian packaged\nversion of Rsubread.  Any idea how to fix this?\n\nKind regards\n\n       Andreas.\n\nOn Thu, Jul 30, 2020 at 08:50:31AM +0300, Adrian Bunk wrote:\n> Source: r-bioc-rsubread\n> Version: 2.2.5-1\n> Severity: serious\n> Tags: ftbfs\n> \n> https://buildd.debian.org/status/package.php?p=r-bioc-rsubread&suite=sid\n> \n> ...\n> In file included from /usr/lib/gcc/i686-linux-gnu/10/include/stdint.h:9,\n>                  from HelperFunctions.h:139,\n>                  from R_wrapper.c:35:\n> /usr/include/stdint.h:96:23: error: conflicting types for ‘uintptr_t’\n>    96 | typedef unsigned int  uintptr_t;\n>       |                       ^~~~~~~~~\n> In file included from R_wrapper.c:30:\n> /usr/share/R/include/Rinterface.h:110:24: note: previous declaration of ‘uintptr_t’ was here\n>   110 |  typedef unsigned long uintptr_t;\n>       |                        ^~~~~~~~~\n> make[1]: *** [/usr/lib/R/etc/Makeconf:167: R_wrapper.o] Error 1\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'm hereby forwarding a problem that was detected on the Debian packaged\nversion of Rsubread.  Any idea how to fix this?\n\nKind regards\n\n       Andreas.\n\nOn Thu, Jul 30, 2020 at 08:50:31AM +0300, ",
+      "thread_id": "thread-580212dbc363",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-f1fa105c36ef",
+      "message_id": "<20200908183253.GC12717@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-08T18:32:53Z",
+      "subject": "[Help] Re: r-cran-rstanarm: FTBFS: error: (converted from warning) TBB library not found.",
+      "subject_clean": "[Help] Re: r-cran-rstanarm: FTBFS: error: (converted from warning) TBB library not found.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Control: tags -1 help\n\nHi,\n\nany help why TBB is not found?  I think this issue is actually causes by\nr-cran-rcppparallel since the code copy of libtbb was removed there -\nbut it seems to not provide the Debian packaged lib properly.\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\n\nHi,\n\nany help why TBB is not found?  I think this issue is actually causes by\nr-cran-rcppparallel since the code copy of libtbb was removed there -\nbut it seems to not provide t",
+      "thread_id": "thread-f1fa105c36ef",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-f089ca6a0786",
+      "message_id": "<20200909133407.GL8080@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-09T13:34:07Z",
+      "subject": "Ping: Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "subject_clean": "Ping: Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "in_reply_to": "<20200525092954.GG25190@an3as.eu>",
+      "references": [
+        "<159039737897.25558.17854156157424087902.reportbug@localhost>",
+        "<20200525092148.GF25190@an3as.eu>",
+        "<20200525092954.GG25190@an3as.eu>"
+      ],
+      "body_plain": "Control: tags -1 help\n\nPing on this topic.  This bug is really nasty and I do not have any\nspare cycles to tackle this.\n\nKind regards\n\n         Andreas.\n\nOn Mon, May 25, 2020 at 11:29:54AM +0200, Andreas Tille wrote:\n> Hi,\n> \n> On Mon, May 25, 2020 at 11:21:48AM +0200, Andreas Tille wrote:\n> > The issue is actually not causes by routine-update but rather\n> > by dh-update-R that regenerates all Depends automatically but\n> > does not respect non-R dependencies we injected for instance\n> > to provide JS files.\n> \n> As a workaround I'm usially adding a comment\n> \n>    # <dh-update-R>do not delete this</dh-update-R>\n> \n> but that's for sure no acceptable solution.  Gordon (or somebody else)\n> do you have some spare cycles to make sure dh-update-R will rewrite only\n> the R Dependencies and leave other Depends we added manually alone?\n> \n> Kind regards\n> \n>      Andreas.\n> \n> -- \n> http://fam-tille.de\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\n\nPing on this topic.  This bug is really nasty and I do not have any\nspare cycles to tackle this.\n\nKind regards\n\n         Andreas.\n\nOn Mon, May 25, 2020 at 11:29:54AM +0200, Andr",
+      "thread_id": "thread-f089ca6a0786",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-90e9ceceb975",
+      "message_id": "<20200911104934.GX8080@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-11T10:49:34Z",
+      "subject": "Re: Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "subject_clean": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "in_reply_to": "<20200903161212.GL29957@an3as.eu>",
+      "references": [
+        "<20200903161212.GL29957@an3as.eu>"
+      ],
+      "body_plain": "On Thu, Sep 03, 2020 at 06:12:12PM +0200, Andreas Tille wrote:\n> I upgraded r-cran-ps[1] to its latest version but it results in two\n> failures in its autopkgtest.  I admit I can not realy parse the log\n> what the actual failure might be.  Can anybody reproduce this - and\n> even better fix this?\n\nTo be more verbose on this the error seems to be:\n\n--------------------------------------------------------------------------------\nv |  74       | pid reuse [0.1 s]\nx |  12 1     | posix-zombie\n--------------------------------------------------------------------------------\ntest-posix-zombie.R:25: error: zombie api\nsubscript out of bounds\nBacktrace:\n 1. testthat::expect_identical(ps_terminal(p), ps_terminal(me)) test-posix-zombie.R:25:2\n 4. ps::ps_terminal(p)\n--------------------------------------------------------------------------------\nx |  11 1     | posix [0.2 s]\n--------------------------------------------------------------------------------\ntest-posix.R:15: error: terminal\nsubscript out of bounds\nBacktrace:\n 1. ps::ps_terminal(ps_handle()) test-posix.R:15:2\n\nDoes anybody have a clue what this might mean and whether we should\npossibly ignore this error?  It might be even an artifact of pbuilder?\n\nKind regards\n\n       Andreas.\n\n> [1] https://salsa.debian.org/r-pkg-team/r-cran-ps\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, Sep 03, 2020 at 06:12:12PM +0200, Andreas Tille wrote:\n> I upgraded r-cran-ps[1] to its latest version but it results in two\n> failures in its autopkgtest.  I admit I can not realy parse the l",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-35ac59178df2",
+      "message_id": "<b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>",
+      "from_name": "Shayan Doust",
+      "from_email_hash": "1b53962d5a9eb6504108845e58f03f6a25d8c0c8b63f09e1640c9cdce30c1f9c",
+      "date": "2020-09-15T17:33:06Z",
+      "subject": "Sponsored upload for r-cran-textdata",
+      "subject_clean": "Sponsored upload for r-cran-textdata",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI believe r-cran-textdata[1] is almost ready for a sponsored upload. One\nthing stands is what is within the build/ directory, which is a\nnon-plaintext vignette. Even removing the file has no weighing on the\nresult of the package building process. Would it be preferred that this\nis repacked to exclude this directory?\n\nI'm only really mentioning this because I don't know why this is\nincluded within the upstream tarball in the first place, and whether\nthere is any importance regarding documentation generation with this.\n\nKind regards,\nShayan Doust\n\n[1]: https://salsa.debian.org/r-pkg-team/r-cran-textdata\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: 0x6D7D441919D02395.asc\nDesc: application/pgp-keys\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hello,\n\nI believe r-cran-textdata[1] is almost ready for a sponsored upload. One\nthing stands is what is within the build/ directory, which is a\nnon-plaintext vignette. Even removing the file has no w",
+      "thread_id": "thread-35ac59178df2",
+      "thread_depth": 0,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-7f22129b0491",
+      "message_id": "<24417.36306.998686.713867@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-09-16T04:00:18Z",
+      "subject": "Re: Sponsored upload for r-cran-textdata",
+      "subject_clean": "Sponsored upload for r-cran-textdata",
+      "in_reply_to": "<b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>",
+      "references": [
+        "<b3a3b528-3d40-4a93-69b4-7fe83c3c7d12@shayandoust.me>"
+      ],
+      "body_plain": "On 15 September 2020 at 18:33, Shayan Doust wrote:\n| I believe r-cran-textdata[1] is almost ready for a sponsored upload. One\n| thing stands is what is within the build/ directory, which is a\n| non-plaintext vignette. Even removing the file has no weighing on the\n| result of the package building process. Would it be preferred that this\n| is repacked to exclude this directory?\n|\n| I'm only really mentioning this because I don't know why this is\n| included within the upstream tarball in the first place, and whether\n| there is any importance regarding documentation generation with this.\n\nNot a feature of textdata: *every* source tar.gz with a vignette has such a\ndirectory / file.\n\nIt is produced by `R CMD build ...` when the source .tar.gz is created.\n \nDirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 15 September 2020 at 18:33, Shayan Doust wrote:\n| I believe r-cran-textdata[1] is almost ready for a sponsored upload. One\n| thing stands is what is within the build/ directory, which is a\n| non-pl",
+      "thread_id": "thread-35ac59178df2",
+      "thread_depth": 1,
+      "month": "2020-09"
+    },
+    {
+      "id": "msg-a413ee6fe78a",
+      "message_id": "<20200922072917.GX28118@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-09-22T07:29:17Z",
+      "subject": "Solved (Was: Any idea why there might be two failures in r-cran-ps autopkgtest)",
+      "subject_clean": "Solved (Was: Any idea why there might be two failures in r-cran-ps autopkgtest)",
+      "in_reply_to": "<20200911104934.GX8080@an3as.eu>",
+      "references": [
+        "<20200903161212.GL29957@an3as.eu>",
+        "<20200911104934.GX8080@an3as.eu>"
+      ],
+      "body_plain": "On Fri, Sep 11, 2020 at 12:49:34PM +0200, Andreas Tille wrote:\n> Backtrace:\n>  1. testthat::expect_identical(ps_terminal(p), ps_terminal(me)) test-posix-zombie.R:25:2\n>  4. ps::ps_terminal(p)\n\nAs the test says it is checking a terminal.  So it was not only xvfb-run missing but\na terminal was needed.  Thus\n\n   /usr/bin/xvfb-run --auto-servernum --server-num=20 -s \"-screen 0 1024x768x24 -noreset\" xterm  -e /bin/sh -c \"R --no-save < $testfile\"\n\nfinally solved the issue.\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, Sep 11, 2020 at 12:49:34PM +0200, Andreas Tille wrote:\n> Backtrace:\n>  1. testthat::expect_identical(ps_terminal(p), ps_terminal(me)) test-posix-zombie.R:25:2\n>  4. ps::ps_terminal(p)\n\nAs the ",
+      "thread_id": "thread-fc9836f3c86d",
+      "thread_depth": 2,
+      "month": "2020-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-f40f672291b1",
+      "subject": "Autopkgtest errors for r-cran-fs 1.5.0+dfsg-1",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Shayan Doust"
+      ],
+      "started": "2020-09-02T11:23:46Z",
+      "last_reply": "2020-09-02T14:11:25Z",
+      "root_message_id": "msg-f40f672291b1"
+    },
+    {
+      "id": "thread-72d0d9f7c310",
+      "subject": "Any hint for uncompressed JavaScript shipped with mathjaxr",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Viechtbauer, Wolfgang (SP)"
+      ],
+      "started": "2020-09-03T09:26:46Z",
+      "last_reply": "2020-09-03T10:46:25Z",
+      "root_message_id": "msg-72d0d9f7c310"
+    },
+    {
+      "id": "thread-d5543b0122fc",
+      "subject": "Test suite errors for r-cran-fs 1.5.0+dfsg-1",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Jim Hester"
+      ],
+      "started": "2020-09-03T13:29:52Z",
+      "last_reply": "2020-09-03T15:33:47Z",
+      "root_message_id": "msg-d5543b0122fc"
+    },
+    {
+      "id": "thread-fc9836f3c86d",
+      "subject": "Any idea why there might be two failures in r-cran-ps autopkgtest",
+      "message_count": 6,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2020-09-03T16:12:12Z",
+      "last_reply": "2020-09-22T07:29:17Z",
+      "root_message_id": "msg-fc9836f3c86d"
+    },
+    {
+      "id": "thread-725947c6ca5c",
+      "subject": "Help needed for r-cran-shiny test failure",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-09-04T11:47:28Z",
+      "last_reply": "2020-09-04T11:47:28Z",
+      "root_message_id": "msg-725947c6ca5c"
+    },
+    {
+      "id": "thread-9b2c97833b49",
+      "subject": "Sponsored upload for r-cran-poissonbinomial",
+      "message_count": 1,
+      "participants": [
+        "Shayan Doust"
+      ],
+      "started": "2020-09-06T16:12:51Z",
+      "last_reply": "2020-09-06T16:12:51Z",
+      "root_message_id": "msg-9b2c97833b49"
+    },
+    {
+      "id": "thread-81513b588535",
+      "subject": "Sponsored upload for r-cran-poissonbinomial",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-09-07T09:49:36Z",
+      "last_reply": "2020-09-07T09:49:36Z",
+      "root_message_id": "msg-81513b588535"
+    },
+    {
+      "id": "thread-580212dbc363",
+      "subject": "r-bioc-rsubread FTBFS on 32bit: error: conflicting types for ‘uintptr_t’",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-09-08T15:00:10Z",
+      "last_reply": "2020-09-08T15:00:10Z",
+      "root_message_id": "msg-580212dbc363"
+    },
+    {
+      "id": "thread-f1fa105c36ef",
+      "subject": "[Help] Re: r-cran-rstanarm: FTBFS: error: (converted from warning) TBB library not found.",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-09-08T18:32:53Z",
+      "last_reply": "2020-09-08T18:32:53Z",
+      "root_message_id": "msg-f1fa105c36ef"
+    },
+    {
+      "id": "thread-f089ca6a0786",
+      "subject": "Ping: Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-09-09T13:34:07Z",
+      "last_reply": "2020-09-09T13:34:07Z",
+      "root_message_id": "msg-f089ca6a0786"
+    },
+    {
+      "id": "thread-35ac59178df2",
+      "subject": "Sponsored upload for r-cran-textdata",
+      "message_count": 2,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Shayan Doust"
+      ],
+      "started": "2020-09-15T17:33:06Z",
+      "last_reply": "2020-09-16T04:00:18Z",
+      "root_message_id": "msg-35ac59178df2"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+From charles.plessy at oist.jp  Mon Oct  5 00:00:51 2026
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Mon, 5 Oct 2026 09:00:51 +0900
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <aqCn5pVkQKxvei4L@kumo.plessy.net>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com> <apoGiIM-99AgKvkp@kumo.plessy.net> <aqCn5pVkQKxvei4L@kumo.plessy.net>
+Message-ID: <b54c3771-38b8-4ddd-aa13-2d296e54bff9@oist.jp>
+
+Hi Graham,
+
+I just uploaded the last package for this transition.
+
+A bunch of packages still have their autopkgtests failing because I gave 
+priority to uploads over fixing tests.
+
+Also, the next Bioconductor transition is probably going to start at the 
+end of the month.  Fortunately, it should be a very easy one since I 
+cleared a lot of backlog and bitrot, and there is no clash with other 
+transitions at the moment.
+
+With this said, I would appreciate your guidance on the next steps.
+
+Have a nice day,
+
+Charles
+
+> > Le Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :
+> > >
+> > > The release team is fine with option 1.  Please see the packaging
+>
+> > > notes about embedded code copies [1], and please register the affected
+> > > packages with the security team.  Previously, you could add them
+> > > yourself in the wiki, but now you can do it in salsa [2].
+> > >
+> > > [1] https://wiki.debian.org/Packaging/EmbeddedCopies
+>
+> > > [2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies
+
+On Wed, 9 Sep 2026 09:27:39 +0900 Charles Plessy <plessy at debian.org> wrote:
+>
+> I have uploaded the packages and declared it:
+>
+> https://salsa.debian.org/security-tracker-team/security-tracker/-/commit/d74ae7f4d648f5ce6fac323e3c60d735b0093962
+
+From ginggs at debian.org  Wed Oct  7 15:56:54 2026
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 7 Oct 2026 15:56:54 +0000
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <aqCn5pVkQKxvei4L@kumo.plessy.net>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com> <apoGiIM-99AgKvkp@kumo.plessy.net> <aqCn5pVkQKxvei4L@kumo.plessy.net>
+Message-ID: <CAM8zJQsnrMrxgBax2wYU9+o5eWb=0Pv+R+Cq89TaemEo+XU41A@mail.gmail.com>
+
+Hi Charles
+
+Your last email [1] did not make it into my mailbox, but I just saw it
+in the bug report.
+
+Please upload r-bioc-biocgenerics dropping 'skip-not-installable' in
+the autopkgtests, then let's consider this transition done and
+packages can migrate as soon as their autopkgtests are green.
+
+Regards
+Graham
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1134352#68
+
+From plessy at debian.org  Thu Oct  8 11:32:39 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 8 Oct 2026 20:32:39 +0900
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <CAM8zJQsnrMrxgBax2wYU9+o5eWb=0Pv+R+Cq89TaemEo+XU41A@mail.gmail.com>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com> <apoGiIM-99AgKvkp@kumo.plessy.net> <aqCn5pVkQKxvei4L@kumo.plessy.net> <CAM8zJQsnrMrxgBax2wYU9+o5eWb=0Pv+R+Cq89TaemEo+XU41A@mail.gmail.com>
+Message-ID: <asd_V-K17VQzEidB@bubu.igloo>
+
+Le Wed, Oct 07, 2026 at 03:56:54PM +0000, Graham Inggs a écrit :
+> Please upload r-bioc-biocgenerics dropping 'skip-not-installable' in
+> the autopkgtests, then let's consider this transition done and
+> packages can migrate as soon as their autopkgtests are green.
+
+Hi Graham,
+
+I removed skip-not-installable in this package and every other one that
+I uploaded, and it is now in unstable.
+
+charles-plessy@grsu-plessy-xps:~/Debian$ rmadison r-bioc-biocgenerics | grep unstable
+r-bioc-biocgenerics | 0.58.1-2      | buildd-unstable | source, all
+r-bioc-biocgenerics | 0.58.1-2      | unstable        | source, all
+charles-plessy@grsu-plessy-xps:~/Debian$ dpkg -I r-bioc-biocgenerics_0.58.1-2_all.deb | grep -e Version -e Provides
+ Version: 0.58.1-2
+ Provides: r-api-bioc-3.23
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From ginggs at debian.org  Thu Oct  8 12:12:53 2026
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 8 Oct 2026 12:12:53 +0000
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <asd_V-K17VQzEidB@bubu.igloo>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com> <apoGiIM-99AgKvkp@kumo.plessy.net> <aqCn5pVkQKxvei4L@kumo.plessy.net> <CAM8zJQsnrMrxgBax2wYU9+o5eWb=0Pv+R+Cq89TaemEo+XU41A@mail.gmail.com> <asd_V-K17VQzEidB@bubu.igloo>
+Message-ID: <CAM8zJQv2ZqKb7SBj4NKWEG5zcWngb2MCxpWwwa8Co+KDHHw+8A@mail.gmail.com>
+
+Hi Charles
+
+On Thu, 8 Oct 2026 at 11:32, Charles Plessy <plessy at debian.org> wrote:
+> I removed skip-not-installable in this package and every other one that
+> I uploaded, and it is now in unstable.
+
+Excellent, thank you!
+
+Closing this bug now.
+
+Regards
+Graham
+

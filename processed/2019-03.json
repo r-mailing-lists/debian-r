@@ -1,0 +1,300 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-03",
+  "messages": [
+    {
+      "id": "msg-8d30aa2fa4e4",
+      "message_id": "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "a265ef4bb03c14ee9d6f00489213486310c7d7bc8d3d2467e6937626fef998e1",
+      "date": "2019-03-01T09:59:01Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+      "references": [
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>"
+      ],
+      "body_plain": "I have submitted a hotfix release openssl 1.2.2 to cran that should\nfix the issue. It should be there soon.\n\nOn Thu, Feb 28, 2019 at 5:24 PM Andreas Tille <tille at debian.org> wrote:\n>\n> Hi,\n>\n> I'd be deligted if somebody from the team could care since I'm\n> basically offline-ish until 4.3.\n>\n> Thank you, Andreas.\n>\n> On Thu, Feb 28, 2019 at 12:29:12PM +0100, Paul Gevers wrote:\n> > Source: openssl, r-cran-openssl\n> > Control: found -1 openssl/1.1.1b-1\n> > Control: found -1 r-cran-openssl/1.2.1+dfsg-1\n> > Severity: important\n> > X-Debbugs-CC: debian-ci at lists.debian.org\n> > User: debian-ci at lists.debian.org\n> > Usertags: breaks needs-update\n> >\n> > Dear maintainers,\n> >\n> > With a recent upload of openssl the autopkgtest of r-cran-openssl fails\n> > in testing when that autopkgtest is run with the binary packages of\n> > openssl from unstable. It passes when run with only packages from\n> > testing. In tabular form:\n> >                        pass            fail\n> > openssl                from testing    1.1.1b-1\n> > r-cran-openssl         from testing    1.2.1+dfsg-1\n> > all others             from testing    from testing\n> >\n> > I copied some of the output at the bottom of this report. The error\n> > looks quite scary to me, but I have no idea if this means that\n> > r-cran-openssl is really failing, or if openssl has changed it's\n> > interface in a bad way.\n> >\n> > Currently this regression is blocking the migration of openssl to\n> > testing [1]. Due to the nature of this issue, I filed this bug report\n> > against both packages. Can you please investigate the situation and\n> > reassign the bug to the right package? If needed, please change the\n> > bug's severity.\n> >\n> > Please note that the window to fix this to allow openssl to migrate\n> > without intervention is closing extremely soon.\n> >\n> > More information about this bug and the reason for filing it can be found on\n> > https://wiki.debian.org/ContinuousIntegration/RegressionEmailInformation\n> >\n> > Paul\n> >\n> > [1] https://qa.debian.org/excuses.php?package=openssl\n> >\n> > https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-openssl/2021380/log.gz\n> >\n> > autopkgtest [21:16:05]: test run-unit-test: [-----------------------\n> >\n> > R version 3.5.2 (2018-12-20) -- \"Eggshell Igloo\"\n> > Copyright (C) 2018 The R Foundation for Statistical Computing\n> > Platform: x86_64-pc-linux-gnu (64-bit)\n> >\n> > R is free software and comes with ABSOLUTELY NO WARRANTY.\n> > You are welcome to redistribute it under certain conditions.\n> > Type 'license()' or 'licence()' for distribution details.\n> >\n> > R is a collaborative project with many contributors.\n> > Type 'contributors()' for more information and\n> > 'citation()' on how to cite R or R packages in publications.\n> >\n> > Type 'demo()' for some demos, 'help()' for on-line help, or\n> > 'help.start()' for an HTML browser interface to help.\n> > Type 'q()' to quit R.\n> >\n> > > library(testthat)\n> > > library(openssl)\n> > >\n> > > test_check(\"openssl\")\n> > double free or corruption (fasttop)\n> > Aborted\n> > autopkgtest [21:16:05]: test run-unit-test: -----------------------]\n> >\n>\n>\n>\n>\n> > _______________________________________________\n> > R-pkg-team mailing list\n> > R-pkg-team at alioth-lists.debian.net\n> > https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n>\n>\n> --\n> http://fam-tille.de\n>",
+      "body_snippet": "I have submitted a hotfix release openssl 1.2.2 to cran that should\nfix the issue. It should be there soon.\n\nOn Thu, Feb 28, 2019 at 5:24 PM Andreas Tille <tille at debian.org> wrote:\n>\n> Hi,\n>\n> I'd ",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 0,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-89911b17236d",
+      "message_id": "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "a265ef4bb03c14ee9d6f00489213486310c7d7bc8d3d2467e6937626fef998e1",
+      "date": "2019-03-01T10:16:35Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+      "references": [
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>"
+      ],
+      "body_plain": "FWIW, the underlying problem in a regression in libssl though. So if\nthe problem appears for other packages you could also backport this\nlibssl patch: https://github.com/openssl/openssl/issues/8375\n\nOn Fri, Mar 1, 2019 at 10:59 AM Jeroen Ooms <jeroenooms at gmail.com> wrote:\n>\n> I have submitted a hotfix release openssl 1.2.2 to cran that should\n> fix the issue. It should be there soon.\n>\n>\n>\n>\n> On Thu, Feb 28, 2019 at 5:24 PM Andreas Tille <tille at debian.org> wrote:\n> >\n> > Hi,\n> >\n> > I'd be deligted if somebody from the team could care since I'm\n> > basically offline-ish until 4.3.\n> >\n> > Thank you, Andreas.\n> >\n> > On Thu, Feb 28, 2019 at 12:29:12PM +0100, Paul Gevers wrote:\n> > > Source: openssl, r-cran-openssl\n> > > Control: found -1 openssl/1.1.1b-1\n> > > Control: found -1 r-cran-openssl/1.2.1+dfsg-1\n> > > Severity: important\n> > > X-Debbugs-CC: debian-ci at lists.debian.org\n> > > User: debian-ci at lists.debian.org\n> > > Usertags: breaks needs-update\n> > >\n> > > Dear maintainers,\n> > >\n> > > With a recent upload of openssl the autopkgtest of r-cran-openssl fails\n> > > in testing when that autopkgtest is run with the binary packages of\n> > > openssl from unstable. It passes when run with only packages from\n> > > testing. In tabular form:\n> > >                        pass            fail\n> > > openssl                from testing    1.1.1b-1\n> > > r-cran-openssl         from testing    1.2.1+dfsg-1\n> > > all others             from testing    from testing\n> > >\n> > > I copied some of the output at the bottom of this report. The error\n> > > looks quite scary to me, but I have no idea if this means that\n> > > r-cran-openssl is really failing, or if openssl has changed it's\n> > > interface in a bad way.\n> > >\n> > > Currently this regression is blocking the migration of openssl to\n> > > testing [1]. Due to the nature of this issue, I filed this bug report\n> > > against both packages. Can you please investigate the situation and\n> > > reassign the bug to the right package? If needed, please change the\n> > > bug's severity.\n> > >\n> > > Please note that the window to fix this to allow openssl to migrate\n> > > without intervention is closing extremely soon.\n> > >\n> > > More information about this bug and the reason for filing it can be found on\n> > > https://wiki.debian.org/ContinuousIntegration/RegressionEmailInformation\n> > >\n> > > Paul\n> > >\n> > > [1] https://qa.debian.org/excuses.php?package=openssl\n> > >\n> > > https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-openssl/2021380/log.gz\n> > >\n> > > autopkgtest [21:16:05]: test run-unit-test: [-----------------------\n> > >\n> > > R version 3.5.2 (2018-12-20) -- \"Eggshell Igloo\"\n> > > Copyright (C) 2018 The R Foundation for Statistical Computing\n> > > Platform: x86_64-pc-linux-gnu (64-bit)\n> > >\n> > > R is free software and comes with ABSOLUTELY NO WARRANTY.\n> > > You are welcome to redistribute it under certain conditions.\n> > > Type 'license()' or 'licence()' for distribution details.\n> > >\n> > > R is a collaborative project with many contributors.\n> > > Type 'contributors()' for more information and\n> > > 'citation()' on how to cite R or R packages in publications.\n> > >\n> > > Type 'demo()' for some demos, 'help()' for on-line help, or\n> > > 'help.start()' for an HTML browser interface to help.\n> > > Type 'q()' to quit R.\n> > >\n> > > > library(testthat)\n> > > > library(openssl)\n> > > >\n> > > > test_check(\"openssl\")\n> > > double free or corruption (fasttop)\n> > > Aborted\n> > > autopkgtest [21:16:05]: test run-unit-test: -----------------------]\n> > >\n> >\n> >\n> >\n> >\n> > > _______________________________________________\n> > > R-pkg-team mailing list\n> > > R-pkg-team at alioth-lists.debian.net\n> > > https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n> >\n> >\n> > --\n> > http://fam-tille.de\n> >",
+      "body_snippet": "FWIW, the underlying problem in a regression in libssl though. So if\nthe problem appears for other packages you could also backport this\nlibssl patch: https://github.com/openssl/openssl/issues/8375\n\nO",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 1,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-69995dc1adc8",
+      "message_id": "<c3489d85-fd60-e998-7ebe-3018cd9ac0bc@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2019-03-01T10:31:43Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+      "references": [
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>"
+      ],
+      "body_plain": "clone 923447 -1\nreassign 923447 src:r-cran-openssl 1.2.1+dfsg-1\nretitle 923447 r-cran-openssl needs update for new openssl\nreassign -1 src:openssl 1.1.1b-1\nretitle -1 openssl: regression in memory problems with BUF_MEM\naffects -1 src:r-cran-openssl\ntags -1 upstream patch\nforwarded -1 https://github.com/openssl/openssl/issues/8375\nthanks\n\nHi Jeroen, others,\n\nOn 01-03-2019 11:16, Jeroen Ooms wrote:\n> FWIW, the underlying problem in a regression in libssl though. So if\n> the problem appears for other packages you could also backport this\n> libssl patch: https://github.com/openssl/openssl/issues/8375\n\nSo if I understand correctly, you improved r-cran-openssl to handle the\nnew situation, but libssl regressed as well. I have cloned this bug and\nhave tried to put your information correctly into the meta-data. Please\nfix those if you think I made a mistake. I am not sure about the\nseverity of the libssl bug, so I'll leave that up to the libssl\nmaintainers to set correctly.\n\nPaul\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "clone 923447 -1\nreassign 923447 src:r-cran-openssl 1.2.1+dfsg-1\nretitle 923447 r-cran-openssl needs update for new openssl\nreassign -1 src:openssl 1.1.1b-1\nretitle -1 openssl: regression in memory pro",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 2,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-a6e5141b1596",
+      "message_id": "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+      "from_name": "Sebastian Andrzej Siewior",
+      "from_email_hash": "a392e9f04398d6f8d46bab8433ee5e467fd93b8db7297b3feaa0f90de7f7e190",
+      "date": "2019-03-01T19:05:52Z",
+      "subject": "Re: [Pkg-openssl-devel] Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "[Pkg-openssl-devel] Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+      "references": [
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>"
+      ],
+      "body_plain": "On 2019-03-01 11:16:35 [+0100], Jeroen Ooms wrote:\n> FWIW, the underlying problem in a regression in libssl though. So if\n> the problem appears for other packages you could also backport this\n> libssl patch: https://github.com/openssl/openssl/issues/8375\n\nDoes this problem solve your problem or does it have nothing to do with\nthe current situation?\n\nSebastian",
+      "body_snippet": "On 2019-03-01 11:16:35 [+0100], Jeroen Ooms wrote:\n> FWIW, the underlying problem in a regression in libssl though. So if\n> the problem appears for other packages you could also backport this\n> libssl",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 2,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-5dba0c8db48f",
+      "message_id": "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "a265ef4bb03c14ee9d6f00489213486310c7d7bc8d3d2467e6937626fef998e1",
+      "date": "2019-03-01T22:55:11Z",
+      "subject": "Re: [Pkg-openssl-devel] Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "[Pkg-openssl-devel] Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+      "references": [
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+        "<20190301190551.tqo4qybhqh7mfhqf@flow>"
+      ],
+      "body_plain": "On Fri, Mar 1, 2019 at 8:05 PM Sebastian Andrzej Siewior\n<sebastian at breakpoint.cc> wrote:\n>\n> On 2019-03-01 11:16:35 [+0100], Jeroen Ooms wrote:\n> > FWIW, the underlying problem in a regression in libssl though. So if\n> > the problem appears for other packages you could also backport this\n> > libssl patch: https://github.com/openssl/openssl/issues/8375\n>\n> Does this problem solve your problem or does it have nothing to do with\n> the current situation?\n\nAs stated, that is the bug report in libssl which causes the crash in\nr-cran-openssl (and the first reply links to a PR with a patch).\n\nI have released a workaround in the R bindings so that it can work\nwith libssl 1.1.1b as-is. Hence in other to fix the crash in\nr-cran-openssl, you either need to update to upstream version 1.2.2,\nor alternatively, you could backport the libssl patch from the\ndiscussion above.",
+      "body_snippet": "On Fri, Mar 1, 2019 at 8:05 PM Sebastian Andrzej Siewior\n<sebastian at breakpoint.cc> wrote:\n>\n> On 2019-03-01 11:16:35 [+0100], Jeroen Ooms wrote:\n> > FWIW, the underlying problem in a regression in ",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 3,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-2bf1f89dd932",
+      "message_id": "<20190302102601.n5gilowsxmlju6we@flow>",
+      "from_name": "Sebastian Andrzej Siewior",
+      "from_email_hash": "a392e9f04398d6f8d46bab8433ee5e467fd93b8db7297b3feaa0f90de7f7e190",
+      "date": "2019-03-02T10:26:02Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>",
+      "references": [
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+        "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+        "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>"
+      ],
+      "body_plain": "On 2019-03-01 23:55:11 [+0100], Jeroen Ooms wrote:\n> On Fri, Mar 1, 2019 at 8:05 PM Sebastian Andrzej Siewior\n> <sebastian at breakpoint.cc> wrote:\n> >\n> > On 2019-03-01 11:16:35 [+0100], Jeroen Ooms wrote:\n> > > FWIW, the underlying problem in a regression in libssl though. So if\n> > > the problem appears for other packages you could also backport this\n> > > libssl patch: https://github.com/openssl/openssl/issues/8375\n> >\n> > Does this problem solve your problem or does it have nothing to do with\n> > the current situation?\n> \n> As stated, that is the bug report in libssl which causes the crash in\n> r-cran-openssl (and the first reply links to a PR with a patch).\n> \n> I have released a workaround in the R bindings so that it can work\n> with libssl 1.1.1b as-is. Hence in other to fix the crash in\n> r-cran-openssl, you either need to update to upstream version 1.2.2,\n> or alternatively, you could backport the libssl patch from the\n> discussion above.\n\nSo if the bug is really in libssl1.1 then I don't see why you should do\nsomething. I will try to backport that commit then and make a new\nupload.\n\nSebastian",
+      "body_snippet": "On 2019-03-01 23:55:11 [+0100], Jeroen Ooms wrote:\n> On Fri, Mar 1, 2019 at 8:05 PM Sebastian Andrzej Siewior\n> <sebastian at breakpoint.cc> wrote:\n> >\n> > On 2019-03-01 11:16:35 [+0100], Jeroen Ooms ",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 4,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-345be545ff5c",
+      "message_id": "<1551524094.32336.34.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2019-03-02T10:54:54Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<20190302102601.n5gilowsxmlju6we@flow>",
+      "references": [
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+        "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+        "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>",
+        "<20190302102601.n5gilowsxmlju6we@flow>"
+      ],
+      "body_plain": "Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewior a écrit :\n> \n> So if the bug is really in libssl1.1 then I don't see why you should do\n> something. I will try to backport that commit then and make a new\n> upload.\n\nNote that the bug has already been fixed in Debian (r-cran-openssl\n1.2.2+dfsg-1), so no need for a new upload.\n\nThanks,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewior a écrit :\n> \n> So if the bug is really in libssl1.1 then I don't see why you should do\n> something. I will try to backport that commit t",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 5,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-99bdc2b0d31d",
+      "message_id": "<20190302161705.xkytnj4msiamahzf@flow>",
+      "from_name": "Sebastian Andrzej Siewior",
+      "from_email_hash": "a392e9f04398d6f8d46bab8433ee5e467fd93b8db7297b3feaa0f90de7f7e190",
+      "date": "2019-03-02T16:17:05Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<1551524094.32336.34.camel@debian.org>",
+      "references": [
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+        "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+        "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>",
+        "<20190302102601.n5gilowsxmlju6we@flow>",
+        "<1551524094.32336.34.camel@debian.org>"
+      ],
+      "body_plain": "On 2019-03-02 11:54:54 [+0100], Sébastien Villemot wrote:\n> Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewior a écrit :\n> > \n> > So if the bug is really in libssl1.1 then I don't see why you should do\n> > something. I will try to backport that commit then and make a new\n> > upload.\n> \n> Note that the bug has already been fixed in Debian (r-cran-openssl\n> 1.2.2+dfsg-1), so no need for a new upload.\n\nNow I am confused. It is either a bug in openssl and should be fixed or\nit is a bug in r-cran-openssl and should be fixed there.\nSo which one is it?\n\n> Thanks,\n> \n\nSebastian",
+      "body_snippet": "On 2019-03-02 11:54:54 [+0100], Sébastien Villemot wrote:\n> Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewior a écrit :\n> > \n> > So if the bug is really in libssl1.1 then I don't see why",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 6,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-eb8e2904eb8e",
+      "message_id": "<1551543708.32336.36.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2019-03-02T16:21:48Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<20190302161705.xkytnj4msiamahzf@flow>",
+      "references": [
+        "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+        "<CABFfbXsgPs024Xkk4Yj-D4MwxfkhwoEzPxZP2PXiaY9mpKj3Ww@mail.gmail.com>",
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+        "<CABFfbXuGnAHucJ8AnR-9tNTDzoaC2i=BtdeVjM8tMUfg4Vyadw@mail.gmail.com>",
+        "<20190301190551.tqo4qybhqh7mfhqf@flow>",
+        "<CABFfbXvScEpXoZu6MHUdMx=ds8b73vgifX=rg3yUX+FQiXSdAg@mail.gmail.com>",
+        "<20190302102601.n5gilowsxmlju6we@flow>",
+        "<1551524094.32336.34.camel@debian.org>",
+        "<20190302161705.xkytnj4msiamahzf@flow>"
+      ],
+      "body_plain": "Le samedi 02 mars 2019 à 17:17 +0100, Sebastian Andrzej Siewior a écrit :\n> On 2019-03-02 11:54:54 [+0100], Sébastien Villemot wrote:\n> > Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewior a écrit :\n> > > \n> > > So if the bug is really in libssl1.1 then I don't see why you should do\n> > > something. I will try to backport that commit then and make a new\n> > > upload.\n> > \n> > Note that the bug has already been fixed in Debian (r-cran-openssl\n> > 1.2.2+dfsg-1), so no need for a new upload.\n> \n> Now I am confused. It is either a bug in openssl and should be fixed or\n> it is a bug in r-cran-openssl and should be fixed there.\n> So which one is it?\n\n>From Debian's point of view, it is now both, since the bug has been\ncloned: #923447 for r-cran-openssl (which is now fixed), and #923516\nfor openssl (still open).\n\nThere is nothing left to do for r-cran-openssl now, at least for\nbuster.\n\nFor openssl, it's up to its maintainers to decide what to do now.\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  http://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  http://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le samedi 02 mars 2019 à 17:17 +0100, Sebastian Andrzej Siewior a écrit :\n> On 2019-03-02 11:54:54 [+0100], Sébastien Villemot wrote:\n> > Le samedi 02 mars 2019 à 11:26 +0100, Sebastian Andrzej Siewio",
+      "thread_id": "thread-8d30aa2fa4e4",
+      "thread_depth": 7,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-ec9d02c977ad",
+      "message_id": "<20190320105921.ulkghwng3i3hgmwc@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2019-03-20T10:59:21Z",
+      "subject": "Re: request for r-cran packages",
+      "subject_clean": "request for r-cran packages",
+      "in_reply_to": "<0791c2f1-1725-7032-306f-d525b6554a36@minke-informatics.co.uk>",
+      "references": [
+        "<0791c2f1-1725-7032-306f-d525b6554a36@minke-informatics.co.uk>"
+      ],
+      "body_plain": "Hi Tony,\n\nOn Tue, Mar 19, 2019 at 10:02:17PM +0100, Tony Travis wrote:\n> I need three r-cran packages that are not in the Debian-Med-based Ubuntu\n> archive for my PIQUE GWAS pipeline:\n> \n> > https://github.com/tony-travis/PIQUE\n\nThanks for the feature request (BTW, should we try to package\nPIQUE itself as well?)\n \n> I would like to request Debian-Med packaging of:\n> \n>   r-cran-forecast\n>   r-cran-uroot\n>   r-cran-fracdiff\n> \n> These are not present in the Ubuntu 18.04 LTS repository...\n\nJust to explain what's needed to do:\n\n   $ prepare_missing_cran_package forecast\n\nThis creates ready to `git buildpackage` repositories of r-cran-forecast\nand r-cran-fracdiff (which is a precondition for r-cran-forecast).\n\n   $ cd ../CRAN_prospective/r-cran-fracdiff\n\nI manually fixed d/copyright of r-cran-fracdiff and did\n\n   $ git buildpackage\n   $ inject-into-salsa-git\n   $ itp_from_debian_dir \"This package is a precondition for r-cran-forecast\"\n\nThis resulted in ITP bug #925131.  Close bug\n\n   $ dput r-cran-fracdiff_1.4-2-1_amd64.changes\n\nCopy deb from r-cran-fracdiff to my extra pbuilder mirror.\n\n   $ cd ../r-cran-forecast\n\nmanually fixed d/copyright and d/control (needs injecting r-cran-fracdiff\ninto Build-Depends since at the time of packaging creation this dependency\ndid not existed yet)\n\n   $ git buildpackage\n   $ inject-into-salsa-git\n\nCheck autopkgtest and learn that r-cran-uroot is needed to pass this test\n\n   $ prepare_missing_cran_package uroot\n   $ cd ../r-cran-uroot\n\nmanually fixed d/copyright and (extremely unusually in R packages)\nneeded work around some build issue.  Uroot can work with CUDA but we\ncan not support this feature in official Debian since this is only in\nnon-free.  I added README.Debian explaining the fact and if needed how\nto deal with it.\n\n   $ git buildpackage\n   $ inject-into-salsa-git\n   $ itp_from_debian_dir \"This package is needed to run the test suite of r-cran-forecast\"\n\nThis resulted in ITP bug #925133.  Close bug                                                                                                                                                 \n\n   $ dput r-cran-uroot_2.0-9-1_amd64.changes\n   $ cd ../r-cran-forecast\n   $ itp_from_debian_dir\n\nThis resulted in ITP bug #925137 which I just uploaded to new.\n\nYou see (with the exception of uroot which is an extremely rare\nexception) creating the R packages is extremely easy using the existing\nR toolset (in package dh-r - itp_from_debian_dir was used from Git since\nthe extension to right send a bug report was added after freeze but it\nwas simple enough anyway).  The time to write all steps down was\nbasically duplicating the time for the actual work (if uroot would\nhave been more simple the relation for writing it down would be even\nworse),  I took that effort to give some practical example how to\nwork with the existing tool set.\n\n> I manually downloaded these versions from Michael Rutter's PPA:\n> \n> > https://launchpad.net/~marutter/+archive/ubuntu/c2d4u\n> \n>   r-cran-forecast_8.4-3cran1ppa0bionic0_amd64.deb\n>   r-cran-uroot_2.0-9-3cran1ppa0bionic0_amd64.deb\n>   r-cran-fracdiff_1.4-2-3cran2ppa0bionic0_amd64.deb\n\nThanks for the links.  I admit I ignored these since we need source\npackages anyway and getting a policy conform source package of latest\nupstream versions including autopkgtests is done obviously faster than\ndoing research where to find the source package and possibly update the\npackaging to latest standards.\n \n> Unfortunately, they are no longer available for 'bionic (18.04 LTS).\n\nThe packages are now in new queue and we need to wait until ftpmaster\nhas processed these.  As you know I'm not informed about how these can\nmake it to bionic.\n\nKind regards,\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Tony,\n\nOn Tue, Mar 19, 2019 at 10:02:17PM +0100, Tony Travis wrote:\n> I need three r-cran packages that are not in the Debian-Med-based Ubuntu\n> archive for my PIQUE GWAS pipeline:\n> \n> > https://g",
+      "thread_id": "thread-ec9d02c977ad",
+      "thread_depth": 0,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-eaa6feeaf73f",
+      "message_id": "<51d59bd9-1cb3-060c-c4ec-ba72796e226a@minke-informatics.co.uk>",
+      "from_name": "Tony Travis",
+      "from_email_hash": "1ef412ccfb26764c219375df566041aa1664839927144a85f4d72ef699f1a68a",
+      "date": "2019-03-20T11:25:32Z",
+      "subject": "Re: request for r-cran packages",
+      "subject_clean": "request for r-cran packages",
+      "in_reply_to": "<20190320105921.ulkghwng3i3hgmwc@an3as.eu>",
+      "references": [
+        "<0791c2f1-1725-7032-306f-d525b6554a36@minke-informatics.co.uk>",
+        "<20190320105921.ulkghwng3i3hgmwc@an3as.eu>"
+      ],
+      "body_plain": "On 20/03/2019 11:59, Andreas Tille wrote:\n> Hi Tony,\n>\n> On Tue, Mar 19, 2019 at 10:02:17PM +0100, Tony Travis wrote:\n> > I need three r-cran packages that are not in the Debian-Med-based Ubuntu\n> > archive for my PIQUE GWAS pipeline:\n> >\n> > > https://github.com/tony-travis/PIQUE\n>\n>\n> Thanks for the feature request (BTW, should we try to package\n> PIQUE itself as well?)\n> [...]\n\nHi, Andreas.\n\nYes, that would be great if you're willing, but I would struggle to do \nit on my own despite you explaining to me several times what to do...\n\nI've been advising some colleagues in India to stop using Bio-Linux 8 \nand switch to Ubuntu-MATE 18.04 + med-bio instead and they reported the \nissue. TBH, I had forgotten that I did a manual work-around on my own \nservers.\n\nThanks,\n\n  Tony.\n\n--\nMinke Informatics Limited, Registered in Scotland - Company No. SC419028\nRegistered Office: 3 Donview, Bridge of Alford, AB33 8QJ, Scotland (UK)\ntel. +44(0)19755 63548                    http://minke-informatics.co.uk\nmob. +44(0)7985 078324        mailto:tony.travis at minke-informatics.co.uk",
+      "body_snippet": "On 20/03/2019 11:59, Andreas Tille wrote:\n> Hi Tony,\n>\n> On Tue, Mar 19, 2019 at 10:02:17PM +0100, Tony Travis wrote:\n> > I need three r-cran packages that are not in the Debian-Med-based Ubuntu\n> > a",
+      "thread_id": "thread-ec9d02c977ad",
+      "thread_depth": 1,
+      "month": "2019-03"
+    },
+    {
+      "id": "msg-6b6f18648c4c",
+      "message_id": "<20190326140735.2ptf7jmdm2qgvsnl@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-03-26T14:07:35Z",
+      "subject": "Licensing of locfit",
+      "subject_clean": "Licensing of locfit",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Andy,\n\nonce we had a discussion about the licensing restriction of locfit.\nI'd like to point your attention to a Github issue about this:\n\n   https://github.com/chairmank/locfit/issues/1\n\nWhile it seems that Steve M. Kim (user name chairmank on Github) has\nsimply copied the code to Github that might be some place to join the\neffort to find the original copyright holder Catherine Loader and\nclarify the license.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Andy,\n\nonce we had a discussion about the licensing restriction of locfit.\nI'd like to point your attention to a Github issue about this:\n\n   https://github.com/chairmank/locfit/issues/1\n\nWhile it ",
+      "thread_id": "thread-6b6f18648c4c",
+      "thread_depth": 0,
+      "month": "2019-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-8d30aa2fa4e4",
+      "subject": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "message_count": 9,
+      "participants": [
+        "Jeroen Ooms",
+        "Paul Gevers",
+        "Sebastian Andrzej Siewior",
+        "Sébastien Villemot"
+      ],
+      "started": "2019-03-01T09:59:01Z",
+      "last_reply": "2019-03-02T16:21:48Z",
+      "root_message_id": "msg-8d30aa2fa4e4"
+    },
+    {
+      "id": "thread-ec9d02c977ad",
+      "subject": "request for r-cran packages",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Tony Travis"
+      ],
+      "started": "2019-03-20T10:59:21Z",
+      "last_reply": "2019-03-20T11:25:32Z",
+      "root_message_id": "msg-ec9d02c977ad"
+    },
+    {
+      "id": "thread-6b6f18648c4c",
+      "subject": "Licensing of locfit",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-03-26T14:07:35Z",
+      "last_reply": "2019-03-26T14:07:35Z",
+      "root_message_id": "msg-6b6f18648c4c"
+    }
+  ]
+}

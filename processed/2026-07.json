@@ -1,0 +1,200 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2026-07",
+  "messages": [
+    {
+      "id": "msg-10fed07e421a",
+      "message_id": "<akb8WSkpnyJQFnid@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-03T00:03:37Z",
+      "subject": "Re: Proposal: a new binary package, r-pkg-team-core-architecture",
+      "subject_clean": "Proposal: a new binary package, r-pkg-team-core-architecture",
+      "in_reply_to": "<27193.9725.613113.335909@paul.eddelbuettel.com>",
+      "references": [
+        "<ajiFFdGqrll_qnyS@kumo.plessy.net>",
+        "<27193.9725.613113.335909@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi all,\n\nI would like to go ahead with this proposal and opened a MR on dh-r at:\n\nhttps://salsa.debian.org/r-pkg-team/dh-r/-/merge_requests/20\n\nHere are some extra answers to Dirk (taking into account the later\nexchange with Rebecca).\n\nLe Mon, Jun 22, 2026 at 07:09:33AM -0500, Dirk Eddelbuettel a écrit :\n> Would you be able to demonstrate for R and, say, a handful of packages that\n> there is fundaemtal \"brokenness\"?  And if you were to find it at the R level,\n> would it not your normal \"Good Open Source Citizen\" responsibility to\n> document this at the upstream bug tracker?  For R, that is its bugzilla; for\n> packages often their GH repos. Can we not start there?  That would also be a\n> net benefit to the R Project which AFAIK has no access to armhf s390x and\n> likely also little to none for i386.\n\nSadly, yes, there is one problematic architecture, and it slipped out\nof the restriction that we went through in the past 6 months: riscv64.\n\nI am tracking the current issues on our wiki:\n\nhttps://wiki.debian.org/R/riscv64/DebianIssues\n\nI think that it is the tip of the iceberg, and that the main reason why\nbugs are hitting particularly high-profile packages is that their test\ncoverage is better.\n\nThe core issue is the same in all cases and explained here, as we\ndiscussed earlier.\n\nhttps://wiki.debian.org/R/riscv64\n\nI asked three times the riscv64 porters on their mailing list to give me\ncomments on this wiki page, explained that even just a \"LGTM\" would be\nfine, but got no answer.  While I wrote earlier that I would contact the\nR developers as well, I am wondering if it is going to be fruitful if\nnobody is expressing interest on the Debian side.  I will expand on this\nin a separate email, maybe next week.\n\nThis said, what I did on risvc64 illustrates what I would like to ask to\nthe people interested in the architecures where we do not build the\npackages at the moment (like the two developpers from IBM and Canonical\nwho enquired about s390x).  I think that it is fair to say that we (the\npeople working or R packages in Debian) should not be alone in charge of\nthe whole process.\n\n> I think our choice of 'mixing' package versions when CRAN is more or less\n> ensuring a buildable cohort 'at HEAD' at each point in time is still the more\n> likely issue.\n\nWell, it is not a choice.  For most of the team-maintained packages that\nare out of date today, the reason is either 1) we need to package new\ndependencies, 2) there are new test failures on amd64 and I will not\nupload until they are resolved, or 3) potential license issues such as\n\"must not modify\" statements (in UK open government data for instance)\nor \"non-commercial\" statements (and third-party upstream authors can not\nbe reached anymore).  Nothing that we can not solve in the long term,\nbut enough to create a backlog.\n\n> [1] https://rousseeuwprize.org/2026\n\nThat is a really great news, thanks for the information!\n\nCheers,\n\nCharles\n\n> --\n> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hi all,\n\nI would like to go ahead with this proposal and opened a MR on dh-r at:\n\nhttps://salsa.debian.org/r-pkg-team/dh-r/-/merge_requests/20\n\nHere are some extra answers to Dirk (taking into account",
+      "thread_id": "thread-10fed07e421a",
+      "thread_depth": 0,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-ceeb4a3b906e",
+      "message_id": "<27207.41545.575062.509479@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2026-07-03T11:51:37Z",
+      "subject": "Re: Proposal: a new binary package, r-pkg-team-core-architecture",
+      "subject_clean": "Proposal: a new binary package, r-pkg-team-core-architecture",
+      "in_reply_to": "<akb8WSkpnyJQFnid@bubu.igloo>",
+      "references": [
+        "<ajiFFdGqrll_qnyS@kumo.plessy.net>",
+        "<27193.9725.613113.335909@paul.eddelbuettel.com>",
+        "<akb8WSkpnyJQFnid@bubu.igloo>"
+      ],
+      "body_plain": "On 3 July 2026 at 09:03, Charles Plessy wrote:\n| Le Mon, Jun 22, 2026 at 07:09:33AM -0500, Dirk Eddelbuettel a écrit :\n| >I think our choice of 'mixing' package versions when CRAN is more or less\n| >ensuring a buildable cohort 'at HEAD' at each point in time is still the more\n| >likely issue.\n| \n| Well, it is not a choice.  For most of the team-maintained packages that\n\nEverything we do is a choice.\n\nLet me be more blunt if the subtler language does not work:\n\n - this team is very ambitious and adds encompassing autopkgtests spanning\n   hardware platforms that CRAN does not run on\n\n - this team has generally speaking difficulties keeping up with CRAN and is\n   therefore slipping behind releases at CRAN.\n\nThis creates a combinations where we end up testing BOTH on more platforms\nAND ALSO on random package combinations CRAN does not test.\n\nThe combination is bound to set us up for failure and a lot of work. I think\nsomething has got to give. I would limit autopkgtests to amd64 for a start,\nuntil we are in alignment with CRAN and pass (ideally) everywhere. Then add\none architecture at a time. \n\nThat said, I do appreciate the added color on that risk platform. There can\nbe / are always some platform that drift too far away. E.g. \"eventually\"\nDebian turned m68k off as a release arch. We may well be at a point where we\ndecide similarly for R packages and some archirecture. And I am not against\nthat. But I wonder if were to do that, should we not also do it at the R\nengine level, i.e. package r-base-core, and then ask for all 500-some binary\npackages on that platform?\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 3 July 2026 at 09:03, Charles Plessy wrote:\n| Le Mon, Jun 22, 2026 at 07:09:33AM -0500, Dirk Eddelbuettel a écrit :\n| >I think our choice of 'mixing' package versions when CRAN is more or less\n| >e",
+      "thread_id": "thread-10fed07e421a",
+      "thread_depth": 1,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-e55a2d781ab7",
+      "message_id": "<akozrTejGdIyDRuM@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-05T10:36:29Z",
+      "subject": "uscan V5 Templates for CRAN and Bioconductor ready for use.",
+      "subject_clean": "uscan V5 Templates for CRAN and Bioconductor ready for use.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everyone,\n\nin the past months I have worked on uscan V5 templates for CRAN and\nBioconductor.  With devscripts version 2.26.9 now backported for stable\nand installed on the relevant parts Debian infrastructure, the templates\nare ready for use in our packages.\n\nFor CRAN package, old watch files can be replaced by:\n\n```\nVersion: 5\n\nTemplate: CRAN\nName: the_upstream_name\n```\n\nFor Bioconductor, the name of the template is… Bioconductor.\n\nBoth templates honor the `Files-excluded` field of `debian/copyright` if\npresent, and will use the +dfsg prefix to indicate that the package has\nbeen repackaged.  Thus they are a replacement for both repackaged and\nunchanged upstream sources.\n\nhttps://salsa.debian.org/debian/devscripts/-/tree/main/lib/Devscripts/Uscan/Templates\n\nThere is even more: if the package has an `Archive` field in\n`d/upstream/metadata` and an `Upstream-Name` field in `d/copyright` the\n`d/watch` file can be deleted entirely.  But a bunch of quality control\ntools still see this as a defect, so I do not recommend it yet.\n\nI hope you will enjoy the templates, and have a nice Sunday!\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hello everyone,\n\nin the past months I have worked on uscan V5 templates for CRAN and\nBioconductor.  With devscripts version 2.26.9 now backported for stable\nand installed on the relevant parts Debian ",
+      "thread_id": "thread-e55a2d781ab7",
+      "thread_depth": 0,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-aad3a8f47483",
+      "message_id": "<ako3CJH2cYradKeR@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-05T10:50:48Z",
+      "subject": "Re: uscan V5 Templates for CRAN and Bioconductor ready for use.",
+      "subject_clean": "uscan V5 Templates for CRAN and Bioconductor ready for use.",
+      "in_reply_to": "<akozrTejGdIyDRuM@bubu.igloo>",
+      "references": [
+        "<akozrTejGdIyDRuM@bubu.igloo>"
+      ],
+      "body_plain": "Le Sun, Jul 05, 2026 at 07:36:29PM +0900, Charles Plessy a écrit :\n> For CRAN package, old watch files can be replaced by:\n>\n> ```\n> Version: 5\n>\n> Template: CRAN\n> Name: the_upstream_name\n> ```\n\nI am very sorry for the noise, it is `Package`, not `Name`.\n\nAlso, please pay attention that character case matters.\n\nCheers,\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Le Sun, Jul 05, 2026 at 07:36:29PM +0900, Charles Plessy a écrit :\n> For CRAN package, old watch files can be replaced by:\n>\n> ```\n> Version: 5\n>\n> Template: CRAN\n> Name: the_upstream_name\n> ```\n\nI am",
+      "thread_id": "thread-e55a2d781ab7",
+      "thread_depth": 1,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-3e763c951914",
+      "message_id": "<akuvbkndmQtEOHqB@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-06T13:36:46Z",
+      "subject": "Re: Proposal: a new binary package, r-pkg-team-core-architecture",
+      "subject_clean": "Proposal: a new binary package, r-pkg-team-core-architecture",
+      "in_reply_to": "<27207.41545.575062.509479@paul.eddelbuettel.com>",
+      "references": [
+        "<ajiFFdGqrll_qnyS@kumo.plessy.net>",
+        "<27193.9725.613113.335909@paul.eddelbuettel.com>",
+        "<akb8WSkpnyJQFnid@bubu.igloo>",
+        "<27207.41545.575062.509479@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk and everyone,\n\nLe Fri, Jul 03, 2026 at 06:51:37AM -0500, Dirk Eddelbuettel a écrit :\n> That said, I do appreciate the added color on that risk platform. There can\n> be / are always some platform that drift too far away. E.g. \"eventually\"\n> Debian turned m68k off as a release arch. We may well be at a point where we\n> decide similarly for R packages and some archirecture. And I am not against\n> that. But I wonder if were to do that, should we not also do it at the R\n> engine level, i.e. package r-base-core, and then ask for all 500-some binary\n> packages on that platform?\n\nthanks Dirk for the answer.  Yes, if R on riscv64 is not realistic in\nthe near term, turning it off in r-base-core may be the solution.\nI will reach out the riscv64 maintainers again with an email explaining\nthe possible directions inluding removal.\n\nIn the meantime, I would like go ahead with submitting the\nr-pkg-team-core-architecture package to the NEW queue.  Please anybody\nlet me know if there remains strong objections.\n\nHave a nice day,\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hi Dirk and everyone,\n\nLe Fri, Jul 03, 2026 at 06:51:37AM -0500, Dirk Eddelbuettel a écrit :\n> That said, I do appreciate the added color on that risk platform. There can\n> be / are always some platfo",
+      "thread_id": "thread-10fed07e421a",
+      "thread_depth": 2,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-b12eb35d8ddf",
+      "message_id": "<ak2zYPLamAbAzAi4@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-08T02:18:08Z",
+      "subject": "r-pkg-team-core-architecture available with dh-r version 20260707.",
+      "subject_clean": "r-pkg-team-core-architecture available with dh-r version 20260707.",
+      "in_reply_to": "<E1wh5Pd-00000005cXh-0Ylm@fasolo.debian.org>",
+      "references": [
+        "<E1wh5Pd-00000005cXh-0Ylm@fasolo.debian.org>"
+      ],
+      "body_plain": "Hi all,\n\nI am pleased to report that it took less than 24h for the DFSG team to accept\nthe addition of the r-pkg-team-core-architecture metapackage to dh-r!\n\nhttps://packages.debian.org/unstable/r-pkg-team-core-architecture\n(will need to fix the formatting of the description)\n\nWe can start to use it and I changed routine-update accordingly to\nreplace the architecture-is-* packages with r-pkg-team-core-architecture\n\nhttps://salsa.debian.org/debian/routine-update/-/commit/0131b548d15bd226c3baf40dd75046669e54919f\n\nThis is now uploaded in routine-update 0.2.7.\n\nHave a nice day,\n\nCharles\n\nLe Tue, Jul 07, 2026 at 01:00:33PM +0000, Debian FTP Masters a écrit :\n> Thank you for your contribution to Debian.\n> \n> \n> \n> Accepted:\n> \n> -----BEGIN PGP SIGNED MESSAGE-----\n> Hash: SHA512\n> \n> Format: 1.8\n> Date: Tue, 07 Jul 2026 09:01:35 +0900\n> Source: dh-r\n> Binary: dh-r pkg-r-autopkgtest r-pkg-team-core-architecture\n> Architecture: source all amd64\n> Version: 20260707\n> Distribution: unstable\n> Urgency: medium\n> Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>\n> Changed-By: Charles Plessy <plessy at debian.org>\n> Description:\n>  dh-r       - Debian helper tools for packaging R libraries\n>  pkg-r-autopkgtest - Script for the automatic testing of R packages\n>  r-pkg-team-core-architecture - Architecture gatekeeper for R packages in Debian\n> Closes: 1111274\n> Changes:\n>  dh-r (20260707) unstable; urgency=medium\n>  .\n>    [ Alexandre Detiste ]\n>    * drop old CDBS -> dh conversion script\n>  .\n>    [ Andreas Tille ]\n>    * scripts/itp_from_debian_dir: Deal with existing RFPs\n>    * Create d/watch Version 5 for CRAN packages\n>  .\n>    [ Charles Plessy ]\n>    * Use uscan templates for CRAN and Bioconductor packages.\n>    * dh-update-R:\n>      - sort debian/control fields like cme and match the\n>        `wrap-and-sort -ast` of libconfig-model-dpkg-perl (>= 3.01).\n>      - stop using `debian/compat`. Closes: #1111274\n>      - read debian/tests/autopkgtest-pkg-r.conf with Config::Properties.\n>      - read debian/tests/control with Dpkg::Control.\n>    * Build the `r-pkg-team-core-architecture` package on amd64, arm64,\n>      loong64, ppc64el and riscv64, so that we can restrict redistribution\n>      of most r-cran-* and all r-bioc-* packages to these architectures,\n>      for reasons explained in the package description.\n>    * Add myself to Uploaders.\n> Checksums-Sha1:\n>  cec307cc357e063d38bb60c46f1cdd1a06f72267 1932 dh-r_20260707.dsc\n>  2bb49b791e3c4c50f0d30bb7a0ec7f59893c60d7 45560 dh-r_20260707.tar.xz\n>  4ca06b144ff2417e7f41eb96b7452aed5e5756d7 40636 dh-r_20260707_all.deb\n>  a9867fddaa5c9ace76c037d89c62b399d7e52413 6257 dh-r_20260707_amd64.buildinfo\n>  c7b916c41ee3e96d195c76787098297906718579 4700 pkg-r-autopkgtest_20260707_all.deb\n>  9a0388ffadbafea7e07fa45027e0704b78e43ef8 4764 r-pkg-team-core-architecture_20260707_amd64.deb\n> Checksums-Sha256:\n>  399c0eb0a40ab1d50c52e690e6c19683cd1eee8c39d2b6e4a62d632bbcd7f71a 1932 dh-r_20260707.dsc\n>  2b81fe8740107438ce3ce015205b0e4c211942f432c4f496f3365d99b797cac5 45560 dh-r_20260707.tar.xz\n>  28f12ec0de65c34e94cad58a14ff804f7f329b64bd8b6dec459fc7ea5d7700b9 40636 dh-r_20260707_all.deb\n>  ce1539a3f9d70faa5357e2775aa226a4cb6ea11565837432440d92dd1f2e6c8f 6257 dh-r_20260707_amd64.buildinfo\n>  f9b01383b413ed29967a450b34bf89555d2fe23c1a7ce1f669781f96850e53c5 4700 pkg-r-autopkgtest_20260707_all.deb\n>  b249b68fc16fbb0bf35a1c450109c4a048fd4aa59dd2a0ff9a938f404198bdf4 4764 r-pkg-team-core-architecture_20260707_amd64.deb\n> Files:\n>  5cdc6d2466369a489f24c201fb53c759 1932 science optional dh-r_20260707.dsc\n>  3af73e96fb6f79f846741128dc3ff97e 45560 science optional dh-r_20260707.tar.xz\n>  8698e3d8a9808ea5cf054952b1f5498d 40636 science optional dh-r_20260707_all.deb\n>  1703876f42bd2779917a21917e6dc642 6257 science optional dh-r_20260707_amd64.buildinfo\n>  bc3b25a341fd9d6dfdc08989240d3ed4 4700 science optional pkg-r-autopkgtest_20260707_all.deb\n>  3ca215f92537f787ac13429957604d7f 4764 science optional r-pkg-team-core-architecture_20260707_amd64.deb\n> \n> -----BEGIN PGP SIGNATURE-----\n> \n> iQJGBAEBCgAwFiEEc0cUmcxg7Z7ugFlGxb1sjyKV1QIFAmpMVkESHHBsZXNzeUBk\n> ZWJpYW4ub3JnAAoJEMW9bI8ildUCV4oP/i3U6HvErBDCetrXsrI8b+/OTKfjU81R\n> 5UGMoGLOWSiKfim5/UppSTea26qmf0MvQD0aME8LxAunJnpCNr7cqJ7KF59OXwIJ\n> bEqLcU3h/uIvmYFcu3QgxzBwMcIzY/uzHekpnZKG4I0dYJqv7Iet13F2qWHow+9H\n> PbUUfxAkjpic487bCl1BMOZ/XczEBaIlQb+A8jM4ftGQE8Q10Ry6OhkXVbw10sdm\n> Mg1R0PBqk7bfvpeCF8OTn5BPVZhlPpkZ1ol5mjY5AAwnf8jN+LYkDrxPXYPJeIS+\n> RGgDxNe5mO6P+sB0BzUYm8A+Z0YeCSrzhp5Iqx/ZDVzNzbdRl4BiGA7r+/oqQooV\n> j0XDnqM52aZ7CeRWtPwv0l4Jl9XXiVo3XMxh5W+VS8aL0i9cVaN8fqyph8D3UPUd\n> bUlcTf5eEfd0bDjGxh80oq3O6VZz+AwMZmhRQXeuAr7pTckiBvaKuRfBTPwFfTfF\n> UgwRmHt0R46widlzhqroKA6iiAQDHJHHwbfZ0Qgfmwzlawl18jIhl7TVKP9ukKfX\n> uBRmwsWyHHMHDvD291OzofgkltmWbe+TfdbMsQNZ9qg+rAmD7mHaigiMlukzc0Ka\n> 1FdTSRPzLOfvpj1zscLNJKI80UXNuvEaF+hPX4VEm7sfPrDCa4bS2edgEe1WYchU\n> Is4pWkDO2LCn\n> =+/N2\n> -----END PGP SIGNATURE-----\n> \n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Hi all,\n\nI am pleased to report that it took less than 24h for the DFSG team to accept\nthe addition of the r-pkg-team-core-architecture metapackage to dh-r!\n\nhttps://packages.debian.org/unstable/r-pkg",
+      "thread_id": "thread-b12eb35d8ddf",
+      "thread_depth": 0,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-bd6a0eebb582",
+      "message_id": "<ak7m72ypLc5OCjDc@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-09T00:10:23Z",
+      "subject": "Ready for Bioconductor transition?",
+      "subject_clean": "Ready for Bioconductor transition?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Good morning everybody!\n\nNow that the architecture restriction mass upload is behind us, that most\nissues with testing migration appear to be either riscv64 or reproducibility\nregressions, and now that we can express architecture support with our brand\nnew r-pkg-team-core-architecture metapackage, I would like to propose to go\nahead with the much awaited Bioconductor transition.\n\nIn the past, one of the major headaches was that if a new dependency would be\nfound by surprise at the middle of the transition, it could delay the process\nby weeks or even months.  Now, thanks to the pereverance of Andreas during his\nDPL terms, the waiting time in the NEW queue can be less than a day.\n\nSo one thing that we could to is to get the green light of the Release team\nand just go for the transition sequentially.\n\nPlease let me know if you see some issues with the simplest plan, your\navailability, collisions with other transitions, etc.\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Good morning everybody!\n\nNow that the architecture restriction mass upload is behind us, that most\nissues with testing migration appear to be either riscv64 or reproducibility\nregressions, and now tha",
+      "thread_id": "thread-bd6a0eebb582",
+      "thread_depth": 0,
+      "month": "2026-07"
+    },
+    {
+      "id": "msg-2fe11a0a39b5",
+      "message_id": "<alAwQhp7VJKGL6sI@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-07-09T23:35:30Z",
+      "subject": "Ready for Bioconductor transition?",
+      "subject_clean": "Ready for Bioconductor transition?",
+      "in_reply_to": "<ak7m72ypLc5OCjDc@kumo.plessy.net>",
+      "references": [
+        "<ak7m72ypLc5OCjDc@kumo.plessy.net>"
+      ],
+      "body_plain": "Control: tags 1134352 - moreinfo\n\nHi Graham,\n\nI think that on the R packages maintainers team side, we are ready for the\nBioconductor transition.  Can we go ahead?\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Control: tags 1134352 - moreinfo\n\nHi Graham,\n\nI think that on the R packages maintainers team side, we are ready for the\nBioconductor transition.  Can we go ahead?\n\nHave a nice day,\n\nCharles\n\n-- \nChar",
+      "thread_id": "thread-bd6a0eebb582",
+      "thread_depth": 1,
+      "month": "2026-07"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-10fed07e421a",
+      "subject": "Proposal: a new binary package, r-pkg-team-core-architecture",
+      "message_count": 3,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2026-07-03T00:03:37Z",
+      "last_reply": "2026-07-06T13:36:46Z",
+      "root_message_id": "msg-10fed07e421a"
+    },
+    {
+      "id": "thread-e55a2d781ab7",
+      "subject": "uscan V5 Templates for CRAN and Bioconductor ready for use.",
+      "message_count": 2,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-07-05T10:36:29Z",
+      "last_reply": "2026-07-05T10:50:48Z",
+      "root_message_id": "msg-e55a2d781ab7"
+    },
+    {
+      "id": "thread-b12eb35d8ddf",
+      "subject": "r-pkg-team-core-architecture available with dh-r version 20260707.",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-07-08T02:18:08Z",
+      "last_reply": "2026-07-08T02:18:08Z",
+      "root_message_id": "msg-b12eb35d8ddf"
+    },
+    {
+      "id": "thread-bd6a0eebb582",
+      "subject": "Ready for Bioconductor transition?",
+      "message_count": 2,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-07-09T00:10:23Z",
+      "last_reply": "2026-07-09T23:35:30Z",
+      "root_message_id": "msg-bd6a0eebb582"
+    }
+  ]
+}

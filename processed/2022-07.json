@@ -1,0 +1,82 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2022-07",
+  "messages": [
+    {
+      "id": "msg-d7db22906f5d",
+      "message_id": "<YtUdmngZvJYsBYEu@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-07-18T08:45:14Z",
+      "subject": "Please adjust StanHeaders to new version of (one)tbb",
+      "subject_clean": "Please adjust StanHeaders to new version of (one)tbb",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Control: tags -1 upstream\nControl: forwarded -1 Ben Goodrich <benjamin.goodrich at columbia.edu>\n\nHi Ben,\n\nDebian is migrating from old tbb to onetbb (currently version 2021.5.0).  When\ntrying to build rstan version 2.21.5 which includes StanHeaders we get the error\nyou can find here in our CI:\n\n   https://salsa.debian.org/r-pkg-team/r-cran-rstan/-/jobs/3011219\n\nIn file included from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core.hpp:4,\n                 from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/mat.hpp:6,\n                 from /usr/lib/R/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12,\n                 from ./stan/model/log_prob_grad.hpp:4,\n                 from ./stan/model/test_gradients.hpp:7,\n                 from ./stan/services/diagnose/diagnose.hpp:10,\n                 from stan_fit.cpp:33:\n/usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core/init_threadpool_tbb.hpp:9:10: fatal error: tbb/task_scheduler_init.h: No such file or directory\n    9 | #include <tbb/task_scheduler_init.h>\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~\ncompilation terminated.\n\nIt seems StanHeaders need to be adapted to onetbb.\n\nThere is a tbb -> onetbb transition guide:\nhttps://oneapi-src.github.io/oneTBB/main/tbb_userguide/Migration_Guide.html\n\nHope this helps\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 upstream\nControl: forwarded -1 Ben Goodrich <benjamin.goodrich at columbia.edu>\n\nHi Ben,\n\nDebian is migrating from old tbb to onetbb (currently version 2021.5.0).  When\ntrying to buil",
+      "thread_id": "thread-d7db22906f5d",
+      "thread_depth": 0,
+      "month": "2022-07"
+    },
+    {
+      "id": "msg-ac9dc368fbfa",
+      "message_id": "<YuWMQkjNLm33RXnz@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-07-30T19:53:38Z",
+      "subject": "Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Julien,\n\nthe Debian R packaging team has packaged scatterD3.  Since Debian is considering\ncompressed JS as binary code without source we need to uncompressed source for\nthis JavaScript file.  Could you please point us to this source?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Julien,\n\nthe Debian R packaging team has packaged scatterD3.  Since Debian is considering\ncompressed JS as binary code without source we need to uncompressed source for\nthis JavaScript file.  Could",
+      "thread_id": "thread-ac9dc368fbfa",
+      "thread_depth": 0,
+      "month": "2022-07"
+    },
+    {
+      "id": "msg-58c500b0a81e",
+      "message_id": "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2022-07-30T20:09:13Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<YuWMQkjNLm33RXnz@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>"
+      ],
+      "body_plain": "On 30 July 2022 at 21:53, Andreas Tille wrote:\n| the Debian R packaging team has packaged scatterD3.  Since Debian is considering\n| compressed JS as binary code without source we need to uncompressed source for\n| this JavaScript file.  Could you please point us to this source?\n\nThe CRAN package in its DESCRIPTION file links to the GitHub repo. Which\nshows in\n                                      \n   https://github.com/juba/scatterD3#development-notes                                      \n\nhow to bundle the (not in the package by design) source dir srcjs/ into a\ncompacted file by using node / npm.  (Disclaimer: I know little JS myself)\n\nDirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 30 July 2022 at 21:53, Andreas Tille wrote:\n| the Debian R packaging team has packaged scatterD3.  Since Debian is considering\n| compressed JS as binary code without source we need to uncompressed ",
+      "thread_id": "thread-ac9dc368fbfa",
+      "thread_depth": 1,
+      "month": "2022-07"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-d7db22906f5d",
+      "subject": "Please adjust StanHeaders to new version of (one)tbb",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2022-07-18T08:45:14Z",
+      "last_reply": "2022-07-18T08:45:14Z",
+      "root_message_id": "msg-d7db22906f5d"
+    },
+    {
+      "id": "thread-ac9dc368fbfa",
+      "subject": "Where can we find the source code for scatterD3.js",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2022-07-30T19:53:38Z",
+      "last_reply": "2022-07-30T20:09:13Z",
+      "root_message_id": "msg-ac9dc368fbfa"
+    }
+  ]
+}

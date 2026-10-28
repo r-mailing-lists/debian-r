@@ -1,0 +1,379 @@
+From crusoe at debian.org  Wed Oct  2 10:53:56 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 2 Oct 2024 12:53:56 +0200
+Subject: Dropping big-endian (s390x) support for some r-bioc-* packages
+Message-ID: <ee3b8286-2e6d-4264-8609-7e2c5754b106@debian.org>
+
+Hello all,
+
+Most of bioconductor 3.19 has migrated to testing, but some legitimate bugs shown by running the r-bioc-rhdf5 tests on s390x are holding up 20+ packages.
+
+I have communicated the issue to upstream, providing them with a reproducer, and helping them reproduce it on their CI. https://github.com/grimbough/rhdf5/issues/138
+
+However I don't think it will be fixed soon, and while I have made a new release of r-bioc-rhdf5 that skips those tests, I don't feel good about that.
+
+So I propose to add a "architecture-is-little-endian" build-dep to the following packages and request the removal of their s390x builds from the archive:
+
+r-bioc-rhdf5
+r-bioc-alabaster.base
+r-bioc-alabaster.matrix
+r-bioc-bsseq
+r-bioc-dropletutils
+r-bioc-hdf5array
+r-bioc-dss
+r-bioc-glmgampoi
+r-bioc-gsva
+r-bioc-demixt
+
+Two of these packages also have failing s390x tests: r-bioc-alabaster.matrix and r-bioc-alabaster.base
+
+I think the removal can be done via one request, so the only real pain is making new releases of those 11 packages.
+
+Thoughts, comments?
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Wed Oct  2 11:34:24 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 2 Oct 2024 20:34:24 +0900
+Subject: Re: Dropping big-endian (s390x) support for some r-bioc-* packages
+In-Reply-To: <ee3b8286-2e6d-4264-8609-7e2c5754b106@debian.org>
+References: <ee3b8286-2e6d-4264-8609-7e2c5754b106@debian.org>
+Message-ID: <Zv0vwI_0SxVotLh5@kumo.plessy.net>
+
+Le Wed, Oct 02, 2024 at 12:53:56PM +0200, Michael R. Crusoe a écrit :
+> 
+> So I propose to add a "architecture-is-little-endian" build-dep to the following packages and request the removal of their s390x builds from the archive:
+> 
+
+Hi Michael and everybody,
+
+I am all for it but I would like to propose something bigger.
+
+Let r-bioc-biocgenerics (or r-bioc-biocbase) provide a virtual package
+called r-bioc-supported-architectures available for amd64 and arm64
+only, and make all r-boc-* depend on it at the next BioC release (which
+takes place this month).
+
+People who want r-bioc-* packages on other architectures can first work
+on portability issues outside the Debian main archive, and can create 
+a local version of r-bioc-supported-architectures to enable building
+BiocC on what they want.  If the mass-build looks sustainable we can
+consider add, maybe after consulting BioC upstream about future
+prospects.
+
+I think that bioinformaticians can aim for other architectures if they
+have appetite for the work it represents, and portrers can aim for
+bioinformatics if they have the workforce for it, but by default we
+should not build these packages everywhere because it puts the whole
+burden on mostly just us.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From steffen_moeller at gmx.de  Thu Oct  3 09:04:44 2024
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Thu, 3 Oct 2024 11:04:44 +0200
+Subject: Aw: Re: Dropping big-endian (s390x) support for some r-bioc-* packages
+In-Reply-To: <Zv0vwI_0SxVotLh5@kumo.plessy.net>
+References: <ee3b8286-2e6d-4264-8609-7e2c5754b106@debian.org> <Zv0vwI_0SxVotLh5@kumo.plessy.net>
+Message-ID: <trinity-3dd01b1f-988d-48c1-92cd-2c812d7693e9-1727946284697@msvc-mesg-gmx023>
+
+I like this thought. My only concern would be that we should have a way to at least inform upstream about platform-specific failures, so we should at least try to build them if the dependencies are available.
+
+Best,
+Steffen
+
+> Gesendet: Mittwoch, 2. Oktober 2024 um 13:34
+> Von: "Charles Plessy" <plessy at debian.org>
+> An: debian-med at lists.debian.org, debian-r at lists.debian.org
+> Betreff: Re: Dropping big-endian (s390x) support for some r-bioc-* packages
+>
+> <html><head></head><body>Le Wed, Oct 02, 2024 at 12:53:56PM +0200, Michael R. Crusoe a écrit :
+> &gt; 
+> &gt; So I propose to add a "architecture-is-little-endian" build-dep to the following packages and request the removal of their s390x builds from the archive:
+> &gt; 
+> 
+> Hi Michael and everybody,
+> 
+> I am all for it but I would like to propose something bigger.
+> 
+> Let r-bioc-biocgenerics (or r-bioc-biocbase) provide a virtual package
+> called r-bioc-supported-architectures available for amd64 and arm64
+> only, and make all r-boc-* depend on it at the next BioC release (which
+> takes place this month).
+> 
+> People who want r-bioc-* packages on other architectures can first work
+> on portability issues outside the Debian main archive, and can create 
+> a local version of r-bioc-supported-architectures to enable building
+> BiocC on what they want.  If the mass-build looks sustainable we can
+> consider add, maybe after consulting BioC upstream about future
+> prospects.
+> 
+> I think that bioinformaticians can aim for other architectures if they
+> have appetite for the work it represents, and portrers can aim for
+> bioinformatics if they have the workforce for it, but by default we
+> should not build these packages everywhere because it puts the whole
+> burden on mostly just us.
+> 
+> Have a nice day,
+> 
+> Charles
+> 
+> -- 
+> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+> Debian Med packaging team         http://www.debian.org/devel/debian-med
+> Tooting from home                  https://framapiaf.org/@charles_plessy
+> - You  do not have  my permission  to use  this email  to train  an AI -
+> 
+> </body></html>
+
+From plessy at debian.org  Fri Oct  4 00:47:23 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 4 Oct 2024 09:47:23 +0900
+Subject: Too mamy wishlist bugs
+Message-ID: <Zv87G34cyyXWTOez@kumo.plessy.net>
+
+Hi Ben,
+
+I appreciate your interest to contribute, but I think that opening many
+wishlist bugs for one-line changes is counter-productive.  Please
+consider the time it takes managing these bugs, compared with the time
+it takes maning the one-line change.
+
+For instance, if we want to standardise the homepage field to point to
+CRAN, we can modify our routine-update script the change will be done
+automatically at each new upload.
+
+Another way to contribute small changes is to make merge requests on
+Salsa.  I think that a few clicks are less time-consuming than copying
+or cut-pasting many 6-digits bug numbers plenty of times.
+
+So please before mass-filing bugs consult with us.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From tille at debian.org  Fri Oct  4 07:03:24 2024
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 4 Oct 2024 09:03:24 +0200
+Subject: Re: Dropping big-endian (s390x) support for some r-bioc-* packages
+In-Reply-To: <Zv0vwI_0SxVotLh5@kumo.plessy.net>
+References: <ee3b8286-2e6d-4264-8609-7e2c5754b106@debian.org> <Zv0vwI_0SxVotLh5@kumo.plessy.net>
+Message-ID: <Zv-TPOqBVuYkJUeF@an3as.eu>
+
+Am Wed, Oct 02, 2024 at 08:34:24PM +0900 schrieb Charles Plessy:
+> Le Wed, Oct 02, 2024 at 12:53:56PM +0200, Michael R. Crusoe a écrit :
+> > 
+> > So I propose to add a "architecture-is-little-endian" build-dep to the following packages and request the removal of their s390x builds from the archive:
+
++1
+
+> I am all for it but I would like to propose something bigger.
+> 
+> Let r-bioc-biocgenerics (or r-bioc-biocbase) provide a virtual package
+> called r-bioc-supported-architectures available for amd64 and arm64
+> only, and make all r-boc-* depend on it at the next BioC release (which
+> takes place this month).
+
+It might possibly a good idea to fix the architure depencency inside
+r-bioc-biocgenerics (or r-bioc-biocbase).  However, there are new
+interesting architectures coming up (like riscv64) and excluding those
+without good reason is IMHO not rectified by the problems we've seen in
+the past.
+ 
+> People who want r-bioc-* packages on other architectures can first work
+> on portability issues outside the Debian main archive, and can create 
+> a local version of r-bioc-supported-architectures to enable building
+> BiocC on what they want.  If the mass-build looks sustainable we can
+> consider add, maybe after consulting BioC upstream about future
+> prospects.
+> 
+> I think that bioinformaticians can aim for other architectures if they
+> have appetite for the work it represents, and portrers can aim for
+> bioinformatics if they have the workforce for it, but by default we
+> should not build these packages everywhere because it puts the whole
+> burden on mostly just us.
+
+I think architecture-is-little-endian on r-bioc-biocgenerics will solve
+our current problems without creating extra work for future
+architectures.  I'm also scared by the extra work we have to remove
+all those architectures that are currently building and testing fine.
+
+Kind regards
+   Andreas.
+
+-- 
+https://fam-tille.de
+
+From joostvb+debian at uvt.nl  Sat Oct  5 08:45:08 2024
+From: joostvb+debian at uvt.nl (=?utf-8?q?Joost_van_Baal-Ili=C4=87?=)
+Date: Sat, 5 Oct 2024 10:45:08 +0200
+Subject: Re: Too mamy wishlist bugs
+In-Reply-To: <Zv87G34cyyXWTOez@kumo.plessy.net>
+References: <Zv87G34cyyXWTOez@kumo.plessy.net>
+Message-ID: <ZwD8lG6nDtLfUYnh@banach.uvt.nl>
+
+Hi again Ben,
+
+Thanks for your efforts to help Debian.  I see you're now filing bugs in Perl
+packages, and others.  However:
+
+Please do read
+https://www.debian.org/doc/manuals/developers-reference/beyond-pkging.en.html#reporting-lots-of-bugs-at-once-mass-bug-filing
+ :
+
+"Reporting a great number of bugs for the same problem on a great number of
+different packages — i.e., more than 10 — is a deprecated practice. Take all
+possible steps to avoid submitting bulk bugs at all."
+
+"If you report more than 10 bugs on the same topic at once, it is recommended
+that you send a message to debian-devel at lists.debian.org describing your
+intention before submitting the report"
+
+Does this help you?
+
+Bye,
+
+Joost
+
+Op Fri, Oct 04, 2024 at 09:47:23AM +0900 schreef Charles Plessy:
+> Hi Ben,
+> 
+> I appreciate your interest to contribute, but I think that opening many
+> wishlist bugs for one-line changes is counter-productive.  Please
+> consider the time it takes managing these bugs, compared with the time
+> it takes maning the one-line change.
+> 
+> For instance, if we want to standardise the homepage field to point to
+> CRAN, we can modify our routine-update script the change will be done
+> automatically at each new upload.
+> 
+> Another way to contribute small changes is to make merge requests on
+> Salsa.  I think that a few clicks are less time-consuming than copying
+> or cut-pasting many 6-digits bug numbers plenty of times.
+> 
+> So please before mass-filing bugs consult with us.
+> 
+> Have a nice day,
+> 
+> Charles
+> 
+> -- 
+> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+> Debian Med packaging team         http://www.debian.org/devel/debian-med
+> Tooting from home                  https://framapiaf.org/@charles_plessy
+> - You  do not have  my permission  to use  this email  to train  an AI -
+> 
+-- 
+✉ Joost van Baal-Ilić <joostvb at uvt.nl>             ☎ (013-466-)3519
+kamer G 231                  ✉ TiU LIS Infra Unix <lis-unix at uvt.nl>
+irc://irc.uvt.nl/#infra                   🌍 https://go.uvt.nl/unix
+
+From edd at debian.org  Fri Oct 11 13:52:11 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 11 Oct 2024 08:52:11 -0500
+Subject: (r-cran-)survey not migrating to testing autoremovals
+Message-ID: <26377.11659.435821.979085@rob.eddelbuettel.com>
+
+Hi Charles,
+
+Could you take a look at https://bugs.debian.org/1081117 ? It is about to
+remove my packages Rcmdr and effects from testing as a repercussion.
+
+The survey package is maintained by an R Core member and in good standing
+upstream: https://cloud.r-project.org/web/checks/check_results_survey.html
+(modulo a minor nag on an entries in two Rd files) so the issue is likely
+self-imposed by us and may need resolution on our end.
+
+Many thanks,  Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sat Oct 12 00:46:20 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 12 Oct 2024 09:46:20 +0900
+Subject: Re: (r-cran-)survey not migrating to testing autoremovals
+In-Reply-To: <26377.11659.435821.979085@rob.eddelbuettel.com>
+References: <26377.11659.435821.979085@rob.eddelbuettel.com>
+Message-ID: <ZwnG3Nk46K05qYxk@bubu.igloo>
+
+Le Fri, Oct 11, 2024 at 08:52:11AM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Could you take a look at https://bugs.debian.org/1081117 ? It is about
+> to remove my packages Rcmdr and effects from testing as a
+> repercussion.
+
+Hi Dirk,
+
+thanks for the heads-up,
+
+it looks like the survey package gained some C++ code in its version
+4.3, but that escaped my attention when running our routine-update
+script, and r-cran-survey is still arch:any, which breaks it on all
+architecture except the one where it was built.
+
+So this time the CI tests caught a real problem :)  I guess that in
+cran2deb and successors because the source package is always rebuilt
+from scratch?
+
+I will fix this soon, maybe by rebuilding from scratch as well.  If easy
+I will also add a check in routine-update that stops the process if a
+`src` directory is found in an arch:any package.
+
+Have nice week-end,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Oct 18 07:14:48 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 18 Oct 2024 16:14:48 +0900
+Subject: Re: (r-cran-)survey not migrating to testing autoremovals
+In-Reply-To: <26377.11659.435821.979085@rob.eddelbuettel.com>
+References: <26377.11659.435821.979085@rob.eddelbuettel.com>
+Message-ID: <ZxIK6Cff4dQ92PzY@kumo.plessy.net>
+
+Le Fri, Oct 11, 2024 at 08:52:11AM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Could you take a look at https://bugs.debian.org/1081117 ? It is about to
+> remove my packages Rcmdr and effects from testing as a repercussion.
+
+Hi Dirk and all,
+
+quick message to say that r-cran-survey now passes all the CI tests
+after I converted it to an architecture-dependent package.
+
+Have a nice week-end,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+

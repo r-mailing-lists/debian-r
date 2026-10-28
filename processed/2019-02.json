@@ -1,0 +1,380 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-02",
+  "messages": [
+    {
+      "id": "msg-eaf5d2456574",
+      "message_id": "<20190201121925.c2ocvidsrri5ra4p@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2019-02-01T12:19:25Z",
+      "subject": "Re: How to get the non-minimized versions of handsontable/all.min.js and others",
+      "subject_clean": "How to get the non-minimized versions of handsontable/all.min.js and others",
+      "in_reply_to": "<CAHsBtiB68Br=eeNDRLzsBX+LG8k9v1vT2Gs-swY5DXSUUKE-CQ@mail.gmail.com>",
+      "references": [
+        "<20190131121510.qpyaar2nxeuaagto@an3as.eu>",
+        "<CAHsBtiB68Br=eeNDRLzsBX+LG8k9v1vT2Gs-swY5DXSUUKE-CQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jonathan,\n\nthanks a lot for your quick response.\n\nOn Thu, Jan 31, 2019 at 06:28:41AM -0600, Jonathan Owen wrote:\n> I generally pull the min.js files from the handsontable GitHub repo:\n> https://github.com/handsontable/handsontable (see releases, dist folder).\n> You can find the current release version for rhandsontable in the\n> rhandsontable/inst/htmlwidgets/rhandsontable.yaml file.\n> \n> Let me know if you need us to create a new version of the library that uses\n> non-minified files.  Switching will increase the package size significantly.\n\nI was able to find an apropriate solution for chroma.min.js and\nhandsontable/all.min.js.  Unfortunately I failed with\n\n    numbro/languages.min.js\n\nYou can not easily download languages.js and I was not able to run\nthe build process locally.  Any hint how to create this file from\nsource?\n\nKind regards,\n\n        Andreas.\n\n \n> Jonathan\n> \n> On Thu, Jan 31, 2019, 6:15 AM Andreas Tille <andreas at an3as.eu wrote:\n> \n> > Hi Jonathan,\n> >\n> > the R packaging team in Debian has packaged your rhandsontable package\n> > for Debian.  Debian iconsiders minimized JavaScript as not human\n> > readable code and thus not considered as source code.  So we need to\n> > provide the non-minimized code inside the source of our packaging.\n> >\n> > In your rhandsontable package I've found\n> >\n> >   inst/htmlwidgets/lib/numbro/languages.min.js\n> >   inst/htmlwidgets/lib/chroma/chroma.min.js\n> >   inst/htmlwidgets/lib/handsontable/all.min.js\n> >\n> > where it is not easy for me to find the not minimized form (no problem\n> > for the other JS scripts).  For instance for handsontable I checked\n> >\n> >   https://github.com/handsontable/handsontable\n> >\n> > but the code I get there from the dist directory are way larger files\n> > and I have no clue what is actually behind all.min.js.  Since I need to\n> > ask you for this anyway I did not yet checked numbro/languages and\n> > chroma/chroma whether I could find the source code since it seems to be\n> > the more straightforward approach to ask you about this.\n> >\n> > Could you help me from where you've got these JS code and what might\n> > be the original source code form.\n> >\n> > Kind regards\n> >\n> >        Andreas.\n> >\n> > --\n> > http://fam-tille.de\n> >\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Jonathan,\n\nthanks a lot for your quick response.\n\nOn Thu, Jan 31, 2019 at 06:28:41AM -0600, Jonathan Owen wrote:\n> I generally pull the min.js files from the handsontable GitHub repo:\n> https://git",
+      "thread_id": "thread-eaf5d2456574",
+      "thread_depth": 0,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-84cf9a941a27",
+      "message_id": "<CAHsBtiCLrZ4V6gTLnHXc-_TSigm6Zq=widWy-ZbB4hLxdqyQEg@mail.gmail.com>",
+      "from_name": "Jonathan Owen",
+      "from_email_hash": "8d06811f7357887ebb8e4daf9e1ba8864a7d58ba3be5cf1d46d87b9f9392b015",
+      "date": "2019-02-05T12:10:32Z",
+      "subject": "Re: How to get the non-minimized versions of handsontable/all.min.js and others",
+      "subject_clean": "How to get the non-minimized versions of handsontable/all.min.js and others",
+      "in_reply_to": "<20190201121925.c2ocvidsrri5ra4p@an3as.eu>",
+      "references": [
+        "<20190131121510.qpyaar2nxeuaagto@an3as.eu>",
+        "<CAHsBtiB68Br=eeNDRLzsBX+LG8k9v1vT2Gs-swY5DXSUUKE-CQ@mail.gmail.com>",
+        "<20190201121925.c2ocvidsrri5ra4p@an3as.eu>"
+      ],
+      "body_plain": "I think you can pull the source files from https://github.com/BenjaminVanRyseghem/numbro/tree/master/languages, but I'm not sure how to create the minified version.  This might be a question for the handsontable project, as they that is where the languages file originated.\n\nOn Fri, Feb 1, 2019, 6:19 AM Andreas Tille <andreas at fam-tille.de wrote:\n\n> Hi Jonathan,\n>\n>\n>\n> thanks a lot for your quick response.\n>\n>\n>\n> On Thu, Jan 31, 2019 at 06:28:41AM -0600, Jonathan Owen wrote:\n>\n> > I generally pull the min.js files from the handsontable GitHub repo:\n>\n> > https://github.com/handsontable/handsontable (see releases, dist folder).\n>\n> > You can find the current release version for rhandsontable in the\n>\n> > rhandsontable/inst/htmlwidgets/rhandsontable.yaml file.\n>\n> >\n>\n> > Let me know if you need us to create a new version of the library that uses\n>\n> > non-minified files.  Switching will increase the package size significantly.\n>\n>\n>\n> I was able to find an apropriate solution for chroma.min.js and\n>\n> handsontable/all.min.js.  Unfortunately I failed with\n>\n>\n>\n>     numbro/languages.min.js\n>\n>\n>\n> You can not easily download languages.js and I was not able to run\n>\n> the build process locally.  Any hint how to create this file from\n>\n> source?\n>\n>\n>\n> Kind regards,\n>\n>\n>\n>         Andreas.\n>\n>\n>\n>\n>\n> > Jonathan\n>\n> >\n>\n> > On Thu, Jan 31, 2019, 6:15 AM Andreas Tille <andreas at an3as.eu wrote:\n>\n> >\n>\n> > > Hi Jonathan,\n>\n> > >\n>\n> > > the R packaging team in Debian has packaged your rhandsontable package\n>\n> > > for Debian.  Debian iconsiders minimized _javascript_ as not human\n>\n> > > readable code and thus not considered as source code.  So we need to\n>\n> > > provide the non-minimized code inside the source of our packaging.\n>\n> > >\n>\n> > > In your rhandsontable package I've found\n>\n> > >\n>\n> > >   inst/htmlwidgets/lib/numbro/languages.min.js\n>\n> > >   inst/htmlwidgets/lib/chroma/chroma.min.js\n>\n> > >   inst/htmlwidgets/lib/handsontable/all.min.js\n>\n> > >\n>\n> > > where it is not easy for me to find the not minimized form (no problem\n>\n> > > for the other JS scripts).  For instance for handsontable I checked\n>\n> > >\n>\n> > >   https://github.com/handsontable/handsontable\n>\n> > >\n>\n> > > but the code I get there from the dist directory are way larger files\n>\n> > > and I have no clue what is actually behind all.min.js.  Since I need to\n>\n> > > ask you for this anyway I did not yet checked numbro/languages and\n>\n> > > chroma/chroma whether I could find the source code since it seems to be\n>\n> > > the more straightforward approach to ask you about this.\n>\n> > >\n>\n> > > Could you help me from where you've got these JS code and what might\n>\n> > > be the original source code form.\n>\n> > >\n>\n> > > Kind regards\n>\n> > >\n>\n> > >        Andreas.\n>\n> > >\n>\n> > > --\n>\n> > > http://fam-tille.de\n>\n> > >\n>\n>\n>\n> --\n>\n> http://fam-tille.de",
+      "body_snippet": "I think you can pull the source files from https://github.com/BenjaminVanRyseghem/numbro/tree/master/languages, but I'm not sure how to create the minified version.  This might be a question for the h",
+      "thread_id": "thread-eaf5d2456574",
+      "thread_depth": 1,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-a82b6d29bad2",
+      "message_id": "<20190205133458.nto3t7bnk5qf4dxq@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-02-05T13:34:58Z",
+      "subject": "Re: How to get the non-minimized versions of handsontable/all.min.js and others",
+      "subject_clean": "How to get the non-minimized versions of handsontable/all.min.js and others",
+      "in_reply_to": "<CAHsBtiCLrZ4V6gTLnHXc-_TSigm6Zq=widWy-ZbB4hLxdqyQEg@mail.gmail.com>",
+      "references": [
+        "<20190131121510.qpyaar2nxeuaagto@an3as.eu>",
+        "<CAHsBtiB68Br=eeNDRLzsBX+LG8k9v1vT2Gs-swY5DXSUUKE-CQ@mail.gmail.com>",
+        "<20190201121925.c2ocvidsrri5ra4p@an3as.eu>",
+        "<CAHsBtiCLrZ4V6gTLnHXc-_TSigm6Zq=widWy-ZbB4hLxdqyQEg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jonathan,\n\nOn Tue, Feb 05, 2019 at 06:10:32AM -0600, Jonathan Owen wrote:\n> I think you can pull the source files from\n> https://github.com/BenjaminVanRyseghem/numbro/tree/master/languages, but\n> I'm not sure how to create the minified version.\n\nYes, I just noticed there are several of the single language files.\n\n> This might be a question\n> for the handsontable project, as they that is where the languages file\n> originated.\n\nI tried\n\n   npm install && npm run build-webpack\n\nbut it ended up in some error (no idea if it is caused due to a broken\nnpm at my side or whether something is wrong with the input.  I have\nabsolutely no clue about all this JS stuff.\n\nWell, there is all.js which is also language related but I can not find\nany numbro related stuff inside the handsontable repository.  At least\nfrom the structure of the rhandsontable directory layout it looks as if\nit is from somewhere else.\n\nAm I missing something?\n\nKind regards\n\n      Andreas.\n\n> On Fri, Feb 1, 2019, 6:19 AM Andreas Tille <andreas at fam-tille.de wrote:\n> \n> > Hi Jonathan,\n> >\n> > thanks a lot for your quick response.\n> >\n> > On Thu, Jan 31, 2019 at 06:28:41AM -0600, Jonathan Owen wrote:\n> > > I generally pull the min.js files from the handsontable GitHub repo:\n> > > https://github.com/handsontable/handsontable (see releases, dist\n> > folder).\n> > > You can find the current release version for rhandsontable in the\n> > > rhandsontable/inst/htmlwidgets/rhandsontable.yaml file.\n> > >\n> > > Let me know if you need us to create a new version of the library that\n> > uses\n> > > non-minified files.  Switching will increase the package size\n> > significantly.\n> >\n> > I was able to find an apropriate solution for chroma.min.js and\n> > handsontable/all.min.js.  Unfortunately I failed with\n> >\n> >     numbro/languages.min.js\n> >\n> > You can not easily download languages.js and I was not able to run\n> > the build process locally.  Any hint how to create this file from\n> > source?\n> >\n> > Kind regards,\n> >\n> >         Andreas.\n> >\n> >\n> > > Jonathan\n> > >\n> > > On Thu, Jan 31, 2019, 6:15 AM Andreas Tille <andreas at an3as.eu wrote:\n> > >\n> > > > Hi Jonathan,\n> > > >\n> > > > the R packaging team in Debian has packaged your rhandsontable package\n> > > > for Debian.  Debian iconsiders minimized JavaScript as not human\n> > > > readable code and thus not considered as source code.  So we need to\n> > > > provide the non-minimized code inside the source of our packaging.\n> > > >\n> > > > In your rhandsontable package I've found\n> > > >\n> > > >   inst/htmlwidgets/lib/numbro/languages.min.js\n> > > >   inst/htmlwidgets/lib/chroma/chroma.min.js\n> > > >   inst/htmlwidgets/lib/handsontable/all.min.js\n> > > >\n> > > > where it is not easy for me to find the not minimized form (no problem\n> > > > for the other JS scripts).  For instance for handsontable I checked\n> > > >\n> > > >   https://github.com/handsontable/handsontable\n> > > >\n> > > > but the code I get there from the dist directory are way larger files\n> > > > and I have no clue what is actually behind all.min.js.  Since I need to\n> > > > ask you for this anyway I did not yet checked numbro/languages and\n> > > > chroma/chroma whether I could find the source code since it seems to be\n> > > > the more straightforward approach to ask you about this.\n> > > >\n> > > > Could you help me from where you've got these JS code and what might\n> > > > be the original source code form.\n> > > >\n> > > > Kind regards\n> > > >\n> > > >        Andreas.\n> > > >\n> > > > --\n> > > > http://fam-tille.de\n> > > >\n> >\n> > --\n> > http://fam-tille.de\n> >\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Jonathan,\n\nOn Tue, Feb 05, 2019 at 06:10:32AM -0600, Jonathan Owen wrote:\n> I think you can pull the source files from\n> https://github.com/BenjaminVanRyseghem/numbro/tree/master/languages, but\n> I",
+      "thread_id": "thread-eaf5d2456574",
+      "thread_depth": 2,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-0f07609138cb",
+      "message_id": "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "ed154dbe019b44583030c9f2c2b2180b1dcbec781ce7fa417e21033d7f55f24a",
+      "date": "2019-02-08T06:36:10Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>"
+      ],
+      "body_plain": "For those following this discussion: there is now a version of\nr-cran-v8 that uses libnode-dev in sid. Is there anything we need to\ndo to get r-cran-v8 back in buster?\n\nOn Tue, Jan 29, 2019 at 10:04 AM Andreas Tille <andreas at an3as.eu> wrote:\n>\n> Hi Jeroen,\n>\n> I realised that the Debian package of V8 has de facto no chance to make\n> it into the next stable Debian release if it depends from V8 version\n> 3.14 or 3.15 (as it is enforced in its configuration step).  The reason\n> is that it depends from libv8-3.14 package which is suffering from\n> several security bugs[1].  I've started a discussion[2] with the\n> JavaScript maintainers which leaded to the suggestion to use the current\n> V8 library which is part of the libnode-dev package.  However, the\n> explicit version checks are preventing this.  I even tried to remove\n> these checks but later (not unexpected) the code failed to build.\n>\n> The problem is that the CRAN V8 package has some reverse dependencies\n> which all are affected and can not migrate to the next Debian stable\n> release which would be a real shame.  Do you see any chance to adapt V8\n> to some more recent implementation of the library?  Finally R\n> applications like Shiny etc might suffer from security issues of that\n> old and unmaintained V8 implementation.\n>\n> Kind regards\n>\n>       Andreas.\n>\n>\n> [1] https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=libv8-3.14\n> [2] https://alioth-lists.debian.net/pipermail/pkg-javascript-devel/2019-January/030787.html\n>\n> On Mon, Jan 21, 2019 at 10:15:44AM +0100, Jérémy Lal wrote:\n> > Le lun. 21 janv. 2019 à 10:08, Andreas Tille <andreas at an3as.eu> a écrit :\n> >\n> > > Hi Jonas,\n> > >\n> > > On Fri, Jan 18, 2019 at 08:04:33PM +0100, Jonas Smedegaard wrote:\n> > > > Quoting Andreas Tille (2019-01-18 18:39:34)\n> > > > > I'd prefer\n> > > > >\n> > > > >  - change nodejs to build its v8 as a shared lib, and provide it it\n> > > > >    makes sense because upstream nodejs do all the work of keeping ABI\n> > > > >    stability,\n> > > >\n> > > > The libv8 part of Nodejs is currently included in Debian as a _private_\n> > > > shared library part of libnode.\n> > > >\n> > > > I guess you can try link with that private library - as an alternative\n> > > > to waiting for someone to refactor packages, have ftpmasters approve new\n> > > > package names, and then have it available in experimental.\n> > >\n> > > I admit I do not understand what exactly I need to do to use that\n> > > private shared library.  I checked the content of the packages\n> > > libnode-dev and libnode64 and did not found anything that looks\n> > > like libv8.  Could you give any more verbose hint how I can link\n> > > against the private shared library you mentioned?\n> > >\n> >\n> > The headers are in libnode-dev\n> >  /usr/include/nodejs/deps/v8/include/\n> > and the link flag is\n> > -lnode\n> > (v8 being inside node). But can that work ?\n> >\n> > Jérémy\n>\n> --\n> http://fam-tille.de",
+      "body_snippet": "For those following this discussion: there is now a version of\nr-cran-v8 that uses libnode-dev in sid. Is there anything we need to\ndo to get r-cran-v8 back in buster?\n\nOn Tue, Jan 29, 2019 at 10:04 A",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 0,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-5dad08024185",
+      "message_id": "<20190208074234.mlw52uedek73s7dl@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-02-08T07:42:34Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jeroen,\n\nOn Fri, Feb 08, 2019 at 07:36:10AM +0100, Jeroen Ooms wrote:\n> For those following this discussion: there is now a version of\n> r-cran-v8 that uses libnode-dev in sid.\n\nThanks a lot for your quick and extremely helpful support.\n\n> Is there anything we need to\n> do to get r-cran-v8 back in buster?\n\nAccording to\n\n    https://tracker.debian.org/pkg/r-cran-v8\n\nTopic \"testing migrations\" waiting for 1 day is all we need to\ndo. ;-)  Thanks to the autopkgtests we have only a 2 day waiting\nperiod for the testing migration.\n\nAccording to\n\n    https://tracker.debian.org/pkg/nodejs\n\nlibnode-js version 10.15.2 migratet to testing at 4.2.\n\nThanks again\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Jeroen,\n\nOn Fri, Feb 08, 2019 at 07:36:10AM +0100, Jeroen Ooms wrote:\n> For those following this discussion: there is now a version of\n> r-cran-v8 that uses libnode-dev in sid.\n\nThanks a lot for yo",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 1,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-d6c511f78a86",
+      "message_id": "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+      "from_name": "Jérémy Lal",
+      "from_email_hash": "4f8a4d14ab787a5f8045b33b8f1c5bea7d9138421e84c33379adf63c6b14f236",
+      "date": "2019-02-08T08:43:51Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>"
+      ],
+      "body_plain": "Le ven. 8 févr. 2019 à 07:36, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n\n> For those following this discussion: there is now a version of\n>\n> r-cran-v8 that uses libnode-dev in sid. Is there anything we need to\n>\n> do to get r-cran-v8 back in buster?\n\nHi Jeroen,\n\nyour work made me realize the debian nodejs source package might just need\nto provide a libv8-dev package with headers in /usr/include/v8 and a pkgconfig\nfile that tell to use -lnode ?\nWould that be all ?\n\nJérémy",
+      "body_snippet": "Le ven. 8 févr. 2019 à 07:36, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n\n> For those following this discussion: there is now a version of\n>\n> r-cran-v8 that uses libnode-dev in sid. Is there anyt",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 1,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-f9fbd9bb0c3f",
+      "message_id": "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "ed154dbe019b44583030c9f2c2b2180b1dcbec781ce7fa417e21033d7f55f24a",
+      "date": "2019-02-08T09:31:29Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+        "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Feb 8, 2019 at 9:44 AM Jérémy Lal <kapouer at melix.org> wrote:\n>\n>\n>\n> Le ven. 8 févr. 2019 à 07:36, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n>>\n>> For those following this discussion: there is now a version of\n>> r-cran-v8 that uses libnode-dev in sid. Is there anything we need to\n>> do to get r-cran-v8 back in buster?\n>>\n>\n> Hi Jeroen,\n>\n> your work made me realize the debian nodejs source package might just need\n> to provide a libv8-dev package with headers in /usr/include/v8 and a pkgconfig\n> file that tell to use -lnode ?\n> Would that be all ?\n\nThat would be absolutely fantastic, yes.  Also a symlink from\nlibv8.so-> libnode.so woulde be handy, because libv8 doesn't use\npkg-config anywhere else so most bindings just test for linking with\n-lv8.",
+      "body_snippet": "On Fri, Feb 8, 2019 at 9:44 AM Jérémy Lal <kapouer at melix.org> wrote:\n>\n>\n>\n> Le ven. 8 févr. 2019 à 07:36, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n>>\n>> For those following this discussion: ",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 2,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-0f6f301b9334",
+      "message_id": "<CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com>",
+      "from_name": "Jérémy Lal",
+      "from_email_hash": "4f8a4d14ab787a5f8045b33b8f1c5bea7d9138421e84c33379adf63c6b14f236",
+      "date": "2019-02-08T10:48:57Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>",
+      "references": [
+        "<20190118103730.3yji326g7lavwhz5@an3as.eu>",
+        "<CAJxTCxxfCQnUS6czfdsFAL5Y-bJpTf0hfjYy-vB9F8W9MejT5Q@mail.gmail.com>",
+        "<20190118120430.5j65cl447uvvwqn2@an3as.eu>",
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+        "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+        "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>"
+      ],
+      "body_plain": "Le ven. 8 févr. 2019 à 10:31, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n\n> On Fri, Feb 8, 2019 at 9:44 AM Jérémy Lal <kapouer at melix.org> wrote:\n>\n> >\n>\n> >\n>\n> >\n>\n> > Le ven. 8 févr. 2019 à 07:36, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n>\n> >>\n>\n> >> For those following this discussion: there is now a version of\n>\n> >> r-cran-v8 that uses libnode-dev in sid. Is there anything we need to\n>\n> >> do to get r-cran-v8 back in buster?\n>\n> >>\n>\n> >\n>\n> > Hi Jeroen,\n>\n> >\n>\n> > your work made me realize the debian nodejs source package might just need\n>\n> > to provide a libv8-dev package with headers in /usr/include/v8 and a pkgconfig\n>\n> > file that tell to use -lnode ?\n>\n> > Would that be all ?\n>\n>\n>\n> That would be absolutely fantastic, yes.  Also a symlink from\n>\n> libv8.so-> libnode.so woulde be handy, because libv8 doesn't use\n>\n> pkg-config anywhere else so most bindings just test for linking with\n>\n> -lv8.\n\nOk then no pkgconfig and a symlink instead.\nI suppose i need to ask a removal of libv8 from unstable (it's removed from testing) to\nbe able to \"take\" libv8-dev. Or maybe declare a libv8-in-nodejs-dev package ?\nIn any case i don't know if i should make a libv8-xx package (which would basically be\nsymlinks to libnode).\n\nAny advice is welcome...\n\nJérémy",
+      "body_snippet": "Le ven. 8 févr. 2019 à 10:31, Jeroen Ooms <jeroen at berkeley.edu> a écrit :\n\n> On Fri, Feb 8, 2019 at 9:44 AM Jérémy Lal <kapouer at melix.org> wrote:\n>\n> >\n>\n> >\n>\n> >\n>\n> > Le ven. 8 févr. 2019 à 0",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 3,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-24ea6b0efada",
+      "message_id": "<20190208125345.qjmf5vz7kdv762g7@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-02-08T12:53:45Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com>",
+      "references": [
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+        "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+        "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>",
+        "<CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Feb 08, 2019 at 11:48:57AM +0100, Jérémy Lal wrote:\n> > That would be absolutely fantastic, yes.  Also a symlink from\n> > libv8.so-> libnode.so woulde be handy, because libv8 doesn't use\n> > pkg-config anywhere else so most bindings just test for linking with\n> > -lv8.\n> >\n> \n> Ok then no pkgconfig and a symlink instead.\n> I suppose i need to ask a removal of libv8 from unstable (it's removed from\n> testing) to\n> be able to \"take\" libv8-dev. Or maybe declare a libv8-in-nodejs-dev package\n> ?\n\nConflicts: libv8-dev (<= version)\nReplaces: libv8-dev\nProvides: libv8-dev\n\n> In any case i don't know if i should make a libv8-xx package (which would\n> basically be\n> symlinks to libnode).\n> Any advice is welcome...\n\nThat should be fine.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, Feb 08, 2019 at 11:48:57AM +0100, Jérémy Lal wrote:\n> > That would be absolutely fantastic, yes.  Also a symlink from\n> > libv8.so-> libnode.so woulde be handy, because libv8 doesn't use\n> > p",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 4,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-5a45a2a4e51c",
+      "message_id": "<CAJxTCxz7Rj-gvTsJkb=YtdCa6Xmu1dn-3jhHExeDVsWoVafX8w@mail.gmail.com>",
+      "from_name": "Jérémy Lal",
+      "from_email_hash": "4f8a4d14ab787a5f8045b33b8f1c5bea7d9138421e84c33379adf63c6b14f236",
+      "date": "2019-02-08T13:57:13Z",
+      "subject": "Re: V8 depends from outdated and unmaintained libv8 with security issues",
+      "subject_clean": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "in_reply_to": "<20190208125345.qjmf5vz7kdv762g7@an3as.eu>",
+      "references": [
+        "<CAJxTCxzwdsv4H9zs+myeET4OgqBx_UgqKX021Sw4Qy884QaV1A@mail.gmail.com>",
+        "<20190118173934.xhd5j3zln4in7lw2@an3as.eu>",
+        "<154783827303.1962.3796423061358403993@auryn.jones.dk>",
+        "<20190121090821.r2v24zrdbwnx6hye@an3as.eu>",
+        "<CAJxTCxxkPYqMsT7Zi6wdwi5zFtnCA5kW1ZsaF8NtvAX_0dcdBw@mail.gmail.com>",
+        "<20190129090440.w7qmybckqd6ols3o@an3as.eu>",
+        "<CABFfbXts46j0ds0sfCF-0ezgud4J8wNd2QX-5htTNsdg_rR+_g@mail.gmail.com>",
+        "<CAJxTCxyK-UWK25iaa9CXgip+5GXDTQ0gTNmeQ=27H0rNqgjNdg@mail.gmail.com>",
+        "<CABFfbXtWNDXvPm6=ULKn70gjuKiB8yZXRxiW-rVOK49Gf7bPxw@mail.gmail.com>",
+        "<CAJxTCxx_zDkJHcVTkght50a79NZJ8Lvu4YUzn8HV1EbsmUBYdg@mail.gmail.com>",
+        "<20190208125345.qjmf5vz7kdv762g7@an3as.eu>"
+      ],
+      "body_plain": "Le ven. 8 févr. 2019 à 13:53, Andreas Tille <andreas at an3as.eu> a écrit :\n\n> On Fri, Feb 08, 2019 at 11:48:57AM +0100, Jérémy Lal wrote:\n>\n> > > That would be absolutely fantastic, yes.  Also a symlink from\n>\n> > > libv8.so-> libnode.so woulde be handy, because libv8 doesn't use\n>\n> > > pkg-config anywhere else so most bindings just test for linking with\n>\n> > > -lv8.\n>\n> > >\n>\n> >\n>\n> > Ok then no pkgconfig and a symlink instead.\n>\n> > I suppose i need to ask a removal of libv8 from unstable (it's removed from\n>\n> > testing) to\n>\n> > be able to \"take\" libv8-dev. Or maybe declare a libv8-in-nodejs-dev package\n>\n> > ?\n>\n>\n>\n> Conflicts: libv8-dev (<= version)\n>\n> Replaces: libv8-dev\n>\n> Provides: libv8-dev\n>\n>\n>\n> > In any case i don't know if i should make a libv8-xx package (which would\n>\n> > basically be\n>\n> > symlinks to libnode).\n>\n> > Any advice is welcome...\n>\n>\n>\n> That should be fine.\n\nnodejs 10.15.1~dfsg-3 in experimental provides libv8-dev,\nplease tell me if it works like a \"normal\" library devel package !\n\nJérémy",
+      "body_snippet": "Le ven. 8 févr. 2019 à 13:53, Andreas Tille <andreas at an3as.eu> a écrit :\n\n> On Fri, Feb 08, 2019 at 11:48:57AM +0100, Jérémy Lal wrote:\n>\n> > > That would be absolutely fantastic, yes.  Also a syml",
+      "thread_id": "thread-0f07609138cb",
+      "thread_depth": 5,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-a23d8ad1a7ff",
+      "message_id": "<20190219062202.fvce6shs4evpyvnm@emissary.chronitis.net>",
+      "from_name": "Gordon Ball",
+      "from_email_hash": "ac0a3e6371126f1b9fcfff7686cc130536ade6a8b23fb2cb07161ceebdcc0bce",
+      "date": "2019-02-19T06:22:03Z",
+      "subject": "RFS: irkernel, irdisplay",
+      "subject_clean": "RFS: irkernel, irdisplay",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I appreciate these are now too late for buster, but the ITPs for these\ntwo packages have been open a while (#814736, #814741) and packaging has\nbeen delayed quite a while because irkernel wasn't on CRAN (see\nhttps://github.com/IRkernel/IRkernel/issues/438). This has recently been\nresolved, so these two packages should be ready to upload.\n\nhttps://salsa.debian.org/r-pkg-team/r-cran-irdisplay\nhttps://salsa.debian.org/r-pkg-team/r-cran-irkernel\n\nGordon",
+      "body_snippet": "I appreciate these are now too late for buster, but the ITPs for these\ntwo packages have been open a while (#814736, #814741) and packaging has\nbeen delayed quite a while because irkernel wasn't on CR",
+      "thread_id": "thread-a23d8ad1a7ff",
+      "thread_depth": 0,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-1bd16d6e6406",
+      "message_id": "<20190219131429.7vadqudll3jebhzx@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-02-19T13:14:29Z",
+      "subject": "Re: RFS: irkernel, irdisplay",
+      "subject_clean": "RFS: irkernel, irdisplay",
+      "in_reply_to": "<20190219062202.fvce6shs4evpyvnm@emissary.chronitis.net>",
+      "references": [
+        "<20190219062202.fvce6shs4evpyvnm@emissary.chronitis.net>"
+      ],
+      "body_plain": "On Tue, Feb 19, 2019 at 06:22:03AM +0000, Gordon Ball wrote:\n> I appreciate these are now too late for buster, but the ITPs for these\n> two packages have been open a while (#814736, #814741) and packaging has\n> been delayed quite a while because irkernel wasn't on CRAN (see\n> https://github.com/IRkernel/IRkernel/issues/438). This has recently been\n> resolved, so these two packages should be ready to upload.\n> \n> https://salsa.debian.org/r-pkg-team/r-cran-irdisplay\n> https://salsa.debian.org/r-pkg-team/r-cran-irkernel\n\nDone (after\n\n   Remove \"Rules-Requires-Root: no\" since this does not build in my pbuilder chroot\n\nso please git pull).\n\nKind regards\n\n       Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Feb 19, 2019 at 06:22:03AM +0000, Gordon Ball wrote:\n> I appreciate these are now too late for buster, but the ITPs for these\n> two packages have been open a while (#814736, #814741) and packa",
+      "thread_id": "thread-a23d8ad1a7ff",
+      "thread_depth": 1,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-2c3a3463e68b",
+      "message_id": "<20190219131742.uhz73afxnnveodpd@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-02-19T13:17:42Z",
+      "subject": "Re: RFS: irkernel, irdisplay",
+      "subject_clean": "RFS: irkernel, irdisplay",
+      "in_reply_to": "<20190219131429.7vadqudll3jebhzx@an3as.eu>",
+      "references": [
+        "<20190219062202.fvce6shs4evpyvnm@emissary.chronitis.net>",
+        "<20190219131429.7vadqudll3jebhzx@an3as.eu>"
+      ],
+      "body_plain": "On Tue, Feb 19, 2019 at 02:14:29PM +0100, Andreas Tille wrote:\n> On Tue, Feb 19, 2019 at 06:22:03AM +0000, Gordon Ball wrote:\n> > I appreciate these are now too late for buster, but the ITPs for these\n> > two packages have been open a while (#814736, #814741) and packaging has\n> > been delayed quite a while because irkernel wasn't on CRAN (see\n> > https://github.com/IRkernel/IRkernel/issues/438). This has recently been\n> > resolved, so these two packages should be ready to upload.\n> > \n> > https://salsa.debian.org/r-pkg-team/r-cran-irdisplay\n> > https://salsa.debian.org/r-pkg-team/r-cran-irkernel\n> \n> Done (after\n> \n>    Remove \"Rules-Requires-Root: no\" since this does not build in my pbuilder chroot\n> \n> so please git pull).\n\nArg, it should have been\n\n   Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>\n\nPlease change this for the next upload.  (Seems its a long time ago since\nyou used dh-make-R ;-) )\n\nKind regards\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, Feb 19, 2019 at 02:14:29PM +0100, Andreas Tille wrote:\n> On Tue, Feb 19, 2019 at 06:22:03AM +0000, Gordon Ball wrote:\n> > I appreciate these are now too late for buster, but the ITPs for these",
+      "thread_id": "thread-a23d8ad1a7ff",
+      "thread_depth": 2,
+      "month": "2019-02"
+    },
+    {
+      "id": "msg-f50adda6ec10",
+      "message_id": "<20190228162405.o2jghqjsivssh4wx@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2019-02-28T16:24:05Z",
+      "subject": "Re: Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "subject_clean": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "in_reply_to": "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>",
+      "references": [
+        "<e6305de4-d7b0-5b9d-7070-07d75f7875b6@debian.org>"
+      ],
+      "body_plain": "Hi,\n\nI'd be deligted if somebody from the team could care since I'm\nbasically offline-ish until 4.3.\n\nThank you, Andreas.\n\nOn Thu, Feb 28, 2019 at 12:29:12PM +0100, Paul Gevers wrote:\n> Source: openssl, r-cran-openssl\n> Control: found -1 openssl/1.1.1b-1\n> Control: found -1 r-cran-openssl/1.2.1+dfsg-1\n> Severity: important\n> X-Debbugs-CC: debian-ci at lists.debian.org\n> User: debian-ci at lists.debian.org\n> Usertags: breaks needs-update\n> \n> Dear maintainers,\n> \n> With a recent upload of openssl the autopkgtest of r-cran-openssl fails\n> in testing when that autopkgtest is run with the binary packages of\n> openssl from unstable. It passes when run with only packages from\n> testing. In tabular form:\n>                        pass            fail\n> openssl                from testing    1.1.1b-1\n> r-cran-openssl         from testing    1.2.1+dfsg-1\n> all others             from testing    from testing\n> \n> I copied some of the output at the bottom of this report. The error\n> looks quite scary to me, but I have no idea if this means that\n> r-cran-openssl is really failing, or if openssl has changed it's\n> interface in a bad way.\n> \n> Currently this regression is blocking the migration of openssl to\n> testing [1]. Due to the nature of this issue, I filed this bug report\n> against both packages. Can you please investigate the situation and\n> reassign the bug to the right package? If needed, please change the\n> bug's severity.\n> \n> Please note that the window to fix this to allow openssl to migrate\n> without intervention is closing extremely soon.\n> \n> More information about this bug and the reason for filing it can be found on\n> https://wiki.debian.org/ContinuousIntegration/RegressionEmailInformation\n> \n> Paul\n> \n> [1] https://qa.debian.org/excuses.php?package=openssl\n> \n> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-openssl/2021380/log.gz\n> \n> autopkgtest [21:16:05]: test run-unit-test: [-----------------------\n> \n> R version 3.5.2 (2018-12-20) -- \"Eggshell Igloo\"\n> Copyright (C) 2018 The R Foundation for Statistical Computing\n> Platform: x86_64-pc-linux-gnu (64-bit)\n> \n> R is free software and comes with ABSOLUTELY NO WARRANTY.\n> You are welcome to redistribute it under certain conditions.\n> Type 'license()' or 'licence()' for distribution details.\n> \n> R is a collaborative project with many contributors.\n> Type 'contributors()' for more information and\n> 'citation()' on how to cite R or R packages in publications.\n> \n> Type 'demo()' for some demos, 'help()' for on-line help, or\n> 'help.start()' for an HTML browser interface to help.\n> Type 'q()' to quit R.\n> \n> > library(testthat)\n> > library(openssl)\n> >\n> > test_check(\"openssl\")\n> double free or corruption (fasttop)\n> Aborted\n> autopkgtest [21:16:05]: test run-unit-test: -----------------------]\n> \n\n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI'd be deligted if somebody from the team could care since I'm\nbasically offline-ish until 4.3.\n\nThank you, Andreas.\n\nOn Thu, Feb 28, 2019 at 12:29:12PM +0100, Paul Gevers wrote:\n> Source: openss",
+      "thread_id": "thread-f50adda6ec10",
+      "thread_depth": 0,
+      "month": "2019-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-eaf5d2456574",
+      "subject": "How to get the non-minimized versions of handsontable/all.min.js and others",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Jonathan Owen"
+      ],
+      "started": "2019-02-01T12:19:25Z",
+      "last_reply": "2019-02-05T13:34:58Z",
+      "root_message_id": "msg-eaf5d2456574"
+    },
+    {
+      "id": "thread-0f07609138cb",
+      "subject": "V8 depends from outdated and unmaintained libv8 with security issues",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Jeroen Ooms",
+        "Jérémy Lal"
+      ],
+      "started": "2019-02-08T06:36:10Z",
+      "last_reply": "2019-02-08T13:57:13Z",
+      "root_message_id": "msg-0f07609138cb"
+    },
+    {
+      "id": "thread-a23d8ad1a7ff",
+      "subject": "RFS: irkernel, irdisplay",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Gordon Ball"
+      ],
+      "started": "2019-02-19T06:22:03Z",
+      "last_reply": "2019-02-19T13:17:42Z",
+      "root_message_id": "msg-a23d8ad1a7ff"
+    },
+    {
+      "id": "thread-f50adda6ec10",
+      "subject": "Bug#923447: openssl breaks r-cran-openssl autopkgtest",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-02-28T16:24:05Z",
+      "last_reply": "2019-02-28T16:24:05Z",
+      "root_message_id": "msg-f50adda6ec10"
+    }
+  ]
+}

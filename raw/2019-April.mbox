@@ -1,0 +1,296 @@
+From tille at debian.org  Thu Apr 18 08:10:00 2019
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 18 Apr 2019 10:10:00 +0200
+Subject: Re: Bug#927335: r-base breaks 9 autopkgtests
+In-Reply-To: <69a58f45-8928-f27c-fa93-e4b1f432d797@debian.org>
+References: <69a58f45-8928-f27c-fa93-e4b1f432d797@debian.org>
+Message-ID: <20190418081000.753ni3mkadnmp6jj@an3as.eu>
+
+On Thu, Apr 18, 2019 at 09:28:55AM +0200, Paul Gevers wrote:
+> Source: r-base
+> Severity: important
+> User: debian-ci at lists.debian.org
+> Usertags: breaks
+> Control: affects -1 r-cran-permute
+> Control: affects -1 r-cran-phangorn
+> Control: affects -1 r-cran-popepi
+> Control: affects -1 r-cran-recipes
+> Control: affects -1 r-cran-sp
+> Control: affects -1 r-cran-spam
+> Control: affects -1 r-cran-units
+> Control: affects -1 r-cran-vegan
+> Control: affects -1 r-cran-zelig
+> 
+> [X-Debbugs-CC: debian-ci at lists.debian.org,
+> r-pkg-team at alioth-lists.debian.net]
+> 
+> Dear maintainers,
+> 
+> With a recent upload of r-base the autopkgtest of 9 r-cran-* fail in
+> testing (and unstable) when their autopkgtests are run with the binary
+> packages of r-base from unstable. It passes in testing when run with
+> only packages from testing.
+> 
+> Apart from the freeze, this regression is blocking the migration of
+> r-base to testing [1].
+
+Well, "apart from freeze" is the keyword here.  The problem is that the
+r-base maintainer has a long record of ignoring freeze policy but the
+r-pkg team is not updating packages to new upstream versions in freeze
+time.  So this will be fixed *after* the Stretch release when we start
+to refresh all R packages with new upstream versions which we stopped
+in Freeze time.
+
+> Can you please investigate the situation?
+
+I'm not motivated to react if others fail to understand freeze policy,
+sorry.
+
+> If the
+> issue (also) needs to be solved in the packages with the regressing
+> autopkgtest than please clone this bug and reassign to the right
+> package. Because this uploads breaks so many autopkgtests, I filed this
+> bug only against r-base, normally I file these kind of bugs against both
+> packages that are involved, but I X-Debbugs-CC-ed the maintainers of the
+> other packages.
+
+Thanks for your work for autopkgtests in general
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Thu Apr 18 08:14:55 2019
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 18 Apr 2019 10:14:55 +0200
+Subject: Re: Bug#927335: r-base breaks 9 autopkgtests
+In-Reply-To: <20190418081000.753ni3mkadnmp6jj@an3as.eu>
+References: <69a58f45-8928-f27c-fa93-e4b1f432d797@debian.org> <20190418081000.753ni3mkadnmp6jj@an3as.eu>
+Message-ID: <22848552-7094-d64f-315a-300c3ebeb922@debian.org>
+
+Hi Andreas,
+
+[Off-bug, on purpose]
+
+On 18-04-2019 10:10, Andreas Tille wrote:
+> On Thu, Apr 18, 2019 at 09:28:55AM +0200, Paul Gevers wrote:
+>> Source: r-base
+
+^^^^^^^^^^^^^^^^^
+
+>> Can you please investigate the situation?
+> 
+> I'm not motivated to react if others fail to understand freeze policy,
+> sorry.
+
+This wasn't aimed at the dependent packages, but at the maintainer of
+r-base. And yes, I'm not really amused by having these kind of uploads
+in unstable now as some typically bite later in the freeze. E.g. we now
+have such an issue around an upload of aptly.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Fri Apr 26 16:13:03 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 26 Apr 2019 18:13:03 +0200
+Subject: Rhdf5 issue
+Message-ID: <20190426161303.mduuzt625fzfskt2@an3as.eu>
+
+Hi,
+
+I'd like to package r-other-wasabi[1] for the Debian Med team.  It
+depends r-bioc-rhdf5[2] which in turn depends r-bioc-rhdf5lib[3]
+which I just uploaded to new after linking against libhdf5.  However,
+I have the impression that I did something wrong since there is an
+issue with r-bioc-rhdf5 which boils down to some code in
+  src/Makevars
+which throws an error:
+
+$ echo 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")'| R --vanilla --slave
+Error in system.file("lib", package = "Rhdf5lib", mustWork = TRUE) : 
+  no file found
+Calls: <Anonymous> -> Sys.getenv -> system.file
+Execution halted
+
+While there is certainly the option to specify PKG_LIBS manually
+to successfully build r-bioc-rhdf5 I'd prefer to get things right.
+Any idea what needs to be fixed in r-bioc-rhdf5lib.
+
+Kind regards
+
+     Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-other-wasabi
+[2] https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5
+[3] https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Apr 26 16:29:41 2019
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 26 Apr 2019 11:29:41 -0500
+Subject: Re: Rhdf5 issue
+In-Reply-To: <20190426161303.mduuzt625fzfskt2@an3as.eu>
+References: <20190426161303.mduuzt625fzfskt2@an3as.eu>
+Message-ID: <23747.12789.823096.578330@rob.eddelbuettel.com>
+
+On 26 April 2019 at 18:13, Andreas Tille wrote:
+| I'd like to package r-other-wasabi[1] for the Debian Med team.  It
+| depends r-bioc-rhdf5[2] which in turn depends r-bioc-rhdf5lib[3]
+| which I just uploaded to new after linking against libhdf5.  However,
+| I have the impression that I did something wrong since there is an
+| issue with r-bioc-rhdf5 which boils down to some code in
+|   src/Makevars
+| which throws an error:
+| 
+| 
+| $ echo 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")'| R --vanilla --slave
+| Error in system.file("lib", package = "Rhdf5lib", mustWork = TRUE) : 
+|   no file found
+| Calls: <Anonymous> -> Sys.getenv -> system.file
+| Execution halted
+
+Something is not right. From
+
+  https://github.com/grimbough/Rhdf5lib/blob/master/R/zzz.R#L15-L18
+
+we have
+  
+  pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS")) {
+    
+      path <- Sys.getenv(
+          x = "RHDF5LIB_RPATH",
+          unset = system.file("lib", package="Rhdf5lib", mustWork=TRUE)
+      )
+    
+      #... more stuff omitted ...
+
+So if the env.var is missing (as in your case) it assumes it has
+a "lib" directory installed in the package.  I read this as the
+package maintainer/author assuming the package would always
+install with a lib dir.  Does it?  I see no `inst/dir` in the
+sources.
+
+You could bypass the issue for now, it seems, by setting the
+variable it wants to use: RHDF5LIB_RPATH.
+
+(All this untested as I'm at work...)
+
+Dirk
+ 
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat Apr 27 05:42:21 2019
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 27 Apr 2019 07:42:21 +0200
+Subject: Re: Rhdf5 issue
+In-Reply-To: <23747.12789.823096.578330@rob.eddelbuettel.com>
+References: <20190426161303.mduuzt625fzfskt2@an3as.eu> <23747.12789.823096.578330@rob.eddelbuettel.com>
+Message-ID: <20190427054221.f2jaath3sxcqgqzb@an3as.eu>
+
+Hi Dirk,
+
+thanks for this hint.
+
+On Fri, Apr 26, 2019 at 11:29:41AM -0500, Dirk Eddelbuettel wrote:
+> | $ echo 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")'| R --vanilla --slave
+> | Error in system.file("lib", package = "Rhdf5lib", mustWork = TRUE) : 
+> |   no file found
+> | Calls: <Anonymous> -> Sys.getenv -> system.file
+> | Execution halted
+> 
+> Something is not right. From
+> 
+>   https://github.com/grimbough/Rhdf5lib/blob/master/R/zzz.R#L15-L18
+> 
+> we have
+>   
+>   pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS")) {
+>     
+>       path <- Sys.getenv(
+>           x = "RHDF5LIB_RPATH",
+>           unset = system.file("lib", package="Rhdf5lib", mustWork=TRUE)
+>       )
+>     
+>       #... more stuff omitted ...
+> 
+> So if the env.var is missing (as in your case) it assumes it has
+> a "lib" directory installed in the package.  > I read this as the
+> package maintainer/author assuming the package would always
+> install with a lib dir.  Does it?  I see no `inst/dir` in the
+> sources.
+
+I suspect there might be some tricks upstream of Rhdf5lib is doing since
+the original tarball contains hdf5small_cxx_1.10.3.tar.gz which is
+unpackaged, build and installed in configure.  This was replaced by
+the Debian packaged libhdf5 and thus the hdf5 library might reside in
+some "unexpected" path.
+ 
+> You could bypass the issue for now, it seems, by setting the
+> variable it wants to use: RHDF5LIB_RPATH.
+
+Since I'm not fully sure to what value setting RHDF5LIB_RPATH I
+tried a different approach in src/Makevars:
+
+HDF5_LIB="/usr/lib/`dpkg-architecture -qDEB_BUILD_GNU_TYPE`/hdf5/serial/"
+PKG_LIBS=-L/usr/lib/R/site-library/Rhdf5lib/libs -lRhdf5lib -L$(HDF5_LIB) -lhdf5
+
+(see https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5/commit/49dea77def56c8222e3b1bd3913aa4a5e850e93f)
+
+Strangely enough the build is ending in
+
+g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-z,relro -o rhdf5.so H5.o H5A.o H5D.o H5E.o H5F.o H5G.o H5I.o H5L.o H5O.o H5P.o H5S.o H5T.o H5constants.o HandleList.o HandleListWrap.o h5dump.o h5ls.o h5testLock.o h5writeDataFrame.o printdatatype.o wrap.o -L/usr/lib/R/site-library/Rhdf5lib/libs -lRhdf5lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial/ -lhdf5 -L/usr/lib/R/lib -lR
+/usr/bin/ld: cannot find -lRhdf5lib
+collect2: error: ld returned 1 exit status
+
+However, when I check inside the pbuilder environment:
+
+root:/# ldd /usr/lib/R/site-library/Rhdf5lib/libs/Rhdf5lib.so 
+        linux-vdso.so.1 (0x00007ffe93b80000)
+        /usr/lib/cowdancer/libcowdancer.so (0x00007f9bd426f000)
+        libhdf5_serial.so.103 => /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.103 (0x00007f9bd3ee3000)
+        libsz.so.2 => /usr/lib/x86_64-linux-gnu/libsz.so.2 (0x00007f9bd3ce0000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f9bd3ac2000)
+        libR.so => /usr/lib/libR.so (0x00007f9bd3636000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f9bd3475000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f9bd346e000)
+        libncurses.so.6 => /lib/x86_64-linux-gnu/libncurses.so.6 (0x00007f9bd3445000)
+        libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f9bd3417000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f9bd33f6000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f9bd3273000)
+        libaec.so.0 => /usr/lib/x86_64-linux-gnu/libaec.so.0 (0x00007f9bd306b000)
+        libblas.so.3 => /usr/lib/x86_64-linux-gnu/libblas.so.3 (0x00007f9bd2ffc000)
+        libgfortran.so.5 => /usr/lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007f9bd2d8e000)
+        libquadmath.so.0 => /usr/lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f9bd2d4c000)
+        libreadline.so.7 => /lib/x86_64-linux-gnu/libreadline.so.7 (0x00007f9bd2aff000)
+        libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007f9bd2a8b000)
+        liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f9bd2a63000)
+        libbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007f9bd2a4e000)
+        librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f9bd2a44000)
+        libicuuc.so.63 => /usr/lib/x86_64-linux-gnu/libicuuc.so.63 (0x00007f9bd2875000)
+        libicui18n.so.63 => /usr/lib/x86_64-linux-gnu/libicui18n.so.63 (0x00007f9bd259a000)
+        libgomp.so.1 => /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f9bd2569000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f9bd427f000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f9bd254d000)
+        libicudata.so.63 => /usr/lib/x86_64-linux-gnu/libicudata.so.63 (0x00007f9bd0b5d000)
+        libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f9bd09d9000)
+
+the library obviously exists and seems to be pretty functional.  So
+why am I getting "cannot find -lRhdf5lib"?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+

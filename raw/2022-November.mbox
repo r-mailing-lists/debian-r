@@ -1,0 +1,4757 @@
+From andreas at an3as.eu  Thu Nov  3 20:13:07 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 3 Nov 2022 21:13:07 +0100
+Subject: BioConductor transition
+Message-ID: <Y2Qg01Pe9MVeLJqM@an3as.eu>
+
+Hi,
+
+BioConductor 3.16 is released now.  Dylan, you started the previous
+transitions.  Would you be up to do it again in this case?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Nov  7 14:59:09 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 7 Nov 2022 15:59:09 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.3342.658058.546758@hornik.net>
+References: <25449.3342.658058.546758@hornik.net>
+Message-ID: <Y2kdPeqIB1akfXSk@an3as.eu>
+
+Hi Kurt,
+
+at first thanks a lot for bringing up this issue to the attention
+of potentially involved Debian developers.
+
+In future if you have questions like this please always bring this up on
+the public mailing list debian-r at lists.debian.org.  You can also try to
+write a bug report, but private mail should be only used for private
+issues.  I'll try to bring your issue up in Enlish on the mailing list
+to have a public record of it.
+
+Kurt noticed that r-base 4.2.2 does not migrate to testing due to a
+regression inside the test suite of r-cran-slicer[1].  The test failures
+are occuring upstream as well[2].
+
+So fart to Kurt's mail.  I can verify the issue in Salsa-CI[3].
+
+I admit if this issue is known upstream we can not really do much
+from the Debian side, thought.
+
+Kind regards and thanks again for noticing it
+    Andreas.
+
+[1] https://tracker.debian.org/pkg/r-base
+[2] https://cran.r-project.org/web/checks/check_results_slider.html
+[3] https://salsa.debian.org/r-pkg-team/r-cran-slider/-/jobs/3484230#L328
+
+-- 
+http://fam-tille.de
+
+From Kurt.Hornik at wu.ac.at  Mon Nov  7 15:02:13 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Mon, 7 Nov 2022 16:02:13 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <Y2kdPeqIB1akfXSk@an3as.eu>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu>
+Message-ID: <25449.7669.855311.992937@hornik.net>
+
+>>>>> Andreas Tille writes:
+
+> Hi Kurt,
+> at first thanks a lot for bringing up this issue to the attention
+> of potentially involved Debian developers.
+
+> In future if you have questions like this please always bring this up on
+> the public mailing list debian-r at lists.debian.org.  You can also try to
+> write a bug report, but private mail should be only used for private
+> issues.  I'll try to bring your issue up in Enlish on the mailing list
+> to have a public record of it.
+
+> Kurt noticed that r-base 4.2.2 does not migrate to testing due to a
+> regression inside the test suite of r-cran-slicer[1].  The test failures
+> are occuring upstream as well[2].
+
+> So fart to Kurt's mail.  I can verify the issue in Salsa-CI[3].
+
+> I admit if this issue is known upstream we can not really do much
+> from the Debian side, thought.
+
+Thanks.  There is no way to manually override the non-regression to
+trigger the migration?
+
+-k
+
+> Kind regards and thanks again for noticing it
+>     Andreas.
+
+> [1] https://tracker.debian.org/pkg/r-base
+> [2] https://cran.r-project.org/web/checks/check_results_slider.html
+> [3] https://salsa.debian.org/r-pkg-team/r-cran-slider/-/jobs/3484230#L328
+
+> -- 
+> http://fam-tille.de
+
+From tille at debian.org  Mon Nov  7 17:15:35 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 7 Nov 2022 18:15:35 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.7669.855311.992937@hornik.net>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net>
+Message-ID: <Y2k9N54MI1L1FgRP@an3as.eu>
+
+Am Mon, Nov 07, 2022 at 04:02:13PM +0100 schrieb Kurt Hornik:
+> > I admit if this issue is known upstream we can not really do much
+> > from the Debian side, thought.
+> 
+> Thanks.  There is no way to manually override the non-regression to
+> trigger the migration?
+
+It would be possible to remove the two affected tests and I'm fine to do
+so but I would love to hear the opinion of other, more knowledged team
+members, than I am.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Nov  7 17:37:20 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 7 Nov 2022 11:37:20 -0600
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <Y2k9N54MI1L1FgRP@an3as.eu>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu>
+Message-ID: <25449.16976.146917.776581@rob.eddelbuettel.com>
+
+On 7 November 2022 at 18:15, Andreas Tille wrote:
+| Am Mon, Nov 07, 2022 at 04:02:13PM +0100 schrieb Kurt Hornik:
+| > > I admit if this issue is known upstream we can not really do much
+| > > from the Debian side, thought.
+| > 
+| > Thanks.  There is no way to manually override the non-regression to
+| > trigger the migration?
+
+There is, and you can find _numerous_ messages by Andreas in the archives of
+this mailing list doing just that because he had to to get things moving.
+
+I have been on record, without success, arguing that the autopkgtests for
+CRAN packages are (almost always) redundant and 'busy work'. However, in this
+case we can (as I usually suggest) go to the CRAN page
+
+   https://cran.r-project.org/package=slider
+
+and then the status page and see
+
+   https://cran.r-project.org/web/checks/check_results_slider.html
+
+that CRAN itself reports errors on three platforms!  (And ignore the clang-15
+issues, that is just forward-looking to upcoming compilers; CRAN was on the
+gcc-10 changes before we were too.)
+ 
+| It would be possible to remove the two affected tests and I'm fine to do
+| so but I would love to hear the opinion of other, more knowledged team
+| members, than I am.
+
+My position is (generally) unchanged. I think we should remove or relax the
+autopkgtest requirement. But I do not expect to change any minds this time
+either. 
+
+But in this case it may be time to talk to the actual package maintainer.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Kurt.Hornik at wu.ac.at  Mon Nov  7 17:43:16 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Mon, 7 Nov 2022 18:43:16 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.16976.146917.776581@rob.eddelbuettel.com>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com>
+Message-ID: <25449.17332.888212.158106@hornik.net>
+
+>>>>> Dirk Eddelbuettel writes:
+
+> On 7 November 2022 at 18:15, Andreas Tille wrote:
+> | Am Mon, Nov 07, 2022 at 04:02:13PM +0100 schrieb Kurt Hornik:
+> | > > I admit if this issue is known upstream we can not really do much
+> | > > from the Debian side, thought.
+> | > 
+> | > Thanks.  There is no way to manually override the non-regression to
+> | > trigger the migration?
+
+> There is, and you can find _numerous_ messages by Andreas in the archives of
+> this mailing list doing just that because he had to to get things moving.
+
+> I have been on record, without success, arguing that the autopkgtests for
+> CRAN packages are (almost always) redundant and 'busy work'. However, in this
+> case we can (as I usually suggest) go to the CRAN page
+
+>    https://cran.r-project.org/package=slider
+
+> and then the status page and see
+
+>    https://cran.r-project.org/web/checks/check_results_slider.html
+
+> that CRAN itself reports errors on three platforms!  (And ignore the clang-15
+> issues, that is just forward-looking to upcoming compilers; CRAN was on the
+> gcc-10 changes before we were too.)
+ 
+> | It would be possible to remove the two affected tests and I'm fine to do
+> | so but I would love to hear the opinion of other, more knowledged team
+> | members, than I am.
+
+> My position is (generally) unchanged. I think we should remove or
+> relax the autopkgtest requirement. But I do not expect to change any
+> minds this time either.
+
+Thanks.  
+
+I was about to raise this on behalf of the CRAN team: ideally, this
+would be synced with the CRAN regular checks, and packages which
+currently/already fail the Debian regular checks for r-release or
+r-patched be excluded for possible regressions.
+
+Btw, one more issue: it seems there is no active tracking of CRAN
+archivals within the r-cran-* packages.  Currently running
+
+lines <- system("apt-cache search r-cran- | grep ^r-cran-",
+                intern = TRUE)
+p <- sub(" .*", "", lines)
+z <- tools::CRAN_package_db()
+setdiff(p, paste0("r-cran-", tolower(z$Package)))
+
+finds
+
+ [1] "r-cran-gregmisc"          "r-cran-amore"            
+ [3] "r-cran-cgdsr"             "r-cran-conting"          
+ [5] "r-cran-diagnosismed"      "r-cran-discriminer"      
+ [7] "r-cran-epicalc"           "r-cran-ffield"           
+ [9] "r-cran-fitcoach"          "r-cran-freetypeharfbuzz" 
+[11] "r-cran-fts"               "r-cran-genabel"          
+[13] "r-cran-genabel.data"      "r-cran-gmaps"            
+[15] "r-cran-gwidgets"          "r-cran-gwidgetstcltk"    
+[17] "r-cran-kedd"              "r-cran-lasso2"           
+[19] "r-cran-manipulatewidgets" "r-cran-medadherence"     
+[21] "r-cran-parsetools"        "r-cran-randomfields"     
+[23] "r-cran-rcppmlpack"        "r-cran-rniftilib"        
+[25] "r-cran-rook-examples"     "r-cran-sdmtools"         
+[27] "r-cran-seroincidence"     "r-cran-sparql"           
+[29] "r-cran-tcr"               "r-cran-testextra"        
+[31] "r-cran-treescape"         "r-cran-unbalanced"       
+[33] "r-cran-zelig"             "r-cran-zeligchoice"      
+[35] "r-cran-zeligei"           "r-cran-zeligverse"       
+
+Clearly, these should also not be part of any regression testing.
+
+Best
+-k
+
+> But in this case it may be time to talk to the actual package maintainer.
+
+> Dirk
+
+> -- 
+> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Mon Nov  7 18:06:06 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 7 Nov 2022 12:06:06 -0600
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.17332.888212.158106@hornik.net>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <25449.17332.888212.158106@hornik.net>
+Message-ID: <25449.18702.322010.271327@rob.eddelbuettel.com>
+
+On 7 November 2022 at 18:43, Kurt Hornik wrote:
+| >>>>> Dirk Eddelbuettel writes:
+| 
+| > On 7 November 2022 at 18:15, Andreas Tille wrote:
+| > | Am Mon, Nov 07, 2022 at 04:02:13PM +0100 schrieb Kurt Hornik:
+| > | > > I admit if this issue is known upstream we can not really do much
+| > | > > from the Debian side, thought.
+| > | > 
+| > | > Thanks.  There is no way to manually override the non-regression to
+| > | > trigger the migration?
+| 
+| > There is, and you can find _numerous_ messages by Andreas in the archives of
+| > this mailing list doing just that because he had to to get things moving.
+| 
+| > I have been on record, without success, arguing that the autopkgtests for
+| > CRAN packages are (almost always) redundant and 'busy work'. However, in this
+| > case we can (as I usually suggest) go to the CRAN page
+| 
+| >    https://cran.r-project.org/package=slider
+| 
+| > and then the status page and see
+| 
+| >    https://cran.r-project.org/web/checks/check_results_slider.html
+| 
+| > that CRAN itself reports errors on three platforms!  (And ignore the clang-15
+| > issues, that is just forward-looking to upcoming compilers; CRAN was on the
+| > gcc-10 changes before we were too.)
+|  
+| > | It would be possible to remove the two affected tests and I'm fine to do
+| > | so but I would love to hear the opinion of other, more knowledged team
+| > | members, than I am.
+| 
+| > My position is (generally) unchanged. I think we should remove or
+| > relax the autopkgtest requirement. But I do not expect to change any
+| > minds this time either.
+| 
+| Thanks.  
+| 
+| I was about to raise this on behalf of the CRAN team: ideally, this
+| would be synced with the CRAN regular checks, and packages which
+| currently/already fail the Debian regular checks for r-release or
+| r-patched be excluded for possible regressions.
+
+Yes. CRAN has a better / more current test setup as you have _all_ packages
+current by construction.  Here we do not -- and while we generally do not
+trail that has often been the case and cause of issues (e.g. recent-ish with
+the arguably not so well executed transition in recommended package Matrix
+aka r-cran-matrix aka Debian source package rmatrix).
+ 
+| Btw, one more issue: it seems there is no active tracking of CRAN
+| archivals within the r-cran-* packages.  Currently running
+| 
+| lines <- system("apt-cache search r-cran- | grep ^r-cran-",
+|                 intern = TRUE)
+| p <- sub(" .*", "", lines)
+| z <- tools::CRAN_package_db()
+| setdiff(p, paste0("r-cran-", tolower(z$Package)))
+
+(To those less familiar with R internals and tricks. Kurt retrieves what
+Debian knows via apt-cache and tranforms into a vector 'p'; 'z' retrieves similar
+information from CRAN (via an extra-useful function I use all the time), then
+constructs a 'Debian-named' packages vector and finds the difference:
+packages we have but should not consider 'alive' as they are no longer on
+CRAN and hence not in what CRAN_package_db() returns).
+ 
+| finds
+| 
+|  [1] "r-cran-gregmisc"          "r-cran-amore"            
+|  [3] "r-cran-cgdsr"             "r-cran-conting"          
+|  [5] "r-cran-diagnosismed"      "r-cran-discriminer"      
+|  [7] "r-cran-epicalc"           "r-cran-ffield"           
+|  [9] "r-cran-fitcoach"          "r-cran-freetypeharfbuzz" 
+| [11] "r-cran-fts"               "r-cran-genabel"          
+| [13] "r-cran-genabel.data"      "r-cran-gmaps"            
+| [15] "r-cran-gwidgets"          "r-cran-gwidgetstcltk"    
+| [17] "r-cran-kedd"              "r-cran-lasso2"           
+| [19] "r-cran-manipulatewidgets" "r-cran-medadherence"     
+| [21] "r-cran-parsetools"        "r-cran-randomfields"     
+| [23] "r-cran-rcppmlpack"        "r-cran-rniftilib"        
+| [25] "r-cran-rook-examples"     "r-cran-sdmtools"         
+| [27] "r-cran-seroincidence"     "r-cran-sparql"           
+| [29] "r-cran-tcr"               "r-cran-testextra"        
+| [31] "r-cran-treescape"         "r-cran-unbalanced"       
+| [33] "r-cran-zelig"             "r-cran-zeligchoice"      
+| [35] "r-cran-zeligei"           "r-cran-zeligverse"       
+| 
+| Clearly, these should also not be part of any regression testing.
+
+Yes. We should be able to cache current packages (and maybe their upstream
+versions) and them moderate test failures for packages that are no longer on
+CRAN, or more current at CRAN.
+
+Thanks for the follow-up, and for having raised this in the first place.
+
+Dirk
+ 
+| Best
+| -k
+| 
+| > But in this case it may be time to talk to the actual package maintainer.
+| 
+| > Dirk
+| 
+| 
+| 
+| > -- 
+| > dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Nov  8 08:18:17 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 8 Nov 2022 09:18:17 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.16976.146917.776581@rob.eddelbuettel.com>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com>
+Message-ID: <Y2oQybKdwABhtmX1@an3as.eu>
+
+Hi
+
+Am Mon, Nov 07, 2022 at 11:37:20AM -0600 schrieb Dirk Eddelbuettel:
+> But in this case it may be time to talk to the actual package maintainer.
+
+Would you suggest to start this talk by people from CRAN or Debian?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Nov  8 08:27:58 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 8 Nov 2022 09:27:58 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25449.17332.888212.158106@hornik.net>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <25449.17332.888212.158106@hornik.net>
+Message-ID: <Y2oTDmdQNMa0pvzj@an3as.eu>
+
+Hi Kurt,
+
+Am Mon, Nov 07, 2022 at 06:43:16PM +0100 schrieb Kurt Hornik:
+> 
+> I was about to raise this on behalf of the CRAN team: ideally, this
+> would be synced with the CRAN regular checks, and packages which
+> currently/already fail the Debian regular checks for r-release or
+> r-patched be excluded for possible regressions.
+
+Regarding tests on Debian packages I just want to give a short summary
+from my perspective.
+
+  1. There where cases that Debian tests had uncovered issues in CRAN
+     packages - or at least create sufficient noise that the issue
+     is brought on the table (like in this case).
+
+  2. We are not testing the CRAN code but the Debian package (and its
+     dependencies) which is slightly different.
+
+  3. Having tests on the Debian packages speeds up migration of the
+     packages to testing.
+
+> Btw, one more issue: it seems there is no active tracking of CRAN
+> archivals within the r-cran-* packages.  Currently running
+> 
+> lines <- system("apt-cache search r-cran- | grep ^r-cran-",
+>                 intern = TRUE)
+> p <- sub(" .*", "", lines)
+> z <- tools::CRAN_package_db()
+> setdiff(p, paste0("r-cran-", tolower(z$Package)))
+> 
+> finds
+> 
+>  [1] "r-cran-gregmisc"          "r-cran-amore"            
+>  [3] "r-cran-cgdsr"             "r-cran-conting"          
+>  [5] "r-cran-diagnosismed"      "r-cran-discriminer"      
+>  [7] "r-cran-epicalc"           "r-cran-ffield"           
+>  [9] "r-cran-fitcoach"          "r-cran-freetypeharfbuzz" 
+> [11] "r-cran-fts"               "r-cran-genabel"          
+> [13] "r-cran-genabel.data"      "r-cran-gmaps"            
+> [15] "r-cran-gwidgets"          "r-cran-gwidgetstcltk"    
+> [17] "r-cran-kedd"              "r-cran-lasso2"           
+> [19] "r-cran-manipulatewidgets" "r-cran-medadherence"     
+> [21] "r-cran-parsetools"        "r-cran-randomfields"     
+> [23] "r-cran-rcppmlpack"        "r-cran-rniftilib"        
+> [25] "r-cran-rook-examples"     "r-cran-sdmtools"         
+> [27] "r-cran-seroincidence"     "r-cran-sparql"           
+> [29] "r-cran-tcr"               "r-cran-testextra"        
+> [31] "r-cran-treescape"         "r-cran-unbalanced"       
+> [33] "r-cran-zelig"             "r-cran-zeligchoice"      
+> [35] "r-cran-zeligei"           "r-cran-zeligverse"       
+> 
+> Clearly, these should also not be part of any regression testing.
+
+According to item 2. above I personally think that specifically
+these packages need to be tested since they are not tested on
+CRAN any more.  How should we otherwise know whether they are
+working or not?
+
+However, it might be a good time to discuss whether we really
+need those packages that are removed from CRAN.  So thanks a
+lot for this list which we should review in the near future.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From Kurt.Hornik at wu.ac.at  Tue Nov  8 11:03:33 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Tue, 8 Nov 2022 12:03:33 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <Y2oQybKdwABhtmX1@an3as.eu>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <Y2oQybKdwABhtmX1@an3as.eu>
+Message-ID: <25450.14213.529436.744808@hornik.net>
+
+>>>>> Andreas Tille writes:
+
+> Hi
+> Am Mon, Nov 07, 2022 at 11:37:20AM -0600 schrieb Dirk Eddelbuettel:
+>> But in this case it may be time to talk to the actual package maintainer.
+
+> Would you suggest to start this talk by people from CRAN or Debian?
+
+I was about to contact the maintainer from CRAN.  Would you like to be
+cc'ed on such issues?
+
+-k
+
+> Kind regards
+>     Andreas.
+
+> -- 
+> http://fam-tille.de
+
+From Kurt.Hornik at wu.ac.at  Tue Nov  8 11:06:51 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Tue, 8 Nov 2022 12:06:51 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <Y2oTDmdQNMa0pvzj@an3as.eu>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <25449.17332.888212.158106@hornik.net> <Y2oTDmdQNMa0pvzj@an3as.eu>
+Message-ID: <25450.14411.248845.770201@hornik.net>
+
+>>>>> Andreas Tille writes:
+
+> Hi Kurt,
+> Am Mon, Nov 07, 2022 at 06:43:16PM +0100 schrieb Kurt Hornik:
+>> 
+>> I was about to raise this on behalf of the CRAN team: ideally, this
+>> would be synced with the CRAN regular checks, and packages which
+>> currently/already fail the Debian regular checks for r-release or
+>> r-patched be excluded for possible regressions.
+
+> Regarding tests on Debian packages I just want to give a short summary
+> from my perspective.
+
+>   1. There where cases that Debian tests had uncovered issues in CRAN
+>      packages - or at least create sufficient noise that the issue
+>      is brought on the table (like in this case).
+
+>   2. We are not testing the CRAN code but the Debian package (and its
+>      dependencies) which is slightly different.
+
+>   3. Having tests on the Debian packages speeds up migration of the
+>      packages to testing.
+
+>> Btw, one more issue: it seems there is no active tracking of CRAN
+>> archivals within the r-cran-* packages.  Currently running
+>> 
+>> lines <- system("apt-cache search r-cran- | grep ^r-cran-",
+>> intern = TRUE)
+>> p <- sub(" .*", "", lines)
+>> z <- tools::CRAN_package_db()
+>> setdiff(p, paste0("r-cran-", tolower(z$Package)))
+>> 
+>> finds
+>> 
+>> [1] "r-cran-gregmisc"          "r-cran-amore"            
+>> [3] "r-cran-cgdsr"             "r-cran-conting"          
+>> [5] "r-cran-diagnosismed"      "r-cran-discriminer"      
+>> [7] "r-cran-epicalc"           "r-cran-ffield"           
+>> [9] "r-cran-fitcoach"          "r-cran-freetypeharfbuzz" 
+>> [11] "r-cran-fts"               "r-cran-genabel"          
+>> [13] "r-cran-genabel.data"      "r-cran-gmaps"            
+>> [15] "r-cran-gwidgets"          "r-cran-gwidgetstcltk"    
+>> [17] "r-cran-kedd"              "r-cran-lasso2"           
+>> [19] "r-cran-manipulatewidgets" "r-cran-medadherence"     
+>> [21] "r-cran-parsetools"        "r-cran-randomfields"     
+>> [23] "r-cran-rcppmlpack"        "r-cran-rniftilib"        
+>> [25] "r-cran-rook-examples"     "r-cran-sdmtools"         
+>> [27] "r-cran-seroincidence"     "r-cran-sparql"           
+>> [29] "r-cran-tcr"               "r-cran-testextra"        
+>> [31] "r-cran-treescape"         "r-cran-unbalanced"       
+>> [33] "r-cran-zelig"             "r-cran-zeligchoice"      
+>> [35] "r-cran-zeligei"           "r-cran-zeligverse"       
+>> 
+>> Clearly, these should also not be part of any regression testing.
+
+> According to item 2. above I personally think that specifically
+> these packages need to be tested since they are not tested on
+> CRAN any more.  How should we otherwise know whether they are
+> working or not?
+
+Andreas, 
+
+These packages were *archived* from CRAN because they no longer worked
+properly.  If at all, they should be dropped from Debian.
+
+Now, some CRAN package maintainers do not take their archival deadline
+quite seriously, and packages can come back alive within a few days of
+their archival.  But after e.g. 28 days they are generally gone for
+good.
+
+I could set up a cron job which reports such cases?
+
+Best
+-k
+
+> However, it might be a good time to discuss whether we really
+> need those packages that are removed from CRAN.  So thanks a
+> lot for this list which we should review in the near future.
+
+> Kind regards
+>    Andreas.
+
+> -- 
+> http://fam-tille.de
+
+From Kurt.Hornik at wu.ac.at  Tue Nov  8 11:30:22 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Tue, 8 Nov 2022 12:30:22 +0100
+Subject: CRAN package slider
+Message-ID: <25450.15822.4090.790659@hornik.net>
+
+Davis,
+
+Please see
+
+  <https://cran.r-project.org/web/checks/check_results_slider.html>
+
+Unfortunately, in addition to the new strict-prototypes compilation
+warnings in r-devel we also have test ERRORs for the Debian r-patched
+and r-release checks, which also materialize in the autopkgtest checks
+for the r-cran-slider package and thus currently prevent the migration
+of the new R 4.2.2 Debian packages from unstable to testing, see
+
+  <https://tracker.debian.org/pkg/r-base>
+
+My hope is that this can be overridden quickly to get the Debian
+packages migrated to testing, but in any case, can you please fix the
+ERRORs (and ideally also the compilation warnings) as quickly as
+possible?
+
+Best
+-k
+
+From tille at debian.org  Tue Nov  8 18:19:54 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 8 Nov 2022 19:19:54 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25450.14213.529436.744808@hornik.net>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <Y2oQybKdwABhtmX1@an3as.eu> <25450.14213.529436.744808@hornik.net>
+Message-ID: <Y2qdymw7M46tfJ3r@an3as.eu>
+
+Am Tue, Nov 08, 2022 at 12:03:33PM +0100 schrieb Kurt Hornik:
+> > Would you suggest to start this talk by people from CRAN or Debian?
+> 
+> I was about to contact the maintainer from CRAN.  Would you like to be
+> cc'ed on such issues?
+
+Thanks a lot for the CC
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Nov  8 19:27:53 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 8 Nov 2022 20:27:53 +0100
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <25450.14411.248845.770201@hornik.net>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <25449.17332.888212.158106@hornik.net> <Y2oTDmdQNMa0pvzj@an3as.eu> <25450.14411.248845.770201@hornik.net>
+Message-ID: <Y2qtuYYjFM1p5i3+@an3as.eu>
+
+Hi Kurt,
+
+Am Tue, Nov 08, 2022 at 12:06:51PM +0100 schrieb Kurt Hornik:
+> > According to item 2. above I personally think that specifically
+> > these packages need to be tested since they are not tested on
+> > CRAN any more.  How should we otherwise know whether they are
+> > working or not?
+> 
+> These packages were *archived* from CRAN because they no longer worked
+> properly.  If at all, they should be dropped from Debian.
+> 
+> Now, some CRAN package maintainers do not take their archival deadline
+> quite seriously, and packages can come back alive within a few days of
+> their archival.  But after e.g. 28 days they are generally gone for
+> good.
+
+Thanks a lot for this explanation.  I admit I have the feeling we are
+maintaining too much CRAN packages anyway and we get more by new
+dependencies or user requests.  So droping some packages from time to
+time makes perfectly sense.  We should probably take the list you
+assembled and remove a couple of these packages.  However, I would
+checkout popcon (user statistics) whether a package is used or not.
+ 
+> I could set up a cron job which reports such cases?
+
+May you could feed the results to some website?  We could have a
+look to this site from time to time.
+ 
+Thanks again for your helpful hints
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From davis at posit.co  Tue Nov  8 22:30:32 2022
+From: davis at posit.co (Davis Vaughan)
+Date: Tue, 8 Nov 2022 17:30:32 -0500
+Subject: Re: CRAN package slider
+In-Reply-To: <25450.15822.4090.790659@hornik.net>
+References: <25450.15822.4090.790659@hornik.net>
+Message-ID: <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com>
+
+Hi all,
+
+I fixed the strict-prototypes warnings here https://github.com/DavisVaughan/slider/pull/175
+(BTW, did you see Lionel's message about this on r-package-devel? https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+
+I have slider ready to go, but can't reproduce the issues seen on the CRAN machines and on the Debian autopkgtest. I've tried a number of things, including:
+
+- Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R CMD check and on the actual source code of slider pulled from GitHub with devtools::check()- Submitting slider to win-devel, where it comes back clean
+- Checking it locally on my own Mac, of course, with various versions of R including the exact r83217 revision it seems to be failing with on CRAN
+
+Those tests should have errored earlier in `check_endpoints_cannot_be_na()` where a missing value check is run, but somehow it is bypassed and is then erroring on the next check, which checks that all values are in ascending order. So my guess is that it has something to do with lubridate and this month addition, which should always result in a missing value in the 4th element, but that must not be the case somehow (here are the expected results):
+
+```
+library(lubridate)
+i <- as.Date("2019-01-30") + months(-3:0)
+i + months(1)
+#> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+```
+
+If anyone can reproduce the test failures themselves, I'd be grateful if you could help me figure out what I might be missing here. I'm very motivated to try and get this fixed for CRAN.
+
+-Davis
+
+On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+
+> Davis,
+>
+>
+>
+> Please see
+>
+>
+>
+>   <https://cran.r-project.org/web/checks/check_results_slider.html>
+>
+>
+>
+> Unfortunately, in addition to the new strict-prototypes compilation
+>
+> warnings in r-devel we also have test ERRORs for the Debian r-patched
+>
+> and r-release checks, which also materialize in the autopkgtest checks
+>
+> for the r-cran-slider package and thus currently prevent the migration
+>
+> of the new R 4.2.2 Debian packages from unstable to testing, see
+>
+>
+>
+>   <https://tracker.debian.org/pkg/r-base>
+>
+>
+>
+> My hope is that this can be overridden quickly to get the Debian
+>
+> packages migrated to testing, but in any case, can you please fix the
+>
+> ERRORs (and ideally also the compilation warnings) as quickly as
+>
+> possible?
+>
+>
+>
+> Best
+>
+> -k
+
+From davis at posit.co  Tue Nov  8 23:04:30 2022
+From: davis at posit.co (Davis Vaughan)
+Date: Tue, 8 Nov 2022 18:04:30 -0500
+Subject: Re: CRAN package slider
+In-Reply-To: <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com>
+Message-ID: <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com>
+
+Oh, and just as I send this I think I have figured it out!
+
+I'm seeing this on the debian log:
+
+```
+Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+```
+
+Meaning that Debian is installing a version of lubridate that is technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago (I assume CRAN is also installing an outdated version).
+
+If you run my lubridate reprex from above with:
+- rocker/r-base image with released R 4.2.2 (2022-10-31)
+- lubridate 1.8.0
+
+then you get:
+
+```
+library(lubridate)
+i <- as.Date("2019-01-30") + months(-3:0)
+i + months(1)
+#> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+```
+
+which clearly isn't right in that 4th slot, it should be `NA`.
+
+This has to do with this R-devel bug which I thought was fixed before 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which makes me think somehow it slipped through:
+
+```
+x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+x
+#> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+# Looks like NA in the 2nd slot
+x$mon <- c(0L, NA)
+x
+#> [1] "2019-01-30 UTC" NA
+
+# But this borks it completely!
+as.Date(x)
+#> [1] "2019-01-30" "1970-01-01"
+```
+
+I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call there correctly gives me `NA` in the 2nd slot.
+
+lubridate happened to switch to using timechange as a backend in the last release, and it probably changes the internal code in such a way that it now happens to avoid this bug, which is why we don't see it on R 4.2.2 with lubridate 1.9.0.
+
+So I think CRAN and Debian just need to rerun these checks with lubridate 1.9.0, and in the meantime I will go ahead and send in a patch release of slider to fix the strict-prototype warnings.
+
+-Davis
+
+On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+
+> Hi all,
+>
+> I fixed the strict-prototypes warnings here https://github.com/DavisVaughan/slider/pull/175
+> (BTW, did you see Lionel's message about this on r-package-devel? https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+>
+>
+> I have slider ready to go, but can't reproduce the issues seen on the CRAN machines and on the Debian autopkgtest. I've tried a number of things, including:
+>
+>
+> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R CMD check and on the actual source code of slider pulled from GitHub with devtools::check()- Submitting slider to win-devel, where it comes back clean
+> - Checking it locally on my own Mac, of course, with various versions of R including the exact r83217 revision it seems to be failing with on CRAN
+>
+>
+> Those tests should have errored earlier in `check_endpoints_cannot_be_na()` where a missing value check is run, but somehow it is bypassed and is then erroring on the next check, which checks that all values are in ascending order. So my guess is that it has something to do with lubridate and this month addition, which should always result in a missing value in the 4th element, but that must not be the case somehow (here are the expected results):
+>
+>
+>
+> ```
+> library(lubridate)
+> i <- as.Date("2019-01-30") + months(-3:0)
+> i + months(1)
+> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+> ```
+>
+> If anyone can reproduce the test failures themselves, I'd be grateful if you could help me figure out what I might be missing here. I'm very motivated to try and get this fixed for CRAN.
+>
+>
+> -Davis
+>
+>
+> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+>
+> > Davis,
+> >
+> >
+> >
+> > Please see
+> >
+> >
+> >
+> >   <https://cran.r-project.org/web/checks/check_results_slider.html>
+> >
+> >
+> >
+> > Unfortunately, in addition to the new strict-prototypes compilation
+> >
+> > warnings in r-devel we also have test ERRORs for the Debian r-patched
+> >
+> > and r-release checks, which also materialize in the autopkgtest checks
+> >
+> > for the r-cran-slider package and thus currently prevent the migration
+> >
+> > of the new R 4.2.2 Debian packages from unstable to testing, see
+> >
+> >
+> >
+> >   <https://tracker.debian.org/pkg/r-base>
+> >
+> >
+> >
+> > My hope is that this can be overridden quickly to get the Debian
+> >
+> > packages migrated to testing, but in any case, can you please fix the
+> >
+> > ERRORs (and ideally also the compilation warnings) as quickly as
+> >
+> > possible?
+> >
+> >
+> >
+> > Best
+> >
+> > -k
+
+From davis at posit.co  Tue Nov  8 23:23:23 2022
+From: davis at posit.co (Davis Vaughan)
+Date: Tue, 8 Nov 2022 18:23:23 -0500
+Subject: Re: CRAN package slider
+In-Reply-To: <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com>
+Message-ID: <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com>
+
+One last thing. I have confirmed that this was a bug that was introduced in R 4.2.2, but has since been patched in R-devel. 
+
+Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how that works)?
+
+```
+x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+x
+#> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+# Make the 2nd element NA by setting one of the fields to NA
+x$mon <- c(0L, NA)
+x
+#> [1] "2019-01-30 UTC" NA
+
+# R 4.2.1
+as.Date(x)
+#> [1] "2019-01-30" NA
+
+# R 4.2.2
+as.Date(x)
+#> [1] "2019-01-30" "1970-01-01"
+
+# R-devel, 2022-11-07 r83308
+as.Date(x)
+#> [1] "2019-01-30" NA
+```
+
+This has practical implications for lubridate users that update to R 4.2.2 but stay on lubridate 1.8.0, as this code no longer works. Luckily we can tell users to just update to lubridate 1.9.0 if they have issues, which works on all the R versions in question:
+
+```
+library(lubridate)
+
+i <- as.Date("2019-01-30")
+i
+#> [1] "2019-01-30"
+
+# R 4.2.2, lubridate 1.8.0
+i + months(1)
+#> [1] "1970-01-30"
+
+# R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+i + months(1)
+#> [1] NA
+```
+
+Thanks all,
+Davis
+
+On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+> Oh, and just as I send this I think I have figured it out!
+>
+> I'm seeing this on the debian log:
+>
+> ```
+> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+> ```
+>
+> Meaning that Debian is installing a version of lubridate that is technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago (I assume CRAN is also installing an outdated version).
+>
+>
+> If you run my lubridate reprex from above with:
+> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+> - lubridate 1.8.0
+>
+>
+> then you get:
+>
+>
+> ```
+> library(lubridate)
+> i <- as.Date("2019-01-30") + months(-3:0)
+> i + months(1)
+> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+> ```
+>
+> which clearly isn't right in that 4th slot, it should be `NA`.
+>
+>
+> This has to do with this R-devel bug which I thought was fixed before 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which makes me think somehow it slipped through:
+>
+>
+> ```
+> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+> x
+> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+>
+> # Looks like NA in the 2nd slot
+> x$mon <- c(0L, NA)
+> x
+> #> [1] "2019-01-30 UTC" NA
+>
+> # But this borks it completely!
+> as.Date(x)
+> #> [1] "2019-01-30" "1970-01-01"
+> ```
+>
+>
+>
+> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call there correctly gives me `NA` in the 2nd slot.
+>
+>
+> lubridate happened to switch to using timechange as a backend in the last release, and it probably changes the internal code in such a way that it now happens to avoid this bug, which is why we don't see it on R 4.2.2 with lubridate 1.9.0.
+>
+>
+> So I think CRAN and Debian just need to rerun these checks with lubridate 1.9.0, and in the meantime I will go ahead and send in a patch release of slider to fix the strict-prototype warnings.
+>
+>
+> -Davis
+>
+>
+>
+>
+>
+>
+>
+>
+> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+>
+> > Hi all,
+> >
+> > I fixed the strict-prototypes warnings here https://github.com/DavisVaughan/slider/pull/175
+> > (BTW, did you see Lionel's message about this on r-package-devel? https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+> >
+> >
+> > I have slider ready to go, but can't reproduce the issues seen on the CRAN machines and on the Debian autopkgtest. I've tried a number of things, including:
+> >
+> >
+> > - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R CMD check and on the actual source code of slider pulled from GitHub with devtools::check()- Submitting slider to win-devel, where it comes back clean
+> > - Checking it locally on my own Mac, of course, with various versions of R including the exact r83217 revision it seems to be failing with on CRAN
+> >
+> >
+> > Those tests should have errored earlier in `check_endpoints_cannot_be_na()` where a missing value check is run, but somehow it is bypassed and is then erroring on the next check, which checks that all values are in ascending order. So my guess is that it has something to do with lubridate and this month addition, which should always result in a missing value in the 4th element, but that must not be the case somehow (here are the expected results):
+> >
+> >
+> >
+> > ```
+> > library(lubridate)
+> > i <- as.Date("2019-01-30") + months(-3:0)
+> > i + months(1)
+> > #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+> > ```
+> >
+> > If anyone can reproduce the test failures themselves, I'd be grateful if you could help me figure out what I might be missing here. I'm very motivated to try and get this fixed for CRAN.
+> >
+> >
+> > -Davis
+> >
+> >
+> > On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+> >
+> > > Davis,
+> > >
+> > >
+> > >
+> > > Please see
+> > >
+> > >
+> > >
+> > >   <https://cran.r-project.org/web/checks/check_results_slider.html>
+> > >
+> > >
+> > >
+> > > Unfortunately, in addition to the new strict-prototypes compilation
+> > >
+> > > warnings in r-devel we also have test ERRORs for the Debian r-patched
+> > >
+> > > and r-release checks, which also materialize in the autopkgtest checks
+> > >
+> > > for the r-cran-slider package and thus currently prevent the migration
+> > >
+> > > of the new R 4.2.2 Debian packages from unstable to testing, see
+> > >
+> > >
+> > >
+> > >   <https://tracker.debian.org/pkg/r-base>
+> > >
+> > >
+> > >
+> > > My hope is that this can be overridden quickly to get the Debian
+> > >
+> > > packages migrated to testing, but in any case, can you please fix the
+> > >
+> > > ERRORs (and ideally also the compilation warnings) as quickly as
+> > >
+> > > possible?
+> > >
+> > >
+> > >
+> > > Best
+> > >
+> > > -k
+
+From bob.dybian at gmail.com  Wed Nov  9 09:23:20 2022
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Wed, 9 Nov 2022 10:23:20 +0100
+Subject: Bug#1023731: transition: r-api-bioc-3.16
+Message-ID: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi,
+Bioconductor 3.16 has been released [1].
+
+[1] https://bioconductor.org/news/bioc_3_16_release/
+
+Like for previous r-api-bioc transitions, all reverse dependencies
+need a manual upgrade to the new upstream releases, they are not
+binNMU-able. The Debian R Packages team will do so.
+
+Please set up a tracker manually, since this is a transition of a
+virtual package name.
+
+Ben file:
+-----------------------------------------------------------------------------
+title = "r-api-bioc-3.16";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.16";
+is_bad = .depends ~ "r-api-bioc-3.15";
+-----------------------------------------------------------------------------
+
+Thanks,
+Dylan
+
+From Kurt.Hornik at wu.ac.at  Wed Nov  9 11:17:00 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Wed, 9 Nov 2022 12:17:00 +0100
+Subject: Re: CRAN package slider
+In-Reply-To: <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com>
+Message-ID: <25451.35884.483990.132013@hornik.net>
+
+>>>>> Davis Vaughan writes:
+
+Many thanks for your detective work.
+
+Turns out that this is actually already fixed in R-patched.
+
+Martin: can you perhaps quickly identify the patch which fixes this?
+
+Dirk: could you perhaps consider to apply that patch and redo the Debian
+4.2.2 packages?
+
+Best
+-k
+
+> One last thing. I have confirmed that this was a bug that was introduced in
+> R 4.2.2, but has since been patched in R-devel.
+
+> Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how
+> that works)?
+
+> ```
+> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+> x
+> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+> # Make the 2nd element NA by setting one of the fields to NA
+> x$mon <- c(0L, NA)
+> x
+> #> [1] "2019-01-30 UTC" NA
+
+> # R 4.2.1
+> as.Date(x)
+> #> [1] "2019-01-30" NA
+
+> # R 4.2.2
+> as.Date(x)
+> #> [1] "2019-01-30" "1970-01-01"
+
+> # R-devel, 2022-11-07 r83308
+> as.Date(x)
+> #> [1] "2019-01-30" NA
+> ```
+
+> This has practical implications for lubridate users that update to R 4.2.2
+> but stay on lubridate 1.8.0, as this code no longer works. Luckily we can
+> tell users to just update to lubridate 1.9.0 if they have issues, which
+> works on all the R versions in question:
+
+> ```
+> library(lubridate)
+
+> i <- as.Date("2019-01-30")
+> i
+> #> [1] "2019-01-30"
+
+> # R 4.2.2, lubridate 1.8.0
+> i + months(1)
+> #> [1] "1970-01-30"
+
+> # R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+> i + months(1)
+> #> [1] NA
+> ```
+
+> Thanks all,
+> Davis
+
+> On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+>> Oh, and just as I send this I think I have figured it out!
+>> 
+>> I'm seeing this on the debian log:
+>> 
+>> ```
+>> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+>> ```
+>> 
+>> Meaning that Debian is installing a version of lubridate that is
+>> technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago
+>> (I assume CRAN is also installing an outdated version).
+>> 
+>> If you run my lubridate reprex from above with:
+>> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+>> - lubridate 1.8.0
+>> 
+>> then you get:
+>> 
+>> ```
+>> library(lubridate)
+>> i <- as.Date("2019-01-30") + months(-3:0)
+>> i + months(1)
+>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+>> ```
+>> 
+>> which clearly isn't right in that 4th slot, it should be `NA`.
+>> 
+>> This has to do with this R-devel bug which I thought was fixed before
+>> 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which
+>> makes me think somehow it slipped through:
+>> 
+>> ```
+>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>> x
+>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+>> 
+>> # Looks like NA in the 2nd slot
+>> x$mon <- c(0L, NA)
+>> x
+>> #> [1] "2019-01-30 UTC" NA
+>> 
+>> # But this borks it completely!
+>> as.Date(x)
+>> #> [1] "2019-01-30" "1970-01-01"
+>> ```
+>> 
+>> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call
+>> there correctly gives me `NA` in the 2nd slot.
+>> 
+>> lubridate happened to switch to using timechange as a backend in the last
+>> release, and it probably changes the internal code in such a way that it
+>> now happens to avoid this bug, which is why we don't see it on R 4.2.2 with
+>> lubridate 1.9.0.
+>> 
+>> So I think CRAN and Debian just need to rerun these checks with lubridate
+>> 1.9.0, and in the meantime I will go ahead and send in a patch release of
+>> slider to fix the strict-prototype warnings.
+>> 
+>> -Davis
+>> 
+>> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+>> 
+>>> Hi all,
+>>> 
+>>> I fixed the strict-prototypes warnings here
+>>> https://github.com/DavisVaughan/slider/pull/175
+>>> (BTW, did you see Lionel's message about this on r-package-devel?
+>>> https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+>>> 
+>>> I have slider ready to go, but can't reproduce the issues seen on the
+>>> CRAN machines and on the Debian autopkgtest. I've tried a number of things,
+>>> including:
+>>> 
+>>> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where
+>>> I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R
+>>> CMD check and on the actual source code of slider pulled from GitHub with
+>>> devtools::check()
+>>> - Submitting slider to win-devel, where it comes back clean
+>>> - Checking it locally on my own Mac, of course, with various versions of
+>>> R including the exact r83217 revision it seems to be failing with on CRAN
+>>> 
+>>> Those tests should have errored earlier in
+>>> `check_endpoints_cannot_be_na()` where a missing value check is run, but
+>>> somehow it is bypassed and is then erroring on the next check, which checks
+>>> that all values are in ascending order. So my guess is that it has
+>>> something to do with lubridate and this month addition, which should always
+>>> result in a missing value in the 4th element, but that must not be the case
+>>> somehow (here are the expected results):
+>>> 
+>>> ```
+>>> library(lubridate)
+>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>> i + months(1)
+>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+>>> ```
+>>> 
+>>> If anyone can reproduce the test failures themselves, I'd be grateful if
+>>> you could help me figure out what I might be missing here. I'm very
+>>> motivated to try and get this fixed for CRAN.
+>>> 
+>>> -Davis
+>>> 
+>>> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+>>> 
+>>>> Davis,
+>>>> 
+>>>> Please see
+>>>> 
+>>>> <https://cran.r-project.org/web/checks/check_results_slider.html>
+>>>> 
+>>>> Unfortunately, in addition to the new strict-prototypes compilation
+>>>> warnings in r-devel we also have test ERRORs for the Debian r-patched
+>>>> and r-release checks, which also materialize in the autopkgtest checks
+>>>> for the r-cran-slider package and thus currently prevent the migration
+>>>> of the new R 4.2.2 Debian packages from unstable to testing, see
+>>>> 
+>>>> <https://tracker.debian.org/pkg/r-base>
+>>>> 
+>>>> My hope is that this can be overridden quickly to get the Debian
+>>>> packages migrated to testing, but in any case, can you please fix the
+>>>> ERRORs (and ideally also the compilation warnings) as quickly as
+>>>> possible?
+>>>> 
+>>>> Best
+>>>> -k
+>>>> 
+>>> 
+
+> 	[[alternative HTML version deleted]]
+
+From maechler at stat.math.ethz.ch  Wed Nov  9 11:46:29 2022
+From: maechler at stat.math.ethz.ch (Martin Maechler)
+Date: Wed, 9 Nov 2022 12:46:29 +0100
+Subject: Re: CRAN package slider
+In-Reply-To: <25451.35884.483990.132013@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net>
+Message-ID: <25451.37653.691475.483268@stat.math.ethz.ch>
+
+>>>>> Kurt Hornik 
+>>>>>     on Wed, 9 Nov 2022 12:17:00 +0100 writes:
+
+>>>>> Davis Vaughan writes:
+    > Many thanks for your detective work.
+
+    > Turns out that this is actually already fixed in R-patched.
+
+    > Martin: can you perhaps quickly identify the patch which fixes this?
+
+Hmm... I don't think it's fixed in R-patched.
+I see (in my version of R-patched which is very rarely *not* up-to-date):
+
+> x$mon <- c(0L, NA)
+> x
+[1] "2019-01-30 UTC" NA              
+> as.Date(x)
+[1] "2019-01-30" "1970-01-01"
+> R.version.string
+[1] "R version 4.2.2 Patched (2022-11-06 r83308)"
+> 
+
+If I am right and this is *not* yet ported to R 4.2.2 patched,
+I do agree that we should port the patch / fix the problem for
+R 4.2.2 patched.
+
+I don't have time for more for the next couple of hours.
+Martin
+
+    > Dirk: could you perhaps consider to apply that patch and redo the Debian
+    > 4.2.2 packages?
+
+    > Best
+    > -k
+
+    >> One last thing. I have confirmed that this was a bug that was introduced in
+    >> R 4.2.2, but has since been patched in R-devel.
+
+    >> Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how
+    >> that works)?
+
+    >> ```
+    >> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+    >> x
+    >> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+    >> # Make the 2nd element NA by setting one of the fields to NA
+    >> x$mon <- c(0L, NA)
+    >> x
+    >> #> [1] "2019-01-30 UTC" NA
+
+    >> # R 4.2.1
+    >> as.Date(x)
+    >> #> [1] "2019-01-30" NA
+
+    >> # R 4.2.2
+    >> as.Date(x)
+    >> #> [1] "2019-01-30" "1970-01-01"
+
+    >> # R-devel, 2022-11-07 r83308
+    >> as.Date(x)
+    >> #> [1] "2019-01-30" NA
+    >> ```
+
+    >> This has practical implications for lubridate users that update to R 4.2.2
+    >> but stay on lubridate 1.8.0, as this code no longer works. Luckily we can
+    >> tell users to just update to lubridate 1.9.0 if they have issues, which
+    >> works on all the R versions in question:
+
+    >> ```
+    >> library(lubridate)
+
+    >> i <- as.Date("2019-01-30")
+    >> i
+    >> #> [1] "2019-01-30"
+
+    >> # R 4.2.2, lubridate 1.8.0
+    >> i + months(1)
+    >> #> [1] "1970-01-30"
+
+    >> # R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+    >> i + months(1)
+    >> #> [1] NA
+    >> ```
+
+    >> Thanks all,
+    >> Davis
+
+    >> On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+    >>> Oh, and just as I send this I think I have figured it out!
+    >>> 
+    >>> I'm seeing this on the debian log:
+    >>> 
+    >>> ```
+    >>> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+    >>> ```
+    >>> 
+    >>> Meaning that Debian is installing a version of lubridate that is
+    >>> technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago
+    >>> (I assume CRAN is also installing an outdated version).
+    >>> 
+    >>> If you run my lubridate reprex from above with:
+    >>> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+    >>> - lubridate 1.8.0
+    >>> 
+    >>> then you get:
+    >>> 
+    >>> ```
+    >>> library(lubridate)
+    >>> i <- as.Date("2019-01-30") + months(-3:0)
+    >>> i + months(1)
+    >>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+    >>> ```
+    >>> 
+    >>> which clearly isn't right in that 4th slot, it should be `NA`.
+    >>> 
+    >>> This has to do with this R-devel bug which I thought was fixed before
+    >>> 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which
+    >>> makes me think somehow it slipped through:
+    >>> 
+    >>> ```
+    >>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+    >>> x
+    >>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+    >>> 
+    >>> # Looks like NA in the 2nd slot
+    >>> x$mon <- c(0L, NA)
+    >>> x
+    >>> #> [1] "2019-01-30 UTC" NA
+    >>> 
+    >>> # But this borks it completely!
+    >>> as.Date(x)
+    >>> #> [1] "2019-01-30" "1970-01-01"
+    >>> ```
+    >>> 
+    >>> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call
+    >>> there correctly gives me `NA` in the 2nd slot.
+    >>> 
+    >>> lubridate happened to switch to using timechange as a backend in the last
+    >>> release, and it probably changes the internal code in such a way that it
+    >>> now happens to avoid this bug, which is why we don't see it on R 4.2.2 with
+    >>> lubridate 1.9.0.
+    >>> 
+    >>> So I think CRAN and Debian just need to rerun these checks with lubridate
+    >>> 1.9.0, and in the meantime I will go ahead and send in a patch release of
+    >>> slider to fix the strict-prototype warnings.
+    >>> 
+    >>> -Davis
+    >>> 
+    >>> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+    >>> 
+    >>>> Hi all,
+    >>>> 
+    >>>> I fixed the strict-prototypes warnings here
+    >>>> https://github.com/DavisVaughan/slider/pull/175
+    >>>> (BTW, did you see Lionel's message about this on r-package-devel?
+    >>>> https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+    >>>> 
+    >>>> I have slider ready to go, but can't reproduce the issues seen on the
+    >>>> CRAN machines and on the Debian autopkgtest. I've tried a number of things,
+    >>>> including:
+    >>>> 
+    >>>> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where
+    >>>> I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R
+    >>>> CMD check and on the actual source code of slider pulled from GitHub with
+    >>>> devtools::check()
+    >>>> - Submitting slider to win-devel, where it comes back clean
+    >>>> - Checking it locally on my own Mac, of course, with various versions of
+    >>>> R including the exact r83217 revision it seems to be failing with on CRAN
+    >>>> 
+    >>>> Those tests should have errored earlier in
+    >>>> `check_endpoints_cannot_be_na()` where a missing value check is run, but
+    >>>> somehow it is bypassed and is then erroring on the next check, which checks
+    >>>> that all values are in ascending order. So my guess is that it has
+    >>>> something to do with lubridate and this month addition, which should always
+    >>>> result in a missing value in the 4th element, but that must not be the case
+    >>>> somehow (here are the expected results):
+    >>>> 
+    >>>> ```
+    >>>> library(lubridate)
+    >>>> i <- as.Date("2019-01-30") + months(-3:0)
+    >>>> i + months(1)
+    >>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+    >>>> ```
+    >>>> 
+    >>>> If anyone can reproduce the test failures themselves, I'd be grateful if
+    >>>> you could help me figure out what I might be missing here. I'm very
+    >>>> motivated to try and get this fixed for CRAN.
+    >>>> 
+    >>>> -Davis
+    >>>> 
+    >>>> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+    >>>> 
+    >>>>> Davis,
+    >>>>> 
+    >>>>> Please see
+    >>>>> 
+    >>>>> <https://cran.r-project.org/web/checks/check_results_slider.html>
+    >>>>> 
+    >>>>> Unfortunately, in addition to the new strict-prototypes compilation
+    >>>>> warnings in r-devel we also have test ERRORs for the Debian r-patched
+    >>>>> and r-release checks, which also materialize in the autopkgtest checks
+    >>>>> for the r-cran-slider package and thus currently prevent the migration
+    >>>>> of the new R 4.2.2 Debian packages from unstable to testing, see
+    >>>>> 
+    >>>>> <https://tracker.debian.org/pkg/r-base>
+    >>>>> 
+    >>>>> My hope is that this can be overridden quickly to get the Debian
+    >>>>> packages migrated to testing, but in any case, can you please fix the
+    >>>>> ERRORs (and ideally also the compilation warnings) as quickly as
+    >>>>> possible?
+    >>>>> 
+    >>>>> Best
+    >>>>> -k
+    >>>>> 
+    >>>> 
+
+    >> [[alternative HTML version deleted]]
+
+From Kurt.Hornik at wu.ac.at  Wed Nov  9 12:32:10 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Wed, 9 Nov 2022 13:32:10 +0100
+Subject: Re: CRAN package slider
+In-Reply-To: <25451.37653.691475.483268@stat.math.ethz.ch>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch>
+Message-ID: <25451.40394.766962.986355@hornik.net>
+
+>>>>> Martin Maechler writes:
+
+Interesting.  I have
+
+  R version 4.2.2 Patched (2022-11-06 r83317) -- "Innocent and Trusting"
+
+for which
+
+R> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+R> x$mon <- c(0L, NA)
+R> x
+[1] "2019-01-30 UTC" NA              
+
+Hmm ...
+
+Best
+-k
+
+>>>>> Kurt Hornik 
+>>>>>     on Wed, 9 Nov 2022 12:17:00 +0100 writes:
+
+>>>>> Davis Vaughan writes:
+>> Many thanks for your detective work.
+
+>> Turns out that this is actually already fixed in R-patched.
+
+>> Martin: can you perhaps quickly identify the patch which fixes this?
+
+> Hmm... I don't think it's fixed in R-patched.
+> I see (in my version of R-patched which is very rarely *not* up-to-date):
+
+>> x$mon <- c(0L, NA)
+>> x
+> [1] "2019-01-30 UTC" NA              
+>> as.Date(x)
+> [1] "2019-01-30" "1970-01-01"
+>> R.version.string
+> [1] "R version 4.2.2 Patched (2022-11-06 r83308)"
+>> 
+
+> If I am right and this is *not* yet ported to R 4.2.2 patched,
+> I do agree that we should port the patch / fix the problem for
+> R 4.2.2 patched.
+
+> I don't have time for more for the next couple of hours.
+> Martin
+
+>> Dirk: could you perhaps consider to apply that patch and redo the Debian
+>> 4.2.2 packages?
+
+>> Best
+>> -k
+
+>>> One last thing. I have confirmed that this was a bug that was introduced in
+>>> R 4.2.2, but has since been patched in R-devel.
+
+>>> Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how
+>>> that works)?
+
+>>> ```
+>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>>> x
+>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+>>> # Make the 2nd element NA by setting one of the fields to NA
+>>> x$mon <- c(0L, NA)
+>>> x
+>>> #> [1] "2019-01-30 UTC" NA
+
+>>> # R 4.2.1
+>>> as.Date(x)
+>>> #> [1] "2019-01-30" NA
+
+>>> # R 4.2.2
+>>> as.Date(x)
+>>> #> [1] "2019-01-30" "1970-01-01"
+
+>>> # R-devel, 2022-11-07 r83308
+>>> as.Date(x)
+>>> #> [1] "2019-01-30" NA
+>>> ```
+
+>>> This has practical implications for lubridate users that update to R 4.2.2
+>>> but stay on lubridate 1.8.0, as this code no longer works. Luckily we can
+>>> tell users to just update to lubridate 1.9.0 if they have issues, which
+>>> works on all the R versions in question:
+
+>>> ```
+>>> library(lubridate)
+
+>>> i <- as.Date("2019-01-30")
+>>> i
+>>> #> [1] "2019-01-30"
+
+>>> # R 4.2.2, lubridate 1.8.0
+>>> i + months(1)
+>>> #> [1] "1970-01-30"
+
+>>> # R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+>>> i + months(1)
+>>> #> [1] NA
+>>> ```
+
+>>> Thanks all,
+>>> Davis
+
+>>> On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+>>>> Oh, and just as I send this I think I have figured it out!
+>>>> 
+>>>> I'm seeing this on the debian log:
+>>>> 
+>>>> ```
+>>>> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+>>>> ```
+>>>> 
+>>>> Meaning that Debian is installing a version of lubridate that is
+>>>> technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago
+>>>> (I assume CRAN is also installing an outdated version).
+>>>> 
+>>>> If you run my lubridate reprex from above with:
+>>>> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+>>>> - lubridate 1.8.0
+>>>> 
+>>>> then you get:
+>>>> 
+>>>> ```
+>>>> library(lubridate)
+>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>> i + months(1)
+>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+>>>> ```
+>>>> 
+>>>> which clearly isn't right in that 4th slot, it should be `NA`.
+>>>> 
+>>>> This has to do with this R-devel bug which I thought was fixed before
+>>>> 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which
+>>>> makes me think somehow it slipped through:
+>>>> 
+>>>> ```
+>>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>>>> x
+>>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+>>>> 
+>>>> # Looks like NA in the 2nd slot
+>>>> x$mon <- c(0L, NA)
+>>>> x
+>>>> #> [1] "2019-01-30 UTC" NA
+>>>> 
+>>>> # But this borks it completely!
+>>>> as.Date(x)
+>>>> #> [1] "2019-01-30" "1970-01-01"
+>>>> ```
+>>>> 
+>>>> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call
+>>>> there correctly gives me `NA` in the 2nd slot.
+>>>> 
+>>>> lubridate happened to switch to using timechange as a backend in the last
+>>>> release, and it probably changes the internal code in such a way that it
+>>>> now happens to avoid this bug, which is why we don't see it on R 4.2.2 with
+>>>> lubridate 1.9.0.
+>>>> 
+>>>> So I think CRAN and Debian just need to rerun these checks with lubridate
+>>>> 1.9.0, and in the meantime I will go ahead and send in a patch release of
+>>>> slider to fix the strict-prototype warnings.
+>>>> 
+>>>> -Davis
+>>>> 
+>>>> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+>>>> 
+>>>>> Hi all,
+>>>>> 
+>>>>> I fixed the strict-prototypes warnings here
+>>>>> https://github.com/DavisVaughan/slider/pull/175
+>>>>> (BTW, did you see Lionel's message about this on r-package-devel?
+>>>>> https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+>>>>> 
+>>>>> I have slider ready to go, but can't reproduce the issues seen on the
+>>>>> CRAN machines and on the Debian autopkgtest. I've tried a number of things,
+>>>>> including:
+>>>>> 
+>>>>> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where
+>>>>> I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R
+>>>>> CMD check and on the actual source code of slider pulled from GitHub with
+>>>>> devtools::check()
+>>>>> - Submitting slider to win-devel, where it comes back clean
+>>>>> - Checking it locally on my own Mac, of course, with various versions of
+>>>>> R including the exact r83217 revision it seems to be failing with on CRAN
+>>>>> 
+>>>>> Those tests should have errored earlier in
+>>>>> `check_endpoints_cannot_be_na()` where a missing value check is run, but
+>>>>> somehow it is bypassed and is then erroring on the next check, which checks
+>>>>> that all values are in ascending order. So my guess is that it has
+>>>>> something to do with lubridate and this month addition, which should always
+>>>>> result in a missing value in the 4th element, but that must not be the case
+>>>>> somehow (here are the expected results):
+>>>>> 
+>>>>> ```
+>>>>> library(lubridate)
+>>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>>> i + months(1)
+>>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+>>>>> ```
+>>>>> 
+>>>>> If anyone can reproduce the test failures themselves, I'd be grateful if
+>>>>> you could help me figure out what I might be missing here. I'm very
+>>>>> motivated to try and get this fixed for CRAN.
+>>>>> 
+>>>>> -Davis
+>>>>> 
+>>>>> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+>>>>> 
+>>>>>> Davis,
+>>>>>> 
+>>>>>> Please see
+>>>>>> 
+>>>>>> <https://cran.r-project.org/web/checks/check_results_slider.html>
+>>>>>> 
+>>>>>> Unfortunately, in addition to the new strict-prototypes compilation
+>>>>>> warnings in r-devel we also have test ERRORs for the Debian r-patched
+>>>>>> and r-release checks, which also materialize in the autopkgtest checks
+>>>>>> for the r-cran-slider package and thus currently prevent the migration
+>>>>>> of the new R 4.2.2 Debian packages from unstable to testing, see
+>>>>>> 
+>>>>>> <https://tracker.debian.org/pkg/r-base>
+>>>>>> 
+>>>>>> My hope is that this can be overridden quickly to get the Debian
+>>>>>> packages migrated to testing, but in any case, can you please fix the
+>>>>>> ERRORs (and ideally also the compilation warnings) as quickly as
+>>>>>> possible?
+>>>>>> 
+>>>>>> Best
+>>>>>> -k
+>>>>>> 
+>>>>> 
+
+>>> [[alternative HTML version deleted]]
+
+From Kurt.Hornik at wu.ac.at  Wed Nov  9 14:04:54 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Wed, 9 Nov 2022 15:04:54 +0100
+Subject: Re: CRAN package slider
+In-Reply-To: <25451.40394.766962.986355@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net>
+Message-ID: <25451.45958.498279.510436@hornik.net>
+
+>>>>> Kurt Hornik writes:
+
+Sorry, my fault, comes from doing too many things at once.
+
+Indeed, in r-patched 
+
+x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+x$mon <- c(0L, NA)
+x
+as.Date(x)
+
+still gives
+
+R> as.Date(x)
+[1] "2019-01-30" "1970-01-01"
+
+whereas in r-devel it gives
+
+R> as.Date(x)
+[1] "2019-01-30" NA        
+
+So we need to find the patch and then apply it for r-patched (and maybe
+also for the Debian packages).
+
+Best
+-k
+  
+
+>>>>> Martin Maechler writes:
+> Interesting.  I have
+
+>   R version 4.2.2 Patched (2022-11-06 r83317) -- "Innocent and Trusting"
+
+> for which
+
+R> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+R> x$mon <- c(0L, NA)
+R> x
+> [1] "2019-01-30 UTC" NA              
+
+> Hmm ...
+
+> Best
+> -k
+
+>>>>> Kurt Hornik 
+>>>>>     on Wed, 9 Nov 2022 12:17:00 +0100 writes:
+
+>>>>> Davis Vaughan writes:
+>>> Many thanks for your detective work.
+
+>>> Turns out that this is actually already fixed in R-patched.
+
+>>> Martin: can you perhaps quickly identify the patch which fixes this?
+
+>> Hmm... I don't think it's fixed in R-patched.
+>> I see (in my version of R-patched which is very rarely *not* up-to-date):
+
+>>> x$mon <- c(0L, NA)
+>>> x
+>> [1] "2019-01-30 UTC" NA              
+>>> as.Date(x)
+>> [1] "2019-01-30" "1970-01-01"
+>>> R.version.string
+>> [1] "R version 4.2.2 Patched (2022-11-06 r83308)"
+>>> 
+
+>> If I am right and this is *not* yet ported to R 4.2.2 patched,
+>> I do agree that we should port the patch / fix the problem for
+>> R 4.2.2 patched.
+
+>> I don't have time for more for the next couple of hours.
+>> Martin
+
+>>> Dirk: could you perhaps consider to apply that patch and redo the Debian
+>>> 4.2.2 packages?
+
+>>> Best
+>>> -k
+
+>>>> One last thing. I have confirmed that this was a bug that was introduced in
+>>>> R 4.2.2, but has since been patched in R-devel.
+
+>>>> Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how
+>>>> that works)?
+
+>>>> ```
+>>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>>>> x
+>>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+>>>> # Make the 2nd element NA by setting one of the fields to NA
+>>>> x$mon <- c(0L, NA)
+>>>> x
+>>>> #> [1] "2019-01-30 UTC" NA
+
+>>>> # R 4.2.1
+>>>> as.Date(x)
+>>>> #> [1] "2019-01-30" NA
+
+>>>> # R 4.2.2
+>>>> as.Date(x)
+>>>> #> [1] "2019-01-30" "1970-01-01"
+
+>>>> # R-devel, 2022-11-07 r83308
+>>>> as.Date(x)
+>>>> #> [1] "2019-01-30" NA
+>>>> ```
+
+>>>> This has practical implications for lubridate users that update to R 4.2.2
+>>>> but stay on lubridate 1.8.0, as this code no longer works. Luckily we can
+>>>> tell users to just update to lubridate 1.9.0 if they have issues, which
+>>>> works on all the R versions in question:
+
+>>>> ```
+>>>> library(lubridate)
+
+>>>> i <- as.Date("2019-01-30")
+>>>> i
+>>>> #> [1] "2019-01-30"
+
+>>>> # R 4.2.2, lubridate 1.8.0
+>>>> i + months(1)
+>>>> #> [1] "1970-01-30"
+
+>>>> # R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+>>>> i + months(1)
+>>>> #> [1] NA
+>>>> ```
+
+>>>> Thanks all,
+>>>> Davis
+
+>>>> On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+>>>>> Oh, and just as I send this I think I have figured it out!
+>>>>> 
+>>>>> I'm seeing this on the debian log:
+>>>>> 
+>>>>> ```
+>>>>> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+>>>>> ```
+>>>>> 
+>>>>> Meaning that Debian is installing a version of lubridate that is
+>>>>> technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago
+>>>>> (I assume CRAN is also installing an outdated version).
+>>>>> 
+>>>>> If you run my lubridate reprex from above with:
+>>>>> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+>>>>> - lubridate 1.8.0
+>>>>> 
+>>>>> then you get:
+>>>>> 
+>>>>> ```
+>>>>> library(lubridate)
+>>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>>> i + months(1)
+>>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+>>>>> ```
+>>>>> 
+>>>>> which clearly isn't right in that 4th slot, it should be `NA`.
+>>>>> 
+>>>>> This has to do with this R-devel bug which I thought was fixed before
+>>>>> 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which
+>>>>> makes me think somehow it slipped through:
+>>>>> 
+>>>>> ```
+>>>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>>>>> x
+>>>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+>>>>> 
+>>>>> # Looks like NA in the 2nd slot
+>>>>> x$mon <- c(0L, NA)
+>>>>> x
+>>>>> #> [1] "2019-01-30 UTC" NA
+>>>>> 
+>>>>> # But this borks it completely!
+>>>>> as.Date(x)
+>>>>> #> [1] "2019-01-30" "1970-01-01"
+>>>>> ```
+>>>>> 
+>>>>> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call
+>>>>> there correctly gives me `NA` in the 2nd slot.
+>>>>> 
+>>>>> lubridate happened to switch to using timechange as a backend in the last
+>>>>> release, and it probably changes the internal code in such a way that it
+>>>>> now happens to avoid this bug, which is why we don't see it on R 4.2.2 with
+>>>>> lubridate 1.9.0.
+>>>>> 
+>>>>> So I think CRAN and Debian just need to rerun these checks with lubridate
+>>>>> 1.9.0, and in the meantime I will go ahead and send in a patch release of
+>>>>> slider to fix the strict-prototype warnings.
+>>>>> 
+>>>>> -Davis
+>>>>> 
+>>>>> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+>>>>> 
+>>>>> Hi all,
+>>>>> 
+>>>>> I fixed the strict-prototypes warnings here
+>>>>> https://github.com/DavisVaughan/slider/pull/175
+>>>>> (BTW, did you see Lionel's message about this on r-package-devel?
+>>>>> https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+>>>>> 
+>>>>> I have slider ready to go, but can't reproduce the issues seen on the
+>>>>> CRAN machines and on the Debian autopkgtest. I've tried a number of things,
+>>>>> including:
+>>>>> 
+>>>>> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where
+>>>>> I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R
+>>>>> CMD check and on the actual source code of slider pulled from GitHub with
+>>>>> devtools::check()
+>>>>> - Submitting slider to win-devel, where it comes back clean
+>>>>> - Checking it locally on my own Mac, of course, with various versions of
+>>>>> R including the exact r83217 revision it seems to be failing with on CRAN
+>>>>> 
+>>>>> Those tests should have errored earlier in
+>>>>> `check_endpoints_cannot_be_na()` where a missing value check is run, but
+>>>>> somehow it is bypassed and is then erroring on the next check, which checks
+>>>>> that all values are in ascending order. So my guess is that it has
+>>>>> something to do with lubridate and this month addition, which should always
+>>>>> result in a missing value in the 4th element, but that must not be the case
+>>>>> somehow (here are the expected results):
+>>>>> 
+>>>>> ```
+>>>>> library(lubridate)
+>>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>>> i + months(1)
+>>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+>>>>> ```
+>>>>> 
+>>>>> If anyone can reproduce the test failures themselves, I'd be grateful if
+>>>>> you could help me figure out what I might be missing here. I'm very
+>>>>> motivated to try and get this fixed for CRAN.
+>>>>> 
+>>>>> -Davis
+>>>>> 
+>>>>> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+>>>>> 
+>>>>>>> Davis,
+>>>>>>> 
+>>>>>>> Please see
+>>>>>>> 
+>>>>>>> <https://cran.r-project.org/web/checks/check_results_slider.html>
+>>>>>>> 
+>>>>>>> Unfortunately, in addition to the new strict-prototypes compilation
+>>>>>>> warnings in r-devel we also have test ERRORs for the Debian r-patched
+>>>>>>> and r-release checks, which also materialize in the autopkgtest checks
+>>>>>>> for the r-cran-slider package and thus currently prevent the migration
+>>>>>>> of the new R 4.2.2 Debian packages from unstable to testing, see
+>>>>>>> 
+>>>>>>> <https://tracker.debian.org/pkg/r-base>
+>>>>>>> 
+>>>>>>> My hope is that this can be overridden quickly to get the Debian
+>>>>>>> packages migrated to testing, but in any case, can you please fix the
+>>>>>>> ERRORs (and ideally also the compilation warnings) as quickly as
+>>>>>>> possible?
+>>>>>>> 
+>>>>>>> Best
+>>>>>>> -k
+>>>>>>> 
+>>>>> 
+
+>>>> [[alternative HTML version deleted]]
+
+From edd at debian.org  Wed Nov  9 14:29:10 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 9 Nov 2022 08:29:10 -0600
+Subject: Re: CRAN package slider
+In-Reply-To: <25451.35884.483990.132013@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net>
+Message-ID: <25451.47414.604161.383535@rob.eddelbuettel.com>
+
+On 9 November 2022 at 12:17, Kurt Hornik wrote:
+| Dirk: could you perhaps consider to apply that patch and redo the Debian
+| 4.2.2 packages?
+
+Yes. If and when we have an identified patch I can carry it over to the
+Debian package (and hence its Ubuntu rebuilds). Though it also seems an
+eventual 4.2.3 may be needed. But we can of course pre-empt it.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Wed Nov  9 14:39:17 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 9 Nov 2022 08:39:17 -0600
+Subject: Re: Debian R 4.2.2 packages
+In-Reply-To: <Y2qtuYYjFM1p5i3+@an3as.eu>
+References: <25449.3342.658058.546758@hornik.net> <Y2kdPeqIB1akfXSk@an3as.eu> <25449.7669.855311.992937@hornik.net> <Y2k9N54MI1L1FgRP@an3as.eu> <25449.16976.146917.776581@rob.eddelbuettel.com> <25449.17332.888212.158106@hornik.net> <Y2oTDmdQNMa0pvzj@an3as.eu> <25450.14411.248845.770201@hornik.net> <Y2qtuYYjFM1p5i3+@an3as.eu>
+Message-ID: <25451.48021.109062.702739@rob.eddelbuettel.com>
+
+On 8 November 2022 at 20:27, Andreas Tille wrote:
+| I admit I have the feeling we are maintaining too much CRAN packages anyway
+| and we get more by new dependencies or user requests.
+
+That depends: I now look after 20k packages (each) for Ubuntu 20.04 and 22.04:
+
+  $ apt-cache search r-cran- | wc -l
+  20115
+  $ lsb_release -d
+  Description:    Ubuntu 22.04.1 LTS
+  $ 
+
+That is all of CRAN (well, plus the 'deceased' packages I am currently not
+removing),  all available via apt. More at https://eddelbuettel.github.io/r2u/
+plus slides/video at my talks page -- giving another (short) talk tomorrow.
+
+This really builds on a lot of work by many others (key markdown slide
+credits below) but most importantly (just like prior and other current
+efforts for Fedora, OpenSUSE, ...) it does it 'outside' the distro (not
+ftp-master or lintian discussion) and of course no autopkgtests.
+
+It is intoxicatingly fast for package tests.
+
+(Kurt: Torsten is a user and huge fan for 'random' checks with incoming JSS
+papers. It. All. Just. Works. Zero user effort.)
+
+Dirk
+
+# r2u
+
+## Prior Work on CRAN into Debian / Ubuntu
+
+cran2deb v1
+  ~  First fully automated conversion of CRAN packages into Debian binaries
+  (via Perl) in early 2000s by Albrecht Gebhard; building on this David Vernazobres, Albrecht Gebhard, Stefan Moeller, Dirk Eddelbuettel had working system with a few
+  thousand binaries (see useR! 2007 talk)
+
+cran2deb v2
+  ~ Excellent GSoC work by Charles Blundell with a full R rewrite, ~ 6k
+  or 7k packages, I ran it for a ~ year til machine died (see useR! 2009 talk)
+
+debian-r
+  ~ During his PhD studies, Don Armstrong did full CRAN and BioC builds til his
+  machine died (2015 personal reference)
+
+c2d4u
+  ~ Extending the cran2deb work, Michael Rutter with new
+  approach using Launchpad, still active after 10+ years, now ~ 5k packages (useR! 2011 talk)
+  
+r-builders
+  ~ R Consortium Grant for Michael Rutter, Don Armstrong, Gabor Csardi, Dirk
+  Eddelbuettel: Grant received, later returned as no liftoff
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Kurt.Hornik at wu.ac.at  Wed Nov  9 16:27:39 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Wed, 9 Nov 2022 17:27:39 +0100
+Subject: Re: CRAN package slider
+In-Reply-To: <25451.47414.604161.383535@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.47414.604161.383535@rob.eddelbuettel.com>
+Message-ID: <25451.54523.624702.787449@hornik.net>
+
+>>>>> Dirk Eddelbuettel writes:
+
+Great, thanks!
+
+Best
+-k
+
+> On 9 November 2022 at 12:17, Kurt Hornik wrote:
+> | Dirk: could you perhaps consider to apply that patch and redo the Debian
+> | 4.2.2 packages?
+
+> Yes. If and when we have an identified patch I can carry it over to the
+> Debian package (and hence its Ubuntu rebuilds). Though it also seems an
+> eventual 4.2.3 may be needed. But we can of course pre-empt it.
+
+> Dirk
+
+> -- 
+> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From maechler at stat.math.ethz.ch  Thu Nov 10 11:03:59 2022
+From: maechler at stat.math.ethz.ch (Martin Maechler)
+Date: Thu, 10 Nov 2022 12:03:59 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25451.45958.498279.510436@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net>
+Message-ID: <25452.55967.295768.390360@stat.math.ethz.ch>
+
+>>>>> Kurt Hornik 
+>>>>>     on Wed, 9 Nov 2022 15:04:54 +0100 writes:
+
+>>>>> Kurt Hornik writes:
+    > Sorry, my fault, comes from doing too many things at once.
+
+    > Indeed, in r-patched 
+
+    > x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+    > x$mon <- c(0L, NA)
+    > x
+    > as.Date(x)
+
+    > still gives
+
+    R> as.Date(x)
+    > [1] "2019-01-30" "1970-01-01"
+
+    > whereas in r-devel it gives
+
+    R> as.Date(x)
+    > [1] "2019-01-30" NA        
+
+    > So we need to find the patch and then apply it for r-patched (and maybe
+    > also for the Debian packages).
+
+We cannot find "the patch". That part of the C code  has been
+changed many dozen times on R-devel..
+
+I have ported some of the comments and then what I thought would
+solve it, but of course it did not,... until I finally saw the
+light.
+
+NEWS entry (in R-patched only at the moment):
+
+----------------------------------------------------------------------
+
+CHANGES IN R 4.2.2 patched:
+
+  ................
+
+  BUG FIXES:
+
+    ..................
+
+    ..................
+
+    • as.Date.POSIXlt(x) would return "1970-01-01" instead of NA in R
+      4.2.2, e.g., for
+              x <- as.POSIXlt(c("2019-01-30","2001-1-1"))
+              x$mon <- c(0L, NA); as.Date(x)
+      
+----------------------------------------------------------------------
+
+Martin
+
+    > Best
+    > -k
+  
+
+>>>>> Martin Maechler writes:
+    >> Interesting.  I have
+
+    >> R version 4.2.2 Patched (2022-11-06 r83317) -- "Innocent and Trusting"
+
+    >> for which
+
+    R> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+    R> x$mon <- c(0L, NA)
+    R> x
+    >> [1] "2019-01-30 UTC" NA              
+
+    >> Hmm ...
+
+    >> Best
+    >> -k
+
+>>>>> Kurt Hornik 
+>>>>>     on Wed, 9 Nov 2022 12:17:00 +0100 writes:
+
+>>>>> Davis Vaughan writes:
+    >>>> Many thanks for your detective work.
+
+    >>>> Turns out that this is actually already fixed in R-patched.
+
+    >>>> Martin: can you perhaps quickly identify the patch which fixes this?
+
+    >>> Hmm... I don't think it's fixed in R-patched.
+    >>> I see (in my version of R-patched which is very rarely *not* up-to-date):
+
+    >>>> x$mon <- c(0L, NA)
+    >>>> x
+    >>> [1] "2019-01-30 UTC" NA              
+    >>>> as.Date(x)
+    >>> [1] "2019-01-30" "1970-01-01"
+    >>>> R.version.string
+    >>> [1] "R version 4.2.2 Patched (2022-11-06 r83308)"
+    >>>> 
+
+    >>> If I am right and this is *not* yet ported to R 4.2.2 patched,
+    >>> I do agree that we should port the patch / fix the problem for
+    >>> R 4.2.2 patched.
+
+    >>> I don't have time for more for the next couple of hours.
+    >>> Martin
+
+    >>>> Dirk: could you perhaps consider to apply that patch and redo the Debian
+    >>>> 4.2.2 packages?
+
+    >>>> Best
+    >>>> -k
+
+    >>>>> One last thing. I have confirmed that this was a bug that was introduced in
+    >>>>> R 4.2.2, but has since been patched in R-devel.
+
+    >>>>> Is that something that can be fixed in R 4.2.2 Patched (I'm not sure how
+    >>>>> that works)?
+
+    >>>>> ```
+    >>>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+    >>>>> x
+    >>>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+
+    >>>>> # Make the 2nd element NA by setting one of the fields to NA
+    >>>>> x$mon <- c(0L, NA)
+    >>>>> x
+    >>>>> #> [1] "2019-01-30 UTC" NA
+
+    >>>>> # R 4.2.1
+    >>>>> as.Date(x)
+    >>>>> #> [1] "2019-01-30" NA
+
+    >>>>> # R 4.2.2
+    >>>>> as.Date(x)
+    >>>>> #> [1] "2019-01-30" "1970-01-01"
+
+    >>>>> # R-devel, 2022-11-07 r83308
+    >>>>> as.Date(x)
+    >>>>> #> [1] "2019-01-30" NA
+    >>>>> ```
+
+    >>>>> This has practical implications for lubridate users that update to R 4.2.2
+    >>>>> but stay on lubridate 1.8.0, as this code no longer works. Luckily we can
+    >>>>> tell users to just update to lubridate 1.9.0 if they have issues, which
+    >>>>> works on all the R versions in question:
+
+    >>>>> ```
+    >>>>> library(lubridate)
+
+    >>>>> i <- as.Date("2019-01-30")
+    >>>>> i
+    >>>>> #> [1] "2019-01-30"
+
+    >>>>> # R 4.2.2, lubridate 1.8.0
+    >>>>> i + months(1)
+    >>>>> #> [1] "1970-01-30"
+
+    >>>>> # R 4.2.2, lubridate 1.9.0 (the NA is correct behavior)
+    >>>>> i + months(1)
+    >>>>> #> [1] NA
+    >>>>> ```
+
+    >>>>> Thanks all,
+    >>>>> Davis
+
+    >>>>> On Tue, Nov 8, 2022 at 6:04 PM Davis Vaughan <davis at posit.co> wrote:
+
+>>>>> Oh, and just as I send this I think I have figured it out!
+>>>>> 
+>>>>> I'm seeing this on the debian log:
+>>>>> 
+>>>>> ```
+>>>>> Setting up r-cran-lubridate (1.8.0+dfsg-1+b1) ..
+>>>>> ```
+>>>>> 
+>>>>> Meaning that Debian is installing a version of lubridate that is
+>>>>> technically out of date now, as lubridate 1.9.0 landed on CRAN 2 days ago
+>>>>> (I assume CRAN is also installing an outdated version).
+>>>>> 
+>>>>> If you run my lubridate reprex from above with:
+>>>>> - rocker/r-base image with released R 4.2.2 (2022-10-31)
+>>>>> - lubridate 1.8.0
+>>>>> 
+>>>>> then you get:
+>>>>> 
+>>>>> ```
+>>>>> library(lubridate)
+>>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>>> i + months(1)
+>>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" "1970-01-30"
+>>>>> ```
+>>>>> 
+>>>>> which clearly isn't right in that 4th slot, it should be `NA`.
+>>>>> 
+>>>>> This has to do with this R-devel bug which I thought was fixed before
+>>>>> 4.2.2 went out? But it seems like I can reproduce this in R 4.2.2 which
+>>>>> makes me think somehow it slipped through:
+>>>>> 
+>>>>> ```
+>>>>> x <- as.POSIXlt(c("2019-01-30", "2019-01-31"), tz = "UTC")
+>>>>> x
+>>>>> #> [1] "2019-01-30 UTC" "2019-01-31 UTC"
+>>>>> 
+>>>>> # Looks like NA in the 2nd slot
+>>>>> x$mon <- c(0L, NA)
+>>>>> x
+>>>>> #> [1] "2019-01-30 UTC" NA
+>>>>> 
+>>>>> # But this borks it completely!
+>>>>> as.Date(x)
+>>>>> #> [1] "2019-01-30" "1970-01-01"
+>>>>> ```
+>>>>> 
+>>>>> I can't reproduce this in R-devel 2022-11-07 r83308, the `as.Date()` call
+>>>>> there correctly gives me `NA` in the 2nd slot.
+>>>>> 
+>>>>> lubridate happened to switch to using timechange as a backend in the last
+>>>>> release, and it probably changes the internal code in such a way that it
+>>>>> now happens to avoid this bug, which is why we don't see it on R 4.2.2 with
+>>>>> lubridate 1.9.0.
+>>>>> 
+>>>>> So I think CRAN and Debian just need to rerun these checks with lubridate
+>>>>> 1.9.0, and in the meantime I will go ahead and send in a patch release of
+>>>>> slider to fix the strict-prototype warnings.
+>>>>> 
+>>>>> -Davis
+>>>>> 
+>>>>> On Tue, Nov 8, 2022 at 5:30 PM Davis Vaughan <davis at posit.co> wrote:
+>>>>> 
+>>>>> Hi all,
+>>>>> 
+>>>>> I fixed the strict-prototypes warnings here
+>>>>> https://github.com/DavisVaughan/slider/pull/175
+>>>>> (BTW, did you see Lionel's message about this on r-package-devel?
+>>>>> https://stat.ethz.ch/pipermail/r-package-devel/2022q4/008589.html)
+>>>>> 
+>>>>> I have slider ready to go, but can't reproduce the issues seen on the
+>>>>> CRAN machines and on the Debian autopkgtest. I've tried a number of things,
+>>>>> including:
+>>>>> 
+>>>>> - Using the rocker/r-base image with released R 4.2.2 (2022-10-31), where
+>>>>> I tried to run tests on the slider_0.2.2.tar.gz downloaded from CRAN with R
+>>>>> CMD check and on the actual source code of slider pulled from GitHub with
+>>>>> devtools::check()
+>>>>> - Submitting slider to win-devel, where it comes back clean
+>>>>> - Checking it locally on my own Mac, of course, with various versions of
+>>>>> R including the exact r83217 revision it seems to be failing with on CRAN
+>>>>> 
+>>>>> Those tests should have errored earlier in
+>>>>> `check_endpoints_cannot_be_na()` where a missing value check is run, but
+>>>>> somehow it is bypassed and is then erroring on the next check, which checks
+>>>>> that all values are in ascending order. So my guess is that it has
+>>>>> something to do with lubridate and this month addition, which should always
+>>>>> result in a missing value in the 4th element, but that must not be the case
+>>>>> somehow (here are the expected results):
+>>>>> 
+>>>>> ```
+>>>>> library(lubridate)
+>>>>> i <- as.Date("2019-01-30") + months(-3:0)
+>>>>> i + months(1)
+>>>>> #> [1] "2018-11-30" "2018-12-30" "2019-01-30" NA
+>>>>> ```
+>>>>> 
+>>>>> If anyone can reproduce the test failures themselves, I'd be grateful if
+>>>>> you could help me figure out what I might be missing here. I'm very
+>>>>> motivated to try and get this fixed for CRAN.
+>>>>> 
+>>>>> -Davis
+>>>>> 
+>>>>> On Tue, Nov 8, 2022 at 6:30 AM Kurt Hornik <Kurt.Hornik at wu.ac.at> wrote:
+>>>>> 
+    >>>>>>>> Davis,
+    >>>>>>>> 
+    >>>>>>>> Please see
+    >>>>>>>> 
+    >>>>>>>> <https://cran.r-project.org/web/checks/check_results_slider.html>
+    >>>>>>>> 
+    >>>>>>>> Unfortunately, in addition to the new strict-prototypes compilation
+    >>>>>>>> warnings in r-devel we also have test ERRORs for the Debian r-patched
+    >>>>>>>> and r-release checks, which also materialize in the autopkgtest checks
+    >>>>>>>> for the r-cran-slider package and thus currently prevent the migration
+    >>>>>>>> of the new R 4.2.2 Debian packages from unstable to testing, see
+    >>>>>>>> 
+    >>>>>>>> <https://tracker.debian.org/pkg/r-base>
+    >>>>>>>> 
+    >>>>>>>> My hope is that this can be overridden quickly to get the Debian
+    >>>>>>>> packages migrated to testing, but in any case, can you please fix the
+    >>>>>>>> ERRORs (and ideally also the compilation warnings) as quickly as
+    >>>>>>>> possible?
+    >>>>>>>> 
+    >>>>>>>> Best
+    >>>>>>>> -k
+    >>>>>>>> 
+>>>>> 
+
+    >>>>> [[alternative HTML version deleted]]
+
+From edd at debian.org  Thu Nov 10 12:58:40 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 10 Nov 2022 06:58:40 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.55967.295768.390360@stat.math.ethz.ch>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch>
+Message-ID: <25452.62848.325353.835801@rob.eddelbuettel.com>
+
+On 10 November 2022 at 12:03, Martin Maechler wrote:
+| NEWS entry (in R-patched only at the moment):
+
+It was not clear from your email whether it would be possible for you to
+distill out a patch. Are you in effect saying "4.2.2.patched or nothing"?
+
+What I suggested yesterday was to aim for a more minimal surgical change to
+4.2.2. We all believe in releases that are properly marked (and tested).  I
+would prefer to not jump wholesale into 4.2.2.patched likely containing more
+unrelated changes (though hopefully not too many given how recent 4.2.2 was).
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Kurt.Hornik at wu.ac.at  Thu Nov 10 13:01:31 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Thu, 10 Nov 2022 14:01:31 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.62848.325353.835801@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com>
+Message-ID: <25452.63019.586775.384560@hornik.net>
+
+>>>>> Dirk Eddelbuettel writes:
+
+Dirk,
+
+I think Martin meant that you could pull
+
+r83323 | maechler | 2022-11-10 10:46:52 +0100 (Thu, 10 Nov 2022) | 1 line
+
+NEWS + check for r83322
+------------------------------------------------------------------------
+r83322 | maechler | 2022-11-10 10:14:06 +0100 (Thu, 10 Nov 2022) | 1 line
+
+manually port some of the as.Date.POSIXlt() => POSIXlt2D() changes, notably fixing as.Date(<POSIXlt w/ NA>)
+
+Or actually use an R-patched snapshot ...
+
+Best
+-k
+
+> On 10 November 2022 at 12:03, Martin Maechler wrote:
+> | NEWS entry (in R-patched only at the moment):
+
+> It was not clear from your email whether it would be possible for you to
+> distill out a patch. Are you in effect saying "4.2.2.patched or nothing"?
+
+> What I suggested yesterday was to aim for a more minimal surgical change to
+> 4.2.2. We all believe in releases that are properly marked (and tested).  I
+> would prefer to not jump wholesale into 4.2.2.patched likely containing more
+> unrelated changes (though hopefully not too many given how recent 4.2.2 was).
+
+> Dirk
+
+> -- 
+> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Kurt.Hornik at wu.ac.at  Thu Nov 10 13:02:04 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Thu, 10 Nov 2022 14:02:04 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.63019.586775.384560@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63019.586775.384560@hornik.net>
+Message-ID: <25452.63052.706429.50598@hornik.net>
+
+>>>>> Kurt Hornik writes:
+
+>>>>> Dirk Eddelbuettel writes:
+> Dirk,
+
+> I think Martin meant that you could pull
+
+> r83323 | maechler | 2022-11-10 10:46:52 +0100 (Thu, 10 Nov 2022) | 1 line
+
+> NEWS + check for r83322
+> ------------------------------------------------------------------------
+> r83322 | maechler | 2022-11-10 10:14:06 +0100 (Thu, 10 Nov 2022) | 1 line
+
+> manually port some of the as.Date.POSIXlt() => POSIXlt2D() changes, notably fixing as.Date(<POSIXlt w/ NA>)
+
+> Or actually use an R-patched snapshot ...
+
+(Which I know you prefer not to do ...)
+
+Best
+-k
+
+> Best
+> -k
+
+>> On 10 November 2022 at 12:03, Martin Maechler wrote:
+>> | NEWS entry (in R-patched only at the moment):
+
+>> It was not clear from your email whether it would be possible for you to
+>> distill out a patch. Are you in effect saying "4.2.2.patched or nothing"?
+
+>> What I suggested yesterday was to aim for a more minimal surgical change to
+>> 4.2.2. We all believe in releases that are properly marked (and tested).  I
+>> would prefer to not jump wholesale into 4.2.2.patched likely containing more
+>> unrelated changes (though hopefully not too many given how recent 4.2.2 was).
+
+>> Dirk
+
+>> -- 
+>> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Thu Nov 10 13:16:55 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 10 Nov 2022 07:16:55 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.63195.778175.625227@stat.math.ethz.ch>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63195.778175.625227@stat.math.ethz.ch>
+Message-ID: <25452.63943.190909.862676@rob.eddelbuettel.com>
+
+On 10 November 2022 at 14:04, Martin Maechler wrote:
+| Well, yes, inadvertently, that would be the consequence.
+| 
+| But more generally, would you really want a version a version
+| of R 4.2.2  which is *not* R 4.2.2  but a patched version of it,
+| buyt not called "patched".
+| 
+| I think we (R-core) would very strongly not like that..
+
+Yes as that is how (minimal) patches get applied and reported in ChangeLog.
+Some packages (gcc, ...) fairly regularly carry patches.
+
+What you propose (jump point blank to 4.2.2.patched which has not release
+number is really no cleaner).
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From maechler at stat.math.ethz.ch  Thu Nov 10 13:04:27 2022
+From: maechler at stat.math.ethz.ch (Martin Maechler)
+Date: Thu, 10 Nov 2022 14:04:27 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.62848.325353.835801@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com>
+Message-ID: <25452.63195.778175.625227@stat.math.ethz.ch>
+
+>>>>> Dirk Eddelbuettel 
+>>>>>     on Thu, 10 Nov 2022 06:58:40 -0600 writes:
+
+    > On 10 November 2022 at 12:03, Martin Maechler wrote:
+    > | NEWS entry (in R-patched only at the moment):
+
+    > It was not clear from your email whether it would be possible for you to
+    > distill out a patch. Are you in effect saying "4.2.2.patched or nothing"?
+
+Well, yes, inadvertently, that would be the consequence.
+
+But more generally, would you really want a version a version
+of R 4.2.2  which is *not* R 4.2.2  but a patched version of it,
+buyt not called "patched".
+
+I think we (R-core) would very strongly not like that..
+
+Martin
+
+    > What I suggested yesterday was to aim for a more minimal surgical change to
+    > 4.2.2. We all believe in releases that are properly marked (and tested).  I
+    > would prefer to not jump wholesale into 4.2.2.patched likely containing more
+    > unrelated changes (though hopefully not too many given how recent 4.2.2 was).
+
+    > Dirk
+
+    > -- 
+    > dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From maechler at stat.math.ethz.ch  Thu Nov 10 14:27:50 2022
+From: maechler at stat.math.ethz.ch (Martin Maechler)
+Date: Thu, 10 Nov 2022 15:27:50 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.63943.190909.862676@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63195.778175.625227@stat.math.ethz.ch> <25452.63943.190909.862676@rob.eddelbuettel.com>
+Message-ID: <25453.2662.964272.561452@stat.math.ethz.ch>
+
+>>>>> Dirk Eddelbuettel 
+>>>>>     on Thu, 10 Nov 2022 07:16:55 -0600 writes:
+
+    > On 10 November 2022 at 14:04, Martin Maechler wrote:
+    > | Well, yes, inadvertently, that would be the consequence.
+    > | 
+    > | But more generally, would you really want a version a version
+    > | of R 4.2.2  which is *not* R 4.2.2  but a patched version of it,
+    > | buyt not called "patched".
+    > | 
+    > | I think we (R-core) would very strongly not like that..
+
+    > Yes as that is how (minimal) patches get applied and reported in ChangeLog.
+    > Some packages (gcc, ...) fairly regularly carry patches.
+
+    > What you propose (jump point blank to 4.2.2.patched which has not release
+    > number is really no cleaner).
+
+it has an svn rev number as part of  R.version or
+R.version.string
+
+> R.version.string
+[1] "R version 4.2.2 Patched (2022-11-06 r83321)"
+> 
+
+Of course you are right, Dirk, that we *could* consider adding a
+minor-minor patch level, conceptually 4.2.2.1 (if 4.2.2 <==> 4.2.2.0),
+but in the past we ended up deciding that was too much
+release/maintenance work for us.
+
+Martin
+
+From edd at debian.org  Fri Nov 11 14:00:39 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 11 Nov 2022 08:00:39 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25452.63052.706429.50598@hornik.net>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63019.586775.384560@hornik.net> <25452.63052.706429.50598@hornik.net>
+Message-ID: <25454.21895.985799.844324@rob.eddelbuettel.com>
+
+(This apparently did not leave the emacs buffer I typed it in. Sending now,
+belatedly. I will look for an updated r-patched tarball and make a judgement
+call in the next few days, likely creating r-base_4.2.2.202211xx off it as
+the changeset may be too large (per Martin's hint) for a simple patch file
+and if I use my maintainer discretion to jump to 'patched' I should also
+signal it in the source version as usual.  -- D.)
+
+On 10 November 2022 at 14:02, Kurt Hornik wrote:
+| >>>>> Kurt Hornik writes:
+| > Or actually use an R-patched snapshot ...
+| 
+| (Which I know you prefer not to do ...)
+
+Last r-patched tarball at the common ftp server is dated Nov 6.
+
+I'll await a new one and will diff it to 4.2.2 and make a judgement call.
+In the quarter century I have been doing this I probably relied on the
+patched tarball once or twice; in general "smaller is better" but bugs are
+bugs and need to get squashed too so it is the definition of a tradeoff.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Nov 11 16:05:58 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 11 Nov 2022 10:05:58 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25453.2662.964272.561452@stat.math.ethz.ch>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63195.778175.625227@stat.math.ethz.ch> <25452.63943.190909.862676@rob.eddelbuettel.com> <25453.2662.964272.561452@stat.math.ethz.ch>
+Message-ID: <25454.29414.283467.982783@rob.eddelbuettel.com>
+
+On 10 November 2022 at 15:27, Martin Maechler wrote:
+| >>>>> Dirk Eddelbuettel 
+| >>>>>     on Thu, 10 Nov 2022 07:16:55 -0600 writes:
+| 
+|     > On 10 November 2022 at 14:04, Martin Maechler wrote:
+|     > | Well, yes, inadvertently, that would be the consequence.
+|     > | 
+|     > | But more generally, would you really want a version a version
+|     > | of R 4.2.2  which is *not* R 4.2.2  but a patched version of it,
+|     > | buyt not called "patched".
+|     > | 
+|     > | I think we (R-core) would very strongly not like that..
+| 
+|     > Yes as that is how (minimal) patches get applied and reported in ChangeLog.
+|     > Some packages (gcc, ...) fairly regularly carry patches.
+| 
+|     > What you propose (jump point blank to 4.2.2.patched which has not release
+|     > number is really no cleaner).
+| 
+| it has an svn rev number as part of  R.version or
+| R.version.string
+| 
+| > R.version.string
+| [1] "R version 4.2.2 Patched (2022-11-06 r83321)"
+| > 
+| 
+| Of course you are right, Dirk, that we *could* consider adding a
+| minor-minor patch level, conceptually 4.2.2.1 (if 4.2.2 <==> 4.2.2.0),
+| but in the past we ended up deciding that was too much
+| release/maintenance work for us.
+
+I know you are on Fedora and at arm's length but please read the changelog as
+to why we do what we do. Other schemes have been tried, and created trouble. Thank you.
+
+https://metadata.ftp-master.debian.org/changelogs//main/r/r-base/r-base_4.2.2-1_changelog
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Nov 11 16:08:08 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 11 Nov 2022 10:08:08 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25454.21895.985799.844324@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63019.586775.384560@hornik.net> <25452.63052.706429.50598@hornik.net> <25454.21895.985799.844324@rob.eddelbuettel.com>
+Message-ID: <25454.29544.17870.968183@rob.eddelbuettel.com>
+
+On 11 November 2022 at 08:00, Dirk Eddelbuettel wrote:
+| I'll await a new one and will diff it to 4.2.2 and make a judgement call.
+
+It's not small. 60 files. 2500+ lines.
+
+  edd@rob:~$ diff -urq ~/deb/r-base/src/  /tmp/R-patched/src/| wc -l
+  60
+  edd@rob:~$ diff -ur ~/deb/r-base/src/  /tmp/R-patched/src/| wc -l
+  2534
+  edd@rob:~$ 
+
+But a lot of it is also clang-15 minutae so r-base 4.0.2.20221110-1 is now
+building and should be available within a day and unblock any updates for
+an update to (CRAN) package slider.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Kurt.Hornik at wu.ac.at  Fri Nov 11 16:50:49 2022
+From: Kurt.Hornik at wu.ac.at (Kurt Hornik)
+Date: Fri, 11 Nov 2022 17:50:49 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25454.29544.17870.968183@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63019.586775.384560@hornik.net> <25452.63052.706429.50598@hornik.net> <25454.21895.985799.844324@rob.eddelbuettel.com> <25454.29544.17870.968183@rob.eddelbuettel.com>
+Message-ID: <25454.32105.308013.763329@hornik.net>
+
+>>>>> Dirk Eddelbuettel writes:
+
+Great, thanks!  Fingers crossed ...
+
+Best
+-k
+
+> On 11 November 2022 at 08:00, Dirk Eddelbuettel wrote:
+> | I'll await a new one and will diff it to 4.2.2 and make a judgement call.
+
+> It's not small. 60 files. 2500+ lines.
+
+>   edd@rob:~$ diff -urq ~/deb/r-base/src/  /tmp/R-patched/src/| wc -l
+>   60
+>   edd@rob:~$ diff -ur ~/deb/r-base/src/  /tmp/R-patched/src/| wc -l
+>   2534
+>   edd@rob:~$ 
+
+> But a lot of it is also clang-15 minutae so r-base 4.0.2.20221110-1 is now
+> building and should be available within a day and unblock any updates for
+> an update to (CRAN) package slider.
+
+> Dirk
+
+> -- 
+> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at fam-tille.de  Fri Nov 11 21:01:40 2022
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Fri, 11 Nov 2022 22:01:40 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25454.32105.308013.763329@hornik.net>
+References: <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63019.586775.384560@hornik.net> <25452.63052.706429.50598@hornik.net> <25454.21895.985799.844324@rob.eddelbuettel.com> <25454.29544.17870.968183@rob.eddelbuettel.com> <25454.32105.308013.763329@hornik.net>
+Message-ID: <Y264NI+ybvvdX9CH@an3as.eu>
+
+Am Fri, Nov 11, 2022 at 05:50:49PM +0100 schrieb Kurt Hornik:
+> Great, thanks!  Fingers crossed ...
+> 
+> > On 11 November 2022 at 08:00, Dirk Eddelbuettel wrote:
+> 
+> > But a lot of it is also clang-15 minutae so r-base 4.0.2.20221110-1 is now
+> > building and should be available within a day and unblock any updates for
+> > an update to (CRAN) package slider.
+
+This means we should probably not upload any r-cran-* packages to make
+sure the migration will go smoothly. 
+
+BTW, I understood that the initial reason why something has started in
+this matter was, that we has an autopkgtest on r-cran-slider.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From pabs at debian.org  Sat Nov 12 06:32:45 2022
+From: pabs at debian.org (Paul Wise)
+Date: Sat, 12 Nov 2022 14:32:45 +0800
+Subject: incorrect Homepage fields in r-cran-* packages?
+Message-ID: <195258890aaf66346a52e7119801df61e00bb1ce.camel@debian.org>
+
+Hi all,
+
+I noticed that a lot of r-cran-* packages have [1] in the Homepage
+field of their debian/control file but the URL field in the DESCRIPTION
+file produced by upstream is different, often it is a GitHub URL.
+
+I wonder if this is intentional and if not if this issue should be
+added to lintian and a fixer for it added to lintian-brush/Janitor?
+
+   1. https://cran.r-project.org/package=*
+
+-- 
+bye,
+pabs
+
+https://wiki.debian.org/PaulWise
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From johannes.ranke at jrwb.de  Sat Nov 12 08:12:08 2022
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Sat, 12 Nov 2022 09:12:08 +0100
+Subject: Re: incorrect Homepage fields in r-cran-* packages?
+In-Reply-To: <195258890aaf66346a52e7119801df61e00bb1ce.camel@debian.org>
+References: <195258890aaf66346a52e7119801df61e00bb1ce.camel@debian.org>
+Message-ID: <4598092.MQ47N5z5X4@ryz>
+
+Hello,
+
+this form [1] is the canonical form of the package URL for any CRAN package, as requested by the R Core team [2]. It is implicitly defined by the name of the package, so it does not have to be defined in the DESCRIPTION file.
+
+Cheers,
+
+Johannes
+
+Am Samstag, 12. November 2022, 07:32:45 CET schrieb Paul Wise:
+
+> Hi all,
+
+> 
+
+> I noticed that a lot of r-cran-* packages have [1] in the Homepage
+
+> field of their debian/control file but the URL field in the DESCRIPTION
+
+> file produced by upstream is different, often it is a GitHub URL.
+
+> 
+
+> I wonder if this is intentional and if not if this issue should be
+
+> added to lintian and a fixer for it added to lintian-brush/Janitor?
+
+> 
+
+> �� 1. https://cran.r-project.org/package=*
+
+[2] https://cran.r-project.org/doc/manuals/R-exts.html#Specifying-URLs 
+
+From maechler at stat.math.ethz.ch  Sat Nov 12 14:13:57 2022
+From: maechler at stat.math.ethz.ch (Martin Maechler)
+Date: Sat, 12 Nov 2022 15:13:57 +0100
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25454.29414.283467.982783@rob.eddelbuettel.com>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63195.778175.625227@stat.math.ethz.ch> <25452.63943.190909.862676@rob.eddelbuettel.com> <25453.2662.964272.561452@stat.math.ethz.ch> <25454.29414.283467.982783@rob.eddelbuettel.com>
+Message-ID: <25455.43557.966411.62830@stat.math.ethz.ch>
+
+>>>>> Dirk Eddelbuettel 
+>>>>>     on Fri, 11 Nov 2022 10:05:58 -0600 writes:
+
+    > On 10 November 2022 at 15:27, Martin Maechler wrote:
+    > | >>>>> Dirk Eddelbuettel 
+    > | >>>>>     on Thu, 10 Nov 2022 07:16:55 -0600 writes:
+    > | 
+    > |     > On 10 November 2022 at 14:04, Martin Maechler wrote:
+    > |     > | Well, yes, inadvertently, that would be the consequence.
+    > |     > | 
+    > |     > | But more generally, would you really want a version a version
+    > |     > | of R 4.2.2  which is *not* R 4.2.2  but a patched version of it,
+    > |     > | buyt not called "patched".
+    > |     > | 
+    > |     > | I think we (R-core) would very strongly not like that..
+    > | 
+    > |     > Yes as that is how (minimal) patches get applied and reported in ChangeLog.
+    > |     > Some packages (gcc, ...) fairly regularly carry patches.
+    > | 
+    > |     > What you propose (jump point blank to 4.2.2.patched which has not release
+    > |     > number is really no cleaner).
+    > | 
+    > | it has an svn rev number as part of  R.version or
+    > | R.version.string
+    > | 
+    > | > R.version.string
+    > | [1] "R version 4.2.2 Patched (2022-11-06 r83321)"
+    > | > 
+    > | 
+    > | Of course you are right, Dirk, that we *could* consider adding a
+    > | minor-minor patch level, conceptually 4.2.2.1 (if 4.2.2 <==> 4.2.2.0),
+    > | but in the past we ended up deciding that was too much
+    > | release/maintenance work for us.
+
+    > I know you are on Fedora and at arm's length but please read the changelog as
+    > to why we do what we do. Other schemes have been tried, and created trouble. Thank you.
+
+    > https://metadata.ftp-master.debian.org/changelogs//main/r/r-base/r-base_4.2.2-1_changelog
+
+Thank you, Dirk.
+(The above URL is not quite correct but it was not hard to find
+ the correct one.)
+
+I can see that you want to do this.
+
+>>From the point of view of maintenance (and communicating with
+users and bug reports!) this *is* far from optimal (*), but of
+course  Debian must have its own priorities.
+
+Thank you anyway a lot for your debian maintenance work!!
+Martin
+
+From edd at debian.org  Sat Nov 12 15:20:39 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 12 Nov 2022 09:20:39 -0600
+Subject: Re: .. slider -- fixing R 4.2.2-only bug in as.Date.POSIXlt()
+In-Reply-To: <25455.43557.966411.62830@stat.math.ethz.ch>
+References: <25450.15822.4090.790659@hornik.net> <CABzLhzz2FWFvqoKA218zgk2TLT42A+wu9Ac4iD7Z6QD1fEPWCg@mail.gmail.com> <CABzLhzw+QoUHwWKe3iwU+CaieADRx794z4aydGmwt1fCQdD-jw@mail.gmail.com> <CABzLhzy3eUD+OcpfjbhvOz3oxz6-ySEXZZ5M1pkwEh2raS-y3g@mail.gmail.com> <25451.35884.483990.132013@hornik.net> <25451.37653.691475.483268@stat.math.ethz.ch> <25451.40394.766962.986355@hornik.net> <25451.45958.498279.510436@hornik.net> <25452.55967.295768.390360@stat.math.ethz.ch> <25452.62848.325353.835801@rob.eddelbuettel.com> <25452.63195.778175.625227@stat.math.ethz.ch> <25452.63943.190909.862676@rob.eddelbuettel.com> <25453.2662.964272.561452@stat.math.ethz.ch> <25454.29414.283467.982783@rob.eddelbuettel.com> <25455.43557.966411.62830@stat.math.ethz.ch>
+Message-ID: <25455.47559.179847.651176@rob.eddelbuettel.com>
+
+On 12 November 2022 at 15:13, Martin Maechler wrote:
+| >>>>> Dirk Eddelbuettel 
+|     > https://metadata.ftp-master.debian.org/changelogs//main/r/r-base/r-base_4.2.2-1_changelog
+| 
+| Thank you, Dirk.
+| (The above URL is not quite correct but it was not hard to find
+|  the correct one.)
+
+I pasted from what was a working URL for me.
+ 
+| I can see that you want to do this.
+| 
+| >From the point of view of maintenance (and communicating with
+| users and bug reports!) this *is* far from optimal (*), but of
+| course  Debian must have its own priorities.
+
+It has its own build and package system which imposes its own constraints.
+But you run the package it of course _internally_ uses the upstream scheme.
+
+  $ dpkg -l r-base-core | tail -1 | cut -c-42
+  ii  r-base-core    4.2.2.20221110-1 amd64 
+  $ R --version | head -1
+  R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+  $
+
+I (personally) speaking would like this as (guessing a patch revision here)
+
+  R version 4.2.2.3 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+
+which I could easily package as 4.2.2.3 (and I use four digits on my own
+packages to signal intermediate release; Rcpp is currently 1.0.9.5 and
+accessible thanks to drat on a repo that way). Is it worth making upstream
+changes for that? Maybe not, your call not mine.
+
+When we tried to be too cute with version names "stuff broke" including
+processing of manuals as texidvi (or another texinfo part) got confused. Such
+as life, you have to compromise sometimes.
+
+| Thank you anyway a lot for your debian maintenance work!!
+
+Thanks a lot for your upstream work!
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Sat Nov 12 15:25:42 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 12 Nov 2022 09:25:42 -0600
+Subject: Re: incorrect Homepage fields in r-cran-* packages?
+In-Reply-To: <4598092.MQ47N5z5X4@ryz>
+References: <195258890aaf66346a52e7119801df61e00bb1ce.camel@debian.org> <4598092.MQ47N5z5X4@ryz>
+Message-ID: <25455.47862.599840.744193@rob.eddelbuettel.com>
+
+On 12 November 2022 at 09:12, Johannes Ranke wrote:
+| Hello,
+| 
+| this form [1] is the canonical form of the package URL for any CRAN package, 
+| as requested by the R Core team [2]. It is implicitly defined by the name of 
+| the package, so it does not have to be defined in the DESCRIPTION file.
+
+Exactly correct. Moreover when you go to any package's _CRAN_ as opposed to
+upstream source repo you see on the rendered package (here taking digest just
+because we had it for so long) at the very bottom
+
+  Linking:
+
+  Please use the canonical form https://CRAN.R-project.org/package=digest to
+  link to this page. 
+
+which is how I got to the page even if it then renders as
+
+  https://cran.r-project.org/web/packages/digest/index.html
+
+which is not unlike our BTS or package pages. Now that package (of mine)
+lists
+
+  URL:	https://github.com/eddelbuettel/digest, http://dirk.eddelbuettel.com/code/digest.html
+
+because one _can_ (but is not required) list repo info under URL as
+well. Sadly not all CRAN packages do.  CRAN precedes git (and svn !!) by
+years so DVCS were not a thing and imposing change on 18k packages is hard.
+
+Dirk
+
+| Cheers,
+| 
+| Johannes
+| 
+| Am Samstag, 12. November 2022, 07:32:45 CET schrieb Paul Wise:
+| > Hi all,
+| > 
+| > I noticed that a lot of r-cran-* packages have [1] in the Homepage
+| > field of their debian/control file but the URL field in the DESCRIPTION
+| > file produced by upstream is different, often it is a GitHub URL.
+| > 
+| > I wonder if this is intentional and if not if this issue should be
+| > added to lintian and a fixer for it added to lintian-brush/Janitor?
+| > 
+| >    1. https://cran.r-project.org/package=*
+| [2] https://cran.r-project.org/doc/manuals/R-exts.html#Specifying-URLs 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Tue Nov 15 11:20:36 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 15 Nov 2022 12:20:36 +0100
+Subject: Encoding issue in r-cran-markdown
+Message-ID: <Y3N2BBnBvqNjYkYD@an3as.eu>
+
+Hi,
+
+I think there is some encoding issue in the tests of r-cran-markdown[1]
+Any idea except of patching the output?
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-markdown/-/jobs/3519402#248
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Nov 16 10:49:22 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 16 Nov 2022 11:49:22 +0100
+Subject: Re: Encoding issue in r-cran-markdown
+In-Reply-To: <Y3N2BBnBvqNjYkYD@an3as.eu>
+References: <Y3N2BBnBvqNjYkYD@an3as.eu>
+Message-ID: <Y3TAMisllzFvohQ8@an3as.eu>
+
+Just to let you know I've contacted upstream in
+
+   https://github.com/rstudio/markdown/issues/97
+
+Am Tue, Nov 15, 2022 at 12:20:36PM +0100 schrieb Andreas Tille:
+> Hi,
+> 
+> I think there is some encoding issue in the tests of r-cran-markdown[1]
+> Any idea except of patching the output?
+> 
+> Kind regards
+> 
+>       Andreas.
+> 
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-markdown/-/jobs/3519402#248
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Wed Nov 16 13:23:10 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 16 Nov 2022 18:53:10 +0530
+Subject: Re: Encoding issue in r-cran-markdown
+In-Reply-To: <Y3TAMisllzFvohQ8@an3as.eu>
+References: <Y3N2BBnBvqNjYkYD@an3as.eu> <Y3TAMisllzFvohQ8@an3as.eu>
+Message-ID: <20221116132310.rojpxgs6odzdqrpr@nileshpatra.info>
+
+On Wed, Nov 16, 2022 at 11:49:22AM +0100, Andreas Tille wrote:
+> Just to let you know I've contacted upstream in
+> 
+>    https://github.com/rstudio/markdown/issues/97
+> 
+> Am Tue, Nov 15, 2022 at 12:20:36PM +0100 schrieb Andreas Tille:
+> > Hi,
+> > 
+> > I think there is some encoding issue in the tests of r-cran-markdown[1]
+> > Any idea except of patching the output?
+
+This is due to upstream assuming some locales to be already present.
+(which may/may not be OK)
+I have tweaked test script to satisfy that kind of assumption and uploaded.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Mon Nov 21 13:18:58 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 21 Nov 2022 14:18:58 +0100
+Subject: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+Message-ID: <Y3t6wopp/KSTu17y@an3as.eu>
+
+Hi,
+
+I'm about to upgrade the Debian packages of Bioconductor to release
+3.16.
+
+As a consequence of droping bam.h from htslib Rhtslib does not ship this
+header file any more as well (since it just includes code copies).  That's
+why BitSeq fails to build due to
+
+$ grep -Rw bam.h
+src/ReadDistribution.h:#include "bam.h"
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Nov 21 13:43:28 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 21 Nov 2022 14:43:28 +0100
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi>
+Message-ID: <Y3uAgNVi4Ns2o7rS@an3as.eu>
+
+Hi Antti,
+
+Am Mon, Nov 21, 2022 at 03:35:38PM +0200 schrieb Antti Honkela:
+> We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+
+Thanks a lot for the super fast and helpful response.
+
+To the readers of Debian R pkg team:  Seems we should remove
+r-bioc-bitseq from Debian, right? 
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Nov 21 14:02:16 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 21 Nov 2022 15:02:16 +0100
+Subject: BioC Transition blocked by new dependencies
+Message-ID: <Y3uE6ICdKg17u9Qv@an3as.eu>
+
+Control: block -1 by 1024563
+Control: block -1 by 1024565
+Control: block -1 by 1024567
+
+Some of the BioConductor packages need new dependencies.
+I have pushed these to new queue and set the ITP bugs as
+blocker.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Mon Nov 21 14:43:32 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Mon, 21 Nov 2022 20:13:32 +0530
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <Y3uAgNVi4Ns2o7rS@an3as.eu>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi> <Y3uAgNVi4Ns2o7rS@an3as.eu>
+Message-ID: <20221121144332.j6atyu6sfmzshazh@nileshpatra.info>
+
+On Mon, Nov 21, 2022 at 02:43:28PM +0100, Andreas Tille wrote:
+> Am Mon, Nov 21, 2022 at 03:35:38PM +0200 schrieb Antti Honkela:
+> > We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+> 
+> Thanks a lot for the super fast and helpful response.
+> 
+> To the readers of Debian R pkg team:  Seems we should remove
+> r-bioc-bitseq from Debian, right? 
+
+If it is going away from bioconductor itself, then I see no reason to keep it in Debian either.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From edd at debian.org  Mon Nov 21 14:53:42 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 21 Nov 2022 08:53:42 -0600
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <20221121144332.j6atyu6sfmzshazh@nileshpatra.info>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi> <Y3uAgNVi4Ns2o7rS@an3as.eu> <20221121144332.j6atyu6sfmzshazh@nileshpatra.info>
+Message-ID: <25467.37110.9749.956864@rob.eddelbuettel.com>
+
+On 21 November 2022 at 20:13, Nilesh Patra wrote:
+| On Mon, Nov 21, 2022 at 02:43:28PM +0100, Andreas Tille wrote:
+| > Am Mon, Nov 21, 2022 at 03:35:38PM +0200 schrieb Antti Honkela:
+| > > We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+| > 
+| > Thanks a lot for the super fast and helpful response.
+| > 
+| > To the readers of Debian R pkg team:  Seems we should remove
+| > r-bioc-bitseq from Debian, right? 
+| 
+| If it is going away from bioconductor itself, then I see no reason to keep it in Debian either.
+
+That is a valid rule, but it is still in 3.16 so ... maybe we want to for
+someone in BioConductor to adopt it?  Difficult call either way, it is not
+building from them either per the status summary at the top of 
+
+   https://bioconductor.org/packages/release/bioc/html/BitSeq.html
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Mon Nov 21 15:12:56 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Mon, 21 Nov 2022 20:42:56 +0530
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <25467.37110.9749.956864@rob.eddelbuettel.com>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi> <Y3uAgNVi4Ns2o7rS@an3as.eu> <20221121144332.j6atyu6sfmzshazh@nileshpatra.info> <25467.37110.9749.956864@rob.eddelbuettel.com>
+Message-ID: <20221121151256.5bjwrrrklktsgg56@nileshpatra.info>
+
+On Mon, Nov 21, 2022 at 08:53:42AM -0600, Dirk Eddelbuettel wrote:
+> 
+> On 21 November 2022 at 20:13, Nilesh Patra wrote:
+> | On Mon, Nov 21, 2022 at 02:43:28PM +0100, Andreas Tille wrote:
+> | > Am Mon, Nov 21, 2022 at 03:35:38PM +0200 schrieb Antti Honkela:
+> | > > We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+> | > 
+> | > Thanks a lot for the super fast and helpful response.
+> | > 
+> | > To the readers of Debian R pkg team:  Seems we should remove
+> | > r-bioc-bitseq from Debian, right? 
+> | 
+> | If it is going away from bioconductor itself, then I see no reason to keep it in Debian either.
+> 
+> That is a valid rule, but it is still in 3.16 so ... maybe we want to for
+> someone in BioConductor to adopt it?  Difficult call either way, it is not
+> building from them either per the status summary at the top of 
+> 
+>    https://bioconductor.org/packages/release/bioc/html/BitSeq.html
+
+In that case, it'd be good to file an RC bug to keep this out of testing, at least and
+not block the transition. If it sees activity, we should be good.
+If not (for many months), we can RM it.
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Mon Nov 21 15:39:26 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 21 Nov 2022 16:39:26 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3uFpm1GbdC5htzE@ramacher.at>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at>
+Message-ID: <Y3ubriik76pfhFqM@an3as.eu>
+
+Hi Sebastian,
+
+Am Mon, Nov 21, 2022 at 03:05:26PM +0100 schrieb Sebastian Ramacher:
+> On 2022-11-21 15:02:16 +0100, Andreas Tille wrote:
+> > Control: block -1 by 1024563
+> > Control: block -1 by 1024565
+> > Control: block -1 by 1024567
+> > 
+> > Some of the BioConductor packages need new dependencies.
+> > I have pushed these to new queue and set the ITP bugs as
+> > blocker.
+> 
+> As this is happening every r-bioc transition, could this be handled
+> before starting the transition the next time?
+
+This is really hard to do, thought.  The new packages are needing those
+packages from the transition.  I actually injected two packages from
+higher levels manually to be able to build one of the new packages.  So
+we really need to upload the start of the transition and I do not see
+any sense in not documenting what we are doing without the transition
+tracker.
+
+However, to make us understand your suggestion better:  Is there any
+drawback on your side if the transition of a closed set of packages if
+the transition is delayed by new processing?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Nov 21 15:59:23 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 21 Nov 2022 09:59:23 -0600
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3ubriik76pfhFqM@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu>
+Message-ID: <25467.41051.572879.965833@rob.eddelbuettel.com>
+
+On 21 November 2022 at 16:39, Andreas Tille wrote:
+| Am Mon, Nov 21, 2022 at 03:05:26PM +0100 schrieb Sebastian Ramacher:
+| > On 2022-11-21 15:02:16 +0100, Andreas Tille wrote:
+| > > Some of the BioConductor packages need new dependencies.
+| > > I have pushed these to new queue and set the ITP bugs as
+| > > blocker.
+| > 
+| > As this is happening every r-bioc transition, could this be handled
+| > before starting the transition the next time?
+
+It could, resources and volunteers willing. BioConductor leads the upcoming
+release as 'devel' just like we do. There is no reason to wait apart from
+having to set up new processes.
+
+I now also look behind a complete r-cran-* set of 20k packages for the two
+Ubuntu LTS flavors (it's a longer story but it reuses RSPM / PPM packages
+from RStudio / posit). For that effort, I just rebuilt the 240 BioConductors
+pulled in from the CRAN package graph for both LTS variants. I got all that
+done in a few hours on Saturday (after mulling over the problem and working
+out a script to determine build order by number of r-bioc-* depends).
+
+"Formal packaging" in Debian proper is more work, but there is no reason not
+to run a test build in a container, or even upload to 'experiemental' a few
+weeks prior to the (well telegraphed) BioConductor release. If someone wants
+to run with this (and knows a little R) I would be happy to discuss my 'build
+order' setup script (bare and hackish at it is).  
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From sebastic at xs4all.nl  Mon Nov 21 15:49:43 2022
+From: sebastic at xs4all.nl (Sebastiaan Couwenberg)
+Date: Mon, 21 Nov 2022 16:49:43 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3ubriik76pfhFqM@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu>
+Message-ID: <186eee77-81c1-4ece-1fa3-8c6dda89361b@xs4all.nl>
+
+On 11/21/22 16:39, Andreas Tille wrote:
+> Am Mon, Nov 21, 2022 at 03:05:26PM +0100 schrieb Sebastian Ramacher:
+> > On 2022-11-21 15:02:16 +0100, Andreas Tille wrote:
+> > > Some of the BioConductor packages need new dependencies.
+> > > I have pushed these to new queue and set the ITP bugs as
+> > > blocker.
+> >
+> >
+> > As this is happening every r-bioc transition, could this be handled
+> > before starting the transition the next time?
+>
+>
+> This is really hard to do, thought.  The new packages are needing those
+> packages from the transition.  I actually injected two packages from
+> higher levels manually to be able to build one of the new packages.  So
+> we really need to upload the start of the transition and I do not see
+> any sense in not documenting what we are doing without the transition
+> tracker.
+
+You can rebuild the packages that are already in the archive and include 
+them in a local repo (e.g. managed with reprepro) and used by the chroot 
+where the rebuilds are performed. Use that to prepare the NEW uploads to 
+experimental, file the transition bugreport once all packages have 
+passed NEW, and move those to unstable once the transition is ACKed.
+
+Kind Regards,
+
+Bas
+
+--
+ GPG Key ID: 4096R/6750F10AE88D4AF1
+Fingerprint: 8182 DE41 7056 408D 6146  50D1 6750 F10A E88D 4AF1
+
+From tille at debian.org  Mon Nov 21 16:21:19 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 21 Nov 2022 17:21:19 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <186eee77-81c1-4ece-1fa3-8c6dda89361b@xs4all.nl>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <186eee77-81c1-4ece-1fa3-8c6dda89361b@xs4all.nl>
+Message-ID: <Y3ulf1ccHibtMdQ2@an3as.eu>
+
+Am Mon, Nov 21, 2022 at 04:49:43PM +0100 schrieb Sebastiaan Couwenberg:
+> > This is really hard to do, thought.  The new packages are needing those
+> > packages from the transition.  I actually injected two packages from
+> > higher levels manually to be able to build one of the new packages.  So
+> > we really need to upload the start of the transition and I do not see
+> > any sense in not documenting what we are doing without the transition
+> > tracker.
+> 
+> You can rebuild the packages that are already in the archive and include
+> them in a local repo (e.g. managed with reprepro) and used by the chroot
+> where the rebuilds are performed. Use that to prepare the NEW uploads to
+> experimental, file the transition bugreport once all packages have passed
+> NEW, and move those to unstable once the transition is ACKed.
+
+Well, probably everything is possible, but as I said the tracker comes
+pretty handy to know the dependency relation.  I really would like to
+know what might be the real problem of the delay of the transition in
+this specific case.  Making me understand this problem would increase
+the motivation to do something else than currently.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From sebastic at xs4all.nl  Mon Nov 21 16:26:30 2022
+From: sebastic at xs4all.nl (Sebastiaan Couwenberg)
+Date: Mon, 21 Nov 2022 17:26:30 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3ulf1ccHibtMdQ2@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <186eee77-81c1-4ece-1fa3-8c6dda89361b@xs4all.nl> <Y3ulf1ccHibtMdQ2@an3as.eu>
+Message-ID: <71f010f0-1bf6-7772-9c88-f7d764aac940@xs4all.nl>
+
+On 11/21/22 17:21, Andreas Tille wrote:
+> Am Mon, Nov 21, 2022 at 04:49:43PM +0100 schrieb Sebastiaan Couwenberg:
+> > > This is really hard to do, thought.  The new packages are needing those
+> > > packages from the transition.  I actually injected two packages from
+> > > higher levels manually to be able to build one of the new packages.  So
+> > > we really need to upload the start of the transition and I do not see
+> > > any sense in not documenting what we are doing without the transition
+> > > tracker.
+> >
+> >
+> > You can rebuild the packages that are already in the archive and include
+> > them in a local repo (e.g. managed with reprepro) and used by the chroot
+> > where the rebuilds are performed. Use that to prepare the NEW uploads to
+> > experimental, file the transition bugreport once all packages have passed
+> > NEW, and move those to unstable once the transition is ACKed.
+>
+>
+> Well, probably everything is possible, but as I said the tracker comes
+> pretty handy to know the dependency relation.  I really would like to
+> know what might be the real problem of the delay of the transition in
+> this specific case.  Making me understand this problem would increase
+> the motivation to do something else than currently.
+
+To prepare for GIS transition sI run my own ben instance to generate the 
+trackers (for testing, unstable, and experimental), it's relatively easy 
+to setup. If you'd like help to setup a ben instance for the R team, let 
+me know.
+
+Kind Regards,
+
+Bas
+
+--
+ GPG Key ID: 4096R/6750F10AE88D4AF1
+Fingerprint: 8182 DE41 7056 408D 6146  50D1 6750 F10A E88D 4AF1
+
+From bunk at debian.org  Mon Nov 21 16:33:52 2022
+From: bunk at debian.org (Adrian Bunk)
+Date: Mon, 21 Nov 2022 18:33:52 +0200
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3ubriik76pfhFqM@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu>
+Message-ID: <Y3uocIE972UI7bNJ@localhost>
+
+On Mon, Nov 21, 2022 at 04:39:26PM +0100, Andreas Tille wrote:
+>...
+> Am Mon, Nov 21, 2022 at 03:05:26PM +0100 schrieb Sebastian Ramacher:
+> > On 2022-11-21 15:02:16 +0100, Andreas Tille wrote:
+> > > Control: block -1 by 1024563
+> > > Control: block -1 by 1024565
+> > > Control: block -1 by 1024567
+> > > 
+> > > Some of the BioConductor packages need new dependencies.
+> > > I have pushed these to new queue and set the ITP bugs as
+> > > blocker.
+> > 
+> > As this is happening every r-bioc transition, could this be handled
+> > before starting the transition the next time?
+> 
+> This is really hard to do, thought.  The new packages are needing those
+> packages from the transition.  I actually injected two packages from
+> higher levels manually to be able to build one of the new packages.  So
+> we really need to upload the start of the transition and I do not see
+> any sense in not documenting what we are doing without the transition
+> tracker.
+>...
+
+Your transition is special because you are manually uploading every 
+single package involved in the transition.
+
+You could upload everything to experimental, run a local ben tracker 
+against experimental, and when the transition is complete in 
+experimental contact the release team for the transition in unstable.
+
+The actual transition is then a batch of "Upload to unstable".
+
+> Kind regards
+>     Andreas.
+
+cu
+Adrian
+
+Example for the status of the ongoing python3.11-add transition in experimental:
+
+$ cat tracker/python3.11-add.ben 
+title = "Add Python 3.11 as supported version";
+is_affected = .build-depends ~ /python3-all-dev|python3-all-dbg/ | .build-depends-arch ~ /python3-all-dev|python3-all-dbg/;
+is_good = .depends ~ /python3 \(<< 3\.12\)|python3.11|python3-dbg \(<< 3\.12\)|python3.11-dbg/;
+is_bad = .depends ~ /python3 \(<< 3\.11\)|python3-dbg \(<< 3\.11\)/ | .breaks ~ /python \(>= 3\.11\)|python-dbg \(>= 3\.11\)/;
+notes = "#1021984";
+$ ben download --suite experimental --preferred-compression-format xz
+Downloading /home/bunk/Sources...
+Downloading /home/bunk/Packages_armhf...
+Downloading /home/bunk/Packages_amd64...
+Downloading /home/bunk/Packages_mips64el...
+Downloading /home/bunk/Packages_armel...
+Downloading /home/bunk/Packages_i386...
+Downloading /home/bunk/Packages_arm64...
+Downloading /home/bunk/Packages_mipsel...
+Downloading /home/bunk/Packages_ppc64el...
+Downloading /home/bunk/Packages_s390x...
+$ ben tracker -cd tracker
+Parsing /home/bunk/Sources...
+Parsing /home/bunk/Packages_amd64...
+Parsing /home/bunk/Packages_arm64...
+Parsing /home/bunk/Packages_armel...
+Parsing /home/bunk/Packages_armhf...
+Parsing /home/bunk/Packages_i386...
+Parsing /home/bunk/Packages_mips64el...
+Parsing /home/bunk/Packages_mipsel...
+Parsing /home/bunk/Packages_ppc64el...
+Parsing /home/bunk/Packages_s390x...
+Computing data for (unknown) python3.11-add
+Generating html/python3.11-add.html
+Generating ./export/packages.yaml
+Cleaning up...
+Generating index...
+$ cp -a /usr/share/ben/media html/
+$
+
+html/python3.11-add.html can then be viewed with any web broswer
+(or html/ copied to a public webserver like people.d.o).
+
+Different from the release team tracker, "ben download" above will get
+updated data only every 6 hours after dinstall.
+
+From tille at debian.org  Mon Nov 21 17:11:41 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 21 Nov 2022 18:11:41 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3uocIE972UI7bNJ@localhost>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3uocIE972UI7bNJ@localhost>
+Message-ID: <Y3uxTXeNq79+cRJp@an3as.eu>
+
+Hi Adrian and others,
+
+Am Mon, Nov 21, 2022 at 06:33:52PM +0200 schrieb Adrian Bunk:
+> > This is really hard to do, thought.  The new packages are needing those
+> > packages from the transition.  I actually injected two packages from
+> > higher levels manually to be able to build one of the new packages.  So
+> > we really need to upload the start of the transition and I do not see
+> > any sense in not documenting what we are doing without the transition
+> > tracker.
+> >...
+> 
+> Your transition is special because you are manually uploading every 
+> single package involved in the transition.
+> 
+> You could upload everything to experimental, run a local ben tracker 
+> against experimental, and when the transition is complete in 
+> experimental contact the release team for the transition in unstable.
+> 
+> The actual transition is then a batch of "Upload to unstable".
+
+Thanks for all helpful hints.  I understand that with some effort over
+the current workflow it is possible to do the transition differently.
+The only thing which I did not yet understood is the actual drawback of
+the current workflow.  I do not think that it takes specifically longer
+than other transition - we just have a different set of showstoppers to
+get it done in 24 hours.  In the past we got support by ftpmaster when
+pinging them and explaining the transition issue.
+
+If I'm missing the point here I'm perfectly fine to enhance the
+procedure - I just fail to see the actual problem we want to solve
+by the suggested methods.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From antti.honkela at helsinki.fi  Mon Nov 21 13:35:38 2022
+From: antti.honkela at helsinki.fi (Antti Honkela)
+Date: Mon, 21 Nov 2022 15:35:38 +0200
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <Y3t6wopp/KSTu17y@an3as.eu>
+References: <Y3t6wopp/KSTu17y@an3as.eu>
+Message-ID: <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi>
+
+Hi Andreas,
+
+We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+
+Best regards,
+
+Antti
+
+On 21 Nov 2022, at 15:18, Andreas Tille wrote:
+
+> Hi,
+>
+> I'm about to upgrade the Debian packages of Bioconductor to release
+> 3.16.
+>
+> As a consequence of droping bam.h from htslib Rhtslib does not ship this
+> header file any more as well (since it just includes code copies).  That's
+> why BitSeq fails to build due to
+>
+> $ grep -Rw bam.h
+> src/ReadDistribution.h:#include "bam.h"
+>
+> Kind regards
+>    Andreas.
+>
+> -- 
+> http://fam-tille.de
+
+From nilesh at debian.org  Mon Nov 21 17:29:01 2022
+From: nilesh at debian.org (Nilesh Patra)
+Date: Mon, 21 Nov 2022 22:59:01 +0530
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3uxTXeNq79+cRJp@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3uocIE972UI7bNJ@localhost> <Y3uxTXeNq79+cRJp@an3as.eu>
+Message-ID: <20221121172901.j4o523c42jcyguzj@nileshpatra.info>
+
+On Mon, Nov 21, 2022 at 06:11:41PM +0100, Andreas Tille wrote:
+> Hi Adrian and others,
+> 
+> Am Mon, Nov 21, 2022 at 06:33:52PM +0200 schrieb Adrian Bunk:
+> > > This is really hard to do, thought.  The new packages are needing those
+> > > packages from the transition.  I actually injected two packages from
+> > > higher levels manually to be able to build one of the new packages.  So
+> > > we really need to upload the start of the transition and I do not see
+> > > any sense in not documenting what we are doing without the transition
+> > > tracker.
+> > >...
+> > 
+> > Your transition is special because you are manually uploading every 
+> > single package involved in the transition.
+> > 
+> > You could upload everything to experimental, run a local ben tracker 
+> > against experimental, and when the transition is complete in 
+> > experimental contact the release team for the transition in unstable.
+> > 
+> > The actual transition is then a batch of "Upload to unstable".
+> 
+> Thanks for all helpful hints.  I understand that with some effort over
+> the current workflow it is possible to do the transition differently.
+> The only thing which I did not yet understood is the actual drawback of
+> the current workflow.  I do not think that it takes specifically longer
+> than other transition - we just have a different set of showstoppers to
+> get it done in 24 hours. 
+
+Personal experience+opinion: I have been involved with quite a few bioc transitions
+and often times you and me were the _only_ people who did the entire transition.
+
+I have noticed several times that the NEW processing takes quite sometime, and the way
+forward (for me) has been to manually patch the DESCRIPTION file to patch it to be
+compatible with new r-bioc api until the dependency from new is accepted.
+
+The new processing time tends to create delay with respect to bioc packages migrating
+to testing and this creats a terrible amount of noise. And then what comes next is
+a bunch of workarounds to get things moving, and this takes a quite a lot of energy
+at my end which I'd like to spend somewhere else. I have not been entirely happy with the
+way it happens, and would like if we can do the transition differently with less friction,
+less days of wide-uninstallability.
+
+The advantage with a reprepo thing that Sebastian suggests is that everything (possibly)
+will migrate as soon as it is uploaded. Once you have stored the sources into a reprepo,
+all you need to do is run a script to do all the uploads.
+
+> In the past we got support by ftpmaster when
+> pinging them and explaining the transition issue.
+
+Which takes time as well, and at least my experience regarding transition new processing
+has not been quite same as you.
+
+Lastly I also want to higlight that: while bioc transition is in theory a transition (I agree)
+but to my understanding, there is no _real_ API change. It is just the tool taking the
+API field from DESCRIPTION file into consideration, and causing FTBFS if it does not match.
+
+In principle, building a package that has an older API value in DESCRIPTION file with the newer
+one does not break anything, it rather looks as updates of various packages disguised as an API
+change, and at least in debian land, to me it just appears as a broken tool config and not a real
+transition (like library transition, for example the recent onetbb one).
+
+-- 
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sramacher at debian.org  Mon Nov 21 18:16:14 2022
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Mon, 21 Nov 2022 19:16:14 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3ubriik76pfhFqM@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu>
+Message-ID: <Y3vAbky0rHdHLoEc@ramacher.at>
+
+On 2022-11-21 16:39:26 +0100, Andreas Tille wrote:
+> Hi Sebastian,
+> 
+> Am Mon, Nov 21, 2022 at 03:05:26PM +0100 schrieb Sebastian Ramacher:
+> > On 2022-11-21 15:02:16 +0100, Andreas Tille wrote:
+> > > Control: block -1 by 1024563
+> > > Control: block -1 by 1024565
+> > > Control: block -1 by 1024567
+> > > 
+> > > Some of the BioConductor packages need new dependencies.
+> > > I have pushed these to new queue and set the ITP bugs as
+> > > blocker.
+> > 
+> > As this is happening every r-bioc transition, could this be handled
+> > before starting the transition the next time?
+> 
+> This is really hard to do, thought.  The new packages are needing those
+> packages from the transition.  I actually injected two packages from
+> higher levels manually to be able to build one of the new packages.  So
+> we really need to upload the start of the transition and I do not see
+> any sense in not documenting what we are doing without the transition
+> tracker.
+
+Others have already answered this part.
+
+> However, to make us understand your suggestion better:  Is there any
+> drawback on your side if the transition of a closed set of packages if
+> the transition is delayed by new processing?
+
+Some packages are also involved in other transitions. For example,
+currently a hdf5 transition is prepared in experimental. While we could
+now also start the hdf5 transition, completing hdf5 would not be
+possible until this one is done.
+
+Now replace the hdf5 transition with another lock-step transition such
+as this one. Then we suddenly have two set of packages that can only
+migrate together. Especially for lock-step transition a quick turn
+around is thus greatly appreciated.
+
+I will remember for the next time that I'll ask you to stage everything
+in experimental or to give me a list of packages that require NEW
+dependencies so that we can get those removed early in the transition to
+not hold of the transition by NEW delay.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From bob.dybian at gmail.com  Mon Nov 21 20:52:23 2022
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Mon, 21 Nov 2022 21:52:23 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <20221121172901.j4o523c42jcyguzj@nileshpatra.info>
+References: <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3ubriik76pfhFqM@an3as.eu> <Y3uocIE972UI7bNJ@localhost> <Y3uxTXeNq79+cRJp@an3as.eu> <20221121172901.j4o523c42jcyguzj@nileshpatra.info>
+Message-ID: <CA+6XHwTH9NwVBQ42ZSbxfEqLUbdHXnQtJ5GmbjwBkRQO=9-iFQ@mail.gmail.com>
+
+Hi Nilesh,
+
+Le lun. 21 nov. 2022 à 18:29, Nilesh Patra <nilesh at debian.org> a écrit :
+>
+> Lastly I also want to higlight that: while bioc transition is in theory a transition (I agree)
+> but to my understanding, there is no _real_ API change. It is just the tool taking the
+> API field from DESCRIPTION file into consideration, and causing FTBFS if it does not match.
+>
+> In principle, building a package that has an older API value in DESCRIPTION file with the newer
+> one does not break anything, it rather looks as updates of various packages disguised as an API
+> change, and at least in debian land, to me it just appears as a broken tool config and not a real
+> transition (like library transition, for example the recent onetbb one).
+>
+
+Before having this r-api-bioc virtual package, transitions were even
+worse. We had a lot of autopkgtest
+issues only because a mix of r-bioc pkgs installed from the old and
+from the new bioconductor releases.
+Issues which solved by themselves when the transition is over and of
+course, users were complaining
+about broken packages during the transition. We were losing a lot of
+time to investigate these issues.
+With this r-api-bioc mechanism, we don't allow this mixture of r-bioc
+pkgs and thus we limit these
+temporary issues.
+
+Adding this r-api-bioc virtual package has another consequence, now we
+can take advantage of the
+transition tracker and upload packages following levels. Before the
+order of the uploads were a bit
+random and again we lose of lot of time to figure out in which order
+we have to update them.
+
+Best,
+Dylan
+
+From edd at debian.org  Tue Nov 22 01:02:37 2022
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 21 Nov 2022 19:02:37 -0600
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <20221121144332.j6atyu6sfmzshazh@nileshpatra.info>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi> <Y3uAgNVi4Ns2o7rS@an3as.eu> <20221121144332.j6atyu6sfmzshazh@nileshpatra.info>
+Message-ID: <25468.8109.508567.736691@rob.eddelbuettel.com>
+
+On 21 November 2022 at 20:13, Nilesh Patra wrote:
+| On Mon, Nov 21, 2022 at 02:43:28PM +0100, Andreas Tille wrote:
+| > Am Mon, Nov 21, 2022 at 03:35:38PM +0200 schrieb Antti Honkela:
+| > > We do not have resources to maintain BitSeq anymore and have requested its removal from Bioconductor. I am not sure why it is still there as it is broken.
+| > 
+| > Thanks a lot for the super fast and helpful response.
+| > 
+| > To the readers of Debian R pkg team:  Seems we should remove
+| > r-bioc-bitseq from Debian, right? 
+| 
+| If it is going away from bioconductor itself, then I see no reason to keep it in Debian either.
+
+Using the same short code example Kurt Hornik posted for CRAN to find
+packages `apt-cache search` still knows, but that are no longer in the
+repository, I looked at the BioConductor release and found these two:
+
+  > setdiff(p, paste0("r-bioc-", tolower(AP$Package)))                                                      
+  [1] "r-bioc-deseq" "r-bioc-mofa"                                                                         
+  >
+
+A search at the BioConductor site seems to confirm it.  So that would be two
+candidates for removal (but if they still build one can also argue for
+keeping them for our user's benefit).
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Nov 22 13:42:11 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 22 Nov 2022 14:42:11 +0100
+Subject: Re: Rhtslib does not contain bam.h any more thus build of BitSeq fails
+In-Reply-To: <25468.8109.508567.736691@rob.eddelbuettel.com>
+References: <Y3t6wopp/KSTu17y@an3as.eu> <B5749EFD-43DD-4B1D-A294-76CE195AE2C2@helsinki.fi> <Y3uAgNVi4Ns2o7rS@an3as.eu> <20221121144332.j6atyu6sfmzshazh@nileshpatra.info> <25468.8109.508567.736691@rob.eddelbuettel.com>
+Message-ID: <Y3zRs7tcRcfSrL/5@an3as.eu>
+
+Am Mon, Nov 21, 2022 at 07:02:37PM -0600 schrieb Dirk Eddelbuettel:
+> 
+> Using the same short code example Kurt Hornik posted for CRAN to find
+> packages `apt-cache search` still knows, but that are no longer in the
+> repository, I looked at the BioConductor release and found these two:
+> 
+>   > setdiff(p, paste0("r-bioc-", tolower(AP$Package)))                                                      
+>   [1] "r-bioc-deseq" "r-bioc-mofa"                                                                         
+>   >
+> 
+> A search at the BioConductor site seems to confirm it.  So that would be two
+> candidates for removal (but if they still build one can also argue for
+> keeping them for our user's benefit).
+
+These package are on an explicit wishlist of some users.  Its easy to
+spot them since they need patches for the BioConductor version inside
+the DESCRIPTION file.  I've just upgraded these and except that mofa
+needs to wait for predependencies in new both build fine and are passing
+their test suite.
+
+Thanks for the hint anyway
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Nov 22 19:42:41 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 22 Nov 2022 20:42:41 +0100
+Subject: Bug#1024661: r-bioc-bitseq: orphaned upstream and blocking BioC 3.16 transition
+Message-ID: <166914616170.2340158.14850328236344593047.reportbug@sputnik>
+
+Source: r-bioc-bitseq
+Version: 1.40.0+dfsg-1
+Severity: critical
+Tags: ftbfs
+Justification: breaks unrelated software
+X-Debbugs-Cc: 1023731 at bugs.debian.org, debian-r at lists.debian.org
+
+As per upstream
+
+   https://lists.debian.org/debian-r/2022/11/msg00058.html
+
+r-bioc-bitseq is not supported any more.  It does not build against the
+packages that are part of the BioC 3.16 release (namely r-bioc-rhtslib
+which does not contain the header file bam.h any more)
+
+Before we might remove r-bioc-bitseq finally from Debian we want to give
+interested people a chance to fix the code but this bug should remove the
+package from testing to not block the BioC 3.16 transition.
+
+Kind regards
+
+      Andreas.
+
+-- System Information:
+Debian Release: bookworm/sid
+  APT prefers unstable
+  APT policy: (500, 'unstable'), (500, 'testing'), (50, 'buildd-unstable'), (1, 'experimental')
+Architecture: amd64 (x86_64)
+
+Kernel: Linux 6.0.0-4-amd64 (SMP w/8 CPU threads; PREEMPT)
+Locale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE not set
+Shell: /bin/sh linked to /usr/bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+From tille at debian.org  Tue Nov 22 19:54:13 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 22 Nov 2022 20:54:13 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y3vAbky0rHdHLoEc@ramacher.at>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at>
+Message-ID: <Y30o5WRc7kvuvT5m@an3as.eu>
+
+Control: block -1 by 1024582
+
+Am Mon, Nov 21, 2022 at 07:16:14PM +0100 schrieb Sebastian Ramacher:
+> > However, to make us understand your suggestion better:  Is there any
+> > drawback on your side if the transition of a closed set of packages if
+> > the transition is delayed by new processing?
+> 
+> Some packages are also involved in other transitions. For example,
+> currently a hdf5 transition is prepared in experimental. While we could
+> now also start the hdf5 transition, completing hdf5 would not be
+> possible until this one is done.
+
+Thanks a lot for making me understand the problem.
+ 
+> Now replace the hdf5 transition with another lock-step transition such
+> as this one. Then we suddenly have two set of packages that can only
+> migrate together. Especially for lock-step transition a quick turn
+> around is thus greatly appreciated.
+
+If I understood that BioConductor packages should not block other
+transitions.  I've just pinged ftpmaster on IRC to check packages
+r-bioc-bsseq, r-bioc-dss, r-bioc-biocbaseutils and r-cran-ggrastr.
+The following packages are blocked by the packages in new:
+
+   r-bioc-bitseq - should be removed from testing immediately bug just filed)
+   r-bioc-multiassayexperiment
+   r-bioc-demixt (bug #1024597 was just filed)
+   r-bioc-scater
+   r-bioc-mofa (just due dependencies)
+
+Do you want me to file RC bugs against r-bioc-multiassayexperiment,
+r-bioc-scater and r-bioc-mofa.
+
+> I will remember for the next time that I'll ask you to stage everything
+> in experimental or to give me a list of packages that require NEW
+> dependencies so that we can get those removed early in the transition to
+> not hold of the transition by NEW delay.
+
+I agree that the BioC transition should not habe a negative effect
+on other transitions.  If RC bugs against the blockers are a valid
+solution to prevent this I'd fully support this.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Nov 23 08:39:15 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Nov 2022 09:39:15 +0100
+Subject: Test suite errors in StructuralVariantAnnotation
+Message-ID: <Y33cM++o0unyJN+r@an3as.eu>
+
+Hi Daniel,
+
+when upgrading the Debian packaged BioConductor packages I stumbled upon
+test suite errors in StructuralVariantAnnotation which are starting
+with:
+
+[ FAIL 30 | WARN 4 | SKIP 0 | PASS 85 ]
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Error ('test-extensions-VCF.R:28'): INFO column import ──────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+Backtrace:
+     ▆
+  1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:28:8
+  2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))
+  3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+  4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+  5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+  6. │     └─VariantAnnotation:::.readVcf(...)
+  7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+  8. │         ├─VariantAnnotation::scanVcfHeader(file)
+  9. │         └─VariantAnnotation::scanVcfHeader(file)
+ 10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 12. │             └─BiocGenerics::Map(...)
+ 13. │               ├─BiocGenerics (local) standardGeneric("Map")
+ 14. │               │ ├─BiocGenerics::eval(mc, env)
+ 15. │               │ └─base::eval(mc, env)
+ 16. │               │   └─base::eval(mc, env)
+ 17. │               └─base::Map(f = f, ...)
+ 18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+ 19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+ 20. │                     ├─Rsamtools::scanBcfHeader(bf)
+ 21. │                     └─Rsamtools::scanBcfHeader(bf)
+ 22. └─base::.handleSimpleError(...)
+ 23.   └─base (local) h(simpleError(msg, call))
+── Error ('test-extensions-VCF.R:49'): Delly TRA ───────────────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+Backtrace:
+     ▆
+  1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:49:4
+  2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))
+  3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+  4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+  5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+  6. │     └─VariantAnnotation:::.readVcf(...)
+  7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+  8. │         ├─VariantAnnotation::scanVcfHeader(file)
+  9. │         └─VariantAnnotation::scanVcfHeader(file)
+ 10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 12. │             └─BiocGenerics::Map(...)
+ 13. │               ├─BiocGenerics (local) standardGeneric("Map")
+ 14. │               │ ├─BiocGenerics::eval(mc, env)
+ 15. │               │ └─base::eval(mc, env)
+ 16. │               │   └─base::eval(mc, env)
+ 17. │               └─base::Map(f = f, ...)
+ 18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+ 19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+ 20. │                     ├─Rsamtools::scanBcfHeader(bf)
+ 21. │                     └─Rsamtools::scanBcfHeader(bf)
+ 22. └─base::.handleSimpleError(...)
+ 23.   └─base (local) h(simpleError(msg, call))
+── Error ('test-extensions-VCF.R:71'): empty VCF ───────────────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+
+You can find the full test log here:
+
+   https://salsa.debian.org/r-pkg-team/r-bioc-structuralvariantannotation/-/jobs/3554988#875
+
+Any hint what might went wrong here?
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From daniel.l.cameron at gmail.com  Thu Nov 24 00:08:31 2022
+From: daniel.l.cameron at gmail.com (Daniel Cameron)
+Date: Thu, 24 Nov 2022 11:08:31 +1100
+Subject: Re: Test suite errors in StructuralVariantAnnotation
+In-Reply-To: <Y33cM++o0unyJN+r@an3as.eu>
+References: <Y33cM++o0unyJN+r@an3as.eu>
+Message-ID: <CAGyTGOtYc_QLe671yHB4uTyTi0AnUSbfQJvK96xzU58+5exFeQ@mail.gmail.com>
+
+My guess is that stricter input file header validation in the r-bioc-variantannotation/r-bioc-rsamtools package dependencies is making the test cases unhappy. It's a failure of the test harness, not the actual test case functionality. I'll look into it.
+
+Cheers
+Daniel
+
+On Wed, Nov 23, 2022 at 7:39 PM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi Daniel,
+>
+>
+>
+> when upgrading the Debian packaged BioConductor packages I stumbled upon
+>
+> test suite errors in StructuralVariantAnnotation which are starting
+>
+> with:
+>
+>
+>
+> [ FAIL 30 | WARN 4 | SKIP 0 | PASS 85 ]
+>
+> ══ Failed tests ════════════════════════════════════════════════════════════════
+>
+> ── Error ('test-extensions-VCF.R:28'): INFO column import ──────────────────────
+>
+> Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+>
+> Backtrace:
+>
+>      ▆
+>
+>   1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:28:8
+>
+>   2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))
+>
+>   3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+>
+>   4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+>
+>   5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+>
+>   6. │     └─VariantAnnotation:::.readVcf(...)
+>
+>   7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+>
+>   8. │         ├─VariantAnnotation::scanVcfHeader(file)
+>
+>   9. │         └─VariantAnnotation::scanVcfHeader(file)
+>
+>  10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+>
+>  11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+>
+>  12. │             └─BiocGenerics::Map(...)
+>
+>  13. │               ├─BiocGenerics (local) standardGeneric("Map")
+>
+>  14. │               │ ├─BiocGenerics::eval(mc, env)
+>
+>  15. │               │ └─base::eval(mc, env)
+>
+>  16. │               │   └─base::eval(mc, env)
+>
+>  17. │               └─base::Map(f = f, ...)
+>
+>  18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+>
+>  19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+>
+>  20. │                     ├─Rsamtools::scanBcfHeader(bf)
+>
+>  21. │                     └─Rsamtools::scanBcfHeader(bf)
+>
+>  22. └─base::.handleSimpleError(...)
+>
+>  23.   └─base (local) h(simpleError(msg, call))
+>
+> ── Error ('test-extensions-VCF.R:49'): Delly TRA ───────────────────────────────
+>
+> Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+>
+> Backtrace:
+>
+>      ▆
+>
+>   1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:49:4
+>
+>   2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))
+>
+>   3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+>
+>   4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+>
+>   5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+>
+>   6. │     └─VariantAnnotation:::.readVcf(...)
+>
+>   7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+>
+>   8. │         ├─VariantAnnotation::scanVcfHeader(file)
+>
+>   9. │         └─VariantAnnotation::scanVcfHeader(file)
+>
+>  10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+>
+>  11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+>
+>  12. │             └─BiocGenerics::Map(...)
+>
+>  13. │               ├─BiocGenerics (local) standardGeneric("Map")
+>
+>  14. │               │ ├─BiocGenerics::eval(mc, env)
+>
+>  15. │               │ └─base::eval(mc, env)
+>
+>  16. │               │   └─base::eval(mc, env)
+>
+>  17. │               └─base::Map(f = f, ...)
+>
+>  18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+>
+>  19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+>
+>  20. │                     ├─Rsamtools::scanBcfHeader(bf)
+>
+>  21. │                     └─Rsamtools::scanBcfHeader(bf)
+>
+>  22. └─base::.handleSimpleError(...)
+>
+>  23.   └─base (local) h(simpleError(msg, call))
+>
+> ── Error ('test-extensions-VCF.R:71'): empty VCF ───────────────────────────────
+>
+> Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+>
+>
+>
+>
+>
+> You can find the full test log here:
+>
+>
+>
+>    https://salsa.debian.org/r-pkg-team/r-bioc-structuralvariantannotation/-/jobs/3554988#875
+>
+>
+>
+> Any hint what might went wrong here?
+>
+>
+>
+> Kind regards
+>
+>
+>
+>      Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+>
+
+From tille at debian.org  Thu Nov 24 06:52:37 2022
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 24 Nov 2022 07:52:37 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y30o5WRc7kvuvT5m@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu>
+Message-ID: <Y38UtZcgrmSby8GX@an3as.eu>
+
+Am Tue, Nov 22, 2022 at 08:54:13PM +0100 schrieb Andreas Tille:
+> If I understood that BioConductor packages should not block other
+> transitions.  I've just pinged ftpmaster on IRC to check packages
+> r-bioc-bsseq, r-bioc-dss, r-bioc-biocbaseutils and r-cran-ggrastr.
+> The following packages are blocked by the packages in new:
+> 
+>    r-bioc-bitseq - should be removed from testing immediately bug just filed)
+>    r-bioc-multiassayexperiment
+>    r-bioc-demixt (bug #1024597 was just filed)
+>    r-bioc-scater
+>    r-bioc-mofa (just due dependencies)
+> 
+> Do you want me to file RC bugs against r-bioc-multiassayexperiment,
+> r-bioc-scater and r-bioc-mofa.
+
+Since r-bioc-scater is needed in autopkgtest of r-bioc-bluster[1] and
+r-bioc-singler[2] probably also these two packages need a RC bug to not
+block the transition.
+
+The test suite issue of r-bioc-structuralvariantannotation is discussed
+with upstream[4].  I'm fine to remove it from testing for the moment as
+well.
+ 
+Just let me know whether I should file the according bugs.
+
+Kind regards
+   Andreas.
+
+[1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-bluster/28612583/log.gz
+[2] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-singler/28612594/log.gz
+[3] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-structuralvariantannotation/28615556/log.gz
+[4] https://lists.debian.org/debian-r/2022/11/msg00067.html
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Thu Nov 24 07:46:31 2022
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Thu, 24 Nov 2022 08:46:31 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y38UtZcgrmSby8GX@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <Y38UtZcgrmSby8GX@an3as.eu>
+Message-ID: <Y38hV1hYE77QxN/n@ramacher.at>
+
+On 2022-11-24 07:52:37 +0100, Andreas Tille wrote:
+> Am Tue, Nov 22, 2022 at 08:54:13PM +0100 schrieb Andreas Tille:
+> > If I understood that BioConductor packages should not block other
+> > transitions.  I've just pinged ftpmaster on IRC to check packages
+> > r-bioc-bsseq, r-bioc-dss, r-bioc-biocbaseutils and r-cran-ggrastr.
+> > The following packages are blocked by the packages in new:
+> > 
+> >    r-bioc-bitseq - should be removed from testing immediately bug just filed)
+> >    r-bioc-multiassayexperiment
+> >    r-bioc-demixt (bug #1024597 was just filed)
+> >    r-bioc-scater
+> >    r-bioc-mofa (just due dependencies)
+> > 
+> > Do you want me to file RC bugs against r-bioc-multiassayexperiment,
+> > r-bioc-scater and r-bioc-mofa.
+> 
+> Since r-bioc-scater is needed in autopkgtest of r-bioc-bluster[1] and
+> r-bioc-singler[2] probably also these two packages need a RC bug to not
+> block the transition.
+> 
+> The test suite issue of r-bioc-structuralvariantannotation is discussed
+> with upstream[4].  I'm fine to remove it from testing for the moment as
+> well.
+>  
+> Just let me know whether I should file the according bugs.
+
+Please do.
+
+Cheers
+-- 
+Sebastian Ramacher
+
+From tille at debian.org  Thu Nov 24 09:30:49 2022
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 24 Nov 2022 10:30:49 +0100
+Subject: Re: Bug#1023731: BioC Transition blocked by new dependencies
+In-Reply-To: <Y38hV1hYE77QxN/n@ramacher.at>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <Y38UtZcgrmSby8GX@an3as.eu> <Y38hV1hYE77QxN/n@ramacher.at>
+Message-ID: <Y385yfYX15kFlOSG@an3as.eu>
+
+Am Thu, Nov 24, 2022 at 08:46:31AM +0100 schrieb Sebastian Ramacher:
+> > >    r-bioc-bitseq - should be removed from testing immediately bug just filed)
+
+Bug #1024661
+
+> > >    r-bioc-multiassayexperiment
+
+#1024748
+
+> > >    r-bioc-demixt (bug #1024597 was just filed)
+> > >    r-bioc-scater
+
+#1024751
+
+> > >    r-bioc-mofa (just due dependencies)
+
+Bug filed as well even if redundant since removal of
+r-bioc-multiassayexperiment should also remove this.
+
+> > > Do you want me to file RC bugs against r-bioc-multiassayexperiment,
+> > > r-bioc-scater and r-bioc-mofa.
+> > 
+> > Since r-bioc-scater is needed in autopkgtest of r-bioc-bluster[1] and
+> > r-bioc-singler[2] probably also these two packages need a RC bug to not
+> > block the transition.
+
+Bugs will be filed against r-bioc-bluster and r-bioc-singler once my
+'only 5 reports per hour for submission' period is over (I'm frequently
+wondering whether this is a bit harsh constraint - I'm beaten by it
+two to four times per year by it)
+
+> > The test suite issue of r-bioc-structuralvariantannotation is discussed
+> > with upstream[4].  I'm fine to remove it from testing for the moment as
+> > well.
+> >  
+> > Just let me know whether I should file the according bugs.
+> 
+> Please do.
+
+Done (or about to do) - transition bug in CC. 
+
+Thanks a lot for your patience
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Nov 28 12:22:32 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 28 Nov 2022 13:22:32 +0100
+Subject: Any idea why debci picks old versions (Was: Bug#1023731: BioC Transition blocked by new dependencies)
+In-Reply-To: <Y385yfYX15kFlOSG@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <Y38UtZcgrmSby8GX@an3as.eu> <Y38hV1hYE77QxN/n@ramacher.at> <Y385yfYX15kFlOSG@an3as.eu>
+Message-ID: <Y4SoCFuRt/S6zzF7@an3as.eu>
+
+Hi,
+
+I'm constantly checking the tracker page of r-bioc-biocgenerics[1] to
+follow the transition status.  I realised that debci picks old, not yet
+fixed package versions like:
+
+  r-bioc-biocfilecache/2.4.0+dfsg-1 while 2.4.0+dfsg-2 is in unstable
+  r-bioc-biocsingular/1.12.0+ds-1   while 1.14.0+ds-2 is in unstable
+  (I've just uploaded fixed r-bioc-bluster - lets see what will be picked)
+  r-bioc-edaseq/2.30.0+dfsg-1 while 2.32.0+dfsg-2 is in unstable
+
+I wonder when debci will be run with the latest versions in unstable
+that are fixing the build issues.
+
+Kind regards
+    Andreas.
+
+PS: First round of new predependencies was done.  I've fixed the
+    remaining reasons for rejects.
+
+[1] https://tracker.debian.org/pkg/r-bioc-biocgenerics
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Mon Nov 28 19:23:12 2022
+From: elbrus at debian.org (Paul Gevers)
+Date: Mon, 28 Nov 2022 20:23:12 +0100
+Subject: Re: Bug#1023731: Any idea why debci picks old versions (Was: Bug#1023731: BioC Transition blocked by new dependencies)
+In-Reply-To: <Y4SoCFuRt/S6zzF7@an3as.eu>
+References: <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y3uE6ICdKg17u9Qv@an3as.eu> <Y3uFpm1GbdC5htzE@ramacher.at> <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <Y38UtZcgrmSby8GX@an3as.eu> <Y38hV1hYE77QxN/n@ramacher.at> <Y385yfYX15kFlOSG@an3as.eu> <Y4SoCFuRt/S6zzF7@an3as.eu>
+Message-ID: <909dea22-733e-5970-cd0f-1fa8b180d803@debian.org>
+
+Hi Andreas,
+
+On 28-11-2022 13:22, Andreas Tille wrote:
+> I'm constantly checking the tracker page of r-bioc-biocgenerics[1] to
+> follow the transition status.  I realised that debci picks old, not yet
+> fixed package versions like:
+>
+>    r-bioc-biocfilecache/2.4.0+dfsg-1 while 2.4.0+dfsg-2 is in unstable
+>    r-bioc-biocsingular/1.12.0+ds-1   while 1.14.0+ds-2 is in unstable
+>    (I've just uploaded fixed r-bioc-bluster - lets see what will be picked)
+>    r-bioc-edaseq/2.30.0+dfsg-1 while 2.32.0+dfsg-2 is in unstable
+
+It's not debci that picks them, but rather britney (our migration 
+software) that doesn't know from the information it uses that 
+r-bioc-biocgenerics from unstable makes r-bioc-biocfilecache from 
+testing uninstallable. I haven't checked but I suspect that this 
+transition is declared via Provides and this *might* mean that britney 
+doesn't handle Provides ideally for this use case.
+
+> I wonder when debci will be run with the latest versions in unstable
+> that are fixing the build issues.
+
+*Probably* when bugs in britney regarding this use of Provides are 
+fixed. For now, I'll schedule some tests manually with the Release Team 
+credentials.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Mon Nov 28 20:32:13 2022
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 28 Nov 2022 21:32:13 +0100
+Subject: Re: Bug#1023731: Any idea why debci picks old versions (Was: Bug#1023731: BioC Transition blocked by new dependencies)
+In-Reply-To: <909dea22-733e-5970-cd0f-1fa8b180d803@debian.org>
+References: <Y3ubriik76pfhFqM@an3as.eu> <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y38UtZcgrmSby8GX@an3as.eu> <Y38hV1hYE77QxN/n@ramacher.at> <Y385yfYX15kFlOSG@an3as.eu> <Y4SoCFuRt/S6zzF7@an3as.eu> <909dea22-733e-5970-cd0f-1fa8b180d803@debian.org>
+Message-ID: <Y4UazUylhh/FpokQ@an3as.eu>
+
+Hi Paul,
+
+Am Mon, Nov 28, 2022 at 08:23:12PM +0100 schrieb Paul Gevers:
+> > I'm constantly checking the tracker page of r-bioc-biocgenerics[1] to
+> > follow the transition status.  I realised that debci picks old, not yet
+> > fixed package versions like:
+> > 
+> >    r-bioc-biocfilecache/2.4.0+dfsg-1 while 2.4.0+dfsg-2 is in unstable
+> >    r-bioc-biocsingular/1.12.0+ds-1   while 1.14.0+ds-2 is in unstable
+> >    (I've just uploaded fixed r-bioc-bluster - lets see what will be picked)
+> >    r-bioc-edaseq/2.30.0+dfsg-1 while 2.32.0+dfsg-2 is in unstable
+> 
+> It's not debci that picks them, but rather britney (our migration software)
+> that doesn't know from the information it uses that r-bioc-biocgenerics from
+> unstable makes r-bioc-biocfilecache from testing uninstallable. I haven't
+> checked but I suspect that this transition is declared via Provides and this
+> *might* mean that britney doesn't handle Provides ideally for this use case.
+> 
+> > I wonder when debci will be run with the latest versions in unstable
+> > that are fixing the build issues.
+> 
+> *Probably* when bugs in britney regarding this use of Provides are fixed.
+> For now, I'll schedule some tests manually with the Release Team
+> credentials.
+
+So you want to say, the fact that the current debci results that are
+listed on the r-bioc-biocgenerics page are based on packages that are
+replaced in unstable and the current packages that are fixed are not
+listed with recent debci results, is due to a bug in britney?
+
+Thanks for the manual triggers, hope this will help here
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Nov 29 07:54:38 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 29 Nov 2022 08:54:38 +0100
+Subject: Test failure in StructuralVariantAnnotation
+Message-ID: <Y4W6vkpItI09CI7Y@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Daniel Cameron <daniel.l.cameron at gmail.com>
+
+Hi Daniel,
+
+when upgrading StructuralVariantAnnotation to its latest version (1.13.0)
+I noticed that some of its tests are failing.  I have reported this to
+the Debian bug tracking system[1].  The errors are starting with
+
+[ FAIL 30 | WARN 4 | SKIP 0 | PASS 85 ]
+
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Error ('test-extensions-VCF.R:28'): INFO column import ──────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+Backtrace:
+     ▆
+  1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:28:8
+  2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tINV\tN\t<INV>\t.\tLowQual\tSVTYPE=INV;CHR2=chr1;END=19357517;CT=3to5"))
+  3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+  4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+  5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+  6. │     └─VariantAnnotation:::.readVcf(...)
+  7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+  8. │         ├─VariantAnnotation::scanVcfHeader(file)
+  9. │         └─VariantAnnotation::scanVcfHeader(file)
+ 10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 12. │             └─BiocGenerics::Map(...)
+ 13. │               ├─BiocGenerics (local) standardGeneric("Map")
+ 14. │               │ ├─BiocGenerics::eval(mc, env)
+ 15. │               │ └─base::eval(mc, env)
+ 16. │               │   └─base::eval(mc, env)
+ 17. │               └─base::Map(f = f, ...)
+ 18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+ 19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+ 20. │                     ├─Rsamtools::scanBcfHeader(bf)
+ 21. │                     └─Rsamtools::scanBcfHeader(bf)
+ 22. └─base::.handleSimpleError(...)
+ 23.   └─base (local) h(simpleError(msg, call))
+── Error ('test-extensions-VCF.R:49'): Delly TRA ───────────────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+Backtrace:
+     ▆
+  1. ├─StructuralVariantAnnotation::breakpointRanges(.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))) at test-extensions-VCF.R:49:4
+  2. ├─StructuralVariantAnnotation:::.testrecord(c("chr10\t2991435\tTRA00000001\tN\t<TRA>\t.\tLowQual\tCIEND=0,100;CIPOS=0,50;SVTYPE=TRA;CHR2=chr1;END=19357517;CT=3to5"))
+  3. │ ├─VariantAnnotation::readVcf(.testfile(filename), "")
+  4. │ └─VariantAnnotation::readVcf(.testfile(filename), "")
+  5. │   └─VariantAnnotation (local) .local(file, genome = genome, param = param, ...)
+  6. │     └─VariantAnnotation:::.readVcf(...)
+  7. │       └─VariantAnnotation:::.scanVcfToVCF(...)
+  8. │         ├─VariantAnnotation::scanVcfHeader(file)
+  9. │         └─VariantAnnotation::scanVcfHeader(file)
+ 10. │           ├─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 11. │           └─Rsamtools::scanBcfHeader(file[[1]], ...)
+ 12. │             └─BiocGenerics::Map(...)
+ 13. │               ├─BiocGenerics (local) standardGeneric("Map")
+ 14. │               │ ├─BiocGenerics::eval(mc, env)
+ 15. │               │ └─base::eval(mc, env)
+ 16. │               │   └─base::eval(mc, env)
+ 17. │               └─base::Map(f = f, ...)
+ 18. │                 └─base::mapply(FUN = f, ..., SIMPLIFY = FALSE)
+ 19. │                   └─Rsamtools (local) `<fn>`(dots[[1L]][[1L]])
+ 20. │                     ├─Rsamtools::scanBcfHeader(bf)
+ 21. │                     └─Rsamtools::scanBcfHeader(bf)
+ 22. └─base::.handleSimpleError(...)
+ 23.   └─base (local) h(simpleError(msg, call))
+── Error ('test-extensions-VCF.R:71'): empty VCF ───────────────────────────────
+Error in `h(simpleError(msg, call))`: error in evaluating the argument 'x' in selecting a method for function 'breakpointRanges': no 'header' line "#CHROM POS ID..."?
+
+You can find a full build log here
+
+   https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-bioc-structuralvariantannotation/28747149/log.gz
+
+Kind regards
+
+     Andreas.
+
+[1] https://bugs.debian.org/1025045
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Nov 29 09:26:17 2022
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 29 Nov 2022 10:26:17 +0100
+Subject: BioC Packages are now clean (one exception with RC bug filed) (Was: Bug#1023731: Any idea why debci picks old versions)
+In-Reply-To: <Y4UazUylhh/FpokQ@an3as.eu>
+References: <Y3vAbky0rHdHLoEc@ramacher.at> <Y30o5WRc7kvuvT5m@an3as.eu> <CA+6XHwQXo3sbdvHOm6G2O72yGXuXd9jk+cu8ZsGutZZj2H-5Tg@mail.gmail.com> <Y38UtZcgrmSby8GX@an3as.eu> <Y38hV1hYE77QxN/n@ramacher.at> <Y385yfYX15kFlOSG@an3as.eu> <Y4SoCFuRt/S6zzF7@an3as.eu> <909dea22-733e-5970-cd0f-1fa8b180d803@debian.org> <Y4UazUylhh/FpokQ@an3as.eu>
+Message-ID: <Y4XQOfp5xWChfRWw@an3as.eu>
+
+Hi again,
+
+Am Mon, Nov 28, 2022 at 09:32:13PM +0100 schrieb Andreas Tille:
+> So you want to say, the fact that the current debci results that are
+> listed on the r-bioc-biocgenerics page are based on packages that are
+> replaced in unstable and the current packages that are fixed are not
+> listed with recent debci results, is due to a bug in britney?
+> 
+> Thanks for the manual triggers, hope this will help here
+
+This has definitely helped to clean-up the debci related excuses from
+false positives.  Now there is only one remaining one which is a real
+problem which I have reported upstream (see bug #1025045).  If
+r-bioc-structuralvariantannotation would be removed from testing I
+do not see any blocker for the transition any more.
+
+The good news is that ftpmaster accepted all preconditions right in
+time, so I was able to upload all missings this morning.  IMHO this is a
+good sign for me, that the current strategy "do the transition right in
+unstable and see what new preconditions are needed when doing so" is not
+really a blocker in the current case.  Please let me know if you think
+this is not the case.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+

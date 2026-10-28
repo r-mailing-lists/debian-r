@@ -1,0 +1,2134 @@
+From andreas at an3as.eu  Tue Jul  2 19:49:09 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 2 Jul 2024 21:49:09 +0200
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com>
+Message-ID: <ZoRZtXXtkY3FDyvW@an3as.eu>
+
+Hi Graham,
+
+Am Tue, Jul 02, 2024 at 04:15:26PM +0000 schrieb Graham Inggs:
+> > r-cran-spatstat.core was removed from Debian.  R-cran-spatstat.geom does
+> > not depend from this package any more and the autopkgtest in Salsa CI is
+> > fine[1].  Any hint why it fails in testing would be welcome.
+> 
+> 82s autopkgtest [21:16:20]: @@@@@@@@@@@@@@@@@@@@ summary
+> 82s run-unit-test PASS
+> 82s pkg-r-autopkgtest FAIL badpkg
+> 
+> It is only the 'pkg-r-autopkgtest' that is failing.  The
+> 'run-unit-test' defined inside the r-cran-spatstat.geom package
+> succeeds.
+
+Good so far.
+ 
+> This looks like a bug in autodep8, where pkg-r-autopkgtest is defined.
+> It could be the same as #961138.
+> 
+> Is it possible to skip the pkg-r-autopkgtest for this package?
+
+We did not implemented any hooks to realise this yet.
+
+Kind regards
+    Andreas.
+
+-- 
+https://fam-tille.de
+
+From ginggs at debian.org  Tue Jul  2 21:32:43 2024
+From: ginggs at debian.org (Graham Inggs)
+Date: Tue, 2 Jul 2024 21:32:43 +0000
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <ZoRZtXXtkY3FDyvW@an3as.eu>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com> <ZoRZtXXtkY3FDyvW@an3as.eu>
+Message-ID: <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com>
+
+On Tue, 2 Jul 2024 at 19:49, Andreas Tille <andreas at an3as.eu> wrote:
+> > Is it possible to skip the pkg-r-autopkgtest for this package?
+>
+> We did not implemented any hooks to realise this yet.
+
+Wouldn't removing the following line from debian/control do it?
+
+Testsuite: autopkgtest-pkg-r
+
+From tille at debian.org  Wed Jul  3 05:18:33 2024
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 3 Jul 2024 07:18:33 +0200
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com> <ZoRZtXXtkY3FDyvW@an3as.eu> <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com>
+Message-ID: <ZoTfKfoeFC7R9fFJ@an3as.eu>
+
+Am Tue, Jul 02, 2024 at 09:32:43PM +0000 schrieb Graham Inggs:
+> > We did not implemented any hooks to realise this yet.
+> 
+> Wouldn't removing the following line from debian/control do it?
+> 
+> Testsuite: autopkgtest-pkg-r
+
+Well, sure.  But our tooling will add this for the next upstream version
+again and if the problem is not solved otherwise it will re-appear.  I
+will upload this change but I would prefer understanding the issue and
+provide a real fix.
+
+Kind regards
+    Andreas.
+
+-- 
+https://fam-tille.de
+
+From edd at debian.org  Wed Jul  3 06:09:49 2024
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 3 Jul 2024 01:09:49 -0500
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <ZoTfKfoeFC7R9fFJ@an3as.eu>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com> <ZoRZtXXtkY3FDyvW@an3as.eu> <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com> <ZoTfKfoeFC7R9fFJ@an3as.eu>
+Message-ID: <26244.60205.120279.478693@rob.eddelbuettel.com>
+
+On 3 July 2024 at 07:18, Andreas Tille wrote:
+| Am Tue, Jul 02, 2024 at 09:32:43PM +0000 schrieb Graham Inggs:
+| > > We did not implemented any hooks to realise this yet.
+| > 
+| > Wouldn't removing the following line from debian/control do it?
+| > 
+| > Testsuite: autopkgtest-pkg-r
+| 
+| Well, sure.  But our tooling will add this for the next upstream version
+| again and if the problem is not solved otherwise it will re-appear.  I
+| will upload this change but I would prefer understanding the issue and
+| provide a real fix.
+
+I have to add my usual reminder here that this package of course tests
+flawlessly against all other CRAN package it uses if those are kept in sync
+too:
+
+https://cran.r-project.org/web/checks/check_results_spatstat.geom.html
+
+This is most likely once again a self-imposed problem. In aggregate, and at
+least in my eyes, this wastes too much time of too many people. (Ditto with
+autopkgtests on i386 and alike no supported upstream).
+
+Dirk
+
+ 
+| Kind regards
+|     Andreas.
+| 
+| -- 
+| https://fam-tille.de
+| 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Wed Jul  3 16:23:13 2024
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 3 Jul 2024 16:23:13 +0000
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <ZoTfKfoeFC7R9fFJ@an3as.eu>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com> <ZoRZtXXtkY3FDyvW@an3as.eu> <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com> <ZoTfKfoeFC7R9fFJ@an3as.eu>
+Message-ID: <CAM8zJQvSFQd9io_HesQ9CYqJ2FK3B+XEas2fTAqMBF6YOpQobw@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 3 Jul 2024 at 05:18, Andreas Tille <tille at debian.org> wrote:
+> Well, sure.  But our tooling will add this for the next upstream version
+> again and if the problem is not solved otherwise it will re-appear.  I
+> will upload this change but I would prefer understanding the issue and
+> provide a real fix.
+
+Looking at the riscv64 results for r-cran-spatstat.geom [1], which
+were passing because r-cran-spatstat.core was not available there, it
+seems that the autopkgtest-pkg-r test consists only of an attempt to
+load the library:
+
+# Try to load package
+echo "Test: Try to load the R library ${pkgname}"
+R --no-save -e "library('${pkgname}')"
+
+Being a superficial test, I think this causes far more problems than
+it is actually worth, and I suggest to disable it until a fix for
+#961138 is found.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-spatstat.geom/testing/riscv64/
+
+From tille at debian.org  Thu Jul  4 05:23:50 2024
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 04 Jul 2024 07:23:50 +0200
+Subject: Bug#1075736: RM: r-cran-zeligchoice -- ROM; Removed from CRAN (not maintained upstream)
+Message-ID: <172007063041.29200.5441848993564927649.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-zeligchoice at packages.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-zeligchoice
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hi,
+
+r-cran-zeligchoice was removed from testing due to a dependency from
+r-cran-maptools which will be asked for removal as well soon.  These
+packages are not maintained upstream at CRAN any more and we have no
+capacity to maintain these in Debian any more.
+
+Kind regards
+    Andreas.
+
+From tille at debian.org  Thu Jul  4 05:42:57 2024
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 04 Jul 2024 07:42:57 +0200
+Subject: Bug#1075738: RM: r-cran-zeligverse -- ROM; Removed from CRAN (not maintained upstream)
+Message-ID: <172007177773.30134.676177030825867969.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-zeligverse at packages.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-zeligverse
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hi,
+
+this package was removed from testing due to a dependency from
+r-cran-maptools which will be asked for removal as well soon.  These
+packages are not maintained upstream at CRAN any more and we have no
+capacity to maintain these in Debian any more.
+
+Kind regards
+    Andreas.
+
+From tille at debian.org  Thu Jul  4 05:45:29 2024
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 04 Jul 2024 07:45:29 +0200
+Subject: Bug#1075739: RM: r-cran-zeligei -- ROM; Removed from CRAN (not maintained upstream)
+Message-ID: <172007192928.30454.14835948332249397012.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-zeligei at packages.debian.org, debian-r at lists.debian.org
+Control: affects -1 + src:r-cran-zeligei
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hi,
+
+this package was removed from testing due to a dependency from
+r-cran-maptools which will be asked for removal as well soon.  These
+packages are not maintained upstream at CRAN any more and we have no
+capacity to maintain these in Debian any more.
+
+Kind regards
+    Andreas.
+
+From andreas at an3as.eu  Thu Jul  4 05:56:40 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 4 Jul 2024 07:56:40 +0200
+Subject: In how far are several packages affected by bug #1071355 of maptools
+Message-ID: <ZoY5mJ7l3Iqij8M0@an3as.eu>
+
+Hi,
+
+there was a series of testing removals due to bug #1071355 of
+r-cran-maptools.  Since maptools was removed from CRAN[1] we intend to
+remove this package.  However, before doing so I would like to
+understand why packages like r-cran-factominer, r-cran-ggpubr,
+r-cran-vim, r-cran-systemfit, r-cran-survminer and others where I can't
+see any connection to r-cran-maptools were removed from testing.
+
+Kind regards
+    Andreas.
+
+[1] https://cran.r-project.org/web/packages/maptools/index.html
+
+-- 
+https://fam-tille.de
+
+From tille at debian.org  Thu Jul  4 06:00:16 2024
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 04 Jul 2024 08:00:16 +0200
+Subject: Bug#1075740: RM: r-cran-rgeos -- ROM; Removed from CRAN (not maintained upstream)
+Message-ID: <172007281604.31271.9035114143032409782.reportbug@sputnik>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-rgeos at packages.debian.org, debian-r at lists.debian.org, 1071355 at bugs.debian.org
+Control: affects -1 + src:r-cran-rgeos
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hi,
+
+this package was removed from testing due to a dependency from
+r-cran-maptools which will be asked for removal as well soon.  These
+packages are not maintained upstream at CRAN any more and we have no
+capacity to maintain these in Debian any more.
+
+Kind regards
+    Andreas.
+
+From ginggs at debian.org  Thu Jul  4 07:15:44 2024
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 4 Jul 2024 07:15:44 +0000
+Subject: Re: In how far are several packages affected by bug #1071355 of maptools
+In-Reply-To: <ZoY5mJ7l3Iqij8M0@an3as.eu>
+References: <ZoY5mJ7l3Iqij8M0@an3as.eu>
+Message-ID: <CAM8zJQsz_y0gz2o=-KHo4pHaReAfMm1oJ1otGSkinWsbiiVhHQ@mail.gmail.com>
+
+Hi Andreas
+
+On Thu, 4 Jul 2024 at 05:56, Andreas Tille <andreas at an3as.eu> wrote:
+> However, before doing so I would like to
+> understand why packages like r-cran-factominer, r-cran-ggpubr,
+> r-cran-vim, r-cran-systemfit, r-cran-survminer and others where I can't
+> see any connection to r-cran-maptools were removed from testing.
+
+The tracker pages for those packages provide the clue:
+
+https://tracker.debian.org/pkg/r-cran-factominer
+Blocked by: car
+
+https://tracker.debian.org/pkg/r-cran-ggpubr
+Blocked by: r-cran-rstatix
+
+https://tracker.debian.org/pkg/r-cran-vim
+Blocked by: car
+
+https://tracker.debian.org/pkg/r-cran-systemfit
+Blocked by: car
+
+https://tracker.debian.org/pkg/r-cran-survminer
+Blocked by: r-cran-ggpubr
+
+Until recently, car had a dependency on r-cran-maptools, which was
+dropped in the 3.1-2-3 upload.
+
+Regards
+Graham
+
+From joostvb-debian at mdcc.cx  Thu Jul  4 12:47:09 2024
+From: joostvb-debian at mdcc.cx (=?utf-8?q?Joost_van_Baal-Ili=C4=87?=)
+Date: Thu, 4 Jul 2024 14:47:09 +0200
+Subject: Re: Bug#1071355: In how far are several packages affected by bug #1071355 of maptools
+In-Reply-To: <ZoY5mJ7l3Iqij8M0@an3as.eu>
+References: <a0e1fc29-ffe6-4b71-80f3-24dd4acf4eb6@debian.org> <ZoY5mJ7l3Iqij8M0@an3as.eu>
+Message-ID: <20240704124709.GB6246@beskar.mdcc.cx>
+
+Hi Andreas,
+
+On Thu, Jul 04, 2024 at 07:56:40AM +0200, Andreas Tille wrote:
+> 
+> there was a series of testing removals due to bug #1071355 of
+> r-cran-maptools.  Since maptools was removed from CRAN[1] we intend to
+> remove this package.  However, before doing so I would like to
+> understand why packages like r-cran-factominer, r-cran-ggpubr,
+> r-cran-vim, r-cran-systemfit, r-cran-survminer and others where I can't
+> see any connection to r-cran-maptools were removed from testing.
+
+I _think_ it's something like this:
+
+r-cran-ggpubr depends r-cran-rstatix depends r-cran-car depends r-cran-maptools .
+Therefore a #1071355 in r-cran-maptools which is serious and tagged ftbfs
+causes r-cran-ggpubr to get removed.
+
+Bye,
+
+Joost
+
+PS: tnx "apt-rdepends r-cran-ggpubr"
+
+From ginggs at debian.org  Sat Jul  6 11:46:38 2024
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 6 Jul 2024 11:46:38 +0000
+Subject: Re: r-cran-spatstat.geom: autopkgtest regression in testing
+In-Reply-To: <CAM8zJQvSFQd9io_HesQ9CYqJ2FK3B+XEas2fTAqMBF6YOpQobw@mail.gmail.com>
+References: <CAM8zJQtNRNShS+xphnnf1n-vOZeg96iJj=9FzsiPPgMH88PgAA@mail.gmail.com> <ZoRZtXXtkY3FDyvW@an3as.eu> <CAM8zJQuOGd6OpuZcc9UH9nfT1Lp7nXstqkzEUNCmqQ_193ojbQ@mail.gmail.com> <ZoTfKfoeFC7R9fFJ@an3as.eu> <CAM8zJQvSFQd9io_HesQ9CYqJ2FK3B+XEas2fTAqMBF6YOpQobw@mail.gmail.com>
+Message-ID: <CAM8zJQt04zP=umg4V==OkMwBsYs2VuEUJZ4ZXojfCD9tmqzMrA@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 3 Jul 2024 at 16:23, Graham Inggs <ginggs at debian.org> wrote:
+> Being a superficial test, I think this causes far more problems than
+> it is actually worth, and I suggest to disable it until a fix for
+> #961138 is found.
+
+To be clear, I am suggesting to disable the 'autopkgtest-pkg-r' tests
+in the autodep8 and/or dh-r packages, rather than doing it in all the
+affected r-* packages.
+
+What do you think?
+
+Regards
+Graham
+
+From crusoe at debian.org  Tue Jul  9 15:26:08 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 17:26:08 +0200
+Subject: Bug#1076018: ITP: r-bioc-alabaster.schemas -- Schemas for the Alabaster Framework
+Message-ID: <b6639e1b-ba73-427e-bac5-af792fd26993@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.schemas -- Schemas for the Alabaster Framework
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.schemas
+Version : 1.4.0+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.schemas/
+* License : MIT
+Programming Lang: GNU R
+Description : Schemas for the Alabaster Framework
+Stores all schemas required by various alabaster.* packages.
+No computation should be performed by this package, as that is handled by alabaster.base.
+We use a separate package instead of storing the schemas in alabaster.base itself,
+to avoid conflating management of the schemas with code maintenence.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.schemas
+
+This package is a build-dep for r-bioc-alabaster.base & Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 15:41:31 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 17:41:31 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <Zj6y2PzYTo24KLu0@bubu.igloo>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo>
+Message-ID: <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org>
+
+Hey Charles,
+
+I agree, an automated solution would be better.
+
+However, in the mean time I would like to see the next version started. Would you object if I began to upload Bioc 3.19 packages to "experimental"?
+
+That would make it easier for me to package and test the new dependencies needed for this release as well.
+
+Cheers,
+
+--
+Michael R. Crusoe
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 16:45:40 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 18:45:40 +0200
+Subject: Bug#1076020: ITP: r-bioc-alabaster.base -- Save Bioconductor Objects To File
+Message-ID: <4d05b662-08ae-4aae-9f43-c071f2a10370@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.base -- Save Bioconductor Objects To File
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.base
+Version : 1.4.2
+Upstream Author : Copyright: FIXME-2024 Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.base/
+* License : MIT
+Programming Lang: GNU R
+Description : Save Bioconductor Objects To File
+Save Bioconductor data structures into file artifacts, and load them back into memory.
+This is a more robust and portable alternative to serialization of such objects into RDS files.
+Each artifact is associated with metadata for further interpretation;
+downstream applications can enrich this metadata with context-specific properties.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base
+
+This package is needed for Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 17:27:06 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 19:27:06 +0200
+Subject: Bug#1076024: ITP: r-bioc-ucsc.utils -- Low-level utilities to retrieve data from the UCSC Genome
+Message-ID: <1a8ee491-29e3-463c-959d-4417a85295cd@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-ucsc.utils -- Low-level utilities to retrieve data from the UCSC Genome
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-ucsc.utils
+Version : 1.0.0+ds
+Upstream Author : Hervé Pagès
+* URL : https://bioconductor.org/packages/UCSC.utils
+* License : Artistic-2.0
+Programming Lang: GNU R
+Description : Low-level utilities to retrieve data from the UCSC Genome
+Browser
+A set of low-level utilities to retrieve data from the UCSC
+Genome Browser. Most functions in the package access the data via
+the UCSC REST API but some of them query the UCSC MySQL server
+directly. Note that the primary purpose of the package is to support
+higher-level functionalities implemented in downstream packages
+like GenomeInfoDb or txdbmaker.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-ucsc.utils
+
+This package is a build-dep for r-bioc-genomeinfodb & Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 17:39:56 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 19:39:56 +0200
+Subject: r-cran-rmariadb on salsa from 3 years ago, but no ITP/RFP?
+Message-ID: <7da96e5a-a5a9-4e22-85fe-6034a3bf9b23@debian.org>
+
+Dear Shayan Doust,
+
+I discovered your draft package https://salsa.debian.org/r-pkg-team/r-cran-rmariadb today while attempting to upload my own.
+
+Is there a particular issue that stopped you from uploading this package to the Debian itself?
+
+For comparison, my 2024 efforts are at https://salsa.debian.org/crusoe/r-cran-rmariadb
+
+Shall I try to combine the two efforts? Do you want to be an uploader?
+
+Please let me know; thanks!
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 18:11:26 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 20:11:26 +0200
+Subject: Bug#1076033: ITP: r-bioc-gypsum -- Interface to the gypsum REST API
+Message-ID: <b71a2cb4-4d7f-4bc7-b1f8-ba1017608952@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-gypsum -- Interface to the gypsum REST API
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-gypsum
+Version : 1.0.1+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/gypsum/
+* License : MIT
+Programming Lang: GNU R
+Description : Interface to the gypsum REST API
+Client for the gypsum REST API (https://gypsum.artifactdb.com), a cloud-based file store in the ArtifactDB ecosystem.
+This package provides functions for uploads, downloads, and various adminstrative and management tasks.
+Check out the documentation at https://github.com/ArtifactDB/gypsum-worker for more details.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-gypsum
+
+This package is need by Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 19:16:53 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Tue, 9 Jul 2024 21:16:53 +0200
+Subject: Bug#1076039: ITP: r-bioc-pwalign -- Perform pairwise sequence alignments
+Message-ID: <78e9098d-f107-4e22-8a02-bcbddfcf13ab@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-pwalign -- Perform pairwise sequence alignments
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-pwalign
+Version : 1.0.0
+Upstream Author : Patrick Aboyoun,
+* URL : https://bioconductor.org/packages/pwalign
+* License : Artistic-2.0
+Programming Lang: GNU R
+Description : Perform pairwise sequence alignments
+The two main functions in the package are pairwiseAlignment() and
+stringDist(). The former solves (Needleman-Wunsch) global alignment,
+(Smith-Waterman) local alignment, and (ends-free) overlap alignment
+problems. The latter computes the Levenshtein edit distance or pairwise
+alignment score matrix for a set of strings.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+
+https://salsa.debian.org/r-pkg-team/r-bioc-pwalign
+
+This package is a build-dep for r-bioc-shortread & Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Tue Jul  9 23:14:30 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 01:14:30 +0200
+Subject: Bug#1076055: ITP: r-cran-httptest2 -- Test Helpers for 'httr2'
+Message-ID: <b12f5694-7455-4f83-ad36-97adafd4de47@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-cran-httptest2 -- Test Helpers for 'httr2'
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-cran-httptest2
+Version : 1.1.0+ds
+Upstream Author : Neal Richardson,
+* URL : https://cran.r-project.org/package=httptest2
+* License : MIT
+Programming Lang: GNU R
+Description : Test Helpers for 'httr2'
+Testing and documenting code that communicates with remote servers
+can be painful. This package helps with writing tests for packages that
+use 'httr2'. It enables testing all of the logic
+on the R sides of the API without requiring access to the
+remote service, and it also allows recording real API responses to use as
+test fixtures. The ability to save responses and load them offline also
+enables writing vignettes and other dynamic documents that can be
+distributed without access to a live server.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+
+https://salsa.debian.org/r-pkg-team/r-cran-httptest2
+
+This package is a test-dep for r-bioc-biomart & Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Wed Jul 10 00:09:33 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 10 Jul 2024 09:09:33 +0900
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org>
+Message-ID: <Zo3RPQ3ORcZvIMpL@kumo.plessy.net>
+
+Le Tue, Jul 09, 2024 at 05:41:31PM +0200, Michael R. Crusoe a écrit :
+> 
+> However, in the mean time I would like to see the next version started. Would you object if I began to upload Bioc 3.19 packages to "experimental"?
+
+Hi Michael,
+
+on my side, I am leaning towards skipping the release entirely.  Next
+Bioc release is in 4 months already.
+
+In any case, I wonder if we really need to go to experimental now that
+the bulk of (or all of?) the r-bioc-* packages have been removed from
+Testing.  Thanks to this, packages with minimal dependencies outside the
+Bioconductor universe can now migrate independantly, isn't it?  The only
+thing that remians to be careful of is the interaction with other
+transitions.
+
+If we still go for a massive upload to experimental, then I think that
+it would be neat to add an --experimental option to routine-update.
+
+Also, shall we exclude i386 systematically from now on?  I find that the
+slow demise of this architecture is very taxing, as it causes us to
+remove packages one after the other with no planification nor
+automation.  As we do not have good tools to manage which architectures
+we build and release on (everything has to go to uploads or bug reports
+to over-busy teams), I think that we should just pull the plug entirely.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From crusoe at debian.org  Wed Jul 10 07:59:35 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 09:59:35 +0200
+Subject: Bug#1076066: ITP: r-bioc-txdbmaker -- Tools for making TxDb objects from genomic annotations
+Message-ID: <219ca055-4202-4b69-86ab-77217453c724@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-txdbmaker -- Tools for making TxDb objects from genomic annotations
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-txdbmaker
+Version : 1.0.1+ds
+Upstream Author : H. Pagès,
+* URL : https://bioconductor.org/packages/txdbmaker
+* License : Artistic-2.0
+Programming Lang: GNU R
+Description : Tools for making TxDb objects from genomic annotations
+A set of tools for making TxDb objects from genomic annotations
+from various sources (e.g. UCSC, Ensembl, and GFF files). These tools
+allow the user to download the genomic locations of transcripts,
+exons, and CDS, for a given assembly, and to import them in a TxDb
+object. TxDb objects are implemented in the GenomicFeatures package,
+together with flexible methods for extracting the desired features in
+convenient formats.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-txdbmaker
+
+This package is a build-dep for r-bioc-tximeta & Bioconductor 3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 10:14:05 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 12:14:05 +0200
+Subject: Help requested: r-bioc-rhdf5lib patches need updating for bioc-3.19 upgrade
+Message-ID: <f9fd990b-e57a-4e03-84ec-9f1cb9ce1548@debian.org>
+
+[whoops, forgot to include the debian-r list]
+
+Hello teams,
+
+I upgraded r-bioc-rhdf5lib from 1.24.2 to 1.26.0 in the "debian/experimental" branch on salsa.
+
+https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/tree/debian/experimental?ref_type=heads
+
+However when I try to build other packages using the resulting "r-bioc-rhd5lib" binary package, I get the following build errors:
+
+# From r-bioc-alabaster.base https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base
+g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+/usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a: No such file or directory
+/usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a: No such file or directory
+collect2: error: ld returned 1 exit status
+
+Can I get some help with this?
+
+Please push any fixes directly to the "debian/experimental" branch on Salsa and let me know, thank you!
+
+For building r-bioc-alabaster.base, feel free to use the bioc-3.19 test packages I've been making: https://people.debian.org/~crusoe/bioc/
+
+--
+Michael R. Crusoe
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 10:19:37 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 12:19:37 +0200
+Subject: Bug#1076073: ITP: r-bioc-alabaster.sce -- Load and Save SingleCellExperiment from File
+Message-ID: <b1d0fc98-d862-4a77-98c3-b9c5967d8575@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.sce -- Load and Save SingleCellExperiment from File
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.sce
+Version : 1.4.0+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.sce/
+* License : MIT
+Programming Lang: GNU R
+Description : Load and Save SingleCellExperiment from File
+Save SingleCellExperiment into file artifacts, and load them back into memory.
+This is a more portable alternative to serialization of such objects into RDS files.
+Each artifact is associated with metadata for further interpretation;
+downstream applications can enrich this metadata with context-specific properties.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.sce
+
+Build-dep for r-bioc-scrnaseq 2.18.0 & bioc-3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 10:20:47 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 12:20:47 +0200
+Subject: Bug#1076074: ITP: r-bioc-alabaster.se -- Load and Save SummarizedExperiments from File
+Message-ID: <1b574bf8-3e1d-4b6d-b026-93bbff07a942@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.se -- Load and Save SummarizedExperiments from File
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.se
+Version : 1.4.1+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.se
+* License : MIT
+Programming Lang: GNU R
+Description : Load and Save SummarizedExperiments from File
+Save SummarizedExperiments into file artifacts, and load them back into memory.
+This is a more portable alternative to serialization of such objects into RDS files.
+Each artifact is associated with metadata for further interpretation;
+downstream applications can enrich this metadata with context-specific properties.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.se
+
+This package is a build-dep for r-bioc-alabaster.sce 1.4.0 & bioc-3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 10:22:46 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 12:22:46 +0200
+Subject: Bug#1076075: ITP: r-bioc-alabaster.matrix -- Load and Save Artifacts from File
+Message-ID: <b5b73939-a7a6-4f82-bbd4-7e26b1339216@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.matrix -- Load and Save Artifacts from File
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.matrix
+Version : 1.4.2+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.matrix
+* License : MIT
+Programming Lang: GNU R
+Description : Load and Save Artifacts from File
+Save matrices, arrays and similar objects into file artifacts, and load them back into memory.
+This is a more portable alternative to serialization of such objects into RDS files.
+Each artifact is associated with metadata for further interpretation;
+downstream applications can enrich this metadata with context-specific properties.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.matrix
+
+This package is a build-dep for r-bioc-scrnaseq 2.18.0 & bioc-3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 10:38:16 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 12:38:16 +0200
+Subject: Bug#1076077: ITP: r-bioc-alabaster.ranges -- Load and Save Ranges-related Artifacts from File
+Message-ID: <1c061a3f-6fff-4c4d-b769-be1c2977a9e8@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-alabaster.ranges -- Load and Save Ranges-related Artifacts from File
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-alabaster.ranges
+Version : 1.4.2+ds
+Upstream Author : Aaron Lun
+* URL : https://bioconductor.org/packages/alabaster.ranges
+* License : MIT
+Programming Lang: GNU R
+Description : Load and Save Ranges-related Artifacts from File
+Save GenomicRanges, IRanges and related data structures into file artifacts, and load them back into memory.
+This is a more portable alternative to serialization of such objects into RDS files.
+Each artifact is associated with metadata for further interpretation;
+downstream applications can enrich this metadata with context-specific properties.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.ranges
+
+This package is build-dep for r-bioc-alabaster.se & bioc-3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From nilesh at debian.org  Wed Jul 10 13:58:47 2024
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 10 Jul 2024 19:28:47 +0530
+Subject: Re: Help requested: r-bioc-rhdf5lib patches need updating for bioc-3.19 upgrade
+In-Reply-To: <f9fd990b-e57a-4e03-84ec-9f1cb9ce1548@debian.org>
+References: <f9fd990b-e57a-4e03-84ec-9f1cb9ce1548@debian.org>
+Message-ID: <vizejim7h6maclyrahz7u6lsziax7uuirqthmu5nxsl4cm57cv@twt2n4bjppy6>
+
+On Wed, Jul 10, 2024 at 12:14:05PM +0200, Michael R. Crusoe wrote:
+> I upgraded r-bioc-rhdf5lib from 1.24.2 to 1.26.0 in the "debian/experimental" branch on salsa.
+> 
+> https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/tree/debian/experimental?ref_type=heads
+> 
+> However when I try to build other packages using the resulting "r-bioc-rhd5lib" binary package, I get the following build errors:
+> 
+> # From r-bioc-alabaster.base https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base
+> g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+> /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a: No such file or directory
+> /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a: No such file or directory
+> collect2: error: ld returned 1 exit status
+> 
+> Can I get some help with this?
+> 
+> Please push any fixes directly to the "debian/experimental" branch on Salsa and let me know, thank you!
+
+I don't have the time to write a patch/hack around this right now, but I
+understood what the issue is and it should be relatively easy to fix.
+
+alabaster.base used Rhdf5lib::pkgconfig("PKG_CXX_LIBS") to get the linker flags
+for Rhdf5 lib as can be see here[1]
+
+This has been set to an incorrect value as per the debian installed package[2].
+It points to a path that does not exist since we are using hdf5 packaged in
+debian instead of building and using embedded copies.
+
+Patching the code to point to the correct path should fix the issue for you.
+
+> For building r-bioc-alabaster.base, feel free to use the bioc-3.19 test packages I've been making: https://people.debian.org/~crusoe/bioc/
+> 
+> -- 
+> Michael R. Crusoe
+
+[1]: https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base/-/blob/master/src/Makevars?ref_type=heads#L1
+[2]: https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/blob/debian/experimental/R/zzz.R?ref_type=heads#L73
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From crusoe at debian.org  Wed Jul 10 15:40:51 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 17:40:51 +0200
+Subject: Re: New dependencies for BioConductor 3.19
+In-Reply-To: <Zjo2CvOmMveowfoo@an3as.eu>
+References: <Zjo2CvOmMveowfoo@an3as.eu>
+Message-ID: <d2caa67e-81d5-4b96-a3a2-3cb160b5180d@debian.org>
+
+Dear Andreas,
+
+Thank you for the list! I have ITP'd all of the listed packages, and uploaded several of them to the NEW queue.
+
+Previously I had already uploaded r-cran-diagrammer, which has already migrated to testing.
+
+Cheers,
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 15:40:30 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 17:40:30 +0200
+Subject: Bug#1076092: ITP: r-bioc-spatialexperiment -- S4 Class for Spatially Resolved -omics Data
+Message-ID: <19ede104-07ae-466e-b23e-081fd57e8234@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-spatialexperiment -- S4 Class for Spatially Resolved -omics Data
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-spatialexperiment
+Version : 1.14.0+ds
+Upstream Author : Dario Righelli,
+* URL : https://bioconductor.org/packages/SpatialExperiment
+* License : GPL-3
+Programming Lang: GNU R
+Description : S4 Class for Spatially Resolved -omics Data
+Defines an S4 class for storing data from spatial -omics experiments.
+The class extends SingleCellExperiment to
+support storage and retrieval of additional information from spot-based and
+molecule-based platforms, including spatial coordinates, images, and
+image metadata. A specialized constructor function is included for data
+from the 10x Genomics Visium platform.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-spatialexperiment
+
+This package is needed for the upgrade to bioc-3.19
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 10 16:03:26 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 10 Jul 2024 18:03:26 +0200
+Subject: Re: Help requested: r-bioc-rhdf5lib patches need updating for bioc-3.19 upgrade
+In-Reply-To: <vizejim7h6maclyrahz7u6lsziax7uuirqthmu5nxsl4cm57cv@twt2n4bjppy6>
+References: <f9fd990b-e57a-4e03-84ec-9f1cb9ce1548@debian.org> <vizejim7h6maclyrahz7u6lsziax7uuirqthmu5nxsl4cm57cv@twt2n4bjppy6>
+Message-ID: <ce1aad14-9eef-4553-834d-96e727761620@debian.org>
+
+On 10/07/2024 15.58, Nilesh Patra wrote:
+> On Wed, Jul 10, 2024 at 12:14:05PM +0200, Michael R. Crusoe wrote:
+> > I upgraded r-bioc-rhdf5lib from 1.24.2 to 1.26.0 in the "debian/experimental" branch on salsa.
+> >
+> > https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/tree/debian/experimental?ref_type=heads
+> >
+> > However when I try to build other packages using the resulting "r-bioc-rhd5lib" binary package, I get the following build errors:
+> >
+> > # From r-bioc-alabaster.base https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base
+> > g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+> > /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a: No such file or directory
+> > /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a: No such file or directory
+> > collect2: error: ld returned 1 exit status
+> >
+> > Can I get some help with this?
+> >
+> > Please push any fixes directly to the "debian/experimental" branch on Salsa and let me know, thank you!
+>
+>
+> I don't have the time to write a patch/hack around this right now, but I
+> understood what the issue is and it should be relatively easy to fix.
+>
+> alabaster.base used Rhdf5lib::pkgconfig("PKG_CXX_LIBS") to get the linker flags
+> for Rhdf5 lib as can be see here[1]
+>
+> This has been set to an incorrect value as per the debian installed package[2].
+> It points to a path that does not exist since we are using hdf5 packaged in
+> debian instead of building and using embedded copies.
+>
+> Patching the code to point to the correct path should fix the issue for you.
+
+Thank you, Nilesh, that got me further!
+
+With https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/commit/13333ce8837d34d244f60b4a26469ba378babcb0
+I get
+
+g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a(H5Exception.o): warning: relocation against `_ZTVN2H518DataTypeIExceptionE' in read-only section `.text'
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a(H5Exception.o): relocation R_X86_64_PC32 against symbol `_ZTVN2H59ExceptionE' can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: final link failed: bad value
+collect2: error: ld returned 1 exit status
+make[1]: *** [/usr/share/R/share/make/shlib.mk:10: alabaster.base.so] Error 1
+
+> > For building r-bioc-alabaster.base, feel free to use the bioc-3.19 test packages I've been making: https://people.debian.org/~crusoe/bioc/
+> >
+> > --
+> > Michael R. Crusoe
+>
+>
+> [1]: https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base/-/blob/master/src/Makevars?ref_type=heads#L1
+> [2]: https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/blob/debian/experimental/R/zzz.R?ref_type=heads#L73
+>
+> Best,
+> Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From nilesh at debian.org  Wed Jul 10 18:16:05 2024
+From: nilesh at debian.org (Nilesh Patra)
+Date: Wed, 10 Jul 2024 23:46:05 +0530
+Subject: Re: Help requested: r-bioc-rhdf5lib patches need updating for bioc-3.19 upgrade
+In-Reply-To: <ce1aad14-9eef-4553-834d-96e727761620@debian.org>
+References: <f9fd990b-e57a-4e03-84ec-9f1cb9ce1548@debian.org> <vizejim7h6maclyrahz7u6lsziax7uuirqthmu5nxsl4cm57cv@twt2n4bjppy6> <ce1aad14-9eef-4553-834d-96e727761620@debian.org>
+Message-ID: <6a54xdvwfv7jjyscj5vv3wo7wejr5d7ckr2q7jjc72vx4zi7tc@tax2hb3j2gfo>
+
+On Wed, Jul 10, 2024 at 06:03:26PM +0200, Michael R. Crusoe wrote:
+> 
+> 
+> On 10/07/2024 15.58, Nilesh Patra wrote:
+> > On Wed, Jul 10, 2024 at 12:14:05PM +0200, Michael R. Crusoe wrote:
+> > > I upgraded r-bioc-rhdf5lib from 1.24.2 to 1.26.0 in the "debian/experimental" branch on salsa.
+> > > 
+> > > https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/tree/debian/experimental?ref_type=heads
+> > > 
+> > > However when I try to build other packages using the resulting "r-bioc-rhd5lib" binary package, I get the following build errors:
+> > > 
+> > > # From r-bioc-alabaster.base https://salsa.debian.org/r-pkg-team/r-bioc-alabaster.base
+> > > g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+> > > /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5_cpp.a: No such file or directory
+> > > /usr/bin/ld: cannot find /usr/lib/R/site-library/Rhdf5lib/libs/libhdf5.a: No such file or directory
+> > > collect2: error: ld returned 1 exit status
+> > > 
+> > > Can I get some help with this?
+> > > 
+> > > Please push any fixes directly to the "debian/experimental" branch on Salsa and let me know, thank you!
+> > 
+> > I don't have the time to write a patch/hack around this right now, but I
+> > understood what the issue is and it should be relatively easy to fix.
+> > 
+> > alabaster.base used Rhdf5lib::pkgconfig("PKG_CXX_LIBS") to get the linker flags
+> > for Rhdf5 lib as can be see here[1]
+> > 
+> > This has been set to an incorrect value as per the debian installed package[2].
+> > It points to a path that does not exist since we are using hdf5 packaged in
+> > debian instead of building and using embedded copies.
+> > 
+> > Patching the code to point to the correct path should fix the issue for you.
+> 
+> Thank you, Nilesh, that got me further!
+> 
+> With https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5lib/-/commit/13333ce8837d34d244f60b4a26469ba378babcb0
+> I get
+> 
+> g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-z,relro -o alabaster.base.so RcppExports.o check_csv.o check_list.o choose_numeric_missing_placeholder.o is_rfc3339.o load_csv.o load_list.o validate.o /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.a -lcrypto -lcurl -lpthread -lsz -lz -ldl -lm -lz -L/usr/lib/R/lib -lR
+> /usr/bin/ld: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a(H5Exception.o): warning: relocation against `_ZTVN2H518DataTypeIExceptionE' in read-only section `.text'
+> /usr/bin/ld: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.a(H5Exception.o): relocation R_X86_64_PC32 against symbol `_ZTVN2H59ExceptionE' can not be used when making a shared object; recompile with -fPIC
+> /usr/bin/ld: final link failed: bad value
+> collect2: error: ld returned 1 exit status
+> make[1]: *** [/usr/share/R/share/make/shlib.mk:10: alabaster.base.so] Error 1
+
+Probably some hdf5 hackery at play here. On re-looking at it, I wonder if itmakes sense to pass in
+the paths to libhdf5.a -- maybe not from debian pov? We could likely just rely on -lhdf5.
+
+This patch gets alabaster.base building for me:
+
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -1,3 +1,3 @@
+-RHDF5_LIBS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")') 
+-PKG_CPPFLAGS=-I../inst/include
+-PKG_LIBS=$(RHDF5_LIBS) -lz
++RHDF5_LIBS=/usr/lib/R/site-library/Rhdf5lib/libs/Rhdf5lib.so -L/usr/lib/$(shell dpkg-architecture -qDEB_HOST_MULTIARCH)/hdf5/serial -lhdf5 -lhdf5_cpp -lcrypto -lcurl -lpthread -lsz
++PKG_CPPFLAGS=-I../inst/include -I/usr/include/hdf5/serial/
++PKG_LIBS=-fPIC $(RHDF5_LIBS) -lz
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From crusoe at debian.org  Thu Jul 11 10:22:32 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Thu, 11 Jul 2024 12:22:32 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <Zo3RPQ3ORcZvIMpL@kumo.plessy.net>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net>
+Message-ID: <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org>
+
+If there are no objections, I'd like to upload the new r-bioc-biocgenerics to experimental and continue on with the rest of bioconductor 3.19
+
+More comments below, thanks!
+
+On 10/07/2024 02.09, Charles Plessy wrote:
+> Le Tue, Jul 09, 2024 at 05:41:31PM +0200, Michael R. Crusoe a écrit :
+> > However, in the mean time I would like to see the next version started. Would you object if I began to upload Bioc 3.19 packages to "experimental"?
+>
+>
+> Hi Michael,
+>
+> on my side, I am leaning towards skipping the release entirely.  Next
+> Bioc release is in 4 months already.
+
+I understand that. Did we have problems skipping releases before?
+
+As it was, I had to do a local build of over 90 bioc packages to confirm that the newly needed packages for 3.19 worked.
+So it would be about another 80 packages to update, which I don't mind doing now that I've gotten practive.
+
+> In any case, I wonder if we really need to go to experimental now that
+> the bulk of (or all of?) the r-bioc-* packages have been removed from
+> Testing.  Thanks to this, packages with minimal dependencies outside the
+> Bioconductor universe can now migrate independantly, isn't it?  The only
+> thing that remians to be careful of is the interaction with other
+> transitions.
+>
+> If we still go for a massive upload to experimental, then I think that
+> it would be neat to add an --experimental option to routine-update.
+
+That exists, yep!
+I've been using
+
+```
+git checkout -b debian/experimental
+routine-update --no-build --experimental --branch debian/experimental -t
+```
+
+> Also, shall we exclude i386 systematically from now on?  I find that the
+> slow demise of this architecture is very taxing, as it causes us to
+> remove packages one after the other with no planification nor
+> automation.  As we do not have good tools to manage which architectures
+> we build and release on (everything has to go to uploads or bug reports
+> to over-busy teams), I think that we should just pull the plug entirely.
+
+If they are 32-bit issues, then I'm fine with excluding them using `architecture-is-64-bits` and allowing the relevant autopkgtests to skip archs where the dependencies aren't available.
+
+> Have a nice day,
+>
+> Charles
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Thu Jul 11 13:07:32 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 11 Jul 2024 22:07:32 +0900
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org>
+Message-ID: <Zo_ZFBo5RXN3_2kB@bubu.igloo>
+
+Hi Michael,
+
+Le Thu, Jul 11, 2024 at 12:22:32PM +0200, Michael R. Crusoe a écrit :
+> If there are no objections, I'd like to upload the new r-bioc-biocgenerics to experimental and continue on with the rest of bioconductor 3.19
+
+I do not want to stop you doing it, but I have a question.
+
+> ```
+> git checkout -b debian/experimental
+> routine-update --no-build --experimental --branch debian/experimental -t
+
+Great news that we have it and sorry that I overlooked it.
+
+Is there also a trick for automatically merging the experimental branch
+into master once we start uploading to unstable ?
+
+Apart from that,
+
+> I understand that. Did we have problems skipping releases before?
+
+I think that we never skipped releases.  The main problem is that the
+old release causes incompatibilities in Testing.  Last time, I proposed
+to skip a release and remove the packages from Testing in the meantime,
+but the Release team refused to do so.  This is one of the reasons I
+took time this time: I wanted to see if something would happen if we
+would wait for autoremoval.  The answer is no, nothing happens and the
+release team does not complain.  If it makes the migration simpler, next
+time I want to ask again the release team again to kindly help us by
+removing the old BioC packages from testing.
+
+> As it was, I had to do a local build of over 90 bioc packages to confirm that the newly needed packages for 3.19 worked.
+> So it would be about another 80 packages to update, which I don't mind doing now that I've gotten practive.
+
+That is really great.  Can you share the part of your gbp configuration
+that allows sbuild to pick locally built packages to resolve
+dependencies?  Do you run autopktest through sbuild's hooks?
+
+> If they are 32-bit issues, then I'm fine with excluding them using
+> `architecture-is-64-bits` and allowing the relevant autopkgtests to
+> skip archs where the dependencies aren't available.
+
+I think that 32-bit issues are bound to pop up with time, in an
+unpredictable frequency.  I fear that adding architecture-is-64-bits
+information package per package on a case-by-case basis is going to be
+quite some work.  Opening bugs, closing bugs, adding patches, removing
+patches.  And I am not aware of Bioconductor does not support non-64 bit
+arches. I will not stand on the way of people working on providing
+32-bit surpport for Bioconductor in Debian.  But if there is no appetite
+or excitement for that task, why don't we take the opportunity of this
+Bioc release for adding architecture-is-64-bits everywhere?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From crusoe at debian.org  Thu Jul 11 14:21:33 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Thu, 11 Jul 2024 16:21:33 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <Zo_ZFBo5RXN3_2kB@bubu.igloo>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo>
+Message-ID: <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org>
+
+On 11/07/2024 15.07, Charles Plessy wrote:
+> Hi Michael,
+>
+> Le Thu, Jul 11, 2024 at 12:22:32PM +0200, Michael R. Crusoe a écrit :
+> > If there are no objections, I'd like to upload the new r-bioc-biocgenerics to experimental and continue on with the rest of bioconductor 3.19
+>
+>
+> I do not want to stop you doing it, but I have a question.
+
+Thanks. Unless I hear otherwise, I'll start uploading tomorrow. More below
+
+> > ```
+> > git checkout -b debian/experimental
+> > routine-update --no-build --experimental --branch debian/experimental -t
+>
+>
+> Great news that we have it and sorry that I overlooked it.
+>
+> Is there also a trick for automatically merging the experimental branch
+> into master once we start uploading to unstable ?
+
+I guess I would do
+
+git checkout master
+git pull
+git merge debian/experimental
+dch --newversion $(dpkg-parsechangelog -SVersion | sed 's/~.*//') 'Upload to unstable' && dch --release ""
+debcommit -a
+git clean -fdx
+gbp tag
+gbp buildpackage -S -d
+# test the package
+
+# and then
+debrelease  -S --dput  &&  gbp push
+
+> Apart from that,
+>
+> > I understand that. Did we have problems skipping releases before?
+>
+>
+> I think that we never skipped releases.  The main problem is that the
+> old release causes incompatibilities in Testing.  Last time, I proposed
+> to skip a release and remove the packages from Testing in the meantime,
+> but the Release team refused to do so.  This is one of the reasons I
+> took time this time: I wanted to see if something would happen if we
+> would wait for autoremoval.  The answer is no, nothing happens and the
+> release team does not complain.  If it makes the migration simpler, next
+> time I want to ask again the release team again to kindly help us by
+> removing the old BioC packages from testing.
+
+Thanks for the history!
+
+> > As it was, I had to do a local build of over 90 bioc packages to confirm that the newly needed packages for 3.19 worked.
+> > So it would be about another 80 packages to update, which I don't mind doing now that I've gotten practive.
+>
+>
+> That is really great.  Can you share the part of your gbp configuration
+> that allows sbuild to pick locally built packages to resolve
+> dependencies?  Do you run autopktest through sbuild's hooks?
+
+I only use `gbp buildpackage` to make the source package. Normally I use autopkgtest, but for this project I use pbuilder (in the form of cowbuilder-dist) plus this trick https://wiki.debian.org/PbuilderTricks#How_to_include_local_packages_in_the_build
+
+To make that trick work, I apply a small patch to https://git.launchpad.net/ubuntu-dev-tools/tree/pbuilder-dist#n407
+
+*** /usr/bin/pbuilder-dist	2023-09-15 10:20:05.534821567 +0200
+--- /home/michael/debian/pbuilder-dist.orig	2024-07-11 16:05:17.401024393 +0200
+***************
+*** 400,406 ****
+              "DISTRIBUTION=" + self.target_distro,
+              "ARCH=" + self.build_architecture,
+              "DIST=" + self.target_distro,
+-             "DEPS=" + os.environ.get("DEPS", ""),
+              "ADT=" + os.environ.get("ADT", ""),
+              "DEB_BUILD_OPTIONS=" + os.environ.get("DEB_BUILD_OPTIONS", ""),
+              self.builder,
+--- 400,405 ----
+
+To run the autopkgtests during package building, I've long had https://salsa.debian.org/pbuilder-team/pbuilder/-/blob/master/examples/B20autopkgtest?ref_type=heads installed in my personal pbuilder hooks directory
+
+> > If they are 32-bit issues, then I'm fine with excluding them using
+> > `architecture-is-64-bits` and allowing the relevant autopkgtests to
+> > skip archs where the dependencies aren't available.
+>
+>
+> I think that 32-bit issues are bound to pop up with time, in an
+> unpredictable frequency.  I fear that adding architecture-is-64-bits
+> information package per package on a case-by-case basis is going to be
+> quite some work.  Opening bugs, closing bugs, adding patches, removing
+> patches.  And I am not aware of Bioconductor does not support non-64 bit
+> arches. I will not stand on the way of people working on providing
+> 32-bit surpport for Bioconductor in Debian.  But if there is no appetite
+> or excitement for that task, why don't we take the opportunity of this
+> Bioc release for adding architecture-is-64-bits everywhere?
+
+Looks like they dropped support for 32-bit MS Windows starting with 3.16, so adding architecture-is-64-bits as a build-dep for all binary-producing source packages is fine by me.
+
+https://bioconductor.org/news/bioc_3_16_release/
+
+> Have a nice day,
+>
+> Charles
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Thu Jul 11 17:59:34 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 11 Jul 2024 19:59:34 +0200
+Subject: Re: New dependencies for BioConductor 3.19
+In-Reply-To: <d2caa67e-81d5-4b96-a3a2-3cb160b5180d@debian.org>
+References: <Zjo2CvOmMveowfoo@an3as.eu> <d2caa67e-81d5-4b96-a3a2-3cb160b5180d@debian.org>
+Message-ID: <ZpAdhsLmLS5_LtNv@an3as.eu>
+
+Am Wed, Jul 10, 2024 at 05:40:51PM +0200 schrieb Michael R. Crusoe:
+> Thank you for the list! I have ITP'd all of the listed packages, and uploaded several of them to the NEW queue.
+> 
+> Previously I had already uploaded r-cran-diagrammer, which has already migrated to testing.
+
+Well done!  Thanks a lot for keeping R-pkg Team alive
+
+      Andreas.
+
+-- 
+https://fam-tille.de
+
+From andreas at an3as.eu  Thu Jul 11 18:07:29 2024
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 11 Jul 2024 20:07:29 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org>
+Message-ID: <ZpAfYdS1BRkwgyjP@an3as.eu>
+
+Hi,
+
+Am Thu, Jul 11, 2024 at 12:22:32PM +0200 schrieb Michael R. Crusoe:
+> If there are no objections, I'd like to upload the new r-bioc-biocgenerics to experimental and continue on with the rest of bioconductor 3.19
+
+I have no obections at all since I'm not doing the work.  Uploading to
+experimental means you need to upload the same package twice which can
+be avoided when uploading to unstable which should be safe currently as
+Charles pointed out.  So if you personally see advantages for your
+work and want to go through all the hassles - perfectly fine for me.
+ 
+> If they are 32-bit issues, then I'm fine with excluding them using `architecture-is-64-bits` and allowing the relevant autopkgtests to skip archs where the dependencies aren't available.
+
+ACK, we should not approach more than upstream, thought.
+
+BTW, do we have the code that is used for the transition tracker somehow
+separately?  Its a great help to resolve inter package dependency
+resolutions.
+
+Happy to see Charles and Michael working on BioC
+    Andreas.
+
+-- 
+https://fam-tille.de
+
+From tille at debian.org  Thu Jul 11 18:10:45 2024
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 11 Jul 2024 20:10:45 +0200
+Subject: Re: r-cran-rmariadb on salsa from 3 years ago, but no ITP/RFP?
+In-Reply-To: <7da96e5a-a5a9-4e22-85fe-6034a3bf9b23@debian.org>
+References: <7da96e5a-a5a9-4e22-85fe-6034a3bf9b23@debian.org>
+Message-ID: <ZpAgJdcGJk9Bv8wZ@an3as.eu>
+
+Hi Michael,
+
+Am Tue, Jul 09, 2024 at 07:39:56PM +0200 schrieb Michael R. Crusoe:
+> I discovered your draft package https://salsa.debian.org/r-pkg-team/r-cran-rmariadb today while attempting to upload my own.
+> 
+> Is there a particular issue that stopped you from uploading this package to the Debian itself?
+
+Shayan did great stuff in a certain period of time but he became MIA.
+So I'm just wild guessing its safe if you take over the packaging.  Just
+add yourself to Uploaders and do what needs to be done.
+ 
+> For comparison, my 2024 efforts are at https://salsa.debian.org/crusoe/r-cran-rmariadb
+> 
+> Shall I try to combine the two efforts? Do you want to be an uploader?
+
+I personally keep people who worked on the package and have put
+themselves into Uploaders in this field and add my own name.  I'm pretty
+sure Shayan will like it if you might finalise his work.
+ 
+Kind regards
+
+     Andreas.
+
+-- 
+https://fam-tille.de
+
+From crusoe at debian.org  Fri Jul 12 07:10:51 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Fri, 12 Jul 2024 09:10:51 +0200
+Subject: Bug#1076191: ITP: r-cran-rmariadb -- Database Interface and 'MariaDB' Driver
+Message-ID: <e50d71c6-7d75-4084-8e62-2c6f18ad7ffd@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-cran-rmariadb -- Database Interface and 'MariaDB' Driver
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-cran-rmariadb
+Version : 1.3.2+ds
+Upstream Author : Kirill Müller,
+* URL : https://cran.r-project.org/package=RMariaDB
+* License : MIT
+Programming Lang: GNU R
+Description : Database Interface and 'MariaDB' Driver
+Implements a 'DBI'-compliant interface to 'MariaDB'
+(<https://mariadb.org/>) and 'MySQL' (<https://www.mysql.com/>)
+databases.
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-cran-rmariadb
+
+This package is a test dependency for the new version of r-bioc-ucsc.utils, and thus needed for the bioc-3.19 transition
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Fri Jul 12 09:10:08 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Fri, 12 Jul 2024 11:10:08 +0200
+Subject: Bug#1076195: RM: r-cran-maptools -- ROM; Abandoned by upstream
+Message-ID: <a0d823f9-d2f9-41e8-95a1-9f882d16fbea@debian.org>
+
+Package: ftp.debian.org
+Severity: normal
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: r-cran-maptools at packages.debian.org, debian-r at lists.debian.org, r-pkg-team at alioth-lists.debian.net, crusoe at debian.org
+Control: affects -1 + src:r-cran-maptools
+
+Dear FTP team,
+
+Please remove the source package r-cran-maptools. Since 2023-10-16 the upstream maintainer has abandoned it, with the message "Consider using 'sf' or 'terra' instead". Both of those are already packaged for Debian
+
+https://cran.r-project.org/web/packages/maptools/index.html
+
+I checked dak and there are no reverse-dependencies. Thank you!
+
+$ ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-cran-maptools"
+Will remove the following packages from unstable:
+
+r-cran-maptools | 1:1.1-8+dfsg-1 | source, amd64, arm64, armel, armhf, i386, mips64el, ppc64el, s390x
+r-cran-maptools | 1:1.1-8+dfsg-1+b1 | riscv64
+
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+------------------- Reason -------------------
+
+----------------------------------------------
+
+Checking reverse dependencies...
+No dependency problem found.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Sat Jul 13 12:04:52 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sat, 13 Jul 2024 14:04:52 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org>
+Message-ID: <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org>
+
+Saturday update: I'm going to continue to build the rest of the r-bioc-* packages locally, as while cleaning out the bug list I found additional bioc packages that needed adding to Debian.
+
+Then I'll cycle through the architecture dependent packages, doing a `ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-bioc-$NAME"` check and adding the `architecture-is-64-bit` build-dep only when there are no no-bioc packages that would be affected.
+
+Then I'll start uploading to experimental. Hopefully some of the new packages will have cleared the queue by then.
+
+Once everything is settled in experimental, I'll request a transition slot from the release team as per https://wiki.debian.org/Teams/ReleaseTeam/Transitions
+
+On 11/07/2024 16.21, Michael R. Crusoe wrote:
+> On 11/07/2024 15.07, Charles Plessy wrote:
+> > Hi Michael,
+> >
+> > Le Thu, Jul 11, 2024 at 12:22:32PM +0200, Michael R. Crusoe a écrit :
+> > > If there are no objections, I'd like to upload the new r-bioc-biocgenerics to experimental and continue on with the rest of bioconductor 3.19
+> >
+> >
+> > I do not want to stop you doing it, but I have a question.
+>
+>
+> Thanks. Unless I hear otherwise, I'll start uploading tomorrow. More below
+>
+> > > ```
+> > > git checkout -b debian/experimental
+> > > routine-update --no-build --experimental --branch debian/experimental -t
+> >
+> >
+> > Great news that we have it and sorry that I overlooked it.
+> >
+> > Is there also a trick for automatically merging the experimental branch
+> > into master once we start uploading to unstable ?
+>
+>
+> I guess I would do
+>
+> git checkout master
+> git pull
+> git merge debian/experimental
+> dch --newversion $(dpkg-parsechangelog -SVersion | sed 's/~.*//') 'Upload to unstable' && dch --release ""
+> debcommit -a
+> git clean -fdx
+> gbp tag
+> gbp buildpackage -S -d
+> # test the package
+>
+> # and then
+> debrelease  -S --dput  &&  gbp push
+>
+> > Apart from that,
+> >
+> > > I understand that. Did we have problems skipping releases before?
+> >
+> >
+> > I think that we never skipped releases.  The main problem is that the
+> > old release causes incompatibilities in Testing.  Last time, I proposed
+> > to skip a release and remove the packages from Testing in the meantime,
+> > but the Release team refused to do so.  This is one of the reasons I
+> > took time this time: I wanted to see if something would happen if we
+> > would wait for autoremoval.  The answer is no, nothing happens and the
+> > release team does not complain.  If it makes the migration simpler, next
+> > time I want to ask again the release team again to kindly help us by
+> > removing the old BioC packages from testing.
+>
+>
+> Thanks for the history!
+>
+> > > As it was, I had to do a local build of over 90 bioc packages to confirm that the newly needed packages for 3.19 worked.
+> > > So it would be about another 80 packages to update, which I don't mind doing now that I've gotten practive.
+> >
+> >
+> > That is really great.  Can you share the part of your gbp configuration
+> > that allows sbuild to pick locally built packages to resolve
+> > dependencies?  Do you run autopktest through sbuild's hooks?
+>
+>
+> I only use `gbp buildpackage` to make the source package. Normally I use autopkgtest, but for this project I use pbuilder (in the form of cowbuilder-dist) plus this trick https://wiki.debian.org/PbuilderTricks#How_to_include_local_packages_in_the_build
+>
+> To make that trick work, I apply a small patch to https://git.launchpad.net/ubuntu-dev-tools/tree/pbuilder-dist#n407
+>
+> *** /usr/bin/pbuilder-dist    2023-09-15 10:20:05.534821567 +0200
+> --- /home/michael/debian/pbuilder-dist.orig    2024-07-11 16:05:17.401024393 +0200
+> ***************
+> *** 400,406 ****
+>                "DISTRIBUTION=" + self.target_distro,
+>                "ARCH=" + self.build_architecture,
+>                "DIST=" + self.target_distro,
+> -             "DEPS=" + os.environ.get("DEPS", ""),
+>                "ADT=" + os.environ.get("ADT", ""),
+>                "DEB_BUILD_OPTIONS=" + os.environ.get("DEB_BUILD_OPTIONS", ""),
+>                self.builder,
+> --- 400,405 ----
+>
+>
+> To run the autopkgtests during package building, I've long had https://salsa.debian.org/pbuilder-team/pbuilder/-/blob/master/examples/B20autopkgtest?ref_type=heads installed in my personal pbuilder hooks directory
+>
+> > > If they are 32-bit issues, then I'm fine with excluding them using
+> > > `architecture-is-64-bits` and allowing the relevant autopkgtests to
+> > > skip archs where the dependencies aren't available.
+> >
+> >
+> > I think that 32-bit issues are bound to pop up with time, in an
+> > unpredictable frequency.  I fear that adding architecture-is-64-bits
+> > information package per package on a case-by-case basis is going to be
+> > quite some work.  Opening bugs, closing bugs, adding patches, removing
+> > patches.  And I am not aware of Bioconductor does not support non-64 bit
+> > arches. I will not stand on the way of people working on providing
+> > 32-bit surpport for Bioconductor in Debian.  But if there is no appetite
+> > or excitement for that task, why don't we take the opportunity of this
+> > Bioc release for adding architecture-is-64-bits everywhere?
+>
+>
+> Looks like they dropped support for 32-bit MS Windows starting with 3.16, so adding architecture-is-64-bits as a build-dep for all binary-producing source packages is fine by me.
+>
+> https://bioconductor.org/news/bioc_3_16_release/
+>
+> > Have a nice day,
+> >
+> > Charles
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Sat Jul 13 14:18:29 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sat, 13 Jul 2024 16:18:29 +0200
+Subject: Bug#1076276: ITP: r-bioc-gsvadata -- Data employed in the vignette of the GSVA package
+Message-ID: <4d50e3cc-05d7-4de0-8e05-abaafdbde20d@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-gsvadata -- Data employed in the vignette of the GSVA package
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-gsvadata
+Version : 1.40.0
+Upstream Author : Robert Castelo <robert.castelo at upf.edu>
+* URL : https://bioconductor.org/packages/GSVAdata
+* License : Artistic-2.0
+Programming Lang: GNU R
+Description : Data employed in the vignette of the GSVA package
+This package stores the data employed in the vignette of the GSVA package.
+These data belong to the following publications:
+- Armstrong et al. Nat Genet 30:41-47, 2002
+- Cahoy et al. J Neurosci 28:264-278, 2008
+- Carrel and Willard, Nature, 434:400-404, 2005
+- Huang et al. PNAS, 104:9758-9763, 2007
+- Pickrell et al. Nature, 464:768-722, 2010
+- Skaletsky et al. Nature, 423:825-837
+- Verhaak et al. Cancer Cell 17:98-110, 2010
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-gsvadata
+
+This package is a test dependency for the new version of r-bioc-gsva, and thus needed for the bioc-3.19 transition
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Sat Jul 13 14:19:56 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sat, 13 Jul 2024 16:19:56 +0200
+Subject: Bug#1076277: ITP: r-bioc-hgu95a.db -- Affymetrix Affymetrix HG_U95A Array annotation data (chip
+Message-ID: <273ddf69-d19d-4d19-809f-d4162f77be33@debian.org>
+
+Package: wnpp
+Severity: wishlist
+X-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org
+
+Subject: ITP: r-bioc-hgu95a.db -- Affymetrix Affymetrix HG_U95A Array annotation data (chip
+Package: wnpp
+Owner: Michael R. Crusoe <crusoe at debian.org>
+Severity: wishlist
+
+* Package name : r-bioc-hgu95a.db
+Version : 3.13.0
+Upstream Author : Marc Carlson
+* URL : https://bioconductor.org/packages/data/experiment/hgu95a.db/
+* License : Artistic-2.0
+Programming Lang: GNU R
+Description : Affymetrix Affymetrix HG_U95A Array annotation data (chip
+hgu95a) Affymetrix Affymetrix HG_U95A Array annotation data (chip
+hgu95a) assembled using data from public repositories
+
+Remark: This package is maintained by Debian R Packages Maintainers at
+https://salsa.debian.org/r-pkg-team/r-bioc-hgu95a.db
+
+This package is a build-dependency for r-bioc-gsvadata, and thus needed for the bioc-3.19 transition
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Sat Jul 13 21:34:47 2024
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 13 Jul 2024 23:34:47 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org> <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org>
+Message-ID: <ZpLy90jgXkslwmjJ@an3as.eu>
+
+Hi Michael,
+
+Am Sat, Jul 13, 2024 at 02:04:52PM +0200 schrieb Michael R. Crusoe:
+> Saturday update: I'm going to continue to build the rest of the r-bioc-* packages locally, as while cleaning out the bug list I found additional bioc packages that needed adding to Debian.
+> 
+> Then I'll cycle through the architecture dependent packages, doing a `ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-bioc-$NAME"` check and adding the `architecture-is-64-bit` build-dep only when there are no no-bioc packages that would be affected.
+> 
+> Then I'll start uploading to experimental. Hopefully some of the new packages will have cleared the queue by then.
+> 
+> Once everything is settled in experimental, I'll request a transition slot from the release team as per https://wiki.debian.org/Teams/ReleaseTeam/Transitions
+
+That looks great (and a lot of effort - thanks a lot!)
+
+In case you might need some helping hand in the transition phase I might
+see what I can do.
+
+Kind regards
+   Andreas.
+
+-- 
+https://fam-tille.de
+
+From crusoe at debian.org  Sun Jul 14 15:09:51 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sun, 14 Jul 2024 17:09:51 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <ZpLy90jgXkslwmjJ@an3as.eu>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org> <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org> <ZpLy90jgXkslwmjJ@an3as.eu>
+Message-ID: <102cd25f-6f5a-4522-b81f-bd46d79c75cd@debian.org>
+
+On 13/07/2024 23.34, Andreas Tille wrote:
+> Hi Michael,
+>
+> Am Sat, Jul 13, 2024 at 02:04:52PM +0200 schrieb Michael R. Crusoe:
+> > Saturday update: I'm going to continue to build the rest of the r-bioc-* packages locally, as while cleaning out the bug list I found additional bioc packages that needed adding to Debian.
+
+Done with the local builds!
+
+> > Then I'll cycle through the architecture dependent packages, doing a `ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-bioc-$NAME"` check and adding the `architecture-is-64-bit` build-dep only when there are no no-bioc packages that would be affected.
+
+Luckily I thought about this a little bit and realized I can do a single query about the removals.
+
+ssh mirror.ftp-master.debian.org "dak rm --architecture=armel,armhf,i386 --no-arch-all-rdeps --binary-only --partial --rdep-check --no-action $(tr '\n' ' ' < ~/debian/bioc-3.19/packaged-any)"
+# where ~/debian/bioc-3.19/packaged-any is a list of packages I made that contain "Architecture: any" in their debian/control files
+
+The following non-bioc-3.19 packages would also need their 32-bit builds removed:
+
+r-bioc-deseq     # not part of bioconductor since 3.13
+r-cran-nmf       # build-dep on r-bioc-biobase
+r-cran-restfulr  # build-dep on r-bioc-s4vectors
+r-cran-samr      # build-dep on r-bioc-impute
+r-cran-wgcna     # build-dep on r-bioc-impute, r-bioc-preprocesscore, r-bioc-go.db, r-bioc-annotationdbi
+
+Adding the 5 packages above to the `dak rm` query doesn't reveal any other issues, BUT removing 32-bit builds of any r-cran-* packages is not yet part of the agreement.
+
+Redoing my "dak rm" query without r-bioc-{biobase,s4vectors,impute,preprocesscore} shows no more issues.
+
+So I'll add the build-dep on "architecture-is-64-bit" to these 76 packages and "extra_restrictions=skip-not-installable" to debian/tests/autopkgtest-pkg-r.conf in all the r-bioc-* packages.
+
+And then I'll start the uploads to "experimental".
+
+> > Once everything is settled in experimental, I'll request a transition slot from the release team as per https://wiki.debian.org/Teams/ReleaseTeam/Transitions
+>
+>
+> That looks great (and a lot of effort - thanks a lot!)
+
+You are welcome!
+
+> In case you might need some helping hand in the transition phase I might
+> see what I can do.
+
+Thanks!
+
+> Kind regards
+>     Andreas.
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Sun Jul 14 16:05:05 2024
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 14 Jul 2024 18:05:05 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <102cd25f-6f5a-4522-b81f-bd46d79c75cd@debian.org>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org> <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org> <ZpLy90jgXkslwmjJ@an3as.eu> <102cd25f-6f5a-4522-b81f-bd46d79c75cd@debian.org>
+Message-ID: <ZpP3MdaTM3R5ldoX@an3as.eu>
+
+Hi Michael,
+
+Am Sun, Jul 14, 2024 at 05:09:51PM +0200 schrieb Michael R. Crusoe:
+> > Am Sat, Jul 13, 2024 at 02:04:52PM +0200 schrieb Michael R. Crusoe:
+> Done with the local builds!
+
+Cool.
+ 
+> > > Then I'll cycle through the architecture dependent packages, doing a `ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-bioc-$NAME"` check and adding the `architecture-is-64-bit` build-dep only when there are no no-bioc packages that would be affected.
+> 
+> Luckily I thought about this a little bit and realized I can do a single query about the removals.
+> 
+> ssh mirror.ftp-master.debian.org "dak rm --architecture=armel,armhf,i386 --no-arch-all-rdeps --binary-only --partial --rdep-check --no-action $(tr '\n' ' ' < ~/debian/bioc-3.19/packaged-any)"
+> # where ~/debian/bioc-3.19/packaged-any is a list of packages I made that contain "Architecture: any" in their debian/control files
+> 
+> The following non-bioc-3.19 packages would also need their 32-bit builds removed:
+> 
+> r-bioc-deseq     # not part of bioconductor since 3.13
+> r-cran-nmf       # build-dep on r-bioc-biobase
+> r-cran-restfulr  # build-dep on r-bioc-s4vectors
+> r-cran-samr      # build-dep on r-bioc-impute
+> r-cran-wgcna     # build-dep on r-bioc-impute, r-bioc-preprocesscore, r-bioc-go.db, r-bioc-annotationdbi
+> 
+> Adding the 5 packages above to the `dak rm` query doesn't reveal any other issues, BUT removing 32-bit builds of any r-cran-* packages is not yet part of the agreement.
+
+This sounds all very sensible!  If I was not yet convinced that it was a
+good idea to run for DPL I think this is a good outcome to deal with
+those tasks automatically. ;-P
+ 
+> Redoing my "dak rm" query without r-bioc-{biobase,s4vectors,impute,preprocesscore} shows no more issues.
+
+Nice.
+ 
+> So I'll add the build-dep on "architecture-is-64-bit" to these 76 packages and "extra_restrictions=skip-not-installable" to debian/tests/autopkgtest-pkg-r.conf in all the r-bioc-* packages.
+
+ACK.
+ 
+> > That looks great (and a lot of effort - thanks a lot!)
+> 
+> You are welcome!
+
+:-)
+ 
+> > In case you might need some helping hand in the transition phase I might
+> > see what I can do.
+> 
+> Thanks!
+
+It might be a bit short timing but I guess while beeing in DebCamp I
+will probably find some time for it (but not at DebConf).
+
+Thanks again
+   Andreas.
+
+-- 
+https://fam-tille.de
+
+From crusoe at debian.org  Sun Jul 14 16:13:30 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Sun, 14 Jul 2024 18:13:30 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <ZpP3MdaTM3R5ldoX@an3as.eu>
+References: <Zj6y2PzYTo24KLu0@bubu.igloo> <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org> <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org> <ZpLy90jgXkslwmjJ@an3as.eu> <102cd25f-6f5a-4522-b81f-bd46d79c75cd@debian.org> <ZpP3MdaTM3R5ldoX@an3as.eu>
+Message-ID: <0e97e8f6-4061-4bf4-8498-6c03a7733140@debian.org>
+
+On 14/07/2024 18.05, Andreas Tille wrote:
+> Hi Michael,
+>
+> Am Sun, Jul 14, 2024 at 05:09:51PM +0200 schrieb Michael R. Crusoe:
+> > > Am Sat, Jul 13, 2024 at 02:04:52PM +0200 schrieb Michael R. Crusoe:
+> > > > Then I'll cycle through the architecture dependent packages, doing a `ssh mirror.ftp-master.debian.org "dak rm --rdep-check --no-action r-bioc-$NAME"` check and adding the `architecture-is-64-bit` build-dep only when there are no no-bioc packages that would be affected.
+> >
+> >
+> > Luckily I thought about this a little bit and realized I can do a single query about the removals.
+> >
+> > ssh mirror.ftp-master.debian.org "dak rm --architecture=armel,armhf,i386 --no-arch-all-rdeps --binary-only --partial --rdep-check --no-action $(tr '\n' ' ' < ~/debian/bioc-3.19/packaged-any)"
+> > # where ~/debian/bioc-3.19/packaged-any is a list of packages I made that contain "Architecture: any" in their debian/control files
+> >
+> > The following non-bioc-3.19 packages would also need their 32-bit builds removed:
+> >
+> > r-bioc-deseq     # not part of bioconductor since 3.13
+> > r-cran-nmf       # build-dep on r-bioc-biobase
+> > r-cran-restfulr  # build-dep on r-bioc-s4vectors
+> > r-cran-samr      # build-dep on r-bioc-impute
+> > r-cran-wgcna     # build-dep on r-bioc-impute, r-bioc-preprocesscore, r-bioc-go.db, r-bioc-annotationdbi
+> >
+> > Adding the 5 packages above to the `dak rm` query doesn't reveal any other issues, BUT removing 32-bit builds of any r-cran-* packages is not yet part of the agreement.
+>
+>
+> This sounds all very sensible!  If I was not yet convinced that it was a
+> good idea to run for DPL I think this is a good outcome to deal with
+> those tasks automatically. ;-P
+
+:-D
+
+ 
+> > So I'll add the build-dep on "architecture-is-64-bit" to these 76 packages and "extra_restrictions=skip-not-installable" to debian/tests/autopkgtest-pkg-r.conf in all the r-bioc-* packages.
+>
+>
+> ACK.
+
+Done!
+
+The commands I used:
+
+for pkg in $(cat bioc-3.19/packaged-any-subset) ; do sed -i "/Build-Depends:/a\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ architecture-is-64-bit," ${pkg}/debian/control ;  done
+for pkg in $(cat bioc-3.19/packaged-any-subset) ; do echo ${pkg}; cd ${pkg}; printf "/^ -- Michael/--a\n  * d/control: Skip building on 32-bit systems.\n.\nw\nq\n" | ed debian/changelog; debcommit -a ; cd .. ; done
+
+for pkg in $(cat bioc-3.19/packaged-all) ; do cd ${pkg}; mkdir -p debian/tests ;  echo extra_restrictions=skip-not-installable >> debian/tests/autopkgtest-pkg-r.conf ; git add debian/tests/autopkgtest-pkg-r.conf ; cd .. ; done
+for pkg in $(cat bioc-3.19/packaged-all) ; do echo ${pkg}; cd ${pkg}; printf "/^ -- Michael/--a\n  * d/tests/autopkgtest-pkg-r.conf: skip on 32-bit architectures.\n.\nw\nq\n" | ed debian/changelog; debcommit -a ; cd .. ; done
+
+> > And then I'll start the uploads to "experimental".
+
+In progress!
+
+for pkg in $(cat bioc-3.19/packaged) ; do echo ${pkg}; cd ${pkg} ; git clean -fdx ; gbp tag --debian-branch=debian/experimental ; gbp buildpackage -S -d  --git-debian-branch=debian/experimental ; debrelease  -S --dput  &&  gbp push --debian-branch=debian/experimental || echo problem: ${pkg}; cd .. ; done
+
+Links for overview (any hints on shorter links would be welcome!):
+
+https://buildd.debian.org/status/package.php?p=r-bioc-affxparser%2Cr-bioc-affy%2Cr-bioc-affyio%2Cr-bioc-all%2Cr-bioc-altcdfenvs%2Cr-bioc-annotate%2Cr-bioc-annotationdbi%2Cr-bioc-annotationfilter%2Cr-bioc-annotationhub%2Cr-bioc-aroma.light%2Cr-bioc-arrayexpress%2Cr-bioc-ballgown%2Cr-bioc-basilisk%2Cr-bioc-basilisk.utils%2Cr-bioc-beachmat%2Cr-bioc-biobase%2Cr-bioc-biocbaseutils%2Cr-bioc-bioccheck%2Cr-bioc-biocfilecache%2Cr-bioc-biocgenerics%2Cr-bioc-biocio%2Cr-bioc-biocneighbors%2Cr-bioc-biocparallel%2Cr-bioc-biocsingular%2Cr-bioc-biocstyle%2Cr-bioc-biocversion%2Cr-bioc-biocviews%2Cr-bioc-biomart%2Cr-bioc-biomformat%2Cr-bioc-biostrings%2Cr-bioc-biovizbase%2Cr-bioc-bladderbatch%2Cr-bioc-bluster%2Cr-bioc-bsgenome%2Cr-bioc-bsseq%2Cr-bioc-chemminer%2Cr-bioc-cner%2Cr-bioc-complexheatmap%2Cr-bioc-consensusclusterplus%2Cr-bioc-ctc%2Cr-bioc-cummerbund%2Cr-bioc-dada2%2Cr-bioc-decontam%2Cr-bioc-decoupler%2Cr-bioc-degnorm%2Cr-bioc-degreport%2Cr-bioc-delayedarray%2Cr-bioc-delayedmatrixstats%2Cr-bioc-demixt%2Cr-bioc-densvis%2Cr-bioc-deseq2%2Cr-bioc-destiny%2Cr-bioc-dexseq%2Cr-bioc-dir.expiry%2Cr-bioc-dirichletmultinomial%2Cr-bioc-dnacopy%2Cr-bioc-drimseq%2Cr-bioc-dropletutils%2Cr-bioc-dss%2Cr-bioc-dupradar%2Cr-bioc-ebseq%2Cr-bioc-edaseq%2Cr-bioc-edger%2Cr-bioc-eir%2Cr-bioc-ensembldb%2Cr-bioc-experimenthub%2Cr-bioc-fishpond%2Cr-bioc-fmcsr%2Cr-bioc-genefilter%2Cr-bioc-genelendatabase%2Cr-bioc-geneplotter%2Cr-bioc-genomeinfodb%2Cr-bioc-genomeinfodbdata%2Cr-bioc-genomicalignments%2Cr-bioc-genomicfeatures%2Cr-bioc-genomicfiles%2Cr-bioc-genomicranges%2Cr-bioc-geoquery%2Cr-bioc-ggbio%2Cr-bioc-glmgampoi%2Cr-bioc-go.db%2Cr-bioc-gosemsim%2Cr-bioc-goseq%2Cr-bioc-graph%2Cr-bioc-grohmm%2Cr-bioc-gseabase%2Cr-bioc-gsva%2Cr-bioc-gviz%2Cr-bioc-hdf5array%2Cr-bioc-hilbertvis%2Cr-bioc-hsmmsinglecell%2Cr-bioc-htsfilter%2Cr-bioc-hypergraph%2Cr-bioc-ihw%2Cr-bioc-impute%2Cr-bioc-interactivedisplaybase%2Cr-bioc-ioniser%2Cr-bioc-iranges%2Cr-bioc-isoformswitchanalyzer%2Cr-bioc-keggrest%2Cr-bioc-limma%2Cr-bioc-lpsymphony%2Cr-bioc-makecdfenv%2Cr-bioc-matrixgenerics%2Cr-bioc-megadepth%2Cr-bioc-mergeomics%2Cr-bioc-metagenomeseq%2Cr-bioc-metapod%2Cr-bioc-monocle%2Cr-bioc-multiassayexperiment%2Cr-bioc-multtest%2Cr-bioc-mutationalpatterns%2Cr-bioc-netsam%2Cr-bioc-noiseq%2Cr-bioc-oligo%2Cr-bioc-oligoclasses%2Cr-bioc-organismdbi%2Cr-bioc-org.hs.eg.db%2Cr-bioc-pcamethods%2Cr-bioc-pfamanalyzer%2Cr-bioc-phyloseq%2Cr-bioc-preprocesscore%2Cr-bioc-progeny%2Cr-bioc-protgenerics%2Cr-bioc-purecn%2Cr-bioc-pwmenrich%2Cr-bioc-qtlizer%2Cr-bioc-qusage%2Cr-bioc-qvalue%2Cr-bioc-rbgl%2Cr-bioc-rcpi%2Cr-bioc-rcwl%2Cr-bioc-residualmatrix%2Cr-bioc-rgsepd%2Cr-bioc-rhdf5%2Cr-bioc-rhdf5filters%2Cr-bioc-rhdf5lib%2Cr-bioc-rhtslib%2Cr-bioc-rots%2Cr-bioc-rsamtools%2Cr-bioc-rsubread%2Cr-bioc-rtracklayer%2Cr-bioc-rwikipathways%2Cr-bioc-s4arrays%2Cr-bioc-s4vectors%2Cr-bioc-saturn%2Cr-bioc-scaledmatrix%2Cr-bioc-scater%2Cr-bioc-scran%2Cr-bioc-scrnaseq%2Cr-bioc-scuttle%2Cr-bioc-seqlogo%2Cr-bioc-shortread%2Cr-bioc-singlecellexperiment%2Cr-bioc-singler%2Cr-bioc-snpstats%2Cr-bioc-sparsearray%2Cr-bioc-sparsematrixstats%2Cr-bioc-stringdb%2Cr-bioc-structuralvariantannotation%2Cr-bioc-summarizedexperiment%2Cr-bioc-sva%2Cr-bioc-tcgabiolinks%2Cr-bioc-tcgabiolinksgui.data%2Cr-bioc-tfbstools%2Cr-bioc-titancna%2Cr-bioc-tximeta%2Cr-bioc-tximport%2Cr-bioc-tximportdata%2Cr-bioc-variantannotation%2Cr-bioc-wrench%2Cr-bioc-xvector%2Cr-bioc-zlibbioc&suite=experimental
+
+https://qa.debian.org/developer.php?packages=r-bioc-affxparser%20r-bioc-affy%20r-bioc-affyio%20r-bioc-all%20r-bioc-altcdfenvs%20r-bioc-annotate%20r-bioc-annotationdbi%20r-bioc-annotationfilter%20r-bioc-annotationhub%20r-bioc-aroma.light%20r-bioc-arrayexpress%20r-bioc-ballgown%20r-bioc-basilisk%20r-bioc-basilisk.utils%20r-bioc-beachmat%20r-bioc-biobase%20r-bioc-biocbaseutils%20r-bioc-bioccheck%20r-bioc-biocfilecache%20r-bioc-biocgenerics%20r-bioc-biocio%20r-bioc-biocneighbors%20r-bioc-biocparallel%20r-bioc-biocsingular%20r-bioc-biocstyle%20r-bioc-biocversion%20r-bioc-biocviews%20r-bioc-biomart%20r-bioc-biomformat%20r-bioc-biostrings%20r-bioc-biovizbase%20r-bioc-bladderbatch%20r-bioc-bluster%20r-bioc-bsgenome%20r-bioc-bsseq%20r-bioc-chemminer%20r-bioc-cner%20r-bioc-complexheatmap%20r-bioc-consensusclusterplus%20r-bioc-ctc%20r-bioc-cummerbund%20r-bioc-dada2%20r-bioc-decontam%20r-bioc-decoupler%20r-bioc-degnorm%20r-bioc-degreport%20r-bioc-delayedarray%20r-bioc-delayedmatrixstats%20r-bioc-demixt%20r-bioc-densvis%20r-bioc-deseq2%20r-bioc-destiny%20r-bioc-dexseq%20r-bioc-dir.expiry%20r-bioc-dirichletmultinomial%20r-bioc-dnacopy%20r-bioc-drimseq%20r-bioc-dropletutils%20r-bioc-dss%20r-bioc-dupradar%20r-bioc-ebseq%20r-bioc-edaseq%20r-bioc-edger%20r-bioc-eir%20r-bioc-ensembldb%20r-bioc-experimenthub%20r-bioc-fishpond%20r-bioc-fmcsr%20r-bioc-genefilter%20r-bioc-genelendatabase%20r-bioc-geneplotter%20r-bioc-genomeinfodb%20r-bioc-genomeinfodbdata%20r-bioc-genomicalignments%20r-bioc-genomicfeatures%20r-bioc-genomicfiles%20r-bioc-genomicranges%20r-bioc-geoquery%20r-bioc-ggbio%20r-bioc-glmgampoi%20r-bioc-go.db%20r-bioc-gosemsim%20r-bioc-goseq%20r-bioc-graph%20r-bioc-grohmm%20r-bioc-gseabase%20r-bioc-gsva%20r-bioc-gviz%20r-bioc-hdf5array%20r-bioc-hilbertvis%20r-bioc-hsmmsinglecell%20r-bioc-htsfilter%20r-bioc-hypergraph%20r-bioc-ihw%20r-bioc-impute%20r-bioc-interactivedisplaybase%20r-bioc-ioniser%20r-bioc-iranges%20r-bioc-isoformswitchanalyzer%20r-bioc-keggrest%20r-bioc-limma%20r-bioc-lpsymphony%20r-bioc-makecdfenv%20r-bioc-matrixgenerics%20r-bioc-megadepth%20r-bioc-mergeomics%20r-bioc-metagenomeseq%20r-bioc-metapod%20r-bioc-monocle%20r-bioc-multiassayexperiment%20r-bioc-multtest%20r-bioc-mutationalpatterns%20r-bioc-netsam%20r-bioc-noiseq%20r-bioc-oligo%20r-bioc-oligoclasses%20r-bioc-organismdbi%20r-bioc-org.hs.eg.db%20r-bioc-pcamethods%20r-bioc-pfamanalyzer%20r-bioc-phyloseq%20r-bioc-preprocesscore%20r-bioc-progeny%20r-bioc-protgenerics%20r-bioc-purecn%20r-bioc-pwmenrich%20r-bioc-qtlizer%20r-bioc-qusage%20r-bioc-qvalue%20r-bioc-rbgl%20r-bioc-rcpi%20r-bioc-rcwl%20r-bioc-residualmatrix%20r-bioc-rgsepd%20r-bioc-rhdf5%20r-bioc-rhdf5filters%20r-bioc-rhdf5lib%20r-bioc-rhtslib%20r-bioc-rots%20r-bioc-rsamtools%20r-bioc-rsubread%20r-bioc-rtracklayer%20r-bioc-rwikipathways%20r-bioc-s4arrays%20r-bioc-s4vectors%20r-bioc-saturn%20r-bioc-scaledmatrix%20r-bioc-scater%20r-bioc-scran%20r-bioc-scrnaseq%20r-bioc-scuttle%20r-bioc-seqlogo%20r-bioc-shortread%20r-bioc-singlecellexperiment%20r-bioc-singler%20r-bioc-snpstats%20r-bioc-sparsearray%20r-bioc-sparsematrixstats%20r-bioc-stringdb%20r-bioc-structuralvariantannotation%20r-bioc-summarizedexperiment%20r-bioc-sva%20r-bioc-tcgabiolinks%20r-bioc-tcgabiolinksgui.data%20r-bioc-tfbstools%20r-bioc-titancna%20r-bioc-tximeta%20r-bioc-tximport%20r-bioc-tximportdata%20r-bioc-variantannotation%20r-bioc-wrench%20r-bioc-xvector%20r-bioc-zlibbioc
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Sun Jul 14 19:49:25 2024
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 14 Jul 2024 21:49:25 +0200
+Subject: Re: Bioconductor 3.19 transition
+In-Reply-To: <0e97e8f6-4061-4bf4-8498-6c03a7733140@debian.org>
+References: <70cc7dce-65d6-423a-8e6c-8108ec519c57@debian.org> <Zo3RPQ3ORcZvIMpL@kumo.plessy.net> <931bc61e-044c-47a4-9092-a93b77e9d3d8@debian.org> <Zo_ZFBo5RXN3_2kB@bubu.igloo> <1173d6ea-3c44-4bf6-afe8-eb0da26a6506@debian.org> <bda6dc48-243a-478b-ac1d-5e751ddf7634@debian.org> <ZpLy90jgXkslwmjJ@an3as.eu> <102cd25f-6f5a-4522-b81f-bd46d79c75cd@debian.org> <ZpP3MdaTM3R5ldoX@an3as.eu> <0e97e8f6-4061-4bf4-8498-6c03a7733140@debian.org>
+Message-ID: <ZpQrxTMtGEu43vLG@an3as.eu>
+
+Hi Michael,
+
+Am Sun, Jul 14, 2024 at 06:13:30PM +0200 schrieb Michael R. Crusoe:
+> Done!
+
+Great.
+ 
+> The commands I used:
+> ...
+
+Good idea to document everything you did somehow online.  Alternatively
+you can also add some information to
+
+    https://salsa.debian.org/r-pkg-team/maintenance-utilities
+
+Thanks again for your work
+    Andreas.
+
+-- 
+https://fam-tille.de
+
+From plessy at debian.org  Mon Jul 22 00:10:43 2024
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 22 Jul 2024 09:10:43 +0900
+Subject: Removal of packages removed from CRAN.
+Message-ID: <Zp2jg-ki9bHrcgxC@kumo.plessy.net>
+
+Hello everybody,
+
+I see a lot uscan error reports on the UDD page.  I think that most of
+them are for packages which were removed (archived) from CRAN.
+
+Shall I just ask for their removal from Debian too?
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From crusoe at debian.org  Wed Jul 24 05:30:31 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 24 Jul 2024 07:30:31 +0200
+Subject: Bug#1076843: transition: r-bioc-biocgenerics (r-api-bioc-3.19)
+Message-ID: <3feb3b0a-3960-4b66-896b-cc60c0f76d8b@debian.org>
+
+Package: release.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-biocgenerics at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org
+Control: affects -1 + src:r-bioc-biocgenerics
+User: release.debian.org at packages.debian.org
+Usertags: transition
+
+Hello. Bioconductor 3.19 has been out for a while, and 3.20 is on its way. Since 3.19 required new packages I decided not to wait for 3.20 in order to simplify that transition. I upgraded and uploaded all 173 r-bioc-* source packages to "experimental"; including 15 new packages that had to clear the NEW queue (and have done so, thank you FTP team!).
+
+My vacation starts today, so I'm writing to reserve a slot for later. I return on July 30th.
+
+Once the transition is approved to start, myself and other members of the Debian R team will follow the "ben" dependency levels and upload new source packages for the upgraded bioconductor 3.19 packages, this time targeting "unstable".
+
+Ben file:
+
+title = "r-api-bioc-3.19";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.19";
+is_bad = .depends ~ "r-api-bioc-3.18";
+
+Cheers,
+
+--
+Michael R. Crusoe on behalf of the Debian R team
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Wed Jul 31 08:05:11 2024
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Wed, 31 Jul 2024 10:05:11 +0200
+Subject: Bug#1077643: RM: r-cran-dimred [armel armhf i386] -- ROM; 32-bit architectures not supported by upstream
+Message-ID: <740427a1-c703-4074-9c6a-cc9c84420100@debian.org>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-dimred at packages.debian.org, debian-r at lists.debian.org, crusoe at debian.org
+Control: affects -1 + src:r-cran-dimred
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Dear FTP Team,
+
+Please remove r-cran-dimred on 32-bit architectures, as that is not supported by upstream.
+
+The following dak check reports "No dependency problem found."
+
+ssh mirror.ftp-master.debian.org "dak rm --architecture=armel,armhf,i386 --no-arch-all-rdeps --binary-only --partial --rdep-check --no-action r-cran-dimred"
+
+Thanks!
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+

@@ -1,0 +1,153 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2020-06",
+  "messages": [
+    {
+      "id": "msg-120a26c21a50",
+      "message_id": "<CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>",
+      "from_name": "Rodrigo Carvalho",
+      "from_email_hash": "b853fc05abd2aebddf3943a11a10c50cad6944fd782d47e8147f2f7db934e665",
+      "date": "2020-06-01T23:45:37Z",
+      "subject": "[RFS] r-gran-ecosolver",
+      "subject_clean": "[RFS] r-gran-ecosolver",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI have pushed a new R package into salsa[1].\nCould you review it?\nThe ITP bug is #961835\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver\n\nthanks,\nRodrigo",
+      "body_snippet": "Hi,\nI have pushed a new R package into salsa[1].\nCould you review it?\nThe ITP bug is #961835\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver\n\nthanks,\nRodrigo",
+      "thread_id": "thread-120a26c21a50",
+      "thread_depth": 0,
+      "month": "2020-06"
+    },
+    {
+      "id": "msg-db8ac8d4e3b0",
+      "message_id": "<20200602070138.GS22880@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2020-06-02T07:01:38Z",
+      "subject": "Re: [RFS] r-gran-ecosolver",
+      "subject_clean": "[RFS] r-gran-ecosolver",
+      "in_reply_to": "<CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Rodrigo,\n\nthanks for your work on this package.\n\nOn Mon, Jun 01, 2020 at 08:45:37PM -0300, Rodrigo Carvalho wrote:\n> Hi,\n> I have pushed a new R package into salsa[1].\n> Could you review it?\n> The ITP bug is #961835\n> \n> [1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver\n\nAs Dylan said in his last mail, please use\n\n   prepare_missing_cran_package ECOSolveR\n\nto create this package.  On one hand it will save you a lot of time on\nthe other hand the repository created should be valid regarding\npristine-tar.  I simply get\n\nr-cran-ecosolver(master) $ gbp buildpackage\ngbp:info: Building with (cowbuilder) for sid\ngbp:info: Tarballs 'r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz' not found at '../tarballs/'\ngbp:info: Creating ../build-area/r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz\ngbp:error: Can not find pristine tar commit for archive 'r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz'\n\nwhich I never observed when using prepare_missing_cran_package.  While\nit would be probably easy to fix I'd suggest you follow the hint above\nto learn how to do things easily and correct.\n\nKind regards and thanks for your involvement in any case\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Rodrigo,\n\nthanks for your work on this package.\n\nOn Mon, Jun 01, 2020 at 08:45:37PM -0300, Rodrigo Carvalho wrote:\n> Hi,\n> I have pushed a new R package into salsa[1].\n> Could you review it?\n> The ",
+      "thread_id": "thread-120a26c21a50",
+      "thread_depth": 1,
+      "month": "2020-06"
+    },
+    {
+      "id": "msg-3eb64e9da94f",
+      "message_id": "<CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>",
+      "from_name": "Rodrigo Carvalho",
+      "from_email_hash": "b853fc05abd2aebddf3943a11a10c50cad6944fd782d47e8147f2f7db934e665",
+      "date": "2020-06-03T02:08:22Z",
+      "subject": "Re: [RFS] r-gran-ecosolver",
+      "subject_clean": "[RFS] r-gran-ecosolver",
+      "in_reply_to": "<20200602070138.GS22880@an3as.eu>",
+      "references": [
+        "<CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>",
+        "<20200602070138.GS22880@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nEm ter., 2 de jun. de 2020 às 04:01, Andreas Tille\n<andreas at fam-tille.de> escreveu:\n>\n> Hi Rodrigo,\n>\n> thanks for your work on this package.\n>\n> On Mon, Jun 01, 2020 at 08:45:37PM -0300, Rodrigo Carvalho wrote:\n> > Hi,\n> > I have pushed a new R package into salsa[1].\n> > Could you review it?\n> > The ITP bug is #961835\n> >\n> > [1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver\n>\n> As Dylan said in his last mail, please use\n>\n>    prepare_missing_cran_package ECOSolveR\n>\n\nI did what you asked. Can you check if it's all ok?\n\nthanks\nRodrigo",
+      "body_snippet": "Hi Andreas,\n\nEm ter., 2 de jun. de 2020 às 04:01, Andreas Tille\n<andreas at fam-tille.de> escreveu:\n>\n> Hi Rodrigo,\n>\n> thanks for your work on this package.\n>\n> On Mon, Jun 01, 2020 at 08:45:37PM -03",
+      "thread_id": "thread-120a26c21a50",
+      "thread_depth": 2,
+      "month": "2020-06"
+    },
+    {
+      "id": "msg-4e926ee47578",
+      "message_id": "<20200603064251.GX22880@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2020-06-03T06:42:51Z",
+      "subject": "Re: [RFS] r-gran-ecosolver",
+      "subject_clean": "[RFS] r-gran-ecosolver",
+      "in_reply_to": "<CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>",
+        "<20200602070138.GS22880@an3as.eu>",
+        "<CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Rodrigo,\n\nOn Tue, Jun 02, 2020 at 11:08:22PM -0300, Rodrigo Carvalho wrote:\n> > As Dylan said in his last mail, please use\n> >\n> >    prepare_missing_cran_package ECOSolveR\n> \n> I did what you asked. Can you check if it's all ok?\n\nYes, looks way better and I hope you agree that the amount\nof work on your side is lower as well. ;-)\n\nJust uploaded to new.\n\nThanks for your work on this\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Rodrigo,\n\nOn Tue, Jun 02, 2020 at 11:08:22PM -0300, Rodrigo Carvalho wrote:\n> > As Dylan said in his last mail, please use\n> >\n> >    prepare_missing_cran_package ECOSolveR\n> \n> I did what you aske",
+      "thread_id": "thread-120a26c21a50",
+      "thread_depth": 3,
+      "month": "2020-06"
+    },
+    {
+      "id": "msg-524aab23da7b",
+      "message_id": "<CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>",
+      "from_name": "Martin Maechler",
+      "from_email_hash": "60adff948614501274f566c08ef1159143cbe943805a8ed4cb200de92d64915a",
+      "date": "2020-06-11T19:50:03Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<20200530052144.GR1820@an3as.eu>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+        "<24273.932.973463.750953@rob.eddelbuettel.com>",
+        "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>",
+        "<CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>",
+        "<20200530052144.GR1820@an3as.eu>"
+      ],
+      "body_plain": "In the mean time,  the maintainer  Antoine Lucas  has released\ngmp_0.6-0  to CRAN .. where I had previously changed all occurrences\nof  'GPL'  to 'GPL-3'.\nI hope this will be helpful for you when debian-packaging r-cran-gmp.\n\nBest regards,\nMartin\n\nOn Sat, May 30, 2020 at 7:23 AM Andreas Tille <tille at debian.org> wrote:\n>\n> On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:\n> > (similar to myself) they are mathematicians and researchers\n> > who want to do science and development for the public good, and not\n> > spend time on boring lawyer's stuff  (;-)..\n>\n> I'm physicist and can perfectly understand.  I'm doing Debian packaging\n> since more than 20 years and can confirm that editing the copyright file\n> is the most boring stuff in this.  Wait, even more boring is getting a\n> package rejected by ftpmaster due to a license conflict is even more\n> boring.  This is what will happen as Dylan said in his mail.  So if you\n> ask me changing just the number takes less time than writing lots of\n> e-mails about it. ;-)\n>\n> Kind regards and thanks a lot for your open words\n>\n>       Andreas.\n>\n> --\n> http://fam-tille.de\n>\n\n-- \nMartin Maechler,\nSeminar fuer Statistik, ETH Zurich",
+      "body_snippet": "In the mean time,  the maintainer  Antoine Lucas  has released\ngmp_0.6-0  to CRAN .. where I had previously changed all occurrences\nof  'GPL'  to 'GPL-3'.\nI hope this will be helpful for you when debi",
+      "thread_id": "thread-524aab23da7b",
+      "thread_depth": 0,
+      "month": "2020-06"
+    },
+    {
+      "id": "msg-dcd83a249cbb",
+      "message_id": "<20200611213017.GL5717@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-06-11T21:30:17Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+        "<24273.932.973463.750953@rob.eddelbuettel.com>",
+        "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>",
+        "<CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>",
+        "<20200530052144.GR1820@an3as.eu>",
+        "<CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Martin,\n\nthanks for the notification.  I've uploaded the package to Debian\nnew queue.\n\nKind regards\n\n      Andreas.\n\nOn Thu, Jun 11, 2020 at 09:50:03PM +0200, Martin Maechler wrote:\n> In the mean time,  the maintainer  Antoine Lucas  has released\n> gmp_0.6-0  to CRAN .. where I had previously changed all occurrences\n> of  'GPL'  to 'GPL-3'.\n> I hope this will be helpful for you when debian-packaging r-cran-gmp.\n> \n> Best regards,\n> Martin\n> \n> On Sat, May 30, 2020 at 7:23 AM Andreas Tille <tille at debian.org> wrote:\n> >\n> > On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:\n> > > (similar to myself) they are mathematicians and researchers\n> > > who want to do science and development for the public good, and not\n> > > spend time on boring lawyer's stuff  (;-)..\n> >\n> > I'm physicist and can perfectly understand.  I'm doing Debian packaging\n> > since more than 20 years and can confirm that editing the copyright file\n> > is the most boring stuff in this.  Wait, even more boring is getting a\n> > package rejected by ftpmaster due to a license conflict is even more\n> > boring.  This is what will happen as Dylan said in his mail.  So if you\n> > ask me changing just the number takes less time than writing lots of\n> > e-mails about it. ;-)\n> >\n> > Kind regards and thanks a lot for your open words\n> >\n> >       Andreas.\n> >\n> > --\n> > http://fam-tille.de\n> >\n> \n> \n> -- \n> Martin Maechler,\n> Seminar fuer Statistik, ETH Zurich\n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Martin,\n\nthanks for the notification.  I've uploaded the package to Debian\nnew queue.\n\nKind regards\n\n      Andreas.\n\nOn Thu, Jun 11, 2020 at 09:50:03PM +0200, Martin Maechler wrote:\n> In the mean t",
+      "thread_id": "thread-524aab23da7b",
+      "thread_depth": 1,
+      "month": "2020-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-120a26c21a50",
+      "subject": "[RFS] r-gran-ecosolver",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Rodrigo Carvalho"
+      ],
+      "started": "2020-06-01T23:45:37Z",
+      "last_reply": "2020-06-03T06:42:51Z",
+      "root_message_id": "msg-120a26c21a50"
+    },
+    {
+      "id": "thread-524aab23da7b",
+      "subject": "[RFS] r-cran-gmp",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Martin Maechler"
+      ],
+      "started": "2020-06-11T19:50:03Z",
+      "last_reply": "2020-06-11T21:30:17Z",
+      "root_message_id": "msg-524aab23da7b"
+    }
+  ]
+}

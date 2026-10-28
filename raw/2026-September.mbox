@@ -1,0 +1,362 @@
+From plessy at debian.org  Thu Sep  3 00:11:17 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 3 Sep 2026 09:11:17 +0900
+Subject: Bioconductor and HDF5 transition clash
+Message-ID: <api4kJUzZgbmSioZ@kumo.plessy.net>
+
+Hi Graham,
+
+most of the Bioconductor transition went smoothly, but unfortunately it clashed
+with the HDF5 transition.
+
+When Bioconductor was released, it contained core packages shipping a vendored
+version 1.14 of HDF5, which was very close to the one in Testing.  Unvendoring
+was very easy.  After the Bioconductor transition started, the HDF5 transition
+took place and now we have version 2.1 in testing, and I simply do not have the
+skill to unvendor HDF5 in Bioconductor and do the major upgrade instead of
+upstream themselves.  I am CCing debian-r@ and debian-med at lists.debian.org to
+see if somebody else wants to pick the ball, but I am pessimistic about this.
+
+The next Bioconductor release might solve the problem, or might not.  The
+next-next release will be in April.
+
+I think that our possibilities are:
+
+ 0 Someone unvendors HDF5 in Bioconductor and ports the dependencies to be
+   compatible with the major upgrade to1 version 2.1.  I tried with Claude 4.8 in
+   OpenCode and failed after spending 20$ of OpenRouter tokens, but my AI skills
+   are still beginner level…
+
+ 1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that
+   they will handle major security issues well.  The Bioconductor project has good
+   programmers, more than a decade of acheivements, and a full commitment to
+   security.  Also, they might migrate before the Freeze.
+
+ 2 Leave the r-bioc-* packages depending on r-bioc-rhdf5lib in Sid, migrate the
+   rest and call the transition done.  The next one is next month.  Revisit the
+   issue before the Freeze.
+
+ 3 Remove r-bioc-rhdf5lib and its dependencies from Debian until we can
+   unvendor HDF5.  The NEW queue is very efficient those days.
+
+ 4 Give up and remove all r-bioc-* packages from Debian.  There are excellent
+   third-party repositories shipping them.  In that case we may need to move some
+   non-R dependencies to contrib, or remove them too.
+
+My favorite is option 1.
+
+What shall we do?
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From tille at debian.org  Thu Sep  3 08:40:07 2026
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 3 Sep 2026 10:40:07 +0200
+Subject: Re: Bioconductor and HDF5 transition clash
+In-Reply-To: <api4kJUzZgbmSioZ@kumo.plessy.net>
+References: <api4kJUzZgbmSioZ@kumo.plessy.net>
+Message-ID: <apkyZ0ypIVL6eEib@an3as.eu>
+
+Hi,
+
+Am Thu, Sep 03, 2026 at 09:11:17AM +0900 schrieb Charles Plessy:
+> most of the Bioconductor transition went smoothly, but unfortunately it clashed
+> with the HDF5 transition.
+
+:-(
+ 
+> When Bioconductor was released, it contained core packages shipping a vendored
+> version 1.14 of HDF5, which was very close to the one in Testing.  Unvendoring
+> was very easy.  After the Bioconductor transition started, the HDF5 transition
+> took place and now we have version 2.1 in testing, and I simply do not have the
+> skill to unvendor HDF5 in Bioconductor and do the major upgrade instead of
+> upstream themselves.  I am CCing debian-r@ and debian-med at lists.debian.org to
+> see if somebody else wants to pick the ball, but I am pessimistic about this.
+> 
+> The next Bioconductor release might solve the problem, or might not.  The
+> next-next release will be in April.
+
+Really in April?  In item 2 you write "next month" and as far as I understood
+there are two releases per year.
+ 
+> I think that our possibilities are:
+> 
+>  0 Someone unvendors HDF5 in Bioconductor and ports the dependencies to be
+>    compatible with the major upgrade to1 version 2.1.  I tried with Claude 4.8 in
+>    OpenCode and failed after spending 20$ of OpenRouter tokens, but my AI skills
+>    are still beginner level…
+
+This sounds complex and trusting AI only seems to be a bad idea.
+ 
+>  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that
+>    they will handle major security issues well.  The Bioconductor project has good
+>    programmers, more than a decade of acheivements, and a full commitment to
+>    security.  Also, they might migrate before the Freeze.
+
+I like this pragmatic approach.  I'd prefer to talk to Bioconductor
+developers what they might think and what schedule they intend to
+follow.
+
+>  2 Leave the r-bioc-* packages depending on r-bioc-rhdf5lib in Sid, migrate the
+>    rest and call the transition done.  The next one is next month.  Revisit the
+>    issue before the Freeze.
+
+Might be an option I would rank below the former option.  It has the
+problem that we might loose time before the Freeze which we could use
+now (by talking to Bioconductor developers).
+ 
+>  3 Remove r-bioc-rhdf5lib and its dependencies from Debian until we can
+>    unvendor HDF5.  The NEW queue is very efficient those days.
+
+If its only
+
+$ apt rdepends r-bioc-rhdf5lib
+r-bioc-rhdf5lib
+Reverse Depends:
+  Depends: r-bioc-rhdf5 (>= 1.33.3)
+  Depends: r-bioc-alabaster.base
+  Depends: r-bioc-rhdf5filters
+  Depends: r-bioc-alabaster.base
+  Depends: r-bioc-hdf5array
+  Depends: r-bioc-dropletutils
+
+I do not see a big problem in not shipping these for some time.  On the
+other hand since some time r-bioc-rhdf5lib has a popcon > 200 which is
+above a lot of other Debian Med packages.
+ 
+>  4 Give up and remove all r-bioc-* packages from Debian.  There are excellent
+>    third-party repositories shipping them.  In that case we may need to move some
+>    non-R dependencies to contrib, or remove them too.
+
+I'm not convinced that this is in the interest of our users.
+ 
+> My favorite is option 1.
+
+Same here.
+
+Kind regards
+    Andreas. 
+
+-- 
+https://fam-tille.de
+
+From ginggs at debian.org  Thu Sep  3 14:56:24 2026
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 3 Sep 2026 14:56:24 +0000
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <api4kJUzZgbmSioZ@kumo.plessy.net>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net>
+Message-ID: <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>
+
+Hi Charles
+
+On Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:
+>  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that
+>    they will handle major security issues well.  The Bioconductor project has good
+>    programmers, more than a decade of acheivements, and a full commitment to
+>    security.  Also, they might migrate before the Freeze.
+
+...
+
+> My favorite is option 1.
+
+The release team is fine with option 1.  Please see the packaging
+notes about embedded code copies [1], and please register the affected
+packages with the security team.  Previously, you could add them
+yourself in the wiki, but now you can do it in salsa [2].
+
+Regards
+Graham
+
+[1] https://wiki.debian.org/Packaging/EmbeddedCopies
+[2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies
+
+From plessy at debian.org  Thu Sep  3 23:45:12 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 4 Sep 2026 08:45:12 +0900
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com>
+Message-ID: <apoGiIM-99AgKvkp@kumo.plessy.net>
+
+Hi Graham,
+
+> On Thu, 3 Sept 2026 at 00:21, Charles Plessy <plessy at debian.org> wrote:
+> >  1 Ship the r-bioc-* packages with their vendored HDF5 library and trust that
+> >    they will handle major security issues well.  The Bioconductor project has good
+> >    programmers, more than a decade of acheivements, and a full commitment to
+> >    security.  Also, they might migrate before the Freeze.
+> 
+> ...
+> 
+> > My favorite is option 1.
+
+Le Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :
+> 
+> The release team is fine with option 1.  Please see the packaging
+> notes about embedded code copies [1], and please register the affected
+> packages with the security team.  Previously, you could add them
+> yourself in the wiki, but now you can do it in salsa [2].
+> 
+> [1] https://wiki.debian.org/Packaging/EmbeddedCopies
+> [2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies
+
+Many thanks to you and the release team for letting us doing this!
+
+I will work on it next week.
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Wed Sep  9 00:27:39 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 9 Sep 2026 09:27:39 +0900
+Subject: Re: Bug#1134352: Bioconductor and HDF5 transition clash
+In-Reply-To: <apoGiIM-99AgKvkp@kumo.plessy.net>
+References: <177655592384.375870.15394889310006759633.reportbug@bubu.igloo> <api4kJUzZgbmSioZ@kumo.plessy.net> <CAM8zJQvwHSOeih==AUTz-=dPum5ar32PCjuHH4=8n_3FgA_Wnw@mail.gmail.com> <apoGiIM-99AgKvkp@kumo.plessy.net>
+Message-ID: <aqCn5pVkQKxvei4L@kumo.plessy.net>
+
+> Le Thu, Sep 03, 2026 at 02:56:24PM +0000, Graham Inggs a écrit :
+> > 
+> > The release team is fine with option 1.  Please see the packaging
+> > notes about embedded code copies [1], and please register the affected
+> > packages with the security team.  Previously, you could add them
+> > yourself in the wiki, but now you can do it in salsa [2].
+> > 
+> > [1] https://wiki.debian.org/Packaging/EmbeddedCopies
+> > [2] https://salsa.debian.org/security-tracker-team/security-tracker/raw/master/data/embedded-code-copies
+
+Le Fri, Sep 04, 2026 at 08:45:12AM +0900, Charles Plessy a écrit :
+> 
+> 
+> Many thanks to you and the release team for letting us doing this!
+> 
+> I will work on it next week.
+
+Hi Graham,
+
+thanks again for the guidance and the green light.
+
+I have uploaded the packages and declared it:
+
+https://salsa.debian.org/security-tracker-team/security-tracker/-/commit/d74ae7f4d648f5ce6fac323e3c60d735b0093962
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Sun Sep 13 23:44:59 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 14 Sep 2026 08:44:59 +0900
+Subject: Bug#1147634: RM: r-bioc-zlibbioc -- ROM; RoM - abandonned upstream.
+Message-ID: <178934309971.3076643.17357864935292908150.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-zlibbioc at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-zlibbioc
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Dear Archives Operation team,
+
+The Bioconductor project stopped vendoring the zlib and retired its
+zlibbbioc package.  We can celebrate and remove r-bioc-zlibbioc from
+Debian too :)
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Sun Sep 13 23:49:20 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 14 Sep 2026 08:49:20 +0900
+Subject: Bug#1147636: RM: r-bioc-mofa -- ROM; superseded by r-bioc-mofa2
+Message-ID: <178934336022.3077608.2499919272685448593.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-mofa at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-mofa
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Dear Archive Operations team,
+
+it's all in the title :)
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Mon Sep 14 00:52:06 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 14 Sep 2026 09:52:06 +0900
+Subject: Bug#1147638: RM: r-bioc-deseq -- ROM; superseded by r-bioc-deseq2
+Message-ID: <178934712601.3136934.15088505551758250374.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-bioc-deseq at packages.debian.org, debian-med at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-bioc-deseq
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hi again, Archives Operation team,
+
+hi all,
+
+r-bioc-deseq was superseded a long time ago by r-bioc-deseq2.  We kept
+it for multiple releases despite upstream stopped releasing it; It is
+time to let it go.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Sun Sep 27 23:56:16 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Mon, 28 Sep 2026 08:56:16 +0900
+Subject: Bug#1149187: RM: r-cran-diffobj [s390x i386] -- ROM; Not a supported architecture
+Message-ID: <179055337681.1065970.3387548545719329939.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-diffobj at packages.debian.org, debian-s390 at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-diffobj
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Dear Archive Operations Team,
+
+Please remove r-cran-diffobj on the above architectures as they are not
+supported by our team.
+
+According to the UDD this is the last request for the mass removal
+started earlier this year!
+
+Have a nice day,
+
+Charles
+

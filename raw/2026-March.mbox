@@ -1,0 +1,3089 @@
+From edd at debian.org  Mon Mar  2 13:29:47 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 2 Mar 2026 07:29:47 -0600
+Subject: Re: rcpp again blocked by i386,armhf,s390x autopkg tests
+In-Reply-To: <27032.9204.596174.238315@hornik.net>
+References: <27030.27319.846826.92298@paul.eddelbuettel.com> <aZaztEUSxd_cn_CO@kumo.plessy.net> <27032.8089.471048.125656@hornik.net> <aZgjYdR2WnFzVamy@kumo.plessy.net> <27032.9204.596174.238315@hornik.net>
+Message-ID: <27045.37067.678395.436540@paul.eddelbuettel.com>
+
+Hi Charles,
+
+Hope all is well.
+
+Any update on your progress?
+
+I still get fresh auto-removal emails (which are frequent enough to require a
+special procmail rule and dedicated folder).  Same issue of r-cran-utf8 and
+'rcpp taking too long' (because packages using it fail).
+
+Appreciate you trying to unplug this recurrent issue.
+
+Cheers, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu Mar  5 06:28:35 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 5 Mar 2026 15:28:35 +0900
+Subject: Re: rcpp again blocked by i386,armhf,s390x autopkg tests
+In-Reply-To: <27045.37067.678395.436540@paul.eddelbuettel.com>
+References: <27030.27319.846826.92298@paul.eddelbuettel.com> <aZaztEUSxd_cn_CO@kumo.plessy.net> <27032.8089.471048.125656@hornik.net> <aZgjYdR2WnFzVamy@kumo.plessy.net> <27032.9204.596174.238315@hornik.net> <27045.37067.678395.436540@paul.eddelbuettel.com>
+Message-ID: <aakik-MP9cFQz8og@kumo.plessy.net>
+
+Le Mon, Mar 02, 2026 at 07:29:47AM -0600, Dirk Eddelbuettel a écrit :
+> 
+> Any update on your progress?
+
+Hi Dirk,
+
+I am now testing the automated update scripts on the dependency chain of
+r-cran-utf8.
+
+There are around 100 architecture-dependent packages in r-cran-utf8's
+dependency chain that still were not updated to exclude non-64-bit,
+non-little-endian architectures.
+
+I am still reviewing each packaging diff one by one but I hope to start to
+upload unattended upgrades (maybe to the 'delayed' queue) next week.
+
+After this is completed I will fill a request for architecture-specific removal
+to the Archives Operation (ex-FTP) team.
+
+Importantly, in the dependency chain of r-cran-utf8, there are some packages
+that you maintain.  Would it be fine for you to also exclude the same list
+architectures, by build-depending on architecture-is-64-bit and
+architecture-is-little-endian?
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Thu Mar  5 06:45:18 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 5 Mar 2026 15:45:18 +0900
+Subject: Standardising descriptions for r-cran / r-bioc packages.
+Message-ID: <aakmfn5niH8fR1K9@kumo.plessy.net>
+
+Hi all,
+
+As I am updating a lot of r-cran-* packages, I am taking the opportunity to
+update their descriptions.  After all, if it changed on CRAN, maybe we are
+doing a disservice by using the old text with new package versions in Debian.
+
+But then I remembered: in Debian, each time we change a description, there are
+dozens of translators who get a notification to review the change and update
+their work.  An the descriptions of CRAN packages are very technical.
+
+As of today there are no logistics to contribute back the translations to the
+authors of CRAN packages.
+
+Most of the r-cran-* packages are consumed as parts of a dependency chain, and
+not installed manually.  Moreover, judging from my own experience, the trigger
+for installing a new CRAN package usually comes from reading information
+available from the internet, not by screening the Apt cache.
+
+Therefore I propose that we simplify the description of most r-cran-* and
+r-bioc-* packages to something like:
+
+Description: CRAN package 'foo' redistributed in Debian.
+ The Comprehensive R Archive Network (CRAN) is a package repository for the R
+ programming language.  This package was automatically generated for the needs
+ of the dependency chain of other Debian packages.  For more information, please
+ refer to the upstream homepage or the DESCRIPTION file in
+ /usr//lib/R/site-library/<packagename>.
+
+What do you think about it ?
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plessy at debian.org  Wed Mar 11 04:57:12 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Wed, 11 Mar 2026 13:57:12 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <aZb1HfKUjWgr1P6V@bubu.igloo>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo>
+Message-ID: <abDzD4XICn_Ynxb1@kumo.plessy.net>
+
+Le Thu, Feb 19, 2026 at 08:33:49PM +0900, Charles Plessy a écrit :
+> 
+> I am making a small-scale test with https://bugs.debian.org/1128383,
+> and will ramp up it it worked well.
+
+Hi Dirk and all,
+
+the test appears to go so well that I am soon going to run
+architecture-restiction on all the packages we team-maintain.
+
+Can I ask you to architecture-restrict your CRAN packages too?
+
+Once everything migrated in Testing, we can cherry-pick a core subset
+to build more broadly if there is interest.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Wed Mar 11 13:39:13 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 11 Mar 2026 08:39:13 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abDzD4XICn_Ynxb1@kumo.plessy.net>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net>
+Message-ID: <27057.28801.42838.841846@paul.eddelbuettel.com>
+
+On 11 March 2026 at 13:57, Charles Plessy wrote:
+| Can I ask you to architecture-restrict your CRAN packages too?
+
+Could you illustrate with a diff against a representative package what you
+mean here?
+
+Are you talking about exclusions such as the one r-base (updated today) has
+with respect to the JDK:
+
+   default-jdk [!arm !hppa !hurd-any] | openjdk-10-jdk [!arm !hppa !hurd-any]
+
+Or is it something else?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu Mar 12 00:09:40 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 12 Mar 2026 09:09:40 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27057.28801.42838.841846@paul.eddelbuettel.com>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com>
+Message-ID: <abIEM-jn60WUuOD_@kumo.plessy.net>
+
+Le Wed, Mar 11, 2026 at 08:39:13AM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Are you talking about exclusions such as the one r-base (updated today) has
+> with respect to the JDK:
+
+Hi Dirk,
+
+for broader class exclusions we build-depend on packages that do not exist on
+the given architectures.
+
+You just have to add "architecture-is-64-bit, architecture-is-little-endian" to
+your build dependencies.  The following commands can automate it for you.
+
+    if ! grep -q architecture-is-64-bit debian/control ; then
+      cme modify dpkg-control 'source Build-Depends:.push("architecture-is-64-bit")'
+    fi
+
+    if ! grep -q architecture-is-little-endian debian/control ; then
+      cme modify dpkg-control 'source Build-Depends:.push("architecture-is-little-endian")'
+    fi
+
+My r-cran-* uploads are now at letter "l".  The loop somtimes blocks when
+autpkgtests enter interactive mode, so it can not run entirely unattended (that
+is: uploads eventually stop when I go to sleep).  Updates are sent to
+DELAYED/2, so I expect that most will reach Unstable by the beginning of next
+week.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Thu Mar 12 00:48:30 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 11 Mar 2026 19:48:30 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abIEM-jn60WUuOD_@kumo.plessy.net>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net>
+Message-ID: <27058.3422.592886.96218@paul.eddelbuettel.com>
+
+Charles,
+
+On 12 March 2026 at 09:09, Charles Plessy wrote:
+| Le Wed, Mar 11, 2026 at 08:39:13AM -0500, Dirk Eddelbuettel a écrit :
+| > 
+| > Are you talking about exclusions such as the one r-base (updated today) has
+| > with respect to the JDK:
+| 
+| for broader class exclusions we build-depend on packages that do not exist on
+| the given architectures.
+| 
+| You just have to add "architecture-is-64-bit, architecture-is-little-endian" to
+| your build dependencies.  The following commands can automate it for you.
+| 
+|     if ! grep -q architecture-is-64-bit debian/control ; then
+|       cme modify dpkg-control 'source Build-Depends:.push("architecture-is-64-bit")'
+|     fi
+| 
+|     if ! grep -q architecture-is-little-endian debian/control ; then
+|       cme modify dpkg-control 'source Build-Depends:.push("architecture-is-little-endian")'
+|     fi
+
+I have no idea what the command 'cme' is or does. I have never seen it
+before. From context this seems to imply some scripted way in which _you_
+modify debian/ files.
+
+Fine.
+
+Now assume that I do not use the same scripted solution. Is that ok?
+
+I had asked you very explicitly in the last email if you do this:
+
+> Could you illustrate with a diff against a representative package what you
+> mean here?
+
+but you chose to chop that part off.
+
+Can I ask again?  As you have packages 'before' and 'after' your changes,
+could you possibly detail a change in a way I can comprehend?
+
+I would really appreciate it.
+
+Thanks so much, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From sanvila at debian.org  Thu Mar 12 01:10:18 2026
+From: sanvila at debian.org (Santiago Vila)
+Date: Thu, 12 Mar 2026 02:10:18 +0100
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27058.3422.592886.96218@paul.eddelbuettel.com>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com>
+Message-ID: <abISekcyiVsrWeHB@nuc>
+
+On Wed, Mar 11, 2026 at 07:48:30PM -0500, Dirk Eddelbuettel wrote:
+> 
+> Charles,
+> 
+> On 12 March 2026 at 09:09, Charles Plessy wrote:
+> | Le Wed, Mar 11, 2026 at 08:39:13AM -0500, Dirk Eddelbuettel a écrit :
+> | > 
+> | > Are you talking about exclusions such as the one r-base (updated today) has
+> | > with respect to the JDK:
+> | 
+> | for broader class exclusions we build-depend on packages that do not exist on
+> | the given architectures.
+> | 
+> | You just have to add "architecture-is-64-bit, architecture-is-little-endian" to
+> | your build dependencies.  The following commands can automate it for you.
+> | 
+> |     if ! grep -q architecture-is-64-bit debian/control ; then
+> |       cme modify dpkg-control 'source Build-Depends:.push("architecture-is-64-bit")'
+> |     fi
+> | 
+> |     if ! grep -q architecture-is-little-endian debian/control ; then
+> |       cme modify dpkg-control 'source Build-Depends:.push("architecture-is-little-endian")'
+> |     fi
+> 
+> I have no idea what the command 'cme' is or does. I have never seen it
+> before. From context this seems to imply some scripted way in which _you_
+> modify debian/ files.
+> 
+> Fine.
+> 
+> Now assume that I do not use the same scripted solution. Is that ok?
+> 
+> 
+> I had asked you very explicitly in the last email if you do this:
+> 
+> > Could you illustrate with a diff against a representative package what you
+> > mean here?
+> 
+> but you chose to chop that part off.
+> 
+> Can I ask again?  As you have packages 'before' and 'after' your changes,
+> could you possibly detail a change in a way I can comprehend?
+
+Hi. Charles is just trying to make it easy to do the changes.
+
+However, for simplicity, you can ignore completely the cme thing and
+just consider what he said in plain English before those cme commands,
+namely:
+
+  Add "architecture-is-64-bit, architecture-is-little-endian" to your build dependencies.
+
+The current Build-Depends for this package is like this:
+
+Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.2), dh-r, r-cran-codetools, r-cran-pkgkitten
+
+so if we add those two packages to the Build-Depends, we get this:
+
+Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.2), dh-r, r-cran-codetools, r-cran-pkgkitten, architecture-is-64-bit, architecture-is-little-endian
+
+Is it more clear now?
+
+(Note that at this point, with such a long build-depends line, many
+people prefer to split the Build-Depends line into several lines, one
+per build-dependency, so that adding and removing BD reflects
+more clearly in diffs. If you are interested, the wrap-and-sort
+command does that. I personally recommend that you take a look at it).
+
+Thanks.
+
+From edd at debian.org  Thu Mar 12 01:31:19 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 11 Mar 2026 20:31:19 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abISekcyiVsrWeHB@nuc>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc>
+Message-ID: <27058.5991.959427.784899@paul.eddelbuettel.com>
+
+On 12 March 2026 at 02:10, Santiago Vila wrote:
+| The current Build-Depends for this package is like this:
+| 
+| Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.2), dh-r, r-cran-codetools, r-cran-pkgkitten
+| 
+| so if we add those two packages to the Build-Depends, we get this:
+| 
+| Build-Depends: debhelper-compat (= 13), r-base-dev (>= 4.5.2), dh-r, r-cran-codetools, r-cran-pkgkitten, architecture-is-64-bit, architecture-is-little-endian
+| 
+| Is it more clear now?
+
+Yes.
+
+Suggestion: Next time just say "add virtual packages 'architecture-is-64-bit'
+and 'architecture-is-little-endian' to the Build-Depends. Brief, clear, to
+the point.
+
+Now, the question is, where: "only" the r-cran-* packages? Or R itself (which
+I updated today, new upstream) as well?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From johannes.ranke at jrwb.de  Thu Mar 12 05:52:00 2026
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Thu, 12 Mar 2026 06:52:00 +0100
+Subject: Re: Standardising descriptions for r-cran / r-bioc packages.
+In-Reply-To: <aakmfn5niH8fR1K9@kumo.plessy.net>
+References: <aakmfn5niH8fR1K9@kumo.plessy.net>
+Message-ID: <3401733.aeNJFYEL58@ryz>
+
+Hi Charles,
+
+I didn't see any answer to your suggestion - to me this sounds very 
+reasonable!
+
+Cheers,
+
+Johannes
+
+Am Donnerstag, 5. März 2026, 07:45:18 Mitteleuropäische Normalzeit schrieb 
+Charles Plessy:
+> Hi all,
+> 
+> As I am updating a lot of r-cran-* packages, I am taking the opportunity to
+> update their descriptions.  After all, if it changed on CRAN, maybe we are
+> doing a disservice by using the old text with new package versions in
+> Debian.
+> 
+> But then I remembered: in Debian, each time we change a description, there
+> are dozens of translators who get a notification to review the change and
+> update their work.  An the descriptions of CRAN packages are very
+> technical.
+> 
+> As of today there are no logistics to contribute back the translations to
+> the authors of CRAN packages.
+> 
+> Most of the r-cran-* packages are consumed as parts of a dependency chain,
+> and not installed manually.  Moreover, judging from my own experience, the
+> trigger for installing a new CRAN package usually comes from reading
+> information available from the internet, not by screening the Apt cache.
+> 
+> Therefore I propose that we simplify the description of most r-cran-* and
+> r-bioc-* packages to something like:
+> 
+> Description: CRAN package 'foo' redistributed in Debian.
+>  The Comprehensive R Archive Network (CRAN) is a package repository for the
+> R programming language.  This package was automatically generated for the
+> needs of the dependency chain of other Debian packages.  For more
+> information, please refer to the upstream homepage or the DESCRIPTION file
+> in
+>  /usr//lib/R/site-library/<packagename>.
+> 
+> What do you think about it ?
+> 
+> Charles
+
+From elbrus at debian.org  Thu Mar 12 06:25:58 2026
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 12 Mar 2026 07:25:58 +0100
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27058.5991.959427.784899@paul.eddelbuettel.com>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com>
+Message-ID: <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org>
+
+Hi,
+
+On 3/12/26 02:31, Dirk Eddelbuettel wrote:
+> Now, the question is, where: "only" the r-cran-* packages? Or R itself (which
+> I updated today, new upstream) as well?
+
+While I understand the frustration of some people with some of the 
+architectures that we have in Debian, trying to support architectures is 
+part of what makes Debian Debian. If you're fine with supporting R 
+itself so far, don't proactively drop support for it.
+
+r-base is a key package (some r-cran packages are as well by the way, by 
+the looks via r-recommended), it's extra work (typically not trivial) to 
+remove it. It probably requires also changes to how some of our desktop 
+environment manage their dependencies if it wouldn't force them out 
+completely on those architectures. Please contact the porters before you 
+do that.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Thu Mar 12 06:45:23 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 12 Mar 2026 15:45:23 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27058.5991.959427.784899@paul.eddelbuettel.com>
+References: <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com>
+Message-ID: <abJhA5qhRI4dvL9X@kumo.plessy.net>
+
+Le Wed, Mar 11, 2026 at 08:31:19PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> Now, the question is, where: "only" the r-cran-* packages? Or R itself (which
+> I updated today, new upstream) as well?
+
+Hi Dirk,
+
+Please continue building R on all architectures you currently support, unless
+doing so becomes an unreasonable workload for you.
+
+This helps future porters: they can build the r-cran packages on their
+architecture of interest using their preferred hosting platform, demonstrate
+that most architecture‑specific regressions are manageable, and then approach
+us with a concrete case for adjusting our supported architecture list.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From joostvb at uvt.nl  Thu Mar 12 07:43:04 2026
+From: joostvb at uvt.nl (=?utf-8?q?Joost_van_Baal-Ili=C4=87?=)
+Date: Thu, 12 Mar 2026 08:43:04 +0100
+Subject: Re: Standardising descriptions for r-cran / r-bioc packages.
+In-Reply-To: <aakmfn5niH8fR1K9@kumo.plessy.net>
+References: <aakmfn5niH8fR1K9@kumo.plessy.net>
+Message-ID: <abJuiHZV90TdyBO_@incagijs.uvt.nl>
+
+Hi Charles,
+
+On Thu, Mar 05, 2026 at 03:45:18PM +0900, Charles Plessy wrote:
+> 
+> As I am updating a lot of r-cran-* packages, I am taking the opportunity to
+> update their descriptions.  After all, if it changed on CRAN, maybe we are
+> doing a disservice by using the old text with new package versions in Debian.
+> 
+> But then I remembered: in Debian, each time we change a description, there are
+> dozens of translators who get a notification to review the change and update
+> their work.  An the descriptions of CRAN packages are very technical.
+> 
+> As of today there are no logistics to contribute back the translations to the
+> authors of CRAN packages.
+> 
+> Most of the r-cran-* packages are consumed as parts of a dependency chain, and
+> not installed manually.  Moreover, judging from my own experience, the trigger
+> for installing a new CRAN package usually comes from reading information
+> available from the internet, not by screening the Apt cache.
+> 
+> Therefore I propose that we simplify the description of most r-cran-* and
+> r-bioc-* packages to something like:
+> 
+> Description: CRAN package 'foo' redistributed in Debian.
+>  The Comprehensive R Archive Network (CRAN) is a package repository for the R
+>  programming language.  This package was automatically generated for the needs
+>  of the dependency chain of other Debian packages.  For more information, please
+>  refer to the upstream homepage or the DESCRIPTION file in
+>  /usr//lib/R/site-library/<packagename>.
+> 
+> What do you think about it ?
+
+I have doubts :)
+
+This would change the meaning of the Description field the r-cran packages in
+Debian; for all other packages it would stay to mean / be used as: "The
+extended description should describe what the package does and how it relates
+to the rest of the system (in terms of, for example, which subsystem it is
+which part of).  The description field needs to make sense to anyone, even
+people who have no idea about any of the things the package deals with."
+
+For libraries we did not change this, and those are _also_ mostly installed
+since they're dependencies.
+
+I personally _very_ much appreciate having information locally on my system.
+Referring to /usr/lib/R/site-library/<packagename> of course only works after
+one decided to install the package.
+
+Maybe indeed keeping translations up to date is not that useful in those
+cases.  Maybe _there_ we could gain some improvements in efficiency?
+
+I agree it'd be useful to keep the extended descriptions in sync with what's
+published by upstream.
+
+My € 0,02!
+
+Thanks for raising this subject, Bye,
+
+Joost
+
+From edd at debian.org  Thu Mar 12 10:19:01 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 12 Mar 2026 05:19:01 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org>
+Message-ID: <27058.37653.7350.139626@paul.eddelbuettel.com>
+
+On 12 March 2026 at 07:25, Paul Gevers wrote:
+| While I understand the frustration of some people with some of the 
+| architectures that we have in Debian, trying to support architectures is 
+| part of what makes Debian Debian. If you're fine with supporting R 
+| itself so far, don't proactively drop support for it.
+| 
+| r-base is a key package (some r-cran packages are as well by the way, by 
+| the looks via r-recommended), it's extra work (typically not trivial) to 
+| remove it. It probably requires also changes to how some of our desktop 
+| environment manage their dependencies if it wouldn't force them out 
+| completely on those architectures. Please contact the porters before you 
+| do that.
+
+That wasn't my plan. R builds everywhere, I am happy to support it
+everywhere. 
+
+But I am still a little fuzzy on Charles's plan. So are we adding the
+restricting qualifier to Build-Depends to all r-cran-* packages? That also
+feels extreme.
+
+What I really want is my Rcpp (upstream) aka r-cran-rcpp package
+unplugged. See Subject.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Thu Mar 12 10:21:32 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 12 Mar 2026 05:21:32 -0500
+Subject: Re: rcpp again blocked by i386,armhf,s390x autopkg tests
+In-Reply-To: <aakik-MP9cFQz8og@kumo.plessy.net>
+References: <27030.27319.846826.92298@paul.eddelbuettel.com> <aZaztEUSxd_cn_CO@kumo.plessy.net> <27032.8089.471048.125656@hornik.net> <aZgjYdR2WnFzVamy@kumo.plessy.net> <27032.9204.596174.238315@hornik.net> <27045.37067.678395.436540@paul.eddelbuettel.com> <aakik-MP9cFQz8og@kumo.plessy.net>
+Message-ID: <27058.37804.100439.968709@paul.eddelbuettel.com>
+
+Hi Charles,
+
+Sorry, I had not seen this email for a few days as it was filed to the
+debian-r folder. It provides some context for the thread in debian-bugs.
+
+On 5 March 2026 at 15:28, Charles Plessy wrote:
+| I am now testing the automated update scripts on the dependency chain of
+| r-cran-utf8.
+| 
+| There are around 100 architecture-dependent packages in r-cran-utf8's
+| dependency chain that still were not updated to exclude non-64-bit,
+| non-little-endian architectures.
+| 
+| I am still reviewing each packaging diff one by one but I hope to start to
+| upload unattended upgrades (maybe to the 'delayed' queue) next week.
+| 
+| After this is completed I will fill a request for architecture-specific removal
+| to the Archives Operation (ex-FTP) team.
+| 
+| Importantly, in the dependency chain of r-cran-utf8, there are some packages
+| that you maintain.  Would it be fine for you to also exclude the same list
+| architectures, by build-depending on architecture-is-64-bit and
+| architecture-is-little-endian?
+
+I can try adding the tag. Let me know what the packages in question are.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Thu Mar 12 10:24:15 2026
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 12 Mar 2026 11:24:15 +0100
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27058.37653.7350.139626@paul.eddelbuettel.com>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com>
+Message-ID: <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org>
+
+Hi,
+
+On 3/12/26 11:19, Dirk Eddelbuettel wrote:
+> What I really want is my Rcpp (upstream) aka r-cran-rcpp package
+> unplugged. See Subject.
+
+For that, Charles (or somebody else) needs to file the appropriate RM 
+bugs against the ftp.debian.org pseudo package or revert the change to 
+no longer build on 32 bits and big endian architectures.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Thu Mar 12 10:34:03 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 12 Mar 2026 05:34:03 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org>
+References: <5cf1b057-4724-468b-84b0-bbb536ca3f20@debian.org> <27019.36042.966359.726337@paul.eddelbuettel.com> <aYvg4-uO2jqYFqvz@bubu.igloo> <f13090b3-8934-42d3-ad3b-539202072b3d@debian.org> <aZb1HfKUjWgr1P6V@bubu.igloo> <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org>
+Message-ID: <27058.38555.811724.117821@paul.eddelbuettel.com>
+
+On 12 March 2026 at 11:24, Paul Gevers wrote:
+| On 3/12/26 11:19, Dirk Eddelbuettel wrote:
+| > What I really want is my Rcpp (upstream) aka r-cran-rcpp package
+| > unplugged. See Subject.
+| 
+| For that, Charles (or somebody else) needs to file the appropriate RM 
+| bugs against the ftp.debian.org pseudo package or revert the change to 
+| no longer build on 32 bits and big endian architectures.
+
+That is my understanding too. Charles, I know you keep immensely busy with
+you updating wave. It would be really nice if you attend to this.
+
+"My" entry at the https://udd.debian.org/cgi-bin/autoremovals.cgi list is now
+over 50 packages, with the first removals in a few days.
+
+As far as I can tell it is still all because of autopkg tests in downstream
+dependencies of my packages. My packages are bystanders here. 
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu Mar 12 12:29:46 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 12 Mar 2026 21:29:46 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27058.38555.811724.117821@paul.eddelbuettel.com>
+References: <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com>
+Message-ID: <abKxuogcxYSdtA2Q@bubu.igloo>
+
+Control: fixed 1127349 1.2.4-1
+Control: fixed 1127631 1.1.0-1
+
+Le Thu, Mar 12, 2026 at 05:34:03AM -0500, Dirk Eddelbuettel a écrit :
+> "My" entry at the https://udd.debian.org/cgi-bin/autoremovals.cgi list is now
+> over 50 packages, with the first removals in a few days.
+>
+> As far as I can tell it is still all because of autopkg tests in downstream
+> dependencies of my packages. My packages are bystanders here.
+
+Hi Dirk,
+
+I am closing the migration bugs on r-cran-utf8 and rcpp, I hope that it
+will buy us some time.
+
+Have a nice day,
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From elbrus at debian.org  Thu Mar 12 13:53:53 2026
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 12 Mar 2026 14:53:53 +0100
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abKxuogcxYSdtA2Q@bubu.igloo>
+References: <abDzD4XICn_Ynxb1@kumo.plessy.net> <27057.28801.42838.841846@paul.eddelbuettel.com> <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo>
+Message-ID: <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org>
+
+Hi Charles,
+
+On 3/12/26 13:29, Charles Plessy wrote:
+> Control: fixed 1127349 1.2.4-1
+> Control: fixed 1127631 1.1.0-1
+
+These bugs were already closed when I filed them. The BTS will get 
+confused when there's a found and fixed for a bug of the same version 
+and assumes that the bug applies.
+
+Please don't do this. The RC bug is about the fact that the package is 
+out-of-sync which is still the case. There's only two ways to fix that: 
+migration of the package in unstable or removal of the package in 
+testing. We told you before you started with this effort of dropping 
+architecture support that you needed to be prepared for the removal 
+bugs. You ignored that and it very much looks like that you willingly 
+created all this mess:
+
+"""
+It can take monthes for a RM bug to be acted on, so there is no urgency
+filling them.  The most important is to progress in the architecture
+removal as fast as I can.
+"""
+
+That not a good way to make us sympathetic towards your goal. As I'm not 
+in control of unstable, and I'm not going to file the bugs you didn't 
+want to file, I'm ensuring that your packages are removed from testing 
+by autoremoval (buying you time to fix the situation in unstable). But 
+you've had enough time, at least 4 months already. Please stop uploading 
+and file those removal bugs first.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From crusoe at debian.org  Thu Mar 12 22:35:27 2026
+From: crusoe at debian.org (Michael R. Crusoe)
+Date: Thu, 12 Mar 2026 23:35:27 +0100
+Subject: Rhdf5lib & packaged HDF5
+Message-ID: <98852690-7232-4938-BBBB-692694003DB8@debian.org>
+
+Looping in you all with https://github.com/Huber-group-EMBL/Rhdf5lib/issues/72
+
+From plessy at debian.org  Fri Mar 13 00:33:25 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 13 Mar 2026 09:33:25 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org>
+References: <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org>
+Message-ID: <abNbVYBb03IWvbGD@kumo.plessy.net>
+
+Hi Paul, hi Dirk,
+
+Dirk, the list at the end includes your architecture-dependent packages that
+directly or transitively depend, recommend or suggest r-cran-utf8.  Can
+you architecture-restrict them?
+
+> On 3/12/26 13:29, Charles Plessy wrote:
+> > Control: fixed 1127349 1.2.4-1
+> > Control: fixed 1127631 1.1.0-1
+
+Le Thu, Mar 12, 2026 at 02:53:53PM +0100, Paul Gevers a écrit :
+> 
+> Please don't do this. The RC bug is about the fact that the package is
+> out-of-sync which is still the case.
+
+I will not interfere with these bugs anymore.
+
+> The BTS will get confused when there's a found and fixed for a bug of the
+> same version and assumes that the bug applies.
+
+I am sorry for my mistake: I forgot that fixed and notfound are not the same.
+Please let me know if you want me to cancel my changes by using "notfix" on the
+bugs or if you want to do it yourself.
+
+> We told you before you started with this effort of dropping architecture
+> support that you needed to be prepared for the removal bugs. You ignored
+> that
+
+No, sorry I have not ignored what you wrote.
+
+ - You explained me what kind of removal bugs would be needed (thank you).
+
+ - I replied that I will group them by batches covering some large branches
+   of the r-cran-* dependency network, because I expect that hundreds
+   of individuals removal bugs are not welcome.  I added that I expect
+   that I only can do so when all the packages in the same bulk removal
+   are architecture-restrited.  I asked for advice on debian-devel about
+   bulk removal bugs.
+
+ - Nobody contradicted my understanding that 1) I can not ask for removal
+   of a package without asking for removal of its dependencies and 2)
+   removing binaries of non-arch-restricted packages is pointless because
+   builds-will reupload the binaries and 3) filing hundredss of separated
+   bugs will not be welcome.
+
+ - I announced (maybe not in this thread, but on this list), that I made a
+   first pilot test (#1128383).  That bug was closed this week by the Archive
+   Operation team.
+
+ - In the meantime I completed dependency tree parsing and automation
+   of architecture restriction, which I have applied to r-cran-utf8.
+   I uploaded more than 400 packages to DELAYED/2 this week.  Every single
+   one of them after checking that they pass their autopkgtests, by the way.
+
+As of today according to debs.debian.org/debian, the r-{cran,bioc}-* packages
+depending, recommending or autopkgtest-depending on r-cran-utf8, directly or
+transitively, and which are not yet arch-restricted, are in the table at the
+end of this email.
+
+BUT: you can check by yourself, most of them are already in the DELAYED queue.
+
+You asked me to stop upload and fill bugs now, but I would like to carry on
+with finishing uploads and filling one bug next week, proposing the following
+dak rm command:
+
+    dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-utf8
+
+Then I will go forward with more removal bugs, especially to allow rcpp and its
+dependencies to migrate to Testing.
+
+If that is not acceptable with you, please let me know with precise instructions
+on what removal bug(s) I must fill and what was wrong in my reasonning.
+
+                           Package           Version arch_restricted Architecture                                                                      Maintainer
+29389               r-cran-conquer           1.3.3-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30100              r-cran-quantreg             6.1-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30213                   r-cran-rms           8.1-1-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29996                   r-cran-pec      2023.04.12-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+4761                      fcopulae         4052.86-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+11201                        hmisc           5.2-5-2           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29087            r-bioc-biovizbase          1.54.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29238     r-bioc-variantannotation          1.52.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29050                  r-bioc-affy          1.84.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29164            r-bioc-makecdfenv          1.82.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29178                 r-bioc-oligo       1.70.0+ds-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29305                 r-cran-bio3d           2.4-5-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29308                   r-cran-bit      4.6.0+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29093                  r-bioc-cner     1.42.0+dfsg-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29126            r-bioc-genefilter          1.88.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29228                   r-bioc-sva          3.54.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29140              r-bioc-gosemsim          2.32.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29655                  r-cran-glue           1.8.0-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29695                 r-cran-haven           2.5.5-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29464             r-cran-dotcall64             1.2-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29268               r-cran-askpass           1.2.1-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29206           r-bioc-rtracklayer          1.66.0-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29091                 r-bioc-bsseq     1.42.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29116                   r-bioc-dss     2.54.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29086            r-bioc-biostrings     2.74.1+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29131     r-bioc-genomicalignments          1.42.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29218             r-bioc-shortread          1.64.0-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29189               r-bioc-pwalign           1.2.0-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29204             r-bioc-rsamtools     2.22.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29134         r-bioc-genomicranges     1.58.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29108                r-bioc-deseq2     1.46.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29216               r-bioc-scuttle     1.16.0+dfsg-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29092             r-bioc-chemminer     3.58.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29080          r-bioc-biocsingular       1.22.0+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30921                          rgl          1.3.36-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29079          r-bioc-biocparallel          1.40.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29089               r-bioc-bluster     1.16.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30280                  r-cran-sass      0.4.9+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29300             r-cran-bigmemory           4.6.4-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30182            r-cran-reticulate   1.41.0.1+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29208              r-bioc-s4arrays      1.6.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29103          r-bioc-delayedarray     0.32.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29070              r-bioc-beachmat       2.22.0+ds-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29149             r-bioc-hdf5array          1.34.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29222           r-bioc-sparsearray      1.6.2+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30160                r-cran-readxl           1.4.5-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30523                 r-cran-vroom           1.7.0-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30158                 r-cran-readr           2.2.0-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30142              r-cran-rcpphnsw        0.6.0+ds-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30094                  r-cran-qpdf      1.3.4+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29839            r-cran-maldiquant          1.22.3-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29966               r-cran-ordinal     2023.12-4.1-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29752                  r-cran-jomo           2.7-6-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30088                   r-cran-qap           0.1-2-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30119                  r-cran-rann           2.6.2-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30143                r-cran-rcppml           0.3.7-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30146              r-cran-rcpproll           0.3.1-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30184               r-cran-rgenoud        5.9-0.11-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30267                 r-cran-rtsne            0.17-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30302                  r-cran-sets       1.0.25+ds-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29980            r-cran-partitions       1.10-9+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30342           r-cran-sourcetools         0.1.7-1-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30354           r-cran-sparsevctrs           0.2.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30394                r-cran-statip           0.2.3-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30418                   r-cran-sys           3.4.3-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30469            r-cran-tokenizers           0.3.0-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30473             r-cran-triebeard           0.4.1-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30476             r-cran-truncnorm           1.0-9-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29483               r-cran-ecodist           2.1.3-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29360              r-cran-classint     0.4-11+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30031               r-cran-polycub           0.9.2-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30512                 r-cran-vegan     2.6-10+dfsg-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30095                r-cran-qqconf      1.3.2+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30382              r-cran-splines2           0.5.4-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29160 r-bioc-isoformswitchanalyzer        2.6.0+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29101               r-bioc-degnorm       1.16.0+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29145                  r-bioc-gsva        2.0.5+ds-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29510              r-cran-estimatr           1.0.6-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29109               r-bioc-destiny          3.20.0-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29692           r-cran-haplo.stats           1.9.7-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29794           r-cran-lavasearch2      2.0.3+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+5649                   fregression         4021.83-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+30532           r-cran-webgestaltr           0.4.6-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30059              r-cran-projpred     2.10.0+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30063               r-cran-prophet        1.0+dfsg-5           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29172               r-bioc-monocle          2.34.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29232              r-bioc-titancna          1.44.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29255                r-cran-amelia           1.8.3-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+4000                      ea-utils      1.1.2+dfsg-9           FALSE          any        Debian Med Packaging Team <debian-med-packaging at lists.alioth.debian.org>
+29105                r-bioc-demixt          1.22.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29280           r-cran-bayesfactor 0.9.12-4.7+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+480                   apache-arrow          23.0.1-6           FALSE          any Debian Science Maintainers <debian-science-maintainers at alioth-lists.debian.net>
+29696                 r-cran-hdf5r     1.3.12+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29934              r-cran-nanotime          0.3.13-1           FALSE          any                                              Dirk Eddelbuettel <edd at debian.org>
+29231             r-bioc-tfbstools     1.44.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29107                 r-bioc-deseq         1.39.0-17           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30356            r-cran-spatialreg      1.3-6+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29118                 r-bioc-ebseq           2.4.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29833                   r-cran-m2r      1.0.3+dfsg-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29143                r-bioc-grohmm          1.40.3-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+28738                     q2-dada2        2024.5.0-1           FALSE          any        Debian Med Packaging Team <debian-med-packaging at lists.alioth.debian.org>
+29115          r-bioc-dropletutils       1.26.0+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29214                 r-bioc-scran     1.34.0+dfsg-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29137             r-bioc-glmgampoi     1.18.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29220               r-bioc-singler        2.8.0+ds-3           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29424                 r-cran-decor           1.0.2-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29428          r-cran-densityclust           0.3.3-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+19748                    mapdamage      2.2.3+dfsg-2           FALSE          any        Debian Med Packaging Team <debian-med-packaging at lists.alioth.debian.org>
+29121                   r-bioc-eir       1.46.0+ds-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29125                 r-bioc-fmcsr     1.48.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29281               r-cran-bayesfm           0.1.7-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+22436            node-shiny-server     1.5.20.1002-4           FALSE          any Debian Science Maintainers <debian-science-maintainers at lists.alioth.debian.org>
+29842                r-cran-maotai           0.2.6-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30453            r-cran-tikzdevice          0.12.6-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30279                  r-cran-samr             3.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30572         r-other-kcha-psiplot           2.3.0-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29106               r-bioc-densvis     1.16.0+dfsg-2           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29497                  r-cran-emoa           0.5-3-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29575      r-cran-freetypeharfbuzz      0.2.6+dfsg-4           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29725            r-cran-influencer           0.1.5-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29751                r-cran-jinjar      0.3.2+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29854              r-cran-matching         4.10-15-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29874                   r-cran-mda           0.5-5-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29893               r-cran-minerva          1.5.10-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29911                   r-cran-mnp           3.1-5-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29930               r-cran-mvnfast      0.2.8+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29954                  r-cran-oaqc           2.0.0-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30265               r-cran-rtdists          0.11-5-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30166                r-cran-regsem      1.9.5+dfsg-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29319               r-cran-boolnet           2.1.9-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+29803              r-cran-lexrankr           0.5.2-8           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+30336                   r-cran-sna             2.8-1           FALSE          any              Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+
+Have a nice day,
+
+Charles
+
+From edd at debian.org  Fri Mar 13 12:39:08 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 13 Mar 2026 07:39:08 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abNbVYBb03IWvbGD@kumo.plessy.net>
+References: <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net>
+Message-ID: <27060.1388.332742.892168@paul.eddelbuettel.com>
+
+Charles,
+
+On 13 March 2026 at 09:33, Charles Plessy wrote:
+| Dirk, the list at the end includes your architecture-dependent packages that
+| directly or transitively depend, recommend or suggest r-cran-utf8.  Can
+| you architecture-restrict them?
+
+That list seems, at glance, _way_ too long. It contains packages for which I
+am upstream and hence fairly certain I do not use package 'utf8'. It also
+contains a few well-established old packages for which I do not see how
+'utf8' could creep in.
+
+Can you detail what you condition was here? Full recursive descent, and did
+you include suggested packages? If I run `apt-cache rdepends r-cran-utf8` I
+get one hit: `r-cran-pillar`.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri Mar 13 13:15:37 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 13 Mar 2026 22:15:37 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27060.1388.332742.892168@paul.eddelbuettel.com>
+References: <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <27060.1388.332742.892168@paul.eddelbuettel.com>
+Message-ID: <abQN-YdmRYcBj905@bubu.igloo>
+
+> On 13 March 2026 at 09:33, Charles Plessy wrote:
+> | Dirk, the list at the end includes your architecture-dependent packages that
+> | directly or transitively depend, recommend or suggest r-cran-utf8.  Can
+> | you architecture-restrict them?
+
+Le Fri, Mar 13, 2026 at 07:39:08AM -0500, Dirk Eddelbuettel a écrit :
+> That list seems, at glance, _way_ too long. It contains packages for which I
+> am upstream and hence fairly certain I do not use package 'utf8'. It also
+> contains a few well-established old packages for which I do not see how
+> 'utf8' could creep in.
+>
+> Can you detail what you condition was here? Full recursive descent, and did
+> you include suggested packages? If I run `apt-cache rdepends r-cran-utf8` I
+> get one hit: `r-cran-pillar`.
+
+Hi Dirk,
+
+Here is the code that I used.  It is low quality and ends more like a
+scratch space than a real script.  Please feel free to ask me to improve
+it before you take more time reading it.  But if you spot bugs I would
+be very grateful to hear about them!
+
+https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/be533de817771558160865103d4aef7e3158acf6/rdeps.R
+
+The parsing of the dependency graph is fully recursive including
+Suggests, which in the Debian package are generated from the DESCRIPTION
+file.  This is necessary because a package in Suggests may be necessary
+to run the package's test suite, which is what we run in the Debian
+package's autopkgtests.  But obviously the impact on the dependency
+graph is strong.
+
+For instance, arch-restricting anything that r-cran-testthat
+transitively depends or build-depends on triggers the need to
+arch-restrict every package using r-cran-testthat in its test suite,
+because we run autopkgtests for every package that provide a test suite.
+(Because it allows us to quality control loong64, ppc64el and riscv64,
+which we support but on which CRAN/Bioconductor and many of their
+upstreams do not run test).
+
+I am not sure if that is the case for r-cran-utf8, but I hope that it
+makes the point that the dependency hairball becomes large very
+quickly…
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Fri Mar 13 13:31:59 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 13 Mar 2026 08:31:59 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abQN-YdmRYcBj905@bubu.igloo>
+References: <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <27060.1388.332742.892168@paul.eddelbuettel.com> <abQN-YdmRYcBj905@bubu.igloo>
+Message-ID: <27060.4559.743408.486509@paul.eddelbuettel.com>
+
+On 13 March 2026 at 22:15, Charles Plessy wrote:
+| The parsing of the dependency graph is fully recursive including
+| Suggests, which in the Debian package are generated from the DESCRIPTION
+| file.
+
+That is a hard "no, disagree strongly" from me.
+
+Suggests are not Depends. I explained that many times to (non-Debian)
+audiences (see eg [1]) and by now CRAN mostly enforces that.
+
+One can treat the 'unit test packages' (testthat, tinytest, RUnit) as special
+and install them. All other tests *must be* conditional on the suggested
+package present. Upstream CRAN packages now mostly do that and are
+increasingly tested upon. 
+
+Dirk
+
+[1] https://dirk.eddelbuettel.com/blog/2017/03/22#suggests_is_not_depends
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri Mar 13 15:05:49 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 00:05:49 +0900
+Subject: Bug#1130603: RM: r-cran-utf8 and its reverse-dependendcy r-cran-pillar [armhf i386 s390c hurd-386] -- RoM; unsupported architectures
+Message-ID: <abQnzYkoeCY4ks5i@bubu.igloo>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive team
+
+please remove r-cran-utf8 and its reverse-dependency r-cran-pillar on
+armhf, i386 and s390c.
+
+These architectures are not supported upstream and I have made the
+packages build-depend on architecture-is-64-bit and
+architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-utf8
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Mar 13 15:12:54 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 00:12:54 +0900
+Subject: Bug#1130604: RM: r-cran-isoband [armhf i386 s390c hurd-386] -- RoM; unsupported
+Message-ID: <abQpdi47nG-dyhT1@bubu.igloo>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive team
+
+please remove r-cran-isoband on armhf, i386 and s390x.
+
+These architectures are not supported upstream and I have made the
+packages build-depend on architecture-is-64-bit and
+architecture-is-little-endian.
+
+Removing this binary packages in unstable will trigger the removal of
+its counterpart in testing, and allow the migration of related packages.
+
+dak rm -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-isoband
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Mar 13 15:29:49 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 00:29:49 +0900
+Subject: Bug#1130603: RM: r-cran-jpeg and its reverse-dependendies [armhf i386 s390c hurd-386] -- RoM; unsupported
+References: <abQnzYkoeCY4ks5i@bubu.igloo>
+Message-ID: <abQtbTbb4OIvs_MR@bubu.igloo>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive team
+
+please remove r-cran-jpeg and its reverse-dependencies on armhf, i386
+and s390x.
+
+These architectures are not supported upstream and I have made the
+packages build-depend on architecture-is-64-bit and
+architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-jpeg
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Mar 13 15:34:14 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 00:34:14 +0900
+Subject: Bug#1130608: RM: r-cran-jpeg and its reverse-dependendies [armhf i386 s390c hurd-386] -- RoM; unsupported
+Message-ID: <abQudh24HH72zz09@bubu.igloo>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive team
+
+please remove r-cran-jpeg and its reverse-dependencies on armhf, i386
+and s390x.
+
+These architectures are not supported upstream and I have made the
+packages build-depend on architecture-is-64-bit and
+architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-jpeg
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Mar 13 15:52:17 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 00:52:17 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27060.4559.743408.486509@paul.eddelbuettel.com>
+References: <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <27060.1388.332742.892168@paul.eddelbuettel.com> <abQN-YdmRYcBj905@bubu.igloo> <27060.4559.743408.486509@paul.eddelbuettel.com>
+Message-ID: <abQysTvf8ESFZ0Jq@bubu.igloo>
+
+Le Fri, Mar 13, 2026 at 08:31:59AM -0500, Dirk Eddelbuettel a écrit :
+> Suggests are not Depends. I explained that many times to (non-Debian)
+> audiences (see eg [1]) and by now CRAN mostly enforces that.
+
+Hi Dirk,
+
+I understand your point of view, but autopkgtest's debian/tests/control
+only allows to specify Depends (to the best of my knowledge).
+
+The whole point of the autopkgtests (and of enduring the pain they give)
+is to search for regressions as extensively as we can, so we take the
+broad approach that turns conditional tests into autopkgtest hard
+dependencies. (We actually turn all DESCRIPTION Suggests into
+autopkgtest dependencies, which know will also include packages not used
+by the test suite, because we do not yet have a reliable way to parse
+the test suite and deduce its dependencies; please let me know if there
+is a standard procedure for this).
+
+This said, I went to the ftp.debian.org mirror and checked the `dak rm`
+simulation for the packages listed as the cause for autoremovals of your
+packages, and indeed, it is very easy to remove r-cran-utf8 on armel
+armhf i386 and s390x.  I am sorry that I did not pay attention earlier.
+I have filled #1130603 for r-cran-utf8, #1130604 for r-cran-isoband, and
+#1130608 for r-cran-jpeg.
+
+Unfortunately, the dak dependency chain of r-cran-jsonlite,
+r-cran-igraph and r-cran-fs are much bigger and contains Bioconductor
+packages (see below).  I arch-restricted 165 out of 193 of them today
+(DELAYED/2).  The others could not be processed automatically for
+various reasons (including failing autopkgtest…).
+
+Next week I will figure out how to check that everything that dak rm
+proposes to remove is arch-restricted, make uploads for the packages
+that need, and fill the other bugs, unless Paul gives me other
+instructions.
+ 
+Have a nice week-end,
+
+Charles
+
+plessy@coccia:~$ dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-jsonlite
+Will remove the following packages from unstable:
+
+r-cran-jsonlite | 1.9.1+dfsg-1 | armhf, i386, s390x
+
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Will also send CCs to: r-cran-jsonlite at packages.debian.org
+
+------------------- Reason -------------------
+ROM; remove 32 bit and non-little-endian architectures
+----------------------------------------------
+
+Checking reverse dependencies...
+# Broken Depends:
+r-bioc-alabaster.sce: r-bioc-alabaster.sce
+r-bioc-alabaster.se: r-bioc-alabaster.se
+r-bioc-arrayexpress: r-bioc-arrayexpress
+r-bioc-biomformat: r-bioc-biomformat
+r-bioc-chemminer: r-bioc-chemminer [s390x]
+r-bioc-fishpond: r-bioc-fishpond
+r-bioc-gypsum: r-bioc-gypsum
+r-bioc-rcpi: r-bioc-rcpi
+r-bioc-scrnaseq: r-bioc-scrnaseq
+r-bioc-tcgabiolinks: r-bioc-tcgabiolinks
+r-bioc-tximeta: r-bioc-tximeta
+r-bioc-ucsc.utils: r-bioc-ucsc.utils
+r-cran-airr: r-cran-airr
+r-cran-argparse: r-cran-argparse
+r-cran-bslib: r-cran-bslib
+r-cran-colourpicker: r-cran-colourpicker
+r-cran-covr: r-cran-covr
+r-cran-credentials: r-cran-credentials
+r-cran-crosstalk: r-cran-crosstalk
+r-cran-crul: r-cran-crul
+r-cran-dt: r-cran-dt
+r-cran-fitbitscraper: r-cran-fitbitscraper
+r-cran-fitcoach: r-cran-fitcoach
+r-cran-gargle: r-cran-gargle
+r-cran-gfonts: r-cran-gfonts
+r-cran-ggvis: r-cran-ggvis
+r-cran-gh: r-cran-gh
+r-cran-googledrive: r-cran-googledrive
+r-cran-googlevis: r-cran-googlevis
+r-cran-gprofiler2: r-cran-gprofiler2
+r-cran-gridsvg: r-cran-gridsvg
+r-cran-htmlwidgets: r-cran-htmlwidgets
+r-cran-httptest2: r-cran-httptest2
+r-cran-httr: r-cran-httr
+r-cran-irkernel: r-cran-irkernel
+r-cran-jinjar: r-cran-jinjar
+r-cran-jrc: r-cran-jrc
+r-cran-jsonld: r-cran-jsonld
+r-cran-memisc: r-cran-memisc
+r-cran-natserv: r-cran-natserv
+r-cran-pkgdown: r-cran-pkgdown
+r-cran-plotly: r-cran-plotly
+r-cran-plumber: r-cran-plumber
+r-cran-quantmod: r-cran-quantmod
+r-cran-rdbnomics: r-cran-rdbnomics
+r-cran-rentrez: r-cran-rentrez
+r-cran-repr: r-cran-repr
+r-cran-reticulate: r-cran-reticulate
+r-cran-rhandsontable: r-cran-rhandsontable
+r-cran-rhub: r-cran-rhub
+r-cran-ritis: r-cran-ritis
+r-cran-rlist: r-cran-rlist
+r-cran-rnaturalearth: r-cran-rnaturalearth
+r-cran-rotl: r-cran-rotl
+r-cran-rredlist: r-cran-rredlist
+r-cran-rsconnect: r-cran-rsconnect
+r-cran-rtweet: r-cran-rtweet
+r-cran-seurat: r-cran-seurat
+r-cran-shiny: r-cran-shiny
+r-cran-shinyfiles: r-cran-shinyfiles
+r-cran-shinyjs: r-cran-shinyjs
+r-cran-solrium: r-cran-solrium
+r-cran-systemfonts: r-cran-systemfonts
+r-cran-taxize: r-cran-taxize
+r-cran-testthat: r-cran-testthat
+r-cran-tidyverse: r-cran-tidyverse
+r-cran-usethis: r-cran-usethis
+r-cran-v8: r-cran-v8
+r-cran-visnetwork: r-cran-visnetwork
+r-cran-wdi: r-cran-wdi
+r-cran-webgestaltr: r-cran-webgestaltr
+r-cran-webmockr: r-cran-webmockr
+r-cran-webshot: r-cran-webshot
+r-cran-webutils: r-cran-webutils
+r-cran-whoami: r-cran-whoami
+r-cran-wikidataqueryservicer: r-cran-wikidataqueryservicer
+r-cran-wikidatar: r-cran-wikidatar
+r-cran-wikipedir: r-cran-wikipedir
+r-cran-wikitaxa: r-cran-wikitaxa
+r-cran-worrms: r-cran-worrms
+rgl: r-cran-rgl
+tseries: r-cran-tseries
+
+# Broken Build-Depends:
+r-bioc-alabaster.base: r-cran-jsonlite
+r-bioc-alabaster.sce: r-cran-jsonlite
+r-bioc-alabaster.se: r-cran-jsonlite
+r-bioc-arrayexpress: r-cran-jsonlite
+r-bioc-biomformat: r-cran-jsonlite
+r-bioc-chemminer: r-cran-jsonlite
+r-bioc-fishpond: r-cran-jsonlite
+r-bioc-gypsum: r-cran-jsonlite
+r-bioc-rcpi: r-cran-jsonlite
+r-bioc-scrnaseq: r-cran-jsonlite
+r-bioc-tcgabiolinks: r-cran-jsonlite
+r-bioc-tximeta: r-cran-jsonlite
+r-bioc-ucsc.utils: r-cran-jsonlite
+r-cran-airr: r-cran-jsonlite
+r-cran-argparse: r-cran-jsonlite
+r-cran-bslib: r-cran-jsonlite
+r-cran-colourpicker: r-cran-jsonlite
+r-cran-covr: r-cran-jsonlite
+r-cran-credentials: r-cran-jsonlite
+r-cran-crosstalk: r-cran-jsonlite
+r-cran-crul: r-cran-jsonlite
+r-cran-dt: r-cran-jsonlite
+r-cran-fitbitscraper: r-cran-jsonlite
+r-cran-fitcoach: r-cran-jsonlite
+r-cran-gargle: r-cran-jsonlite
+r-cran-gfonts: r-cran-jsonlite
+r-cran-ggvis: r-cran-jsonlite
+r-cran-gh: r-cran-jsonlite
+r-cran-googledrive: r-cran-jsonlite
+r-cran-googlevis: r-cran-jsonlite
+r-cran-gprofiler2: r-cran-jsonlite
+r-cran-gridsvg: r-cran-jsonlite
+r-cran-htmlwidgets: r-cran-jsonlite
+r-cran-httptest2: r-cran-jsonlite
+r-cran-httr: r-cran-jsonlite
+r-cran-irkernel: r-cran-jsonlite
+r-cran-jinjar: r-cran-jsonlite
+r-cran-jrc: r-cran-jsonlite
+r-cran-jsonld: r-cran-jsonlite
+r-cran-memisc: r-cran-jsonlite
+r-cran-natserv: r-cran-jsonlite
+r-cran-pkgdown: r-cran-jsonlite
+r-cran-plotly: r-cran-jsonlite
+r-cran-plumber: r-cran-jsonlite
+r-cran-quantmod: r-cran-jsonlite
+r-cran-rdbnomics: r-cran-jsonlite
+r-cran-rentrez: r-cran-jsonlite
+r-cran-repr: r-cran-jsonlite
+r-cran-reticulate: r-cran-jsonlite
+r-cran-rhandsontable: r-cran-jsonlite
+r-cran-rhub: r-cran-jsonlite
+r-cran-ritis: r-cran-jsonlite
+r-cran-rlist: r-cran-jsonlite
+r-cran-rnaturalearth: r-cran-jsonlite
+r-cran-rotl: r-cran-jsonlite
+r-cran-rredlist: r-cran-jsonlite
+r-cran-rsconnect: r-cran-jsonlite
+r-cran-rtweet: r-cran-jsonlite
+r-cran-seurat: r-cran-jsonlite
+r-cran-shiny: r-cran-jsonlite
+r-cran-shinyfiles: r-cran-jsonlite
+r-cran-shinyjs: r-cran-jsonlite
+r-cran-solrium: r-cran-jsonlite
+r-cran-systemfonts: r-cran-jsonlite
+r-cran-taxize: r-cran-jsonlite
+r-cran-testthat: r-cran-jsonlite (2.0.0 >=)
+r-cran-tidyverse: r-cran-jsonlite (1.8.4 >=)
+r-cran-usethis: r-cran-jsonlite
+r-cran-v8: r-cran-jsonlite
+r-cran-visnetwork: r-cran-jsonlite
+r-cran-wdi: r-cran-jsonlite
+r-cran-webgestaltr: r-cran-jsonlite
+r-cran-webmockr: r-cran-jsonlite
+r-cran-webshot: r-cran-jsonlite
+r-cran-webutils: r-cran-jsonlite
+r-cran-whoami: r-cran-jsonlite
+r-cran-wikidataqueryservicer: r-cran-jsonlite
+r-cran-wikidatar: r-cran-jsonlite
+r-cran-wikipedir: r-cran-jsonlite
+r-cran-wikitaxa: r-cran-jsonlite
+r-cran-worrms: r-cran-jsonlite
+rgl: r-cran-jsonlite
+tseries: r-cran-jsonlite
+
+plessy@coccia:~$ dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-igraph
+Will remove the following packages from unstable:
+
+r-cran-igraph | 2.1.4-1+b1 | armhf, i386, s390x
+
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Will also send CCs to: r-cran-igraph at packages.debian.org
+
+------------------- Reason -------------------
+ROM; remove 32 bit and non-little-endian architectures
+----------------------------------------------
+
+Checking reverse dependencies...
+# Broken Depends:
+r-bioc-bluster: r-bioc-bluster [s390x]
+r-bioc-monocle: r-bioc-monocle [s390x]
+r-bioc-netsam: r-bioc-netsam
+r-bioc-phyloseq: r-bioc-phyloseq
+r-bioc-scran: r-bioc-scran [s390x]
+r-bioc-stringdb: r-bioc-stringdb
+r-cran-bdgraph: r-cran-bdgraph
+r-cran-bios2cor: r-cran-bios2cor
+r-cran-boolnet: r-cran-boolnet
+r-cran-diagrammer: r-cran-diagrammer
+r-cran-ecodist: r-cran-ecodist
+r-cran-ggm: r-cran-ggm
+r-cran-ggraph: r-cran-ggraph
+r-cran-graphlayouts: r-cran-graphlayouts
+r-cran-huge: r-cran-huge
+r-cran-influencer: r-cran-influencer
+r-cran-intergraph: r-cran-intergraph
+r-cran-leiden: r-cran-leiden
+r-cran-leidenbase: r-cran-leidenbase
+r-cran-lexrankr: r-cran-lexrankr
+r-cran-markovchain: r-cran-markovchain
+r-cran-phangorn: r-cran-phangorn
+r-cran-qgraph: r-cran-qgraph
+r-cran-semplot: r-cran-semplot
+r-cran-seurat: r-cran-seurat
+r-cran-shazam: r-cran-shazam
+r-cran-threejs: r-cran-threejs
+r-cran-tidygraph: r-cran-tidygraph
+r-cran-webgestaltr: r-cran-webgestaltr
+
+# Broken Build-Depends:
+r-bioc-bluster: r-cran-igraph
+r-bioc-monocle: r-cran-igraph
+r-bioc-netsam: r-cran-igraph (2.0.0 >=)
+r-bioc-phyloseq: r-cran-igraph
+r-bioc-scran: r-cran-igraph
+r-bioc-stringdb: r-cran-igraph
+r-cran-adegenet: r-cran-igraph
+r-cran-alakazam: r-cran-igraph (1.5.0 >=)
+r-cran-bdgraph: r-cran-igraph
+r-cran-bios2cor: r-cran-igraph
+r-cran-boolnet: r-cran-igraph
+r-cran-diagrammer: r-cran-igraph (1.4.0 >=)
+r-cran-ecodist: r-cran-igraph
+r-cran-ggm: r-cran-igraph
+r-cran-ggraph: r-cran-igraph
+r-cran-graphlayouts: r-cran-igraph (2.0.0 >=)
+r-cran-huge: r-cran-igraph
+r-cran-influencer: r-cran-igraph
+r-cran-intergraph: r-cran-igraph
+r-cran-leiden: r-cran-igraph (1.2.7 >=)
+r-cran-leidenbase: r-cran-igraph
+r-cran-lexrankr: r-cran-igraph
+r-cran-markovchain: r-cran-igraph
+r-cran-phangorn: r-cran-igraph
+r-cran-qgraph: r-cran-igraph
+r-cran-semplot: r-cran-igraph
+r-cran-seurat: r-cran-igraph
+r-cran-shazam: r-cran-igraph (1.5.0 >=)
+r-cran-threejs: r-cran-igraph
+r-cran-tidygraph: r-cran-igraph (2.0.0 >=)
+r-cran-webgestaltr: r-cran-igraph
+
+plessy@coccia:~$ dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-fs
+Will remove the following packages from unstable:
+
+ r-cran-fs | 1.6.5+dfsg-1 | armhf, i386, s390x
+
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Will also send CCs to: r-cran-fs at packages.debian.org
+
+------------------- Reason -------------------
+ROM; remove 32 bit and non-little-endian architectures
+----------------------------------------------
+
+Checking reverse dependencies...
+# Broken Depends:
+r-bioc-megadepth: r-bioc-megadepth
+r-cran-batchtools: r-cran-batchtools
+r-cran-devtools: r-cran-devtools
+r-cran-gargle: r-cran-gargle
+r-cran-irace: r-cran-irace
+r-cran-jinjar: r-cran-jinjar
+r-cran-pkgdown: r-cran-pkgdown
+r-cran-pkgload: r-cran-pkgload
+r-cran-reprex: r-cran-reprex
+r-cran-sass: r-cran-sass
+r-cran-shinyfiles: r-cran-shinyfiles
+r-cran-usethis: r-cran-usethis
+r-cran-yulab.utils: r-cran-yulab.utils
+
+# Broken Build-Depends:
+r-bioc-megadepth: r-cran-fs
+r-cran-batchtools: r-cran-fs
+r-cran-devtools: r-cran-fs (1.6.6 >=)
+r-cran-gargle: r-cran-fs
+r-cran-irace: r-cran-fs
+r-cran-jinjar: r-cran-fs
+r-cran-pkgdown: r-cran-fs
+r-cran-pkgload: r-cran-fs
+r-cran-reprex: r-cran-fs
+r-cran-sass: r-cran-fs
+r-cran-shinyfiles: r-cran-fs
+r-cran-usethis: r-cran-fs
+r-cran-yulab.utils: r-cran-fs
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Fri Mar 13 23:57:42 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 08:57:42 +0900
+Subject: Key pakages and r-cran-* packages
+Message-ID: <abSkdjZcUAsPKjRA@bubu.igloo>
+
+Hi Paul and everybody,
+
+Le Thu, Mar 12, 2026 at 07:25:58AM +0100, Paul Gevers a écrit :
+> r-base is a key package (some r-cran packages are as well by the way,
+> by the looks via r-recommended), it's extra work (typically not
+> trivial) to remove it. It probably requires also changes to how some
+> of our desktop environment manage their dependencies if it wouldn't
+> force them out completely on those architectures. Please contact the
+> porters before you do that.
+
+https://release.debian.org/key-packages.html states:
+
+	Key packages, what are they? In order to run a (minimal) Debian
+	system, there is a set of package that need to be available in a
+	suite."
+
+I know about key packages and I just want to forward here to the readers
+of his list what was said on the debian-release last year.
+
+In https://lists.debian.org/debian-release/2025/11/msg00859.html, Chris
+wrote:
+
+	r-% in the key set are:
+	  r-base
+	  r-cran-class
+	  r-cran-mass
+	  r-cran-nnet
+	  r-cran-spatial
+
+	One chain is:
+
+	meta:d-i	=>	debian-edu-install
+	debian-edu-install	depends	debian-edu-config
+	debian-edu-config	depends	debian-edu
+	debian-edu	depends	tasksel
+	tasksel	depends	meta-kde
+	meta-kde	depends	cantor
+	cantor	build-depends	r-base
+
+	r-base	depends	r-cran-class
+	r-base	depends	r-cran-mass
+	r-base	depends	r-cran-nnet
+	r-base	depends	r-cran-spatial
+
+And Holger added in https://lists.debian.org/debian-release/2025/11/msg00867.html 
+
+	Debian Edu is basically an amd64 blend.
+
+to which Chris answered:
+
+	Probably just one of many things the key package set does not and
+	maybe should not take into account.
+
+	Incidentally I looked into either the calculation or the autoremoval
+	script today and noticed that "cantor" is marked as allow-remove.
+	Maybe the r-* packages do not matter for the key package set, in the
+	end.
+
+This is why it may look like I do not know about key packages…
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plessy at debian.org  Sat Mar 14 01:50:14 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 10:50:14 +0900
+Subject: Bug#1130670: RM: r-cran-restfulr and its reverse-dependendcy r-bioc-rtracklayer [armhf i386 s390c hurd-386] -- RoM; unsupported architectures
+Message-ID: <abS-1qcJY6NWtEol@bubu.igloo>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive team
+
+please remove r-cran-restfulr and its reverse-dependency r-bioc-rtracklayer on
+armhf, i386 and s390x.
+
+These architectures are not supported upstream and I have made the
+packages build-depend on architecture-is-64-bit and
+architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian architectures" -b -a armhf,i386,s390x r-cran-restfulr
+
+Have a nice week-end,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From elbrus at debian.org  Sat Mar 14 06:23:11 2026
+From: elbrus at debian.org (Paul Gevers)
+Date: Sat, 14 Mar 2026 07:23:11 +0100
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abNbVYBb03IWvbGD@kumo.plessy.net>
+References: <abIEM-jn60WUuOD_@kumo.plessy.net> <27058.3422.592886.96218@paul.eddelbuettel.com> <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net>
+Message-ID: <7026b714-5032-4afe-b6fb-255efb477cc3@debian.org>
+
+Hi Charles
+
+On 3/13/26 01:33, Charles Plessy wrote:
+> Dirk, the list at the end includes your architecture-dependent packages that
+> directly or transitively depend, recommend or suggest r-cran-utf8.  Can
+> you architecture-restrict them?
+
+This isn't needed for Suggests (like Dirk already mentioned). For 
+Recommends, I'd say it's a touch call as we (ambiguously) don't allow it 
+by policy, but nothing checks on it and I wouldn't want to drop 
+architecture support for a binary because its Recommends isn't available 
+on that architecture. Worse case one can annotate the Recommends with an 
+architecture qualifier, but that feels a PITA and just busywork (which 
+seems like counteracting the goal of your campaign). And for 
+completeness this also isn't needed for Build-Depends, as once the 
+binaries are removed on architectures where the Build-Depends and 
+reverse packages are removed, those architectures can't build the 
+binaries anymore and things are OK from the archive point of view.
+
+> > On 3/12/26 13:29, Charles Plessy wrote:
+> > > Control: fixed 1127349 1.2.4-1
+> > > Control: fixed 1127631 1.1.0-1
+>
+>
+> Le Thu, Mar 12, 2026 at 02:53:53PM +0100, Paul Gevers a écrit :
+> > We told you before you started with this effort of dropping architecture
+> > support that you needed to be prepared for the removal bugs. You ignored
+> > that
+
+>   - I replied that I will group them by batches covering some large branches
+>     of the r-cran-* dependency network, because I expect that hundreds
+>     of individuals removal bugs are not welcome.  I added that I expect
+>     that I only can do so when all the packages in the same bulk removal
+>     are architecture-restrited.  I asked for advice on debian-devel about
+>     bulk removal bugs.
+
+Not on d-devel, but: Message-ID: 
+<523f3f9b-8fb2-48aa-b2c4-8b718a046543 at debian.org>
+
+"""
+So, I think for you mass upload it's probably the easiest to start with 
+leaf packages and then work your way up the stack, unless you make 
+special arrangements with ftp-master.
+
+"""
+
+As I understand it, you work alphabetically and you have not made 
+special arrangements with ftp-master.
+
+>     removing binaries of non-arch-restricted packages is pointless because
+>     builds-will reupload the binaries
+
+... unless Build-Depends are removed at the same time and thus no longer 
+can be satisfied on that architecture. The buildds can only upload what 
+they can build. So, had you arranged support from ftp-master, you only 
+needed to do the annotation at the bottom of the stack.
+
+>   - I announced (maybe not in this thread, but on this list), that I made a
+>     first pilot test (#1128383).  That bug was closed this week by the Archive
+>     Operation team.
+
+That was quite some time after you started your endeavor. Maybe a pilot 
+*before* would have been useful?
+
+> If that is not acceptable with you, please let me know with precise instructions
+> on what removal bug(s) I must fill and what was wrong in my reasonning.
+
+I haven't checked, but I stand with Dirk in his remark that these 
+packages shouldn't be removed for Suggests (and per my remark above, 
+also not for Recommends).
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From plessy at debian.org  Sat Mar 14 08:27:55 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 14 Mar 2026 17:27:55 +0900
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <7026b714-5032-4afe-b6fb-255efb477cc3@debian.org>
+References: <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <7026b714-5032-4afe-b6fb-255efb477cc3@debian.org>
+Message-ID: <abUcC2dQaLevi7hj@bubu.igloo>
+
+Hi Paul,
+
+> On 3/13/26 01:33, Charles Plessy wrote:
+> > I asked for advice on debian-devel about bulk removal bugs.
+
+Le Sat, Mar 14, 2026 at 07:23:11AM +0100, Paul Gevers a écrit :
+> Not on d-devel, but: Message-ID: <523f3f9b-8fb2-48aa-b2c4-8b718a046543 at debian.org>
+
+I asked for advice on debian-devel about bulk removal bugs.
+
+https://lists.debian.org/debian-devel/2025/12/msg00106.html
+
+I think that point-to-point replies deviate us from the core of the
+discussion.
+
+In any case, I have finished the bulk updates that were automatable,
+wich was more than 500 packages.  They will be all out of the delayed
+queue by the end of the week-end.   How I reached that point is now a
+thing of the past; we had misunderstandings but I think that we can
+overcome and eventually forget them.  I understand that people are
+frustrated on how long it took but I have a full-time job and a family.
+
+I will follow up with requests for removal and targeted uploads.
+
+Soon, most of the r-cran and all of the r-bioc packages will be
+available only on 64-bit little-endian architectures, which is still
+broader than what upstream supports.  People aiming seriously at
+supporting scientific computation with R and Debian packages on other
+architectures should engage with the R community first.  On my side, I
+will not upload anymore packages where we turn off autopkgtests on
+specific architectures in order to hide the fact that they perform
+incorrect computations.
+
+Dirk, I think that we can give you the ownership of the packages that
+you need if you prefer not drop architectures in your packages that
+depend on ours.  I am also fine for making case-by-case exceptions in
+the architecture restricions when there is a serious need.
+
+Lastly, porters who would like to assess the feasibility of supporting
+r-cran/bioc packages on their architectures can make local builds and
+autopkgtests in environments that provides architecture-is-64-bit and
+architecture-is-little-endian.  I am fine with extending the list of
+architecures we support if the porters show that they can provide
+patches that the R community is willing to accept.
+
+Cheers,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Sat Mar 14 11:53:36 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 14 Mar 2026 06:53:36 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <abUcC2dQaLevi7hj@bubu.igloo>
+References: <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <7026b714-5032-4afe-b6fb-255efb477cc3@debian.org> <abUcC2dQaLevi7hj@bubu.igloo>
+Message-ID: <27061.19520.972823.805172@paul.eddelbuettel.com>
+
+On 14 March 2026 at 17:27, Charles Plessy wrote:
+| Dirk, I think that we can give you the ownership of the packages that
+| you need if you prefer not drop architectures in your packages that
+
+Thanks but I do not need more packages to look after, around 170 is plenty.
+
+What I need is your autopkgtests to hold my existing packages behind and
+causes endless, repeated and uncalled-for trouble.
+
+It might be worth considering to limit the autopkgtests to Depends (plus
+testthat, tinytest, RUnit) as Paul and I are urging you too. In that case you
+might not have to do the 'exclude entire architecture groups' undertaking you
+do now.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Sat Mar 14 15:13:57 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 14 Mar 2026 10:13:57 -0500
+Subject: Re: Bug#1127631: src:rcpp: fails to migrate to testing for too long
+In-Reply-To: <27061.19520.972823.805172@paul.eddelbuettel.com>
+References: <abISekcyiVsrWeHB@nuc> <27058.5991.959427.784899@paul.eddelbuettel.com> <0462aff4-1930-46e5-8b07-9eb4639233f2@debian.org> <27058.37653.7350.139626@paul.eddelbuettel.com> <c33677f6-8d91-46df-a0b1-e86f78b51af2@debian.org> <27058.38555.811724.117821@paul.eddelbuettel.com> <abKxuogcxYSdtA2Q@bubu.igloo> <5969b77c-9b09-4e4f-bb99-260c3df1e375@debian.org> <abNbVYBb03IWvbGD@kumo.plessy.net> <7026b714-5032-4afe-b6fb-255efb477cc3@debian.org> <abUcC2dQaLevi7hj@bubu.igloo> <27061.19520.972823.805172@paul.eddelbuettel.com>
+Message-ID: <27061.31541.617840.578695@paul.eddelbuettel.com>
+
+On 14 March 2026 at 06:53, Dirk Eddelbuettel wrote:
+| 
+| On 14 March 2026 at 17:27, Charles Plessy wrote:
+| | Dirk, I think that we can give you the ownership of the packages that
+| | you need if you prefer not drop architectures in your packages that
+| 
+| Thanks but I do not need more packages to look after, around 170 is plenty.
+| 
+| What I need is your autopkgtests to hold my existing packages behind and
+| causes endless, repeated and uncalled-for trouble.
+
+Sent this before going running and missed a critical 'NOT':
+
+  What I need is your autopkgtests to NOT hold my existing packages behind and
+  causes endless, repeated and uncalled-for trouble.
+
+Dirk
+ 
+| It might be worth considering to limit the autopkgtests to Depends (plus
+| testthat, tinytest, RUnit) as Paul and I are urging you too. In that case you
+| might not have to do the 'exclude entire architecture groups' undertaking you
+| do now.
+| 
+| Dirk
+| 
+| -- 
+| dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sun Mar 15 01:29:16 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 15 Mar 2026 10:29:16 +0900
+Subject: Bug#1130771: RM: r-cran-rtweet -- ROM; Removed upstream
+Message-ID: <177353815606.4156073.8201291300616336224.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-rtweet at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-rtweet
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hello, r-cran-rtweet was discontinued upstream, let's remove it from Debian.
+
+https://cran.r-project.org/web/packages/rtweet/index.html
+
+Have a nice Sunday,
+
+Charles
+
+From plessy at debian.org  Sun Mar 15 02:13:55 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 15 Mar 2026 11:13:55 +0900
+Subject: Bug#1130773: RM: r-cran-whatif -- ROM; Removed upstream
+Message-ID: <177354083583.159774.15310158562344202415.reportbug@grsu-plessy-xps.oist.jp>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-whatif at packages.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-whatif
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+
+Hello, r-cran-whatif was removed upstream so let's remove it from Debian
+too.
+
+https://cran.r-project.org/web/packages/WhatIf/index.html
+
+Cheers,
+
+Charles
+
+From rinni at inventati.org  Sun Mar 15 17:11:20 2026
+From: rinni at inventati.org (Philip Rinn)
+Date: Sun, 15 Mar 2026 18:11:20 +0100
+Subject: Re: Accepted r-cran-scatterplot3d 0.3-45-2 (source) into unstable
+In-Reply-To: <E1w1J3Z-0000000GKTR-3lmu@fasolo.debian.org>
+References: <E1w1J3Z-0000000GKTR-3lmu@fasolo.debian.org>
+Message-ID: <c6f174f9-05e9-4f9a-8d58-8021fe975fcc@inventati.org>
+
+Hi Charles,
+
+On 14.03.26, at 08:05 Debian FTP Masters wrote:
+> Format: 1.8
+> Date: Thu, 12 Mar 2026 15:32:17 +0900
+> Source: r-cran-scatterplot3d
+> Architecture: source
+> Version: 0.3-45-2
+> Distribution: unstable
+> Urgency: medium
+> Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+> Changed-By: Charles Plessy <plessy at debian.org>
+> Changes:
+>   r-cran-scatterplot3d (0.3-45-2) unstable; urgency=medium
+>   .
+>     * Team upload.
+>     * Packaging update (routine-update)
+>     * Reflow Uploaders field (cme)
+>     * Restrict to 64-bits architectures (routine-update)
+>     * Restrict to little-endian architectures (routine-update)
+what's your goal? Did you see any indication that the package doesn't 
+work correctly on non 64bit/little-endian archs?
+
+I don't think this makes sense for arch all package (at least not in the 
+way you implemented it).
+Currently, it just prevents those packages to be _build_ on non 
+64bit/little-endian archs. While is doesn't prevent them to be 
+_installed_ on those.
+
+Am I missing something?
+
+Best,
+Philip
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature.asc
+Desc: OpenPGP digital signature
+
+From charles.plessy at oist.jp  Mon Mar 16 01:36:46 2026
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Mon, 16 Mar 2026 10:36:46 +0900
+Subject: Bug#1130922: RM: r-cran-jsonlite and its reverse-dependencies [armhf i386 s390c hurd-386] -- RoM; unsupported architectures
+Message-ID: <3a1bb8de-9564-49bb-b4a0-c63d89f23bfc@oist.jp>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive Operations team,
+
+please remove r-cran-jsonlite and its reverse-dependencies on
+armhf, i386 and s390x.
+
+These architectures are not supported upstream and I have made the 
+package and its reverse-dependencies build-depend on architecture-is-64 
+bit and architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of 
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-jsonlite
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Mon Mar 16 01:37:12 2026
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Mon, 16 Mar 2026 10:37:12 +0900
+Subject: Bug#1130923: RM: r-cran-igraph and its reverse-dependencies [armhf i386 s390c hurd-386] -- RoM; unsupported architectures
+Message-ID: <12b5e5d1-c5cc-4002-be42-d9697f265d22@oist.jp>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive Operations team,
+
+please remove r-cran-igraph and its reverse-dependencies on
+armhf, i386 and s390x.
+
+These architectures are not supported upstream and I have made the 
+package and its reverse-dependencies build-depend on architecture-is-64 
+bit and architecture-is-little-endian.
+
+Removing these binary packages in unstable will trigger the removal of 
+their counterparts in testing, and allow the migration of related packages.
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-igraph
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From charles.plessy at oist.jp  Tue Mar 17 00:21:36 2026
+From: charles.plessy at oist.jp (Charles Plessy)
+Date: Tue, 17 Mar 2026 09:21:36 +0900
+Subject: Bug#1131018: Bulk r-cran-* r-bioc-* armel armhf i386 s390x removals
+Message-ID: <c061640a-e07b-4038-927c-a8bced1c9a51@oist.jp>
+
+Package: ftp.debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: archive
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Dear Archive Operations team,
+
+Thank you for the removals yesterday.  Unfortunately, I made a typo that 
+I propagated with cut-and-paste, so can I ask you to run the following 
+commands?
+
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-utf8
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-isoband
+dak rm -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-jpeg
+dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-restfulr
+dak rm  -R -p -C package -m "ROM; remove 32 bit and non-little-endian 
+architectures" -b -a armhf,i386,s390x r-cran-jsonlite
+
+In addition, I would be grateful if you could remove all r-bioc-* 
+packages on armhf,i386,s390x as well.  In case you need it, here is the 
+list of packages as I know it.
+
+Have a nice day,
+
+Charles
+
+r-bioc-affxparser
+r-bioc-affy
+r-bioc-affyio
+r-bioc-alabaster.base
+r-bioc-alabaster.matrix
+r-bioc-alabaster.ranges
+r-bioc-alabaster.sce
+r-bioc-alabaster.schemas
+r-bioc-alabaster.se
+r-bioc-all
+r-bioc-altcdfenvs
+r-bioc-annotate
+r-bioc-annotationdbi
+r-bioc-annotationfilter
+r-bioc-annotationhub
+r-bioc-aroma.light
+r-bioc-arrayexpress
+r-bioc-assorthead
+r-bioc-ballgown
+r-bioc-basilisk
+r-bioc-basilisk.utils
+r-bioc-beachmat
+r-bioc-biobase
+r-bioc-biocbaseutils
+r-bioc-bioccheck
+r-bioc-biocfilecache
+r-bioc-biocgenerics
+r-bioc-biocio
+r-bioc-biocmake
+r-bioc-biocneighbors
+r-bioc-biocparallel
+r-bioc-biocsingular
+r-bioc-biocstyle
+r-bioc-biocversion
+r-bioc-biocviews
+r-bioc-biomart
+r-bioc-biomformat
+r-bioc-biostrings
+r-bioc-biovizbase
+r-bioc-bladderbatch
+r-bioc-bluster
+r-bioc-bsgenome
+r-bioc-bsseq
+r-bioc-chemminer
+r-bioc-cner
+r-bioc-complexheatmap
+r-bioc-consensusclusterplus
+r-bioc-ctc
+r-bioc-cummerbund
+r-bioc-dada2
+r-bioc-decontam
+r-bioc-decoupler
+r-bioc-degnorm
+r-bioc-degreport
+r-bioc-delayedarray
+r-bioc-delayedmatrixstats
+r-bioc-demixt
+r-bioc-densvis
+r-bioc-deseq
+r-bioc-deseq2
+r-bioc-destiny
+r-bioc-dexseq
+r-bioc-dir.expiry
+r-bioc-dirichletmultinomial
+r-bioc-dnacopy
+r-bioc-drimseq
+r-bioc-dropletutils
+r-bioc-dss
+r-bioc-dupradar
+r-bioc-ebseq
+r-bioc-edaseq
+r-bioc-edger
+r-bioc-eir
+r-bioc-ensembldb
+r-bioc-experimenthub
+r-bioc-fishpond
+r-bioc-fmcsr
+r-bioc-genefilter
+r-bioc-genelendatabase
+r-bioc-geneplotter
+r-bioc-genomeinfodb
+r-bioc-genomeinfodbdata
+r-bioc-genomicalignments
+r-bioc-genomicfeatures
+r-bioc-genomicfiles
+r-bioc-genomicranges
+r-bioc-geoquery
+r-bioc-ggbio
+r-bioc-glmgampoi
+r-bioc-go.db
+r-bioc-golubesets
+r-bioc-gosemsim
+r-bioc-goseq
+r-bioc-graph
+r-bioc-grohmm
+r-bioc-gseabase
+r-bioc-gsva
+r-bioc-gsvadata
+r-bioc-gviz
+r-bioc-gypsum
+r-bioc-hdf5array
+r-bioc-hgu95a.db
+r-bioc-hilbertvis
+r-bioc-hsmmsinglecell
+r-bioc-htsfilter
+r-bioc-hypergraph
+r-bioc-ihw
+r-bioc-impute
+r-bioc-interactivedisplaybase
+r-bioc-ioniser
+r-bioc-iranges
+r-bioc-isoformswitchanalyzer
+r-bioc-keggrest
+r-bioc-limma
+r-bioc-lpsymphony
+r-bioc-makecdfenv
+r-bioc-matrixgenerics
+r-bioc-megadepth
+r-bioc-mergeomics
+r-bioc-metagenomeseq
+r-bioc-metapod
+r-bioc-mofa
+r-bioc-mofa2
+r-bioc-monocle
+r-bioc-multiassayexperiment
+r-bioc-multtest
+r-bioc-mutationalpatterns
+r-bioc-netsam
+r-bioc-noiseq
+r-bioc-oligo
+r-bioc-oligoclasses
+r-bioc-organismdbi
+r-bioc-org.hs.eg.db
+r-bioc-pcamethods
+r-bioc-pfamanalyzer
+r-bioc-phyloseq
+r-bioc-preprocesscore
+r-bioc-progeny
+r-bioc-protgenerics
+r-bioc-purecn
+r-bioc-pwalign
+r-bioc-pwmenrich
+r-bioc-qtlizer
+r-bioc-qusage
+r-bioc-qvalue
+r-bioc-rbgl
+r-bioc-rcpi
+r-bioc-rcwl
+r-bioc-residualmatrix
+r-bioc-rgsepd
+r-bioc-rhdf5
+r-bioc-rhdf5filters
+r-bioc-rhdf5lib
+r-bioc-rhtslib
+r-bioc-rots
+r-bioc-rsamtools
+r-bioc-rsubread
+r-bioc-rtracklayer
+r-bioc-rwikipathways
+r-bioc-s4arrays
+r-bioc-s4vectors
+r-bioc-saturn
+r-bioc-savr
+r-bioc-scaledmatrix
+r-bioc-scater
+r-bioc-scran
+r-bioc-scrnaseq
+r-bioc-scuttle
+r-bioc-seqlogo
+r-bioc-shortread
+r-bioc-singlecellexperiment
+r-bioc-singler
+r-bioc-snpstats
+r-bioc-sparsearray
+r-bioc-sparsematrixstats
+r-bioc-spatialexperiment
+r-bioc-stringdb
+r-bioc-structuralvariantannotation
+r-bioc-summarizedexperiment
+r-bioc-sva
+r-bioc-tcgabiolinks
+r-bioc-tcgabiolinksgui.data
+r-bioc-tfbstools
+r-bioc-titancna
+r-bioc-txdbmaker
+r-bioc-tximeta
+r-bioc-tximport
+r-bioc-tximportdata
+r-bioc-ucsc.utils
+r-bioc-variantannotation
+r-bioc-wrench
+r-bioc-xvector
+r-bioc-zlibbioc
+
+--
+Charles Plessy - - ~ ~ ~ ~ ~ ~~~~ ~ ~ ~ ~ ~ - - charles.plessy at oist.jp
+Okinawa  Institute  of  Science  and  Technology  Graduate  University
+Senior staff scientist ~~ Luscombe Unit ~~ https://groups.oist.jp/grsu
+Toots from work - ~~ ~~~~ ~~ - https://fediscience.org/@charles_plessy
+
+From plessy at debian.org  Mon Mar 23 18:11:36 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:11:36 +0900
+Subject: Bug#1131728: RM: r-cran-rlang [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177428949654.4854.11121786822957096555.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-rlang at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-rlang
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again, and thanks for your help with the removals.
+
+Cheers,
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:17:34 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:17:34 +0900
+Subject: Bug#1131729: RM: r-cran-roxygen2 [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177428985449.5532.3318838496659026203.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-roxygen2 at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-roxygen2
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again and thanks for your help with the architecture removals.
+
+Cheers,
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:20:20 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:20:20 +0900
+Subject: Bug#1131730: RM: r-cran-xfun [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177429002052.5698.10345429620643393064.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-xfun at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-xfun
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again and thank you for the help with the removals.
+
+Cheers,
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:22:36 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:22:36 +0900
+Subject: Bug#1131731: RM: r-cran-stringi [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177429015609.5797.17146917990055076682.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-stringi at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-stringi
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again and thank you for the help with the architecture removals.
+
+Cheers
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:26:20 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:26:20 +0900
+Subject: Bug#1131733: RM: r-cran-evaluate [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177429038011.6130.2389050056464117121.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-evaluate at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-evaluate
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again and thank you for the help with the architecture removals.
+
+Cheers
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:24:10 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:24:10 +0900
+Subject: Bug#1131732: RM: r-cran-ps [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177429025012.6034.9642197995009415915.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-ps at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-ps
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello again and thank you for the help with the architecture removals.
+
+Cheers
+
+Charles
+
+From plessy at debian.org  Mon Mar 23 18:40:52 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 03:40:52 +0900
+Subject: Bug#1131734: RM: r-cran-partykit [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177429125217.16806.8311374015414795414.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-partykit at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-partykit
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Hello and thanks for your help with the architecture removals.
+
+Cheers,
+
+Charles
+
+From pranav.p7 at ibm.com  Mon Mar 23 18:59:31 2026
+From: pranav.p7 at ibm.com (Pranav P)
+Date: Mon, 23 Mar 2026 18:59:31 +0000
+Subject: Supporting R packages
+Message-ID: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com>
+
+Hi all,
+
+I am one of the s390 porters of Debian and is working at IBM.
+
+We here at IBM would love to see the r-cran-* packages work
+
+on our platform. But given the current circumstances, working
+
+on all the failing bugs seems like something that is way beyond
+
+my scope. I would love to fix at least the most crucial ones (or the
+
+ones with the maximum dependency).
+
+R being widely used in academia, is something we would love to see
+
+on our platform.
+
+Thanks,
+
+Pranav
+
+From edd at debian.org  Mon Mar 23 19:54:30 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 23 Mar 2026 14:54:30 -0500
+Subject: Re: Supporting R packages
+In-Reply-To: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com>
+Message-ID: <27073.39542.857843.270297@paul.eddelbuettel.com>
+
+Hi Pranav,
+
+On 23 March 2026 at 18:59, Pranav P wrote:
+| I am one of the s390 porters of Debian and is working at IBM.
+| We here at IBM would love to see the r-cran-* packages work
+| on our platform. But given the current circumstances, working
+| on all the failing bugs seems like something that is way beyond
+| my scope. I would love to fix at least the most crucial ones (or the
+| ones with the maximum dependency).
+| R being widely used in academia, is something we would love to see
+| on our platform.
+
+I do not work at IBM, but look after the R package here, and have also been
+somewhat involved in the R Project over a few decades (and am also an R
+Foundation Board member ar large).  One of my different activities involved
+several runs at building a system for converting all/most of CRAN into .deb
+packages with attempts spanning a few decades. (The first one was a neat
+Google Summer of Code variant that covered a few thousand packages. Another
+one spawned a fairly complete and larger set Don Armstrong did as part of
+grad school / postdoc life, I think got high single digit thousands. Both
+were outside of Debian proper as we cannot 'flood' the incoming review queue
+with thousands of packages. Both died of disk failures and lack of full
+backups).
+
+The last attempt I made a few years worked out rather well and is still
+ongoing [0] and seeing decent demand coming up on 70 million packages shipped
+(I have access to the server logs at the main machine at illinois.edu). For
+technical reasons valid at the time I started it, is based on Ubuntu LTS and
+covers all/most [1] of CRAN for several current LTS releases. I am right now
+in the process of building the binaries for Ubuntu 26.04. I do all of this
+via GitHub Actions (as I have no 'bulk' cpu access elsewhere -- though it is
+not "that" heavy, I used to use my local server).
+
+I would be happy to chat with you off-line about you starting from my setup
+(all at GitHub) to spawn a s390 variant. "It should just work."  The
+BioConductor folks took inspiration too and now do the same (though mostly
+for use inside Docker).  Maybe we even get to Debian testing on amd64 and
+arm64 (two platforms I cover for Ubuntu).
+
+Long story short: this all works, and works well because CRAN pays close
+attention to systems and develops / checks quite a bit on Debian testing (in
+Vienna) and current Fedora (in Oxford).  So if one takes _consistent_
+snapshots -- and I tend to rebuild multiple times daily -- then the
+"everything works at CRAN 'at @HEAD'" guarantee is quite useful.  
+
+Cheers, Dirk
+
+[0] See https://eddelbuettel.github.io/r2u/ for more
+[1] There are always a few blacklisted packages but in essence it is all.
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Tue Mar 24 10:29:51 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 24 Mar 2026 19:29:51 +0900
+Subject: Re: Supporting R packages
+In-Reply-To: <27073.39542.857843.270297@paul.eddelbuettel.com>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com>
+Message-ID: <acJnn2ZAreKduNCZ@kumo.plessy.net>
+
+CCing Frank, who just posted a similar question on debian-devel.
+
+Thanks Pranav and Frank for your care about R on s390x and
+thanks Dirk for the detailed answer,
+
+As Dirk noted, most CRAN packages build fine, and the tools he developed make
+it straightforward to build and test them outside Debian. CRAN itself only
+tests on Windows, macOS, and amd64 Linux, so on architectures they do not
+cover, a clean build does not guarantee correct behaviour. In Debian we have
+repeatedly seen a small number of R packages fail their test suites on
+non‑64‑bit and non‑little‑endian architectures due to portability issues,
+reproducibility problems, or plain bugs.
+
+Because we could not both keep the collection up to date and handle the porting
+workload, we eventually had to exclude those architectures. I also expect the
+removal of 32‑bit architectures to be permanent unless there is a clear need
+for them beyond 2030 (the end of Trixie’s LTS). Debian patches often disrupt
+automated upstream‑version updates, and with a large package set maintained
+under near burn‑out conditions, the extra porting burden is simply not
+sustainable.
+
+This is why most of the current Debian “failures” are intentional: the affected
+packages declare architecture-is-little-endian to block big‑endian builds. Once
+you have demonstrated successful s390x builds and test runs, and upstream fixes
+have been accepted, I will gladly remove that artificial restriction.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From pranav.p7 at ibm.com  Tue Mar 24 14:04:44 2026
+From: pranav.p7 at ibm.com (Pranav P)
+Date: Tue, 24 Mar 2026 14:04:44 +0000
+Subject: RE: Supporting R packages
+In-Reply-To: <acJnn2ZAreKduNCZ@kumo.plessy.net>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net>
+Message-ID: <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com>
+
+Hi Dirk,
+
+I would love to learn more about your setup and would love
+to implement the same if that could potentially lead to faster
+fixes for the same.
+
+Please let me know when and how you'd prefer to chat.
+
+Hi Charles,
+
+I will do my best to work on this.
+I can see that the official community doesn't test on s390x (and on most other archs) from the following:
+https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-R-under-Unix_002dalikes-1
+
+What would you suggest me to do?
+
+Thanks,
+Pranav
+
+From edd at debian.org  Tue Mar 24 14:49:18 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 24 Mar 2026 09:49:18 -0500
+Subject: RE: Supporting R packages
+In-Reply-To: <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net> <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com>
+Message-ID: <27074.42094.963312.969636@paul.eddelbuettel.com>
+
+Hi Pranav
+
+On 24 March 2026 at 14:04, Pranav P wrote:
+| Hi Dirk,
+| 
+| I would love to learn more about your setup and would love
+| to implement the same if that could potentially lead to faster
+| fixes for the same.
+| 
+| Please let me know when and how you'd prefer to chat.
+
+I am on Central time and quite flexible. Zoom would work, as woukd jit.si and
+other similar services.  What times would work for you?
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Thu Mar 26 10:10:03 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 26 Mar 2026 19:10:03 +0900
+Subject: Bug#1131933: RM: r-cran-ragg [armhf i386 s390x] -- ROM; Architectures not supported upstream
+Message-ID: <177451980357.18582.8499351655712803958.reportbug@bubu.igloo>
+
+Package: ftp.debian.org
+Severity: normal
+X-Debbugs-Cc: r-cran-ragg at packages.debian.org, debian-arm at lists.debian.org, debian-s390 at lists.debian.org, debian-arm at lists.debian.org, debian-hurd at lists.debian.org, debian-s390 at lists.debian.org, debian-r at lists.debian.org, plessy at debian.org
+Control: affects -1 + src:r-cran-ragg
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-qa at lists.debian.org
+Usertags: i386
+User: debian-s390 at lists.debian.org
+Usertags: s390x
+User: debian-arm at lists.debian.org
+Usertags: armhf
+User: debian-hurd at lists.debian.org
+Usertags: hurd-i386
+
+Thanks a lot for your support,
+
+Charles
+
+From plessy at debian.org  Fri Mar 27 14:44:31 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 27 Mar 2026 23:44:31 +0900
+Subject: Re: Supporting R packages
+In-Reply-To: <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net> <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com>
+Message-ID: <acaXz_X3-dmhzUu_@kumo.plessy.net>
+
+Le Tue, Mar 24, 2026 at 02:04:44PM +0000, Pranav P a écrit :
+> Hi Charles,
+> 
+> What would you suggest me to do?
+
+Hi Pranav,
+
+First, I recommend reaching out to Frank (cc’d), as he has expressed similar
+interests on a different mailing list. Joining forces may increase the
+likelihood of success for your project.
+
+I assume you have received—or will soon receive—excellent guidance from Dirk on
+automating package builds. The main point I would add is that, to identify as
+many s390x-specific (or more generally, big-endian–specific) issues as possible
+in CRAN, you should aim to run as many package regression tests as you can.
+
+As Dirk recently explained on this list, some tests are executed conditionally
+based on the availability of their dependencies in the test environment.
+Ensuring that these dependencies are present is key to making your screening as
+effective as possible. The simplest approach I know is to install all packages
+listed in the Suggests field of each package’s DESCRIPTION file before running
+the tests. This may occasionally result in installing more than strictly
+necessary, but for the purpose of bug screening, this is perfectly acceptable.
+
+I am not fully familiar with how CRAN or upstream projects run package tests.
+In Debian, however, we aim to run all scripts found in a package’s tests
+directory using the autopkgtest framework. You do not need to follow this
+system exactly, but feel free to ask if you would like more details about how
+it works. One recurring bottleneck to automation, in my experience, is the
+variable quality of test suites: in some cases, the contents of the tests
+directory do not appear to be designed for continuous integration environments.
+
+Once bugs are identified, forwarding fixes upstream is an excellent way to
+build relationships with the R community. You may also uncover recurring
+patterns that are of broader interest to R developers. Ultimately, this should
+make it much easier to reintroduce s390x (and likely big-endian architectures
+more generally) into the set of architectures for which we build r-cran-* and
+r-bioc-* packages in Debian, while also fostering shared knowledge, practical
+experience, and community buy-in for handling new issues as they arise.
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From edd at debian.org  Fri Mar 27 15:04:25 2026
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Mar 2026 10:04:25 -0500
+Subject: Re: Supporting R packages
+In-Reply-To: <acaXz_X3-dmhzUu_@kumo.plessy.net>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net> <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com> <acaXz_X3-dmhzUu_@kumo.plessy.net>
+Message-ID: <27078.40057.968573.345955@paul.eddelbuettel.com>
+
+On 27 March 2026 at 23:44, Charles Plessy wrote:
+| The simplest approach I know is to install all packages listed in the
+| Suggests field of each package’s DESCRIPTION file before running 
+| the tests.
+
+[...]
+
+| I am not fully familiar with how CRAN or upstream projects run package tests.
+
+You first statement here is likely a consequence of your second statement.
+
+Only 'strong dependencies' (in R's language, i.e. from Depends and Imports
+and LinkingTo in the DESCRIPTION file of the R source package) must be
+installed.  As suggested packages are optional, I have argued for years that
+'strong dependencies' is all we should install for (bulk) tests.
+
+I have gotten nowhere, but as a maintainer of maybe around 100 r-cran-*
+packages now have dozens removed from testings for choices I did not make.
+
+That is, to put it mildly, frustrating.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Fri Mar 27 17:34:52 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 28 Mar 2026 02:34:52 +0900
+Subject: Re: Supporting R packages
+In-Reply-To: <27078.40057.968573.345955@paul.eddelbuettel.com>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net> <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com> <acaXz_X3-dmhzUu_@kumo.plessy.net> <27078.40057.968573.345955@paul.eddelbuettel.com>
+Message-ID: <aca_vA7TXAJoSIMu@kumo.plessy.net>
+
+Hi Dirk and all,
+
+Apologies for the confusion caused by my previous message. Despite an explicit
+warning from MS Copilot 365 that it “might be misinterpreted as a
+recommendation for production or policy”, that is unfortunately what
+happened—lesson learned.
+
+To clarify: my recommendation to Pranav is specifically about running
+extensive tests on s390x in order to screen for as many porting issues as
+possible. It is not intended as guidance on Debian packaging best practices or
+policy.
+
+For the broadest possible screening, my suggestion is to test all CRAN
+packages—not only those currently redistributed in Debian—and to run as many
+tests as can be executed automatically in a straightforward manner.
+
+Have a nice day,
+
+Charles
+
+From pranav.p7 at ibm.com  Fri Mar 27 18:25:34 2026
+From: pranav.p7 at ibm.com (Pranav P)
+Date: Fri, 27 Mar 2026 18:25:34 +0000
+Subject: RE: Supporting R packages
+In-Reply-To: <aca_vA7TXAJoSIMu@kumo.plessy.net>
+References: <CO1PR15MB4841D37B2E0453864BB8D4CFA04BA@CO1PR15MB4841.namprd15.prod.outlook.com> <27073.39542.857843.270297@paul.eddelbuettel.com> <acJnn2ZAreKduNCZ@kumo.plessy.net> <CO1PR15MB484156CCBD8970029D5A9C9FA048A@CO1PR15MB4841.namprd15.prod.outlook.com> <acaXz_X3-dmhzUu_@kumo.plessy.net> <27078.40057.968573.345955@paul.eddelbuettel.com> <aca_vA7TXAJoSIMu@kumo.plessy.net>
+Message-ID: <CO1PR15MB4841EAEEB55FDBFD5DA7CE66A057A@CO1PR15MB4841.namprd15.prod.outlook.com>
+
+Hi Charles,
+
+I already had a call with Dirk yesterday and he did give me a few ideas on how to start off.
+I also had a quick talk with Frank over the mail.
+Thanks all for all the suggestions and help.
+
+With Regards,
+Pranav
+
+________________________________________
+From: Charles Plessy <plessy at debian.org>
+Sent: Friday, March 27, 2026 11:04 PM
+To: Dirk Eddelbuettel
+Cc: Charles Plessy; Pranav P; frank.heimes_canonical.com; debian-r at lists.debian.org; Paul Gevers
+Subject: [EXTERNAL] Re: Supporting R packages
+
+Hi Dirk and all,
+
+Apologies for the confusion caused by my previous message. Despite an explicit
+warning from MS Copilot 365 that it “might be misinterpreted as a
+recommendation for production or policy”, that is unfortunately what
+happened—lesson learned.
+
+To clarify: my recommendation to Pranav is specifically about running
+extensive tests on s390x in order to screen for as many porting issues as
+possible. It is not intended as guidance on Debian packaging best practices or
+policy.
+
+For the broadest possible screening, my suggestion is to test all CRAN
+packages—not only those currently redistributed in Debian—and to run as many
+tests as can be executed automatically in a straightforward manner.
+
+Have a nice day,
+
+Charles
+
+From plessy at debian.org  Sat Mar 28 07:20:52 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 28 Mar 2026 16:20:52 +0900
+Subject: Re: [R-pkg-team] Bug#1123819: MR to fix #1123819 - r-bioc-s4vectors: autopkgtests fail on riscv64
+In-Reply-To: <DHE832M5R5KC.3ED3N5CR4NKNH@disroot.org>
+References: <aUkp4AuybGHJUzcG@per.namespace.at> <DHE832M5R5KC.3ED3N5CR4NKNH@disroot.org>
+Message-ID: <aceBVHSqTQDH39Ld@kumo.plessy.net>
+
+Le Sat, Mar 28, 2026 at 08:04:52AM +0100, Pieter Lenaerts a écrit :
+> 
+> I prepared a fix for #1123819 in merge request https://salsa.debian.org/r-pkg-team/r-bioc-s4vectors/-/merge_requests/1
+
+Hi Pieter,
+
+S4Vectors is going to to be updated upstream at the end of April.
+
+ - https://bioconductor.org/packages/release/bioc/html/S4Vectors.html
+ - https://bioconductor.org/developers/release-schedule/
+
+Can I ask you to submit your patch upstream ?  If it is accepted that would be
+one less patch to carry on our shoulders.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from home                  https://framapiaf.org/@charles_plessy
+- You  do not have  my permission  to use  this email  to train  an AI -
+
+From plenae at disroot.org  Sat Mar 28 08:17:27 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Sat, 28 Mar 2026 09:17:27 +0100
+Subject: Re: [R-pkg-team] Bug#1123819: MR to fix #1123819 - r-bioc-s4vectors: autopkgtests fail on riscv64
+In-Reply-To: <aceBVHSqTQDH39Ld@kumo.plessy.net>
+References: <aUkp4AuybGHJUzcG@per.namespace.at> <DHE832M5R5KC.3ED3N5CR4NKNH@disroot.org> <aceBVHSqTQDH39Ld@kumo.plessy.net>
+Message-ID: <DHE9MNB9YNDL.KJWRFJ9MYVE@disroot.org>
+
+Hi Charles,
+
+On Sat Mar 28, 2026 at 8:20 AM CET, Charles Plessy wrote:
+> S4Vectors is going to to be updated upstream at the end of April.
+
+I remember from a previous conversation. The patch I propose will still be
+relevant.
+
+> Can I ask you to submit your patch upstream ?  If it is accepted that would be
+> one less patch to carry on our shoulders.
+
+Done and PR is in the patch header now.
+
+In the meantime, will you consider my patch? This blocks the pyrle package to
+go into testing.
+
+Best regards,
+
+Pieter
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From plessy at debian.org  Sat Mar 28 10:03:09 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 28 Mar 2026 19:03:09 +0900
+Subject: Re: [R-pkg-team] Bug#1123819: MR to fix #1123819 - r-bioc-s4vectors: autopkgtests fail on riscv64
+In-Reply-To: <DHE9MNB9YNDL.KJWRFJ9MYVE@disroot.org>
+References: <aUkp4AuybGHJUzcG@per.namespace.at> <DHE832M5R5KC.3ED3N5CR4NKNH@disroot.org> <aceBVHSqTQDH39Ld@kumo.plessy.net> <DHE9MNB9YNDL.KJWRFJ9MYVE@disroot.org>
+Message-ID: <acenXddLdlrjT58A@bubu.igloo>
+
+Le Sat, Mar 28, 2026 at 09:17:27AM +0100, Pieter Lenaerts a écrit :
+> In the meantime, will you consider my patch? This blocks the pyrle
+> package to go into testing.
+
+Hi Pieter,
+
+I am worried that the patch is just hiding a real bug.  Can we wait for
+upstream's decision?
+
+In any case, r-bioc-s4vectors is not going to migrate before
+r-bioc-biocgenerics, and the plan it to take care of this after next
+Bioconductor release.
+
+If you are in a hurry, maybe you can also instead disable the S4Vectors
+tests on your side and therefore remove the dependency?
+
+Have a nice day,
+
+Charles
+
+--
+Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,               https://fediscience.org/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From plenae at disroot.org  Sat Mar 28 12:23:09 2026
+From: plenae at disroot.org (Pieter Lenaerts)
+Date: Sat, 28 Mar 2026 13:23:09 +0100
+Subject: Re: [R-pkg-team] Bug#1123819: MR to fix #1123819 - r-bioc-s4vectors: autopkgtests fail on riscv64
+In-Reply-To: <acenXddLdlrjT58A@bubu.igloo>
+References: <aUkp4AuybGHJUzcG@per.namespace.at> <DHE832M5R5KC.3ED3N5CR4NKNH@disroot.org> <aceBVHSqTQDH39Ld@kumo.plessy.net> <DHE9MNB9YNDL.KJWRFJ9MYVE@disroot.org> <acenXddLdlrjT58A@bubu.igloo>
+Message-ID: <DHEEURKH53CK.3LE3VH292LSSE@disroot.org>
+
+Hey Charles,
+
+On Sat Mar 28, 2026 at 11:03 AM CET, Charles Plessy wrote:
+> Le Sat, Mar 28, 2026 at 09:17:27AM +0100, Pieter Lenaerts a écrit :
+
+> I am worried that the patch is just hiding a real bug.  Can we wait for
+> upstream's decision?
+
+Absolutely fine if that's your concern.
+
+> In any case, r-bioc-s4vectors is not going to migrate before
+> r-bioc-biocgenerics, and the plan it to take care of this after next
+> Bioconductor release.
+>
+> If you are in a hurry, maybe you can also instead disable the S4Vectors
+> tests on your side and therefore remove the dependency?
+
+Not urgent. Lets wait as long as it's not forever. 👍
+
+Br,
+
+Pieter
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+

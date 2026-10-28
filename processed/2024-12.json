@@ -1,0 +1,174 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2024-12",
+  "messages": [
+    {
+      "id": "msg-5469391e5d74",
+      "message_id": "<CAM8zJQv61y4u+2bzWHYZs-RMemaOmhKjOv0Bkupxegdk_VRA-A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2024-12-01T10:07:16Z",
+      "subject": "Re: Accidental upload of newer r-bioc-biocstyle to unstable ahead of BioConductor 3.20 transition",
+      "subject_clean": "Accidental upload of newer r-bioc-biocstyle to unstable ahead of BioConductor 3.20 transition",
+      "in_reply_to": "<7044009f-616b-4381-bc04-e74c1844e79f@debian.org>",
+      "references": [
+        "<7044009f-616b-4381-bc04-e74c1844e79f@debian.org>"
+      ],
+      "body_plain": "Hi Michael\n\nOn Sat, 30 Nov 2024 at 21:25, Michael R. Crusoe <crusoe at debian.org> wrote:\n> While preparing uploads of the BioConductor 3.20 r-bioc-* packages to the experimental distribution, I accidentally uploaded a newer version of r-bioc-biocstyle (2.34.0+dfsg-1) to unstable.\n>\n> Shall I fix this by rolling back the change with an upload of a r-bioc-biocstyle source package version \"2.34.0+really2.32.1+dfsg-1\" to unstable (and corresponding \"2.34.0+really2.34.0+dfsg-1\" version to experimental)?\n>\n> Or shall I wait for the bioc-3.20 transition's [0] blockers [1][2] to be fixed and permission for the new r-bioc-* packages to be uploaded to unstable?\n\nI don't think this is worth reverting.  It cannot migrate to testing\nas it is, and even if it would, we could just add a block hint.\n\n> Sorry about the mess I made!\n\nNo problem!\n\nRegards\nGraham",
+      "body_snippet": "Hi Michael\n\nOn Sat, 30 Nov 2024 at 21:25, Michael R. Crusoe <crusoe at debian.org> wrote:\n> While preparing uploads of the BioConductor 3.20 r-bioc-* packages to the experimental distribution, I accid",
+      "thread_id": "thread-5469391e5d74",
+      "thread_depth": 0,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-05d93177f431",
+      "message_id": "<Z1QJoZGykoel1gE_@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2024-12-07T08:38:57Z",
+      "subject": "Re: r-cran-dplyr needs some love",
+      "subject_clean": "r-cran-dplyr needs some love",
+      "in_reply_to": "<Z0JoxHwkSLg7TULw@bubu.igloo>",
+      "references": [
+        "<26434.8301.478781.114792@rob.eddelbuettel.com>",
+        "<Z0JoxHwkSLg7TULw@bubu.igloo>"
+      ],
+      "body_plain": "Control: severity 1072630 normal\n\nHi all,\n\nsorry for the dplyr-related mass removal from Testing.\n\nr-cran-dplyr is marked for autoremoval on December 12 and I did not\nexpect nor pay attention that its dependencies would be reomved 5 days\nbefore…\n\nI have uploaded r-cran-dplyr_1.1.4-3_source.changes that disables the\ntest suite.\n\nHave a nice week-end,\n\nCharles\n\nLe Sun, Nov 24, 2024 at 08:44:04AM +0900, Charles Plessy a écrit :\n> Hi Dirk and everybody,\n> \n> yes it is in the radar.  I will disable the tests before the removal if I\n> or others can not fix the failure:\n> \n> ══ Failed tests ════════════════════════════════════════════════════════════════\n> ── Failure ('test-rows.R:161:3'): rows_update() works ──────────────────────────\n> `expect_identical(...)` produced warnings.\n> ── Failure ('test-rows.R:258:3'): rows_patch() works ───────────────────────────\n> `expect_identical(...)` produced warnings.\n> \n> Unfortunately, the test logs do not show the warnings.  Here is the code\n> that fails:\n> \n>     161   expect_silent(\n>     162     expect_identical(\n>     163       rows_update(data, tibble(b = \"z\", a = 2:3), by = \"a\"),\n>     164       tibble(a = 1:3, b = c(\"a\", \"z\", \"z\"), c = data$c)\n>     165     )\n>     166   )\n> \n>     258   expect_silent(\n>     259     expect_identical(\n>     260       rows_patch(data, tibble(b = \"z\", a = 2:3), by = \"a\"),\n>     261       tibble(a = 1:3, b = c(\"a\", \"b\", \"z\"), c = data$c)\n>     262     )\n>     263   )\n> \n> And even more unfortunately, I can not trigger the same failures in an\n> unstable chroot, where these tests pass, and other fail with\n> discrepancies in error messages such as:\n> \n> [6]    ! Can't subset columns past the end.        -   ! Can't select columns past the end.         [6]\n> [17]   i In group 1: `x = 1`, `y = 1`.             -   i In group 1: `x = 1` and `y = 1`.          [17]\n> \n> Could it be that the tests fail because one of the r-cran- packages is\n> not up to date?  But which one?\n> \n> Have a nice week-end,\n> \n> Charles\n> \n> -- \n> Charles Plessy                         Nagahama, Yomitan, Okinawa, Japan\n> Debian Med packaging team         http://www.debian.org/devel/debian-med\n> Tooting from work,               https://fediscience.org/@charles_plessy\n> Tooting from home,                 https://framapiaf.org/@charles_plessy\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Control: severity 1072630 normal\n\nHi all,\n\nsorry for the dplyr-related mass removal from Testing.\n\nr-cran-dplyr is marked for autoremoval on December 12 and I did not\nexpect nor pay attention that its",
+      "thread_id": "thread-05d93177f431",
+      "thread_depth": 0,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-260b4b10139d",
+      "message_id": "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>",
+      "from_name": "Philip Rinn",
+      "from_email_hash": "981e491c73999300c80e7c04892f62de60ac831df1afebb3627bd2626491006f",
+      "date": "2024-12-19T10:31:14Z",
+      "subject": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "subject_clean": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "[please keep me and the bug in cc]\n\nHi,\n\nduring the effort to reproduce Debian binary packages distributed via \ndeb.debian.org (see https://reproduce.debian.net) it turned out that \nmany/most/all R package couldn't be reproduced as some \nDepends/Suggests/Recommends where missing.\n\nAfter digging it bit - the missing build-dependency on apt was \nunfortunately just a red herring -  it turns out, the problem is that \ncheck_real_version_of_package() in dh/R.pm[1] uses 'grep-aptavail' and \nthus the result depends on the state of the apt cache.\nAs parse_depends() (in dh/R.pm) calls check_real_version_of_package() to \nbuild Depends/Suggests/Recommend they depend on the status of the apt \ncache as well.\n\nWhile this seems to be a quite elegant solution to the problem of \nmapping R package names to Debian package names, it turns out to be \nquite hard to reproduce the state of the apt cache for a given point in \ntime.\n\nJochen reminded me of the solution dh-python chose [2] for that problem \nand I do think a (simplified) version of that would work for R packages \nas well.\n\nThe main idea is to have a mapping table embedded in dh-r which can be \noverrode on package level.\n\nmapping table would basically be\n\n<R package name> <corresponding Debian package name>\nknitr r-cran-knir\nggplot2 r-cran-ggplot2\nreshape2 r-cran-reshape2\n...\n\ncontaining a mapping for all packages in Debian unstable at the time of \nthe dh-r upload.\n\nThis would of course mean that we'd need to keep that list moderately \nupdated in the dh-r package.\n\nAs we can't guarantee that, we need the possibility to place a file in \ndebian/ to amend/override the mapping table dh-r provides. (We could of \ncourse have a helper script creates that file for us.)\n\nI'm quite sure, I miss some details here and I do entirely miss the \ncontext of why the current approach was chosen, but I hope, we can start \na discussion on how to make it possible to reproduce R packages going \nforward.\n\nBest\nPhilip\n\n[1] \nhttps://salsa.debian.org/r-pkg-team/dh-r/-/blob/5d6dc04ba4f1f1b5db4bfaecc0e00893e46e5c72/dh/R.pm#L147-L170\n\n[2] \nhttps://salsa.debian.org/python-team/tools/dh-python/-/blob/master/pydist/README.PyDist\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "[please keep me and the bug in cc]\n\nHi,\n\nduring the effort to reproduce Debian binary packages distributed via \ndeb.debian.org (see https://reproduce.debian.net) it turned out that \nmany/most/all R pa",
+      "thread_id": "thread-260b4b10139d",
+      "thread_depth": 0,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-c9b7ec9b8139",
+      "message_id": "<Z2P6R2srRjCyAQF2@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2024-12-19T10:49:43Z",
+      "subject": "Re: dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "subject_clean": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "in_reply_to": "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>",
+      "references": [
+        "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>"
+      ],
+      "body_plain": "Hi Philip,\n\nthank you for the detailed information.  I simply replaced all\noccurences of apt-cache (which admittedly does *not* affect the creation\nof a resulting binary package).\n\nYour hint to[1] in your re-opening mail was helpful.\n\nAm Thu, Dec 19, 2024 at 11:31:14AM +0100 schrieb Philip Rinn:\n> [please keep me and the bug in cc]\n> \n> Hi,\n> \n> during the effort to reproduce Debian binary packages distributed via\n> deb.debian.org (see https://reproduce.debian.net) it turned out that\n> many/most/all R package couldn't be reproduced as some\n> Depends/Suggests/Recommends where missing.\n> \n> After digging it bit - the missing build-dependency on apt was unfortunately\n> just a red herring -  it turns out, the problem is that\n> check_real_version_of_package() in dh/R.pm[1] uses 'grep-aptavail' and thus\n> the result depends on the state of the apt cache.\n> As parse_depends() (in dh/R.pm) calls check_real_version_of_package() to\n> build Depends/Suggests/Recommend they depend on the status of the apt cache\n> as well.\n\nThat's correct.\n \n> While this seems to be a quite elegant solution to the problem of mapping R\n> package names to Debian package names, it turns out to be quite hard to\n> reproduce the state of the apt cache for a given point in time.\n> \n> Jochen reminded me of the solution dh-python chose [2] for that problem and\n> I do think a (simplified) version of that would work for R packages as well.\n> \n> The main idea is to have a mapping table embedded in dh-r which can be\n> overrode on package level.\n> \n> mapping table would basically be\n> \n> <R package name> <corresponding Debian package name>\n> knitr r-cran-knir\n> ggplot2 r-cran-ggplot2\n> reshape2 r-cran-reshape2\n> ...\n> \n> containing a mapping for all packages in Debian unstable at the time of the\n> dh-r upload.\n> \n> This would of course mean that we'd need to keep that list moderately\n> updated in the dh-r package.\n\nWell, in principle the package *names* can be calculated more or less -\nwe only need to know whether these are CRAN or BioConductor (or other)\npackages.  However, maintaining dh-r after de facto every new r-*\npackage is a burden I would love to avoid.\n \n> As we can't guarantee that, we need the possibility to place a file in\n> debian/ to amend/override the mapping table dh-r provides. (We could of\n> course have a helper script creates that file for us.)\n> \n> \n> I'm quite sure, I miss some details here and I do entirely miss the context\n> of why the current approach was chosen, but I hope, we can start a\n> discussion on how to make it possible to reproduce R packages going forward.\n\nWell, the package names in principle are taken from the metadata contained\ninside the DESCRIPTION file every R package (they use the same name for\ntheir source - so please do not mix up with Debian package).  There is\nalso the concept of versioned dependencies.  We simply check whether this\npackage / version is available in Debian.\n\nI think what would be helpful for me to understand if you could give me\nsome example where the same build results in different packages.  I need\nto admit that I might fail to understand the real consequences of the\ncode and an example would be pretty helpful, thought.\n\nKind regards\n    Andreas.\n\n> [1] https://salsa.debian.org/r-pkg-team/dh-r/-/blob/5d6dc04ba4f1f1b5db4bfaecc0e00893e46e5c72/dh/R.pm#L147-L170\n> \n> [2] https://salsa.debian.org/python-team/tools/dh-python/-/blob/master/pydist/README.PyDist\n\n-- \nhttps://fam-tille.de",
+      "body_snippet": "Hi Philip,\n\nthank you for the detailed information.  I simply replaced all\noccurences of apt-cache (which admittedly does *not* affect the creation\nof a resulting binary package).\n\nYour hint to[1] in ",
+      "thread_id": "thread-260b4b10139d",
+      "thread_depth": 1,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-135f8deba801",
+      "message_id": "<6cf4f963-fc1e-48f0-9b9b-01d97b2127d4@inventati.org>",
+      "from_name": "Philip Rinn",
+      "from_email_hash": "981e491c73999300c80e7c04892f62de60ac831df1afebb3627bd2626491006f",
+      "date": "2024-12-19T11:34:47Z",
+      "subject": "Re: dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "subject_clean": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "in_reply_to": "<Z2P6R2srRjCyAQF2@an3as.eu>",
+      "references": [
+        "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>",
+        "<Z2P6R2srRjCyAQF2@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn 19.12.24 at 11:49, Andreas Tille wrote:\n> > The main idea is to have a mapping table embedded in dh-r which can be\n> > overrode on package level.\n> >\n> > mapping table would basically be\n> >\n> > <R package name> <corresponding Debian package name>\n> > knitr r-cran-knir\n> > ggplot2 r-cran-ggplot2\n> > reshape2 r-cran-reshape2\n> > ...\n> >\n> > containing a mapping for all packages in Debian unstable at the time of the\n> > dh-r upload.\n> >\n> > This would of course mean that we'd need to keep that list moderately\n> > updated in the dh-r package.\n>\n>\n> Well, in principle the package *names* can be calculated more or less -\n> we only need to know whether these are CRAN or BioConductor (or other)\n> packages.  However, maintaining dh-r after de facto every new r-*\n> package is a burden I would love to avoid.\n\nThe more I think about it, I guess we should actually _not_ have a list \nin dh-r but generate the Depends/Suggests/Recommends at the time of \ncreating the _source_ package. So I'd suggest to have what I called \n'package level override' in my first mail (but filling d/control \ndirectly). [See the package example below for context of why.]\n\nWe'd probably need that list in dh-r for a migration period though.\n\n> > As we can't guarantee that, we need the possibility to place a file in\n> > debian/ to amend/override the mapping table dh-r provides. (We could of\n> > course have a helper script creates that file for us.)\n> >\n> >\n> > I'm quite sure, I miss some details here and I do entirely miss the context\n> > of why the current approach was chosen, but I hope, we can start a\n> > discussion on how to make it possible to reproduce R packages going forward.\n>\n>\n> Well, the package names in principle are taken from the metadata contained\n> inside the DESCRIPTION file every R package (they use the same name for\n> their source - so please do not mix up with Debian package).  There is\n> also the concept of versioned dependencies.  We simply check whether this\n> package / version is available in Debian.\n>\n> I think what would be helpful for me to understand if you could give me\n> some example where the same build results in different packages.  I need\n> to admit that I might fail to understand the real consequences of the\n> code and an example would be pretty helpful, thought.\n\nSure, I'll try [sorry for the longish introduction but I think it's \nimportant to get us all on the same page here].\n\ndh-r currently determines Depends/Suggests/Recommends at build time from \nthe state of the apt cache.\n\nIn a build log, it looks like:\n\n[...]\nW: Ignoring specified R dependency: R (>= 2.10)\nW: Cannot find a debian package for Suggests:knitr\nI: Using r-cran-ggplot2 for Imports:ggplot2\nI: Using r-cran-reshape2 for Imports:reshape2\nI: BioConductor API version: r-api-bioc-3.19\nI: Use r-bioc-qvalue as Debian binary package for variables substitution\n[...]\n\n[https://amd64.reproduce.debian.net/api/v0/builds/110379/log]\n\nI'd admit this log is a little special as it has a very sparse apt cache \ncontaining only the build dependencies of the specific package. (This is \nwhy it finds corresponding Debian packages for ggplot2, reshape2 but not \nfor knitr.)\n\nLooking now at the difference between the package in the Debian archive \nand the one built on reproduce.d.n, we find that the 'Suggests' are missing:\n\n[...]\n Depends: r-api-4.0, r-api-bioc-3.19, r-cran-ggplot2, r-cran-reshape2\n-Suggests: r-cran-knitr\n Section: gnu-r\n Priority: optional\n[...]\n\n[https://amd64.reproduce.debian.net/api/v0/builds/110379/diffoscope]\n\nSo, dh-r drops (at least) missing suggests rather silently at build time.\n\nImagine now a R package that suggests a R package ('foo') not in Debian \nat the time of uploading to Debian. The result would be that the built \npackage would _not_ have a 'Suggests' on r-cran-foo as it doesn't exist \nin Debian a build time.\nFast forwarding to a future Debian where r-cran-foo was uploaded, \nrebuilding the same package (via a binNMU for example) would now lead to \na different package with 'Suggests: r-cran-foo'.\n\nHope that helps\nPhilip\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Andreas,\n\nOn 19.12.24 at 11:49, Andreas Tille wrote:\n> > The main idea is to have a mapping table embedded in dh-r which can be\n> > overrode on package level.\n> >\n> > mapping table would basically ",
+      "thread_id": "thread-260b4b10139d",
+      "thread_depth": 2,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-eb6fb72a5f07",
+      "message_id": "<8a55b96a-7258-4e2b-ae19-af9ec23833b9@inventati.org>",
+      "from_name": "Philip Rinn",
+      "from_email_hash": "981e491c73999300c80e7c04892f62de60ac831df1afebb3627bd2626491006f",
+      "date": "2024-12-19T12:14:37Z",
+      "subject": "Re: dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "subject_clean": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "in_reply_to": "<6cf4f963-fc1e-48f0-9b9b-01d97b2127d4@inventati.org>",
+      "references": [
+        "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>",
+        "<Z2P6R2srRjCyAQF2@an3as.eu>",
+        "<6cf4f963-fc1e-48f0-9b9b-01d97b2127d4@inventati.org>"
+      ],
+      "body_plain": "On 19.12.24 at 12:34, Philip Rinn wrote:\n> Hi Andreas,\n>\n> On 19.12.24 at 11:49, Andreas Tille wrote:\n> > > The main idea is to have a mapping table embedded in dh-r which can be\n> > > overrode on package level.\n> > >\n> > > mapping table would basically be\n> > >\n> > > <R package name> <corresponding Debian package name>\n> > > knitr r-cran-knir\n> > > ggplot2 r-cran-ggplot2\n> > > reshape2 r-cran-reshape2\n> > > ...\n> > >\n> > > containing a mapping for all packages in Debian unstable at the time\n> > > of the\n> > >\n> > > dh-r upload.\n> > >\n> > > This would of course mean that we'd need to keep that list moderately\n> > > updated in the dh-r package.\n> >\n> >\n> > Well, in principle the package *names* can be calculated more or less -\n> > we only need to know whether these are CRAN or BioConductor (or other)\n> > packages.  However, maintaining dh-r after de facto every new r-*\n> > package is a burden I would love to avoid.\n>\n>\n> The more I think about it, I guess we should actually _not_ have a list\n> in dh-r but generate the Depends/Suggests/Recommends at the time of\n> creating the _source_ package. So I'd suggest to have what I called\n> 'package level override' in my first mail (but filling d/control\n> directly). [See the package example below for context of why.]\n>\n>\n> We'd probably need that list in dh-r for a migration period though.\n\nAh, this is probably nonsense. We could have a mapping in dh-r plus the \npackage specific amends/overrides and still not run into problems like I \ndescribed in my reply.\n\nSo to answer your initial remark: As we have package amends/overrides we \ndon't need a dh-r upload per new r-* package.\nThe important property we need to have is that there is a stable (in the \nsense of fixed by the version of dh-r and the Debian package version) \nmapping from R packages to Debian packages.\n\nBest\nPhilip\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 19.12.24 at 12:34, Philip Rinn wrote:\n> Hi Andreas,\n>\n> On 19.12.24 at 11:49, Andreas Tille wrote:\n> > > The main idea is to have a mapping table embedded in dh-r which can be\n> > > overrode on pac",
+      "thread_id": "thread-260b4b10139d",
+      "thread_depth": 3,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-346fd6cf1673",
+      "message_id": "<Z2bGYwqek6V56tVE@kumo.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2024-12-21T13:45:07Z",
+      "subject": "Re: dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "subject_clean": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "in_reply_to": "<6cf4f963-fc1e-48f0-9b9b-01d97b2127d4@inventati.org>",
+      "references": [
+        "<a9a07077-920b-440e-b90b-ad2c8578336e@inventati.org>",
+        "<Z2P6R2srRjCyAQF2@an3as.eu>",
+        "<6cf4f963-fc1e-48f0-9b9b-01d97b2127d4@inventati.org>"
+      ],
+      "body_plain": "Le Thu, Dec 19, 2024 at 12:34:47PM +0100, Philip Rinn a écrit :\n> \n> Imagine now a R package that suggests a R package ('foo') not in Debian at\n> the time of uploading to Debian. The result would be that the built package\n> would _not_ have a 'Suggests' on r-cran-foo as it doesn't exist in Debian a\n> build time.\n> Fast forwarding to a future Debian where r-cran-foo was uploaded, rebuilding\n> the same package (via a binNMU for example) would now lead to a different\n> package with 'Suggests: r-cran-foo'.\n\nHi Philip and everybody,\n\ndoesn't that suggest that dh-r should install a DebCI test that checks\nfor that and can issue an error instructing that \"the package must be\nbinNMUed\" ?\n\nHave a nice day,\n\n-- \nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from home                  https://framapiaf.org/@charles_plessy\n- You  do not have  my permission  to use  this email  to train  an AI -",
+      "body_snippet": "Le Thu, Dec 19, 2024 at 12:34:47PM +0100, Philip Rinn a écrit :\n> \n> Imagine now a R package that suggests a R package ('foo') not in Debian at\n> the time of uploading to Debian. The result would be t",
+      "thread_id": "thread-260b4b10139d",
+      "thread_depth": 3,
+      "month": "2024-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-5469391e5d74",
+      "subject": "Accidental upload of newer r-bioc-biocstyle to unstable ahead of BioConductor 3.20 transition",
+      "message_count": 1,
+      "participants": [
+        "Graham Inggs"
+      ],
+      "started": "2024-12-01T10:07:16Z",
+      "last_reply": "2024-12-01T10:07:16Z",
+      "root_message_id": "msg-5469391e5d74"
+    },
+    {
+      "id": "thread-05d93177f431",
+      "subject": "r-cran-dplyr needs some love",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2024-12-07T08:38:57Z",
+      "last_reply": "2024-12-07T08:38:57Z",
+      "root_message_id": "msg-05d93177f431"
+    },
+    {
+      "id": "thread-260b4b10139d",
+      "subject": "dh-r: Stop generating Depends/Suggests/Recommends from the apt cache",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Charles Plessy",
+        "Philip Rinn"
+      ],
+      "started": "2024-12-19T10:31:14Z",
+      "last_reply": "2024-12-21T13:45:07Z",
+      "root_message_id": "msg-260b4b10139d"
+    }
+  ]
+}

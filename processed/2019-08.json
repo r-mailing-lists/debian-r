@@ -1,0 +1,549 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2019-08",
+  "messages": [
+    {
+      "id": "msg-513611402b89",
+      "message_id": "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-06T09:16:38Z",
+      "subject": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "subject_clean": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "in_reply_to": "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nOn Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n> It is https://bioconductor.org/packages/release/bioc/html/tximport.html\n> that I am after. Any idea how to get it found?\n\nFor the tximport issue I injected it here\n\n    https://salsa.debian.org/r-pkg-team/r-bioc-tximport\n\nFeel free to continue from this (I've just put you as Uploader). \n\nUnfortunately the issue is more serious than just tximport did not\nworked:  **ALL** our BioC watch files are not working currently!\n\nI've fixed this in prepare_missing_cran_package[1] which is now using\n\n    opts=downloadurlmangle=s?^(.*)\\.\\.?https://bioconductor.org/packages/release/bioc?\n\nbut on the other hand the downloadurlmangle string of all existing BioC\npackages is broken now.  The good news is that we will be informed about\nnew versions but the routine-update script will currently not download\nthe new upstream version.\n\nI plan to fix the downloadurlmangle string if found in debian/watch\nbefore trying to upload the new version.  However, I'd like to have a\nsecond pair of eyeballs watching at this new string before implementing\nit into routine-update.\n\nAnybody wants to comment?\n\nKind regards\n\n       Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/dh-r/commit/46a021dc0a88ef80cf6eb57c3e4598131f78725f\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nOn Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n> It is https://bioconductor.org/packages/release/bioc/html/tximport.html\n> that I am after. Any idea how to get it found?\n\nFor the",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-88f5a7295571",
+      "message_id": "<17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2019-08-06T09:49:31Z",
+      "subject": "Re: Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "subject_clean": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "in_reply_to": "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+        "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn 06.08.19 11:16, Andreas Tille wrote:\n> Hi,\n>\n> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n>> It is https://bioconductor.org/packages/release/bioc/html/tximport.html\n>> that I am after. Any idea how to get it found?\n> For the tximport issue I injected it here\n>\n>     https://salsa.debian.org/r-pkg-team/r-bioc-tximport\n>\n> Feel free to continue from this (I've just put you as Uploader).\n\nThank you tons. I just found this when I wanted to create it :) I'll\ncontinue on it. I have even already added it to the blend's med/bio .\n\n> Unfortunately the issue is more serious than just tximport did not\n> worked:  **ALL** our BioC watch files are not working currently!\n>\n> I've fixed this in prepare_missing_cran_package[1] which is now using\n>\n>     opts=downloadurlmangle=s?^(.*)\\.\\.?https://bioconductor.org/packages/release/bioc?\n>\n> but on the other hand the downloadurlmangle string of all existing BioC\n> packages is broken now.\nOuch. Mass update? Other \"external to Debian\" ways how to learn what is\nnew to BioC and auto-update these?\n> The good news is that we will be informed about\n> new versions but the routine-update script will currently not download\n> the new upstream version.\n>\n> I plan to fix the downloadurlmangle string if found in debian/watch\n> before trying to upload the new version.  However, I'd like to have a\n> second pair of eyeballs watching at this new string before implementing\n> it into routine-update.\n>\n> Anybody wants to comment?\n\nNext week.\n\nCheers,\n\nSteffen",
+      "body_snippet": "Hi Andreas,\n\nOn 06.08.19 11:16, Andreas Tille wrote:\n> Hi,\n>\n> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n>> It is https://bioconductor.org/packages/release/bioc/html/tximport.htm",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 1,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-f53452603aa2",
+      "message_id": "<20190806100742.n2g5lxgw3gnfdl62@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-06T10:07:42Z",
+      "subject": "Re: Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "subject_clean": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "in_reply_to": "<17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+        "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+        "<17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>"
+      ],
+      "body_plain": "Hi Steffen,\n\nOn Tue, Aug 06, 2019 at 11:49:31AM +0200, Steffen Möller wrote:\n> > For the tximport issue I injected it here\n> >\n> >     https://salsa.debian.org/r-pkg-team/r-bioc-tximport\n> >\n> > Feel free to continue from this (I've just put you as Uploader).\n> \n> Thank you tons. I just found this when I wanted to create it :) I'll\n> continue on it. I have even already added it to the blend's med/bio .\n\nYou are welcome.\n \n> > Unfortunately the issue is more serious than just tximport did not\n> > worked:  **ALL** our BioC watch files are not working currently!\n> >\n> > I've fixed this in prepare_missing_cran_package[1] which is now using\n> >\n> >     opts=downloadurlmangle=s?^(.*)\\.\\.?https://bioconductor.org/packages/release/bioc?\n> >\n> > but on the other hand the downloadurlmangle string of all existing BioC\n> > packages is broken now.\n> Ouch. Mass update? Other \"external to Debian\" ways how to learn what is\n> new to BioC and auto-update these?\n\nI think they just changed something in their web pages the formerly\nvalid watch files now stumbled upon.  I do not see any reason for a\nmass update.  The problem occures only if somebody wants to download\na new version by using uscan.  That's usually one of our maintainers\nin the team.  If routine-update is fixing the watch file before\ncalling uscan no real harm is done (as far as I can see).\n\nKind regards\n\n     Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Steffen,\n\nOn Tue, Aug 06, 2019 at 11:49:31AM +0200, Steffen Möller wrote:\n> > For the tximport issue I injected it here\n> >\n> >     https://salsa.debian.org/r-pkg-team/r-bioc-tximport\n> >\n> > Feel ",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 2,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-bcbed04992f5",
+      "message_id": "<cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2019-08-06T11:05:50Z",
+      "subject": "What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?",
+      "subject_clean": "What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?",
+      "in_reply_to": "<20190806100742.n2g5lxgw3gnfdl62@an3as.eu>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+        "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+        "<17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>",
+        "<20190806100742.n2g5lxgw3gnfdl62@an3as.eu>"
+      ],
+      "body_plain": "Hello,\n\ntximport comes with a blob of jquery and fonts in a non-functional\ndocumentation file. These should be substituted with our jquery package\nbut I do not want to do anything that would interfere with the routine\nupdate script. And I don't really want to just remove the documentation,\neither.\n\nDo we have any policy on this? I am tempted to just leave everything as\nit is and override the lintian errors.\n\nBest,\n\nSteffen",
+      "body_snippet": "Hello,\n\ntximport comes with a blob of jquery and fonts in a non-functional\ndocumentation file. These should be substituted with our jquery package\nbut I do not want to do anything that would interfere",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 3,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-ad56320f8b57",
+      "message_id": "<20190807043649.yix4js6dhzawgwuv@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-07T04:36:49Z",
+      "subject": "Re: What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?",
+      "subject_clean": "What to do with JS-blobs and Microsoft fonts in inst/doc/*html ?",
+      "in_reply_to": "<cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+        "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+        "<17428818-6ed7-fdf6-48e2-7eee5c02ddd2@gmx.de>",
+        "<20190806100742.n2g5lxgw3gnfdl62@an3as.eu>",
+        "<cbe3e38a-68d6-d92d-8585-615d4c88bc52@gmx.de>"
+      ],
+      "body_plain": "Hi Steffen,\n\nOn Tue, Aug 06, 2019 at 01:05:50PM +0200, Steffen Möller wrote:\n> tximport comes with a blob of jquery and fonts in a non-functional\n> documentation file. These should be substituted with our jquery package\n> but I do not want to do anything that would interfere with the routine\n> update script.\n\nUse this script:\n\n    https://salsa.debian.org/r-pkg-team/maintenance-utilities/blob/master/r-exclude-doc\n\n> And I don't really want to just remove the documentation,\n> either.\n\nWhy?\n\n> Do we have any policy on this? I am tempted to just leave everything as\n> it is and override the lintian errors.\n\nI asked on this list two times how to recreate the doc since I was\nhoping that somebody knows.  I think the proper solution is to recreate\nwhat we had removed using dh-r but as long as nobody knows how to do\nthis our packages come without docs that are containing non-free blobs. \n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Steffen,\n\nOn Tue, Aug 06, 2019 at 01:05:50PM +0200, Steffen Möller wrote:\n> tximport comes with a blob of jquery and fonts in a non-functional\n> documentation file. These should be substituted with",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 4,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-436b1cf2da67",
+      "message_id": "<ac6168b8-9d57-d134-f1ca-82cd2fabfffa@debian.org>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-08-07T11:26:02Z",
+      "subject": "Re: r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>",
+      "references": [
+        "<20190723133005.t3sq6fdcsjoibhjo@an3as.eu>",
+        "<CAM8zJQvYjJwgQbjDrTCOAJP4RP2U-d1Fv1WxE+iES5f_WS9S8A@mail.gmail.com>",
+        "<20190723225655.gkuawrrm6k65fw6n@an3as.eu>",
+        "<CAM8zJQuCfzj_=HW-LTDht8LARi08rgcfFmznpjgBDZFQG-hk2A@mail.gmail.com>",
+        "<20190724110441.y7nc7ozn2ifzxs2o@an3as.eu>",
+        "<CAM8zJQtCT=QLrusH_2BRGgUtv7id3J31ext_+wj=b4yMMuis4w@mail.gmail.com>",
+        "<CA+6XHwRffjejhqBaq_DqCp_2AbjUnR5qgRrCZnoVKe0UwzOrOw@mail.gmail.com>",
+        "<CAM8zJQswhOj=aZLuErA4eQ+Ry-bj3mdxFGU4fFcquN3LA1+VMg@mail.gmail.com>",
+        "<20190725104235.kose5zsc5sd7skv7@an3as.eu>",
+        "<CAM8zJQuKwVsuV_ydyHL=04FWwEzRyDW5c0A0Do_65r_KF2mm5Q@mail.gmail.com>",
+        "<20190726125916.rsqt6x42z2lr4wlm@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn 2019/07/26 14:59, Andreas Tille wrote:\n> > OK, great!  As per the excuses for r-base [1], once the regressions in\n> > r-cran-filehash and r-cran-haplo.stats have been fixed, I will ask\n> > Dirk to do a no-change source-only upload to resolve the \"not built on\n> > buildd\" issue.\n>\n>\n> If those two packages are the only blockers we might consider\n> deactivating the tests for the moment.  I'm to busy at DebConf to\n> do more complex stuff than simple uploads / upgrades but feel free\n> to \"cheat\" with the tests.  I just activated the tests which were\n> never be run before so deactivating them is just restoring the\n> situation we had before.  These should not block any transition.\n\nI trust you had a good DebConf!\n\nAs far as I can see, these tests were activated and passed previously, \nwhich is why, as you can see on the packages tracker pages [1][2], \nbritney considers them regressions, and thus block migration:\n\nautopkgtest for r-cran-filehash/2.4-2-1: amd64: Regression\nNot considered\n\nautopkgtest for r-cran-haplo.stats/1.7.9-3: amd64: Regression\nNot considered\n\nI'll quote the usual message that appears on the package tracker for \ntransitions:\n\n\"Please avoid uploads unrelated to this transition, they would likely \ndelay it and require supplementary work from the release managers. On \nthe other hand, if your package has problems preventing it to migrate to \ntesting, please fix them as soon as possible.\"\n\nThe uploads we need now are ones fixing autopkgtest regressions and \nbinaries not built on the buildds, as these are blocking the migration.\n\nI found one can search on britney's update excuses page [3] e.g. for \n'binaries uploaded by ginggs' and find a package of mine that recently \ncleared NEW and was not built on the buildds.\n\nRegards\nGraham\n\n[1] https://tracker.debian.org/pkg/r-cran-filehash\n[2] https://tracker.debian.org/pkg/r-cran-haplo.stats\n[3] https://release.debian.org/britney/update_excuses.html",
+      "body_snippet": "Hi Andreas\n\nOn 2019/07/26 14:59, Andreas Tille wrote:\n> > OK, great!  As per the excuses for r-base [1], once the regressions in\n> > r-cran-filehash and r-cran-haplo.stats have been fixed, I will ask\n",
+      "thread_id": "thread-436b1cf2da67",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-4d2420ba446d",
+      "message_id": "<348c2db8-2ca9-0536-c72a-68cae35b55a9@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2019-08-07T12:33:41Z",
+      "subject": "Re: Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "subject_clean": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "in_reply_to": "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>",
+      "references": [
+        "<03443580-ddfa-f597-606f-5695da798130@gmail.com>",
+        "<20190806091638.5ofb2dyxwjrn7ona@an3as.eu>"
+      ],
+      "body_plain": "On 06.08.19 11:16, Andreas Tille wrote:\n> Hi,\n>\n> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n>> It is https://bioconductor.org/packages/release/bioc/html/tximport.html\n>> that I am after. Any idea how to get it found?\n> For the tximport issue I injected it here\n>\n>     https://salsa.debian.org/r-pkg-team/r-bioc-tximport\n>\n> Feel free to continue from this (I've just put you as Uploader).\n>\n> Unfortunately the issue is more serious than just tximport did not\n> worked:  **ALL** our BioC watch files are not working currently!\n>\n> I've fixed this in prepare_missing_cran_package[1] which is now using\n>\n>     opts=downloadurlmangle=s?^(.*)\\.\\.?https://bioconductor.org/packages/release/bioc?\nI can confirm that this works (just the final backslash is missing on\nthat line).\n> but on the other hand the downloadurlmangle string of all existing BioC\n> packages is broken now.  The good news is that we will be informed about\n> new versions but the routine-update script will currently not download\n> the new upstream version.\n>\n> I plan to fix the downloadurlmangle string if found in debian/watch\n> before trying to upload the new version.  However, I'd like to have a\n> second pair of eyeballs watching at this new string before implementing\n> it into routine-update.\n>\n> Anybody wants to comment?\n\nI just tested it - on Egon's BridgeDB - works.\n\nCheers,\n\nSteffen",
+      "body_snippet": "On 06.08.19 11:16, Andreas Tille wrote:\n> Hi,\n>\n> On Mon, Aug 05, 2019 at 08:35:17PM +0200, Steffen Möller wrote:\n>> It is https://bioconductor.org/packages/release/bioc/html/tximport.html\n>> that I a",
+      "thread_id": "thread-513611402b89",
+      "thread_depth": 1,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-f662386968b7",
+      "message_id": "<156524537457.3391.10849701988135714001.reportbug@sputnik.fam-tille.de>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2019-08-08T06:22:54Z",
+      "subject": "Bug#934201: RM: r-bioc-metagenomeseq/1.24.1-1",
+      "subject_clean": "Bug#934201: RM: r-bioc-metagenomeseq/1.24.1-1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: rm\n\n(explain the reason for the removal here)\n\nPlease remove r-bioc-metagenomeseq from testing.  It would block the\nmigration of R packages otherwise.  The reason is that we can not\nupgrade r-bioc-metagenomeseq to the new upstream version since it got a\nnew dependency from a non-free package.  We are sorting this out with\nupstream but this might take time.  All other r-bioc packages are\ndepending from the virtual package r-api-bioc-3.9 while\nr-bioc-metagenomeseq 1.24.1-1 depends r-api-bioc-3.8.  So there is a\nconflicting dependency which can only be resolved by a temporary removal\nof r-bioc-metagenomeseq 1.24.1-1 from testing.\n\nKind regards\n\n      Andreas.\n\n-- System Information:\nDebian Release: 10.0\n  APT prefers testing\n  APT policy: (501, 'testing'), (50, 'buildd-unstable'), (50, 'unstable'), (5, 'experimental')\nArchitecture: amd64 (x86_64)\nForeign Architectures: i386\n\nKernel: Linux 4.19.0-5-amd64 (SMP w/4 CPU cores)\nLocale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE=de_DE.UTF-8 (charmap=UTF-8)\nShell: /bin/sh linked to /bin/dash\nInit: systemd (via /run/systemd/system)\nLSM: AppArmor: enabled",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nUser: release.debian.org at packages.debian.org\nUsertags: rm\n\n(explain the reason for the removal here)\n\nPlease remove r-bioc-metagenomeseq from testing.  ",
+      "thread_id": "thread-f662386968b7",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-9656f346d0f4",
+      "message_id": "<20190808105842.a3y6ge4uxs457le6@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-08T10:58:42Z",
+      "subject": "r-cran-haplo.stats (Was: r-base breaks 9 autopkgtests)",
+      "subject_clean": "r-cran-haplo.stats (Was: r-base breaks 9 autopkgtests)",
+      "in_reply_to": "<CAM8zJQtAEyh-go04rkp+TV_LFRDOFEM-RFAWZgrUFAdGwCdTeg@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<20190723141917.i7qmq3vg5udkhf5o@an3as.eu>",
+        "<CAM8zJQtAEyh-go04rkp+TV_LFRDOFEM-RFAWZgrUFAdGwCdTeg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nOn Wed, Aug 7, 2019  Graham Inggs wrote:\n> I trust you had a good DebConf!\n\nI had despite I was missing some friends like you.\n \n> As far as I can see, these tests were activated and passed previously, which is why, as you can see on the packages tracker pages [1][2], britney considers them regressions, and thus block migration:\n> \n> \n> autopkgtest for r-cran-filehash/2.4-2-1: amd64: Regression\n\nFixed.\n \n> autopkgtest for r-cran-haplo.stats/1.7.9-3: amd64: Regression\n> Not considered\n\nThat test is totally useless since all parts are failing with quite some\ndiff.  Steffen, has this package any use or should we rather drop it?\nFor the moment I do not see any sense in running the test and thus I\ndeactivated it completely.  Could you please raise the issue with\nupstream?\n \n> I'll quote the usual message that appears on the package tracker for transitions:\n> \n> \n> \"Please avoid uploads unrelated to this transition, they would likely delay it and require supplementary work from the release managers. On the other hand, if your package has problems preventing it to migrate to testing, please fix them as soon as possible.\"\n>\n> The uploads we need now are ones fixing autopkgtest regressions and binaries not built on the buildds, as these are blocking the migration.\n\nOK, I'll stop uploading any R packages for the moment until\n\n   https://qa.debian.org/excuses.php?package=r-base\n\nis cleared.\n\nAny help is really welcome.  I'll be basically busy with real life until\n19.8. and will not be of much help here.\n\nKind regards\n\n        Andreas.\n \n> I found one can search on britney's update excuses page [3] e.g. for 'binaries uploaded by ginggs' and find a package of mine that recently cleared NEW and was not built on the buildds.\n\nYou mean for these we need to do a source-only re-upload? \nI admit I do not like this new \"feature\" that packages coming\nfrom new have no chance to migrate to testing. :-(\n\nKind regards\n\n      Andreas.\n \n \n> [1] https://tracker.debian.org/pkg/r-cran-filehash\n> [2] https://tracker.debian.org/pkg/r-cran-haplo.stats\n> [3] https://release.debian.org/britney/update_excuses.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nOn Wed, Aug 7, 2019  Graham Inggs wrote:\n> I trust you had a good DebConf!\n\nI had despite I was missing some friends like you.\n \n> As far as I can see, these tests were activated and passe",
+      "thread_id": "thread-9656f346d0f4",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-32a1a7e28845",
+      "message_id": "<3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-08-08T17:17:31Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<23862.60462.279335.797924@rob.eddelbuettel.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+        "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+        "<23862.60462.279335.797924@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk\n\nI've prepared the attached list of Breaks to be added to the r-base-core \nbinary package.\n\nI believe these will ease migration.  Paul, do you concur?\n\nRegards\nGraham\n--- a/debian/control\n+++ b/debian/control\n@@ -53,6 +54,31 @@\n Conflicts:  r-gnome, r-cran-rcompgen, r-base-latex\n Recommends: r-recommended, r-base-dev, r-doc-html\n Suggests: elpa-ess, r-doc-info | r-doc-pdf, r-mathlib, r-base-html\n+Breaks: r-bioc-graph (<< 1.62.0-1~),\n+        r-cran-bbmle (<< 1.0.20-5~),\n+        r-cran-biocmanager (<< 1.30.4+dfsg-2~),\n+        r-cran-caret (<< 6.0-84-2~),\n+        r-cran-cmprsk (<< 2.2-8-1~),\n+        r-cran-coin (<< 1.3-0-1~),\n+        r-cran-dendextend (<< 1.12.0+dfsg-1~),\n+        r-cran-fields (<< 9.8-3-1~),\n+        r-cran-filehash (<< 2.4-2-2~),\n+        r-cran-future (<< 1.14.0+dfsg-1~),\n+        r-cran-genetics (<< 1.3.8.1.2-1~),\n+        r-cran-haplo.stats (<< 1.7.9-4~),\n+        r-cran-igraph (<< 1.2.4.1-1~),\n+        r-cran-lava (<< 1.6.5-1~),\n+        r-cran-libcoin (<< 1.0-4-1~),\n+        r-cran-msm (<< 1.6.7-1~),\n+        r-cran-permute (<< 0.9-5-1~),\n+        r-cran-phangorn (<< 2.5.5-1~),\n+        r-cran-popepi (<< 0.4.7-1~),\n+        r-cran-recipes (<< 0.1.6-1~),\n+        r-cran-sp (<< 1:1.3-1-2~),\n+        r-cran-spam (<< 2.2-2-1~),\n+        r-cran-units (<< 0.6-3-1~),\n+        r-cran-vegan (<< 2.5-5+dfsg-1~),\n+        r-cran-zelig (<< 5.1.6.1-1~)\n Description: GNU R core of statistical computation and graphics system\n  R is a system for statistical computation and graphics.  It consists \n  of a language plus a run-time environment with graphics, a debugger,",
+      "body_snippet": "Hi Dirk\n\nI've prepared the attached list of Breaks to be added to the r-base-core \nbinary package.\n\nI believe these will ease migration.  Paul, do you concur?\n\nRegards\nGraham\n--- a/debian/control\n+++ ",
+      "thread_id": "thread-32a1a7e28845",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-0a0445a75283",
+      "message_id": "<217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2019-08-08T18:38:28Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+        "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+        "<23862.60462.279335.797924@rob.eddelbuettel.com>",
+        "<3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>"
+      ],
+      "body_plain": "Hi Graham, Dirk,\n\nOn 08-08-2019 19:17, Graham Inggs wrote:\n> I've prepared the attached list of Breaks to be added to the r-base-core\n> binary package.\n> \n> I believe these will ease migration.  Paul, do you concur?\n\nAdding the breaks helps the migration, yes.\n\nPaul\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Graham, Dirk,\n\nOn 08-08-2019 19:17, Graham Inggs wrote:\n> I've prepared the attached list of Breaks to be added to the r-base-core\n> binary package.\n> \n> I believe these will ease migration.  Paul,",
+      "thread_id": "thread-32a1a7e28845",
+      "thread_depth": 1,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-ea45a73e9b31",
+      "message_id": "<23884.28851.724153.902696@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2019-08-08T18:57:55Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+        "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+        "<23862.60462.279335.797924@rob.eddelbuettel.com>",
+        "<3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>",
+        "<217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>"
+      ],
+      "body_plain": "On 8 August 2019 at 20:38, Paul Gevers wrote:\n| Hi Graham, Dirk,\n| \n| On 08-08-2019 19:17, Graham Inggs wrote:\n| > I've prepared the attached list of Breaks to be added to the r-base-core\n| > binary package.\n| > \n| > I believe these will ease migration.  Paul, do you concur?\n| \n| Adding the breaks helps the migration, yes.\n\nAm I understanding this correctly in that the Breaks: block is temporary and\nonce the (current) migration is complete, I should remove that block?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 8 August 2019 at 20:38, Paul Gevers wrote:\n| Hi Graham, Dirk,\n| \n| On 08-08-2019 19:17, Graham Inggs wrote:\n| > I've prepared the attached list of Breaks to be added to the r-base-core\n| > binary p",
+      "thread_id": "thread-32a1a7e28845",
+      "thread_depth": 2,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-6ac972a10677",
+      "message_id": "<CAM8zJQvV1ia6sFnHE2e4x4h1qBC7B+cnf7GHtL83t7q2u6izvA@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-08-10T10:49:03Z",
+      "subject": "Re: r-base breaks 9 autopkgtests",
+      "subject_clean": "r-base breaks 9 autopkgtests",
+      "in_reply_to": "<23884.28851.724153.902696@rob.eddelbuettel.com>",
+      "references": [
+        "<CAM8zJQvSeGJ6imWJKyLC8qtuOO4ajNSkm3ZHqYQQLhUSsOoZMw@mail.gmail.com>",
+        "<23862.56524.236264.202735@rob.eddelbuettel.com>",
+        "<CAM8zJQsXP5Kt90VHXFsxn-akNu1+5x87O34uzr3rVtA1R6bN-g@mail.gmail.com>",
+        "<23862.60462.279335.797924@rob.eddelbuettel.com>",
+        "<3e507b18-8804-b4e7-cce1-8b67c1e0a124@debian.org>",
+        "<217fcedf-3b5e-32d3-0a2a-b15da1eea2c1@debian.org>",
+        "<23884.28851.724153.902696@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dirk\n\nOn Thu, 8 Aug 2019 at 20:58, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Am I understanding this correctly in that the Breaks: block is temporary and\n> once the (current) migration is complete, I should remove that block?\n\nNo, I think that block should remain until after the release of bullseye.\n\nRegards\nGraham",
+      "body_snippet": "Hi Dirk\n\nOn Thu, 8 Aug 2019 at 20:58, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Am I understanding this correctly in that the Breaks: block is temporary and\n> once the (current) migration is comp",
+      "thread_id": "thread-32a1a7e28845",
+      "thread_depth": 3,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-5c1be3044c2e",
+      "message_id": "<20190813230729.GB14737@beskar.mdcc.cx>",
+      "from_name": "Joost van Baal-Ilić",
+      "from_email_hash": "1820ff95072bcc20ba413663dbbdd97d796c6dccc27f3fa9ecb4b55f3aec0cc9",
+      "date": "2019-08-13T23:07:29Z",
+      "subject": "Re: Open ITPs (turned into RFPs)",
+      "subject_clean": "Open ITPs (turned into RFPs)",
+      "in_reply_to": "<20190722174206.imawny3kc3soweao@an3as.eu>",
+      "references": [
+        "<20190722174206.imawny3kc3soweao@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn Mon, Jul 22, 2019 at 07:42:06PM +0200, Andreas Tille wrote:\n> \n> you have at least two long standing ITPs (#813815 - r-cran-nfactors,\n> #835082 - r-cran-semplot, may be others) which were turned into RFPs\n> automatically.  Could you give some statement whether these packages\n> might remain interesting for you and whether we should fire up\n> prepare_missing_cran_package for these?\n\nThanks for this reminder.  For both r-cran-nfactors and r-cran-semplot there\nalready _is_ work in our git at salsa.debian.org:r-pkg-team : at\nr-cran-nfactors.git and r-cran-semplot.git .  So no need for\nprepare_missing_cran_package for those.\n\nI cannot commit to maintaining these packages appear in a stable Debian\nrelease: I do all my R packaging work during $dayjob; I'm mainly interested in\nkeeping the packages working on Debian stable, and somewhat in sync with\nupsteam.  So that's technically what would end up in debian backports.  The\nreason I stick the work in git @ salsa is I feel there's a chance others might\nbenefit from it too.  That's the reason I've recently not been very active in\nactually uploading it to NEW.\n\nThere some packages of me in our git now for which I've not yet posted ITP's.\nI believe this interferes badly with some of your workflows.  Would it help you\nif I actually _would_ post ITP's?  I'd be glad to.\n\nAlso, debian/copyright of most of my recent packages is still lacking.  I'll\ntry to find time to work on that (note to self: have another look at cme).\n\nWhat do you think?\n\nBye,\n\nJoost\n\nPS: thanks for your talk @ debconf, I enjoyed the video!",
+      "body_snippet": "Hi Andreas,\n\nOn Mon, Jul 22, 2019 at 07:42:06PM +0200, Andreas Tille wrote:\n> \n> you have at least two long standing ITPs (#813815 - r-cran-nfactors,\n> #835082 - r-cran-semplot, may be others) which w",
+      "thread_id": "thread-5c1be3044c2e",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-7212151a09bf",
+      "message_id": "<20190819191600.uj73bm3phkohm4nb@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2019-08-19T19:16:00Z",
+      "subject": "Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "subject_clean": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "in_reply_to": "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>",
+      "references": [
+        "<20190819095705.scpalflufoqsyfmk@an3as.eu>",
+        "<6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org>",
+        "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>"
+      ],
+      "body_plain": "Control: tags -1 help\n\nHi Paul,\n\nOn Mon, Aug 19, 2019 at 08:54:03PM +0200, Paul Gevers wrote:\n> Hi Andreas,\n> \n> On Mon, 19 Aug 2019 11:57:05 +0200 Andreas Tille <andreas at fam-tille.de>\n> wrote:\n> > I wonder whether we can close this bug since the test is passing\n> > in unstable (with r-cran-multcomp 1.4-10-2).\n> \n> No, because currently it is blocking the migration of r-cran-multcomp.\n> Apparently r-cran-multcomp isn't making sure that the right stuff is\n> pulled into testing when it is testing r-cran-dosefinding. I am hoping\n> that r-cran migrates soon with lots of r stuff, maybe after that it is\n> \"fixed\". There is still a breaks missing somewhere I guess, but I don't\n> know where.\n\nSo the bug was first filed against r-cran-multcomp, reassigned to\nr-cran-dosefinding where the test is OK in sid but the issue is blocking\nthe migration.  I admit I neither have any idea how to fix this.\n\nIf its rather a matter of the bug severity downgrading it manually could\nenable the migration.  I have no idea whether this is the right course\nof action but otherwise it looks like a deadlock for me.\n\nKind regards\n\n          Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Control: tags -1 help\n\nHi Paul,\n\nOn Mon, Aug 19, 2019 at 08:54:03PM +0200, Paul Gevers wrote:\n> Hi Andreas,\n> \n> On Mon, 19 Aug 2019 11:57:05 +0200 Andreas Tille <andreas at fam-tille.de>\n> wrote:\n> >",
+      "thread_id": "thread-7212151a09bf",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-67e82d71fe47",
+      "message_id": "<e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>",
+      "from_name": "Paul Gevers",
+      "from_email_hash": "093a4f0ef6192cec642aa578379d5f40320e8143b61ab66a46ef78184273e40b",
+      "date": "2019-08-19T19:25:57Z",
+      "subject": "Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "subject_clean": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "in_reply_to": "<20190819191600.uj73bm3phkohm4nb@an3as.eu>",
+      "references": [
+        "<20190819095705.scpalflufoqsyfmk@an3as.eu>",
+        "<6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org>",
+        "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>",
+        "<20190819191600.uj73bm3phkohm4nb@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\nOn 19-08-2019 21:16, Andreas Tille wrote:\n> So the bug was first filed against r-cran-multcomp,\n\nThe bug was filed against *both* packages, as I always do when it isn't\ntotally clear from the failure to which package it belongs.\n\n> reassigned to\n> r-cran-dosefinding\n\nby edd, who refuses to look into these kind of issues.\n\n> where the test is OK in sid but the issue is blocking\n> the migration.  I admit I neither have any idea how to fix this.\n\nWhen the test is successful in sid, it suggests that there is a\ncombination of packages that need to migrate together to bullseye to be\nsuccessful. If we want to help r-cran-multcomp migrate, it would be\nhelpful to know the combination that is needed. Then we can figure out\nwhich package needs to grow which kind of dependency.\n\n> If its rather a matter of the bug severity downgrading it manually could\n> enable the migration.  I have no idea whether this is the right course\n> of action but otherwise it looks like a deadlock for me.\n\nThe migration is *not* blocked by this bug report, so severity doesn't\nhelp. The migration is blocked because the autopkgtest of\nr-cran-dosefinding in bullseye fails when run with the binary packages\nfrom multcomp together with a whole set of other packages deemed\nnecessary (by britney based on package relations) from unstable. And\nthat is the subject of this report (albeit missing the \"in bullseye\" part).\n\nAs said, I am hoping that without doing anything, things will be all\nright in a couple of days. If not, r-base migration will simplify\nfinding the issue a lot.\n\nPaul\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Hi Andreas,\n\nOn 19-08-2019 21:16, Andreas Tille wrote:\n> So the bug was first filed against r-cran-multcomp,\n\nThe bug was filed against *both* packages, as I always do when it isn't\ntotally clear from",
+      "thread_id": "thread-7212151a09bf",
+      "thread_depth": 1,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-3bf33aaaab66",
+      "message_id": "<23898.63860.353116.484293@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2019-08-19T19:33:08Z",
+      "subject": "Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "subject_clean": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "in_reply_to": "<e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>",
+      "references": [
+        "<20190819095705.scpalflufoqsyfmk@an3as.eu>",
+        "<6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org>",
+        "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>",
+        "<20190819191600.uj73bm3phkohm4nb@an3as.eu>",
+        "<e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>"
+      ],
+      "body_plain": "FWIW both packages are pristinely clean at CRAN with current versions:\n\n  https://cran.r-project.org/web/checks/check_results_DoseFinding.html\n\n  https://cloud.r-project.org/web/checks/check_results_multcomp.html\n\nThese problems still seem self-imposed to me.  We (maybe randomly ?) appear\nto be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)\ndoes not see.\n\nThe whole issue is odd _because CRAN already does all the checking_ and we do\nnot fundamentally alter packages, or R.  So I still think that we could\npotentially save ourselves a lot of grief if we aligned more with what CRAN\nalready does.  But I said that before, and nobody seems to agree so ....\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "FWIW both packages are pristinely clean at CRAN with current versions:\n\n  https://cran.r-project.org/web/checks/check_results_DoseFinding.html\n\n  https://cloud.r-project.org/web/checks/check_results_m",
+      "thread_id": "thread-7212151a09bf",
+      "thread_depth": 2,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-92b126365bf5",
+      "message_id": "<a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2019-08-23T13:44:26Z",
+      "subject": "Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "subject_clean": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "in_reply_to": "<23898.63860.353116.484293@rob.eddelbuettel.com>",
+      "references": [
+        "<20190819095705.scpalflufoqsyfmk@an3as.eu>",
+        "<6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org>",
+        "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>",
+        "<20190819191600.uj73bm3phkohm4nb@an3as.eu>",
+        "<e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>",
+        "<23898.63860.353116.484293@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Closing the bug since multcomp has now migrated.\n\nOn 2019/08/19 21:33, Dirk Eddelbuettel wrote:\n> These problems still seem self-imposed to me.  We (maybe randomly ?) appear\n> to be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)\n> does not see.\n\nWell, not randomly, we check multcomp from unstable against its \nreverse-dependencies from testing.\n\nIf one of multcomp's reverse-dependencies from testing is not compatible \nwith the new multcomp, but there is a new version in unstable that is, \nthen it is likely that adding a Breaks to multcomp will hint to the \npackage manager not to install them together, thus ensuring we don't try \nto test incompatible versions.",
+      "body_snippet": "Closing the bug since multcomp has now migrated.\n\nOn 2019/08/19 21:33, Dirk Eddelbuettel wrote:\n> These problems still seem self-imposed to me.  We (maybe randomly ?) appear\n> to be checking (maybe ou",
+      "thread_id": "thread-7212151a09bf",
+      "thread_depth": 3,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-3f6d4d79221e",
+      "message_id": "<23904.26004.850380.747286@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2019-08-23T22:15:48Z",
+      "subject": "Re: Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "subject_clean": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "in_reply_to": "<a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>",
+      "references": [
+        "<20190819095705.scpalflufoqsyfmk@an3as.eu>",
+        "<6e9d3952-4fa3-9323-e4a6-9076cd1ce558@debian.org>",
+        "<8432b518-6bda-1eb5-82e3-c96a86811f1b@debian.org>",
+        "<20190819191600.uj73bm3phkohm4nb@an3as.eu>",
+        "<e43ec8c3-8b4e-f0bb-bfe0-3b1fcf910b26@debian.org>",
+        "<23898.63860.353116.484293@rob.eddelbuettel.com>",
+        "<a43b2ccf-3e3a-255b-7bc7-039c4a336b5e@debian.org>"
+      ],
+      "body_plain": "On 23 August 2019 at 15:44, Graham Inggs wrote:\n| Closing the bug since multcomp has now migrated.\n| \n| \n| On 2019/08/19 21:33, Dirk Eddelbuettel wrote:\n| > These problems still seem self-imposed to me.  We (maybe randomly ?) appear\n| > to be checking (maybe out-of-sync ?) permutations that upstream (ie CRAN)\n| > does not see.\n| \n| Well, not randomly, we check multcomp from unstable against its \n| reverse-dependencies from testing.\n\nSure. But still \"random\" in the eyes of upstream (as the versions are purely\nours), and orthogonal to their requirements.  See below.\n\n| If one of multcomp's reverse-dependencies from testing is not compatible \n| with the new multcomp, but there is a new version in unstable that is, \n| then it is likely that adding a Breaks to multcomp will hint to the \n| package manager not to install them together, thus ensuring we don't try \n| to test incompatible versions.\n\nAs mentioned, if a new candidate version does not mesh with its reverse\ndepends in what is current at CRAN, the CRAN admins will not let the new\ncandidate in. CRAN does all that for the relationships that matter: Depends,\nImports, LinkingTo but not Suggests. That ensures that CRAN almost always\nbuilds and works.\n\nAnd we can trust this.  By keeping our versions fresh and aligned we get\ntheir quality checks for free.\n\nThere is nothing wrong with running additional version checks.  Just realize\nthat the corresponding upstream authors may shrug: they work hard to keep the\ncurrent version working, not somewhat randomly (to them) chosen arbitrary\nones (as they happen here if a package is behind upstream).\n\nThere is a bit more discussion about whether Suggests should be tested like\nDepends, Imports and LinkingTo, or not. I tend to argue no, others disagree.\nSo here, to me it feels odd that we did all this for a _single optional call_\nas it was a Suggests: between these two packages.  \n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 23 August 2019 at 15:44, Graham Inggs wrote:\n| Closing the bug since multcomp has now migrated.\n| \n| \n| On 2019/08/19 21:33, Dirk Eddelbuettel wrote:\n| > These problems still seem self-imposed to m",
+      "thread_id": "thread-7212151a09bf",
+      "thread_depth": 4,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-97e050aa47fa",
+      "message_id": "<20190824060204.qvjdy3qrrf55r7sg@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-24T06:02:04Z",
+      "subject": "Re: R Packaging",
+      "subject_clean": "R Packaging",
+      "in_reply_to": "<2127082f-816a-b755-aa68-766456ffb30e@gmx.com>",
+      "references": [
+        "<2127082f-816a-b755-aa68-766456ffb30e@gmx.com>"
+      ],
+      "body_plain": "Hi David,\n\nOn Fri, Aug 23, 2019 at 07:14:26PM -0600, David Shaub wrote:\n> Hi Andreas,\n> \n> I saw the video of your talk at Debconf about R packaging,\n\nNice. For the readers of this list here is the link[1]\n\n> but I cannot remember the correct way to request for an R package to be packaged in Debian. Is there a request form or mailing list on the Debian site?\n\nIn Debian there is a formalism to ask for packages.  You\nfile a bug against the virtual package wnpp\n\n    reportbug wnpp\n\nand select RFP (Request For Packaging).  However, chances that this will\nbe picked up is usually not as high since not many people are really\nwatching the bug.  Thus I would recommend to send this kind of requests\nhere on the Debian R list debian-r at lists.debian.org.  I'd also like to\nencourage every newcomer to give the tools shown in the video a try.\nIts an easy way to become a member of the Debian team.  So why asking\nsomebody to do something for you if you can even do it yourself?\n\n> The CRAN packages I am interested in are the following: \"lintr\", \"rmarkdown\", \"xgboost\", \"ranger\", \"boruta\", \"forecast\", and \"prophet\".\n\nR-cran-rmarkdown, r-cran-ranger and r-cran-forecast are packaged.  The\nothers could be done (just hoping for either you as a volunteer to learn\nor some volunteer here on the list).  Regarding prophet I had some\nissues in the past[2].  It does not compile and I have no idea how to\nfix it neither anybody else here contributed some solution.  I tried\nabout one year later with prophet 0.5 - no solution so far but I can try\nagain in a couple of days.\n\nKind regards and thanks for the interest in R packaging for Debian\n\n    Andreas.\n\n[1] https://caesar.ftp.acc.umu.se/pub/debian-meetings/2019/DebConf19/r-packaging-bof.webm \n[2] https://lists.debian.org/debian-r/2018/07/msg00005.html\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi David,\n\nOn Fri, Aug 23, 2019 at 07:14:26PM -0600, David Shaub wrote:\n> Hi Andreas,\n> \n> I saw the video of your talk at Debconf about R packaging,\n\nNice. For the readers of this list here is the li",
+      "thread_id": "thread-97e050aa47fa",
+      "thread_depth": 0,
+      "month": "2019-08"
+    },
+    {
+      "id": "msg-24a3316fa28f",
+      "message_id": "<20190826084641.chhpcwppyiibx2x2@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2019-08-26T08:46:41Z",
+      "subject": "HELP: Test suite error with latest version of r-cran-fpc",
+      "subject_clean": "HELP: Test suite error with latest version of r-cran-fpc",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI tried to upgrade r-cran-fpc to version 2.2-3.  When running the autopkgtest\nI get:\n\nMethod  fuzzy  was used.\nNumber of representative FPCs:  3 \n\nFPCs with less than  3  points were skipped.\nFPCs with ratio of times found to number of points less than  0.1  were skipped.\n0  iteration runs led to  0  skipped clusters.\n  Weight 1 for r^2<=  3.84  weight 0 for r^2>  7.88  \n  Constant ca=  3.84  corresponding to alpha=  0.95 \n\n FPC  1 \n  Times found (group members):  4 \n  Ratio to size:  1.33 \n  Mean:\n[1] 6.33\n  Covariance matrix:\n      [,1]\n[1,] 0.222\n  Number of points (sum of weights):  3 \n\n FPC  2 \n  Times found (group members):  3 \n  Ratio to size:  1 \n  Mean:\n[1] 2\n  Covariance matrix:\n      [,1]\n[1,] 0.667\n  Number of points (sum of weights):  3 \n\n FPC  3 \n  Times found (group members):  2 \n  Ratio to size:  0.286 \n  Mean:\n[1] 4.71\n  Covariance matrix:\n     [,1]\n[1,]  6.2\n  Number of points (sum of weights):  7 \n\nNumber of points (rounded weights) in intersection of representative FPCs\n     [,1] [,2] [,3]\n[1,]    3    0    3\n[2,]    0    3    3\n[3,]    3    3    7\n> \n> set.seed(776655)\n> v1 <- rnorm(100)\n> v2 <- rnorm(100)\n> d1 <- sample(1:5,100,replace=TRUE)\n> d2 <- sample(1:4,100,replace=TRUE)\n> ldata <- cbind(v1,v2,d1,d2)\n> fr <- flexmixedruns(ldata,\n+     continuous=2,discrete=2,simruns=1,initial.cluster=c(rep(1,5),rep(2,45),\n+                                         rep(3,50)),\n+                     control=list(minprior=0.1),\n+                     n.cluster=3,allout=FALSE)\nk=  3  flexmix error in run  1  \nError in flexout[[optimalk]] : \n  attempt to select less than one element in get1index <real>\nCalls: flexmixedruns -> summary\n\nStrangely enough this only occures in the autopkgtest chroot but\nnot on my local machine.  This is usually a sign for a missing\ntest-depends.  Any idea what this might be?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI tried to upgrade r-cran-fpc to version 2.2-3.  When running the autopkgtest\nI get:\n\nMethod  fuzzy  was used.\nNumber of representative FPCs:  3 \n\nFPCs with less than  3  points were skipped.\nFPC",
+      "thread_id": "thread-24a3316fa28f",
+      "thread_depth": 0,
+      "month": "2019-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-513611402b89",
+      "subject": "Seems all our BioC watch files are broken now (Was: BioC package \"tximport\" not found by dh-r's prepare... script - any idea?)",
+      "message_count": 6,
+      "participants": [
+        "Andreas Tille",
+        "Steffen Möller"
+      ],
+      "started": "2019-08-06T09:16:38Z",
+      "last_reply": "2019-08-07T12:33:41Z",
+      "root_message_id": "msg-513611402b89"
+    },
+    {
+      "id": "thread-436b1cf2da67",
+      "subject": "r-bioc-biocinstaller (Was: r-base breaks 9 autopkgtests)",
+      "message_count": 1,
+      "participants": [
+        "Graham Inggs"
+      ],
+      "started": "2019-08-07T11:26:02Z",
+      "last_reply": "2019-08-07T11:26:02Z",
+      "root_message_id": "msg-436b1cf2da67"
+    },
+    {
+      "id": "thread-f662386968b7",
+      "subject": "Bug#934201: RM: r-bioc-metagenomeseq/1.24.1-1",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-08-08T06:22:54Z",
+      "last_reply": "2019-08-08T06:22:54Z",
+      "root_message_id": "msg-f662386968b7"
+    },
+    {
+      "id": "thread-9656f346d0f4",
+      "subject": "r-cran-haplo.stats (Was: r-base breaks 9 autopkgtests)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-08-08T10:58:42Z",
+      "last_reply": "2019-08-08T10:58:42Z",
+      "root_message_id": "msg-9656f346d0f4"
+    },
+    {
+      "id": "thread-32a1a7e28845",
+      "subject": "r-base breaks 9 autopkgtests",
+      "message_count": 4,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Graham Inggs",
+        "Paul Gevers"
+      ],
+      "started": "2019-08-08T17:17:31Z",
+      "last_reply": "2019-08-10T10:49:03Z",
+      "root_message_id": "msg-32a1a7e28845"
+    },
+    {
+      "id": "thread-5c1be3044c2e",
+      "subject": "Open ITPs (turned into RFPs)",
+      "message_count": 1,
+      "participants": [
+        "Joost van Baal-Ilić"
+      ],
+      "started": "2019-08-13T23:07:29Z",
+      "last_reply": "2019-08-13T23:07:29Z",
+      "root_message_id": "msg-5c1be3044c2e"
+    },
+    {
+      "id": "thread-7212151a09bf",
+      "subject": "Bug#924514: multcomp breaks r-cran-dosefinding autopkgtest",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Graham Inggs",
+        "Paul Gevers"
+      ],
+      "started": "2019-08-19T19:16:00Z",
+      "last_reply": "2019-08-23T22:15:48Z",
+      "root_message_id": "msg-7212151a09bf"
+    },
+    {
+      "id": "thread-97e050aa47fa",
+      "subject": "R Packaging",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-08-24T06:02:04Z",
+      "last_reply": "2019-08-24T06:02:04Z",
+      "root_message_id": "msg-97e050aa47fa"
+    },
+    {
+      "id": "thread-24a3316fa28f",
+      "subject": "HELP: Test suite error with latest version of r-cran-fpc",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2019-08-26T08:46:41Z",
+      "last_reply": "2019-08-26T08:46:41Z",
+      "root_message_id": "msg-24a3316fa28f"
+    }
+  ]
+}

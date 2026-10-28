@@ -1,0 +1,258 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2018-12",
+  "messages": [
+    {
+      "id": "msg-3cd5aa3cf40d",
+      "message_id": "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2018-12-01T11:13:44Z",
+      "subject": "'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi R People\n\nSince the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\nr-bioc-cummerbund have been failing in Ubuntu where the test runners\nhave less than ~2GB RAM.\n\nIn both cases, the autopkgtest consists of generating the\ndocumentation from a .rnw file.  The last step in the .rnw file is a\ncall to sessionInfo() which seems to run out of memory while trying to\nexecute 'uname' to determine the platform, as follows:\n\n> sessionInfo()\nError in system(paste(which, shQuote(names[i])), intern = TRUE,\nignore.stderr = TRUE) :\n  cannot popen '/usr/bin/which 'uname' 2>/dev/null', probable reason\n'Cannot allocate memory'\nCalls: source ... withVisible -> eval -> eval -> sessionInfo -> Sys.which\nExecution halted\nWarning message:\nsystem call failed: Cannot allocate memory\n\nI don't believe this failure is a reflection of the quality of the\nr-bioc-biovizbase and r-bioc-cummerbund packages, and the following\nworkaround does the trick:\n\n--- a/debian/tests/run-unit-test\n+++ b/debian/tests/run-unit-test\n@@ -10,6 +10,7 @@ cp -r /usr/lib/R/site-library/$oname/ext\n cp /usr/share/doc/$pkg/examples/vignettes/* $ADTTMP\n find . -name \"*.gz\" -exec gunzip \\{\\} \\;\n for rnw in `ls *.[rRS]nw` ; do\n+sed -i '/^sessionInfo\\(\\)/d' $rnw\n rfile=`echo $rnw | sed 's/\\.[rRS]nw/.R/'`\n LC_ALL=C R --no-save <<EOT\n   Stangle(\"$rnw\")\n\nWould there be any objections to me making this change in the Debian\npackaging of r-bioc-biovizbase and r-bioc-cummerbund?\ncodesearch.debian.net suggests there may be other affected packages,\nbut either the documentation is not generated as part of the\nautopkgtest, or the autopkgtest has never passed.\n\nRegards\nGraham",
+      "body_snippet": "Hi R People\n\nSince the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\nr-bioc-cummerbund have been failing in Ubuntu where the test runners\nhave less than ~2GB RAM.\n\nIn both cases, the auto",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 0,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-c06a99909bd6",
+      "message_id": "<e0409902-ff7e-c055-506e-0de7dd9b10de@gmail.com>",
+      "from_name": "Michael Rutter",
+      "from_email_hash": "f32ffdcba6fa19dc2e0eddf45ddb562199f8606163316733b96f1f24318d52ef",
+      "date": "2018-12-02T15:11:31Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 12/1/18 6:13 AM, Graham Inggs wrote:\n> Hi R People\n>\n> Since the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\n> r-bioc-cummerbund have been failing in Ubuntu where the test runners\n> have less than ~2GB RAM.\n\nGraham,\n\nWhat is the source of the binaries?  Are they coming from an Ubuntu \nrepository or one of my PPA's?\n\nThanks,\nMichael\n\n> In both cases, the autopkgtest consists of generating the\n> documentation from a .rnw file.  The last step in the .rnw file is a\n> call to sessionInfo() which seems to run out of memory while trying to\n> execute 'uname' to determine the platform, as follows:\n>\n> > sessionInfo()\n>\n> Error in system(paste(which, shQuote(names[i])), intern = TRUE,\n> ignore.stderr = TRUE) :\n>    cannot popen '/usr/bin/which 'uname' 2>/dev/null', probable reason\n> 'Cannot allocate memory'\n> Calls: source ... withVisible -> eval -> eval -> sessionInfo -> Sys.which\n> Execution halted\n> Warning message:\n> system call failed: Cannot allocate memory\n>\n> I don't believe this failure is a reflection of the quality of the\n> r-bioc-biovizbase and r-bioc-cummerbund packages, and the following\n> workaround does the trick:\n>\n> --- a/debian/tests/run-unit-test\n> +++ b/debian/tests/run-unit-test\n> @@ -10,6 +10,7 @@ cp -r /usr/lib/R/site-library/$oname/ext\n>   cp /usr/share/doc/$pkg/examples/vignettes/* $ADTTMP\n>   find . -name \"*.gz\" -exec gunzip \\{\\} \\;\n>   for rnw in `ls *.[rRS]nw` ; do\n> +sed -i '/^sessionInfo\\(\\)/d' $rnw\n>   rfile=`echo $rnw | sed 's/\\.[rRS]nw/.R/'`\n>   LC_ALL=C R --no-save <<EOT\n>     Stangle(\"$rnw\")\n>\n> Would there be any objections to me making this change in the Debian\n> packaging of r-bioc-biovizbase and r-bioc-cummerbund?\n> codesearch.debian.net suggests there may be other affected packages,\n> but either the documentation is not generated as part of the\n> autopkgtest, or the autopkgtest has never passed.\n>\n> Regards\n> Graham",
+      "body_snippet": "On 12/1/18 6:13 AM, Graham Inggs wrote:\n> Hi R People\n>\n> Since the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\n> r-bioc-cummerbund have been failing in Ubuntu where the test runners\n> ",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 1,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-5430812d628d",
+      "message_id": "<20181203094145.jgcrqswr7hlnvdii@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-12-03T09:41:45Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nOn Sat, Dec 01, 2018 at 01:13:44PM +0200, Graham Inggs wrote:\n>   cannot popen '/usr/bin/which 'uname' 2>/dev/null', probable reason\n> 'Cannot allocate memory'\n> Calls: source ... withVisible -> eval -> eval -> sessionInfo -> Sys.which\n> Execution halted\n> Warning message:\n> system call failed: Cannot allocate memory\n>\n> \n> Would there be any objections to me making this change in the Debian\n> packaging of r-bioc-biovizbase and r-bioc-cummerbund?\n> codesearch.debian.net suggests there may be other affected packages,\n> but either the documentation is not generated as part of the\n> autopkgtest, or the autopkgtest has never passed.\n\nNo objection against the patch but I wonder what else might be\nbroken if a\n   popen '/usr/bin/which 'uname'\nwill cause a problem with memory allocation.\n\nKind regards\n\n       Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nOn Sat, Dec 01, 2018 at 01:13:44PM +0200, Graham Inggs wrote:\n>   cannot popen '/usr/bin/which 'uname' 2>/dev/null', probable reason\n> 'Cannot allocate memory'\n> Calls: source ... withVisi",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 1,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-3b85b982c1bd",
+      "message_id": "<CA+6XHwQUUtX_Atp9CTfe-ZiGRKzkF0TyLUt5O1icKpeUyK2oJQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2018-12-03T09:56:50Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<20181203094145.jgcrqswr7hlnvdii@an3as.eu>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<20181203094145.jgcrqswr7hlnvdii@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nLe lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> No objection against the patch but I wonder what else might be\n> broken if a\n>    popen '/usr/bin/which 'uname'\n> will cause a problem with memory allocation.\n\nIt's the same for me, no problem with this patch.\nBut, quite strange that sessionInfo() fails... it should not.\n\nBTW, I'm still working to improve \"Testsuite: autopkgtest-pkg-r\" to\nmake useless all debian/tests folders.\nI try to fix all broken tests to see which are the common problems to\navoid too many troubles when the update of autopkgtest-pkg-r will\nhappen.\nCurrently, I have to fix the detection of required R packages to run\nsuccessfully the tests [1].\n\nBest,\nDylan\n\n[1] https://salsa.debian.org/ci-team/autodep8/merge_requests/8/diffs",
+      "body_snippet": "Hi,\n\nLe lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> No objection against the patch but I wonder what else might be\n> broken if a\n>    popen '/usr/bin/which 'uname'\n> will",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 2,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-88c30c0cc543",
+      "message_id": "<20181203103113.samei3gojvjw3oue@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-12-03T10:31:13Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CA+6XHwQUUtX_Atp9CTfe-ZiGRKzkF0TyLUt5O1icKpeUyK2oJQ@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<20181203094145.jgcrqswr7hlnvdii@an3as.eu>",
+        "<CA+6XHwQUUtX_Atp9CTfe-ZiGRKzkF0TyLUt5O1icKpeUyK2oJQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Dec 03, 2018 at 10:56:50AM +0100, Dylan Aïssi wrote:\n> Le lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> > No objection against the patch but I wonder what else might be\n> > broken if a\n> >    popen '/usr/bin/which 'uname'\n> > will cause a problem with memory allocation.\n> \n> It's the same for me, no problem with this patch.\n\nNo shame for you - thanks a lot for working on\n  \"Testsuite: autopkgtest-pkg-r\"\nIt helps a lot for speedy propagation of packages.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Mon, Dec 03, 2018 at 10:56:50AM +0100, Dylan Aïssi wrote:\n> Le lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> > No objection against the patch but I wonder what else migh",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 3,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-19a106dd70a0",
+      "message_id": "<CAM8zJQu7i+_r7gPUC2-QCGhNm080_wUBc1tGZT50X3jteF-P=A@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "15599bb2aa275b7ea818b635fb79eddf34dd83966feaa55ef35e59d407478c2b",
+      "date": "2018-12-04T04:49:07Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<e0409902-ff7e-c055-506e-0de7dd9b10de@gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<e0409902-ff7e-c055-506e-0de7dd9b10de@gmail.com>"
+      ],
+      "body_plain": "Hi Michael\n\nOn Sun, 2 Dec 2018 at 17:11, Michael Rutter <marutter at gmail.com> wrote:\n> What is the source of the binaries?  Are they coming from an Ubuntu\n> repository or one of my PPA's?\n\nThese binaries are from the Ubuntu archive.\n\nRegards\nGraham",
+      "body_snippet": "Hi Michael\n\nOn Sun, 2 Dec 2018 at 17:11, Michael Rutter <marutter at gmail.com> wrote:\n> What is the source of the binaries?  Are they coming from an Ubuntu\n> repository or one of my PPA's?\n\nThese bin",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 2,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-86418803abc3",
+      "message_id": "<CAM8zJQuL06T8fVdvBDrVRKO=KQD+x1R=GDixtBABhxNJS8ByVQ@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2018-12-04T05:27:08Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CA+6XHwQUUtX_Atp9CTfe-ZiGRKzkF0TyLUt5O1icKpeUyK2oJQ@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<20181203094145.jgcrqswr7hlnvdii@an3as.eu>",
+        "<CA+6XHwQUUtX_Atp9CTfe-ZiGRKzkF0TyLUt5O1icKpeUyK2oJQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, 3 Dec 2018 at 11:57, Dylan Aïssi <daissi at debian.org> wrote:\n> Le lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> > No objection against the patch but I wonder what else might be\n> > broken if a\n> >    popen '/usr/bin/which 'uname'\n> > will cause a problem with memory allocation.\n>\n> It's the same for me, no problem with this patch.\n> But, quite strange that sessionInfo() fails... it should not.\n\nSeeing this problem also made me very uneasy, but I was able to\nreproduce it locally in a 64-bit VM with only 2GB RAM, and increasing\nthe memory to 4GB or enabling swap made the problem go away.  So I\nthink it really is just a case of running out of memory.\n\nRunning sessionInfo() before creating the vignette is fine.  I did try\ninserting a call to gc() before sessionInfo(), and fiddling with the\nvalue of R_MAX_VSIZE, but neither helped.",
+      "body_snippet": "On Mon, 3 Dec 2018 at 11:57, Dylan Aïssi <daissi at debian.org> wrote:\n> Le lun. 3 déc. 2018 à 10:41, Andreas Tille <andreas at an3as.eu> a écrit :\n> > No objection against the patch but I wonder what",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 3,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-073bdbb6f4b2",
+      "message_id": "<CA+6XHwQN5bv5u+4JXTea2bORnCQQ4zS3gZAz_ThitJd96tX1bg@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2018-12-05T09:12:16Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nLe sam. 1 déc. 2018 à 12:14, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> Since the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\n> r-bioc-cummerbund have been failing in Ubuntu where the test runners\n> have less than ~2GB RAM.\n>\n> In both cases, the autopkgtest consists of generating the\n> documentation from a .rnw file.  The last step in the .rnw file is a\n> call to sessionInfo() which seems to run out of memory while trying to\n> execute 'uname' to determine the platform, as follows:\n\nI have just updated the r-bioc-biovizbase autopkgtest to run the\nprovided tests instead building vignettes [1].\nIt still requires an adjustment due to a missing package before to be\nuploaded (I will do it later today).\nHopefully this will suppress the error for Ubuntu.\n\nBest,\nDylan\n\n[1] https://salsa.debian.org/r-pkg-team/r-bioc-biovizbase/commit/45beab3555",
+      "body_snippet": "Hi Graham,\n\nLe sam. 1 déc. 2018 à 12:14, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> Since the upload of R 3.5, the autopkgtests of r-bioc-biovizbase and\n> r-bioc-cummerbund have been failing in",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 1,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-342c5e733344",
+      "message_id": "<29ff28d2-5564-3034-0770-5f276987b450@debian.org>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2018-12-05T09:37:44Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CA+6XHwQN5bv5u+4JXTea2bORnCQQ4zS3gZAz_ThitJd96tX1bg@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<CA+6XHwQN5bv5u+4JXTea2bORnCQQ4zS3gZAz_ThitJd96tX1bg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Dylan\n\nOn 2018/12/05 11:12, Dylan Aïssi wrote:\n> I have just updated the r-bioc-biovizbase autopkgtest to run the\n> provided tests instead building vignettes [1].\n> It still requires an adjustment due to a missing package before to be\n> uploaded (I will do it later today).\n\nAh, this is a much better solution, thank you!\n\nDo you intend doing the same for r-bioc-cummerbund, or should I just \nskip sessionInfo() there for now?\n\nRegards\nGraham",
+      "body_snippet": "Hi Dylan\n\nOn 2018/12/05 11:12, Dylan Aïssi wrote:\n> I have just updated the r-bioc-biovizbase autopkgtest to run the\n> provided tests instead building vignettes [1].\n> It still requires an adjustment ",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 2,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-6562805e6a17",
+      "message_id": "<CA+6XHwS3RVvQgnEv9fjCP1LoU3Pnp8V_NZG3mfkOo2tC2gZbdw@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2018-12-05T09:48:35Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<29ff28d2-5564-3034-0770-5f276987b450@debian.org>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<CA+6XHwQN5bv5u+4JXTea2bORnCQQ4zS3gZAz_ThitJd96tX1bg@mail.gmail.com>",
+        "<29ff28d2-5564-3034-0770-5f276987b450@debian.org>"
+      ],
+      "body_plain": "Le mer. 5 déc. 2018 à 10:38, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> Do you intend doing the same for r-bioc-cummerbund, or should I just\n> skip sessionInfo() there for now?\n>\n\nThere is no test for r-bioc-cummerbund, so let's continue with\nbuilding vignettes for this one.\nI did not check exactly how it failed, but I am wondering if a\n\"try(sessionInfo())\" could fix the problem instead skipping\nsessionInfo?\nOtherwise, skipping sessionInfo is fine for this package.",
+      "body_snippet": "Le mer. 5 déc. 2018 à 10:38, Graham Inggs <ginggs at debian.org> a écrit :\n>\n> Do you intend doing the same for r-bioc-cummerbund, or should I just\n> skip sessionInfo() there for now?\n>\n\nThere is no t",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 3,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-1994ff126ca2",
+      "message_id": "<4cf19ef3-d17a-6ec8-2085-e462c671803d@debian.org>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2018-12-05T11:17:07Z",
+      "subject": "Re: 'Cannot allocate memory' during autopkgtest",
+      "subject_clean": "'Cannot allocate memory' during autopkgtest",
+      "in_reply_to": "<CA+6XHwS3RVvQgnEv9fjCP1LoU3Pnp8V_NZG3mfkOo2tC2gZbdw@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQsf7sEJOG6wLthP6jA86RHqDn3OcCRiHUBoukYNTP6XPQ@mail.gmail.com>",
+        "<CA+6XHwQN5bv5u+4JXTea2bORnCQQ4zS3gZAz_ThitJd96tX1bg@mail.gmail.com>",
+        "<29ff28d2-5564-3034-0770-5f276987b450@debian.org>",
+        "<CA+6XHwS3RVvQgnEv9fjCP1LoU3Pnp8V_NZG3mfkOo2tC2gZbdw@mail.gmail.com>"
+      ],
+      "body_plain": "On 2018/12/05 11:48, Dylan Aïssi wrote:\n> I did not check exactly how it failed, but I am wondering if a\n> \"try(sessionInfo())\" could fix the problem instead skipping\n> sessionInfo?\n\nThat didn't help.\n\n> Otherwise, skipping sessionInfo is fine for this package.\n\nOK, I'll upload shortly.",
+      "body_snippet": "On 2018/12/05 11:48, Dylan Aïssi wrote:\n> I did not check exactly how it failed, but I am wondering if a\n> \"try(sessionInfo())\" could fix the problem instead skipping\n> sessionInfo?\n\nThat didn't help.",
+      "thread_id": "thread-3cd5aa3cf40d",
+      "thread_depth": 4,
+      "month": "2018-12"
+    },
+    {
+      "id": "msg-47f2416240f2",
+      "message_id": "<20181214233520.xrgsnnrol2agp5vo@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2018-12-14T23:35:20Z",
+      "subject": "test suite failures in new upstream version of units",
+      "subject_clean": "test suite failures in new upstream version of units",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI tried to update the Debian package for units.  The test suite throws:\n\n...\n== testthat results  ===========================================================\nOK: 376 SKIPPED: 8 FAILED: 2\n1. Error: set_units works with symbols in character data, and resolves names (@test_misc.R#91) \n2. Error: udunits database can be read (@test_udunits.R#42) \n\nError: testthat unit tests failed\n\nDo you have any hint what might cause this issue?\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI tried to update the Debian package for units.  The test suite throws:\n\n...\n== testthat results  ===========================================================\nOK: 376 SKIPPED: 8 FAILED: 2\n1. Error",
+      "thread_id": "thread-47f2416240f2",
+      "thread_depth": 0,
+      "month": "2018-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-3cd5aa3cf40d",
+      "subject": "'Cannot allocate memory' during autopkgtest",
+      "message_count": 11,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi",
+        "Graham Inggs",
+        "Michael Rutter"
+      ],
+      "started": "2018-12-01T11:13:44Z",
+      "last_reply": "2018-12-05T11:17:07Z",
+      "root_message_id": "msg-3cd5aa3cf40d"
+    },
+    {
+      "id": "thread-47f2416240f2",
+      "subject": "test suite failures in new upstream version of units",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2018-12-14T23:35:20Z",
+      "last_reply": "2018-12-14T23:35:20Z",
+      "root_message_id": "msg-47f2416240f2"
+    }
+  ]
+}

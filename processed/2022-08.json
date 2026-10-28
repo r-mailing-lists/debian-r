@@ -1,0 +1,506 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2022-08",
+  "messages": [
+    {
+      "id": "msg-bde315513307",
+      "message_id": "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-01T15:09:36Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi,\n\n> The CRAN package in its DESCRIPTION file links to the GitHub repo. Which\n> shows in\n>\n>     https://github.com/juba/scatterD3#development-notes\n>\n>\n> how to bundle the (not in the package by design) source dir srcjs/ into a\n> compacted file by using node / npm.  (Disclaimer: I know little JS myself)\n\nThis is perfectly correct. The JavaScript source code of scatterD3 is in the srcjs \ndirectory in this Github repository. The compressed JS code in the R package is the \nresult of the bundling command given in the README.\n\nLet me know if you have any other question.\n\nThanks for your efforts on packaging scatterD3 for debian !\n\n--\nJulien",
+      "body_snippet": "Hi,\n\n> The CRAN package in its DESCRIPTION file links to the GitHub repo. Which\n> shows in\n>\n>     https://github.com/juba/scatterD3#development-notes\n>\n>\n> how to bundle the (not in the package by de",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-d12b85297f2c",
+      "message_id": "<YujtgH/2WQP5LosC@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2022-08-02T09:25:20Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>"
+      ],
+      "body_plain": "Hi Julien,\n\nAm Mon, Aug 01, 2022 at 05:09:36PM +0200 schrieb Julien Barnier:\n> > The CRAN package in its DESCRIPTION file links to the GitHub repo. Which\n> > shows in\n> >     https://github.com/juba/scatterD3#development-notes\n> > \n> > how to bundle the (not in the package by design) source dir srcjs/ into a\n> > compacted file by using node / npm.  (Disclaimer: I know little JS myself)\n> \n> This is perfectly correct. The JavaScript source code of scatterD3 is in the\n> srcjs directory in this Github repository. The compressed JS code in the R\n> package is the result of the bundling command given in the README.\n> \n> Let me know if you have any other question.\n\nThanks for confirming.  I've now found the time to try this out.\nHere is what I did:\n\n$ git clone https://github.com/juba/scatterD3\n$ $ LC_ALL=C R --no-save <<EOT\ninstall.packages(\"packer\")\npacker::bundle_dev()\nEOT\n\nR version 4.2.1 (2022-06-23) -- \"Funny-Looking Kid\"\nCopyright (C) 2022 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n> install.packages(\"packer\")\nInstalling package into '/home/andreas/R/x86_64-pc-linux-gnu-library/4.2'\n(as 'lib' is unspecified)\ntrying URL 'https://cloud.r-project.org/src/contrib/packer_0.1.3.tar.gz'\nContent type 'application/x-gzip' length 55191 bytes (53 KB)\n==================================================\ndownloaded 53 KB\n\n* installing *source* package 'packer' ...\n** package 'packer' successfully unpacked and MD5 sums checked\n** using staged installation\n** R\n** inst\n** byte-compile and prepare package for lazy loading\n** help\n*** installing help indices\n** building package indices\n** testing if installed package can be loaded from temporary location\n** testing if installed package can be loaded from final location\n** testing if installed package keeps a record of temporary installation path\n* DONE (packer)\n\nThe downloaded source packages are in\n        '/tmp/RtmpTSroW1/downloaded_packages'\n> packer::bundle_dev()\nError: No scaffold found, see the `scaffold_*` family of functions\nExecution halted\n\nAm I missing something?\n \n> Thanks for your efforts on packaging scatterD3 for debian !\n\nYou are welcome\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Julien,\n\nAm Mon, Aug 01, 2022 at 05:09:36PM +0200 schrieb Julien Barnier:\n> > The CRAN package in its DESCRIPTION file links to the GitHub repo. Which\n> > shows in\n> >     https://github.com/juba/s",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 1,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-c361d78c2c2a",
+      "message_id": "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-02T10:47:44Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<YujtgH/2WQP5LosC@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\n> Thanks for confirming.  I've now found the time to try this out.\n> Here is what I did:\n>\n> $ git clonehttps://github.com/juba/scatterD3\n> $ $ LC_ALL=C R --no-save <<EOT\n> install.packages(\"packer\")\n> packer::bundle_dev()\n> EOT\n\nThere is a missing step in your instructions, and there were also some missing files \nin the repository, which should now be fixed.\n\nSo if you try again with :\n\n$ git clone https://github.com/juba/scatterD3\n$ cd scatterD3\n$ npm install\n$ LC_ALL=C R --no-save <<EOT\n> install.packages(\"packer\")\n> packer::bundle_prod()\n> EOT\n\nI think it should work. You would need a working installation of nodejs and npm on \nyour machine though, to be able to run the `npm install` command that will download \nthe npm dependencies in a node_modules folder.\n\nLet me know if you encounter any other problems.\n\nThanks again,\n\nJulien",
+      "body_snippet": "Hi,\n\n> Thanks for confirming.  I've now found the time to try this out.\n> Here is what I did:\n>\n> $ git clonehttps://github.com/juba/scatterD3\n> $ $ LC_ALL=C R --no-save <<EOT\n> install.packages(\"pack",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 2,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-2cdcb1be2a6a",
+      "message_id": "<YukUevHLCIB2IynI@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2022-08-02T12:11:38Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>"
+      ],
+      "body_plain": "Hi again,\n\nAm Tue, Aug 02, 2022 at 12:47:44PM +0200 schrieb Julien Barnier:\n> \n> There is a missing step in your instructions,\n\nAhhh, you mean `npm install`, right.  I simply missed to write this down.\nTo be fully sure you get everything I tried - here is the script I'm\ntrying to run:\n\n    https://salsa.debian.org/r-pkg-team/r-cran-scatterd3/-/blob/master/debian/missing-sources/get\n\n> and there were also some\n> missing files in the repository, which should now be fixed.\n\nThanks for fixing the repository.\n \n> So if you try again with :\n> \n> $ git clone https://github.com/juba/scatterD3\n> $ cd scatterD3\n> $ npm install\n> $ LC_ALL=C R --no-save <<EOT\n> > install.packages(\"packer\")\n> > packer::bundle_prod()\n> > EOT\n> \n> I think it should work. You would need a working installation of nodejs and\n> npm on your machine though, to be able to run the `npm install` command that\n> will download the npm dependencies in a node_modules folder.\n> \n> Let me know if you encounter any other problems.\n\nNow I get:\n\n...\n** testing if installed package can be loaded from temporary location\n** testing if installed package can be loaded from final location\n** testing if installed package keeps a record of temporary installation path\n* DONE (packer)\n\nThe downloaded source packages are in\n        '/tmp/RtmpAWd0yC/downloaded_packages'\n> packer::bundle_prod()\n! Command raised the warning below\nrunning command ''/usr/bin/npm' run production 2>&1' had status 1\n> scatterD3 at 1.0.0 production\n> webpack --config webpack.prod.js\nnode:internal/crypto/hash:71\n  this[kHandle] = new _Hash(algorithm, xofLen);\n                  ^\nError: error:0308010C:digital envelope routines::unsupported\n    at new Hash (node:internal/crypto/hash:71:19)\n    at Object.createHash (node:crypto:133:10)\n    at BulkUpdateDecorator.hashFactory (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/util/createHash.js:145:18)\n    at BulkUpdateDecorator.update (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/util/createHash.js:46:50)\n    at RawSource.updateHash (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack-sources/lib/RawSource.js:70:8)\n    at NormalModule._initBuildHash (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/NormalModule.js:874:17)\n    at handleParseResult (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/NormalModule.js:940:10)\n    at /home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/NormalModule.js:1032:4\n    at processResult (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/NormalModule.js:749:11)\n    at /home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/node_modules/webpack/lib/NormalModule.js:813:5 {\n  opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],\n  library: 'digital envelope routines',\n  reason: 'unsupported',\n  code: 'ERR_OSSL_EVP_UNSUPPORTED'\n}\nNode.js v18.6.0\nx Failed to bundle files\n\nI suspected that I need to install webpack as well and did so - but\nthis did not changed anything\n\nAny further hints?\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again,\n\nAm Tue, Aug 02, 2022 at 12:47:44PM +0200 schrieb Julien Barnier:\n> \n> There is a missing step in your instructions,\n\nAhhh, you mean `npm install`, right.  I simply missed to write this down",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 3,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-090a05fcd75c",
+      "message_id": "<a1346de5-bd16-cbda-6baa-9b5833e7c509@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-03T09:26:35Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<YukUevHLCIB2IynI@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nAnd sorry for my late answer.\n\n> I suspected that I need to install webpack as well and did so - but\n> this did not changed anything\n\nAh, I think you also have to run :\n\n$ npm install --dev\n\nto install the dependencies needed for development, ie bundling JavaScript source \ncode. Sorry for not mentioning it before, I totally forgot about it.\n\nI hope it will solve the issue this time, let me know if this is not the case.\n\nThanks again,\n\nJulien",
+      "body_snippet": "Hi,\n\nAnd sorry for my late answer.\n\n> I suspected that I need to install webpack as well and did so - but\n> this did not changed anything\n\nAh, I think you also have to run :\n\n$ npm install --dev\n\nto i",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 4,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-bea0cf8b0e5e",
+      "message_id": "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-03T09:32:42Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<YukUevHLCIB2IynI@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>"
+      ],
+      "body_plain": "Re,\n\n> I suspected that I need to install webpack as well and did so - but\n> this did not changed anything\n\nAh, sorry again, there was an error in my previous mail, the --dev flag has been \ndeprecated, the correct instruction now seems to be :\n\n$ npm install --production=false\n\nI've updated the README with (I hope) the correct instruction...\n\nRegards,\n\nJulien",
+      "body_snippet": "Re,\n\n> I suspected that I need to install webpack as well and did so - but\n> this did not changed anything\n\nAh, sorry again, there was an error in my previous mail, the --dev flag has been \ndeprecated",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 4,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-47a7cee68a92",
+      "message_id": "<Yupdxmdu/A1L27Uh@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2022-08-03T11:36:38Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>",
+        "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>"
+      ],
+      "body_plain": "Hi again,\n\nAm Wed, Aug 03, 2022 at 11:32:42AM +0200 schrieb Julien Barnier:\n> > I suspected that I need to install webpack as well and did so - but\n> > this did not changed anything\n> \n> Ah, sorry again, there was an error in my previous mail, the --dev flag has\n> been deprecated, the correct instruction now seems to be :\n> \n> $ npm install --production=false\n\nWithout any knowledge about npm I was wild-guessing from the error message\nI've got from this command line I should rather use:\n\n   npm install --omit=dev\n\n> I've updated the README with (I hope) the correct instruction...\n\nIt seemed I also need node-webpack-merge - so here is the updated script\nI'm running:\n\n   https://salsa.debian.org/r-pkg-team/r-cran-scatterd3/-/blob/master/debian/missing-sources/get \n\nI've added also `set -x` here locally and need to confess that it does\nnot yet work:\n\n...\n+ npm install --omit=dev\n\nadded 38 packages, and audited 39 packages in 711ms\n\nfound 0 vulnerabilities\n+ LC_ALL=C R --no-save\n\nR version 4.2.1 (2022-06-23) -- \"Funny-Looking Kid\"\nCopyright (C) 2022 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n> install.packages(\"packer\")\nInstalling package into '/home/andreas/R/x86_64-pc-linux-gnu-library/4.2'\n(as 'lib' is unspecified)\ntrying URL 'https://cloud.r-project.org/src/contrib/packer_0.1.3.tar.gz'\nContent type 'application/x-gzip' length 55191 bytes (53 KB)\n==================================================\ndownloaded 53 KB\n\n* installing *source* package 'packer' ...\n** package 'packer' successfully unpacked and MD5 sums checked\n** using staged installation\n** R\n** inst\n** byte-compile and prepare package for lazy loading\n** help\n*** installing help indices\n** building package indices\n** testing if installed package can be loaded from temporary location\n** testing if installed package can be loaded from final location\n** testing if installed package keeps a record of temporary installation path\n* DONE (packer)\n\nThe downloaded source packages are in\n        '/tmp/RtmpreIczh/downloaded_packages'\n> packer::bundle_prod()\n! Command raised the warning below\nrunning command ''/usr/bin/npm' run production 2>&1' had status 2\n> scatterD3 at 1.0.0 production\n> webpack --config webpack.prod.js\n[webpack-cli] Failed to load '/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/webpack.prod.js' config\n[webpack-cli] TypeError: merge is not a function\n    at Object.<anonymous> (/home/andreas/debian-maintain/salsa/r-pkg-team/r-cran-scatterd3/debian/missing-sources/scatterD3/webpack.prod.js:4:18)\n    at Module._compile (node:internal/modules/cjs/loader:1120:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1174:10)\n    at Module.load (node:internal/modules/cjs/loader:998:32)\n    at Module._load (node:internal/modules/cjs/loader:839:12)\n    at Module.require (node:internal/modules/cjs/loader:1022:19)\n    at require (node:internal/modules/cjs/helpers:102:18)\n    at WebpackCLI.tryRequireThenImport (/usr/share/nodejs/webpack-cli/lib/webpack-cli.js:249:16)\n    at loadConfigByPath (/usr/share/nodejs/webpack-cli/lib/webpack-cli.js:1719:30)\n    at /usr/share/nodejs/webpack-cli/lib/webpack-cli.js:1774:11\nx Failed to bundle files\n> \n\nUnfortunately I have no idea what this might mean and how to fix this.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again,\n\nAm Wed, Aug 03, 2022 at 11:32:42AM +0200 schrieb Julien Barnier:\n> > I suspected that I need to install webpack as well and did so - but\n> > this did not changed anything\n> \n> Ah, sorry aga",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 5,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-9d8eb73a4e75",
+      "message_id": "<5f1b51b8-21c3-420a-c3f9-9bd87a0262a3@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-03T14:32:35Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<Yupdxmdu/A1L27Uh@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>",
+        "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+        "<Yupdxmdu/A1L27Uh@an3as.eu>"
+      ],
+      "body_plain": "Re,\n\n> Without any knowledge about npm I was wild-guessing from the error message\n> I've got from this command line I should rather use:\n>\n>     npm install --omit=dev\n\nDid you try with :\n\n$ npm install --production=false\n\n--omit=dev should do the reverse, omitting dev dependencies needed for bundling (such \nas webpack). If it still doesn't work, maybe not using apt-get to install webpack and \nnode-webpack-merge, but only relying on the \"npm install\" instruction to do it could \nhelp...\n\nIf it still doesn't work I'll try to do it in a fresh debian install in a VM when I \nfind the time.\n\nThanks !\n\nJulien",
+      "body_snippet": "Re,\n\n> Without any knowledge about npm I was wild-guessing from the error message\n> I've got from this command line I should rather use:\n>\n>     npm install --omit=dev\n\nDid you try with :\n\n$ npm insta",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 6,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-35b8107ef111",
+      "message_id": "<YuwjumrsbFKy5j40@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2022-08-04T19:53:30Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<5f1b51b8-21c3-420a-c3f9-9bd87a0262a3@cnrs.fr>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>",
+        "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+        "<Yupdxmdu/A1L27Uh@an3as.eu>",
+        "<5f1b51b8-21c3-420a-c3f9-9bd87a0262a3@cnrs.fr>"
+      ],
+      "body_plain": "Am Wed, Aug 03, 2022 at 04:32:35PM +0200 schrieb Julien Barnier:\n> Re,\n> \n> > Without any knowledge about npm I was wild-guessing from the error message\n> > I've got from this command line I should rather use:\n> > \n> >     npm install --omit=dev\n> \n> Did you try with :\n> \n> $ npm install --production=false\n> \n> --omit=dev should do the reverse, omitting dev dependencies needed for\n> bundling (such as webpack).\n\nThis also does not work.\n\n> If it still doesn't work, maybe not using\n> apt-get to install webpack and node-webpack-merge, but only relying on the\n> \"npm install\" instruction to do it could help...\n\nWell, I did not installed these in the first place.  The motivation to\ninstall these were error messages indicating that these tools were\nmissing.\n \n> If it still doesn't work I'll try to do it in a fresh debian install in a VM\n> when I find the time.\n\nThis would be really appreciated.\n\nKind regards\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Wed, Aug 03, 2022 at 04:32:35PM +0200 schrieb Julien Barnier:\n> Re,\n> \n> > Without any knowledge about npm I was wild-guessing from the error message\n> > I've got from this command line I should ra",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 7,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-2216601ac44a",
+      "message_id": "<c11c1441-7db3-16d5-5ee0-21fe28d701ff@cnrs.fr>",
+      "from_name": "Julien Barnier",
+      "from_email_hash": "87f8236651afffbd3bbb016320cfee0b58e6b4584deeb5b066464518bb01221d",
+      "date": "2022-08-04T23:28:27Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<YuwjumrsbFKy5j40@an3as.eu>",
+      "references": [
+        "<YuWMQkjNLm33RXnz@an3as.eu>",
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>",
+        "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+        "<Yupdxmdu/A1L27Uh@an3as.eu>",
+        "<5f1b51b8-21c3-420a-c3f9-9bd87a0262a3@cnrs.fr>",
+        "<YuwjumrsbFKy5j40@an3as.eu>"
+      ],
+      "body_plain": "Re,\n\n> This would be really appreciated.\n\nSo I just tested on clean docker images of debian stable and unstable. All was \nworking fine on debian stable, but I got an error on unstable (a different one than \nyours, though). I updated the webpack and webpack-cli dependencies to the latest \nversions, it solved the problem, and I think it should fix your issue too.\n\nSo what I would advise is :\n\n- if possible, remove the webpack and node-webpack-merge debian packages to avoid \nversion conflicts.\n\n- to install packer, you will also need the libcurl4-openssl-dev and libxml2-dev \ndebian packages.\n\nThen run the following (please clone the github repository again, or pull the latest \nversion) :\n\n$ git clone https://github.com/juba/scatterD3\n$ cd scatterD3\n$ npm install --production=false\n$ LC_ALL=C R --no-save <<EOT\n> install.packages(\"packer\")\n> packer::bundle_prod()\n> EOT\n\nAnd I think it should work (at least I really hope so).\n\nThanks again for your work and sorry for the wasted time on this.\n\n--\nJulien",
+      "body_snippet": "Re,\n\n> This would be really appreciated.\n\nSo I just tested on clean docker images of debian stable and unstable. All was \nworking fine on debian stable, but I got an error on unstable (a different one",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 8,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-28080d3e155a",
+      "message_id": "<Yu0HdufYVX0GTUUj@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-08-05T12:05:10Z",
+      "subject": "Re: Where can we find the source code for scatterD3.js",
+      "subject_clean": "Where can we find the source code for scatterD3.js",
+      "in_reply_to": "<c11c1441-7db3-16d5-5ee0-21fe28d701ff@cnrs.fr>",
+      "references": [
+        "<25317.36841.22264.629628@rob.eddelbuettel.com>",
+        "<ce4324bd-8b02-f6d0-059d-bff0d8f74a60@cnrs.fr>",
+        "<YujtgH/2WQP5LosC@an3as.eu>",
+        "<5a156f57-5172-1819-ddf7-d375823b77ae@cnrs.fr>",
+        "<YukUevHLCIB2IynI@an3as.eu>",
+        "<9b323927-7584-a2ff-fc7a-9f192f3305f9@cnrs.fr>",
+        "<Yupdxmdu/A1L27Uh@an3as.eu>",
+        "<5f1b51b8-21c3-420a-c3f9-9bd87a0262a3@cnrs.fr>",
+        "<YuwjumrsbFKy5j40@an3as.eu>",
+        "<c11c1441-7db3-16d5-5ee0-21fe28d701ff@cnrs.fr>"
+      ],
+      "body_plain": "Hi Julien,\n\nAm Fri, Aug 05, 2022 at 01:28:27AM +0200 schrieb Julien Barnier:\n> - if possible, remove the webpack and node-webpack-merge debian packages to\n> avoid version conflicts.\n\nI did so - even if I'm not sure that this was the root of the problem.\n \n> - to install packer, you will also need the libcurl4-openssl-dev and\n> libxml2-dev debian packages.\n\nI thinks these were missing and installing these solved the issue.\n\n> Then run the following (please clone the github repository again, or pull\n> the latest version) :\n> \n> $ git clone https://github.com/juba/scatterD3\n> $ cd scatterD3\n> $ npm install --production=false\n> $ LC_ALL=C R --no-save <<EOT\n> > install.packages(\"packer\")\n> > packer::bundle_prod()\n> > EOT\n> \n> And I think it should work (at least I really hope so).\n\nYep, this finally works.  Thanks a lot for your patience.\n\n> Thanks again for your work and sorry for the wasted time on this.\n\nIts not your fault.  In Debian we decided to provide the source of\neverything and we do not consider compressed JS as editable source.  In\nsome cases this is quite some maintenance burden which we decided to\ntake over.  But most users will probably not notice that issue. \n\nThanks for your help and patience\n\n      Andreass.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Julien,\n\nAm Fri, Aug 05, 2022 at 01:28:27AM +0200 schrieb Julien Barnier:\n> - if possible, remove the webpack and node-webpack-merge debian packages to\n> avoid version conflicts.\n\nI did so - even i",
+      "thread_id": "thread-bde315513307",
+      "thread_depth": 9,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-5f02b257ad4b",
+      "message_id": "<YvZngFrVRdip2qdU@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-08-12T14:45:20Z",
+      "subject": "Re: Please adjust StanHeaders to new version of (one)tbb",
+      "subject_clean": "Please adjust StanHeaders to new version of (one)tbb",
+      "in_reply_to": "<YtUdmngZvJYsBYEu@an3as.eu>",
+      "references": [
+        "<YtUdmngZvJYsBYEu@an3as.eu>"
+      ],
+      "body_plain": "Ping?  Is there any place where I can open an issue about this?\nI've found\n   https://github.com/cran/StanHeaders\nbut this is readonly and has no option to report issues.\n\nKind regards\n     Andreas.\n\nAm Mon, Jul 18, 2022 at 10:45:14AM +0200 schrieb Andreas Tille:\n> Control: tags -1 upstream\n> Control: forwarded -1 Ben Goodrich <benjamin.goodrich at columbia.edu>\n> \n> Hi Ben,\n> \n> Debian is migrating from old tbb to onetbb (currently version 2021.5.0).  When\n> trying to build rstan version 2.21.5 which includes StanHeaders we get the error\n> you can find here in our CI:\n> \n>    https://salsa.debian.org/r-pkg-team/r-cran-rstan/-/jobs/3011219\n> \n> In file included from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core.hpp:4,\n>                  from /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/mat.hpp:6,\n>                  from /usr/lib/R/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12,\n>                  from ./stan/model/log_prob_grad.hpp:4,\n>                  from ./stan/model/test_gradients.hpp:7,\n>                  from ./stan/services/diagnose/diagnose.hpp:10,\n>                  from stan_fit.cpp:33:\n> /usr/lib/R/site-library/StanHeaders/include/stan/math/prim/core/init_threadpool_tbb.hpp:9:10: fatal error: tbb/task_scheduler_init.h: No such file or directory\n>     9 | #include <tbb/task_scheduler_init.h>\n>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n> compilation terminated.\n> \n> It seems StanHeaders need to be adapted to onetbb.\n> \n> There is a tbb -> onetbb transition guide:\n> https://oneapi-src.github.io/oneTBB/main/tbb_userguide/Migration_Guide.html\n> \n> Hope this helps\n> \n>       Andreas.\n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Ping?  Is there any place where I can open an issue about this?\nI've found\n   https://github.com/cran/StanHeaders\nbut this is readonly and has no option to report issues.\n\nKind regards\n     Andreas.\n\n",
+      "thread_id": "thread-5f02b257ad4b",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-e298f78412c0",
+      "message_id": "<20220820220616.a5yjxvhnxdywcyae@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2022-08-20T22:06:16Z",
+      "subject": "Re: Please adjust StanHeaders to new version of (one)tbb",
+      "subject_clean": "Please adjust StanHeaders to new version of (one)tbb",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "On August 12, Andreas Tille wrote:\n> Ping?  Is there any place where I can open an issue about this?\n> I've found\n>    https://github.com/cran/StanHeaders\n> but this is readonly and has no option to report issues.\n\nI am talking about this on this github issue[1] -- please feel\nfree to chime in.\n\n[1]: https://github.com/stan-dev/rstan/issues/924\n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On August 12, Andreas Tille wrote:\n> Ping?  Is there any place where I can open an issue about this?\n> I've found\n>    https://github.com/cran/StanHeaders\n> but this is readonly and has no option to r",
+      "thread_id": "thread-e298f78412c0",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-29e3e6032364",
+      "message_id": "<7550f01cf62e30d424e2f31b451d9cf07d37267b.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2022-08-22T08:26:15Z",
+      "subject": "Re: Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "subject_clean": "Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "in_reply_to": "<E1oQ1zW-00GvUF-3F@fasolo.debian.org>",
+      "references": [
+        "<E1oQ1zW-00GvUF-3F@fasolo.debian.org>"
+      ],
+      "body_plain": "Hi Andreas,\n\nI don’t understand why you removed the HTML documentation in this\nupload. I don’t see any compressed JS in the files that you removed,\nsee:\nhttps://salsa.debian.org/r-pkg-team/r-cran-plm/-/commit/a3fb386f86f2b8ba664add2c716fd1240a69f92f\n\nBest,\n\nLe lundi 22 août 2022 à 07:36 +0000, Debian FTP Masters a écrit :\n> Format: 1.8\n> Date: Mon, 22 Aug 2022 09:21:39 +0200\n> Source: r-cran-plm\n> Architecture: source\n> Version: 2.6-2+dfsg-1\n> Distribution: unstable\n> Urgency: medium\n> Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>\n> Changed-By: Andreas Tille <tille at debian.org>\n> Changes:\n>  r-cran-plm (2.6-2+dfsg-1) unstable; urgency=medium\n>  .\n>    * Team upload.\n>    * New upstream version\n>    * Standards-Version: 4.6.1 (routine-update)\n>    * Remove autogenerated HTML docs since it is including compressed JS\n> Checksums-Sha1:\n>  4099c02de25c5ff78c732f089164d053f6c59517 2401 r-cran-plm_2.6-2+dfsg-1.dsc\n>  bb734e55a7ace0f4ef5bc7d14d87e420116ebbb6 1410524 r-cran-plm_2.6-2+dfsg.orig.tar.xz\n>  95dda50ca81ca2a72e9c37ee4d6f3c279ed14a8d 4428 r-cran-plm_2.6-2+dfsg-1.debian.tar.xz\n>  510dc54bf1738afac414ca44520b8d12781e0f63 11608 r-cran-plm_2.6-2+dfsg-1_amd64.buildinfo\n> Checksums-Sha256:\n>  ec89ab426f3ed28cfb639b693594bd083f79fe710d87de373a972c4df7817fd1 2401 r-cran-plm_2.6-2+dfsg-1.dsc\n>  91e48d17f6e069be95285e65fc2d90d0986f40caf3d59dc2e0e76b702eb664e4 1410524 r-cran-plm_2.6-2+dfsg.orig.tar.xz\n>  97a680a47a51768cce76fa89dff188e618dd884b8342ca3390ac80b1c0368aee 4428 r-cran-plm_2.6-2+dfsg-1.debian.tar.xz\n>  a01a3e748c7bae293dd35f7b4448485b9e5235c6c142ed3346b5aa68dbca6aa8 11608 r-cran-plm_2.6-2+dfsg-1_amd64.buildinfo\n> Files:\n>  80711125cf3e2089854e7a4e7c0efca6 2401 gnu-r optional r-cran-plm_2.6-2+dfsg-1.dsc\n>  7d67e4dc932715332405fbf4503697cc 1410524 gnu-r optional r-cran-plm_2.6-2+dfsg.orig.tar.xz\n>  53be4750dda46a48e0873c1091722f8e 4428 gnu-r optional r-cran-plm_2.6-2+dfsg-1.debian.tar.xz\n>  9637a0e41e6e5fee923b46341301effe 11608 gnu-r optional r-cran-plm_2.6-2+dfsg-1_amd64.buildinfo\n> \n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Hi Andreas,\n\nI don’t understand why you removed the HTML documentation in this\nupload. I don’t see any compressed JS in the files that you removed,\nsee:\nhttps://salsa.debian.org/r-pkg-team/r-cran-plm/",
+      "thread_id": "thread-29e3e6032364",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-d65d62838f1e",
+      "message_id": "<YwNQzex6jtO4KK8x@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2022-08-22T09:47:57Z",
+      "subject": "Re: Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "subject_clean": "Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "in_reply_to": "<7550f01cf62e30d424e2f31b451d9cf07d37267b.camel@debian.org>",
+      "references": [
+        "<E1oQ1zW-00GvUF-3F@fasolo.debian.org>",
+        "<7550f01cf62e30d424e2f31b451d9cf07d37267b.camel@debian.org>"
+      ],
+      "body_plain": "Hi Sébastien,\n\nAm Mon, Aug 22, 2022 at 10:26:15AM +0200 schrieb Sébastien Villemot:\n> I don’t understand why you removed the HTML documentation in this\n> upload. I don’t see any compressed JS in the files that you removed,\n> see:\n> https://salsa.debian.org/r-pkg-team/r-cran-plm/-/commit/a3fb386f86f2b8ba664add2c716fd1240a69f92f\n\nIt became somehow routine to simply trust lintian errors instead of\nchecking.  Thus I simply fired up my script that removes the docs.  If\nyou think the doc is important feel free to re-add and add according\nlintian-overrides.\n\nPlease note: Updating 5-10 CRAN packages every day (and more after\nbeeing on vac) requries some kind of automatisation which might end in\nnon-optimal results.  If someone wants to step in and join the effort to\nkeep CRAN packages up to date I'd be more than happy to share the\nworkload.\n\nIts basically working down the list[1] of outdated packages and run\nroutine-update on it, check autopkgtest and lintian errors.  Nilesh is\nthe only one besides me[2] who seems to work on this.  I'm trying to\ncatch up quite closely for the moment to spot new dependencies that need\nto pass new queue until we freeze.\n\nKind regards\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/outdated_r-packages.txt\n[2] http://blends.debian.net/liststats/uploaders_r-pkg.png\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Sébastien,\n\nAm Mon, Aug 22, 2022 at 10:26:15AM +0200 schrieb Sébastien Villemot:\n> I don’t understand why you removed the HTML documentation in this\n> upload. I don’t see any compressed JS in the f",
+      "thread_id": "thread-29e3e6032364",
+      "thread_depth": 1,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-e570a7e5340d",
+      "message_id": "<166123582390.984417.6272744556891409580.reportbug@sputnik>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2022-08-23T06:23:43Z",
+      "subject": "Bug#1017966: lintian: Systematic false positives for source-is-missing in r-cran-* documentation",
+      "subject_clean": "Bug#1017966: lintian: Systematic false positives for source-is-missing in r-cran-* documentation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: lintian\nVersion: 2.115.2\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nHi lintian maintainers,\n\nlintian is doing a check for overlong lines to guess for included\nJavaScript in html pages (and may be more).  I now realised that several\nR packages are including\n\n   img src=\"data:image/png;base64\n\nimages that were generated by the source of the documentation which is\nalways shipped with these docs.  For example see the documentation of\nr-cran-patchwork[1].  It would be great if lintian would not report\nthese false positives since the source is provided by upstream and the\nhtml file can be re-generated by an automated process.\n\nKind regards\n    Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-patchwork/-/blob/master/inst/doc/patchwork.html#L375\n\n-- System Information:\nDebian Release: bookworm/sid\n  APT prefers unstable\n  APT policy: (500, 'unstable'), (500, 'testing'), (50, 'buildd-unstable'), (1, 'experimental')\nArchitecture: amd64 (x86_64)\n\nKernel: Linux 5.18.0-3-amd64 (SMP w/8 CPU threads; PREEMPT)\nLocale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE not set\nShell: /bin/sh linked to /usr/bin/dash\nInit: systemd (via /run/systemd/system)\nLSM: AppArmor: enabled\n\nVersions of packages lintian depends on:\nii  binutils                        2.38.90.20220713-2\nii  bzip2                           1.0.8-5\nii  diffstat                        1.64-1\nii  dpkg                            1.21.9\nii  dpkg-dev                        1.21.9\nii  file                            1:5.41-4\nii  gettext                         0.21-8\nii  gpg                             2.2.35-3\nii  intltool-debian                 0.35.0+20060710.5\nii  iso-codes                       4.11.0-1\nii  libapt-pkg-perl                 0.1.40+b1\nii  libarchive-zip-perl             1.68-1\nii  libberkeleydb-perl              0.64-1+b2\nii  libcapture-tiny-perl            0.48-1\nii  libclass-xsaccessor-perl        1.19-4\nii  libclone-perl                   0.45-1+b2\nii  libconfig-tiny-perl             2.28-1\nii  libconst-fast-perl              0.014-2\nii  libcpanel-json-xs-perl          4.32-1\nii  libdata-dpath-perl              0.58-1\nii  libdata-validate-domain-perl    0.10-1.1\nii  libdata-validate-uri-perl       0.07-2\nii  libdevel-size-perl              0.83-2\npn  libdigest-sha-perl              <none>\nii  libdpkg-perl                    1.21.9\nii  libemail-address-xs-perl        1.05-1\nii  libfile-basedir-perl            0.09-1\nii  libfile-find-rule-perl          0.34-2\nii  libfont-ttf-perl                1.06-2\nii  libhtml-html5-entities-perl     0.004-2\nii  libhtml-tokeparser-simple-perl  3.16-4\nii  libio-interactive-perl          1.023-1\nii  libipc-run3-perl                0.048-2\nii  libjson-maybexs-perl            1.004003-1\nii  liblist-compare-perl            0.55-1\nii  liblist-someutils-perl          0.58-1\nii  liblist-utilsby-perl            0.12-1\nii  libmldbm-perl                   2.05-3\nii  libmoo-perl                     2.005004-3\nii  libmoox-aliases-perl            0.001006-2\nii  libnamespace-clean-perl         0.27-2\nii  libpath-tiny-perl               0.122-1\nii  libperlio-gzip-perl             0.20-1\nii  libperlio-utf8-strict-perl      0.009-1+b1\nii  libproc-processtable-perl       0.634-1+b1\nii  libregexp-wildcards-perl        1.05-3\nii  libsereal-decoder-perl          4.025+ds-1\nii  libsereal-encoder-perl          4.025+ds-1\nii  libsort-versions-perl           1.62-2\nii  libsyntax-keyword-try-perl      0.27-1\nii  libterm-readkey-perl            2.38-2\nii  libtext-levenshteinxs-perl      0.03-5\nii  libtext-markdown-discount-perl  0.13-1+b1\nii  libtext-xslate-perl             3.5.9-1+b1\nii  libtime-duration-perl           1.21-1\nii  libtime-moment-perl             0.44-2\nii  libtimedate-perl                2.3300-2\nii  libunicode-utf8-perl            0.62-1+b3\nii  liburi-perl                     5.12-1\nii  libwww-mechanize-perl           2.14-2\nii  libwww-perl                     6.67-1\nii  libxml-libxml-perl              2.0207+dfsg+really+2.0134-1\nii  libyaml-libyaml-perl            0.83+ds-1+b1\nii  lzip [lzip-decompressor]        1.23-4\nii  lzop                            1.04-2\nii  man-db                          2.10.2-2\nii  patchutils                      0.4.2-1\nii  perl [libencode-perl]           5.34.0-5\nii  t1utils                         1.41-4\nii  unzip                           6.0-27\nii  xz-utils                        5.2.5-2.1\n\nlintian recommends no packages.\n\nVersions of packages lintian suggests:\npn  binutils-multiarch     <none>\nii  libtext-template-perl  1.61-1\n\n-- no debconf information",
+      "body_snippet": "Package: lintian\nVersion: 2.115.2\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org\n\nHi lintian maintainers,\n\nlintian is doing a check for overlong lines to guess for included\nJavaScript in ",
+      "thread_id": "thread-e570a7e5340d",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-893a2158c1f8",
+      "message_id": "<YwR4bmxD1vngzzja@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2022-08-23T06:49:19Z",
+      "subject": "Please clarify the intented license of example file in basilisk",
+      "subject_clean": "Please clarify the intented license of example file in basilisk",
+      "in_reply_to": "<87mtcmelb0.fsf@hands.com>",
+      "references": [
+        "<YukgKpYtbxEoyD3h@an3as.eu>",
+        "<87mtcmelb0.fsf@hands.com>"
+      ],
+      "body_plain": "Hi Aaron,\n\nthe Debian R packaging team intends to package basilisk for Debian.  In\nDebian the ftpmaster team has the role to verify licenses and copyright\nof new software.  The team member who was checking my upload considers\nthe files in\n\n    inst/example/inst/test_dummy\n\nas differently licensed than the whole basilisk package and wants me\nto mention it as licensed under the MIT license[1].  I personally\ndisagree since I consider this a simple example string inside a code\nsnippet but ftpmaster rejected even a second time with the words:\n\n   \"upstream decided that this test package should have a different\n    license than the rest of his software and said so in the\n    corresponding setup.py\"[2].\n\nThe statement of FTPMaster is based on line 9 of a 12 line of code\nexample file[3].  It contains the string \"license='MIT'\" while all other\ncode of the package is GPL-3.\n\nIt would be great if you could explicitly express your intention to\nstop wild guessing whether it is a license statement or an example\nstring.\n\nThanks a lot and sorry for stealing your time with this kind of\nquestions\n\n      Andreas.\n\n[1] https://alioth-lists.debian.net/pipermail/r-pkg-team/2022-February/024165.html\n[2] https://alioth-lists.debian.net/pipermail/r-pkg-team/2022-February/024248.html\n[3] https://salsa.debian.org/r-pkg-team/r-bioc-basilisk/-/blob/master/inst/example/inst/test_dummy/setup.py#L9\n\n-- \nhttp://fam-tille.de\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Aaron,\n\nthe Debian R packaging team intends to package basilisk for Debian.  In\nDebian the ftpmaster team has the role to verify licenses and copyright\nof new software.  The team member who was che",
+      "thread_id": "thread-893a2158c1f8",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-3885032168cb",
+      "message_id": "<YwXMmPiNWm3THMZ4@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2022-08-24T07:00:40Z",
+      "subject": "r-cran-projpred autopkgtest says: \"Package \"rstanarm\" is needed for these tests. Please install it.\" - but it is installed",
+      "subject_clean": "r-cran-projpred autopkgtest says: \"Package \"rstanarm\" is needed for these tests. Please install it.\" - but it is installed",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI tried to upgrade r-cran-projpred to its latest upstream version, but got:\n\n> library(testthat)\n> library(projpred)\nThis is projpred version 2.2.0.\n> \n> test_check(\"projpred\")\ndpkg-architecture: warning: cannot determine CC system type, falling back to default (native compilation)\ndpkg-architecture: warning: cannot determine CC system type, falling back to default (native compilation)\nError: Package \"rstanarm\" is needed for these tests. Please install it.\nExecution halted\n\n(see Salsa CI: https://salsa.debian.org/r-pkg-team/r-cran-projpred/-/jobs/3141946#L578 )\n\nAny idea what might be wrong here?\n\nKind regards\n\n    Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI tried to upgrade r-cran-projpred to its latest upstream version, but got:\n\n> library(testthat)\n> library(projpred)\nThis is projpred version 2.2.0.\n> \n> test_check(\"projpred\")\ndpkg-architecture:",
+      "thread_id": "thread-3885032168cb",
+      "thread_depth": 0,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-56d0ce0ed535",
+      "message_id": "<0fb8ac15d9116494ba023275d9a2f574f2d02780.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2022-08-26T11:14:42Z",
+      "subject": "Re: Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "subject_clean": "Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "in_reply_to": "<YwNQzex6jtO4KK8x@an3as.eu>",
+      "references": [
+        "<E1oQ1zW-00GvUF-3F@fasolo.debian.org>",
+        "<7550f01cf62e30d424e2f31b451d9cf07d37267b.camel@debian.org>",
+        "<YwNQzex6jtO4KK8x@an3as.eu>"
+      ],
+      "body_plain": "Le lundi 22 août 2022 à 11:47 +0200, Andreas Tille a écrit :\n> Hi Sébastien,\n> \n> Am Mon, Aug 22, 2022 at 10:26:15AM +0200 schrieb Sébastien Villemot:\n> > I don’t understand why you removed the HTML documentation in this\n> > upload. I don’t see any compressed JS in the files that you removed,\n> > see:\n> > https://salsa.debian.org/r-pkg-team/r-cran-plm/-/commit/a3fb386f86f2b8ba664add2c716fd1240a69f92f\n> \n> It became somehow routine to simply trust lintian errors instead of\n> checking.  Thus I simply fired up my script that removes the docs.  If\n> you think the doc is important feel free to re-add and add according\n> lintian-overrides.\n\nI’ve pushed a commit that reinstates the doc and adds a lintian\noverride.\n\nAnd thank you for opening #1017966 against lintian.\n\n> Please note: Updating 5-10 CRAN packages every day (and more after\n> beeing on vac) requries some kind of automatisation which might end in\n> non-optimal results.  If someone wants to step in and join the effort to\n> keep CRAN packages up to date I'd be more than happy to share the\n> workload.\n\nWe already had this discussion, and I understand your viewpoint. As a\nmatter of fact, relying mostly on automated tools may be the only way\nof maintaining so many packages, but at the same time it increases the\nrisk of mistakes, as shown by the current example.\n\nI can’t help you with all those packages, so I certainly won’t blame\nyou. I however take care of those packages for which I’m listed in the\nUploaders field (which is the reason why I spotted this mistake).\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Le lundi 22 août 2022 à 11:47 +0200, Andreas Tille a écrit :\n> Hi Sébastien,\n> \n> Am Mon, Aug 22, 2022 at 10:26:15AM +0200 schrieb Sébastien Villemot:\n> > I don’t understand why you removed the HTML d",
+      "thread_id": "thread-29e3e6032364",
+      "thread_depth": 2,
+      "month": "2022-08"
+    },
+    {
+      "id": "msg-4787334b2f56",
+      "message_id": "<20220826154701.g3anvwllhsxwapwr@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2022-08-26T15:47:09Z",
+      "subject": "Re: r-cran-projpred autopkgtest says: \"Package \"rstanarm\" is needed for these tests. Please install it.\" - but it is installed",
+      "subject_clean": "r-cran-projpred autopkgtest says: \"Package \"rstanarm\" is needed for these tests. Please install it.\" - but it is installed",
+      "in_reply_to": "<YwXMmPiNWm3THMZ4@an3as.eu>",
+      "references": [
+        "<YwXMmPiNWm3THMZ4@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas,\n\n> I tried to upgrade r-cran-projpred to its latest upstream version, but got:\n> [...]\n> Error: Package \"rstanarm\" is needed for these tests. Please install it.\n> Execution halted\n>\n> (see Salsa CI: https://salsa.debian.org/r-pkg-team/r-cran-projpred/-/jobs/3141946#L578 )\n\nIf you look at the corresponding code closely, it tries to call rstanarm with\na `requireNamespace` call to check whether or not is is present, which tries\nloading it (log at end of the mail)\nrstanarm is broken[1] (in debian) and cannot be loaded because It needs rstan, which inturn need\nstanheaders.\n\nYou are aware that stanheaders does not compile with openTBB. So, it all comes circling\ndown to the stanheaders port :-)\nI don't think this package can be updated until this problem is fixed.\n\n[1]: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1011222\n\n| $ R -e \"requireNamespace('rstanarm')\"         \n|\n| R version 4.2.1 (2022-06-23) -- \"Funny-Looking Kid\"\n| Copyright (C) 2022 The R Foundation for Statistical Computing\n| Platform: x86_64-pc-linux-gnu (64-bit)\n|\n| R is free software and comes with ABSOLUTELY NO WARRANTY.\n| You are welcome to redistribute it under certain conditions.\n| Type 'license()' or 'licence()' for distribution details.\n|\n|  Natural language support but running in an English locale\n|\n| R is a collaborative project with many contributors.\n| Type 'contributors()' for more information and\n| 'citation()' on how to cite R or R packages in publications.\n|\n| Type 'demo()' for some demos, 'help()' for on-line help, or\n| 'help.start()' for an HTML browser interface to help.\n| Type 'q()' to quit R.\n|\n| > requireNamespace('rstanarm')\n| Loading required namespace: rstanarm\n| Failed with error:  ‘unable to load shared object '/usr/lib/R/site-library/rstan/libs/rstan.so':\n|  /usr/lib/R/site-library/rstan/libs/rstan.so: undefined symbol: _ZN3tbb8internal26task_scheduler_observer_v37observeEb’\n| > \n| > \n\n-- \nBest,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Andreas,\n\n> I tried to upgrade r-cran-projpred to its latest upstream version, but got:\n> [...]\n> Error: Package \"rstanarm\" is needed for these tests. Please install it.\n> Execution halted\n>\n> (see",
+      "thread_id": "thread-3885032168cb",
+      "thread_depth": 1,
+      "month": "2022-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-bde315513307",
+      "subject": "Where can we find the source code for scatterD3.js",
+      "message_count": 11,
+      "participants": [
+        "Andreas Tille",
+        "Julien Barnier"
+      ],
+      "started": "2022-08-01T15:09:36Z",
+      "last_reply": "2022-08-05T12:05:10Z",
+      "root_message_id": "msg-bde315513307"
+    },
+    {
+      "id": "thread-5f02b257ad4b",
+      "subject": "Please adjust StanHeaders to new version of (one)tbb",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2022-08-12T14:45:20Z",
+      "last_reply": "2022-08-12T14:45:20Z",
+      "root_message_id": "msg-5f02b257ad4b"
+    },
+    {
+      "id": "thread-e298f78412c0",
+      "subject": "Please adjust StanHeaders to new version of (one)tbb",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2022-08-20T22:06:16Z",
+      "last_reply": "2022-08-20T22:06:16Z",
+      "root_message_id": "msg-e298f78412c0"
+    },
+    {
+      "id": "thread-29e3e6032364",
+      "subject": "Accepted r-cran-plm 2.6-2+dfsg-1 (source) into unstable",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Sébastien Villemot"
+      ],
+      "started": "2022-08-22T08:26:15Z",
+      "last_reply": "2022-08-26T11:14:42Z",
+      "root_message_id": "msg-29e3e6032364"
+    },
+    {
+      "id": "thread-e570a7e5340d",
+      "subject": "Bug#1017966: lintian: Systematic false positives for source-is-missing in r-cran-* documentation",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2022-08-23T06:23:43Z",
+      "last_reply": "2022-08-23T06:23:43Z",
+      "root_message_id": "msg-e570a7e5340d"
+    },
+    {
+      "id": "thread-893a2158c1f8",
+      "subject": "Please clarify the intented license of example file in basilisk",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2022-08-23T06:49:19Z",
+      "last_reply": "2022-08-23T06:49:19Z",
+      "root_message_id": "msg-893a2158c1f8"
+    },
+    {
+      "id": "thread-3885032168cb",
+      "subject": "r-cran-projpred autopkgtest says: \"Package \"rstanarm\" is needed for these tests. Please install it.\" - but it is installed",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2022-08-24T07:00:40Z",
+      "last_reply": "2022-08-26T15:47:09Z",
+      "root_message_id": "msg-3885032168cb"
+    }
+  ]
+}

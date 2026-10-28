@@ -1,0 +1,2185 @@
+From npatra974 at gmail.com  Sat Mar  7 05:03:55 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Sat, 7 Mar 2020 10:33:55 +0530
+Subject: [RFS] r-cran-sjmisc
+Message-ID: <CAJN1929Oj-UcU8=o52Mm5_3P_D+Et_BjRf0zfqo0g40obnK0Aw@mail.gmail.com>
+
+Hi,
+Currently r-cran-sjmisc reports failing tests. I have fixed it, and now build + autopkgtests pass.
+I have pushed my changes to the team repo here[1].
+Needs review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-sjmisc
+
+Thanks and regards
+Nilesh
+
+From tille at debian.org  Sat Mar  7 05:59:57 2020
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 7 Mar 2020 06:59:57 +0100
+Subject: Please use matching spelling of version number in Depends field (Was: Bug#953225: r-cran-gwidgetstcltk not installable: typo in versioned Depends?)
+In-Reply-To: <d0a77fcc-c041-f513-48bc-ddd6ba3af520@debian.org>
+References: <d0a77fcc-c041-f513-48bc-ddd6ba3af520@debian.org>
+Message-ID: <20200307055957.GC9327@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 John Verzani <jverzani at gmail.com>
+
+Dear John,
+
+the Debian R packaging team has packaged your package gWidgetstcltk for
+Debian.  We are using some automated mechanism to create versioned
+package dependencies.  We are perfectly aware that in R version numbers
+could be either separated by '.' or by '-' and both characters are
+sorting the same when used in R.  Unfortunately outside R these
+characters are different and also sorted differently.  So if we simply
+take over your version specification this leads to versioned dependencies
+that can not be fulfilled in Debian.  To simplify things we would be
+really happy if you could use the following patch
+
+   https://salsa.debian.org/r-pkg-team/r-cran-gwidgetstcltk/-/blob/master/debian/patches/Fix-dep.patch
+
+to make our automated procedure working smoothly without any exceptions
+we would need to add manually.
+
+Thanks a lot for your cooperation
+
+     Andreas.
+
+On Fri, Mar 06, 2020 at 09:08:21AM +0100, Paul Gevers wrote:
+> Source: r-cran-gwidgetstcltk
+> Version: 0.0-55-1
+> Severity: serious
+> User: debian-ci at lists.debian.org
+> Usertags: regression
+> Control: affects -1 r-cran-gwidgets
+> 
+> [X-Debbugs-CC: debian-ci at lists.debian.org,
+> r-cran-gwidgets at packages.debian.org]
+> 
+> Dear maintainers,
+> 
+> r-cran-gwidgets and r-cran-gwidgetstcltk are new in Debian. However the
+> autopkgtest of r-cran-gwidgets shows that you probably have a typo (dot
+> instead of hyphen) in the versioned Depends of your package.
+> 
+> Broken r-cran-gwidgetstcltk:amd64 Depends on r-cran-gwidgets:amd64 <
+> 0.0-54.1-2 @ii pmK > (>= 0.0.51)
+> 
+> This can also be seen on your migration QA page:
+> https://qa.debian.org/excuses.php?package=r-cran-gwidgetstcltk
+> 
+> r-cran-gwidgetstcltk/amd64 has unsatisfiable dependency
+> r-cran-gwidgetstcltk/i386 has unsatisfiable dependency
+> Rejected due to piuparts regression -
+> https://piuparts.debian.org/sid/source/r/r-cran-gwidgetstcltk.html
+> 
+> Please fix your Depends.
+> 
+> Paul
+> 
+
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From bob.dybian at gmail.com  Sat Mar  7 07:08:46 2020
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sat, 7 Mar 2020 08:08:46 +0100
+Subject: Re: [RFS] r-cran-sjmisc
+In-Reply-To: <CAJN1929Oj-UcU8=o52Mm5_3P_D+Et_BjRf0zfqo0g40obnK0Aw@mail.gmail.com>
+References: <CAJN1929Oj-UcU8=o52Mm5_3P_D+Et_BjRf0zfqo0g40obnK0Aw@mail.gmail.com>
+Message-ID: <CA+6XHwTgipN=0xK8Wa62hSMY_6NTNCmFPDCF0XEWrMUyTXScPw@mail.gmail.com>
+
+Hi Nilesh,
+
+Le sam. 7 mars 2020 à 06:21, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Currently r-cran-sjmisc reports failing tests. I have fixed it, and now build + autopkgtests pass.
+> I have pushed my changes to the team repo here[1].
+> Needs review and sponsorship.
+
+Thanks! Uploaded!
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Sat Mar  7 23:33:54 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 8 Mar 2020 00:33:54 +0100
+Subject: [ftpmaster at ftp-master.debian.org: r-bioc-rwikipathways_1.6.1+dfsg-1_amd64.changes REJECTED]
+Message-ID: <20200307233354.GH9327@an3as.eu>
+
+Hi Egon,
+
+could you comment on this?  Could you clarify the licenses?  If the said
+parts could not be distributed under a free license is there any big
+restriction for the functionality if we would drop it (provided that
+BioConductor allows non-free software and this does not even need to
+be removed from BioConductor)?
+
+Kind regards
+
+     Andreas.
+
+----- Forwarded message from Sean Whitton <ftpmaster at ftp-master.debian.org> -----
+
+Date: Sat, 07 Mar 2020 18:00:10 +0000
+From: Sean Whitton <ftpmaster at ftp-master.debian.org>
+To: Andreas Tille <tille at debian.org>, Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Subject: r-bioc-rwikipathways_1.6.1+dfsg-1_amd64.changes REJECTED
+
++----------------------+
+|   REJECT reasoning   |
++----------------------+
+
+According to <https://www.drugbank.ca/>,
+inst\extdata\drugbank-5.1.0.xgmml.zip is under a non-free license.
+
++----------------------+
+|    Other comments    |
++----------------------+
+
+What is the copyright/licensing status of
+extdata/data-lung-cancer.csv?
+
+vignettes/biomed-central.csl appears to have a different author and so
+maybe a different license.
+
+I think it would be best to use "The Authors" in the copyright
+statement rather than inferring the author names, as the MIT license
+requires we reproduce copyright statements verbatim.
+
++----------------------+
+|         N.B.         |
++----------------------+
+
+This review may not be exhaustive.  Please check your source package
+against your d/copyright and the ftpmaster REJECT-FAQ, throughly,
+before uploading to NEW again.
+
+Thank you for your time and contribution!
+
+Sean
+ 
+
+===
+
+Please feel free to respond to this email if you don't understand why
+your files were rejected, or if you upload new files which address our
+concerns.
+
+_______________________________________________
+R-pkg-team mailing list
+R-pkg-team at alioth-lists.debian.net
+https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+----- End forwarded message -----
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Sun Mar  8 07:24:41 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Sun, 8 Mar 2020 12:54:41 +0530
+Subject: [RFS] r-other-nitpick
+Message-ID: <CAJN19290vpfjds9tEGEMc=23Xurbx17r2LtjrYZErjt2TnmSPQ@mail.gmail.com>
+
+Hi,
+Currently r-other-nitpick reports failing tests.
+This is due to missing "Depends", I have fixed it and pushed to the team repo here[1].
+Needs review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-other-nitpick
+
+Thanks and regards
+Nilesh
+
+From egon.willighagen at gmail.com  Sun Mar  8 07:43:37 2020
+From: egon.willighagen at gmail.com (Egon Willighagen)
+Date: Sun, 8 Mar 2020 08:43:37 +0100
+Subject: Re: [ftpmaster at ftp-master.debian.org: r-bioc-rwikipathways_1.6.1+dfsg-1_amd64.changes REJECTED]
+In-Reply-To: <20200307233354.GH9327@an3as.eu>
+References: <20200307233354.GH9327@an3as.eu>
+Message-ID: <CAMPqvY-OCy=Vgco6o3opBfDJf-FJj0rm+TkqMY2jCmh0LBwg=Q@mail.gmail.com>
+
+Dear Andreas,
+
+ah, I did not realize the vignettes had data! I'm sorry about that.
+
+The DrugBank is certainly not DFSG :( Had I realized that data was there, I would have flagged that myself. 
+
+Okay, this is going to require some patches. THanks for informing me. I will set out some tasks, discussions with Alex (cc-ed).
+
+I'm very sorry for the inconvenience. I should have paid more attention :(
+
+Egon
+
+On Sun, Mar 8, 2020 at 12:33 AM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi Egon,
+>
+>
+>
+> could you comment on this?  Could you clarify the licenses?  If the said
+>
+> parts could not be distributed under a free license is there any big
+>
+> restriction for the functionality if we would drop it (provided that
+>
+> BioConductor allows non-free software and this does not even need to
+>
+> be removed from BioConductor)?
+>
+>
+>
+> Kind regards
+>
+>
+>
+>      Andreas.
+>
+>
+>
+> ----- Forwarded message from Sean Whitton <ftpmaster at ftp-master.debian.org> -----
+>
+>
+>
+> Date: Sat, 07 Mar 2020 18:00:10 +0000
+>
+> From: Sean Whitton <ftpmaster at ftp-master.debian.org>
+>
+> To: Andreas Tille <tille at debian.org>, Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+>
+> Subject: r-bioc-rwikipathways_1.6.1+dfsg-1_amd64.changes REJECTED
+>
+>
+>
+>
+>
+> +----------------------+
+>
+> |   REJECT reasoning   |
+>
+> +----------------------+
+>
+>
+>
+> According to <https://www.drugbank.ca/>,
+>
+> inst\extdata\drugbank-5.1.0.xgmml.zip is under a non-free license.
+>
+>
+>
+> +----------------------+
+>
+> |    Other comments    |
+>
+> +----------------------+
+>
+>
+>
+> What is the copyright/licensing status of
+>
+> extdata/data-lung-cancer.csv?
+>
+>
+>
+> vignettes/biomed-central.csl appears to have a different author and so
+>
+> maybe a different license.
+>
+>
+>
+> I think it would be best to use "The Authors" in the copyright
+>
+> statement rather than inferring the author names, as the MIT license
+>
+> requires we reproduce copyright statements verbatim.
+>
+>
+>
+> +----------------------+
+>
+> |         N.B.         |
+>
+> +----------------------+
+>
+>
+>
+> This review may not be exhaustive.  Please check your source package
+>
+> against your d/copyright and the ftpmaster REJECT-FAQ, throughly,
+>
+> before uploading to NEW again.
+>
+>
+>
+> Thank you for your time and contribution!
+>
+>
+>
+> Sean
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> ===
+>
+>
+>
+> Please feel free to respond to this email if you don't understand why
+>
+> your files were rejected, or if you upload new files which address our
+>
+> concerns.
+>
+>
+>
+>
+>
+> _______________________________________________
+>
+> R-pkg-team mailing list
+>
+> R-pkg-team at alioth-lists.debian.net
+>
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+>
+>
+>
+> ----- End forwarded message -----
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+-- 
+Hi, do you like citation networks? Already 51% of all citations are available available for innovative new uses. Join me in asking the American Chemical Society to join the Initiative for Open Citations too. SpringerNature, the RSC and many others already did.
+
+-----
+E.L. Willighagen
+Department of Bioinformatics - BiGCaT
+Maastricht University (http://www.bigcat.unimaas.nl/)
+Homepage: http://egonw.github.com/
+Blog: http://chem-bla-ics.blogspot.com/
+PubList: https://www.zotero.org/egonw
+ORCID: 0000-0001-7542-0286
+ImpactStory: https://impactstory.org/u/egonwillighagen
+
+From tille at debian.org  Sun Mar  8 15:15:26 2020
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 8 Mar 2020 16:15:26 +0100
+Subject: Re: [ftpmaster at ftp-master.debian.org: r-bioc-rwikipathways_1.6.1+dfsg-1_amd64.changes REJECTED]
+In-Reply-To: <CAMPqvY-OCy=Vgco6o3opBfDJf-FJj0rm+TkqMY2jCmh0LBwg=Q@mail.gmail.com>
+References: <20200307233354.GH9327@an3as.eu> <CAMPqvY-OCy=Vgco6o3opBfDJf-FJj0rm+TkqMY2jCmh0LBwg=Q@mail.gmail.com>
+Message-ID: <20200308151526.GN9327@an3as.eu>
+
+Dear Egon,
+
+On Sun, Mar 08, 2020 at 08:43:37AM +0100, Egon Willighagen wrote:
+> ah, I did not realize the vignettes had data! I'm sorry about that.
+> 
+> The DrugBank is certainly not DFSG :( Had I realized that data was there, I
+> would have flagged that myself.
+> 
+> Okay, this is going to require some patches. THanks for informing me. I
+> will set out some tasks, discussions with Alex (cc-ed).
+> 
+> I'm very sorry for the inconvenience. I should have paid more attention :(
+
+No problem.  Just ping me if you was able to sort it out.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From bob.dybian at gmail.com  Mon Mar  9 05:30:04 2020
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Mon, 9 Mar 2020 06:30:04 +0100
+Subject: Re: [RFS] r-other-nitpick
+In-Reply-To: <CAJN19290vpfjds9tEGEMc=23Xurbx17r2LtjrYZErjt2TnmSPQ@mail.gmail.com>
+References: <CAJN19290vpfjds9tEGEMc=23Xurbx17r2LtjrYZErjt2TnmSPQ@mail.gmail.com>
+Message-ID: <CA+6XHwSpuC5AWfxbG8L4JHbshuQTfLE-iaN+5FHAXNMT7HR5rQ@mail.gmail.com>
+
+Hi,
+
+Le dim. 8 mars 2020 à 08:42, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Needs review and sponsorship.
+
+Uploaded! Thanks!
+
+Best,
+Dylan
+
+From npatra974 at gmail.com  Mon Mar  9 11:27:22 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Mon, 9 Mar 2020 16:57:22 +0530
+Subject: [RFS] r-cran-remotes
+Message-ID: <CAJN192-nvA2zA9zFYApw45s0YbPUuhYkg5vv_ausV-HnmG5Yjw@mail.gmail.com>
+
+Hi,
+Currently r-cran-remotes reports failed tests. I have fixed it, and build + autopkgtests pass.
+I have pushed my changes to team-repo here[1].
+Needs review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-remotes
+
+Thanks and regards
+Nilesh
+
+From andreas at fam-tille.de  Mon Mar  9 14:33:08 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Mon, 9 Mar 2020 15:33:08 +0100
+Subject: Re: [RFS] r-cran-remotes
+In-Reply-To: <CAJN192-nvA2zA9zFYApw45s0YbPUuhYkg5vv_ausV-HnmG5Yjw@mail.gmail.com>
+References: <CAJN192-nvA2zA9zFYApw45s0YbPUuhYkg5vv_ausV-HnmG5Yjw@mail.gmail.com>
+Message-ID: <20200309143308.GV9327@an3as.eu>
+
+Hi Nilesh,
+
+On Mon, Mar 09, 2020 at 04:57:22PM +0530, Nilesh Patra wrote:
+> Currently r-cran-remotes reports failed tests. I have fixed it, and build +
+> autopkgtests pass.
+> I have pushed my changes to team-repo here[1].
+> Needs review and sponsorship.
+
+Uploaded.  Thanks a lot!
+
+One remark: Please either run routine-update *or* leave distribution set
+to UNRELEASED.  Currently I need another commit to reset from unstable
+to UNRELEASED to enable routine-update working on the same d/changelog
+paragraph you have started before.
+
+Thanks again
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Mon Mar  9 14:40:09 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Mon, 9 Mar 2020 20:10:09 +0530
+Subject: Re: [RFS] r-cran-remotes
+In-Reply-To: <20200309143308.GV9327@an3as.eu>
+References: <CAJN192-nvA2zA9zFYApw45s0YbPUuhYkg5vv_ausV-HnmG5Yjw@mail.gmail.com> <20200309143308.GV9327@an3as.eu>
+Message-ID: <CAJN1928hdo1raTSOPkBYHML0MCAD0Sjm+HC=+1i=AZbTWJmV1w@mail.gmail.com>
+
+On Mon, 9 Mar 2020, 20:03 Andreas Tille, <andreas at fam-tille.de> wrote:
+
+> Hi Nilesh,
+>
+>
+>
+> On Mon, Mar 09, 2020 at 04:57:22PM +0530, Nilesh Patra wrote:
+>
+> > Currently r-cran-remotes reports failed tests. I have fixed it, and build +
+>
+> > autopkgtests pass.
+>
+> > I have pushed my changes to team-repo here[1].
+>
+> > Needs review and sponsorship.
+>
+>
+>
+> Uploaded.  Thanks a lot!
+>
+>
+>
+> One remark: Please either run routine-update *or* leave distribution set
+>
+> to UNRELEASED.  Currently I need another commit to reset from unstable
+>
+> to UNRELEASED to enable routine-update working on the same d/changelog
+>
+> paragraph you have started before.
+
+Noted.
+Also wanted to ask: how can I selectively install files in a R package?
+Lintian level = pedantic complains about duplicate files/binary in R packages a few times(this package included)
+But
+ * Removing files manually in `override_dh_install` in d/rules
+Or, 
+ * Adding in d/install doesn't seem to change anything.
+
+And every R package I have encountered uses neither of the two, so is there a workaround for the same?
+Would be glad to know.
+>
+
+From andreas at an3as.eu  Tue Mar 10 06:45:03 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 10 Mar 2020 07:45:03 +0100
+Subject: Re: [RFS] r-cran-remotes
+In-Reply-To: <CAJN1928hdo1raTSOPkBYHML0MCAD0Sjm+HC=+1i=AZbTWJmV1w@mail.gmail.com>
+References: <CAJN192-nvA2zA9zFYApw45s0YbPUuhYkg5vv_ausV-HnmG5Yjw@mail.gmail.com> <20200309143308.GV9327@an3as.eu> <CAJN1928hdo1raTSOPkBYHML0MCAD0Sjm+HC=+1i=AZbTWJmV1w@mail.gmail.com>
+Message-ID: <20200310064503.GZ9327@an3as.eu>
+
+On Mon, Mar 09, 2020 at 08:10:09PM +0530, Nilesh Patra wrote:
+> Also wanted to ask: how can I selectively install files in a R package?
+> Lintian level = pedantic complains about duplicate files/binary in R
+> packages a few times(this package included)
+
+As a general remark: level=pedantic goes beyond what I'm willing to
+spent my time into.  There are way more urgent issues in lots of other
+packages before I would go into nitpicking mode.
+
+> But
+>  * Removing files manually in `override_dh_install` in d/rules
+
+Hmmm, are you sure that
+
+override_dh_install:
+	dh_install
+	rm foo
+
+would not work?
+
+I did some
+
+  grep "^override_dh.*install:$" */debian/rules
+
+in the dir where I'm keeping my r-pkg repositories.  I picked a random
+onr and got:
+
+override_dh_auto_install:
+        dh_auto_install --buildsystem R
+        rm debian/r-cran-tufte/usr/lib/R/site-library/tufte/rmarkdown/templates/tufte_html/resources/LICENSE
+        chmod -x debian/r-cran-tufte/usr/lib/R/site-library/tufte/rmarkdown/templates/tufte_html/resources/et-book/*.ttf
+
+Besides the fact that the last line should rather be in dh_fixperms it
+does what it should do.  I remember I frequently removed extra license
+files that way.
+
+>  * Adding in d/install doesn't seem to change anything.
+
+Simply adding d/install does not change anything.  I *think* the files
+are installed inside dh_auto_install.
+ 
+> And every R package I have encountered uses neither of the two, so is there
+> a workaround for the same?
+
+In general there is very less need for this in R packages - so chances
+are good that you was just not lucky enough to find an example.
+
+> Would be glad to know.
+
+Hope this helps
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Thu Mar 12 09:17:45 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Thu, 12 Mar 2020 14:47:45 +0530
+Subject: [RFS] r-cran-rcppparallel
+Message-ID: <CAJN1928KB9u02CJ8vAVvxATv1wL7UbuRCcUkC4u1=R5J9X3Hcw@mail.gmail.com>
+
+Hi,
+Currently r-cran-rcppparallel reports failed tests.
+I have fixed it, and build + autopkgtests pass.
+I have pushed the changes to team-repo here[1].
+Needs review and sponsorship
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-rcppparallel
+
+Thanks and regards
+Nilesh
+
+From andreas at fam-tille.de  Thu Mar 12 10:53:46 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Thu, 12 Mar 2020 11:53:46 +0100
+Subject: Re: [RFS] r-cran-rcppparallel
+In-Reply-To: <CAJN1928KB9u02CJ8vAVvxATv1wL7UbuRCcUkC4u1=R5J9X3Hcw@mail.gmail.com>
+References: <CAJN1928KB9u02CJ8vAVvxATv1wL7UbuRCcUkC4u1=R5J9X3Hcw@mail.gmail.com>
+Message-ID: <20200312105346.GN3163@an3as.eu>
+
+On Thu, Mar 12, 2020 at 02:47:45PM +0530, Nilesh Patra wrote:
+> I have fixed it, and build + autopkgtests pass.
+> I have pushed the changes to team-repo here[1].
+> Needs review and sponsorship
+
+Done.  Thanks for your complete work via routine-update.
+
+Since it seems sensible to also add "Rules-Requires-Root: no"
+I added this.  In case a maintainer might realise that rather
+yes would be needed it can be reset to yes explicitly or left
+as a comment to stop routine-update doing something.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Thu Mar 12 12:28:17 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Thu, 12 Mar 2020 17:58:17 +0530
+Subject: Re: [RFS] r-cran-rcppparallel
+In-Reply-To: <20200312105346.GN3163@an3as.eu>
+References: <CAJN1928KB9u02CJ8vAVvxATv1wL7UbuRCcUkC4u1=R5J9X3Hcw@mail.gmail.com> <20200312105346.GN3163@an3as.eu>
+Message-ID: <CAJN19293PJr0gCz-+ra+oQpovhtrTCxbiXhkTRyjqNKqp0JsFA@mail.gmail.com>
+
+On Thu, 12 Mar 2020, 16:23 Andreas Tille, <andreas at fam-tille.de> wrote:
+
+> On Thu, Mar 12, 2020 at 02:47:45PM +0530, Nilesh Patra wrote:
+>
+> > I have fixed it, and build + autopkgtests pass.
+>
+> > I have pushed the changes to team-repo here[1].
+>
+> > Needs review and sponsorship
+>
+>
+>
+> Done.  Thanks for your complete work via routine-update.
+
+Thanks for sponsoring.
+
+> Since it seems sensible to also add "Rules-Requires-Root: no"
+>
+> I added this.
+
+Woah, I was thinking of making + sending a patch for the same by today midnight. You are fast, :D
+
+>   In case a maintainer might realise that rather
+>
+> yes would be needed it can be reset to yes explicitly or left
+>
+> as a comment to stop routine-update doing something.
+
+Sounds good to me, majority of the packages won't require root-access to build,
+so asking the user if they require root for 'every' package might be an inconvenience.
+Thanks for adding that in.
+
+Regards,
+Nilesh
+>
+
+From andreas at fam-tille.de  Thu Mar 12 12:54:11 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Thu, 12 Mar 2020 13:54:11 +0100
+Subject: Re: [RFS] r-cran-rcppparallel
+In-Reply-To: <CAJN19293PJr0gCz-+ra+oQpovhtrTCxbiXhkTRyjqNKqp0JsFA@mail.gmail.com>
+References: <CAJN1928KB9u02CJ8vAVvxATv1wL7UbuRCcUkC4u1=R5J9X3Hcw@mail.gmail.com> <20200312105346.GN3163@an3as.eu> <CAJN19293PJr0gCz-+ra+oQpovhtrTCxbiXhkTRyjqNKqp0JsFA@mail.gmail.com>
+Message-ID: <20200312125411.GO3163@an3as.eu>
+
+Hi Nilesh,
+
+On Thu, Mar 12, 2020 at 05:58:17PM +0530, Nilesh Patra wrote:
+> Thanks for sponsoring.
+
+As usual you are welcome.
+ 
+> > Since it seems sensible to also add "Rules-Requires-Root: no"
+> > I added this.
+> 
+> Woah, I was thinking of making + sending a patch for the same by today
+> midnight. You are fast, :D
+
+I did it with ulterior motive:  May be it gives you some time to look
+for bug #951984 and #952003. ;-)
+ 
+> Sounds good to me, majority of the packages won't require root-access to
+> build,
+> so asking the user if they require root for 'every' package might be an
+> inconvenience.
+
+Yes, that was my motivation.
+
+> Thanks for adding that in.
+
+You are welcome.  Lets see whether I messed something up...
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at fam-tille.de  Fri Mar 13 10:26:13 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Fri, 13 Mar 2020 11:26:13 +0100
+Subject: For those who have some spare time r-cran-rwiener does not build
+Message-ID: <20200313102613.GX3163@an3as.eu>
+
+Hi,
+
+with the latest update in Git I get
+
+gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dwiener.c -o dwiener.o
+In file included from /usr/share/R/include/R.h:57,
+                 from dwiener.c:1:
+/usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+  124 | # include_next <limits.h>
+      |                          ^
+In file included from /usr/share/R/include/Rinternals.h:40,
+                 from dwiener.c:2:
+/usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+  124 | # include_next <limits.h>
+      |                          ^
+In file included from dwiener.c:2:
+/usr/share/R/include/Rinternals.h:575:28: error: 'INT_MIN' undeclared here (not in a function)
+  575 |       UNKNOWN_SORTEDNESS = INT_MIN, /*INT_MIN is NA_INTEGER! */
+      |                            ^~~~~~~
+
+for r-cran-rwiener.  Anybody is invited to fix this.  My time is
+currently very limited.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Mar 13 11:59:04 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 13 Mar 2020 06:59:04 -0500
+Subject: Re: For those who have some spare time r-cran-rwiener does not build
+In-Reply-To: <20200313102613.GX3163@an3as.eu>
+References: <20200313102613.GX3163@an3as.eu>
+Message-ID: <24171.30088.2184.622830@rob.eddelbuettel.com>
+
+On 13 March 2020 at 11:26, Andreas Tille wrote:
+| with the latest update in Git I get
+| 
+| gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dwiener.c -o dwiener.o
+| In file included from /usr/share/R/include/R.h:57,
+|                  from dwiener.c:1:
+| /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+|   124 | # include_next <limits.h>
+|       |                          ^
+          ^^^^^^^^^^^^^^
+
+That is a tell, but I do not remember right now what from. An include
+directory is omitted, so maybe the Build-Depends is too narrow? OTOH it lists
+what we normally list.
+
+Strangely, the, the package is
+  - really *very* vanilla (just some C files)
+  - builds and installs just fine locally
+  - builds and installs just fine in the 'r-base' Docker container
+  - has no CRAN build issues across their 13 test plaforms:
+    https://cloud.r-project.org/web/packages/RWiener/index.html
+
+Dirk
+
+| In file included from /usr/share/R/include/Rinternals.h:40,
+|                  from dwiener.c:2:
+| /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+|   124 | # include_next <limits.h>
+|       |                          ^
+| In file included from dwiener.c:2:
+| /usr/share/R/include/Rinternals.h:575:28: error: 'INT_MIN' undeclared here (not in a function)
+|   575 |       UNKNOWN_SORTEDNESS = INT_MIN, /*INT_MIN is NA_INTEGER! */
+|       |                            ^~~~~~~
+| 
+| for r-cran-rwiener.  Anybody is invited to fix this.  My time is
+| currently very limited.
+| 
+| Kind regards
+| 
+|        Andreas.
+| 
+| 
+| -- 
+| http://fam-tille.de
+| 
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Fri Mar 13 16:02:26 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Fri, 13 Mar 2020 18:02:26 +0200
+Subject: Re: For those who have some spare time r-cran-rwiener does not build
+In-Reply-To: <20200313102613.GX3163@an3as.eu>
+References: <20200313102613.GX3163@an3as.eu>
+Message-ID: <8a23715a-6fe5-3d74-c958-93c870730df3@debian.org>
+
+On 2020/03/13 12:26, Andreas Tille wrote:
+> with the latest update in Git I get
+>
+> gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dwiener.c -o dwiener.o
+> In file included from /usr/share/R/include/R.h:57,
+>                   from dwiener.c:1:
+> /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+>    124 | # include_next <limits.h>
+>        |                          ^
+> In file included from /usr/share/R/include/Rinternals.h:40,
+>                   from dwiener.c:2:
+> /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+>    124 | # include_next <limits.h>
+>        |                          ^
+> In file included from dwiener.c:2:
+> /usr/share/R/include/Rinternals.h:575:28: error: 'INT_MIN' undeclared here (not in a function)
+>    575 |       UNKNOWN_SORTEDNESS = INT_MIN, /*INT_MIN is NA_INTEGER! */
+>        |                            ^~~~~~~
+>
+> for r-cran-rwiener.  Anybody is invited to fix this.  My time is
+> currently very limited.
+
+>From topic on #debian-devel today:
+broken: <limits.h> in gcc-9 >= 9.3.0, << 9.3.0-3
+
+So should be fixed soon once gcc-9 9.3.0-3 is built everywhere.
+
+From edd at debian.org  Fri Mar 13 16:35:10 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 13 Mar 2020 11:35:10 -0500
+Subject: Re: For those who have some spare time r-cran-rwiener does not build
+In-Reply-To: <8a23715a-6fe5-3d74-c958-93c870730df3@debian.org>
+References: <20200313102613.GX3163@an3as.eu> <8a23715a-6fe5-3d74-c958-93c870730df3@debian.org>
+Message-ID: <24171.46654.579641.3216@rob.eddelbuettel.com>
+
+On 13 March 2020 at 18:02, Graham Inggs wrote:
+| On 2020/03/13 12:26, Andreas Tille wrote:
+| > with the latest update in Git I get
+| > 
+| > gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dwiener.c -o dwiener.o
+| > In file included from /usr/share/R/include/R.h:57,
+| >                   from dwiener.c:1:
+| > /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+| >    124 | # include_next <limits.h>
+| >        |                          ^
+| > In file included from /usr/share/R/include/Rinternals.h:40,
+| >                   from dwiener.c:2:
+| > /usr/include/limits.h:124:26: error: no include path in which to search for limits.h
+| >    124 | # include_next <limits.h>
+| >        |                          ^
+| > In file included from dwiener.c:2:
+| > /usr/share/R/include/Rinternals.h:575:28: error: 'INT_MIN' undeclared here (not in a function)
+| >    575 |       UNKNOWN_SORTEDNESS = INT_MIN, /*INT_MIN is NA_INTEGER! */
+| >        |                            ^~~~~~~
+| > 
+| > for r-cran-rwiener.  Anybody is invited to fix this.  My time is
+| > currently very limited.
+| 
+|  From topic on #debian-devel today:
+| broken: <limits.h> in gcc-9 >= 9.3.0, << 9.3.0-3
+| 
+| So should be fixed soon once gcc-9 9.3.0-3 is built everywhere.
+
+Nice catch!
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From npatra974 at gmail.com  Mon Mar 16 15:14:24 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Mon, 16 Mar 2020 20:44:24 +0530
+Subject: [RFS] r-cran-mcmc
+Message-ID: <CAJN192_avHMPnnOMO817cdjvv7uxyv0GpwweL4QJQyn3Lsv=Eg@mail.gmail.com>
+
+Hi,
+Currently r-cran-mcmc reports failing tests. I have fixed it, and now build + autopkgtests pass.
+I have pushed my changes to the team repo here[1].
+Needs review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-mcmc
+
+Thanks and regards
+Nilesh
+
+From daissi at debian.org  Mon Mar 16 16:16:48 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Mon, 16 Mar 2020 17:16:48 +0100
+Subject: Re: [RFS] r-cran-mcmc
+In-Reply-To: <CAJN192_avHMPnnOMO817cdjvv7uxyv0GpwweL4QJQyn3Lsv=Eg@mail.gmail.com>
+References: <CAJN192_avHMPnnOMO817cdjvv7uxyv0GpwweL4QJQyn3Lsv=Eg@mail.gmail.com>
+Message-ID: <CA+6XHwR4R5Q1WjyzesNmLv=0=Z5hEQPqiCjOLk8tWJc+GN+QXQ@mail.gmail.com>
+
+Hi,
+
+Le lun. 16 mars 2020 à 16:30, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Hi,
+> Currently r-cran-mcmc reports failing tests. I have fixed it, and now build + autopkgtests pass.
+> I have pushed my changes to the team repo here[1].
+> Needs review and sponsorship.
+
+Done! Thanks!
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Tue Mar 24 16:36:24 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 24 Mar 2020 17:36:24 +0100
+Subject: Help needed for r-cran-hunspell to link with Debian packaged libhunspell
+Message-ID: <20200324163624.GX5878@an3as.eu>
+
+Hi,
+
+we could need r-cran-spelling which depends r-cran-hunspell for some test
+suites.  I injected both into Git but I have trouble with r-cran-hunspell:
+
+...
+   dh_auto_install -O--buildsystem=R
+I: R packages needed for DEP8: testthat
+I: R Package: hunspell Version: 3.0
+I: Building using R version 3.6.3-1
+I: R API version: r-api-3.5
+I: Using built-time from d/changelog: Tue, 24 Mar 2020 17:25:33 +0100
+        mkdir -p /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library
+        R CMD INSTALL -l /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . "--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'"
+* installing *source* package 'hunspell' ...
+files 'src/hunspell/affentry.cc', 'src/hunspell/affentry.hxx', 'src/hunspell/affixmgr.cc', 'src/hunspell/affixmgr.hxx', 'src/hunspell/atypes.hxx', 'src/hunspell/baseaffix.hxx', 'src/hunspell/csutil.cc', 'src/hunspell/filemgr.cc', 'src/hunspell/filemgr.hxx', 'src/hunspell/hashmgr.cc', 'src/hunspell/hashmgr.hxx', 'src/hunspell/hunspell.cc', 'src/hunspell/hunspell.h', 'src/hunspell/hunspell.hxx', 'src/hunspell/hunvisapi.h', 'src/hunspell/hunzip.cc', 'src/hunspell/hunzip.hxx', 'src/hunspell/langnum.hxx', 'src/hunspell/phonet.cc', 'src/hunspell/phonet.hxx', 'src/hunspell/replist.cc', 'src/hunspell/replist.hxx', 'src/hunspell/suggestmgr.cc', 'src/hunspell/suggestmgr.hxx', 'src/hunspell/utf_info.cxx', 'src/hunspell/utf_info.hxx', 'src/hunspell/w_char.hxx' are missing
+file 'src/Makevars' has the wrong MD5 checksum
+** using staged installation
+** libs
+make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c RcppExports.cpp -o RcppExports.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dictionary.cpp -o dictionary.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parser.cpp -o parser.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/textparser.cc -o parsers/textparser.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/latexparser.cc -o parsers/latexparser.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/manparser.cc -o parsers/manparser.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/xmlparser.cc -o parsers/xmlparser.o
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I"/usr/lib/R/site-library/Rcpp/include"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/htmlparser.cc -o parsers/htmlparser.o
+ar rcs hunspell/libstathunspell.a parsers/textparser.o parsers/latexparser.o parsers/manparser.o parsers/xmlparser.o parsers/htmlparser.o
+g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-z,relro -o hunspell.so RcppExports.o dictionary.o parser.o -lhunspell -L/usr/lib/R/lib -lR
+make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'
+make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'
+make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'
+installing to /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Error: package or namespace load failed for 'hunspell' in dyn.load(file, DLLpath = DLLpath, ...):
+ unable to load shared object '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so':
+  /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so: undefined symbol: _ZN10TextParser8put_lineEPKc
+Error: loading failed
+Execution halted
+ERROR: loading failed
+* removing '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/hunspell'
+dh_auto_install: error: R CMD INSTALL -l /build/r-cran-hunspell-3.0\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . "--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'" returned exit code 1
+make: *** [debian/rules:4: binary] Error 25
+dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+
+I have excluded the code copy of libhunspell
+
+   Files-Excluded: */src/hunspell
+
+Is anybody able to successfully link with the Debian packaged
+libhunspell?
+
+Kind regards
+
+     Andreas.   
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Wed Mar 25 22:14:30 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 26 Mar 2020 07:14:30 +0900
+Subject: New upstream version of locfit
+Message-ID: <20200325221430.GB2435@bubu.plessy.net>
+
+Hello everybody,
+
+for a long time, the CRAN package locfit could not go in Debian because
+of uncertainties of its license.  Although marked GPL >=2 in its
+DESCRIPTION file, some C source files were pointing to a README file for
+their license, the file was not available in the package, and searches
+in the Internet Archive were revealing that the licese was forbidding
+benchmarks, which is not Free.
+
+The new upstream version 1.5-9-4 contains a README file with the
+following statement from the current Maintainer:
+
+    Earlier versions of locfit had a license which restricted usage.
+    The code was re-licensed by Prof. Loader in a version sent to
+    Andy Liaw in 2005 from which this CRAN distribution is derived.
+
+I believe this solves the problem and opens Debian's doors to locfit
+and its reverse-dependencies !
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From andreas at an3as.eu  Thu Mar 26 07:28:51 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 26 Mar 2020 08:28:51 +0100
+Subject: Re: New upstream version of locfit
+In-Reply-To: <20200325221430.GB2435@bubu.plessy.net>
+References: <20200325221430.GB2435@bubu.plessy.net>
+Message-ID: <20200326072851.GC5878@an3as.eu>
+
+Hi Charles,
+
+On Thu, Mar 26, 2020 at 07:14:30AM +0900, Charles Plessy wrote:
+> Hello everybody,
+> 
+> for a long time, the CRAN package locfit could not go in Debian because
+> of uncertainties of its license.  Although marked GPL >=2 in its
+> DESCRIPTION file, some C source files were pointing to a README file for
+> their license, the file was not available in the package, and searches
+> in the Internet Archive were revealing that the licese was forbidding
+> benchmarks, which is not Free.
+> 
+> The new upstream version 1.5-9-4 contains a README file with the
+> following statement from the current Maintainer:
+> 
+>     Earlier versions of locfit had a license which restricted usage.
+>     The code was re-licensed by Prof. Loader in a version sent to
+>     Andy Liaw in 2005 from which this CRAN distribution is derived.
+> 
+> I believe this solves the problem and opens Debian's doors to locfit
+> and its reverse-dependencies !
+
+Thanks for the good news.  I'll prepare a package right now.
+
+Kind regards
+
+        Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Mar 26 07:35:38 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 26 Mar 2020 08:35:38 +0100
+Subject: Re: New upstream version of locfit
+In-Reply-To: <20200326072851.GC5878@an3as.eu>
+References: <20200325221430.GB2435@bubu.plessy.net> <20200326072851.GC5878@an3as.eu>
+Message-ID: <20200326073538.GD5878@an3as.eu>
+
+On Thu, Mar 26, 2020 at 08:28:51AM +0100, Andreas Tille wrote:
+> 
+> Thanks for the good news.  I'll prepare a package right now.
+
+Aarg, Dylan was faster! ;-)
+
+Thanks a lot.  I'm proud to be a member of such a busy team!
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Thu Mar 26 07:56:52 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 26 Mar 2020 08:56:52 +0100
+Subject: Re: New upstream version of locfit
+In-Reply-To: <20200326073538.GD5878@an3as.eu>
+References: <20200325221430.GB2435@bubu.plessy.net> <20200326072851.GC5878@an3as.eu> <20200326073538.GD5878@an3as.eu>
+Message-ID: <CA+6XHwREjiFA96vOzDfVD0RbruH_o4uZq3=VBc8ihqdjOG98uA@mail.gmail.com>
+
+Hi,
+
+Le jeu. 26 mars 2020 à 08:35, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> On Thu, Mar 26, 2020 at 08:28:51AM +0100, Andreas Tille wrote:
+> >
+> > Thanks for the good news.  I'll prepare a package right now.
+>
+
+Thanks Charles!!!
+
+> Aarg, Dylan was faster! ;-)
+>
+
+:-) just uploaded to NEW!
+
+Best,
+Dylan
+
+From steffen_moeller at gmx.de  Thu Mar 26 12:23:25 2020
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Thu, 26 Mar 2020 13:23:25 +0100
+Subject: Re: New upstream version of locfit
+In-Reply-To: <CA+6XHwREjiFA96vOzDfVD0RbruH_o4uZq3=VBc8ihqdjOG98uA@mail.gmail.com>
+References: <20200325221430.GB2435@bubu.plessy.net> <20200326072851.GC5878@an3as.eu> <20200326073538.GD5878@an3as.eu> <CA+6XHwREjiFA96vOzDfVD0RbruH_o4uZq3=VBc8ihqdjOG98uA@mail.gmail.com>
+Message-ID: <759a62a9-4437-ae07-5738-0c52af4e19de@gmx.de>
+
+On 26.03.20 08:56, Dylan Aïssi wrote:
+> Hi,
+>
+> Le jeu. 26 mars 2020 à 08:35, Andreas Tille <andreas at an3as.eu> a écrit :
+> > On Thu, Mar 26, 2020 at 08:28:51AM +0100, Andreas Tille wrote:
+> > > Thanks for the good news.  I'll prepare a package right now.
+>
+> Thanks Charles!!!
+>
+> > Aarg, Dylan was faster! ;-)
+>
+> :-) just uploaded to NEW!
+
+That is an enormous relief!
+
+Thank you all
+
+Steffen
+
+From andreas at an3as.eu  Fri Mar 27 11:05:05 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 27 Mar 2020 12:05:05 +0100
+Subject: ChemmineOB is using private interface of openbabel (rand.h)
+Message-ID: <20200327110505.GM446@an3as.eu>
+
+Hi Thomas,
+
+when I try to build ChemmineOB under Debian[1] with the Debian packaged
+opebabel I get:
+
+config.status: creating src/Makevars
+** libs
+make[1]: Entering directory '/build/r-bioc-chemmineob-1.24.0/src'
+g++ -std=gnu++11 -I"/usr/share/R/include" -DNDEBUG  -I"/usr/lib/R/site-library/BH/include" -I"/usr/lib/R/site-library/Rcpp/include"  `pkg-config --cflags openbabel-3`  -I/usr/include/eigen3  -DUSE_BOOST -fpic  -
+g -O2 -fdebug-prefix-map=/build/r-base-j1tBvV/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c ChemmineOB.cpp -o ChemmineOB.o
+ChemmineOB.cpp:1470:10: fatal error: openbabel/rand.h: No such file or directory
+ 1470 | #include <openbabel/rand.h>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+I've checked openbabel sources and while this contains src/rand.h this
+does not seem to belong to the public interface of the openbabel library
+since it is not in include/ dir and thus not installed by the
+installation procedure.  Am I misunderstanding something here?
+
+Kind regards and thanks for providing the openbabel interface for GNU R
+
+     Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-chemmineob
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Mar 27 12:16:29 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Mar 2020 07:16:29 -0500
+Subject: Re: ChemmineOB is using private interface of openbabel (rand.h)
+In-Reply-To: <20200327110505.GM446@an3as.eu>
+References: <20200327110505.GM446@an3as.eu>
+Message-ID: <24189.61085.359367.409470@rob.eddelbuettel.com>
+
+Andreas,
+
+I ran into that a few days ago. The version of ChemnineOB that is on the repo
+requires OpenBabel 2, we have version 3.  See
+  https://github.com/girke-lab/ChemmineOB/issues/21
+A new version should be forthcoming.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Fri Mar 27 13:44:46 2020
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 27 Mar 2020 14:44:46 +0100
+Subject: Re: ChemmineOB is using private interface of openbabel (rand.h)
+In-Reply-To: <24189.61085.359367.409470@rob.eddelbuettel.com>
+References: <20200327110505.GM446@an3as.eu> <24189.61085.359367.409470@rob.eddelbuettel.com>
+Message-ID: <20200327134446.GN446@an3as.eu>
+
+Hi Dirk,
+
+On Fri, Mar 27, 2020 at 07:16:29AM -0500, Dirk Eddelbuettel wrote:
+> 
+> I ran into that a few days ago. The version of ChemnineOB that is on the repo
+> requires OpenBabel 2, we have version 3.  See
+>   https://github.com/girke-lab/ChemmineOB/issues/21
+> A new version should be forthcoming.
+
+Thanks a lot for the very helpful information
+
+    Andreas. 
+
+-- 
+http://fam-tille.de
+
+From thomas.girke at ucr.edu  Fri Mar 27 15:28:56 2020
+From: thomas.girke at ucr.edu (Thomas Girke)
+Date: Fri, 27 Mar 2020 08:28:56 -0700
+Subject: Re: ChemmineOB is using private interface of openbabel (rand.h)
+In-Reply-To: <20200327134446.GN446@an3as.eu>
+References: <20200327110505.GM446@an3as.eu> <24189.61085.359367.409470@rob.eddelbuettel.com> <20200327134446.GN446@an3as.eu>
+Message-ID: <CAHtDL=OAn21BDZhGcT_f+oOXYAckP413TKm9r1iKTr5rovi=KQ@mail.gmail.com>
+
+Dear Andreas and Dirk,
+
+Thanks for reporting this issue. I am CC'ing Kevin Horan on this email. He has been working on quite a few updates for ChemmineOB including support for OpenBabel 3. 
+
+Kevin: could you please let Andreas and Dirk know...
+
+Thanks,
+
+Thomas
+
+On Fri, Mar 27, 2020 at 6:44 AM Andreas Tille <tille at debian.org> wrote:
+
+> Hi Dirk,
+>
+>
+>
+> On Fri, Mar 27, 2020 at 07:16:29AM -0500, Dirk Eddelbuettel wrote:
+>
+> >
+>
+> > I ran into that a few days ago. The version of ChemnineOB that is on the repo
+>
+> > requires OpenBabel 2, we have version 3.  See
+>
+> >   https://github.com/girke-lab/ChemmineOB/issues/21
+>
+> > A new version should be forthcoming.
+>
+>
+>
+> Thanks a lot for the very helpful information
+>
+>
+>
+>     Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+-- 
+Thomas Girke, Ph.D.
+Professor of Bioinformatics
+1207F Genomics Building
+University of California
+Riverside, CA 92521
+
+E-mail: thomas.girke at ucr.edu
+URL: https://girke.bioinformatics.ucr.edu
+Phone/Cell/Text: 951-732-7072
+Fax: 951-827-4437
+
+From edd at debian.org  Fri Mar 27 19:09:33 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Mar 2020 14:09:33 -0500
+Subject: R 4.0.0 coming in four weeks
+Message-ID: <24190.20333.642873.934726@rob.eddelbuettel.com>
+
+The preparations for R 4.0.0 have started. Peter Dalgaard, upstream's release
+manager, cut the first alpha release today.  The detailed plan is as always
+available [1] (and has been for a bit). As always, there is a long and
+impressive list of changes [2].
+
+We have four weeks until April 24 when it will be released.
+
+First steps I have taken:
+
+ - I made a first release available in "experimental". [3] And I also changed
+   the tag to r-api-4.0.
+
+ - As I and others also work on Ubuntu (directly or also via Travis CI and
+   alike) I also created a new PPA 'r-4.0' and populated it with the build,
+   so far only for 18.04 ("bionic"). [4][5]
+
+We probably need some sort of plan for rebuilding all our packages / staging
+some things etc pp.  I am open to any and all suggestions; I am still not all
+that familiar with how to 'best' proceed both within Debian, and for the
+'backports'.  
+
+Cheers, Dirk
+
+[1] http://developer.r-project.org/
+[2] https://github.com/wch/r-source/blob/trunk/doc/NEWS.Rd -- I cheated via
+the GH mirror. There is probably also a html-rendered version somewhere...
+[3] https://incoming.debian.org/debian-buildd/pool/main/r/r-base/r-base_3.6.3.20200326-1.dsc
+[4] https://launchpad.net/~edd/+archive/ubuntu/r-4.0/+packages
+[5] From a 'Rocker' container running 18.04:
+    root@4c884498c150:~# add-apt-repository --enable-source --yes "ppa:edd/r-4.0"
+    [... apt update and upgrade skipped ...]
+    root@4c884498c150:~# R --version | head -1
+    R version 4.0.0 alpha (2020-03-26 r78078)
+    root@4c884498c150:~# 
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From marutter at gmail.com  Fri Mar 27 19:31:36 2020
+From: marutter at gmail.com (Michael Rutter)
+Date: Fri, 27 Mar 2020 15:31:36 -0400
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24190.20333.642873.934726@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com>
+Message-ID: <7aeb5d4c-6c68-84e7-3210-7148dedcacfa@gmail.com>
+
+I've created my 4.0 PPA 
+(https://launchpad.net/~marutter/+archive/ubuntu/rrutter4.0) that I will 
+be using to seed the repository on CRAN.  I am just waiting for the 
+debian source package to become available so I can test backports.  To 
+make life more interesting (like we need that), Ubuntu has a 20.04 has a 
+release date of April 23.
+
+Once I get the base packages built for xenial, bionic, and focal, I will 
+start the creating c2du4.0.  I have all the scripts left over from the 
+transition to 3.5, so it should be an "easy", just a time consuming process.
+
+Michael
+
+On 3/27/20 3:09 PM, Dirk Eddelbuettel wrote:
+> The preparations for R 4.0.0 have started. Peter Dalgaard, upstream's release
+> manager, cut the first alpha release today.  The detailed plan is as always
+> available [1] (and has been for a bit). As always, there is a long and
+> impressive list of changes [2].
+>
+> We have four weeks until April 24 when it will be released.
+>
+> First steps I have taken:
+>
+>   - I made a first release available in "experimental". [3] And I also changed
+>     the tag to r-api-4.0.
+>
+>   - As I and others also work on Ubuntu (directly or also via Travis CI and
+>     alike) I also created a new PPA 'r-4.0' and populated it with the build,
+>     so far only for 18.04 ("bionic"). [4][5]
+>
+> We probably need some sort of plan for rebuilding all our packages / staging
+> some things etc pp.  I am open to any and all suggestions; I am still not all
+> that familiar with how to 'best' proceed both within Debian, and for the
+> 'backports'.
+>
+> Cheers, Dirk
+>
+>
+> [1] http://developer.r-project.org/
+> [2] https://github.com/wch/r-source/blob/trunk/doc/NEWS.Rd -- I cheated via
+> the GH mirror. There is probably also a html-rendered version somewhere...
+> [3] https://incoming.debian.org/debian-buildd/pool/main/r/r-base/r-base_3.6.3.20200326-1.dsc
+> [4] https://launchpad.net/~edd/+archive/ubuntu/r-4.0/+packages
+> [5] From a 'Rocker' container running 18.04:
+>      root@4c884498c150:~# add-apt-repository --enable-source --yes "ppa:edd/r-4.0"
+>      [... apt update and upgrade skipped ...]
+>      root@4c884498c150:~# R --version | head -1
+>      R version 4.0.0 alpha (2020-03-26 r78078)
+>      root@4c884498c150:~#
+
+From daissi at debian.org  Fri Mar 27 20:30:06 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 27 Mar 2020 21:30:06 +0100
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24190.20333.642873.934726@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com>
+Message-ID: <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com>
+
+Hi Dirk,
+
+Le ven. 27 mars 2020 à 20:09, Dirk Eddelbuettel <edd at debian.org> a écrit :
+>
+> First steps I have taken:
+>
+>  - I made a first release available in "experimental". [3] And I also changed
+>    the tag to r-api-4.0.
+>
+>  - As I and others also work on Ubuntu (directly or also via Travis CI and
+>    alike) I also created a new PPA 'r-4.0' and populated it with the build,
+>    so far only for 18.04 ("bionic"). [4][5]
+
+Thanks for this!
+
+> We probably need some sort of plan for rebuilding all our packages / staging
+> some things etc pp.  I am open to any and all suggestions; I am still not all
+> that familiar with how to 'best' proceed both within Debian, and for the
+> 'backports'.
+
+To perform the transition from r-api-3.5 to r-api-4.0, we should
+follow the recommendation here [1] and open a bug against the virtual
+package "release.debian.org" like Sébastien did it here [2] for the
+previous transition.
+
+Best,
+Dylan
+
+[1] https://wiki.debian.org/Teams/ReleaseTeam/Transitions
+[2] https://bugs.debian.org/896667
+
+From daissi at debian.org  Fri Mar 27 20:31:36 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 27 Mar 2020 21:31:36 +0100
+Subject: Fwd: r-cran-locfit_1.5-9.4-1_amd64.changes ACCEPTED into unstable, unstable
+In-Reply-To: <E1jHvNK-000Hp9-QW@fasolo.debian.org>
+References: <E1jHvNK-000Hp9-QW@fasolo.debian.org>
+Message-ID: <CA+6XHwTwLih-9Qi0fxVscTnmO_-=Dpnp7c5s4LWCzPC_u+H4Bw@mail.gmail.com>
+
+Good news!
+
+---------- Forwarded message ---------
+De : Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+Date: ven. 27 mars 2020 à 21:14
+Subject: r-cran-locfit_1.5-9.4-1_amd64.changes ACCEPTED into unstable, unstable
+To: Dylan Aïssi <daissi at debian.org>, Debian R Packages Maintainers
+<r-pkg-team at alioth-lists.debian.net>
+
+Accepted:
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Thu, 26 Mar 2020 08:47:25 +0100
+Source: r-cran-locfit
+Binary: r-cran-locfit r-cran-locfit-dbgsym
+Architecture: source amd64
+Version: 1.5-9.4-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Changed-By: Dylan Aïssi <daissi at debian.org>
+Description:
+ r-cran-locfit - GNU R local regression, likelihood and density estimation
+Closes: 731599
+Changes:
+ r-cran-locfit (1.5-9.4-1) unstable; urgency=medium
+ .
+   * Initial release (Closes: #731599)
+      Thanks to Charles Plessy for solving the
+      license problem with CRAN maintainers.
+
+From jranke at uni-bremen.de  Fri Mar 27 20:23:29 2020
+From: jranke at uni-bremen.de (Johannes Ranke)
+Date: Fri, 27 Mar 2020 21:23:29 +0100
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <7aeb5d4c-6c68-84e7-3210-7148dedcacfa@gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <7aeb5d4c-6c68-84e7-3210-7148dedcacfa@gmail.com>
+Message-ID: <8456239.mEPeXSr4UY@ryz>
+
+Hi everybody,
+
+thanks Dirk for the notice. As far as the Debian backports for CRAN (currently 
+stretch and buster) are concerned, I will also publish new repositories for R 
+4.0 once it is released, so people will have to change their sources.list to 
+get it. As in earlier cases of breaking changes, this is to make sure they 
+understand that they have to recompile their locally installed packages.
+
+Regarding Debian unstable I think a transition will be needed in order to take 
+care of and monitor rebuilding reverse dependencies.
+
+Johannes
+
+Am Freitag, 27. März 2020, 20:31:36 CET schrieb Michael Rutter:
+> I've created my 4.0 PPA
+> (https://launchpad.net/~marutter/+archive/ubuntu/rrutter4.0) that I will
+> be using to seed the repository on CRAN.  I am just waiting for the
+> debian source package to become available so I can test backports.  To
+> make life more interesting (like we need that), Ubuntu has a 20.04 has a
+> release date of April 23.
+> 
+> Once I get the base packages built for xenial, bionic, and focal, I will
+> start the creating c2du4.0.  I have all the scripts left over from the
+> transition to 3.5, so it should be an "easy", just a time consuming process.
+> 
+> Michael
+> 
+> On 3/27/20 3:09 PM, Dirk Eddelbuettel wrote:
+> > The preparations for R 4.0.0 have started. Peter Dalgaard, upstream's
+> > release manager, cut the first alpha release today.  The detailed plan is
+> > as always available [1] (and has been for a bit). As always, there is a
+> > long and impressive list of changes [2].
+> > 
+> > We have four weeks until April 24 when it will be released.
+> > 
+> > First steps I have taken:
+> >   - I made a first release available in "experimental". [3] And I also
+> >   changed>   
+> >     the tag to r-api-4.0.
+> >   
+> >   - As I and others also work on Ubuntu (directly or also via Travis CI
+> >   and
+> >   
+> >     alike) I also created a new PPA 'r-4.0' and populated it with the
+> >     build,
+> >     so far only for 18.04 ("bionic"). [4][5]
+> > 
+> > We probably need some sort of plan for rebuilding all our packages /
+> > staging some things etc pp.  I am open to any and all suggestions; I am
+> > still not all that familiar with how to 'best' proceed both within
+> > Debian, and for the 'backports'.
+> > 
+> > Cheers, Dirk
+> > 
+> > 
+> > [1] http://developer.r-project.org/
+> > [2] https://github.com/wch/r-source/blob/trunk/doc/NEWS.Rd -- I cheated
+> > via
+> > the GH mirror. There is probably also a html-rendered version somewhere...
+> > [3]
+> > https://incoming.debian.org/debian-buildd/pool/main/r/r-base/r-base_3.6.3
+> > .20200326-1.dsc [4]
+> > https://launchpad.net/~edd/+archive/ubuntu/r-4.0/+packages
+> > 
+> > [5] From a 'Rocker' container running 18.04:
+> >      root@4c884498c150:~# add-apt-repository --enable-source --yes
+> >      "ppa:edd/r-4.0" [... apt update and upgrade skipped ...]
+> >      root@4c884498c150:~# R --version | head -1
+> >      R version 4.0.0 alpha (2020-03-26 r78078)
+> >      root@4c884498c150:~#
+
+From edd at debian.org  Fri Mar 27 20:52:57 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Mar 2020 15:52:57 -0500
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com>
+Message-ID: <24190.26537.184327.211744@rob.eddelbuettel.com>
+
+On 27 March 2020 at 21:30, Dylan Aïssi wrote:
+| Hi Dirk,
+| 
+| Le ven. 27 mars 2020 à 20:09, Dirk Eddelbuettel <edd at debian.org> a écrit :
+| >
+| > First steps I have taken:
+| >
+| >  - I made a first release available in "experimental". [3] And I also changed
+| >    the tag to r-api-4.0.
+| >
+| >  - As I and others also work on Ubuntu (directly or also via Travis CI and
+| >    alike) I also created a new PPA 'r-4.0' and populated it with the build,
+| >    so far only for 18.04 ("bionic"). [4][5]
+| 
+| Thanks for this!
+| 
+| > We probably need some sort of plan for rebuilding all our packages / staging
+| > some things etc pp.  I am open to any and all suggestions; I am still not all
+| > that familiar with how to 'best' proceed both within Debian, and for the
+| > 'backports'.
+| 
+| To perform the transition from r-api-3.5 to r-api-4.0, we should
+| follow the recommendation here [1] and open a bug against the virtual
+| package "release.debian.org" like Sébastien did it here [2] for the
+| previous transition.
+
+Ah, yes, I vaguely remember that. Upload to 'experimental' is done. Of
+course, we have no new SO name so no 'new queue'.  The wiki page does not
+really cover our case.  Do I file the bug now?  
+
+Dirk
+
+| Best,
+| Dylan
+| 
+| [1] https://wiki.debian.org/Teams/ReleaseTeam/Transitions
+| [2] https://bugs.debian.org/896667
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Fri Mar 27 21:50:01 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 27 Mar 2020 22:50:01 +0100
+Subject: Any idea why r-bioc-edger autopkgtest might fail?
+Message-ID: <20200327215001.GG32306@an3as.eu>
+
+Hi folks,
+
+finally r-cran-locfit was accepted (thanks to Dylan) and I intended
+to reintroduce r-bioc-edger[1].  Unfortunately I get:
+
+...
+(Reading database ... 20456 files and directories currently installed.)
+Removing autopkgtest-satdep (0) ...
+autopkgtest [21:43:02]: test run-unit-test: [-----------------------
+autopkgtest [21:43:05]: test run-unit-test: -----------------------]
+autopkgtest [21:43:05]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+run-unit-test        FAIL non-zero exit status 1
+autopkgtest [21:43:05]: @@@@@@@@@@@@@@@@@@@@ summary
+run-unit-test        FAIL non-zero exit status 1
+autopkgtest [21:43:05]: Binaries: resetting testbed apt configuration
+Get:1 file:/var/cache/pbuilder/extra/release ./ InRelease
+...
+
+in my pbuilder chroot.  Any idea what might be wrong here?
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-edger
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Fri Mar 27 22:29:03 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Mar 2020 00:29:03 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24190.26537.184327.211744@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com>
+
+Hi Dirk
+
+On Fri, 27 Mar 2020 at 22:53, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Ah, yes, I vaguely remember that. Upload to 'experimental' is done. Of
+> course, we have no new SO name so no 'new queue'.  The wiki page does not
+> really cover our case.  Do I file the bug now?
+
+Yes, please file the bug now.  As there were no new binary packages,
+there was no NEW queue and no auto-generated 'auto-r-base' ben
+tracker, so we'll need to supply a ben file, like Sébastien did in
+#896667.
+Other than that, the process is the same; file the bug, wait for ACK,
+upload to unstable.
+
+Regards
+Graham
+
+From edd at debian.org  Sat Mar 28 00:25:22 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 27 Mar 2020 19:25:22 -0500
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com>
+Message-ID: <24190.39282.282661.938447@rob.eddelbuettel.com>
+
+Hi Graham,
+
+On 28 March 2020 at 00:29, Graham Inggs wrote:
+| Hi Dirk
+| 
+| On Fri, 27 Mar 2020 at 22:53, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > Ah, yes, I vaguely remember that. Upload to 'experimental' is done. Of
+| > course, we have no new SO name so no 'new queue'.  The wiki page does not
+| > really cover our case.  Do I file the bug now?
+| 
+| Yes, please file the bug now.  As there were no new binary packages,
+| there was no NEW queue and no auto-generated 'auto-r-base' ben
+| tracker, so we'll need to supply a ben file, like Sébastien did in
+| #896667.
+| Other than that, the process is the same; file the bug, wait for ACK,
+| upload to unstable.
+
+Thanks for that reminder, it is slowly coming back. I have to look at the
+'ben' file snippet again and see if the current pre-release version number
+can be made to fit so that we do not have to wait for 4.0.0-1.    A strict
+greater than the current 3.6.3-2 (plus wiggle room for updates to this one)
+may do, or an explicit '>= 3.6.3.20200326' to include today's version.
+
+Sage advice always welcome :)
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Sat Mar 28 07:07:21 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Mar 2020 09:07:21 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24190.39282.282661.938447@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com>
+
+Hi Dirk
+
+On Sat, 28 Mar 2020 at 02:25, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Thanks for that reminder, it is slowly coming back. I have to look at the
+> 'ben' file snippet again and see if the current pre-release version number
+> can be made to fit so that we do not have to wait for 4.0.0-1.    A strict
+> greater than the current 3.6.3-2 (plus wiggle room for updates to this one)
+> may do, or an explicit '>= 3.6.3.20200326' to include today's version.
+
+I don't think we need to worry about exact versions for the ben file.
+I've adapted Sébastien's one below.  Do I have the correct versions?
+
+title = "r-base";
+is_affected = .depends ~ "r-api-3.5" | .depends ~ "r-api-4.0";
+is_good = .depends ~ "r-api-4.0";
+is_bad = .depends ~ "r-api-3.5";
+
+I think the 3.6.3.20200326 version could be very confusing for our derivatives.
+I recall we chatted about naming them e.g. 4.0.0~20200326 and I also
+recall the tilde in the build directory name being a problem.  Do you
+know if this has been resolved?
+
+Regards
+Graham
+
+From ginggs at debian.org  Sat Mar 28 08:14:23 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Mar 2020 10:14:23 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com> <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com>
+Message-ID: <CAM8zJQsQSjc24s8pmmKXiwosPgRNnaTzQD4BRtNrgWxO+P9=dA@mail.gmail.com>
+
+Hi Dirk
+
+On Sat, 28 Mar 2020 at 09:07, Graham Inggs <ginggs at debian.org> wrote:
+> I think the 3.6.3.20200326 version could be very confusing for our derivatives.
+> I recall we chatted about naming them e.g. 4.0.0~20200326 and I also
+> recall the tilde in the build directory name being a problem.  Do you
+> know if this has been resolved?
+
+I just tried this for myself.  I was able to build 3.6.3.20200326-1
+locally, but renaming that to 4.0.0~20200326-1 caused the build to
+fail as below.  Any ideas?
+
+you should 'make docs' now ...
+make[2]: Entering directory '/<<PKGBUILDDIR>>/doc'
+creating doc/NEWS
+creating doc/NEWS.pdf
+Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  :
+  unable to run pdflatex on 'NEWS.tex'
+LaTeX errors:
+! Package pdftex.def Error: File `Rlogo.pdf' not found: using draft setting.
+
+Regards
+Graham
+
+From ginggs at debian.org  Sat Mar 28 12:48:05 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Mar 2020 14:48:05 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CAM8zJQsQSjc24s8pmmKXiwosPgRNnaTzQD4BRtNrgWxO+P9=dA@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com> <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com> <CAM8zJQsQSjc24s8pmmKXiwosPgRNnaTzQD4BRtNrgWxO+P9=dA@mail.gmail.com>
+Message-ID: <CAM8zJQu5uOde6Zvw_24zfbyEXdfffpRQ0d-0hbq8FjSfMJgkHQ@mail.gmail.com>
+
+Hi All
+
+On Fri, 27 Mar 2020 at 21:31, Michael Rutter <marutter at gmail.com> wrote:
+> To
+> make life more interesting (like we need that), Ubuntu has a 20.04 has a
+> release date of April 23.
+
+We *might* be able to pull this off in time for Ubuntu 20.04.
+I checked, and r-base is not in Ubuntu main, and is not seeded on any
+of the installation media, which means we have right up until
+2020-04-23 [1] to upload fixes, and even doing a 0-day Stable Release
+Update (SRU) of the final 4.0.0 version is possible.
+
+If someone were to file a Feature Freeze Exception (FFe) bug [2],
+explaining why upgrading to 4.0.0 is a good thing, and answer any of
+Ubuntu release team's questions, I'd be happy to manage the transition
+and deal with the (bin-)NMUs.
+I've had experience pushing through an R transition a month before
+17.10's release [3].
+
+I think starting the transition in Debian and showing good progress
+would be enough to convince Ubuntu's release team.
+The sooner the FFe bug is filed, the better.
+
+Regards
+Graham
+
+[1] https://wiki.ubuntu.com/FocalFossa/ReleaseSchedule
+[2] https://wiki.ubuntu.com/FreezeExceptionProcess
+[3] https://bugs.launchpad.net/ubuntu/+source/r-base/+bug/1719245
+
+From edd at debian.org  Sat Mar 28 13:00:13 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 28 Mar 2020 08:00:13 -0500
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com> <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com>
+Message-ID: <24191.19037.352345.678769@rob.eddelbuettel.com>
+
+Hi Graham,
+
+(Three replies in one)
+
+On 28 March 2020 at 09:07, Graham Inggs wrote:
+| On Sat, 28 Mar 2020 at 02:25, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > Thanks for that reminder, it is slowly coming back. I have to look at the
+| > 'ben' file snippet again and see if the current pre-release version number
+| > can be made to fit so that we do not have to wait for 4.0.0-1.    A strict
+| > greater than the current 3.6.3-2 (plus wiggle room for updates to this one)
+| > may do, or an explicit '>= 3.6.3.20200326' to include today's version.
+| 
+| I don't think we need to worry about exact versions for the ben file.
+| I've adapted Sébastien's one below.  Do I have the correct versions?
+| 
+| title = "r-base";
+| is_affected = .depends ~ "r-api-3.5" | .depends ~ "r-api-4.0";
+| is_good = .depends ~ "r-api-4.0";
+| is_bad = .depends ~ "r-api-3.5";
+
+Yes, that looks spot-on (and I once again was not thinking clearly but hey it
+was a looong week).
+
+So I file a bug with that ben file against release.d.o now then, ok?
+
+| I think the 3.6.3.20200326 version could be very confusing for our derivatives.
+| I recall we chatted about naming them e.g. 4.0.0~20200326 and I also
+| recall the tilde in the build directory name being a problem.  Do you
+| know if this has been resolved?
+
+I do not think so, and I believe it is not us.
+
+On 28 March 2020 at 10:14, Graham Inggs wrote:
+| I just tried this for myself.  I was able to build 3.6.3.20200326-1
+| locally, but renaming that to 4.0.0~20200326-1 caused the build to
+| fail as below.  Any ideas?
+| 
+| you should 'make docs' now ...
+| make[2]: Entering directory '/<<PKGBUILDDIR>>/doc'
+| creating doc/NEWS
+| creating doc/NEWS.pdf
+| Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  :
+|   unable to run pdflatex on 'NEWS.tex'
+| LaTeX errors:
+| ! Package pdftex.def Error: File `Rlogo.pdf' not found: using draft setting.
+
+It is a (very old) issue in the texi2dvi toolchain that once been fixed but
+regressed. If you look at the version numbers in my debian/changelog you see
+that we did employ the scheme for a few years but alas not now.
+
+On 28 March 2020 at 14:48, Graham Inggs wrote:
+| We *might* be able to pull this off in time for Ubuntu 20.04.
+| I checked, and r-base is not in Ubuntu main, and is not seeded on any
+| of the installation media, which means we have right up until
+| 2020-04-23 [1] to upload fixes, and even doing a 0-day Stable Release
+| Update (SRU) of the final 4.0.0 version is possible.
+
+Nice. My gut instinct is "let's do this"
+
+OTOH it is a LTS release. Maybe the known stability of R 3.6.3 is better?
+ 
+| If someone were to file a Feature Freeze Exception (FFe) bug [2],
+| explaining why upgrading to 4.0.0 is a good thing, and answer any of
+| Ubuntu release team's questions, I'd be happy to manage the transition
+| and deal with the (bin-)NMUs.
+| I've had experience pushing through an R transition a month before
+| 17.10's release [3].
+| 
+| I think starting the transition in Debian and showing good progress
+| would be enough to convince Ubuntu's release team.
+| The sooner the FFe bug is filed, the better.
+
+I would be happy to help. You can always DM me (eg DM via twitter, handle is
+my family name); email is batched and a little less responsive at time).
+
+I am not sure I am familiar enough with Ubuntu innards to leads the effort
+there. 
+
+Dirk
+
+| Regards
+| Graham
+| 
+| 
+| [1] https://wiki.ubuntu.com/FocalFossa/ReleaseSchedule
+| [2] https://wiki.ubuntu.com/FreezeExceptionProcess
+| [3] https://bugs.launchpad.net/ubuntu/+source/r-base/+bug/1719245
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Sat Mar 28 13:32:49 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 28 Mar 2020 15:32:49 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24191.19037.352345.678769@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com> <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com> <24191.19037.352345.678769@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQuuDT5i7OA9___AEiTPjZwubxOkumpL1okRz=sGWhOORQ@mail.gmail.com>
+
+Hi Dirk
+
+On Sat, 28 Mar 2020 at 15:00, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Yes, that looks spot-on (and I once again was not thinking clearly but hey it
+> was a looong week).
+>
+> So I file a bug with that ben file against release.d.o now then, ok?
+
+Do it!  :-)
+
+> Nice. My gut instinct is "let's do this"
+>
+> OTOH it is a LTS release. Maybe the known stability of R 3.6.3 is better?
+
+I don't have an opinion either way.  If someone thinks it would be of
+benefit of Ubuntu users, then I'm happy to help make it happen.
+
+> I am not sure I am familiar enough with Ubuntu innards to leads the effort
+> there.
+
+For the FFe bug, it's more a case of convincing Ubuntu's release team
+of the benefits, and allaying any concerns they might have.
+I would follow-up on that bug and say that I'll take care of managing
+the transition; uploads, autopkgtests, etc.
+
+Regards
+Graham
+
+From marutter at gmail.com  Sat Mar 28 13:59:05 2020
+From: marutter at gmail.com (Michael Rutter)
+Date: Sat, 28 Mar 2020 09:59:05 -0400
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CAM8zJQuuDT5i7OA9___AEiTPjZwubxOkumpL1okRz=sGWhOORQ@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTNr=sMSfT825WNBxLoqJPNY+FgiQ74uUecZC-ZwzNw7w@mail.gmail.com> <24190.26537.184327.211744@rob.eddelbuettel.com> <CAM8zJQsRSTWsLE2AtocRxE3jxyzmOWGZO4B2r0MBheJpGySYkA@mail.gmail.com> <24190.39282.282661.938447@rob.eddelbuettel.com> <CAM8zJQu9shuQh_CeznwvCjiJwfFkbL=L=nJUGMpqWrm_4jzaJQ@mail.gmail.com> <24191.19037.352345.678769@rob.eddelbuettel.com> <CAM8zJQuuDT5i7OA9___AEiTPjZwubxOkumpL1okRz=sGWhOORQ@mail.gmail.com>
+Message-ID: <0acad303-9258-f9cb-7a8b-d771da7e89ef@gmail.com>
+
+On 3/28/20 9:32 AM, Graham Inggs wrote:
+
+> > OTOH it is a LTS release. Maybe the known stability of R 3.6.3 is better?
+>
+>
+> I don't have an opinion either way.  If someone thinks it would be of
+> benefit of Ubuntu users, then I'm happy to help make it happen.
+>
+> > I am not sure I am familiar enough with Ubuntu innards to leads the effort
+> > there.
+>
+>
+> For the FFe bug, it's more a case of convincing Ubuntu's release team
+> of the benefits, and allaying any concerns they might have.
+> I would follow-up on that bug and say that I'll take care of managing
+> the transition; uploads, autopkgtests, etc.
+>
+> Regards
+> Graham
+
+Graham,
+
+We went through a similar transition when 18.04 came out (4/26/18) and R 
+3.5 was released (4/23/18).  I remember rebuilding all the r-cran and 
+r-bioc packages in universe against R 3.5 on putting them on my 
+RRutter3.5 PPA.
+
+I don't mind repeating that approach (I still have all the code I used 
+to do that), but if you can get 4.0 in universe, it will certainly save 
+a step.
+
+Michael
+
+From andreas at an3as.eu  Sun Mar 29 12:23:28 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 29 Mar 2020 14:23:28 +0200
+Subject: Help with r-bioc-rgadem needed
+Message-ID: <20200329122328.GL11736@an3as.eu>
+
+Hi,
+
+I injected r-bioc-rgadem[1] but the build ends in:
+
+   dh_autoreconf -O--buildsystem=R
+autoheader: warning: missing template: HAVE_OPENMP
+autoheader: Use AC_DEFINE([HAVE_OPENMP], [], [Description])
+autoreconf: /usr/bin/autoheader failed with exit status: 1
+dh_autoreconf: error: autoreconf -f -i returned exit code 1
+make: *** [debian/rules:4: binary] Error 25
+dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+
+Any hint would be welcome
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-rgadem
+
+-- 
+http://fam-tille.de
+
+From andreas at fam-tille.de  Sun Mar 29 20:18:52 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sun, 29 Mar 2020 22:18:52 +0200
+Subject: Besides missing xml2 there is another problem (Was: Bug#955316: r-cran-svglite autopkgtest fails: there is no package called 'xml2')
+In-Reply-To: <b6c899c2-97f2-d49a-5635-360eeb7223fb@debian.org>
+References: <b6c899c2-97f2-d49a-5635-360eeb7223fb@debian.org>
+Message-ID: <20200329201852.GR11736@an3as.eu>
+
+Control: tags -1 help
+
+On Sun, Mar 29, 2020 at 09:11:04PM +0200, Paul Gevers wrote:
+> -- 1. Error: (unknown) (@test-colour.R#2)
+> -------------------------------------
+> there is no package called 'xml2'
+> Backtrace:
+>  1. base::library(xml2)
+
+OK, this is fixed.
+
+> -- 15. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)
+
+However, this problem remains and once xml2 is added as Test-Depends
+the test suite fails with:
+
+...
+> library(svglite)
+> 
+> test_check("svglite")
+-- 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)  -----------
+StartTag: invalid element name [68]
+Backtrace:
+ 1. svglite::xmlSVG(...)
+ 3. xml2:::read_xml.character(plot)
+ 4. xml2:::read_xml.raw(...)
+ 5. xml2:::doc_parse_raw(...)
+
+== testthat results  ===========================================================
+[ OK: 93 | SKIPPED: 5 | WARNINGS: 0 | FAILED: 1 ]
+1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30) 
+...
+
+I was hoping that adding
+   Depends: fonts-symbola
+(as per Git[1]) would help but it does not change anything.
+
+Any help is welcome
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-svglite
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Mon Mar 30 12:12:41 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Mon, 30 Mar 2020 17:42:41 +0530
+Subject: [RFS] r-cran-rlist
+Message-ID: <CAJN192-k6XPc-8mo9JoDMAGNCmQmh-1R8sb16bUroDKUXYK1ZQ@mail.gmail.com>
+
+Hi,Currently r-cran-rlist reports failed tests. I have fixed it, and build + Autopkgtests pass.
+I have pushed my changes to the team repo here [1].
+Needs review and sponsorship.
+
+[1]: http://salsa.debian.org/r-pkg-team/r-cran-rlist
+
+Thanks and regards
+Nilesh
+
+From daissi at debian.org  Mon Mar 30 14:16:33 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Mon, 30 Mar 2020 16:16:33 +0200
+Subject: Re: [RFS] r-cran-rlist
+In-Reply-To: <CAJN192-k6XPc-8mo9JoDMAGNCmQmh-1R8sb16bUroDKUXYK1ZQ@mail.gmail.com>
+References: <CAJN192-k6XPc-8mo9JoDMAGNCmQmh-1R8sb16bUroDKUXYK1ZQ@mail.gmail.com>
+Message-ID: <CA+6XHwRxbDDkNrneh5M=VnfRODPi1FA+Hf9522A30bYiSHX2tg@mail.gmail.com>
+
+Hi,
+
+Le lun. 30 mars 2020 à 14:30, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Hi,
+> Currently r-cran-rlist reports failed tests. I have fixed it, and build + Autopkgtests pass.
+> I have pushed my changes to the team repo here [1].
+> Needs review and sponsorship.
+>
+> [1]: http://salsa.debian.org/r-pkg-team/r-cran-rlist
+
+Done! Thanks
+
+Best,
+Dylan
+
+From tille at debian.org  Mon Mar 30 16:38:51 2020
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 30 Mar 2020 18:38:51 +0200
+Subject: Re: ChemmineOB is using private interface of openbabel (rand.h)
+In-Reply-To: <59e13bf5-1b07-34a3-197d-3f4309458678@globalrecordings.net>
+References: <20200327110505.GM446@an3as.eu> <24189.61085.359367.409470@rob.eddelbuettel.com> <20200327134446.GN446@an3as.eu> <CAHtDL=OAn21BDZhGcT_f+oOXYAckP413TKm9r1iKTr5rovi=KQ@mail.gmail.com> <59e13bf5-1b07-34a3-197d-3f4309458678@globalrecordings.net>
+Message-ID: <20200330163851.GH20899@an3as.eu>
+
+Hi Kevin,
+
+thanks a lot for this quick response.  For the moment ChemmineOB is only
+needed as Test-Dependency for ChemmineR and for the time beeing we could
+live without running the test suite.  But its good to know that there
+will be a solution in the future.
+
+Kind regards
+
+       Andreas.
+
+On Mon, Mar 30, 2020 at 08:30:27AM -0700, Kevin Horan wrote:
+> 
+>     There is now available a version of ChemmineOB that has been compiled
+> with OpenBabel 3.0.0 and R devel (next 4.0.0). Since we didn't want to force
+> people to upgrade OpenBabel right away, we are not releasing this version in
+> the next BioConductor release. Instead, we will deploy it into development
+> after this April release. That will give people 6 months to upgrade
+> OpenBabel before 3.0 becomes a requirement for ChemmineOB.
+> 
+>     I have created a release on Github though for anyone who wants this
+> version right now. You can find it here:
+> https://github.com/girke-lab/ChemmineOB/releases/tag/1.25.1
+> 
+> 
+> Kevin
+> 
+> 
+> On 3/27/20 8:28 AM, Thomas Girke wrote:
+> > Dear Andreas and Dirk,
+> > 
+> > Thanks for reporting this issue. I am CC'ing Kevin Horan on this email.
+> > He has been working on quite a few updates for ChemmineOB including
+> > support for OpenBabel 3.
+> > 
+> > Kevin: could you please let Andreas and Dirk know...
+> > 
+> > Thanks,
+> > 
+> > Thomas
+> > 
+> > On Fri, Mar 27, 2020 at 6:44 AM Andreas Tille <tille at debian.org
+> > <mailto:tille at debian.org>> wrote:
+> > 
+> >     Hi Dirk,
+> > 
+> >     On Fri, Mar 27, 2020 at 07:16:29AM -0500, Dirk Eddelbuettel wrote:
+> >     >
+> >     > I ran into that a few days ago. The version of ChemnineOB that
+> >     is on the repo
+> >     > requires OpenBabel 2, we have version 3.  See
+> >     > https://github.com/girke-lab/ChemmineOB/issues/21
+> >     > A new version should be forthcoming.
+> > 
+> >     Thanks a lot for the very helpful information
+> > 
+> >         Andreas.
+> > 
+> >     --     http://fam-tille.de
+> > 
+> > 
+> > 
+> > -- 
+> > Thomas Girke, Ph.D.
+> > Professor of Bioinformatics
+> > 1207F Genomics Building
+> > University of California
+> > Riverside, CA 92521
+> > 
+> > E-mail: thomas.girke at ucr.edu <mailto:thomas.girke at ucr.edu>
+> > URL: https://girke.bioinformatics.ucr.edu
+> > Phone/Cell/Text: 951-732-7072
+> > Fax: 951-827-4437
+
+-- 
+http://fam-tille.de
+

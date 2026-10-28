@@ -1,0 +1,1122 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2020-05",
+  "messages": [
+    {
+      "id": "msg-0398e069e308",
+      "message_id": "<24236.6963.424927.991946@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-01T12:50:59Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24233.50708.369377.282729@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24233.50708.369377.282729@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 29 April 2020 at 13:23, Dirk Eddelbuettel wrote:\n| R 4.0.0 was released as scheduled on Friday, source packages have been in\n| experimental since Friday too.\n| \n| There is one build failure on ppc64el but we now know what causes it so a bug\n| fix from upstream should be forthcoming shortly.  The bug can also be\n| circumvented by (on that platform only) configuring with --disable-long-double.\n| \n| As such, we're ready, so I may I would like to nudge you towards considering\n| a start for this transition.  R is reasonably widely used language that is\n| very well supported in Debian, and it would be good to have this updated\n| upstream version be part of Debian testing and the next release.\n\nNew release 4.0.0-2 also builds on ppc64el (by disabling long double support,\nwhich upstream may also make the default for this platform) and is ready.\n\nPlease schedule a transition for r-base.\n\nI will then upload 4.0.0-3 to unstable as soon as I get your green light.\n\nCheers, Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 29 April 2020 at 13:23, Dirk Eddelbuettel wrote:\n| R 4.0.0 was released as scheduled on Friday, source packages have been in\n| experimental since Friday too.\n| \n| There is one build failure on ppc6",
+      "thread_id": "thread-0398e069e308",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-6aa05686676a",
+      "message_id": "<CABFfbXtsZddrBcEpg_0PDQDkXkAM_gzY8zedftpN_wQHGJJshQ@mail.gmail.com>",
+      "from_name": "Jeroen Ooms",
+      "from_email_hash": "ed154dbe019b44583030c9f2c2b2180b1dcbec781ce7fa417e21033d7f55f24a",
+      "date": "2020-05-06T21:31:32Z",
+      "subject": "Re: Help needed for r-cran-hunspell to link with Debian packaged libhunspell",
+      "subject_clean": "Help needed for r-cran-hunspell to link with Debian packaged libhunspell",
+      "in_reply_to": "<20200324163624.GX5878@an3as.eu>",
+      "references": [
+        "<20200324163624.GX5878@an3as.eu>"
+      ],
+      "body_plain": "Sorry I missed this email.\n\nI bundled hunspell because I had a lot of trouble with the ever\nchanging api of hunspell, and the missing parser files. So maybe it's\neasier to use the bundled version in this case.\n\nEither way, in your code it looks like you are creating\nlibstathunspell.a which still contains the parser files, but you are\nnot linking to it when creating the package shared library. Did you\nremove the -lstathunspell from the PKG_LIBS in src/makevars? You may\nhave to keep it there if you still want to use the parser files\n(because I don't think debian has those).\n\nOn Tue, Mar 24, 2020 at 5:36 PM Andreas Tille <andreas at an3as.eu> wrote:\n>\n> Hi,\n>\n> we could need r-cran-spelling which depends r-cran-hunspell for some test\n> suites.  I injected both into Git but I have trouble with r-cran-hunspell:\n>\n> ...\n>    dh_auto_install -O--buildsystem=R\n> I: R packages needed for DEP8: testthat\n> I: R Package: hunspell Version: 3.0\n> I: Building using R version 3.6.3-1\n> I: R API version: r-api-3.5\n> I: Using built-time from d/changelog: Tue, 24 Mar 2020 17:25:33 +0100\n>         mkdir -p /build/r-cran-hunspell-3.0\\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library\n>         R CMD INSTALL -l /build/r-cran-hunspell-3.0\\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . \"--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'\"\n> * installing *source* package 'hunspell' ...\n> files 'src/hunspell/affentry.cc', 'src/hunspell/affentry.hxx', 'src/hunspell/affixmgr.cc', 'src/hunspell/affixmgr.hxx', 'src/hunspell/atypes.hxx', 'src/hunspell/baseaffix.hxx', 'src/hunspell/csutil.cc', 'src/hunspell/filemgr.cc', 'src/hunspell/filemgr.hxx', 'src/hunspell/hashmgr.cc', 'src/hunspell/hashmgr.hxx', 'src/hunspell/hunspell.cc', 'src/hunspell/hunspell.h', 'src/hunspell/hunspell.hxx', 'src/hunspell/hunvisapi.h', 'src/hunspell/hunzip.cc', 'src/hunspell/hunzip.hxx', 'src/hunspell/langnum.hxx', 'src/hunspell/phonet.cc', 'src/hunspell/phonet.hxx', 'src/hunspell/replist.cc', 'src/hunspell/replist.hxx', 'src/hunspell/suggestmgr.cc', 'src/hunspell/suggestmgr.hxx', 'src/hunspell/utf_info.cxx', 'src/hunspell/utf_info.hxx', 'src/hunspell/w_char.hxx' are missing\n> file 'src/Makevars' has the wrong MD5 checksum\n> ** using staged installation\n> ** libs\n> make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c RcppExports.cpp -o RcppExports.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c dictionary.cpp -o dictionary.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parser.cpp -o parser.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/textparser.cc -o parsers/textparser.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/latexparser.cc -o parsers/latexparser.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/manparser.cc -o parsers/manparser.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/xmlparser.cc -o parsers/xmlparser.o\n> g++ -std=gnu++11 -I\"/usr/share/R/include\" -DNDEBUG -I. -I/usr/include/hunspell -DBUILDING_LIBHUNSPELL -I\"/usr/lib/R/site-library/Rcpp/include\"  -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-GLgnFl/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c parsers/htmlparser.cc -o parsers/htmlparser.o\n> ar rcs hunspell/libstathunspell.a parsers/textparser.o parsers/latexparser.o parsers/manparser.o parsers/xmlparser.o parsers/htmlparser.o\n> g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-z,relro -o hunspell.so RcppExports.o dictionary.o parser.o -lhunspell -L/usr/lib/R/lib -lR\n> make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'\n> make[1]: Entering directory '/build/r-cran-hunspell-3.0+dfsg/src'\n> make[1]: Leaving directory '/build/r-cran-hunspell-3.0+dfsg/src'\n> installing to /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs\n> ** R\n> ** inst\n> ** byte-compile and prepare package for lazy loading\n> ** help\n> *** installing help indices\n> ** building package indices\n> ** installing vignettes\n> ** testing if installed package can be loaded from temporary location\n> Error: package or namespace load failed for 'hunspell' in dyn.load(file, DLLpath = DLLpath, ...):\n>  unable to load shared object '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so':\n>   /build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/00LOCK-r-cran-hunspell-3.0+dfsg/00new/hunspell/libs/hunspell.so: undefined symbol: _ZN10TextParser8put_lineEPKc\n> Error: loading failed\n> Execution halted\n> ERROR: loading failed\n> * removing '/build/r-cran-hunspell-3.0+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library/hunspell'\n> dh_auto_install: error: R CMD INSTALL -l /build/r-cran-hunspell-3.0\\+dfsg/debian/r-cran-hunspell/usr/lib/R/site-library --clean . \"--built-timestamp='Tue, 24 Mar 2020 17:25:33 +0100'\" returned exit code 1\n> make: *** [debian/rules:4: binary] Error 25\n> dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2\n>\n>\n>\n> I have excluded the code copy of libhunspell\n>\n>    Files-Excluded: */src/hunspell\n>\n> Is anybody able to successfully link with the Debian packaged\n> libhunspell?\n>\n> Kind regards\n>\n>      Andreas.\n>\n>\n> --\n> http://fam-tille.de",
+      "body_snippet": "Sorry I missed this email.\n\nI bundled hunspell because I had a lot of trouble with the ever\nchanging api of hunspell, and the missing parser files. So maybe it's\neasier to use the bundled version in t",
+      "thread_id": "thread-6aa05686676a",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-bb4a163c077d",
+      "message_id": "<CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2020-05-13T08:15:24Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24236.6963.424927.991946@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24233.50708.369377.282729@rob.eddelbuettel.com>",
+        "<24236.6963.424927.991946@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Control: tags -1 + confirmed\n\nHi Dirk\n\nOn Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Please schedule a transition for r-base.\n>\n> I will then upload 4.0.0-3 to unstable as soon as I get your green light.\n\nPlease go ahead with the upload to unstable.\n\nRegards\nGraham",
+      "body_snippet": "Control: tags -1 + confirmed\n\nHi Dirk\n\nOn Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n> Please schedule a transition for r-base.\n>\n> I will then upload 4.0.0-3 to unstable a",
+      "thread_id": "thread-0398e069e308",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-bd88150cc51c",
+      "message_id": "<24251.59020.474986.400000@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-13T12:22:36Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24233.50708.369377.282729@rob.eddelbuettel.com>",
+        "<24236.6963.424927.991946@rob.eddelbuettel.com>",
+        "<CAM8zJQsLMRDRhs1qNBa9eKgJw245PWZOhg10_cjHmt2NUcCO7w@mail.gmail.com>"
+      ],
+      "body_plain": "On 13 May 2020 at 10:15, Graham Inggs wrote:\n| Control: tags -1 + confirmed\n| \n| Hi Dirk\n| \n| On Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n| > Please schedule a transition for r-base.\n| >\n| > I will then upload 4.0.0-3 to unstable as soon as I get your green light.\n| \n| Please go ahead with the upload to unstable.\n\nGreat -- now building.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 13 May 2020 at 10:15, Graham Inggs wrote:\n| Control: tags -1 + confirmed\n| \n| Hi Dirk\n| \n| On Fri, 1 May 2020 at 14:51, Dirk Eddelbuettel <edd at debian.org> wrote:\n| > Please schedule a transition",
+      "thread_id": "thread-0398e069e308",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-5c566639dbd2",
+      "message_id": "<20200514191955.GC21485@bubu.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2020-05-14T19:19:55Z",
+      "subject": "Bioconductor transition",
+      "subject_clean": "Bioconductor transition",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everybody,\n\nI would like to participate to the transition and thought I would start\nwith a team upload on r-cran-biocmanager.  But my packaging skills are a\nbit rusty, so I prefer asking first…\n\nIs there anything in the source packages that we need to take the\nopportunity to upgrade in that wave of uploads, or can I just simply\nfollow the Debian Policy's checklist ?\n\nHave a nice day,\n\nCharles\n\n-- \nCharles Plessy\nDebian Med packaging team,\nhttp://www.debian.org/devel/debian-med\nAkano, Uruma, Okinawa, Japan",
+      "body_snippet": "Hello everybody,\n\nI would like to participate to the transition and thought I would start\nwith a team upload on r-cran-biocmanager.  But my packaging skills are a\nbit rusty, so I prefer asking first…\n",
+      "thread_id": "thread-5c566639dbd2",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-c2537182f094",
+      "message_id": "<CA+6XHwRBx-zeDm9ELn_4Zm8V=TmwsB0MSYRkZYv3GB1A5fVHWg@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-14T19:41:15Z",
+      "subject": "Re: Bioconductor transition",
+      "subject_clean": "Bioconductor transition",
+      "in_reply_to": "<20200514191955.GC21485@bubu.plessy.net>",
+      "references": [
+        "<20200514191955.GC21485@bubu.plessy.net>"
+      ],
+      "body_plain": "Hi Charles,\n\nLe jeu. 14 mai 2020 à 21:20, Charles Plessy <plessy at debian.org> a écrit :\n\n>\n\n> I would like to participate to the transition and thought I would start\n\n> with a team upload on r-cran-biocmanager.  But my packaging skills are a\n\n> bit rusty, so I prefer asking first…\n\n>\n\n> Is there anything in the source packages that we need to take the\n\n> opportunity to upgrade in that wave of uploads, or can I just simply\n\n> follow the Debian Policy's checklist ?\n\n>\n\nYou can just use \"routine-update\" to update packages to our last requirements.\n\nhttps://tracker.debian.org/pkg/routine-update\n\nBest,\n\nDylan",
+      "body_snippet": "Hi Charles,\n\nLe jeu. 14 mai 2020 à 21:20, Charles Plessy <plessy at debian.org> a écrit :\n\n>\n\n> I would like to participate to the transition and thought I would start\n\n> with a team upload on r-cran-",
+      "thread_id": "thread-5c566639dbd2",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-e586a7ddae40",
+      "message_id": "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-14T21:17:21Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 4 April 2020 at 13:40, Dirk Eddelbuettel wrote:\n| \n| On 4 April 2020 at 10:15, Sebastiaan Couwenberg wrote:\n| | On 4/3/20 8:27 PM, Dirk Eddelbuettel wrote:\n| | > Can the tracker sort by\n| | >  - maintainer\n| | >  - binary type\n| | > to help ?\n| | \n| | With the attached script you can create a dd-list from the tracker.\n| | \n| |  transition-dd-list.pl -u\n| | https://release.debian.org/transitions/html/r-api-4.0.html\n| \n| Excellent, thank you!  I needed to add libmojolicious-perl but that was it.\n\nIt gets me packages by maintainer.  What is missing is 'binary-arch' vs\n'binary-all' because, if I have this right, maintainers need to manually\nupload binary-all package during the now started transition.  Correct?\n\nDoes anybody have a helper tool?\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 4 April 2020 at 13:40, Dirk Eddelbuettel wrote:\n| \n| On 4 April 2020 at 10:15, Sebastiaan Couwenberg wrote:\n| | On 4/3/20 8:27 PM, Dirk Eddelbuettel wrote:\n| | > Can the tracker sort by\n| | >  - ma",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-948c001c96a3",
+      "message_id": "<20200515133141.GL550@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-15T13:31:41Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On Thu, May 14, 2020 at 04:17:21PM -0500, Dirk Eddelbuettel wrote:\n> \n> It gets me packages by maintainer.  What is missing is 'binary-arch' vs\n> 'binary-all' because, if I have this right, maintainers need to manually\n> upload binary-all package during the now started transition.  Correct?\n> \n> Does anybody have a helper tool?\n\n   apt-get install routine-update\n\nHowever, it only works for team maintained packages in Git.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Thu, May 14, 2020 at 04:17:21PM -0500, Dirk Eddelbuettel wrote:\n> \n> It gets me packages by maintainer.  What is missing is 'binary-arch' vs\n> 'binary-all' because, if I have this right, maintainer",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-5deb824d3954",
+      "message_id": "<20200517081102.GE12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-17T08:11:02Z",
+      "subject": "R 4.0 transition might be blocked by hdf5 transition",
+      "subject_clean": "R 4.0 transition might be blocked by hdf5 transition",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI intended to do a source upload of r-other-wasabi which fails with:\n\n  Depends: r-bioc-rhdf5 but it is not installable\n\nThus I tried to build r-bioc-rhdf5 manually but got:\n\n  dpkg-checkbuilddeps: error: Unmet build dependencies: r-bioc-rhdf5lib libhdf5-dev\n\nI'll go offline in about 30min until this evening but may be somebody\ncould check the situation.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nI intended to do a source upload of r-other-wasabi which fails with:\n\n  Depends: r-bioc-rhdf5 but it is not installable\n\nThus I tried to build r-bioc-rhdf5 manually but got:\n\n  dpkg-checkbuilddep",
+      "thread_id": "thread-5deb824d3954",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-23196872d870",
+      "message_id": "<20200518151446.GO12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-18T15:14:46Z",
+      "subject": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen trying to do an R 4.0 transition upload of r-cran-bookdown[1] I\nget:\n\n   Depends: r-cran-rmarkdown (>= 2.0) but it is not installable\n\nThat's pretty strange since as far as I can see r-cran-rmarkdown was\nbuild against R 4.0 before.\n\nAny clue\n\n      Andreas.\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-bookdown\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen trying to do an R 4.0 transition upload of r-cran-bookdown[1] I\nget:\n\n   Depends: r-cran-rmarkdown (>= 2.0) but it is not installable\n\nThat's pretty strange since as far as I can see r-cran-",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-551928aefaef",
+      "message_id": "<20200518152049.GP12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-18T15:20:49Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200518151446.GO12054@an3as.eu>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>"
+      ],
+      "body_plain": "Similar with r-cran-tufte where its rather:\n\n   Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n\nOn Mon, May 18, 2020 at 05:14:46PM +0200, Andreas Tille wrote:\n> Hi,\n> \n> when trying to do an R 4.0 transition upload of r-cran-bookdown[1] I\n> get:\n> \n> \n>    Depends: r-cran-rmarkdown (>= 2.0) but it is not installable\n> \n> \n> That's pretty strange since as far as I can see r-cran-rmarkdown was\n> build against R 4.0 before.\n> \n> Any clue\n> \n>       Andreas.\n> \n> [1] https://salsa.debian.org/r-pkg-team/r-cran-bookdown\n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Similar with r-cran-tufte where its rather:\n\n   Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n\nOn Mon, May 18, 2020 at 05:14:46PM +0200, Andreas Tille wrote:\n> Hi,\n> \n> when trying to ",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-595c5b453fd5",
+      "message_id": "<20200518201418.GA20798@bubu.plessy.net>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2020-05-18T20:14:18Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200518152049.GP12054@an3as.eu>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<20200518152049.GP12054@an3as.eu>"
+      ],
+      "body_plain": "Le Mon, May 18, 2020 at 05:20:49PM +0200, Andreas Tille a écrit :\n> Similar with r-cran-tufte where its rather:\n> \n>    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n\nHi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\nrebuilt at that time, but I see that you are just doing that...\n\nHave a nice day,\n\n-- \nCharles",
+      "body_snippet": "Le Mon, May 18, 2020 at 05:20:49PM +0200, Andreas Tille a écrit :\n> Similar with r-cran-tufte where its rather:\n> \n>    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n\nHi Andreas, r-cra",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-f665965ba517",
+      "message_id": "<20200518202329.GR12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-18T20:23:29Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200518201418.GA20798@bubu.plessy.net>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<20200518152049.GP12054@an3as.eu>",
+        "<20200518201418.GA20798@bubu.plessy.net>"
+      ],
+      "body_plain": "On Tue, May 19, 2020 at 05:14:18AM +0900, Charles Plessy wrote:\n> >    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n> \n> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\n> rebuilt at that time, but I see that you are just doing that...\n\n:-)\nYes.  About one hour ago I had the idea to install the package in a sid\nchroot and got the reason.  So once r-cran-shiny has hit the mirrors we\ncan probably continue with the remaining uploads.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, May 19, 2020 at 05:14:18AM +0900, Charles Plessy wrote:\n> >    Depends: r-cran-rmarkdown (>= 1.12) but it is not installable\n> \n> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which wa",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-f90b33887afd",
+      "message_id": "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-19T06:36:15Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200518201418.GA20798@bubu.plessy.net>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<20200518152049.GP12054@an3as.eu>",
+        "<20200518201418.GA20798@bubu.plessy.net>"
+      ],
+      "body_plain": "Hi,\n\nLe lun. 18 mai 2020 à 22:14, Charles Plessy <plessy at debian.org> a écrit :\n>\n> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\n> rebuilt at that time, but I see that you are just doing that...\n>\n\nAccording to the DESCRIPTION file of rmarkdown, there is no dependency\nto shiny. Shiny is only in suggests. It should not be in deps. There\nis a bug in dh-r that could lead to some circular dependency. Did I\nmiss something ? I will investigate this.\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe lun. 18 mai 2020 à 22:14, Charles Plessy <plessy at debian.org> a écrit :\n>\n> Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\n> rebuilt at that time, but I see that you are",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-d90d0228b633",
+      "message_id": "<20200519070055.GV12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-19T07:00:55Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<20200518152049.GP12054@an3as.eu>",
+        "<20200518201418.GA20798@bubu.plessy.net>",
+        "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, May 19, 2020 at 08:36:15AM +0200, Dylan Aïssi wrote:\n> > Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\n> > rebuilt at that time, but I see that you are just doing that...\n> >\n> \n> According to the DESCRIPTION file of rmarkdown, there is no dependency\n> to shiny. Shiny is only in suggests. It should not be in deps. There\n> is a bug in dh-r that could lead to some circular dependency. Did I\n> miss something ? I will investigate this.\n\nThere is no need to investigate.  r-cran-shiny is mentioned *explicitly*\nin Depends since it contains some compressed JS that is shared with\nr-cran-rmarkdown and we tried to avoid duplication of nasty code.\n\nNo idea whether this is the best solution - but for now we worked around.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, May 19, 2020 at 08:36:15AM +0200, Dylan Aïssi wrote:\n> > Hi Andreas, r-cran-rmarkdown depends on r-cran-shiny, which was not\n> > rebuilt at that time, but I see that you are just doing that...",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 4,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-667f28ec5677",
+      "message_id": "<20200519070250.GW12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-19T07:02:50Z",
+      "subject": "r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable",
+      "subject_clean": "r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nwhen trying to do the R 4.0 transition of r-bioc-pwmenrich the\nautopkgtest fails with:\n\n r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable\n\nAny clue?\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nwhen trying to do the R 4.0 transition of r-bioc-pwmenrich the\nautopkgtest fails with:\n\n r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable\n\nAny clue?\n\nKind regards\n\n       A",
+      "thread_id": "thread-667f28ec5677",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-9f68765b06c9",
+      "message_id": "<8563573.luAJL8ri0o@ryz>",
+      "from_name": "Johannes Ranke",
+      "from_email_hash": "70f405e66820344ddf650838db2a676ed8d926ceb30aa8cf158ab94fa0d64f43",
+      "date": "2020-05-19T07:19:53Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200519070055.GV12054@an3as.eu>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>",
+        "<20200519070055.GV12054@an3as.eu>"
+      ],
+      "body_plain": "> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> in Depends since it contains some compressed JS that is shared with\n> r-cran-rmarkdown and we tried to avoid duplication of nasty code.\n\nIs this DFSG compliant?\n\nCheers,\n\nJohannes",
+      "body_snippet": "> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> in Depends since it contains some compressed JS that is shared with\n> r-cran-rmarkdown and we tried to avoid duplication of",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 5,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-bd2f1defff0b",
+      "message_id": "<CA+6XHwTjmvobmC=juOLSCQVb0td4JHUpQWrEzbDR_SmG7Rgsfg@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-19T07:21:48Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<20200519070055.GV12054@an3as.eu>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<20200518152049.GP12054@an3as.eu>",
+        "<20200518201418.GA20798@bubu.plessy.net>",
+        "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>",
+        "<20200519070055.GV12054@an3as.eu>"
+      ],
+      "body_plain": "Le mar. 19 mai 2020 à 09:01, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> in Depends since it contains some compressed JS that is shared with\n> r-cran-rmarkdown and we tried to avoid duplication of nasty code.\n>\n\nAhh. I missed this part!\n\nThanks Andreas!\n\nBest,\nDylan",
+      "body_snippet": "Le mar. 19 mai 2020 à 09:01, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> in Depends since it contains some compressed J",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 5,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-e5202df03626",
+      "message_id": "<20200519072909.GX12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-19T07:29:09Z",
+      "subject": "Re: Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "subject_clean": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "in_reply_to": "<8563573.luAJL8ri0o@ryz>",
+      "references": [
+        "<20200518151446.GO12054@an3as.eu>",
+        "<CA+6XHwSWb6QTMw5qw=kU0XS90NUobF7QDE74NTXrJ1dbsBn5hQ@mail.gmail.com>",
+        "<20200519070055.GV12054@an3as.eu>",
+        "<8563573.luAJL8ri0o@ryz>"
+      ],
+      "body_plain": "On Tue, May 19, 2020 at 09:19:53AM +0200, Johannes Ranke wrote:\n> > There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> > in Depends since it contains some compressed JS that is shared with\n> > r-cran-rmarkdown and we tried to avoid duplication of nasty code.\n> \n> Is this DFSG compliant?\n\nSure.  R-cran-shiny was equipped with uncompressed JS + compressed from\nthat source.  We just have saved the very same in another package by\nsimply depending from a package where it was done properly. \n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Tue, May 19, 2020 at 09:19:53AM +0200, Johannes Ranke wrote:\n> > There is no need to investigate.  r-cran-shiny is mentioned *explicitly*\n> > in Depends since it contains some compressed JS that is",
+      "thread_id": "thread-23196872d870",
+      "thread_depth": 6,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-ab3283465355",
+      "message_id": "<CA+6XHwSwSMBxE3aU-pyTywFDZ3E+wXifnMjMYLEBa8vztadmMw@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-19T08:59:09Z",
+      "subject": "Re: r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable",
+      "subject_clean": "r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable",
+      "in_reply_to": "<20200519070250.GW12054@an3as.eu>",
+      "references": [
+        "<20200519070250.GW12054@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nLe mar. 19 mai 2020 à 09:03, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> when trying to do the R 4.0 transition of r-bioc-pwmenrich the\n> autopkgtest fails with:\n>\n>  r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable\n\nFixed and uploaded!\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe mar. 19 mai 2020 à 09:03, Andreas Tille <andreas at an3as.eu> a écrit :\n>\n> when trying to do the R 4.0 transition of r-bioc-pwmenrich the\n> autopkgtest fails with:\n>\n>  r-bioc-pwmenrich : Dep",
+      "thread_id": "thread-667f28ec5677",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-34320e30c657",
+      "message_id": "<20200520085556.GI12054@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-20T08:55:56Z",
+      "subject": "Reduced contributions to transition until Monday",
+      "subject_clean": "Reduced contributions to transition until Monday",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nthe transition seems to go quite well.  Thanks a lot to Dylan Aïssi who\nis also caring for BioConductor transition where I admitedly lost track\na bit.  I'll leave the r-bioc-* packages to you for this transition\nexcept if you might ask for help explicitly.  I also liked the way you\npicked your upload targets in alphabethical reverse order.  That is\nexactly the strategy I tend to follow if race conditions are to be\nexpected.  Its a pleasure to cooperate with you! :-)\n\nFor the next days I will not be able to dedicate the same amount of time\nas up to now since we have guests.  So please everybody who wants to help\ndo not hesitate to simply run\n\n    routine-update -f\n\nIt works *usually* but I spotted one issue:  If there is really no\nchange needed the internal call to\n\n    dch -r\n\nleads to simply changing timestamp and author of the *last* changelog\nentry.  That's a bug in routine-update which should check for a published\npackage first and create a new changelog entry if the actual revision is\navailable from Debian mirror.  If it might happen I do\n\n    dch -i \"Source upload in R 4.0 transition\"; git commit -a -m\"Source upload in R 4.0 transition\"\n\nand move on.  On the other hand chances for people who are not mentioned\nas Uploaders to fall into this trap are pretty low since if the maintainer\nwho calls routine-update is no Uploader a new changelog entry\n\n    * Team upload\n\nis created in any case.  In short:  Please help with the transition if\nyou have some spare cycles - its really only a few minutes per package.\nJust go to\n\n    https://release.debian.org/transitions/html/r-api-4.0.html\n\npick your target package if its marked [arch:all] and do team uploads.\n\nKind regards\n\n       Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nthe transition seems to go quite well.  Thanks a lot to Dylan Aïssi who\nis also caring for BioConductor transition where I admitedly lost track\na bit.  I'll leave the r-bioc-* packages to you for",
+      "thread_id": "thread-34320e30c657",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-adda5c9bfc6a",
+      "message_id": "<20200520160747.y47gepkvp42k4tbl@elgar.kardiogramm.net>",
+      "from_name": "Stefano Rivera",
+      "from_email_hash": "694d5463fde351c342d2ea78961c4956052fe7f05658513c236318d3aa190c6a",
+      "date": "2020-05-20T16:07:47Z",
+      "subject": "Bug#961138: autodep8 uses host APT packages to generate dependencies for pkg-r-autopkgtest tests",
+      "subject_clean": "Bug#961138: autodep8 uses host APT packages to generate dependencies for pkg-r-autopkgtest tests",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: autodep8\nVersion: 0.16\nSeverity: normal\n\nThe autodep8 generator for pkg-r-autopkgtest uses APT lists to determine\nwhich R packages from DESCRIPTION exist in Debian. autodep8 is run\noutside the test runner, not inside it, so this makes the behaviour\ndependant on the packages available to the test runner host.\n\nHere's the code that introduced this approach:\nhttps://salsa.debian.org/ci-team/autodep8/-/merge_requests/10\n\nIt all works when the autopkgtest runner has approximately the same\npackages available as the release under test, but that's not always the\ncase.\n\nI noticed that the r-bioc-hdf5 package's test misses a dependency on\nr-cranc-bit64 when the test is run from an older stable release that\npredates this package.\n\nI don't know how else you can solve this particular problem, though...\n\nSR",
+      "body_snippet": "Package: autodep8\nVersion: 0.16\nSeverity: normal\n\nThe autodep8 generator for pkg-r-autopkgtest uses APT lists to determine\nwhich R packages from DESCRIPTION exist in Debian. autodep8 is run\noutside th",
+      "thread_id": "thread-adda5c9bfc6a",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-80b41888e931",
+      "message_id": "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2020-05-25T07:32:25Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi All\n\nThanks everyone for doing all the hundreds of uploads that were needed\nfor this combined transition.\nAll rebuilds for r-api-bioc3.11 are done [1] and there's one\noutstanding FTBFS on a release architecture for r-api-4.0 [2].\n\nNow there are a handful of autopkgtest regressions [3] that need to be\nresolved before migration can happen.\n\nAs usual, please avoid uploads unrelated to this transition, they\nwould likely delay it and require supplementary work from the release\nmanagers.\n\nRegards\nGraham\n\n[1] https://release.debian.org/transitions/html/r-api-bioc-3.11.html\n[2] https://release.debian.org/transitions/html/r-api-4.0.html\n[3] https://qa.debian.org/excuses.php?package=r-base",
+      "body_snippet": "Hi All\n\nThanks everyone for doing all the hundreds of uploads that were needed\nfor this combined transition.\nAll rebuilds for r-api-bioc3.11 are done [1] and there's one\noutstanding FTBFS on a release",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-3dd3427f2f5e",
+      "message_id": "<20200525092954.GG25190@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-25T09:29:54Z",
+      "subject": "Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "subject_clean": "Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "in_reply_to": "<20200525092148.GF25190@an3as.eu>",
+      "references": [
+        "<159039737897.25558.17854156157424087902.reportbug@localhost>",
+        "<20200525092148.GF25190@an3as.eu>"
+      ],
+      "body_plain": "Hi,\n\nOn Mon, May 25, 2020 at 11:21:48AM +0200, Andreas Tille wrote:\n> The issue is actually not causes by routine-update but rather\n> by dh-update-R that regenerates all Depends automatically but\n> does not respect non-R dependencies we injected for instance\n> to provide JS files.\n\nAs a workaround I'm usially adding a comment\n\n   # <dh-update-R>do not delete this</dh-update-R>\n\nbut that's for sure no acceptable solution.  Gordon (or somebody else)\ndo you have some spare cycles to make sure dh-update-R will rewrite only\nthe R Dependencies and leave other Depends we added manually alone?\n\nKind regards\n\n     Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nOn Mon, May 25, 2020 at 11:21:48AM +0200, Andreas Tille wrote:\n> The issue is actually not causes by routine-update but rather\n> by dh-update-R that regenerates all Depends automatically but\n> do",
+      "thread_id": "thread-3dd3427f2f5e",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-b4b4f96f26ec",
+      "message_id": "<20200525110957.GH25190@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-25T11:09:57Z",
+      "subject": "Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)",
+      "subject_clean": "Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)",
+      "in_reply_to": "<159040141005.5720.11070986205216846196.reportbug@localhost>",
+      "references": [
+        "<159040141005.5720.11070986205216846196.reportbug@localhost>"
+      ],
+      "body_plain": "Hi,\n\nthere is a series of build failures connected to missing r-cran-haven.\nFormerly r-cran-sjlabelled dependend from r-cran-haven - and IMHO that\nshould remain that way:\n\nr-cran-sjlabelled(master) $ grep haven R/* | grep -i required\nR/as_label.R:        stop(\"Package 'haven' required for this function. Please install it.\")\nR/get_na.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/remove_labels.R:      stop(\"Package 'haven' required for this function. Please install it.\")\nR/remove_labels.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/set_labels.R:          stop(\"Package 'haven' required for this function. Please install it.\")\nR/set_na.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/write.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/zap_labels.R:    stop(\"Package 'haven' required for this function. Please install it.\")\n\nI think it is just wrong that DESCRIPTION of sjlabelled just\n\n   Suggests: haven (>= 1.1.2)\n\nI don't understand the difference between Depends and Imports in R\nDESCRIPTION files but both are translated to Debian Depends - and this\nshould be used here.\n\nKind regards\n\n     Andreas.\n\nOn Mon, May 25, 2020 at 01:10:10PM +0300, Adrian Bunk wrote:\n> Source: r-cran-sjplot\n> Version: 2.8.3-2\n> Severity: serious\n> \n> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-sjplot/5625656/log.gz\n> \n> ...\n> > library(testthat)\n> > library(sjPlot)\n> > \n> > if (length(strsplit(packageDescription(\"sjPlot\")$Version, \"\\\\.\")[[1]]) > 3) {\n> +   Sys.setenv(\"RunAllsjPlotTests\" = \"yes\")\n> + }\n> > \n> > test_check(\"sjPlot\")\n> ── 1. Error: (unknown) (@test-plot_model_std.R#15)  ────────────────────────────\n> Package 'haven' required for this function. Please install it.\n> Backtrace:\n>  1. sjmisc::to_factor(efc, e42dep, c172code, c161sex)\n>  2. sjmisc:::to_fac_helper(.dat[[i]], add.non.labelled, ref.lvl)\n>  5. sjlabelled::set_labels(...)\n>  6. sjlabelled:::set_labels_helper(...)\n> \n> ══ testthat results  ═══════════════════════════════════════════════════════════\n> [ OK: 2 | SKIPPED: 0 | WARNINGS: 12 | FAILED: 1 ]\n> ...\n> \n> \n> r-cran-sjlabelled no longer depends on r-cran-haven.\n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi,\n\nthere is a series of build failures connected to missing r-cran-haven.\nFormerly r-cran-sjlabelled dependend from r-cran-haven - and IMHO that\nshould remain that way:\n\nr-cran-sjlabelled(master) $ ",
+      "thread_id": "thread-b4b4f96f26ec",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-64df754e4648",
+      "message_id": "<007001d63292$71ec8bb0$55c5a310$@uke.de>",
+      "from_name": "Daniel Lüdecke",
+      "from_email_hash": "6f8df6b19ecb9c605277ecfa1677451a38bf3dc3ef7b4c357f841ed131fe14cf",
+      "date": "2020-05-25T12:46:00Z",
+      "subject": "AW: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)",
+      "subject_clean": "AW: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)",
+      "in_reply_to": "<20200525110957.GH25190@an3as.eu>",
+      "references": [
+        "<159040141005.5720.11070986205216846196.reportbug@localhost>",
+        "<20200525110957.GH25190@an3as.eu>"
+      ],
+      "body_plain": "Suggesting the package 'haven' is correct, because it's only used conditionally now. That change was intentional, to reduce package dependencies. See also current sjlablled on CRAN (https://cran.r-project.org/web/packages/sjlabelled/index.html).\n\nBest\nDaniel\n\n-----Ursprüngliche Nachricht-----\nVon: Andreas Tille [mailto:andreas at an3as.eu] \nGesendet: Montag, 25. Mai 2020 13:10\nAn: Adrian Bunk <bunk at debian.org>; 961498 at bugs.debian.org; 961419 at bugs.debian.org; debian-r at lists.debian.org; Daniel Lüdecke <d.luedecke at uke.de>\nBetreff: Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)\n\nHi,\n\nthere is a series of build failures connected to missing r-cran-haven.\nFormerly r-cran-sjlabelled dependend from r-cran-haven - and IMHO that should remain that way:\n\nr-cran-sjlabelled(master) $ grep haven R/* | grep -i required\nR/as_label.R:        stop(\"Package 'haven' required for this function. Please install it.\")\nR/get_na.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/read.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/remove_labels.R:      stop(\"Package 'haven' required for this function. Please install it.\")\nR/remove_labels.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/set_labels.R:          stop(\"Package 'haven' required for this function. Please install it.\")\nR/set_na.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/write.R:    stop(\"Package 'haven' required for this function. Please install it.\")\nR/zap_labels.R:    stop(\"Package 'haven' required for this function. Please install it.\")\n\nI think it is just wrong that DESCRIPTION of sjlabelled just\n\n   Suggests: haven (>= 1.1.2)\n\nI don't understand the difference between Depends and Imports in R DESCRIPTION files but both are translated to Debian Depends - and this should be used here.\n\nKind regards\n\n     Andreas.\n\nOn Mon, May 25, 2020 at 01:10:10PM +0300, Adrian Bunk wrote:\n> Source: r-cran-sjplot\n> Version: 2.8.3-2\n> Severity: serious\n> \n> https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-sjplot/5\n> 625656/log.gz\n> \n> ...\n> > library(testthat)\n> > library(sjPlot)\n> > \n> > if (length(strsplit(packageDescription(\"sjPlot\")$Version, \n> > \"\\\\.\")[[1]]) > 3) {\n> +   Sys.setenv(\"RunAllsjPlotTests\" = \"yes\") }\n> > \n> > test_check(\"sjPlot\")\n> ── 1. Error: (unknown) (@test-plot_model_std.R#15)  \n> ──────────────────────────── Package 'haven' required for this function. Please install it.\n> Backtrace:\n>  1. sjmisc::to_factor(efc, e42dep, c172code, c161sex)  2. \n> sjmisc:::to_fac_helper(.dat[[i]], add.non.labelled, ref.lvl)  5. \n> sjlabelled::set_labels(...)  6. sjlabelled:::set_labels_helper(...)\n> \n> ══ testthat results  \n> ═══════════════════════════════════════════════════════════\n> [ OK: 2 | SKIPPED: 0 | WARNINGS: 12 | FAILED: 1 ] ...\n> \n> \n> r-cran-sjlabelled no longer depends on r-cran-haven.\n> _______________________________________________\n> R-pkg-team mailing list\n> R-pkg-team at alioth-lists.debian.net\n> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team\n\n--\nhttp://fam-tille.de\n\n--\n\n_____________________________________________________________________\n\nUniversitätsklinikum Hamburg-Eppendorf; Körperschaft des öffentlichen Rechts; Gerichtsstand: Hamburg | www.uke.de\nVorstandsmitglieder: Prof. Dr. Burkhard Göke (Vorsitzender), Joachim Prölß, Prof. Dr. Blanche Schwappach-Pignataro, Marya Verdel\n_____________________________________________________________________\n\nSAVE PAPER - THINK BEFORE PRINTING",
+      "body_snippet": "Suggesting the package 'haven' is correct, because it's only used conditionally now. That change was intentional, to reduce package dependencies. See also current sjlablled on CRAN (https://cran.r-pro",
+      "thread_id": "thread-b4b4f96f26ec",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-24edad583764",
+      "message_id": "<CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-05-26T06:01:32Z",
+      "subject": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "subject_clean": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nCurrently r-cran-sjplot, r-cran-sjmisc have failing tests, and have RC bugs - #961498 and  #961499 filed against them.\nI have fixed these and pushed my changes to the team repos here[1] and here[2].\nNeed review and sponsorship.\n\n[1]: https://salsa.debian.org/r-pkg-team/r-cran-sjplot\n[2]: https://salsa.debian.org/r-pkg-team/r-cran-sjmisc\n\nThanks and regards\nNilesh",
+      "body_snippet": "Hi,\nCurrently r-cran-sjplot, r-cran-sjmisc have failing tests, and have RC bugs - #961498 and  #961499 filed against them.\nI have fixed these and pushed my changes to the team repos here[1] and here[2",
+      "thread_id": "thread-24edad583764",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-00dc592b491e",
+      "message_id": "<20200526075601.GT25190@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-26T07:56:01Z",
+      "subject": "Re: [RFS] r-cran-sjplot and r-cran-sjmisc",
+      "subject_clean": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "in_reply_to": "<CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>",
+      "references": [
+        "<CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nsame as for r-cran-sjplot:  In commit d2c969cc you move a file out of\nhelp system to doc and I'm not convinced that this is not dangerous.\n\nKind regards\n\n     Andreas.\n\nOn Tue, May 26, 2020 at 11:31:32AM +0530, Nilesh Patra wrote:\n> Hi,\n> Currently r-cran-sjplot, r-cran-sjmisc have failing tests, and have RC bugs\n> - #961498 and  #961499 filed against them.\n> I have fixed these and pushed my changes to the team repos here[1] and\n> here[2].\n> Need review and sponsorship.\n> \n> [1]: https://salsa.debian.org/r-pkg-team/r-cran-sjplot\n> [2]: https://salsa.debian.org/r-pkg-team/r-cran-sjmisc\n> \n> Thanks and regards\n> Nilesh\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nsame as for r-cran-sjplot:  In commit d2c969cc you move a file out of\nhelp system to doc and I'm not convinced that this is not dangerous.\n\nKind regards\n\n     Andreas.\n\nOn Tue, May 26, 202",
+      "thread_id": "thread-24edad583764",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-6c0f5ed55c6a",
+      "message_id": "<CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-05-26T08:46:35Z",
+      "subject": "Re: [RFS] r-cran-sjplot and r-cran-sjmisc",
+      "subject_clean": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "in_reply_to": "<20200526075601.GT25190@an3as.eu>",
+      "references": [
+        "<CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>",
+        "<20200526075601.GT25190@an3as.eu>"
+      ],
+      "body_plain": "Hi\n\nOn Tue, 26 May 2020, 13:26 Andreas Tille, <andreas at an3as.eu> wrote:\n\n> Hi Nilesh,\n>\n>\n>\n> same as for r-cran-sjplot:  In commit d2c969cc you move a file out of\n>\n> help system to doc and I'm not convinced that this is not dangerous.\n\nAhh, righty!\nI didn't realise the help system thing while moving it, and this was indeed a careless mistake. Apologies.\n\nI've reverted the commit and pushed for both the packages.\nPlease consider to upload.\n\nRegards,\nNilesh\n\n>",
+      "body_snippet": "Hi\n\nOn Tue, 26 May 2020, 13:26 Andreas Tille, <andreas at an3as.eu> wrote:\n\n> Hi Nilesh,\n>\n>\n>\n> same as for r-cran-sjplot:  In commit d2c969cc you move a file out of\n>\n> help system to doc and I'm no",
+      "thread_id": "thread-24edad583764",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-3abaa6669f17",
+      "message_id": "<20200526094341.GU25190@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2020-05-26T09:43:41Z",
+      "subject": "Re: [RFS] r-cran-sjplot and r-cran-sjmisc",
+      "subject_clean": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "in_reply_to": "<CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>",
+      "references": [
+        "<CAJN192_FChNCqqpt3aj2ha3hBvj_QKVFE_YKsqmOXN6aJo6qCQ@mail.gmail.com>",
+        "<20200526075601.GT25190@an3as.eu>",
+        "<CAJN1929Vn5P0iGwoDyvb6qJE67EPCdPYR7n32hiLvNDe7RkCsA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nOn Tue, May 26, 2020 at 02:16:35PM +0530, Nilesh Patra wrote:\n> > same as for r-cran-sjplot:  In commit d2c969cc you move a file out of\n> > help system to doc and I'm not convinced that this is not dangerous.\n> \n> Ahh, righty!\n> I didn't realise the help system thing while moving it, and this was indeed\n> a careless mistake. Apologies.\n\nReally no need to apologise - mistakes just happen.\n \n> I've reverted the commit and pushed for both the packages.\n> Please consider to upload.\n\nFirst package uploaded, second just building.  Thanks a lot for your\ncontribution\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nOn Tue, May 26, 2020 at 02:16:35PM +0530, Nilesh Patra wrote:\n> > same as for r-cran-sjplot:  In commit d2c969cc you move a file out of\n> > help system to doc and I'm not convinced that th",
+      "thread_id": "thread-24edad583764",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-88582fd6e0b9",
+      "message_id": "<24269.968.695937.187924@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-26T11:55:52Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+        "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 25 May 2020 at 09:32, Graham Inggs wrote:\n| Hi All\n| \n| Thanks everyone for doing all the hundreds of uploads that were needed\n| for this combined transition.\n| All rebuilds for r-api-bioc3.11 are done [1] and there's one\n| outstanding FTBFS on a release architecture for r-api-4.0 [2].\n\nThe r-cran-treescape build bug has been there for several days, hopefully\nsomeone can take care of this.  Also, the package is archived at CRAN, we\ncould look into retiring it. And as the issue is on ppc64el, it may be long\ndouble related: we now configure without long double support there after\nconsultation with upstream.\n \n| Now there are a handful of autopkgtest regressions [3] that need to be\n| resolved before migration can happen.\n\nThese issues are likely self-imposed: looking at r-cran-etm and r-cran-sp we\nsee clean sheets at CRAN for a variety of releases:\n  https://cloud.r-project.org/web/checks/check_results_etm.html  # etm\n  https://cloud.r-project.org/web/checks/check_results_sp.html   # sp\n\nThe simplest may be to fix the apparent false positive on the package side.\n\nWe're almost there. Nice work everyone!\n\n| As usual, please avoid uploads unrelated to this transition, they\n| would likely delay it and require supplementary work from the release\n| managers.\n\nUpdates and package changes pile up. Eventually packages need to be built and\nupdated again.\n\nBest, Dirk\n\n| Regards\n| Graham\n| \n| \n| [1] https://release.debian.org/transitions/html/r-api-bioc-3.11.html\n| [2] https://release.debian.org/transitions/html/r-api-4.0.html\n| [3] https://qa.debian.org/excuses.php?package=r-base\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 25 May 2020 at 09:32, Graham Inggs wrote:\n| Hi All\n| \n| Thanks everyone for doing all the hundreds of uploads that were needed\n| for this combined transition.\n| All rebuilds for r-api-bioc3.11 are ",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-3cf9a522c350",
+      "message_id": "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-05-27T17:19:36Z",
+      "subject": "[RFS] r-bioc-graph",
+      "subject_clean": "[RFS] r-bioc-graph",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nCurrently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.\nI have fixed this and pushed my changes to the team repo here[1].\n\nNeed review and sponsorship.\n\n[1]: https://salsa.debian.org/r-pkg-team/r-bioc-graph\n\nThanks and regards\nNilesh",
+      "body_snippet": "Hi,\nCurrently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.\nI have fixed this and pushed my changes to the team repo here[1].\n\nNeed review and sponsorship.\n\n[1]: https:/",
+      "thread_id": "thread-3cf9a522c350",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-bb10ad90859b",
+      "message_id": "<CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-27T17:58:15Z",
+      "subject": "Re: [RFS] r-bioc-graph",
+      "subject_clean": "[RFS] r-bioc-graph",
+      "in_reply_to": "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>",
+      "references": [
+        "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nLe mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> Hi,\n> Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.\n> I have fixed this and pushed my changes to the team repo here[1].\n> Need review and sponsorship.\n>\n\nThanks for #961591 !!!\n\nI don't understand why you moved some test-deps to deps ?\n\nBest,\nDylan",
+      "body_snippet": "Hi Nilesh,\n\nLe mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> Hi,\n> Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.\n> I have fixed",
+      "thread_id": "thread-3cf9a522c350",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-7afea1a7eff4",
+      "message_id": "<CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-05-27T18:04:30Z",
+      "subject": "Re: [RFS] r-bioc-graph",
+      "subject_clean": "[RFS] r-bioc-graph",
+      "in_reply_to": "<CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>",
+      "references": [
+        "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>",
+        "<CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, 27 May 2020, 23:28 Dylan Aïssi, <daissi at debian.org> wrote:\n\n> Hi Nilesh,\n>\n>\n>\n> Le mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> >\n>\n> > Hi,\n>\n> > Currently r-bioc-graph has failing tests, and has RC bug - #961591 filed against this.\n>\n> > I have fixed this and pushed my changes to the team repo here[1].\n>\n> > Need review and sponsorship.\n>\n> >\n>\n>\n>\n> Thanks for #961591 !!!\n>\n>\n>\n> I don't understand why you moved some test-deps to deps ?\n\nThe second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.\nThis passed on my local machine though. Since I wanted to be sure, I moved this there.\n\nWas this incorrect to do?\nPlease do let me know.\n\nRegards,\nNilesh",
+      "body_snippet": "On Wed, 27 May 2020, 23:28 Dylan Aïssi, <daissi at debian.org> wrote:\n\n> Hi Nilesh,\n>\n>\n>\n> Le mer. 27 mai 2020 à 19:36, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> >\n>\n> > Hi,\n>\n> > Currently",
+      "thread_id": "thread-3cf9a522c350",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-0ead7752c6c2",
+      "message_id": "<CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-27T20:12:42Z",
+      "subject": "Re: [RFS] r-bioc-graph",
+      "subject_clean": "[RFS] r-bioc-graph",
+      "in_reply_to": "<CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>",
+      "references": [
+        "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>",
+        "<CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>",
+        "<CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nLe mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.\n> This passed on my local machine though. Since I wanted to be sure, I moved this there.\n\nThere is probably a bug on the salsa-ci side, because both tests\npassed on my computer. Let's skip salsa-ci for now.\n\nI have moved back these dependencies to test-deps and I have updated\nyour patch (str_replace_all --> gsub) to not add a new dependency.\n\nYou probably already noticed, the debian/test/control files for R\npackages require a lot of manual work to keep the list of test-deps\nup-to-date. Because I don't want to do this manually, I moved the code\nto tests these packages into pkg-r-autopkgtest. The list of test-deps\nis automatically generated at run time from the DESCRIPTION file.\nCurrently, it is enabled only for bioconductor packages, if there is\nno big bug with this transition, we will be able to remove the\ndebian/test/control files and to enable this for other R packages.\n\nThanks again for #961591.\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible becaus",
+      "thread_id": "thread-3cf9a522c350",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-96a473e10825",
+      "message_id": "<CAJN19284VGCORmDuAdKk7nUiP62gAgoeZAusq099HKgG4w472w@mail.gmail.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "43c0226df7217f37b94b5650f6313686735e15175ebda88b2e04f8c3ad959a6d",
+      "date": "2020-05-27T20:35:01Z",
+      "subject": "Re: [RFS] r-bioc-graph",
+      "subject_clean": "[RFS] r-bioc-graph",
+      "in_reply_to": "<CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>",
+      "references": [
+        "<CAJN192-q=PEDm_hg+oCgYrAugNwOk0Vcw8OO2w62tcRug-PCFQ@mail.gmail.com>",
+        "<CA+6XHwQ6Oh40ftQHGzn+Cty_3df=5cP3yzCMz+BnLXdogMS2wA@mail.gmail.com>",
+        "<CAJN1929n79oX-UY9W5hV1KKcJvvk-xEBt=Aehxed2RctASMkGQ@mail.gmail.com>",
+        "<CA+6XHwTb4CktYAb7n7xANTHwYgB0SdbuJtxOWoK6kBBrr944bQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Thu, 28 May 2020, 01:43 Dylan Aïssi, <daissi at debian.org> wrote:\n\n> Hi,\n>\n>\n>\n> Le mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> >\n>\n> > The second test (needing the library) failed on gitlab-ci, w/o adding r-cran-xml and r-cran-runit, possible because this doesn't pick up depends from test-depends.\n>\n> > This passed on my local machine though. Since I wanted to be sure, I moved this there.\n>\n>\n>\n> There is probably a bug on the salsa-ci side, because both tests\n>\n> passed on my computer. Let's skip salsa-ci for now.\n\nAhh, alrighty.\n\n> I have moved back these dependencies to test-deps and I have updated\n>\n> your patch (str_replace_all --> gsub) to not add a new dependency.\n\nThat's good, and makes sense. I didn't know about this, possibly because I don't speak R :P\n\n> You probably already noticed, the debian/test/control files for R\n>\n> packages require a lot of manual work to keep the list of test-deps\n>\n> up-to-date. Because I don't want to do this manually, I moved the code\n>\n> to tests these packages into pkg-r-autopkgtest. The list of test-deps\n>\n> is automatically generated at run time from the DESCRIPTION file\n\nThat's nice!\n\n> Currently, it is enabled only for bioconductor packages, if there is\n>\n> no big bug with this transition, we will be able to remove the\n>\n> debian/test/control files and to enable this for other R packages.\n\nGot it, thanks for the explanation.\n\n> Thanks again for #961591.\n\n:)\nAnd thanks a lot for letting me have this upload (i.e. my name on d/ch for this upload)\n\nKind regards,\nNilesh\n>",
+      "body_snippet": "On Thu, 28 May 2020, 01:43 Dylan Aïssi, <daissi at debian.org> wrote:\n\n> Hi,\n>\n>\n>\n> Le mer. 27 mai 2020 à 20:04, Nilesh Patra <npatra974 at gmail.com> a écrit :\n>\n> >\n>\n> > The second test (needing t",
+      "thread_id": "thread-3cf9a522c350",
+      "thread_depth": 4,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-084ea08ec73a",
+      "message_id": "<CAOeBkLpwKe6Zrtt-_H2nrPM0hjkKTyrFJ+WdMFqga0h285TGZg@mail.gmail.com>",
+      "from_name": "Rodrigo Carvalho",
+      "from_email_hash": "b853fc05abd2aebddf3943a11a10c50cad6944fd782d47e8147f2f7db934e665",
+      "date": "2020-05-28T02:04:19Z",
+      "subject": "ITP: r-cran-gmp -- Multiple Precision Arithmetic",
+      "subject_clean": "ITP: r-cran-gmp -- Multiple Precision Arithmetic",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nOwner: Rodrigo Carvalho <rodrigorsdc at gmail.com>\n\n* Package name    : r-cran-gmp\n  Version         : 0.5-14\n  Upstream Author : Antoine Lucas, Immanuel Scholz, Rainer Boehme,\nSylvain Jasson, Martin Maechler\n* URL             : https://cran.r-project.org/package=gmp\n* License         : GPL-2 | GPL-3\n  Programming Lang: R and C++\n  Description     : Multiple Precision Arithmetic\n\nMultiple Precision Arithmetic (big integers and rationals,\n prime number tests, matrix computation), \"arithmetic without limitations\"\n using the C library GMP (GNU Multiple Precision Arithmetic).\n\nIt will be maintained by R Packages Team",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nOwner: Rodrigo Carvalho <rodrigorsdc at gmail.com>\n\n* Package name    : r-cran-gmp\n  Version         : 0.5-14\n  Upstream Author : Antoine Lucas, Immanuel Scholz, Raine",
+      "thread_id": "thread-084ea08ec73a",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-242076547da5",
+      "message_id": "<CA+6XHwSqDR4Wr29TKxwxDk6X1VqSizkwaQvV-TBYC61TsrCe=g@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-28T08:10:54Z",
+      "subject": "Bug#961709: lintian: Warn if R binary packages don't depend on virtual r-api-* package",
+      "subject_clean": "Bug#961709: lintian: Warn if R binary packages don't depend on virtual r-api-* package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: lintian\nVersion: 2.77.1\nSeverity: wishlist\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\n\nI just saw a R binary package (r-cran-isospec) with wrong dependencies\n(bug not yet opened). Lintian doesn't warn about a problem in its\ndependencies, so it would be cool to add a new warning (maybe\n\"missing-dependency-on-r-api\") to warn if any R binary packages (\nr-{cran|bioc|other}-* ) don't depend at least to a virtual r-api-*\npackage.\n\nThanks\n\nBest,\nDylan",
+      "body_snippet": "Package: lintian\nVersion: 2.77.1\nSeverity: wishlist\nX-Debbugs-CC: debian-r at lists.debian.org\n\nHi,\n\nI just saw a R binary package (r-cran-isospec) with wrong dependencies\n(bug not yet opened). Lintia",
+      "thread_id": "thread-242076547da5",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-b14ee6f92d68",
+      "message_id": "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+      "from_name": "Rodrigo Carvalho",
+      "from_email_hash": "b853fc05abd2aebddf3943a11a10c50cad6944fd782d47e8147f2f7db934e665",
+      "date": "2020-05-28T16:48:09Z",
+      "subject": "[RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi R team,\n\nI uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n\nCould you review and sponsor?\n\nthanks\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-gmp\n[2] https://mentors.debian.net/package/r-cran-gmp",
+      "body_snippet": "Hi R team,\n\nI uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n\nCould you review and sponsor?\n\nthanks\n\n[1] https://salsa.debian.org/r-pkg-team/r-cran-gmp\n[2] https://mentors.d",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 0,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-5f8d544650c6",
+      "message_id": "<24271.60833.357065.62828@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-28T16:58:09Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+        "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.\n\nWhich is lovely as upstream is already at work with 4.0.1 which will drop on\nJune 6 [1]. I'll likely make an rc upload.\n\nSpecial thanks to Graham for calmly pulling a few strings here and there.\n\nCheers, Dirk\n\n[1] Details as always at http://developer.r-project.org/, and just to be\nplain it is of course _not_ a binary change needing an API change.\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.\n\nWhich is lovely as upstream is already at work with 4.0.1 which will drop on\nJune 6 [1]. I'll likely make an rc upload.\n\n",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-6b0204e0cf89",
+      "message_id": "<CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-29T05:51:54Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<24271.60833.357065.62828@rob.eddelbuettel.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+        "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>",
+        "<24271.60833.357065.62828@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi,\n\nLe jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :\n>\n> Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.\n>\n\n\\o/\n\nBoth transition trackers (r-api-4.0 and r-api-bioc-3.11) were not very\nuseful to determine the order to update Bioconductor packages.\nSome Bioconductor packages were green in the first tracker but red in\nthe second one, because they were automatically rebuild without an\nupgrade.\nSo, it was not possible to use the first tracker to follow the upgrade\norder of Bioconductor packages.\nAnd the second tracker did not consider the r-api-4.0 rebuild order,\nso some packages in the first levels were not buildable until the\ndependency chain was ready for r-api-4.0.\n\nNext time there is a transition with these two r-api virtual packages,\nwe should use a unique ben file for them, something like this:\n\ntitle = \"r-api\";\nis_affected = .depends ~ \"r-api-3.5\" | .depends ~ \"r-api-4.0\" |\n.depends ~ \"r-api-bioc-3.10\" | .depends ~ \"r-api-bioc-3.11\";\nis_good = .depends ~ \"r-api-4.0\" | .depends ~ \"r-api-bioc-3.11\";\nis_bad = .depends ~ \"r-api-3.5\" | .depends ~ \"r-api-bioc-3.10\";\n\nBest,\nDylan",
+      "body_snippet": "Hi,\n\nLe jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :\n>\n> Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.\n>\n\n\\o/\n\nBoth transition trackers (r-",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-ccd8cde22fb3",
+      "message_id": "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+      "from_name": "Dylan Aïssi",
+      "from_email_hash": "e8519289abfa16c4f96db3f5e7f1f720828b7dc18371f9ea4ab4adda709da676",
+      "date": "2020-05-29T06:45:47Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Rodrigo,\n\nLe jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n>\n> I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n>\n\nThanks for your work!\n\nIt seems you did some work manually (I had to fix some stuff, please\nhave a look at the git repo). Next time, you could use\n\"prepare_missing_cran_package\" and \"itp_from_debian_dir \" from the\npackage dh-r, they will save your time ;-)\n\nUnfortunately, the package cannot be uploaded to NEW because there is\na problem in the license. The package is under the GPL-1 (no precision\nof the version = v1), but the file src/factorize.cc seems to be under\nGPL-3+. These licenses are not compatible, you should clarify this\nwith upstream devs.\n\nBest,\nDylan",
+      "body_snippet": "Hi Rodrigo,\n\nLe jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n>\n> I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n>\n\nThanks for your work!",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 1,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-a4f6ccdc9f8c",
+      "message_id": "<24273.356.192970.853111@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-29T12:34:44Z",
+      "subject": "Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "subject_clean": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "in_reply_to": "<CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>",
+      "references": [
+        "<87y2rkh9ij.fsf@rob.eddelbuettel.com>",
+        "<CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>",
+        "<24199.32779.699757.301854@rob.eddelbuettel.com>",
+        "<b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>",
+        "<24200.54439.142307.819143@rob.eddelbuettel.com>",
+        "<24253.46433.173016.143067@rob.eddelbuettel.com>",
+        "<CAM8zJQsV-4pidGiUFcTKS3FXNB8343H+VpdUraOmRPzvAW_4CQ@mail.gmail.com>",
+        "<24271.60833.357065.62828@rob.eddelbuettel.com>",
+        "<CA+6XHwQponF+uUKFHLa-7F03QPgX9dzOsOSOpe_Lc+tK0VZzfw@mail.gmail.com>"
+      ],
+      "body_plain": "On 29 May 2020 at 07:51, Dylan Aïssi wrote:\n| Hi,\n| \n| Le jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :\n| >\n| > Thanks everybody for the help with the transition: 4.0.0-3 is now in testing.\n| >\n| \n| \\o/\n| \n| Both transition trackers (r-api-4.0 and r-api-bioc-3.11) were not very\n| useful to determine the order to update Bioconductor packages.\n| Some Bioconductor packages were green in the first tracker but red in\n| the second one, because they were automatically rebuild without an\n| upgrade.\n| So, it was not possible to use the first tracker to follow the upgrade\n| order of Bioconductor packages.\n| And the second tracker did not consider the r-api-4.0 rebuild order,\n| so some packages in the first levels were not buildable until the\n| dependency chain was ready for r-api-4.0.\n| \n| Next time there is a transition with these two r-api virtual packages,\n| we should use a unique ben file for them, something like this:\n| \n| title = \"r-api\";\n| is_affected = .depends ~ \"r-api-3.5\" | .depends ~ \"r-api-4.0\" |\n| .depends ~ \"r-api-bioc-3.10\" | .depends ~ \"r-api-bioc-3.11\";\n| is_good = .depends ~ \"r-api-4.0\" | .depends ~ \"r-api-bioc-3.11\";\n| is_bad = .depends ~ \"r-api-3.5\" | .depends ~ \"r-api-bioc-3.10\";\n\nGood point. Probably worth trying if the next transition once again has BioC\nwithin a week (which is common).\n\nNobody knows what will be in R 4.1.0 next year. With some luck we may get by\nwithout a transition (a la R 3.6.0).\n\nCheers, Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 29 May 2020 at 07:51, Dylan Aïssi wrote:\n| Hi,\n| \n| Le jeu. 28 mai 2020 à 18:58, Dirk Eddelbuettel <edd at debian.org> a écrit :\n| >\n| > Thanks everybody for the help with the transition: 4.0.0-3 i",
+      "thread_id": "thread-e586a7ddae40",
+      "thread_depth": 4,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-2eac74912d1e",
+      "message_id": "<24273.932.973463.750953@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2020-05-29T12:44:20Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>"
+      ],
+      "body_plain": "On 29 May 2020 at 08:45, Dylan Aïssi wrote:\n| Hi Rodrigo,\n| \n| Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n| >\n| > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n| >\n| \n| Thanks for your work!\n| \n| It seems you did some work manually (I had to fix some stuff, please\n| have a look at the git repo). Next time, you could use\n| \"prepare_missing_cran_package\" and \"itp_from_debian_dir \" from the\n| package dh-r, they will save your time ;-)\n| \n| Unfortunately, the package cannot be uploaded to NEW because there is\n| a problem in the license. The package is under the GPL-1 (no precision\n| of the version = v1), but the file src/factorize.cc seems to be under\n| GPL-3+. These licenses are not compatible, you should clarify this\n| with upstream devs.\n\nThat should be no problem. Martin Maechler (now CC'ed) of the R Core team is\none of the upstream authors. And he is the one who persuaded Ross and Robert\nin 1993 (IIRC) to make their then-little-known \"R\" a part of the GNU Project.\n\nPer https://github.com/cran/gmp/blob/master/ChangeLog and\nhttps://github.com/cran/gmp/blob/master/Changes the commits started in 2004\nso I guess it already meant GPL (>= 2) but we cannot know for sure. But I\nexpect this to be fixed quite easily.\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 29 May 2020 at 08:45, Dylan Aïssi wrote:\n| Hi Rodrigo,\n| \n| Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n| >\n| > I uploaded a new R package into salsa[1]. Also",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 2,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-000937c39b06",
+      "message_id": "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>",
+      "from_name": "Rodrigo Carvalho",
+      "from_email_hash": "b853fc05abd2aebddf3943a11a10c50cad6944fd782d47e8147f2f7db934e665",
+      "date": "2020-05-29T16:22:32Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<24273.932.973463.750953@rob.eddelbuettel.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+        "<24273.932.973463.750953@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "Hi Dylan\n\nThanks for the review.\n\nI'm a layman on license stuff, but I'm reading the GPL version 1 [1]\nand I found out a stretch that says:\n\n\"Each version is given a distinguishing version number.  If the Program\nspecifies a version number of the license which applies to it and \"any\nlater version\", you have the option of following the terms and conditions\neither of that version or of any later version published by the Free\nSoftware Foundation.  If the Program does not specify a version number of\nthe license, you may choose any version ever published by the Free Software\nFoundation.\"\n\nNote the part:\n\n\"If the Program does not specify a version number of\nthe license, you may choose any version ever published by the Free Software\nFoundation\"\n\nNeither DESCRIPTION file nor source files specify GPL version 1, they are just\nlicensed as GPL without specifying a version, except the factorize.cc file which\nis GPL-3. So, we can choose the GPL-3 for the whole program, right?\n\nWhat do you think?\n\nthanks,\n\nRodrigo\n\n[1] https://www.gnu.org/licenses/old-licenses/gpl-1.0.html\n\nEm sex., 29 de mai. de 2020 às 09:44, Dirk Eddelbuettel\n<edd at debian.org> escreveu:\n>\n>\n> On 29 May 2020 at 08:45, Dylan Aïssi wrote:\n> | Hi Rodrigo,\n> |\n> | Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n> | >\n> | > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n> | >\n> |\n> | Thanks for your work!\n> |\n> | It seems you did some work manually (I had to fix some stuff, please\n> | have a look at the git repo). Next time, you could use\n> | \"prepare_missing_cran_package\" and \"itp_from_debian_dir \" from the\n> | package dh-r, they will save your time ;-)\n> |\n> | Unfortunately, the package cannot be uploaded to NEW because there is\n> | a problem in the license. The package is under the GPL-1 (no precision\n> | of the version = v1), but the file src/factorize.cc seems to be under\n> | GPL-3+. These licenses are not compatible, you should clarify this\n> | with upstream devs.\n>\n> That should be no problem. Martin Maechler (now CC'ed) of the R Core team is\n> one of the upstream authors. And he is the one who persuaded Ross and Robert\n> in 1993 (IIRC) to make their then-little-known \"R\" a part of the GNU Project.\n>\n> Per https://github.com/cran/gmp/blob/master/ChangeLog and\n> https://github.com/cran/gmp/blob/master/Changes the commits started in 2004\n> so I guess it already meant GPL (>= 2) but we cannot know for sure. But I\n> expect this to be fixed quite easily.\n>\n> Dirk\n>\n> --\n> http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Dylan\n\nThanks for the review.\n\nI'm a layman on license stuff, but I'm reading the GPL version 1 [1]\nand I found out a stretch that says:\n\n\"Each version is given a distinguishing version number.  If",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 3,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-2f9e8a811df6",
+      "message_id": "<CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>",
+      "from_name": "Martin Maechler",
+      "from_email_hash": "60adff948614501274f566c08ef1159143cbe943805a8ed4cb200de92d64915a",
+      "date": "2020-05-29T19:59:44Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+        "<24273.932.973463.750953@rob.eddelbuettel.com>",
+        "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, May 29, 2020 at 6:25 PM Rodrigo Carvalho <rodrigorsdc at gmail.com> wrote:\n>\n> Hi Dylan\n>\n> Thanks for the review.\n>\n> I'm a layman on license stuff, but I'm reading the GPL version 1 [1]\n> and I found out a stretch that says:\n>\n> \"Each version is given a distinguishing version number.  If the Program\n> specifies a version number of the license which applies to it and \"any\n> later version\", you have the option of following the terms and conditions\n> either of that version or of any later version published by the Free\n> Software Foundation.  If the Program does not specify a version number of\n> the license, you may choose any version ever published by the Free Software\n> Foundation.\"\n>\n> Note the part:\n>\n> \"If the Program does not specify a version number of\n> the license, you may choose any version ever published by the Free Software\n> Foundation\"\n>\n> Neither DESCRIPTION file nor source files specify GPL version 1, they are just\n> licensed as GPL without specifying a version, except the factorize.cc file which\n> is GPL-3. So, we can choose the GPL-3 for the whole program, right?\n>\n> What do you think?\n>\n> thanks,\n>\n> Rodrigo\n\nThank you, Rodrigo.    Yes, I also checked the package (which was\nalready \"there\" when I joined as co-author), and it always\nconsistently uses  \"GPL\" without any version.\n\nI've got to know my co-authors, notably the maintainer Antoine Lucas\nquite a bit and I'm 100% sure that they never cared about licence\nnumbers; (similar to myself) they are mathematicians and researchers\nwho want to do science and development for the public good, and not\nspend time on boring lawyer's stuff  (;-)..   Of course, I could ask\nthe other authors -- if it's ok to change to say GPL 3, and modify the\nsources accordingly, but honestly, I'd be very happy to know we could\nkeep  'GPL' unversioned indeed with the intent to say\n- we want GPL,\n- but we don't want to deal with details, nor have to spend time on\nlearning why we should care more ..\n\nBest,\nMartin\n>\n> [1] https://www.gnu.org/licenses/old-licenses/gpl-1.0.html\n>\n> Em sex., 29 de mai. de 2020 às 09:44, Dirk Eddelbuettel\n> <edd at debian.org> escreveu:\n> >\n> >\n> > On 29 May 2020 at 08:45, Dylan Aïssi wrote:\n> > | Hi Rodrigo,\n> > |\n> > | Le jeu. 28 mai 2020 à 18:48, Rodrigo Carvalho <rodrigorsdc at gmail.com> a écrit :\n> > | >\n> > | > I uploaded a new R package into salsa[1]. Also, I uploaded into mentors[2].\n> > | >\n> > |\n> > | Thanks for your work!\n> > |\n> > | It seems you did some work manually (I had to fix some stuff, please\n> > | have a look at the git repo). Next time, you could use\n> > | \"prepare_missing_cran_package\" and \"itp_from_debian_dir \" from the\n> > | package dh-r, they will save your time ;-)\n> > |\n> > | Unfortunately, the package cannot be uploaded to NEW because there is\n> > | a problem in the license. The package is under the GPL-1 (no precision\n> > | of the version = v1), but the file src/factorize.cc seems to be under\n> > | GPL-3+. These licenses are not compatible, you should clarify this\n> > | with upstream devs.\n> >\n> > That should be no problem. Martin Maechler (now CC'ed) of the R Core team is\n> > one of the upstream authors. And he is the one who persuaded Ross and Robert\n> > in 1993 (IIRC) to make their then-little-known \"R\" a part of the GNU Project.\n> >\n> > Per https://github.com/cran/gmp/blob/master/ChangeLog and\n> > https://github.com/cran/gmp/blob/master/Changes the commits started in 2004\n> > so I guess it already meant GPL (>= 2) but we cannot know for sure. But I\n> > expect this to be fixed quite easily.\n> >\n> > Dirk\n> >\n> > --\n> > http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n>\n\n-- \nMartin Maechler,\nSeminar fuer Statistik, ETH Zurich",
+      "body_snippet": "On Fri, May 29, 2020 at 6:25 PM Rodrigo Carvalho <rodrigorsdc at gmail.com> wrote:\n>\n> Hi Dylan\n>\n> Thanks for the review.\n>\n> I'm a layman on license stuff, but I'm reading the GPL version 1 [1]\n> an",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 4,
+      "month": "2020-05"
+    },
+    {
+      "id": "msg-f9d518014512",
+      "message_id": "<20200530052144.GR1820@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2020-05-30T05:21:44Z",
+      "subject": "Re: [RFS] r-cran-gmp",
+      "subject_clean": "[RFS] r-cran-gmp",
+      "in_reply_to": "<CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>",
+      "references": [
+        "<CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com>",
+        "<CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com>",
+        "<24273.932.973463.750953@rob.eddelbuettel.com>",
+        "<CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com>",
+        "<CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:\n> (similar to myself) they are mathematicians and researchers\n> who want to do science and development for the public good, and not\n> spend time on boring lawyer's stuff  (;-)..\n\nI'm physicist and can perfectly understand.  I'm doing Debian packaging\nsince more than 20 years and can confirm that editing the copyright file\nis the most boring stuff in this.  Wait, even more boring is getting a\npackage rejected by ftpmaster due to a license conflict is even more\nboring.  This is what will happen as Dylan said in his mail.  So if you\nask me changing just the number takes less time than writing lots of\ne-mails about it. ;-)\n\nKind regards and thanks a lot for your open words\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:\n> (similar to myself) they are mathematicians and researchers\n> who want to do science and development for the public good, and not\n> s",
+      "thread_id": "thread-b14ee6f92d68",
+      "thread_depth": 5,
+      "month": "2020-05"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-0398e069e308",
+      "subject": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Graham Inggs"
+      ],
+      "started": "2020-05-01T12:50:59Z",
+      "last_reply": "2020-05-13T12:22:36Z",
+      "root_message_id": "msg-0398e069e308"
+    },
+    {
+      "id": "thread-6aa05686676a",
+      "subject": "Help needed for r-cran-hunspell to link with Debian packaged libhunspell",
+      "message_count": 1,
+      "participants": [
+        "Jeroen Ooms"
+      ],
+      "started": "2020-05-06T21:31:32Z",
+      "last_reply": "2020-05-06T21:31:32Z",
+      "root_message_id": "msg-6aa05686676a"
+    },
+    {
+      "id": "thread-5c566639dbd2",
+      "subject": "Bioconductor transition",
+      "message_count": 2,
+      "participants": [
+        "Charles Plessy",
+        "Dylan Aïssi"
+      ],
+      "started": "2020-05-14T19:19:55Z",
+      "last_reply": "2020-05-14T19:41:15Z",
+      "root_message_id": "msg-5c566639dbd2"
+    },
+    {
+      "id": "thread-e586a7ddae40",
+      "subject": "Bug#955211: release.debian.org: Transition r-base for 4.0.0",
+      "message_count": 7,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Dylan Aïssi",
+        "Graham Inggs"
+      ],
+      "started": "2020-05-14T21:17:21Z",
+      "last_reply": "2020-05-29T12:34:44Z",
+      "root_message_id": "msg-e586a7ddae40"
+    },
+    {
+      "id": "thread-5deb824d3954",
+      "subject": "R 4.0 transition might be blocked by hdf5 transition",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-05-17T08:11:02Z",
+      "last_reply": "2020-05-17T08:11:02Z",
+      "root_message_id": "msg-5deb824d3954"
+    },
+    {
+      "id": "thread-23196872d870",
+      "subject": "Depends: r-cran-rmarkdown (>= 2.0) but it is not installable",
+      "message_count": 9,
+      "participants": [
+        "Andreas Tille",
+        "Charles Plessy",
+        "Dylan Aïssi",
+        "Johannes Ranke"
+      ],
+      "started": "2020-05-18T15:14:46Z",
+      "last_reply": "2020-05-19T07:29:09Z",
+      "root_message_id": "msg-23196872d870"
+    },
+    {
+      "id": "thread-667f28ec5677",
+      "subject": "r-bioc-pwmenrich : Depends: r-api-bioc-master but it is not installable",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Dylan Aïssi"
+      ],
+      "started": "2020-05-19T07:02:50Z",
+      "last_reply": "2020-05-19T08:59:09Z",
+      "root_message_id": "msg-667f28ec5677"
+    },
+    {
+      "id": "thread-34320e30c657",
+      "subject": "Reduced contributions to transition until Monday",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-05-20T08:55:56Z",
+      "last_reply": "2020-05-20T08:55:56Z",
+      "root_message_id": "msg-34320e30c657"
+    },
+    {
+      "id": "thread-adda5c9bfc6a",
+      "subject": "Bug#961138: autodep8 uses host APT packages to generate dependencies for pkg-r-autopkgtest tests",
+      "message_count": 1,
+      "participants": [
+        "Stefano Rivera"
+      ],
+      "started": "2020-05-20T16:07:47Z",
+      "last_reply": "2020-05-20T16:07:47Z",
+      "root_message_id": "msg-adda5c9bfc6a"
+    },
+    {
+      "id": "thread-3dd3427f2f5e",
+      "subject": "Any Perl programmer able to fix dh-update-R (Was: Bug#961492: routine-update removes required dependencies)",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2020-05-25T09:29:54Z",
+      "last_reply": "2020-05-25T09:29:54Z",
+      "root_message_id": "msg-3dd3427f2f5e"
+    },
+    {
+      "id": "thread-b4b4f96f26ec",
+      "subject": "Description file of r-cran-sjlabelled seems to specify wrong depencency from haven (Was: Bug#961498: r-cran-sjplot: missing test dependency on r-cran-haven)",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Daniel Lüdecke"
+      ],
+      "started": "2020-05-25T11:09:57Z",
+      "last_reply": "2020-05-25T12:46:00Z",
+      "root_message_id": "msg-b4b4f96f26ec"
+    },
+    {
+      "id": "thread-24edad583764",
+      "subject": "[RFS] r-cran-sjplot and r-cran-sjmisc",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra"
+      ],
+      "started": "2020-05-26T06:01:32Z",
+      "last_reply": "2020-05-26T09:43:41Z",
+      "root_message_id": "msg-24edad583764"
+    },
+    {
+      "id": "thread-3cf9a522c350",
+      "subject": "[RFS] r-bioc-graph",
+      "message_count": 5,
+      "participants": [
+        "Dylan Aïssi",
+        "Nilesh Patra"
+      ],
+      "started": "2020-05-27T17:19:36Z",
+      "last_reply": "2020-05-27T20:35:01Z",
+      "root_message_id": "msg-3cf9a522c350"
+    },
+    {
+      "id": "thread-084ea08ec73a",
+      "subject": "ITP: r-cran-gmp -- Multiple Precision Arithmetic",
+      "message_count": 1,
+      "participants": [
+        "Rodrigo Carvalho"
+      ],
+      "started": "2020-05-28T02:04:19Z",
+      "last_reply": "2020-05-28T02:04:19Z",
+      "root_message_id": "msg-084ea08ec73a"
+    },
+    {
+      "id": "thread-242076547da5",
+      "subject": "Bug#961709: lintian: Warn if R binary packages don't depend on virtual r-api-* package",
+      "message_count": 1,
+      "participants": [
+        "Dylan Aïssi"
+      ],
+      "started": "2020-05-28T08:10:54Z",
+      "last_reply": "2020-05-28T08:10:54Z",
+      "root_message_id": "msg-242076547da5"
+    },
+    {
+      "id": "thread-b14ee6f92d68",
+      "subject": "[RFS] r-cran-gmp",
+      "message_count": 6,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Dylan Aïssi",
+        "Martin Maechler",
+        "Rodrigo Carvalho"
+      ],
+      "started": "2020-05-28T16:48:09Z",
+      "last_reply": "2020-05-30T05:21:44Z",
+      "root_message_id": "msg-b14ee6f92d68"
+    }
+  ]
+}

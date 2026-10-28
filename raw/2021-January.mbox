@@ -1,0 +1,2804 @@
+From Magnus.Hagdorn at ed.ac.uk  Fri Jan 15 12:56:59 2021
+From: Magnus.Hagdorn at ed.ac.uk (Magnus HAGDORN)
+Date: Fri, 15 Jan 2021 12:56:59 +0000
+Subject: packaging R-INLA
+Message-ID: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk>
+
+Hi there,
+I am a sysadmin at the University of Edinburgh. We are in the process
+of switching to Ubuntu for our managed Linux desktops. As part of this
+effort we will need to package software that is currently not available
+on Debian/Ubuntu.
+
+One of the packages I need to deal with is R-INLA [1] which is not
+available on CRAN. I am happy to package it but what should the correct
+name for the package be since it is not on cran. Just r-inla?
+
+Regards
+magnus
+
+[1] https://www.r-inla.org/
+The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336.
+
+From joan_erraez at pangea.org  Fri Jan 15 13:59:35 2021
+From: joan_erraez at pangea.org (Joan Albert)
+Date: Fri, 15 Jan 2021 14:59:35 +0100
+Subject: Re: packaging R-INLA
+In-Reply-To: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk>
+References: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk>
+Message-ID: <YAGfx4Ox5s/rF0zC@clearpeaks>
+
+Hi Magnus,
+
+> I am a sysadmin at the University of Edinburgh. We are in the process
+> of switching to Ubuntu for our managed Linux desktops.
+
+Great news! :)
+ 
+> One of the packages I need to deal with is R-INLA [1] which is not
+> available on CRAN. I am happy to package it but what should the correct
+> name for the package be since it is not on cran. Just r-inla?
+
+For what I've seen (I have to admit that I am not an Debian neither R
+package developer, but would like to become one), all cran packages
+have names of the form r-cran-{package-name}. r-cran-inla would be my
+suggestion then.
+
+You can take a look at them at Debian website[1].
+
+[1] https://packages.debian.org/stable/gnu-r/
+
+Regards,
+--
+TS
+
+From metreo at sent.com  Fri Jan 15 14:17:13 2021
+From: metreo at sent.com (oliver)
+Date: Fri, 15 Jan 2021 10:17:13 -0400
+Subject: Re: packaging R-INLA
+In-Reply-To: <YAGfx4Ox5s/rF0zC@clearpeaks>
+References: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk> <YAGfx4Ox5s/rF0zC@clearpeaks>
+Message-ID: <bf9f2882-8e1e-254c-7e19-0b615d3179e4@sent.com>
+
+On 2021-01-15 9:59 a.m., Joan Albert wrote:
+> Hi Magnus,
+>
+> > I am a sysadmin at the University of Edinburgh. We are in the process
+> > of switching to Ubuntu for our managed Linux desktops.
+>
+>
+> Great news! :)
+>
+> > One of the packages I need to deal with is R-INLA [1] which is not
+> > available on CRAN. I am happy to package it but what should the correct
+> > name for the package be since it is not on cran. Just r-inla?
+>
+>
+> For what I've seen (I have to admit that I am not an Debian neither R
+> package developer, but would like to become one), all cran packages
+> have names of the form r-cran-{package-name}. r-cran-inla would be my
+> suggestion then.
+>
+> You can take a look at them at Debian website[1].
+>
+> [1] https://packages.debian.org/stable/gnu-r/
+>
+> Regards,
+> --
+> TS
+Is the package not on CRAN because it doesn't want to deal with the 
+administration or for other reasons?
+
+Tagging with `r-cran` might imply criteria [0] the project may or may 
+not conform with.
+
+--
+oliver at ftml.net
+PGP KEY A623 9AEB C617 D3E3 0CBB 121C E1F8 FFEA 9F07 8FB3
+
+[0] https://cran.r-project.org/web/packages/policies.html
+
+From edd at debian.org  Fri Jan 15 14:38:37 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 15 Jan 2021 08:38:37 -0600
+Subject: Re: packaging R-INLA
+In-Reply-To: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk>
+References: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk>
+Message-ID: <24577.43245.676355.529129@rob.eddelbuettel.com>
+
+On 15 January 2021 at 12:56, Magnus HAGDORN wrote:
+| I am a sysadmin at the University of Edinburgh. We are in the process
+| of switching to Ubuntu for our managed Linux desktops. As part of this
+| effort we will need to package software that is currently not available
+| on Debian/Ubuntu.
+| 
+| One of the packages I need to deal with is R-INLA [1] which is not
+| available on CRAN. I am happy to package it but what should the correct
+| name for the package be since it is not on cran. Just r-inla?
+
+We generally use 'other' in that case to follow the three-component model we
+have converged on. The initial unpublished draft proposed
+'r-other-$AUTHOR-$PACKAGE' for these cases but we later dropped the author
+component.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Fri Jan 15 14:55:48 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 15 Jan 2021 08:55:48 -0600
+Subject: Countrs of r-$FOO-packages, and Debian + Ubuntu package counts
+Message-ID: <24577.44276.110025.35394@rob.eddelbuettel.com>
+
+I just got curious about how many R packages we would now have under the
+different categories, and knowing that I could answer that via my RcppAPT
+connector to the apt cache, I quickly run that.
+
+On Debian testing, it is now almost a thousand packages. We can run the few
+lines (in R, after installing libapt-pkg-dev and then R packages RcppAPT and
+data.table)
+
+  library(data.table)  # to filter and aggregate
+  revs <- setDT(RcppAPT::reverseDepends("r-base-core"))
+  revs[grepl("^r-([a-z]*)-*", package), c("r","where","name","other") := tstrsplit(package, "-")][
+      "r"==r,.N,by=where][
+      order(-N)]
+
+we get (keeping the last compound data.table statement on one line)
+
+  > revs[grepl("^r-([a-z]*)-*", package), c("r","where","name","other") := tstrsplit(package, "-")]["r"==r,.N,by=where][order(-N)]
+           where   N
+  1:        cran 974
+  2:        bioc 134
+  3:       other  10
+  4:        base   4
+  5:         doc   3
+  6:    omegahat   1
+  7: recommended   1
+  8:     mathlib   1
+  > 
+
+where 'base', 'doc', 'recommended' and 'mathlib' all stem from my r-base
+source package and can be ignored.  So for purposes of the INLA discussion we
+have ten 'other' packages.
+
+While this is a Debian list, it is still worth recalling that the Ubuntu PPA
+effort by Michael Rutter is something to reckon with more than five times the
+packages:
+
+  > revs[grepl("^r-([a-z]*)-*", package), c("r","where","name","other") :=
+         tstrsplit(package, "-")]["r"=  =r,.N,by=where][order(-N)]
+           where    N
+  1:        cran 5305
+  2:        bioc  150
+  3:        base   12
+  4:         doc    9
+  5:       other    8
+  6: recommended    3
+  7:     mathlib    3
+  8:    omegahat    2
+  > 
+
+But before we jump up and down in joy, for Fedora and SUSE two volunteers
+have assembled 15k+ binaries each covering essentially all of CRAN.  We need
+a sponsor for more CPU power because running the build scripts is not that
+hard given how well curated CRAN is.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From Magnus.Hagdorn at ed.ac.uk  Fri Jan 15 15:04:20 2021
+From: Magnus.Hagdorn at ed.ac.uk (Magnus HAGDORN)
+Date: Fri, 15 Jan 2021 15:04:20 +0000
+Subject: Re: packaging R-INLA
+In-Reply-To: <24577.43245.676355.529129@rob.eddelbuettel.com>
+References: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk> <24577.43245.676355.529129@rob.eddelbuettel.com>
+Message-ID: <77dc7ea424c8d818a49fdb24dbaf0bd70c81675b.camel@ed.ac.uk>
+
+On Fri, 2021-01-15 at 08:38 -0600, Dirk Eddelbuettel wrote:
+> > One of the packages I need to deal with is R-INLA [1] which is not
+> > available on CRAN. I am happy to package it but what should the
+> > correct
+> > name for the package be since it is not on cran. Just r-inla?
+>
+>
+> We generally use 'other' in that case to follow the three-component
+> model we
+>
+> have converged on. The initial unpublished draft proposed
+>
+> 'r-other-$AUTHOR-$PACKAGE' for these cases but we later dropped the
+> author
+>
+> component.
+
+excellent. Thanks for the info.
+Cheers
+magnus
+The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336.
+
+From Magnus.Hagdorn at ed.ac.uk  Fri Jan 15 15:43:27 2021
+From: Magnus.Hagdorn at ed.ac.uk (Magnus HAGDORN)
+Date: Fri, 15 Jan 2021 15:43:27 +0000
+Subject: Re: packaging R-INLA
+In-Reply-To: <bf9f2882-8e1e-254c-7e19-0b615d3179e4@sent.com>
+References: <cb063a735e7aa41d1a494057896a8e724ba6e076.camel@ed.ac.uk> <YAGfx4Ox5s/rF0zC@clearpeaks> <bf9f2882-8e1e-254c-7e19-0b615d3179e4@sent.com>
+Message-ID: <6c0e12d40c82c511463d8261fc4cc3f928889163.camel@ed.ac.uk>
+
+On Fri, 2021-01-15 at 10:17 -0400, oliver wrote:
+> Is the package not on CRAN because it doesn't want to deal with the
+>
+> administration or for other reasons?
+
+Hmm, I was too quick. Looks like there is at least one C
+library/program plus R binding involved. I guess it's not on CRAN
+because it is a big project that doesn't only contain R.
+
+Need to think how to split this up.
+
+Regards
+magnus
+The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336.
+
+From andreas at an3as.eu  Sat Jan 16 07:25:55 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 16 Jan 2021 08:25:55 +0100
+Subject: Please use consistent version spelling for minpack.lm in Luminescence
+Message-ID: <20210116072555.GA12301@an3as.eu>
+
+Hi Sebastian,
+
+I had to use a patch[1] in the Debian packaged version of Luminescence
+to adjust the version restriction of minpack.lm.  I'm aware that in R
+the characters '-' and '.' are sorting equally.  However, this is not
+the case somewhere else and automatic processing runs into a failure
+when used as a Debian package version string.  It would help if you
+would simply stick to the same spelling of the version the minpack.lm
+maintainer had decided to use to fix this.
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-luminescence/-/blob/master/debian/patches/fix_r-cran-minpack.lm_version_string.patch
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sat Jan 16 07:29:14 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 16 Jan 2021 08:29:14 +0100
+Subject: Re: Countrs of r-$FOO-packages, and Debian + Ubuntu package counts
+In-Reply-To: <24577.44276.110025.35394@rob.eddelbuettel.com>
+References: <24577.44276.110025.35394@rob.eddelbuettel.com>
+Message-ID: <20210116072914.GB12301@an3as.eu>
+
+Hi Dirk,
+
+thanks a lot for the interesting stats.
+
+On Fri, Jan 15, 2021 at 08:55:48AM -0600, Dirk Eddelbuettel wrote:
+> While this is a Debian list, it is still worth recalling that the Ubuntu PPA
+> effort by Michael Rutter is something to reckon with more than five times the
+> packages:
+> ...
+> But before we jump up and down in joy, for Fedora and SUSE two volunteers
+> have assembled 15k+ binaries each covering essentially all of CRAN.  We need
+> a sponsor for more CPU power because running the build scripts is not that
+> hard given how well curated CRAN is.
+
+I'm assuming that all this packaging is done automatically which is
+great.  I wonder whether we could learn some lessons how these efforts
+are dealing with version spelling differences like I just observed it in
+r-cran-luminescence which required a manual patch[1].
+
+If there is a chance to cope with this automatically I'd love to adopt
+this.
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-luminescence/-/blob/master/debian/patches/fix_r-cran-minpack.lm_version_string.patch
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sat Jan 16 14:01:40 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 16 Jan 2021 08:01:40 -0600
+Subject: Re: Countrs of r-$FOO-packages, and Debian + Ubuntu package counts
+In-Reply-To: <20210116072914.GB12301@an3as.eu>
+References: <24577.44276.110025.35394@rob.eddelbuettel.com> <20210116072914.GB12301@an3as.eu>
+Message-ID: <24578.61892.858667.120980@rob.eddelbuettel.com>
+
+On 16 January 2021 at 08:29, Andreas Tille wrote:
+| If there is a chance to cope with this automatically I'd love to adopt
+| this.
+
+I think we need to write ourselves a lintian (or equivalent) checker and
+patch locally. I have the exact same issue in one my packages that upstream
+is (in our eyes only) "buggy" by substituting a hyphen with a dot leading
+to different sorting for us (but not them as the R sorting tolerates it).
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sat Jan 16 15:47:08 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 16 Jan 2021 16:47:08 +0100
+Subject: Re: Countrs of r-$FOO-packages, and Debian + Ubuntu package counts
+In-Reply-To: <24578.61892.858667.120980@rob.eddelbuettel.com>
+References: <24577.44276.110025.35394@rob.eddelbuettel.com> <20210116072914.GB12301@an3as.eu> <24578.61892.858667.120980@rob.eddelbuettel.com>
+Message-ID: <20210116154708.GG12301@an3as.eu>
+
+Hi,
+
+On Sat, Jan 16, 2021 at 08:01:40AM -0600, Dirk Eddelbuettel wrote:
+> 
+> I think we need to write ourselves a lintian (or equivalent) checker and
+> patch locally.
+
+The good thing in the r-cran-luminescence case is that upstream has
+fixed it immediately in their repository and it will be fixed in the
+next release,
+
+> I have the exact same issue in one my packages that upstream
+> is (in our eyes only) "buggy" by substituting a hyphen with a dot leading
+> to different sorting for us (but not them as the R sorting tolerates it).
+
+I admit that I know about this sorting tolerance but I consider that
+the *different* spelling of a version number is a bug anyway.
+
+Kind regards
+
+     Andreas,
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sat Jan 16 15:53:26 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 16 Jan 2021 09:53:26 -0600
+Subject: Re: Countrs of r-$FOO-packages, and Debian + Ubuntu package counts
+In-Reply-To: <20210116154708.GG12301@an3as.eu>
+References: <24577.44276.110025.35394@rob.eddelbuettel.com> <20210116072914.GB12301@an3as.eu> <24578.61892.858667.120980@rob.eddelbuettel.com> <20210116154708.GG12301@an3as.eu>
+Message-ID: <24579.3062.116355.754844@rob.eddelbuettel.com>
+
+On 16 January 2021 at 16:47, Andreas Tille wrote:
+| I admit that I know about this sorting tolerance but I consider that
+| the *different* spelling of a version number is a bug anyway.
+
+It is documented behaviour at both the CRAN and the Debian side. 
+
+There is a difference between having a rule-based detector, and one-off email
+requests for changes. One scales, one doesn't. You asked this question in the
+context of two different distros having 16k packages autogenerated.  But it
+seems you are now content with your package issue so we can put this to rest.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sun Jan 17 08:00:51 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 17 Jan 2021 09:00:51 +0100
+Subject: Help needed for r-cran-rcppmlpack
+Message-ID: <20210117080051.GL12301@an3as.eu>
+
+Hi,
+
+the new version of r-cran-genieclust needs r-cran-rcppmlpack and thus I
+injected it into salsa[1].  As I documented in d/README.source I went
+with the MLPACK code copy since the Debian packaged version is way more
+ahead than this one.  Possibly we can avoid the trouble I'm talking below
+by simply using libmlpack-dev but I have not checked this.
+
+...
+g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-z,relro -o RcppMLPACK.so ./mlpack/methods/pca/pca.o ./mlpack/methods/mvu/mvu.o ./mlpack/methods/det/dtree.o ./mlpack/methods/det/dt_utils.o ./mlpack/methods/linear_regression/linear_regression.o ./mlpack/methods/radical/radical.o ./mlpack/methods/neighbor_search/unmap.o ./mlpack/methods/neighbor_search/sort_policies/furthest_neighbor_sort.o ./mlpack/methods/neighbor_search/sort_policies/nearest_neighbor_sort.o ./mlpack/methods/lars/lars.o ./mlpack/methods/logistic_regression/logistic_regression_function.o ./mlpack/methods/regularized_svd/regularized_svd_function.o ./mlpack/methods/sparse_autoencoder/sparse_autoencoder_function.o ./mlpack/core/math/lin_alg.o ./mlpack/core/math/random.o ./mlpack/core/kernels/epanechnikov_kernel.o ./mlpack/core/kernels/pspectrum_string_kernel.o ./mlpack/core/optimizers/lbfgs/test_functions.o ./mlpack/core/optimizers/aug_lagrangian/aug_lagrangian_test_functions.o ./mlpack/core/optimizers/sgd/test_function.o ./mlpack/core/optimizers/lrsdp/lrsdp_function.o ./mlpack/core/optimizers/lrsdp/lrsdp.o ./mlpack/core/dists/gaussian_distribution.o ./mlpack/core/dists/discrete_distribution.o ./mlpack/core/dists/laplace_distribution.o ./mlpack/core/tree/mrkd_statistic.o ./mlpack/core/tree/cosine_tree/cosine_tree.o ./mlpack/core/util/string_util.o RcppExports.o kmeans.o init.o -llapack -lblas -lgfortran -lm -lquadmath -L/usr/lib/R/lib -lR
+g++ -std=gnu++11 -o libRcppMLPACK.so ./mlpack/methods/pca/pca.o ./mlpack/methods/mvu/mvu.o ./mlpack/methods/det/dtree.o ./mlpack/methods/det/dt_utils.o ./mlpack/methods/linear_regression/linear_regression.o ./mlpack/methods/radical/radical.o ./mlpack/methods/neighbor_search/unmap.o ./mlpack/methods/neighbor_search/sort_policies/furthest_neighbor_sort.o ./mlpack/methods/neighbor_search/sort_policies/nearest_neighbor_sort.o ./mlpack/methods/lars/lars.o ./mlpack/methods/logistic_regression/logistic_regression_function.o ./mlpack/methods/regularized_svd/regularized_svd_function.o ./mlpack/methods/sparse_autoencoder/sparse_autoencoder_function.o ./mlpack/core/math/lin_alg.o ./mlpack/core/math/random.o ./mlpack/core/kernels/epanechnikov_kernel.o ./mlpack/core/kernels/pspectrum_string_kernel.o ./mlpack/core/optimizers/lbfgs/test_functions.o ./mlpack/core/optimizers/aug_lagrangian/aug_lagrangian_test_functions.o ./mlpack/core/optimizers/sgd/test_function.o ./mlpack/core/optimizers/lrsdp/lrsdp_function.o ./mlpack/core/optimizers/lrsdp/lrsdp.o ./mlpack/core/dists/gaussian_distribution.o ./mlpack/core/dists/discrete_distribution.o ./mlpack/core/dists/laplace_distribution.o ./mlpack/core/tree/mrkd_statistic.o ./mlpack/core/tree/cosine_tree/cosine_tree.o ./mlpack/core/util/string_util.o RcppExports.o kmeans.o init.o -shared -llapack -lblas -lgfortran -lm -lquadmath  -L"/usr/lib/R/lib" -lR
+ar qc libRcppMLPACK.a ./mlpack/methods/pca/pca.o ./mlpack/methods/mvu/mvu.o ./mlpack/methods/det/dtree.o ./mlpack/methods/det/dt_utils.o ./mlpack/methods/linear_regression/linear_regression.o ./mlpack/methods/radical/radical.o ./mlpack/methods/neighbor_search/unmap.o ./mlpack/methods/neighbor_search/sort_policies/furthest_neighbor_sort.o ./mlpack/methods/neighbor_search/sort_policies/nearest_neighbor_sort.o ./mlpack/methods/lars/lars.o ./mlpack/methods/logistic_regression/logistic_regression_function.o ./mlpack/methods/regularized_svd/regularized_svd_function.o ./mlpack/methods/sparse_autoencoder/sparse_autoencoder_function.o ./mlpack/core/math/lin_alg.o ./mlpack/core/math/random.o ./mlpack/core/kernels/epanechnikov_kernel.o ./mlpack/core/kernels/pspectrum_string_kernel.o ./mlpack/core/optimizers/lbfgs/test_functions.o ./mlpack/core/optimizers/aug_lagrangian/aug_lagrangian_test_functions.o ./mlpack/core/optimizers/sgd/test_function.o ./mlpack/core/optimizers/lrsdp/lrsdp_function.o ./mlpack/core/optimizers/lrsdp/lrsdp.o ./mlpack/core/dists/gaussian_distribution.o ./mlpack/core/dists/discrete_distribution.o ./mlpack/core/dists/laplace_distribution.o ./mlpack/core/tree/mrkd_statistic.o ./mlpack/core/tree/cosine_tree/cosine_tree.o ./mlpack/core/util/string_util.o RcppExports.o kmeans.o init.o
+cp libRcppMLPACK.so ../inst/lib
+cp libRcppMLPACK.a ../inst/lib
+rm libRcppMLPACK.so libRcppMLPACK.a
+make[2]: Leaving directory '/build/r-cran-rcppmlpack-1.0.10-7/src'
+make[2]: Entering directory '/build/r-cran-rcppmlpack-1.0.10-7/src'
+make[2]: Leaving directory '/build/r-cran-rcppmlpack-1.0.10-7/src'
+installing to /build/r-cran-rcppmlpack-1.0.10-7/debian/r-cran-rcppmlpack/usr/lib/R/site-library/00LOCK-r-cran-rcppmlpack-1.0.10-7/00new/RcppMLPACK/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Error: package or namespace load failed for 'RcppMLPACK' in library.dynam(lib, package, package.lib):
+ shared object 'RcppMLPACK.so' not found
+Error: loading failed
+Execution halted
+ERROR: loading failed
+* removing '/build/r-cran-rcppmlpack-1.0.10-7/debian/r-cran-rcppmlpack/usr/lib/R/site-library/RcppMLPACK'
+
+I've checked my pbuilder chroot after the build process halted and there
+is really no "*.so" file left inside the build tree.  Any idea what might
+be wrong here?
+
+Kind regards
+
+        Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rcppmlpack
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sun Jan 17 21:30:45 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 17 Jan 2021 15:30:45 -0600
+Subject: Re: Help needed for r-cran-rcppmlpack
+In-Reply-To: <20210117080051.GL12301@an3as.eu>
+References: <20210117080051.GL12301@an3as.eu>
+Message-ID: <24580.44165.176342.926444@rob.eddelbuettel.com>
+
+On 17 January 2021 at 09:00, Andreas Tille wrote:
+| the new version of r-cran-genieclust needs r-cran-rcppmlpack and thus I
+| injected it into salsa[1].  As I documented in d/README.source I went
+| with the MLPACK code copy since the Debian packaged version is way more
+| ahead than this one.  Possibly we can avoid the trouble I'm talking below
+| by simply using libmlpack-dev but I have not checked this.
+
+You cannot. I am a little involved in this multi-year process of bringing
+mlpack to R: we had RcppMLPACK based on mlpack 1.*, but subsequent mlpack
+releases required Boost serialization via linking which made packaging for R
+challenging / impossible.
+
+Thanks to amazing work of one GSoC student (and mlpack contributor) R is now
+a properly exported language (among a few other) with auto-generated
+bindings.  And the CRAN source package is self-contained with all it needs
+from mlpack. But the build is expensive as every mlpack algoriithm gets built
+using these autogenerated binding so it simply takes a moment.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Sun Jan 17 21:43:02 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 17 Jan 2021 22:43:02 +0100
+Subject: Re: Help needed for r-cran-rcppmlpack
+In-Reply-To: <24580.44165.176342.926444@rob.eddelbuettel.com>
+References: <20210117080051.GL12301@an3as.eu> <24580.44165.176342.926444@rob.eddelbuettel.com>
+Message-ID: <20210117214302.GV12301@an3as.eu>
+
+On Sun, Jan 17, 2021 at 03:30:45PM -0600, Dirk Eddelbuettel wrote:
+> 
+> You cannot. I am a little involved in this multi-year process of bringing
+> mlpack to R: we had RcppMLPACK based on mlpack 1.*, but subsequent mlpack
+> releases required Boost serialization via linking which made packaging for R
+> challenging / impossible.
+
+OK, thanks for the hint.
+ 
+> Thanks to amazing work of one GSoC student (and mlpack contributor) R is now
+> a properly exported language (among a few other) with auto-generated
+> bindings.  And the CRAN source package is self-contained with all it needs
+> from mlpack. But the build is expensive as every mlpack algoriithm gets built
+> using these autogenerated binding so it simply takes a moment.
+
+Well, it does not take a moment - it fails.  Or is it possibly that some
+competing parallel build is not finished yet?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Sun Jan 17 21:59:32 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 17 Jan 2021 15:59:32 -0600
+Subject: Re: Help needed for r-cran-rcppmlpack
+In-Reply-To: <20210117214302.GV12301@an3as.eu>
+References: <20210117080051.GL12301@an3as.eu> <24580.44165.176342.926444@rob.eddelbuettel.com> <20210117214302.GV12301@an3as.eu>
+Message-ID: <24580.45892.181515.208302@rob.eddelbuettel.com>
+
+On 17 January 2021 at 22:43, Andreas Tille wrote:
+| On Sun, Jan 17, 2021 at 03:30:45PM -0600, Dirk Eddelbuettel wrote:
+| > Thanks to amazing work of one GSoC student (and mlpack contributor) R is now
+| > a properly exported language (among a few other) with auto-generated
+| > bindings.  And the CRAN source package is self-contained with all it needs
+| > from mlpack. But the build is expensive as every mlpack algoriithm gets built
+| > using these autogenerated binding so it simply takes a moment.
+| 
+| Well, it does not take a moment - it fails.  Or is it possibly that some
+| competing parallel build is not finished yet?
+
+Hm, that may be something local to your setup.
+
+It builds and checks fine at CRAN [1] and has always built fine on Ubuntu and
+Debian for me and others, including on the Debian testing VM I use for
+reverse-depends checks. All those use just the CRAN package and not
+libmlpack-dev.
+
+Dirk
+
+[1] https://cloud.r-project.org/web/checks/check_results_mlpack.html
+    (the fail at Solaris is known and fixed upstream; the fail on
+    oldrel-windows is due to older compiler; rest builds)
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Mon Jan 18 10:51:56 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 18 Jan 2021 11:51:56 +0100
+Subject: Re: Help needed for r-cran-rcppmlpack
+In-Reply-To: <24580.45892.181515.208302@rob.eddelbuettel.com>
+References: <20210117080051.GL12301@an3as.eu> <24580.44165.176342.926444@rob.eddelbuettel.com> <20210117214302.GV12301@an3as.eu> <24580.45892.181515.208302@rob.eddelbuettel.com>
+Message-ID: <20210118105155.GX12301@an3as.eu>
+
+On Sun, Jan 17, 2021 at 03:59:32PM -0600, Dirk Eddelbuettel wrote:
+> | Well, it does not take a moment - it fails.  Or is it possibly that some
+> | competing parallel build is not finished yet?
+> 
+> Hm, that may be something local to your setup.
+
+"My local setup" is a fresh sid chroot as used by pbuilder where any
+package should build.
+ 
+> It builds and checks fine at CRAN [1] and has always built fine on Ubuntu and
+> Debian for me and others, including on the Debian testing VM I use for
+> reverse-depends checks. All those use just the CRAN package and not
+> libmlpack-dev.
+
+As you can verify in Git I also do not use libmlpack-dev (which I wrote
+in my initial mail perhaps not clearly enough).
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Mon Jan 18 13:15:55 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 18 Jan 2021 07:15:55 -0600
+Subject: Re: Help needed for r-cran-rcppmlpack
+In-Reply-To: <20210118105155.GX12301@an3as.eu>
+References: <20210117080051.GL12301@an3as.eu> <24580.44165.176342.926444@rob.eddelbuettel.com> <20210117214302.GV12301@an3as.eu> <24580.45892.181515.208302@rob.eddelbuettel.com> <20210118105155.GX12301@an3as.eu>
+Message-ID: <24581.35339.766938.807229@rob.eddelbuettel.com>
+
+On 18 January 2021 at 11:51, Andreas Tille wrote:
+| "My local setup" is a fresh sid chroot as used by pbuilder where any
+| package should build.
+
+Yes. Something in your local setup differs from how the package is usually
+built.
+
+I also now realize that what I was mentioning was the _new_ package mlpack
+currently at 3.4.2.1. It is what we all will end up using. However, it
+currently has no packages depending on it.
+
+But what you are packaging is the much, much older RcppMLPACK based on what
+MLPACK was at 1.0.10 or so. Nobody should use this. Now, as why _this_ fails
+for you I do not know as it too seems to be fine at CRAN:
+
+   https://cloud.r-project.org/web/checks/check_results_RcppMLPACK.html
+
+Note though that it yields the warning
+
+  WARNING: shared objects/dynamic libraries with hard-coded temporary installation paths
+
+so it may have library path hardcode which would foul of our standard build
+process.  Which would be the difference you run into. I don't recall off the
+top of what we usually do with that. I think I have two (also older) R
+packages on CRAN with a similar issue due to an embedded library.
+
+Medium term you should get upstream for 'genieclust' to switch to mlpack and
+package that. I think it will behave well (as per my previous emails about it).
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Tue Jan 19 07:22:04 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 19 Jan 2021 08:22:04 +0100
+Subject: One test of brio test suite seems to run into endless loop on some hardware architectures
+Message-ID: <20210119072204.GA15115@an3as.eu>
+
+Hi Jim,
+
+the R packaging team in Debian has packaged brio.  There is a CI
+infrastructure which is running the test suite on several architectures.
+The test suite runs nicely on Intel architectures.  However, there was
+an issue with arm64, armhf and ppc64el (which are the only non-Intel
+architectures currently so this list might not be complete).  The test
+suite simply never ended and the tests were manually stopped by the
+admins.
+
+Yesterday I bisected the tests to find out what actual test is
+responsible for the issue and I was successful with excluding a
+single test[1].  So for whatever reason this code
+
+test_that("file_line_endings detects Unix line endings", {
+  tmp <- tempfile()
+  on.exit(unlink(tmp))
+
+  writeBin(charToRaw("foo\n"), tmp)
+
+  expect_equal(file_line_endings(tmp), "\n")
+
+  writeBin(charToRaw(""), tmp)
+
+  expect_identical(file_line_endings(tmp), NA_character_)
+})
+
+works only on Intel architectures but does not end on other
+test architectures in the Debian CI pool.
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-brio/-/blob/master/debian/tests/run-unit-test#L17
+
+-- 
+http://fam-tille.de
+
+From james.hester at rstudio.com  Tue Jan 19 15:34:28 2021
+From: james.hester at rstudio.com (Jim Hester)
+Date: Tue, 19 Jan 2021 10:34:28 -0500
+Subject: Re: One test of brio test suite seems to run into endless loop on some hardware architectures
+In-Reply-To: <20210119072204.GA15115@an3as.eu>
+References: <20210119072204.GA15115@an3as.eu>
+Message-ID: <CAD6tx97BGu15BFZyMyGKc4uXn5pZWCnGMaGLKObocGLsmo+zxQ@mail.gmail.com>
+
+Andreas,
+
+Looking at the code I think the issue is I was storing the results of `fgetc()` as a `char` and then checking if it matched `EOF`. This works on x86, but non-intel architectures must use a different value of `EOF` that doesn't fit in `char` storage.
+
+In https://github.com/r-lib/brio/commit/f1d6329bc6261ad72489550bc21b53ef271b5062 I switched to using `int`, as the `fgetc()` type signature shows, so I believe that should fix the problem.
+
+I will release a new version of brio to CRAN in the next day or two with this change.
+
+Jim
+
+On Tue, Jan 19, 2021 at 2:22 AM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi Jim,
+>
+>
+>
+> the R packaging team in Debian has packaged brio.  There is a CI
+>
+> infrastructure which is running the test suite on several architectures.
+>
+> The test suite runs nicely on Intel architectures.  However, there was
+>
+> an issue with arm64, armhf and ppc64el (which are the only non-Intel
+>
+> architectures currently so this list might not be complete).  The test
+>
+> suite simply never ended and the tests were manually stopped by the
+>
+> admins.
+>
+>
+>
+> Yesterday I bisected the tests to find out what actual test is
+>
+> responsible for the issue and I was successful with excluding a
+>
+> single test[1].  So for whatever reason this code
+>
+>
+>
+>
+>
+> test_that("file_line_endings detects Unix line endings", {
+>
+>   tmp <- tempfile()
+>
+>   on.exit(unlink(tmp))
+>
+>
+>
+>   writeBin(charToRaw("foo\n"), tmp)
+>
+>
+>
+>   expect_equal(file_line_endings(tmp), "\n")
+>
+>
+>
+>   writeBin(charToRaw(""), tmp)
+>
+>
+>
+>   expect_identical(file_line_endings(tmp), NA_character_)
+>
+> })
+>
+>
+>
+>
+>
+> works only on Intel architectures but does not end on other
+>
+> test architectures in the Debian CI pool.
+>
+>
+>
+> Kind regards
+>
+>
+>
+>        Andreas.
+>
+>
+>
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-brio/-/blob/master/debian/tests/run-unit-test#L17
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jan 20 16:41:21 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 20 Jan 2021 17:41:21 +0100
+Subject: Re: One test of brio test suite seems to run into endless loop on some hardware architectures
+In-Reply-To: <CAD6tx97BGu15BFZyMyGKc4uXn5pZWCnGMaGLKObocGLsmo+zxQ@mail.gmail.com>
+References: <20210119072204.GA15115@an3as.eu> <CAD6tx97BGu15BFZyMyGKc4uXn5pZWCnGMaGLKObocGLsmo+zxQ@mail.gmail.com>
+Message-ID: <20210120164121.GM15115@an3as.eu>
+
+Hi Jim,
+
+On Tue, Jan 19, 2021 at 10:34:28AM -0500, Jim Hester wrote:
+> Looking at the code I think the issue is I was storing the results of
+> `fgetc()` as a `char` and then checking if it matched `EOF`. This works on
+> x86, but non-intel architectures must use a different value of `EOF` that
+> doesn't fit in `char` storage.
+> 
+> In
+> https://github.com/r-lib/brio/commit/f1d6329bc6261ad72489550bc21b53ef271b5062
+> I switched to using `int`, as the `fgetc()` type signature shows, so I
+> believe that should fix the problem.
+
+Sounds plausible.
+ 
+> I will release a new version of brio to CRAN in the next day or two with
+> this change.
+
+Thanks a lot
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Jan 22 09:23:13 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 22 Jan 2021 10:23:13 +0100
+Subject: Is there any chance to make mathjaxr non-mandatory in clubSandwich?
+Message-ID: <20210122092313.GZ15115@an3as.eu>
+
+Hi James,
+
+the R packaging team is maintaining your package clubSandwich for the
+Debian GNU/Linux distribution.  The latest version 0.5.2 has mathjaxr as
+new dependency.  Usually new R package depencencies are quite easy to
+package for Debian and we have some semi-automatic mechanism for this.
+However, in the case of mathjaxr it is pretty hard since it contains a
+lot of compressed JavaScript code which is considered non-free by Debian
+since there is no chance to change this code.
+
+That's why we would need to try very hard to replace all this code and
+provide the non-compressed JS files.  We've got the hint by Dirk
+Eddelbuettel to ask you as the author of clubSandwich whether you would
+consider to make mathjaxr an optional feature which would spare us the
+work to package it at the moment when we are about to freeze the next
+stable version of Debian.  This would enable us to provide the latest
+ans greatest clubSandwich - otherwise we need to stick to version 0.5.0
+which does not have this dependency.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Jan 22 21:11:55 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 22 Jan 2021 15:11:55 -0600
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in clubSandwich?
+In-Reply-To: <20210122092313.GZ15115@an3as.eu>
+References: <20210122092313.GZ15115@an3as.eu>
+Message-ID: <24587.16283.378876.881620@rob.eddelbuettel.com>
+
+This thread now spilled over into the R packaging list where I am
+replying. Will CC Andreas on my reply there.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From jepusto at gmail.com  Sat Jan 23 18:13:39 2021
+From: jepusto at gmail.com (James Pustejovsky)
+Date: Sat, 23 Jan 2021 12:13:39 -0600
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in clubSandwich?
+In-Reply-To: <24587.16283.378876.881620@rob.eddelbuettel.com>
+References: <20210122092313.GZ15115@an3as.eu> <24587.16283.378876.881620@rob.eddelbuettel.com>
+Message-ID: <CAFUVuJxOjAS7r=sg4ejKmj=mc-nK1foVuMOmBJcfzDiNc7un4g@mail.gmail.com>
+
+Hi Andreas,
+I have submitted a new version (0.5.3) of clubSandwich to CRAN, which removes the dependency on mathjaxr. If it's urgent to get the package built for Debian (rather than waiting for it to get to CRAN), please let me know if there is anything I can do to assist.
+
+Kind Regards,
+James
+
+On Fri, Jan 22, 2021 at 3:11 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+
+> This thread now spilled over into the R packaging list where I am
+>
+> replying. Will CC Andreas on my reply there.
+>
+>
+>
+> Dirk
+>
+>
+>
+> --
+>
+> https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at fam-tille.de  Sat Jan 23 20:25:25 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sat, 23 Jan 2021 21:25:25 +0100
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in clubSandwich?
+In-Reply-To: <CAFUVuJxOjAS7r=sg4ejKmj=mc-nK1foVuMOmBJcfzDiNc7un4g@mail.gmail.com>
+References: <20210122092313.GZ15115@an3as.eu> <24587.16283.378876.881620@rob.eddelbuettel.com> <CAFUVuJxOjAS7r=sg4ejKmj=mc-nK1foVuMOmBJcfzDiNc7un4g@mail.gmail.com>
+Message-ID: <20210123202525.GM15115@an3as.eu>
+
+Hi James,
+
+thanks a lot  - its not really urgent so I can one or more days.
+
+Kind regards
+
+      Andreas.
+
+On Sat, Jan 23, 2021 at 12:13:39PM -0600, James Pustejovsky wrote:
+> Hi Andreas,
+> 
+> I have submitted a new version (0.5.3) of clubSandwich to CRAN, which
+> removes the dependency on mathjaxr. If it's urgent to get the package built
+> for Debian (rather than waiting for it to get to CRAN), please let me know
+> if there is anything I can do to assist.
+> 
+> Kind Regards,
+> James
+> 
+> On Fri, Jan 22, 2021 at 3:11 PM Dirk Eddelbuettel <edd at debian.org> wrote:
+> 
+> >
+> > This thread now spilled over into the R packaging list where I am
+> > replying. Will CC Andreas on my reply there.
+> >
+> > Dirk
+> >
+> > --
+> > https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+> >
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Sun Jan 24 04:08:52 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 24 Jan 2021 06:08:52 +0200
+Subject: Bug#980902: rmatrix: which reverse dependencies need rebuilds?
+Message-ID: <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com>
+
+Source: rmatrix
+Version: 1.3-2-1
+Severity: important
+Control: affects -1 src:r-cran-tmb
+X-Debbugs-CC: debian-r at lists.debian.org
+
+Hi R Maintainers
+
+While investigating #980809 [1], I found the following output in the
+autopkgtest logs of and r-cran-glmmtmb and r-cran-tmb:
+
+Warning message:
+In checkMatrixPackageVersion() : Package version inconsistency detected.
+TMB was built with Matrix version 1.2.18
+Current Matrix version is 1.3.2
+Please re-install 'TMB' from source using install.packages('TMB', type
+= 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's
+'Matrix' package
+
+This is a clear sign that at least r-cran-tmb needs a rebuild and
+should gain a versioned dependency on the version of r-cran-matrix
+that it was built against.
+
+I will schedule a binNMU for r-cran-tmb for now, but it still needs
+the versioned dependency added.  Is this something that dh-r could do?
+  We also need to find other affected packages.
+
+The actual warning message is generated by r-base, is there a way to
+make this an error instead of a warning?
+
+Regards
+Graham
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=980809#14
+
+From andreas at an3as.eu  Sun Jan 24 21:02:53 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 24 Jan 2021 22:02:53 +0100
+Subject: Any idea why autopkgtest of r-cran-repr fails (seems broken string comparison issue)
+Message-ID: <20210124210253.GU15115@an3as.eu>
+
+Hi,
+
+I updated r-cran-repr and assumed I would have fixed the autopkgtest by
+using UTF-8[1].  Now the test output is:
+
+── Failure (test_repr_array_df.r:18:2): factors display correctly ──────────────
+repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+
+lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+  "<table class=\"dataframe\">"
+- "<caption>A data.frame: 1 x 1</caption>"
++ "<caption>A data.frame: 1 × 1</caption>"
+  "<thead>"
+  "\t<tr><th scope=col>a</th></tr>"
+  "\t<tr><th scope=col>&lt;fct&gt;</th></tr>"
+── Failure (test_repr_array_df.r:35:2): mixed factors and strings display correctly ──
+repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 2</caption>\n<thead>\n\t<tr><th scope=col>a</th><th scope=col>b</th></tr>\n\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamastring</td><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+
+lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+  "<table class=\"dataframe\">"
+- "<caption>A data.frame: 1 x 2</caption>"
++ "<caption>A data.frame: 1 × 2</caption>"
+  "<thead>"
+  "\t<tr><th scope=col>a</th><th scope=col>b</th></tr>"
+  "\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>"
+── Failure (test_repr_array_df.r:51:2): date display correctly ─────────────────
+repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;dttm&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>2016-05-28 10:00:00</td></tr>\n</tbody>\n</table>\n" (`expected`).
+
+lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+  "<table class=\"dataframe\">"
+- "<caption>A data.frame: 1 x 1</caption>"
++ "<caption>A data.frame: 1 × 1</caption>"
+  "<thead>"
+  "\t<tr><th scope=col>a</th></tr>"
+  "\t<tr><th scope=col>&lt;dttm&gt;</th></tr>"
+── Failure (test_repr_array_df.r:67:2): markdown works ─────────────────────────
+repr_markdown(df) (`actual`) not identical to "\nA data.frame: 2 × 2\n\n| a &lt;int&gt; | b &lt;chr&gt; |\n|---|---|\n| 1 | a |\n| 2 | b |\n\n" (`expected`).
+
+I wonder whether this might be some issue of different line ending
+encodings or whatever, which makes the obviously equal strings different
+in this test.  Any idea how to fix this?
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-repr/-/commit/ef7475a798d72b388e6bb092de06ff49f58e1504
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Jan 25 07:17:11 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Jan 2021 09:17:11 +0200
+Subject: Re: Bug#980902: rmatrix: which reverse dependencies need rebuilds?
+In-Reply-To: <CAM8zJQuM63Yt3Ej=r0aUECtJF9A=F1o9aJ6TbGbfbP=Z48XQWQ@mail.gmail.com>
+References: <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com> <24589.27745.501207.330782@rob.eddelbuettel.com> <CAM8zJQuM63Yt3Ej=r0aUECtJF9A=F1o9aJ6TbGbfbP=Z48XQWQ@mail.gmail.com>
+Message-ID: <CAM8zJQs=fU-oxoA8oZQ2Zic7eK5GEnvBW-Q_x6P5rJm3S3E8hA@mail.gmail.com>
+
+Hi
+
+On Sun, 24 Jan 2021 at 18:06, Graham Inggs <ginggs at debian.org> wrote:
+> I'm awaiting autopkgtest results on the binNMU'd r-cran-tmb.  I will
+> update this bug and #980809 when they are in.
+
+The autopkgtests for r-cran-tmb [1] and r-cran-glmmtmb [2] have
+completed on all architectures except for s390x, which are still
+queued.  So no definitive answer for #980809 yet.  The latest results
+no longer have the "Package version inconsistency detected" warning.
+
+On Sun, 24 Jan 2021 at 06:12, Graham Inggs <ginggs at debian.org> wrote:
+> The actual warning message is generated by r-base,
+
+This is not true, I was confused by a similar error I had seen in
+another package (where the warning does come from r-base):
+
+Error: package or namespace load failed for ‘DropletUtils’ in
+loadNamespace(j <- imp[[1L]], c(lib.loc, .libPaths()), versionCheck =
+vI[[j]]):
+ namespace ‘Matrix’ 1.2-18 is already loaded, but >= 1.3.2 is required
+
+The warning in r-cran-tmb comes from r-cran-tmb itself [3].  I had a
+look on codesearch.debian.net and found the only other occurrences of
+packageVersion("Matrix") were in r-cran-rcpparmadillo and
+r-cran-igraph, and that code seems to be catering for different
+versions of Matrix, not warning against them.  In my opinion, there's
+nothing to be done in rmatrix, and I will reassign this bug to
+r-cran-tmb, affecting r-cran-glmmtmb.  I think the solution there is
+to simply upgrade the warning to an error and then it should be caught
+by autopkgtest whenever it wants rebuilding.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-tmb/
+[2] https://ci.debian.net/packages/r/r-cran-glmmtmb/
+[3] https://salsa.debian.org/r-pkg-team/r-cran-tmb/-/blob/master/R/zzz.R#L8
+
+From ginggs at debian.org  Mon Jan 25 08:31:36 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Jan 2021 10:31:36 +0200
+Subject: r-cran-tmb: prints warning when rmatrix is upgraded
+Message-ID: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com>
+
+Control: tags -1 + patch
+
+The attached patch upgrades the warning() to a stop().
+This will cause r-cran-tmb's autopkgtests to fail whenever rmatrix is upgraded.
+Then we will know it is time for a rebuild, or a new upload.
+
+Let me know if this seems a reasonable solution, and I'll do a team upload.
+--- a/R/zzz.R
++++ b/R/zzz.R
+@@ -15,7 +15,7 @@
+     }
+     TMB.Matrix.version <- readLines(file)
+     if(!identical(TMB.Matrix.version, cur.Matrix.version)) {
+-        warning(
++        stop(
+             "Package version inconsistency detected.\n",
+             "TMB was built with Matrix version ",
+             TMB.Matrix.version,
+
+From gordon at chronitis.net  Mon Jan 25 08:31:59 2021
+From: gordon at chronitis.net (Gordon Ball)
+Date: Mon, 25 Jan 2021 08:31:59 +0000
+Subject: Re: Any idea why autopkgtest of r-cran-repr fails (seems broken string comparison issue)
+In-Reply-To: <20210124210253.GU15115@an3as.eu>
+References: <20210124210253.GU15115@an3as.eu>
+Message-ID: <20210125083159.4fntmwx46tnnrocf@emissary.chronitis.net>
+
+The error being shown isn't line endings but different characters for
+multiplication - letter 'x' vs multiplication sign 'U+00D7'.
+
+However, I don't see this failure running the autopkgtest locally with
+your latest commit below - maybe something about your locale leaking
+into the test?
+
+GOrdon
+
+On Sun, Jan 24, 2021 at 10:02:53PM +0100, Andreas Tille wrote:
+> Hi,
+> 
+> I updated r-cran-repr and assumed I would have fixed the autopkgtest by
+> using UTF-8[1].  Now the test output is:
+> 
+> 
+> ── Failure (test_repr_array_df.r:18:2): factors display correctly ──────────────
+> repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> 
+> lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+>   "<table class=\"dataframe\">"
+> - "<caption>A data.frame: 1 x 1</caption>"
+> + "<caption>A data.frame: 1 × 1</caption>"
+>   "<thead>"
+>   "\t<tr><th scope=col>a</th></tr>"
+>   "\t<tr><th scope=col>&lt;fct&gt;</th></tr>"
+> ── Failure (test_repr_array_df.r:35:2): mixed factors and strings display correctly ──
+> repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 2</caption>\n<thead>\n\t<tr><th scope=col>a</th><th scope=col>b</th></tr>\n\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamastring</td><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> 
+> lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+>   "<table class=\"dataframe\">"
+> - "<caption>A data.frame: 1 x 2</caption>"
+> + "<caption>A data.frame: 1 × 2</caption>"
+>   "<thead>"
+>   "\t<tr><th scope=col>a</th><th scope=col>b</th></tr>"
+>   "\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>"
+> ── Failure (test_repr_array_df.r:51:2): date display correctly ─────────────────
+> repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;dttm&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>2016-05-28 10:00:00</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> 
+> lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+>   "<table class=\"dataframe\">"
+> - "<caption>A data.frame: 1 x 1</caption>"
+> + "<caption>A data.frame: 1 × 1</caption>"
+>   "<thead>"
+>   "\t<tr><th scope=col>a</th></tr>"
+>   "\t<tr><th scope=col>&lt;dttm&gt;</th></tr>"
+> ── Failure (test_repr_array_df.r:67:2): markdown works ─────────────────────────
+> repr_markdown(df) (`actual`) not identical to "\nA data.frame: 2 × 2\n\n| a &lt;int&gt; | b &lt;chr&gt; |\n|---|---|\n| 1 | a |\n| 2 | b |\n\n" (`expected`).
+> 
+> 
+> I wonder whether this might be some issue of different line ending
+> encodings or whatever, which makes the obviously equal strings different
+> in this test.  Any idea how to fix this?
+> 
+> Kind regards
+> 
+>       Andreas.
+> 
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-repr/-/commit/ef7475a798d72b388e6bb092de06ff49f58e1504
+> 
+> -- 
+> http://fam-tille.de
+> 
+
+From andreas at fam-tille.de  Mon Jan 25 08:57:16 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Mon, 25 Jan 2021 09:57:16 +0100
+Subject: Re: Any idea why autopkgtest of r-cran-repr fails (seems broken string comparison issue)
+In-Reply-To: <20210125083159.4fntmwx46tnnrocf@emissary.chronitis.net>
+References: <20210124210253.GU15115@an3as.eu> <20210125083159.4fntmwx46tnnrocf@emissary.chronitis.net>
+Message-ID: <20210125085716.GZ15115@an3as.eu>
+
+Hi Gordon,
+
+On Mon, Jan 25, 2021 at 08:31:59AM +0000, Gordon Ball wrote:
+> The error being shown isn't line endings but different characters for
+> multiplication - letter 'x' vs multiplication sign 'U+00D7'.
+
+I have seen the diff   'x' - 'U+00D7'   when using LC_ALL=C (as it was
+before).  Thus I switched to LC_ALL=C.UTF-8  which did not seem to help
+at my side.
+
+> However, I don't see this failure running the autopkgtest locally with
+> your latest commit below - maybe something about your locale leaking
+> into the test?
+
+So if you confirm it works on your side I would consider uploading
+and trusting that this is no issue on debci.
+
+Thanks for checking
+
+        Andreas.
+ 
+> GOrdon
+> 
+> On Sun, Jan 24, 2021 at 10:02:53PM +0100, Andreas Tille wrote:
+> > Hi,
+> > 
+> > I updated r-cran-repr and assumed I would have fixed the autopkgtest by
+> > using UTF-8[1].  Now the test output is:
+> > 
+> > 
+> > ── Failure (test_repr_array_df.r:18:2): factors display correctly ──────────────
+> > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > 
+> > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> >   "<table class=\"dataframe\">"
+> > - "<caption>A data.frame: 1 x 1</caption>"
+> > + "<caption>A data.frame: 1 × 1</caption>"
+> >   "<thead>"
+> >   "\t<tr><th scope=col>a</th></tr>"
+> >   "\t<tr><th scope=col>&lt;fct&gt;</th></tr>"
+> > ── Failure (test_repr_array_df.r:35:2): mixed factors and strings display correctly ──
+> > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 2</caption>\n<thead>\n\t<tr><th scope=col>a</th><th scope=col>b</th></tr>\n\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamastring</td><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > 
+> > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> >   "<table class=\"dataframe\">"
+> > - "<caption>A data.frame: 1 x 2</caption>"
+> > + "<caption>A data.frame: 1 × 2</caption>"
+> >   "<thead>"
+> >   "\t<tr><th scope=col>a</th><th scope=col>b</th></tr>"
+> >   "\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>"
+> > ── Failure (test_repr_array_df.r:51:2): date display correctly ─────────────────
+> > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;dttm&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>2016-05-28 10:00:00</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > 
+> > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> >   "<table class=\"dataframe\">"
+> > - "<caption>A data.frame: 1 x 1</caption>"
+> > + "<caption>A data.frame: 1 × 1</caption>"
+> >   "<thead>"
+> >   "\t<tr><th scope=col>a</th></tr>"
+> >   "\t<tr><th scope=col>&lt;dttm&gt;</th></tr>"
+> > ── Failure (test_repr_array_df.r:67:2): markdown works ─────────────────────────
+> > repr_markdown(df) (`actual`) not identical to "\nA data.frame: 2 × 2\n\n| a &lt;int&gt; | b &lt;chr&gt; |\n|---|---|\n| 1 | a |\n| 2 | b |\n\n" (`expected`).
+> > 
+> > 
+> > I wonder whether this might be some issue of different line ending
+> > encodings or whatever, which makes the obviously equal strings different
+> > in this test.  Any idea how to fix this?
+> > 
+> > Kind regards
+> > 
+> >       Andreas.
+> > 
+> > 
+> > [1] https://salsa.debian.org/r-pkg-team/r-cran-repr/-/commit/ef7475a798d72b388e6bb092de06ff49f58e1504
+> > 
+> > -- 
+> > http://fam-tille.de
+> > 
+> 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Mon Jan 25 09:21:24 2021
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 25 Jan 2021 10:21:24 +0100
+Subject: Re: r-cran-tmb: prints warning when rmatrix is upgraded
+In-Reply-To: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com>
+References: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com>
+Message-ID: <20210125092124.GA15115@an3as.eu>
+
+Hi Graham,
+
+On Mon, Jan 25, 2021 at 10:31:36AM +0200, Graham Inggs wrote:
+> Control: tags -1 + patch
+> 
+> The attached patch upgrades the warning() to a stop().
+> This will cause r-cran-tmb's autopkgtests to fail whenever rmatrix is upgraded.
+> Then we will know it is time for a rebuild, or a new upload.
+> 
+> Let me know if this seems a reasonable solution, and I'll do a team upload.
+
+Looks sensible.  As I mention before team uploads are always welcome.  So
+please go for it.
+
+Thanks a lot, Andreas.
+
+> --- a/R/zzz.R
+> +++ b/R/zzz.R
+> @@ -15,7 +15,7 @@
+>      }
+>      TMB.Matrix.version <- readLines(file)
+>      if(!identical(TMB.Matrix.version, cur.Matrix.version)) {
+> -        warning(
+> +        stop(
+>              "Package version inconsistency detected.\n",
+>              "TMB was built with Matrix version ",
+>              TMB.Matrix.version,
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Jan 25 13:36:03 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Jan 2021 15:36:03 +0200
+Subject: Re: [R-pkg-team] Bug#980902: r-cran-tmb: prints warning when rmatrix is upgraded
+In-Reply-To: <20210125092124.GA15115@an3as.eu>
+References: <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com> <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com> <20210125092124.GA15115@an3as.eu>
+Message-ID: <CAM8zJQtaGQLD1qrG0HPWP9J9vKoix9z6zauPOiJXCtv3W9j3nA@mail.gmail.com>
+
+On Mon, 25 Jan 2021 at 11:24, Andreas Tille <tille at debian.org> wrote:
+> Looks sensible.  As I mention before team uploads are always welcome.  So
+> please go for it.
+
+Thanks Andreas!  I will do once the autopkgtests have finished on s390x.
+
+For reference, this is what the failing output looks like with my
+patch in place:
+
+> library('TMB')
+Error: package or namespace load failed for ‘TMB’:
+ .onLoad failed in loadNamespace() for 'TMB', details:
+  call: checkMatrixPackageVersion()
+  error: Package version inconsistency detected.
+TMB was built with Matrix version 1.2.18
+Current Matrix version is 1.3.2
+Please re-install 'TMB' from source using install.packages('TMB', type
+= 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's
+'Matrix' package
+Execution halted
+
+From edd at debian.org  Mon Jan 25 14:21:35 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 25 Jan 2021 08:21:35 -0600
+Subject: Re: Bug#980902: rmatrix: which reverse dependencies need rebuilds?
+In-Reply-To: <CAM8zJQs=fU-oxoA8oZQ2Zic7eK5GEnvBW-Q_x6P5rJm3S3E8hA@mail.gmail.com>
+References: <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com> <24589.27745.501207.330782@rob.eddelbuettel.com> <CAM8zJQuM63Yt3Ej=r0aUECtJF9A=F1o9aJ6TbGbfbP=Z48XQWQ@mail.gmail.com> <CAM8zJQs=fU-oxoA8oZQ2Zic7eK5GEnvBW-Q_x6P5rJm3S3E8hA@mail.gmail.com>
+Message-ID: <24590.54255.470261.71826@rob.eddelbuettel.com>
+
+On 25 January 2021 at 09:17, Graham Inggs wrote:
+| Hi
+| 
+| On Sun, 24 Jan 2021 at 18:06, Graham Inggs <ginggs at debian.org> wrote:
+| > I'm awaiting autopkgtest results on the binNMU'd r-cran-tmb.  I will
+| > update this bug and #980809 when they are in.
+| 
+| The autopkgtests for r-cran-tmb [1] and r-cran-glmmtmb [2] have
+| completed on all architectures except for s390x, which are still
+| queued.  So no definitive answer for #980809 yet.  The latest results
+| no longer have the "Package version inconsistency detected" warning.
+| 
+| On Sun, 24 Jan 2021 at 06:12, Graham Inggs <ginggs at debian.org> wrote:
+| > The actual warning message is generated by r-base,
+| 
+| This is not true, I was confused by a similar error I had seen in
+| another package (where the warning does come from r-base):
+| 
+| Error: package or namespace load failed for ‘DropletUtils’ in
+| loadNamespace(j <- imp[[1L]], c(lib.loc, .libPaths()), versionCheck =
+| vI[[j]]):
+|  namespace ‘Matrix’ 1.2-18 is already loaded, but >= 1.3.2 is required
+
+Hm, but that is a different warning -- AFAIK it comes when you a versioned
+Depends or Imports tries to load package and encounters an already installed
+(i.e. cannot be replace by R in that session) version that is lower than the
+requirement.
+
+(Code search is very useful. As an aside, instead of codesearch.debian.net
+you can also search at GitHub in the cran organisation which hits essentially
+all mirrored CRAN packages.  17k >> 1k.)
+ 
+| The warning in r-cran-tmb comes from r-cran-tmb itself [3].  I had a
+| look on codesearch.debian.net and found the only other occurrences of
+| packageVersion("Matrix") were in r-cran-rcpparmadillo and
+| r-cran-igraph, and that code seems to be catering for different
+| versions of Matrix, not warning against them.  In my opinion, there's
+| nothing to be done in rmatrix, and I will reassign this bug to
+
+Looks like we are "finally" on the same page :)
+
+| r-cran-tmb, affecting r-cran-glmmtmb.  I think the solution there is
+| to simply upgrade the warning to an error and then it should be caught
+| by autopkgtest whenever it wants rebuilding.
+
+Yes. The cleanest might be a test script that just tries library(glmmTMB)
+having set options("warn"=2).
+
+Dirk 
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Mon Jan 25 14:13:35 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 25 Jan 2021 08:13:35 -0600
+Subject: Re: r-cran-tmb: prints warning when rmatrix is upgraded
+In-Reply-To: <20210125092124.GA15115@an3as.eu>
+References: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com> <20210125092124.GA15115@an3as.eu>
+Message-ID: <24590.53775.656971.720046@rob.eddelbuettel.com>
+
+On 25 January 2021 at 10:21, Andreas Tille wrote:
+| Hi Graham,
+| 
+| On Mon, Jan 25, 2021 at 10:31:36AM +0200, Graham Inggs wrote:
+| > Control: tags -1 + patch
+| > 
+| > The attached patch upgrades the warning() to a stop().
+| > This will cause r-cran-tmb's autopkgtests to fail whenever rmatrix is upgraded.
+| > Then we will know it is time for a rebuild, or a new upload.
+| > 
+| > Let me know if this seems a reasonable solution, and I'll do a team upload.
+| 
+| Looks sensible.  As I mention before team uploads are always welcome.  So
+| please go for it.
+| 
+| Thanks a lot, Andreas.
+| 
+| > --- a/R/zzz.R
+| > +++ b/R/zzz.R
+| > @@ -15,7 +15,7 @@
+| >      }
+| >      TMB.Matrix.version <- readLines(file)
+| >      if(!identical(TMB.Matrix.version, cur.Matrix.version)) {
+| > -        warning(
+| > +        stop(
+| >              "Package version inconsistency detected.\n",
+| >              "TMB was built with Matrix version ",
+| >              TMB.Matrix.version,
+
+But upstream had that choice too and selected a warning not a stop. It
+appears to be a non-fatal issue.
+
+I would not make this stop and think it is a bad idea. (Plus I had explained
+that by setting options("warn"=2) in the code calling this you can set this
+if and when you want it rather than unconditionally.  That is IMHO a better
+solution.)
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From gordon at chronitis.net  Mon Jan 25 16:36:34 2021
+From: gordon at chronitis.net (Gordon Ball)
+Date: Mon, 25 Jan 2021 16:36:34 +0000
+Subject: Re: Any idea why autopkgtest of r-cran-repr fails (seems broken string comparison issue)
+In-Reply-To: <20210125085716.GZ15115@an3as.eu>
+References: <20210124210253.GU15115@an3as.eu> <20210125083159.4fntmwx46tnnrocf@emissary.chronitis.net> <20210125085716.GZ15115@an3as.eu>
+Message-ID: <20210125163634.u6gdnnbkiunnweqj@emissary.chronitis.net>
+
+On Mon, Jan 25, 2021 at 09:57:16AM +0100, Andreas Tille wrote:
+> Hi Gordon,
+> 
+> On Mon, Jan 25, 2021 at 08:31:59AM +0000, Gordon Ball wrote:
+> > The error being shown isn't line endings but different characters for
+> > multiplication - letter 'x' vs multiplication sign 'U+00D7'.
+> 
+> I have seen the diff   'x' - 'U+00D7'   when using LC_ALL=C (as it was
+> before).  Thus I switched to LC_ALL=C.UTF-8  which did not seem to help
+> at my side.
+> 
+> > However, I don't see this failure running the autopkgtest locally with
+> > your latest commit below - maybe something about your locale leaking
+> > into the test?
+> 
+> So if you confirm it works on your side I would consider uploading
+> and trusting that this is no issue on debci.
+>
+Re-running the checks does seem to confirm no issue here (with
+autopkgtest running in sbuild in what is _hopefully_ a clean
+environment).
+
+However, it looks like you've uploaded so hopefully we'll see positive
+autopkgtest results soon...
+
+nb - I saw you uploaded r-cran-irdisplay too (thanks), but the git
+repository doesn't seem to be updated - can you push?)
+
+> Thanks for checking
+> 
+>         Andreas.
+>  
+> > GOrdon
+> > 
+> > On Sun, Jan 24, 2021 at 10:02:53PM +0100, Andreas Tille wrote:
+> > > Hi,
+> > > 
+> > > I updated r-cran-repr and assumed I would have fixed the autopkgtest by
+> > > using UTF-8[1].  Now the test output is:
+> > > 
+> > > 
+> > > ── Failure (test_repr_array_df.r:18:2): factors display correctly ──────────────
+> > > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > > 
+> > > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> > >   "<table class=\"dataframe\">"
+> > > - "<caption>A data.frame: 1 x 1</caption>"
+> > > + "<caption>A data.frame: 1 × 1</caption>"
+> > >   "<thead>"
+> > >   "\t<tr><th scope=col>a</th></tr>"
+> > >   "\t<tr><th scope=col>&lt;fct&gt;</th></tr>"
+> > > ── Failure (test_repr_array_df.r:35:2): mixed factors and strings display correctly ──
+> > > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 2</caption>\n<thead>\n\t<tr><th scope=col>a</th><th scope=col>b</th></tr>\n\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>iamastring</td><td>iamafactor</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > > 
+> > > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> > >   "<table class=\"dataframe\">"
+> > > - "<caption>A data.frame: 1 x 2</caption>"
+> > > + "<caption>A data.frame: 1 × 2</caption>"
+> > >   "<thead>"
+> > >   "\t<tr><th scope=col>a</th><th scope=col>b</th></tr>"
+> > >   "\t<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th></tr>"
+> > > ── Failure (test_repr_array_df.r:51:2): date display correctly ─────────────────
+> > > repr_html(df) (`actual`) not identical to "<table class=\"dataframe\">\n<caption>A data.frame: 1 × 1</caption>\n<thead>\n\t<tr><th scope=col>a</th></tr>\n\t<tr><th scope=col>&lt;dttm&gt;</th></tr>\n</thead>\n<tbody>\n\t<tr><td>2016-05-28 10:00:00</td></tr>\n</tbody>\n</table>\n" (`expected`).
+> > > 
+> > > lines(actual[[1]])[1:5] vs lines(expected[[1]])[1:5]
+> > >   "<table class=\"dataframe\">"
+> > > - "<caption>A data.frame: 1 x 1</caption>"
+> > > + "<caption>A data.frame: 1 × 1</caption>"
+> > >   "<thead>"
+> > >   "\t<tr><th scope=col>a</th></tr>"
+> > >   "\t<tr><th scope=col>&lt;dttm&gt;</th></tr>"
+> > > ── Failure (test_repr_array_df.r:67:2): markdown works ─────────────────────────
+> > > repr_markdown(df) (`actual`) not identical to "\nA data.frame: 2 × 2\n\n| a &lt;int&gt; | b &lt;chr&gt; |\n|---|---|\n| 1 | a |\n| 2 | b |\n\n" (`expected`).
+> > > 
+> > > 
+> > > I wonder whether this might be some issue of different line ending
+> > > encodings or whatever, which makes the obviously equal strings different
+> > > in this test.  Any idea how to fix this?
+> > > 
+> > > Kind regards
+> > > 
+> > >       Andreas.
+> > > 
+> > > 
+> > > [1] https://salsa.debian.org/r-pkg-team/r-cran-repr/-/commit/ef7475a798d72b388e6bb092de06ff49f58e1504
+> > > 
+> > > -- 
+> > > http://fam-tille.de
+> > > 
+> > 
+> 
+> -- 
+> http://fam-tille.de
+
+From andreas at an3as.eu  Mon Jan 25 19:38:29 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 25 Jan 2021 20:38:29 +0100
+Subject: Re: Any idea why autopkgtest of r-cran-repr fails (seems broken string comparison issue)
+In-Reply-To: <20210125163634.u6gdnnbkiunnweqj@emissary.chronitis.net>
+References: <20210124210253.GU15115@an3as.eu> <20210125083159.4fntmwx46tnnrocf@emissary.chronitis.net> <20210125085716.GZ15115@an3as.eu> <20210125163634.u6gdnnbkiunnweqj@emissary.chronitis.net>
+Message-ID: <20210125193829.GG15115@an3as.eu>
+
+Hi Gordon,
+
+On Mon, Jan 25, 2021 at 04:36:34PM +0000, Gordon Ball wrote:
+> > So if you confirm it works on your side I would consider uploading
+> > and trusting that this is no issue on debci.
+> >
+> Re-running the checks does seem to confirm no issue here (with
+> autopkgtest running in sbuild in what is _hopefully_ a clean
+> environment).
+
+Autopkgtests seem to pass. :-)
+ 
+> nb - I saw you uploaded r-cran-irdisplay too (thanks), but the git
+> repository doesn't seem to be updated - can you push?)
+
+Pushed this and other not yet pushed repositories.  If I might have
+saved you some cycles of time you can possibly fix #961492. ;-)
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Jan 25 19:39:07 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 25 Jan 2021 21:39:07 +0200
+Subject: Re: [R-pkg-team] Bug#980902: r-cran-tmb: prints warning when rmatrix is upgraded
+In-Reply-To: <24590.53775.656971.720046@rob.eddelbuettel.com>
+References: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com> <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com> <20210125092124.GA15115@an3as.eu> <24590.53775.656971.720046@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQtnLKkS9QVxMqLGzxisLXhEOKeKZWfgkgm_e3x_pH7f6Q@mail.gmail.com>
+
+Hi Dirk
+
+On Mon, 25 Jan 2021 at 16:13, Dirk Eddelbuettel <edd at debian.org> wrote:
+> But upstream had that choice too and selected a warning not a stop. It
+> appears to be a non-fatal issue.
+
+My deviation from upstream here was intentional.  The purpose being to
+fail the autopkgtest, and our users should never ever see the failure,
+as autopkgtest would prevent this package from ever migrating to
+testing.
+
+On Mon, 25 Jan 2021 at 16:21, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Yes. The cleanest might be a test script that just tries library(glmmTMB)
+> having set options("warn"=2).
+
+However, I do agree that your solution is more elegant, and also does
+not incur the burden of maintaining a patch.   When I get a chance
+tomorrow, I will try your suggestion in an autopkgtest in addition to
+the pkg-r-autopkgtest that is already run.
+
+Thanks again for your input on this issue!
+
+Regards
+Graham
+
+From edd at debian.org  Mon Jan 25 19:56:40 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 25 Jan 2021 13:56:40 -0600
+Subject: Re: [R-pkg-team] Bug#980902: r-cran-tmb: prints warning when rmatrix is upgraded
+In-Reply-To: <CAM8zJQtnLKkS9QVxMqLGzxisLXhEOKeKZWfgkgm_e3x_pH7f6Q@mail.gmail.com>
+References: <CAM8zJQv5DvJ1XQgKC4zEYsUPiVAGTPZ4ZceR6tcqgfXZfiy1cg@mail.gmail.com> <CAM8zJQsFUj3ZnrhmJR2ujrPG7oFW64nHLFZQyRCJiEQWU4j9AQ@mail.gmail.com> <20210125092124.GA15115@an3as.eu> <24590.53775.656971.720046@rob.eddelbuettel.com> <CAM8zJQtnLKkS9QVxMqLGzxisLXhEOKeKZWfgkgm_e3x_pH7f6Q@mail.gmail.com>
+Message-ID: <24591.8824.622264.413990@rob.eddelbuettel.com>
+
+On 25 January 2021 at 21:39, Graham Inggs wrote:
+| Thanks again for your input on this issue!
+ 
+Always a pleasure :)
+
+Best, Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Tue Jan 26 10:55:21 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 26 Jan 2021 11:55:21 +0100
+Subject: ShortRead fails test test_readPrb.R for non-Intel architectures
+Message-ID: <20210126105521.GQ15115@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Bioconductor Package Maintainer <maintainer at bioconductor.org>
+
+Hi,
+
+the Debian packaged ShortRead is tested in CI test on different hardware
+architectures.  On the debci page[1] you can see the matrix for success
+and failure which shows that amd64 and i386 are passing the complete
+test suite while other architectures are failing.  In those failing cases
+the test log says something like
+
+Timing stopped at: 1.012 0.02 1.031
+Error in checkIdentical(exp, as(readPrb(sp, ".*prb.txt", as = "FastqEncoding"),  : 
+  FALSE 
+ 
+In addition: Warning messages:
+1: In .class1(object) :
+  closing unused connection 6 (/usr/lib/R/site-library/ShortRead/extdata/Data/C1-36Firecrest/Bustard/GERALD/s_1_sequence.txt)
+2: In .class1(object) :
+  closing unused connection 5 (/usr/lib/R/site-library/ShortRead/extdata/Data/C1-36Firecrest/Bustard/GERALD/s_1_sequence.txt)
+Timing stopped at: 0.028 0.001 0.031
+Error in checkIdentical(36L, unique(width(obj))) : FALSE 
+ 
+
+RUNIT TEST PROTOCOL -- Sun Jan 24 21:54:15 2021 
+*********************************************** 
+Number of test functions: 104 
+Number of errors: 0 
+Number of failures: 2 
+
+ 
+1 Test Suite : 
+ShortRead RUnit Tests - 104 test functions, 0 errors, 2 failures
+FAILURE in test_readPrb_consistent: Error in checkIdentical(exp, as(readPrb(sp, ".*prb.txt", as = "FastqEncoding"),  : 
+  FALSE 
+ 
+FAILURE in test_readPrb_input: Error in checkIdentical(36L, unique(width(obj))) : FALSE 
+ 
+
+Test files with failing tests
+
+   test_readPrb.R 
+     test_readPrb_consistent 
+     test_readPrb_input 
+
+Error in BiocGenerics:::testPackage("ShortRead") : 
+  unit tests failed for package ShortRead
+In addition: Warning message:
+In is.factor(x) :
+  closing unused connection 3 (/tmp/RtmpEinleR/file1d7b55bbcf1b)
+Execution halted
+
+When removing the file test_readPrb.R from the installation the tests
+are passing but before I do such nasty things I'd like to clarify the
+situation with you.
+
+Kind regards
+
+      Andreas.
+
+[1] https://ci.debian.net/packages/r/r-bioc-shortread/
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jan 27 07:57:49 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 27 Jan 2021 08:57:49 +0100
+Subject: Is there any chance to make mathjaxr non-mandatory in metap
+Message-ID: <20210127075749.GH4758@an3as.eu>
+
+Hi Michael,
+
+there was some longer discussion about the usage of mathjaxr in
+clubSandwich.  The part of the discussion on the Debian R packaging list
+is in the according list archive[1].  I admit I'm lacking the necessary
+knowledge in R to understand the solution that was found in clubSandwich
+but it would be really great if you could do the same in your package
+metap since this would enable us (the Debian R packaging team) to upgrade
+metap to its latest version.
+
+Kind regards
+
+     Andreas.
+
+[1] https://lists.debian.org/debian-r/2021/01/msg00021.html
+
+-- 
+http://fam-tille.de
+
+From lists at dewey.myzen.co.uk  Wed Jan 27 11:44:04 2021
+From: lists at dewey.myzen.co.uk (Michael Dewey)
+Date: Wed, 27 Jan 2021 11:44:04 +0000
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <20210127075749.GH4758@an3as.eu>
+References: <20210127075749.GH4758@an3as.eu>
+Message-ID: <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>
+
+Dear Andreas
+
+I am rather reluctant to follow James' example and downgrade the 
+documentation for everyone to suit the requirements of one OS, even an 
+important one like Debian. Reverting to the previous version of metap 
+for your packaging also seems undesirable as there was a bug fix albeit 
+a small one. I did not see the maintainer of mathjaxr contributing to 
+the discussion on the R mailing list so I am cc'ing this to him to see 
+if he has any brainwave.
+
+One option would be for me to make a version for you to use for your 
+packaging. I think I can do that without having to edit all the 
+documentation files by giving you a personalised DESCRIPTION, NAMESPACE, 
+and macros.Rd but I have not tested that yet. Of course if you package 
+off the CRAN version that will not work.
+
+Michael
+
+On 27/01/2021 07:57, Andreas Tille wrote:
+> Hi Michael,
+>
+> there was some longer discussion about the usage of mathjaxr in
+> clubSandwich.  The part of the discussion on the Debian R packaging list
+> is in the according list archive[1].  I admit I'm lacking the necessary
+> knowledge in R to understand the solution that was found in clubSandwich
+> but it would be really great if you could do the same in your package
+> metap since this would enable us (the Debian R packaging team) to upgrade
+> metap to its latest version.
+>
+> Kind regards
+>
+>       Andreas.
+>
+> [1] https://lists.debian.org/debian-r/2021/01/msg00021.html
+
+--
+Michael
+http://www.dewey.myzen.co.uk/home.html
+
+From wolfgang.viechtbauer at maastrichtuniversity.nl  Wed Jan 27 12:03:05 2021
+From: wolfgang.viechtbauer at maastrichtuniversity.nl (Viechtbauer, Wolfgang (SP))
+Date: Wed, 27 Jan 2021 12:03:05 +0000
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>
+Message-ID: <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>
+
+Dear All,
+
+I am aware of the discussion and understand the issue with the way MathJax is bundled with mathjaxr (i.e., MathJax is provided by default using minified/compressed javascript, which (rightly so imho) could be argued to not be proper source code).
+
+The minification is not something I did - I am just using how MathJax is provided by default. I do intend to look into creating a non-minified version of MathJax that I can then bundle with mathjaxr. If I succeed in doing so, then there might be an issue with mathjaxr becoming too large for a CRAN package, but maybe this is something that can be discussed with the CRAN maintainers (and possibly, the minification could still happen upon installation of the source package).
+
+To be 100% clear: I absolutely understand the concern with the minified JS and I will try to find a solution (when I have the time). However, I personally never install R packages from deb's (i.e., I always install all R packages from source directly from CRAN). R packages are so frequently updated - and for good reason - that I would never rely on what version has been bundled as a deb in the past. But that's just my personal preference.
+
+Best,
+Wolfgang
+
+>-----Original Message-----
+>From: Michael Dewey [mailto:lists at dewey.myzen.co.uk]
+>Sent: Wednesday, 27 January, 2021 12:44
+>To: Andreas Tille; debian-r at lists.debian.org
+>Cc: Viechtbauer, Wolfgang (SP)
+>Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+>
+>Dear Andreas
+>
+>I am rather reluctant to follow James' example and downgrade the
+>documentation for everyone to suit the requirements of one OS, even an
+>important one like Debian. Reverting to the previous version of metap
+>for your packaging also seems undesirable as there was a bug fix albeit
+>a small one. I did not see the maintainer of mathjaxr contributing to
+>the discussion on the R mailing list so I am cc'ing this to him to see
+>if he has any brainwave.
+>
+>One option would be for me to make a version for you to use for your
+>packaging. I think I can do that without having to edit all the
+>documentation files by giving you a personalised DESCRIPTION, NAMESPACE,
+>and macros.Rd but I have not tested that yet. Of course if you package
+>off the CRAN version that will not work.
+>
+>Michael
+>
+>On 27/01/2021 07:57, Andreas Tille wrote:
+>> Hi Michael,
+>>
+>> there was some longer discussion about the usage of mathjaxr in
+>> clubSandwich.  The part of the discussion on the Debian R packaging list
+>> is in the according list archive[1].  I admit I'm lacking the necessary
+>> knowledge in R to understand the solution that was found in clubSandwich
+>> but it would be really great if you could do the same in your package
+>> metap since this would enable us (the Debian R packaging team) to upgrade
+>> metap to its latest version.
+>>
+>> Kind regards
+>>
+>>       Andreas.
+>>
+>> [1] https://lists.debian.org/debian-r/2021/01/msg00021.html
+
+From andreas at an3as.eu  Wed Jan 27 13:44:56 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 27 Jan 2021 14:44:56 +0100
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk>
+Message-ID: <20210127134456.GL4758@an3as.eu>
+
+Dear Michael,
+
+thanks a lot for your quick response.
+
+On Wed, Jan 27, 2021 at 11:44:04AM +0000, Michael Dewey wrote:
+> I am rather reluctant to follow James' example and downgrade the
+> documentation for everyone to suit the requirements of one OS, even an
+> important one like Debian. Reverting to the previous version of metap for
+> your packaging also seems undesirable as there was a bug fix albeit a small
+> one.
+
+Thanks for the info about the bug fix.  Currently in Debian we are
+stalled at version 1.3 since we can not (yet) build version 1.4 due to
+the missing dependency.
+
+> I did not see the maintainer of mathjaxr contributing to the discussion
+> on the R mailing list so I am cc'ing this to him to see if he has any
+> brainwave.
+
+Thanks for the CC.
+ 
+> One option would be for me to make a version for you to use for your
+> packaging. I think I can do that without having to edit all the
+> documentation files by giving you a personalised DESCRIPTION, NAMESPACE, and
+> macros.Rd but I have not tested that yet. Of course if you package off the
+> CRAN version that will not work.
+
+I do not think that this is a practical solution.  We try to package
+everything right from CRAN and that packaging process is quite
+automated.  So deriving from this scheme is not really my favourite
+solution.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jan 27 14:01:14 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 27 Jan 2021 15:01:14 +0100
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>
+Message-ID: <20210127140114.GM4758@an3as.eu>
+
+Dear Wolfgang,
+
+thanks a lot for stepping in.
+
+On Wed, Jan 27, 2021 at 12:03:05PM +0000, Viechtbauer, Wolfgang (SP) wrote:
+> I am aware of the discussion and understand the issue with the way MathJax is bundled with mathjaxr (i.e., MathJax is provided by default using minified/compressed javascript, which (rightly so imho) could be argued to not be proper source code).
+> 
+> The minification is not something I did - I am just using how MathJax is provided by default.
+
+I can perfectly understand this any many maintainers of R packages are
+doing so with different JS libraries.  Do you see any chance to use an
+existing MathJax in the file system - as for instance in the Debian
+package libjs-mathjax which installs its files to
+   /usr/share/javascript/mathjax/
+in favour of the code copy shipped with your package.  The Debian
+procedure would be to strip your source package to remove that code copy
+and instead use the system installation.
+
+> I do intend to look into creating a non-minified version of MathJax that I can then bundle with mathjaxr. If I succeed in doing so, then there might be an issue with mathjaxr becoming too large for a CRAN package, but maybe this is something that can be discussed with the CRAN maintainers (and possibly, the minification could still happen upon installation of the source package).
+
+While this would be another option the Debian way is to prevent code
+copies anyway - so if it is feasible for you I'd be really happy if
+the Debian packaged MathJax could be reused.
+ 
+> To be 100% clear: I absolutely understand the concern with the minified JS and I will try to find a solution (when I have the time). However, I personally never install R packages from deb's (i.e., I always install all R packages from source directly from CRAN). R packages are so frequently updated - and for good reason - that I would never rely on what version has been bundled as a deb in the past. But that's just my personal preference.
+
+Fair enough.  I can fully understand this and as a CRAN developer I
+would probably do the same.  The actual reason why we are packaging more
+and more CRAN and BioConductor packages is that we can define
+dependencies between Debian packages.  Lots of non-R packages depend
+from R packages and so we have a closed set of code dependencies.  We
+try to make sure that at release freeze time all R packages are up to
+date (that's why I'm currently worried about some remaining packages
+like metap since the freeze date is coming soon).  Otherwise we have
+semi-automated upgrading R packages (and creating new dependencies)
+which helps us to keep Debian unstable quite in sync with current CRAN -
+but lagging behind from time to time when other tasks are occupying
+developers.  That's a perfect reason not to rely on Debian packages for
+some people.
+
+Kind regards and thanks a lot for your insight
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jan 27 15:48:53 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 27 Jan 2021 16:48:53 +0100
+Subject: r-cran-pbdzmq reporting erroneously new upstream version
+Message-ID: <20210127154853.GR4758@an3as.eu>
+
+Hi Gordon,
+
+after your change[1] uscan started reporting new upstream version which
+is wrong.  Thus I reverted that change at the expense that the final source
+tarball is wrongly named which is a consequence of the repackaging which
+does not respect the filemangle option.  It is caused by the call
+
+uscan info: Launch mk-origtargz with options:
+   --package r-cran-pbdzmq --version 0.3-4 --repack-suffix +dfsg --repack --compression xz --directory .. --copyright-file debian/copyright ../r-cran-pbdzmq-0.3.4.tar.gz
+
+For some reason uscan insists in specifying a --version option (in this
+case the wrong one for whatever reason).  I think there is no really good
+solution (besides fixing uscan) for this package.  However, I think we
+should avoid that uscan reports "new upstream version" which is a real
+nuisance since the package always adds noise to our QA tools.  I could
+somehow live with renaming the wrongly named repackaged tarball (as it
+is now in my commit).  But may be it is time to fix #898037 and end the
+nasty version mangling and use an epoch.  Or even ask upstream for a new
+"release" version 0.4 - just to help us out of this dilemma.
+
+What do you think?
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/3f15ecadc1a5397f1558951a0fb5fb8b7da39283
+[2] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/2f026e10dde9d9ce4126ee204ab071645ffd9452
+
+-- 
+http://fam-tille.de
+
+From gordon at chronitis.net  Thu Jan 28 08:32:29 2021
+From: gordon at chronitis.net (Gordon Ball)
+Date: Thu, 28 Jan 2021 08:32:29 +0000
+Subject: Re: r-cran-pbdzmq reporting erroneously new upstream version
+In-Reply-To: <20210127154853.GR4758@an3as.eu>
+References: <20210127154853.GR4758@an3as.eu>
+Message-ID: <20210128083229.6x6wpi7xvpropzax@emissary.chronitis.net>
+
+On Wed, Jan 27, 2021 at 04:48:53PM +0100, Andreas Tille wrote:
+> Hi Gordon,
+> 
+> after your change[1] uscan started reporting new upstream version which
+> is wrong.  Thus I reverted that change at the expense that the final source
+> tarball is wrongly named which is a consequence of the repackaging which
+> does not respect the filemangle option.  It is caused by the call
+> 
+
+Yes, I noticed this was broken by 3f15ecad (in 0.3.4+dfsg-1), but I pushed a
+subsequent commit cf38b12a which I think had already solved the issue
+(although this obviously isn't reflected in UDD etc since it hasn't been
+uploaded).
+
+While both your commit yesterday and cf38b12a correctly report
+
+uscan info:  => Package is up to date
+
+I think you've regressed getting a tarball with the correct name
+
+Running uscan -v --force with cf38b12a gives
+
+uscan info: Launch mk-origtargz with options:
+   --package r-cran-pbdzmq --version 0.3.4 --repack-suffix +dfsg
+   --compression default --directory .. --copyright-file
+   debian/copyright ../pbdZMQ_0.3-4.tar.gz
+Successfully repacked ../pbdZMQ_0.3-4.tar.gz as
+   ../r-cran-pbdzmq_0.3.4+dfsg.orig.tar.xz, deleting 272 files from it.
+
+While your version 2f026e10 from yesterday:
+
+uscan info: Launch mk-origtargz with options:
+   --package r-cran-pbdzmq --version 0.3-4 --repack-suffix +dfsg
+   --repack --compression xz --directory .. --copyright-file
+   debian/copyright ../r-cran-pbdzmq-0.3.4.tar.gz
+Successfully repacked ../r-cran-pbdzmq-0.3.4.tar.gz as
+   ../r-cran-pbdzmq_0.3-4+dfsg.orig.tar.xz, deleting 272 files from it.
+
+(Unless I'm misunderstanding which way round you think the --version
+flag should be)
+
+> uscan info: Launch mk-origtargz with options:
+>    --package r-cran-pbdzmq --version 0.3-4 --repack-suffix +dfsg --repack --compression xz --directory .. --copyright-file debian/copyright ../r-cran-pbdzmq-0.3.4.tar.gz
+> 
+> For some reason uscan insists in specifying a --version option (in this
+> case the wrong one for whatever reason).  I think there is no really good
+> solution (besides fixing uscan) for this package.  However, I think we
+> should avoid that uscan reports "new upstream version" which is a real
+> nuisance since the package always adds noise to our QA tools.  I could
+> somehow live with renaming the wrongly named repackaged tarball (as it
+> is now in my commit).  But may be it is time to fix #898037 and end the
+> nasty version mangling and use an epoch.  Or even ask upstream for a new
+> "release" version 0.4 - just to help us out of this dilemma.
+> 
+
+Given the rarity of updates to this package, I think the main issue is
+just that it doesn't report being wrongly out of date on QA/UDD. I
+would just upload a -2 with fixed d/watch and continue to wait to see
+if upstream releases a 0.4 version to fix #898037. I don't think our
+issues with version numbers are sufficient grounds to ask them to do so.
+
+> What do you think?
+> 
+> Kind regards
+> 
+>       Andreas.
+
+Gordon
+> 
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/3f15ecadc1a5397f1558951a0fb5fb8b7da39283
+> [2] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/2f026e10dde9d9ce4126ee204ab071645ffd9452
+> 
+> -- 
+> http://fam-tille.de
+
+From andreas at fam-tille.de  Thu Jan 28 10:39:55 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Thu, 28 Jan 2021 11:39:55 +0100
+Subject: Re: r-cran-pbdzmq reporting erroneously new upstream version
+In-Reply-To: <20210128083229.6x6wpi7xvpropzax@emissary.chronitis.net>
+References: <20210127154853.GR4758@an3as.eu> <20210128083229.6x6wpi7xvpropzax@emissary.chronitis.net>
+Message-ID: <20210128103955.GC20370@an3as.eu>
+
+Hi Gordon,
+
+On Thu, Jan 28, 2021 at 08:32:29AM +0000, Gordon Ball wrote:
+> On Wed, Jan 27, 2021 at 04:48:53PM +0100, Andreas Tille wrote:
+> > Hi Gordon,
+> > 
+> > after your change[1] uscan started reporting new upstream version which
+> > is wrong.  Thus I reverted that change at the expense that the final source
+> > tarball is wrongly named which is a consequence of the repackaging which
+> > does not respect the filemangle option.  It is caused by the call
+> 
+> Yes, I noticed this was broken by 3f15ecad (in 0.3.4+dfsg-1), but I pushed a
+> subsequent commit cf38b12a which I think had already solved the issue
+> (although this obviously isn't reflected in UDD etc since it hasn't been
+> uploaded).
+
+Yes, IMHO we should do an upload which fixes this.
+ 
+> While both your commit yesterday and cf38b12a correctly report
+> 
+> uscan info:  => Package is up to date
+> 
+> I think you've regressed getting a tarball with the correct name
+
+Yes, that's what I tried to explain and what is the reason for not
+just uploading.
+
+> Running uscan -v --force with cf38b12a gives
+> 
+> uscan info: Launch mk-origtargz with options:
+>    --package r-cran-pbdzmq --version 0.3.4 --repack-suffix +dfsg
+>    --compression default --directory .. --copyright-file
+>    debian/copyright ../pbdZMQ_0.3-4.tar.gz
+> Successfully repacked ../pbdZMQ_0.3-4.tar.gz as
+>    ../r-cran-pbdzmq_0.3.4+dfsg.orig.tar.xz, deleting 272 files from it.
+> 
+> While your version 2f026e10 from yesterday:
+> 
+> uscan info: Launch mk-origtargz with options:
+>    --package r-cran-pbdzmq --version 0.3-4 --repack-suffix +dfsg
+>    --repack --compression xz --directory .. --copyright-file
+>    debian/copyright ../r-cran-pbdzmq-0.3.4.tar.gz
+> Successfully repacked ../r-cran-pbdzmq-0.3.4.tar.gz as
+>    ../r-cran-pbdzmq_0.3-4+dfsg.orig.tar.xz, deleting 272 files from it.
+> 
+> (Unless I'm misunderstanding which way round you think the --version
+> flag should be)
+
+Uscan should not set the --version flag at all which would lead
+to a correct stripped tarball name.
+ 
+> > uscan info: Launch mk-origtargz with options:
+> >    --package r-cran-pbdzmq --version 0.3-4 --repack-suffix +dfsg --repack --compression xz --directory .. --copyright-file debian/copyright ../r-cran-pbdzmq-0.3.4.tar.gz
+> > 
+> > For some reason uscan insists in specifying a --version option (in this
+> > case the wrong one for whatever reason).  I think there is no really good
+> > solution (besides fixing uscan) for this package.  However, I think we
+> > should avoid that uscan reports "new upstream version" which is a real
+> > nuisance since the package always adds noise to our QA tools.  I could
+> > somehow live with renaming the wrongly named repackaged tarball (as it
+> > is now in my commit).  But may be it is time to fix #898037 and end the
+> > nasty version mangling and use an epoch.  Or even ask upstream for a new
+> > "release" version 0.4 - just to help us out of this dilemma.
+> > 
+> 
+> Given the rarity of updates to this package, I think the main issue is
+> just that it doesn't report being wrongly out of date on QA/UDD. I
+> would just upload a -2 with fixed d/watch and continue to wait to see
+> if upstream releases a 0.4 version to fix #898037. I don't think our
+> issues with version numbers are sufficient grounds to ask them to do so.
+
+I think the same - otherwise I would have done some action.
+
+If you can find a solution that on one hand reports correctly that
+tha package is up to date *and* results in a correctly named source
+tarball I'd be more than happy.  If not I suggest you upload at least
+something that reports correct package update status and leaves some
+manual work (which is seldom enough) for the maintainer.
+
+Kind regards
+     Andreas. 
+
+> > [1] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/3f15ecadc1a5397f1558951a0fb5fb8b7da39283
+> > [2] https://salsa.debian.org/r-pkg-team/r-cran-pbdzmq/-/commit/2f026e10dde9d9ce4126ee204ab071645ffd9452
+> > 
+> > -- 
+> > http://fam-tille.de
+> 
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Thu Jan 28 14:27:18 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 28 Jan 2021 08:27:18 -0600
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl>
+Message-ID: <24594.51654.478822.942820@rob.eddelbuettel.com>
+
+On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+| To be 100% clear: I absolutely understand the concern with the minified JS and I will try to find a solution (when I have the time). However, I personally never install R packages from deb's (i.e., I always install all R packages from source directly from CRAN). R packages are so frequently updated - and for good reason - that I would never rely on what version has been bundled as a deb in the past. But that's just my personal preference.
+
+So do I, and I maintain ~ 100 of them and started the whole busines (with,
+IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+update to /usr/local/lib/R/site-library daily or almost daily (littler script
+`update.r`) on my main machine, and have done so on many work machines over
+all those years.
+
+Michael Rutter' PPA is very good if you are on Ubuntu, and updates about once
+a week so I use that on another laptop.
+
+These Debian packages are very good and very important but they aren't the
+only way to use R, and are also sometimes stale plus there may be a Debian
+repo lag. Lastly, here for this package: if I were the maintainer, I would
+probably just try to patch mathjaxr out for the Debian package.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From lists at dewey.myzen.co.uk  Fri Jan 29 13:59:29 2021
+From: lists at dewey.myzen.co.uk (Michael Dewey)
+Date: Fri, 29 Jan 2021 13:59:29 +0000
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <24594.51654.478822.942820@rob.eddelbuettel.com>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com>
+Message-ID: <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk>
+
+Comment in-line
+
+On 28/01/2021 14:27, Dirk Eddelbuettel wrote:
+> On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+> | To be 100% clear: I absolutely understand the concern with the minified JS and I will try to find a solution (when I have the time). However, I personally never install R packages from deb's (i.e., I always install all R packages from source directly from CRAN). R packages are so frequently updated - and for good reason - that I would never rely on what version has been bundled as a deb in the past. But that's just my personal preference.
+>
+> So do I, and I maintain ~ 100 of them and started the whole busines (with,
+> IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+> update to /usr/local/lib/R/site-library daily or almost daily (littler script
+> `update.r`) on my main machine, and have done so on many work machines over
+> all those years.
+>
+> Michael Rutter' PPA is very good if you are on Ubuntu, and updates about once
+> a week so I use that on another laptop.
+>
+> These Debian packages are very good and very important but they aren't the
+> only way to use R, and are also sometimes stale plus there may be a Debian
+> repo lag. Lastly, here for this package: if I were the maintainer, I would
+> probably just try to patch mathjaxr out for the Debian package.
+
+If I understand that correctly that was what I suggested in an earlier 
+part of the thread but Andreas felt that was not suitable. Just for the 
+avoidance of doubt what I was proposing was to edit my macros.Rd file to 
+redefine the mathjaxr macros as base Rd (d)eqn, make relevant changes in 
+DESCRIPTION and NAMESPACE, build and check it and then send Andreas the 
+tar.gz
+
+I have not tested that but I cannot see any reason why it would not 
+work. I do realise I may come to regret writing that.
+
+> Dirk
+
+--
+Michael
+http://www.dewey.myzen.co.uk/home.html
+
+From wolfgang.viechtbauer at maastrichtuniversity.nl  Fri Jan 29 14:16:06 2021
+From: wolfgang.viechtbauer at maastrichtuniversity.nl (Viechtbauer, Wolfgang (SP))
+Date: Fri, 29 Jan 2021 14:16:06 +0000
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk>
+Message-ID: <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl>
+
+And just a quick follow-up from me:
+
+I now have a working mathjaxr version that contains no minified JS. By cutting out one of the (non-crucial) components from MathJax, I was also able to keep the package size below 5Mb and hence can avoid triggering the 'R CMD check' check warning. I will be submitting this to CRAN asap (after some final testing).
+
+@Andreas: As for using an existing MathJax in the file system: I might look into this in the future, but unfortunately can't spend any time on this right now.
+
+I included Duncan and James in cc as they have also made use of mathjaxr.
+
+Best,
+Wolfgang
+
+>-----Original Message-----
+>From: Michael Dewey [mailto:lists at dewey.myzen.co.uk]
+>Sent: Friday, 29 January, 2021 14:59
+>To: Dirk Eddelbuettel; Viechtbauer, Wolfgang (SP)
+>Cc: Andreas Tille; debian-r at lists.debian.org
+>Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+>
+>Comment in-line
+>
+>On 28/01/2021 14:27, Dirk Eddelbuettel wrote:
+>>
+>> On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+>> | To be 100% clear: I absolutely understand the concern with the minified
+>JS and I will try to find a solution (when I have the time). However, I
+>personally never install R packages from deb's (i.e., I always install all R
+>packages from source directly from CRAN). R packages are so frequently
+>updated - and for good reason - that I would never rely on what version has
+>been bundled as a deb in the past. But that's just my personal preference.
+>>
+>> So do I, and I maintain ~ 100 of them and started the whole busines (with,
+>> IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+>> update to /usr/local/lib/R/site-library daily or almost daily (littler
+>script
+>> `update.r`) on my main machine, and have done so on many work machines
+>over
+>> all those years.
+>>
+>> Michael Rutter' PPA is very good if you are on Ubuntu, and updates about
+>once
+>> a week so I use that on another laptop.
+>>
+>> These Debian packages are very good and very important but they aren't the
+>> only way to use R, and are also sometimes stale plus there may be a Debian
+>> repo lag. Lastly, here for this package: if I were the maintainer, I would
+>> probably just try to patch mathjaxr out for the Debian package.
+>
+>If I understand that correctly that was what I suggested in an earlier
+>part of the thread but Andreas felt that was not suitable. Just for the
+>avoidance of doubt what I was proposing was to edit my macros.Rd file to
+>redefine the mathjaxr macros as base Rd (d)eqn, make relevant changes in
+>DESCRIPTION and NAMESPACE, build and check it and then send Andreas the
+>tar.gz
+>
+>I have not tested that but I cannot see any reason why it would not
+>work. I do realise I may come to regret writing that.
+>
+>>
+>> Dirk
+>>
+>
+>--
+>Michael
+>http://www.dewey.myzen.co.uk/home.html
+
+From edd at debian.org  Fri Jan 29 14:37:16 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 29 Jan 2021 08:37:16 -0600
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk> <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl>
+Message-ID: <24596.7580.713894.964728@rob.eddelbuettel.com>
+
+On 29 January 2021 at 14:16, Viechtbauer, Wolfgang (SP) wrote:
+| And just a quick follow-up from me:
+| 
+| I now have a working mathjaxr version that contains no minified JS. By cutting out one of the (non-crucial) components from MathJax, I was also able to keep the package size below 5Mb and hence can avoid triggering the 'R CMD check' check warning. I will be submitting this to CRAN asap (after some final testing).
+
+Thank you so much!  I still have the open 'ticket' (around here we call them
+'intent to package' bug report) for it which I will update once my
+CRANberries robot tells me this on CRAN.
+
+Debian is headed into a release which may slow processing of the NEW
+(package) queue (our version of CRAN new package checks) down so all this may
+take a moment to unravel, but hey it is open source and we (generally) have
+(near) infinite time horizons. So eventually this will all pan out. Which is
+how it should be -- so thanks for making that happen at your (package) end.
+
+Dirk
+
+| @Andreas: As for using an existing MathJax in the file system: I might look into this in the future, but unfortunately can't spend any time on this right now.
+| 
+| I included Duncan and James in cc as they have also made use of mathjaxr.
+| 
+| Best,
+| Wolfgang
+| 
+| >-----Original Message-----
+| >From: Michael Dewey [mailto:lists at dewey.myzen.co.uk]
+| >Sent: Friday, 29 January, 2021 14:59
+| >To: Dirk Eddelbuettel; Viechtbauer, Wolfgang (SP)
+| >Cc: Andreas Tille; debian-r at lists.debian.org
+| >Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+| >
+| >Comment in-line
+| >
+| >On 28/01/2021 14:27, Dirk Eddelbuettel wrote:
+| >>
+| >> On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+| >> | To be 100% clear: I absolutely understand the concern with the minified
+| >JS and I will try to find a solution (when I have the time). However, I
+| >personally never install R packages from deb's (i.e., I always install all R
+| >packages from source directly from CRAN). R packages are so frequently
+| >updated - and for good reason - that I would never rely on what version has
+| >been bundled as a deb in the past. But that's just my personal preference.
+| >>
+| >> So do I, and I maintain ~ 100 of them and started the whole busines (with,
+| >> IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+| >> update to /usr/local/lib/R/site-library daily or almost daily (littler
+| >script
+| >> `update.r`) on my main machine, and have done so on many work machines
+| >over
+| >> all those years.
+| >>
+| >> Michael Rutter' PPA is very good if you are on Ubuntu, and updates about
+| >once
+| >> a week so I use that on another laptop.
+| >>
+| >> These Debian packages are very good and very important but they aren't the
+| >> only way to use R, and are also sometimes stale plus there may be a Debian
+| >> repo lag. Lastly, here for this package: if I were the maintainer, I would
+| >> probably just try to patch mathjaxr out for the Debian package.
+| >
+| >If I understand that correctly that was what I suggested in an earlier
+| >part of the thread but Andreas felt that was not suitable. Just for the
+| >avoidance of doubt what I was proposing was to edit my macros.Rd file to
+| >redefine the mathjaxr macros as base Rd (d)eqn, make relevant changes in
+| >DESCRIPTION and NAMESPACE, build and check it and then send Andreas the
+| >tar.gz
+| >
+| >I have not tested that but I cannot see any reason why it would not
+| >work. I do realise I may come to regret writing that.
+| >
+| >>
+| >> Dirk
+| >>
+| >
+| >--
+| >Michael
+| >http://www.dewey.myzen.co.uk/home.html
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Fri Jan 29 17:40:10 2021
+From: tille at debian.org (Andreas Tille)
+Date: Fri, 29 Jan 2021 18:40:10 +0100
+Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <24596.7580.713894.964728@rob.eddelbuettel.com>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk> <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl> <24596.7580.713894.964728@rob.eddelbuettel.com>
+Message-ID: <20210129174010.GL28662@an3as.eu>
+
+Hi,
+
+On Fri, Jan 29, 2021 at 08:37:16AM -0600, Dirk Eddelbuettel wrote:
+> 
+> On 29 January 2021 at 14:16, Viechtbauer, Wolfgang (SP) wrote:
+> | And just a quick follow-up from me:
+> | 
+> | I now have a working mathjaxr version that contains no minified JS. By cutting out one of the (non-crucial) components from MathJax, I was also able to keep the package size below 5Mb and hence can avoid triggering the 'R CMD check' check warning. I will be submitting this to CRAN asap (after some final testing).
+> 
+> Thank you so much!
+
++1
+
+> I still have the open 'ticket' (around here we call them
+> 'intent to package' bug report) for it which I will update once my
+> CRANberries robot tells me this on CRAN.
+> 
+> Debian is headed into a release which may slow processing of the NEW
+> (package) queue (our version of CRAN new package checks) down so all this may
+> take a moment to unravel, but hey it is open source and we (generally) have
+> (near) infinite time horizons. So eventually this will all pan out. Which is
+> how it should be -- so thanks for making that happen at your (package) end.
+
+I think we could try and ping ftpmaster about it.  May be we are lucky.
+I cannot contribute honest work until 9.2. due to real life things.
+
+Kind regards
+
+     Andreas.
+
+> Dirk
+> 
+> | @Andreas: As for using an existing MathJax in the file system: I might look into this in the future, but unfortunately can't spend any time on this right now.
+> | 
+> | I included Duncan and James in cc as they have also made use of mathjaxr.
+> | 
+> | Best,
+> | Wolfgang
+> | 
+> | >-----Original Message-----
+> | >From: Michael Dewey [mailto:lists at dewey.myzen.co.uk]
+> | >Sent: Friday, 29 January, 2021 14:59
+> | >To: Dirk Eddelbuettel; Viechtbauer, Wolfgang (SP)
+> | >Cc: Andreas Tille; debian-r at lists.debian.org
+> | >Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+> | >
+> | >Comment in-line
+> | >
+> | >On 28/01/2021 14:27, Dirk Eddelbuettel wrote:
+> | >>
+> | >> On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+> | >> | To be 100% clear: I absolutely understand the concern with the minified
+> | >JS and I will try to find a solution (when I have the time). However, I
+> | >personally never install R packages from deb's (i.e., I always install all R
+> | >packages from source directly from CRAN). R packages are so frequently
+> | >updated - and for good reason - that I would never rely on what version has
+> | >been bundled as a deb in the past. But that's just my personal preference.
+> | >>
+> | >> So do I, and I maintain ~ 100 of them and started the whole busines (with,
+> | >> IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+> | >> update to /usr/local/lib/R/site-library daily or almost daily (littler
+> | >script
+> | >> `update.r`) on my main machine, and have done so on many work machines
+> | >over
+> | >> all those years.
+> | >>
+> | >> Michael Rutter' PPA is very good if you are on Ubuntu, and updates about
+> | >once
+> | >> a week so I use that on another laptop.
+> | >>
+> | >> These Debian packages are very good and very important but they aren't the
+> | >> only way to use R, and are also sometimes stale plus there may be a Debian
+> | >> repo lag. Lastly, here for this package: if I were the maintainer, I would
+> | >> probably just try to patch mathjaxr out for the Debian package.
+> | >
+> | >If I understand that correctly that was what I suggested in an earlier
+> | >part of the thread but Andreas felt that was not suitable. Just for the
+> | >avoidance of doubt what I was proposing was to edit my macros.Rd file to
+> | >redefine the mathjaxr macros as base Rd (d)eqn, make relevant changes in
+> | >DESCRIPTION and NAMESPACE, build and check it and then send Andreas the
+> | >tar.gz
+> | >
+> | >I have not tested that but I cannot see any reason why it would not
+> | >work. I do realise I may come to regret writing that.
+> | >
+> | >>
+> | >> Dirk
+> | >>
+> | >
+> | >--
+> | >Michael
+> | >http://www.dewey.myzen.co.uk/home.html
+> 
+> -- 
+> https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Jan 29 17:47:42 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 29 Jan 2021 18:47:42 +0100
+Subject: Please help r-cran-shiny upgrade by packaging new dependencies
+Message-ID: <20210129174742.GM28662@an3as.eu>
+
+Hi,
+
+r-cran-shiny needs the new dependencies r-cran-bslib and r-cran-cachem.
+The former in turn depends r-cran-jquerylib and r-cran-sass.  I was
+able to upload r-cran-cachem and r-cran-sass since these where pretty
+easy.  However as you can see in Git r-cran-jquerylib[1] and
+r-cran-bslib[2] are quite some work due to lots of minified files.
+
+I'm busy with real life until 9.2. and can not contribute to this kind
+of job sensibly.  Since the freeze is coming closer I'd be really happy
+if someone could have a look at these packages.
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-jquerylib
+[2] https://salsa.debian.org/r-pkg-team/r-cran-bslib
+
+-- 
+http://fam-tille.de
+
+From wolfgang.viechtbauer at maastrichtuniversity.nl  Sat Jan 30 17:08:11 2021
+From: wolfgang.viechtbauer at maastrichtuniversity.nl (Viechtbauer, Wolfgang (SP))
+Date: Sat, 30 Jan 2021 17:08:11 +0000
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <20210129174010.GL28662@an3as.eu>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk> <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl> <24596.7580.713894.964728@rob.eddelbuettel.com> <20210129174010.GL28662@an3as.eu>
+Message-ID: <c9ac7ab1916c453a847e82cab44a96e4@UM-MAIL3214.unimaas.nl>
+
+Dear All,
+
+I just submitted an updated version of mathjaxr to CRAN. As described earlier, it now contains the unminified javascript files. Thanks to Duncan, the package now makes use of an install hook to minify the javascript files upon installation (using the 'js' package if it is installed). This shaves off a bit over 1Mb from the installed package (4Mb vs 2.9Mb). So we get the best of both worlds - plain js in the source, minified when installed.
+
+Best,
+Wolfgang
+
+>-----Original Message-----
+>From: Andreas Tille [mailto:tille at debian.org]
+>Sent: Friday, 29 January, 2021 18:40
+>To: Dirk Eddelbuettel
+>Cc: Viechtbauer, Wolfgang (SP); Michael Dewey; debian-r at lists.debian.org; Duncan
+>Murdoch; James Pustejovsky
+>Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+>
+>Hi,
+>
+>On Fri, Jan 29, 2021 at 08:37:16AM -0600, Dirk Eddelbuettel wrote:
+>>
+>> On 29 January 2021 at 14:16, Viechtbauer, Wolfgang (SP) wrote:
+>> | And just a quick follow-up from me:
+>> |
+>> | I now have a working mathjaxr version that contains no minified JS. By cutting
+>out one of the (non-crucial) components from MathJax, I was also able to keep the
+>package size below 5Mb and hence can avoid triggering the 'R CMD check' check
+>warning. I will be submitting this to CRAN asap (after some final testing).
+>>
+>> Thank you so much!
+>
+>+1
+>
+>> I still have the open 'ticket' (around here we call them
+>> 'intent to package' bug report) for it which I will update once my
+>> CRANberries robot tells me this on CRAN.
+>>
+>> Debian is headed into a release which may slow processing of the NEW
+>> (package) queue (our version of CRAN new package checks) down so all this may
+>> take a moment to unravel, but hey it is open source and we (generally) have
+>> (near) infinite time horizons. So eventually this will all pan out. Which is
+>> how it should be -- so thanks for making that happen at your (package) end.
+>
+>I think we could try and ping ftpmaster about it.  May be we are lucky.
+>I cannot contribute honest work until 9.2. due to real life things.
+>
+>Kind regards
+>
+>     Andreas.
+>
+>> Dirk
+>>
+>> | @Andreas: As for using an existing MathJax in the file system: I might look
+>into this in the future, but unfortunately can't spend any time on this right now.
+>> |
+>> | I included Duncan and James in cc as they have also made use of mathjaxr.
+>> |
+>> | Best,
+>> | Wolfgang
+>> |
+>> | >-----Original Message-----
+>> | >From: Michael Dewey [mailto:lists at dewey.myzen.co.uk]
+>> | >Sent: Friday, 29 January, 2021 14:59
+>> | >To: Dirk Eddelbuettel; Viechtbauer, Wolfgang (SP)
+>> | >Cc: Andreas Tille; debian-r at lists.debian.org
+>> | >Subject: Re: Is there any chance to make mathjaxr non-mandatory in metap
+>> | >
+>> | >Comment in-line
+>> | >
+>> | >On 28/01/2021 14:27, Dirk Eddelbuettel wrote:
+>> | >>
+>> | >> On 27 January 2021 at 12:03, Viechtbauer, Wolfgang (SP) wrote:
+>> | >> | To be 100% clear: I absolutely understand the concern with the minified
+>> | >JS and I will try to find a solution (when I have the time). However, I
+>> | >personally never install R packages from deb's (i.e., I always install all R
+>> | >packages from source directly from CRAN). R packages are so frequently
+>> | >updated - and for good reason - that I would never rely on what version has
+>> | >been bundled as a deb in the past. But that's just my personal preference.
+>> | >>
+>> | >> So do I, and I maintain ~ 100 of them and started the whole busines (with,
+>> | >> IIRC, r-cran-rodbc almost 18 years ago). I follow CRAN closely, so I just
+>> | >> update to /usr/local/lib/R/site-library daily or almost daily (littler
+>> | >script
+>> | >> `update.r`) on my main machine, and have done so on many work machines
+>> | >over
+>> | >> all those years.
+>> | >>
+>> | >> Michael Rutter' PPA is very good if you are on Ubuntu, and updates about
+>> | >once
+>> | >> a week so I use that on another laptop.
+>> | >>
+>> | >> These Debian packages are very good and very important but they aren't the
+>> | >> only way to use R, and are also sometimes stale plus there may be a Debian
+>> | >> repo lag. Lastly, here for this package: if I were the maintainer, I would
+>> | >> probably just try to patch mathjaxr out for the Debian package.
+>> | >
+>> | >If I understand that correctly that was what I suggested in an earlier
+>> | >part of the thread but Andreas felt that was not suitable. Just for the
+>> | >avoidance of doubt what I was proposing was to edit my macros.Rd file to
+>> | >redefine the mathjaxr macros as base Rd (d)eqn, make relevant changes in
+>> | >DESCRIPTION and NAMESPACE, build and check it and then send Andreas the
+>> | >tar.gz
+>> | >
+>> | >I have not tested that but I cannot see any reason why it would not
+>> | >work. I do realise I may come to regret writing that.
+>> | >
+>> | >>
+>> | >> Dirk
+>> | >>
+>> | >
+>> | >--
+>> | >Michael
+>> | >http://www.dewey.myzen.co.uk/home.html
+>>
+>> --
+>> https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+>>
+>
+>--
+>http://fam-tille.de
+
+From edd at debian.org  Sat Jan 30 18:46:56 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 30 Jan 2021 12:46:56 -0600
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <c9ac7ab1916c453a847e82cab44a96e4@UM-MAIL3214.unimaas.nl>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk> <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl> <24596.7580.713894.964728@rob.eddelbuettel.com> <20210129174010.GL28662@an3as.eu> <c9ac7ab1916c453a847e82cab44a96e4@UM-MAIL3214.unimaas.nl>
+Message-ID: <24597.43424.613080.344743@rob.eddelbuettel.com>
+
+On 30 January 2021 at 17:08, Viechtbauer, Wolfgang (SP) wrote:
+| Dear All,
+| 
+| I just submitted an updated version of mathjaxr to CRAN. As described earlier, it now contains the unminified javascript files. Thanks to Duncan, the package now makes use of an install hook to minify the javascript files upon installation (using the 'js' package if it is installed). This shaves off a bit over 1Mb from the installed package (4Mb vs 2.9Mb). So we get the best of both worlds - plain js in the source, minified when installed.
+
+Most excellent. I just update the Debian packaging, sent it back to the NEW
+queue and replied to existing mail thread with one of the ftpmasters about it.
+
+So at "some point soon" (for generous definitions of "soon") this should be
+in Debian, and then as always "eventually" also in Ubuntu and others.
+
+Big thank you to Wolfgang for making the changes, and to Duncan for the "hook"!
+
+Cheers, Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From wolfgang.viechtbauer at maastrichtuniversity.nl  Sat Jan 30 22:33:30 2021
+From: wolfgang.viechtbauer at maastrichtuniversity.nl (Viechtbauer, Wolfgang (SP))
+Date: Sat, 30 Jan 2021 22:33:30 +0000
+Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+In-Reply-To: <24597.43424.613080.344743@rob.eddelbuettel.com>
+References: <20210127075749.GH4758@an3as.eu> <a0a0fe87-335e-399b-97dd-57ab0c66e04b@dewey.myzen.co.uk> <7056baaf0ba34c96afbd6002c1c8d5c6@UM-MAIL3214.unimaas.nl> <24594.51654.478822.942820@rob.eddelbuettel.com> <d8db6848-cbf0-c156-d31a-85531e20ec1f@dewey.myzen.co.uk> <8f98635b9f65481891ddedf757dc3465@UM-MAIL3214.unimaas.nl> <24596.7580.713894.964728@rob.eddelbuettel.com> <20210129174010.GL28662@an3as.eu> <c9ac7ab1916c453a847e82cab44a96e4@UM-MAIL3214.unimaas.nl> <24597.43424.613080.344743@rob.eddelbuettel.com>
+Message-ID: <84f84c3f00db4dd291200e8c5ce83208@UM-MAIL3214.unimaas.nl>
+
+Glad this worked out. Also personally quite happy with the avoidance of the minified js in the source package. It's definitely better this way. Thanks for the push to make this happen.
+
+Best,
+Wolfgang
+
+>-----Original Message-----
+>From: Dirk Eddelbuettel [mailto:edd at debian.org]
+>Sent: Saturday, 30 January, 2021 19:47
+>To: Viechtbauer, Wolfgang (SP)
+>Cc: Andreas Tille; Dirk Eddelbuettel; Michael Dewey; debian-r at lists.debian.org;
+>Duncan Murdoch; James Pustejovsky
+>Subject: RE: Is there any chance to make mathjaxr non-mandatory in metap
+>
+>On 30 January 2021 at 17:08, Viechtbauer, Wolfgang (SP) wrote:
+>| Dear All,
+>|
+>| I just submitted an updated version of mathjaxr to CRAN. As described earlier,
+>it now contains the unminified javascript files. Thanks to Duncan, the package now
+>makes use of an install hook to minify the javascript files upon installation
+>(using the 'js' package if it is installed). This shaves off a bit over 1Mb from
+>the installed package (4Mb vs 2.9Mb). So we get the best of both worlds - plain js
+>in the source, minified when installed.
+>
+>Most excellent. I just update the Debian packaging, sent it back to the NEW
+>queue and replied to existing mail thread with one of the ftpmasters about it.
+>
+>So at "some point soon" (for generous definitions of "soon") this should be
+>in Debian, and then as always "eventually" also in Ubuntu and others.
+>
+>Big thank you to Wolfgang for making the changes, and to Duncan for the "hook"!
+>
+>Cheers, Dirk
+>
+>--
+>https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Sun Jan 31 10:38:57 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sun, 31 Jan 2021 16:08:57 +0530
+Subject: Regarding r-cran-rcppmlpack
+Message-ID: <ad15f617-35cb-e966-f4d8-d084a609ff4a@debian.org>
+
+Hi Dirk,
+
+The new release of r-cran-genieclust seems to need r-cran-rcppmlpack (as seen here[1]) which is still unpackaged.
+Andreas did initial packaging of r-cran-rcppmlpack[2] (this has not yet been uploaded) - it builds and works good, however I quickly realised that it uses an "embedded" copy of mlpack library which is bad for obvious reasons.
+I tried repacking it, but then it seems that the embedded MLpack is several versions behind the mlpack we have in Debian.
+
+And then, I saw that you have a fork of r-cran-rcppmlpack here[3] however the readme states that it is still experimental so I'm not sure if I should package this and upload for unstable.
+Or with this if genieclust can even work for that matter. I'm not sure if uploading the mlpack1 compatible package with embedded copy would be a good idea. (I don't feel so)
+
+Since you seem to be (mplack-3-compatible) r-cran-rcppmlpack's primary author, I'd really appreciate your advice on this - as to what do you think about its compatibility and feasibility to enter
+unstable and therefore testing.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-genieclust/-/blob/master/DESCRIPTION#L38
+[2]: https://salsa.debian.org/r-pkg-team/r-cran-rcppmlpack
+[3]: https://github.com/rcppmlpack/rcppmlpack2
+
+Nilesh
+
+From edd at debian.org  Sun Jan 31 13:59:58 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 31 Jan 2021 07:59:58 -0600
+Subject: Re: Regarding r-cran-rcppmlpack
+In-Reply-To: <ad15f617-35cb-e966-f4d8-d084a609ff4a@debian.org>
+References: <ad15f617-35cb-e966-f4d8-d084a609ff4a@debian.org>
+Message-ID: <24598.47070.441732.709797@rob.eddelbuettel.com>
+
+Howdy,
+
+On 31 January 2021 at 16:08, Nilesh Patra wrote:
+| The new release of r-cran-genieclust seems to need r-cran-rcppmlpack (as seen here[1]) which is still unpackaged.
+| Andreas did initial packaging of r-cran-rcppmlpack[2] (this has not yet been uploaded) - it builds and works good, however I quickly realised that it uses an "embedded" copy of mlpack library which is bad for obvious reasons.
+| I tried repacking it, but then it seems that the embedded MLpack is several versions behind the mlpack we have in Debian.
+
+As I wrote in the thread that you may have seen RcppMLPACK is outdated. It's
+main upstream repo and CRAN package are
+  https://github.com/rcppmlpack/RcppMLPACK1
+  https://cloud.r-project.org/web/packages/RcppMLPACK/index.html
+  
+A careful glance reveals that all there is six years old. So I should just talk to
+Qiang about it. We may just have to pull it from CRAN. Or keep maintaining it
+as status quo.
+
+As for your current inability to package it: I forget the CRAN / R details
+but at some point R switched to this 'pivoted' build where it builds in
+location A, pivots to location B and retests. That hits me in two or so CRAN
+packages I co-author---and one generally gets a pass as "grandfathered" on
+CRAN. However, I am not sure we _can_ in fact overcome that with Debian
+packaging but I have not tried.  So you should really consider retiring it.
+
+And after *many* years and many failed attempts, the *current* MLPACK sources
+are packaged at CRAN, and will remain packaged and update there as R is now
+a formal primary delivery language in the source repo:
+   https://github.com/mlpack/mlpack
+   http://cloud.r-project.org/package=mlpack
+You will note that they were kind enough to list me as an author/contributor
+in their R package as I assisted over the years with the trials (included the
+"v2" approach you link to below and which still failed). One very, very eager
+and capable GSoC student pushed it far enough for all this to work.
+
+That is what should get packaged for Debian. It's clean (but large so there
+could be issues with some autobuilders -- but it's still way smaller than
+some other things we have in Debian).
+
+| And then, I saw that you have a fork of r-cran-rcppmlpack here[3] however the readme states that it is still experimental so I'm not sure if I should package this and upload for unstable.
+| Or with this if genieclust can even work for that matter. I'm not sure if uploading the mlpack1 compatible package with embedded copy would be a good idea. (I don't feel so)
+|
+| Since you seem to be (mplack-3-compatible) r-cran-rcppmlpack's primary author, I'd really appreciate your advice on this - as to what do you think about its compatibility and feasibility to enter
+| unstable and therefore testing.
+
+No please see
+   https://github.com/mlpack/mlpack
+   http://cloud.r-project.org/package=mlpack
+
+As such the whole rcppmlpack org is a little outdated. I will make a point of
+upding the README.md files at GitHub today.
+
+Thank you for pursuing packaging various forms of mlpack. It is worth it!
+
+Dirk
+ 
+| [1]: https://salsa.debian.org/r-pkg-team/r-cran-genieclust/-/blob/master/DESCRIPTION#L38
+| [2]: https://salsa.debian.org/r-pkg-team/r-cran-rcppmlpack
+| [3]: https://github.com/rcppmlpack/rcppmlpack2
+| 
+| Nilesh
+| 
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

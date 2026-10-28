@@ -1,0 +1,905 @@
+From friedrich.pahlke at rpact.com  Thu Jan  6 08:23:29 2022
+From: friedrich.pahlke at rpact.com (Friedrich Pahlke (RPACT))
+Date: Thu, 6 Jan 2022 09:23:29 +0100
+Subject: Re: Rpact fails its test on i386
+In-Reply-To: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net>
+References: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net>
+Message-ID: <03c3222a-a9f4-7194-55d0-54a51e01f1e1@rpact.com>
+
+Hi Nilesh,
+
+Thanks a lot for the bug report and sorry for the late reply.
+I'm still on Christmas vacation and will check that out next week.
+
+Happy New Year and best regards,
+
+Friedrich
+
+  Friedrich Pahlke, Ph.D.
+  RPACT
+
+  phone  +49 451 1217116
+  mobile +49 151 72928193
+  fax    +49 451 1216993
+  e-mail friedrich.pahlke at rpact.com
+
+  CEOs: Prof. Dr. Gernot Wassmer, Dr. Friedrich Pahlke
+  VAT-ID (USt-ID): DE312258359
+  District Court Luebeck
+_______________________________________________________
+  RPACT - R Programming for Adaptive Clinical Trials
+  www.rpact.com
+
+Am 30.12.2021 um 20:37 schrieb Nilesh Patra:
+> Hi Friedrich,
+>
+> Rpact version 3.2.0 fails its tests on i386 (and only this one) with some float precision errors.
+> Usually propagating a `-ffloat-store` in PKG_CXXFLAGS fixed the issue when it surfaced in other packages earlier, but that
+> does not seem to help here.
+>
+> Could you take a look? Should these tests be ignored on i386?
+>
+> Let me know.
+>
+> regards,
+> Nilesh
+>
+>
+> ══ Failed tests ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+> ── Failure (test-f_simulation_enrichment_rates.R:125:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$iterations[2, ] not equal to c(99, 100, 99, 96, 100, 95, 91, 91, 83, 79, 79, 63).
+> 2/12 mismatches (average diff: 3)
+> [9]  82 - 83 == -1
+> [10] 84 - 79 ==  5
+> ── Failure (test-f_simulation_enrichment_rates.R:126:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$rejectAtLeastOne not equal to c(...).
+> 8/12 mismatches (average diff: 0.0212)
+> [1]  0.03 - 0.04 == -0.01
+> [2]  0.03 - 0.04 == -0.01
+> [3]  0.12 - 0.15 == -0.03
+> [4]  0.39 - 0.36 ==  0.03
+> [5]  0.44 - 0.41 ==  0.03
+> [6]  0.51 - 0.54 == -0.03
+> [9]  0.95 - 0.94 ==  0.01
+> [10] 0.95 - 0.93 ==  0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:127:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$rejectedPopulationsPerStage)) not equal to c(...).
+> 16/48 mismatches (average diff: 0.0225)
+> [2]  0.02 - 0.03 == -0.01
+> [10] 0.37 - 0.36 ==  0.01
+> [12] 0.30 - 0.31 == -0.01
+> [13] 0.02 - 0.03 == -0.01
+> [17] 0.17 - 0.16 ==  0.01
+> [19] 0.14 - 0.18 == -0.04
+> [20] 0.61 - 0.55 ==  0.06
+> [26] 0.00 - 0.01 == -0.01
+> [28] 0.02 - 0.03 == -0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:129:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$earlyStop[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [9]  0.18 - 0.17 ==  0.01
+> [10] 0.16 - 0.21 == -0.05
+> ── Failure (test-f_simulation_enrichment_rates.R:130:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$successPerStage[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [9]  0.18 - 0.17 ==  0.01
+> [10] 0.16 - 0.21 == -0.05
+> ── Failure (test-f_simulation_enrichment_rates.R:131:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$successPerStage[2, ] not equal to c(...).
+> 7/12 mismatches (average diff: 0.03)
+> [1]  0.02 - 0.03 == -0.01
+> [2]  0.03 - 0.04 == -0.01
+> [3]  0.11 - 0.14 == -0.03
+> [4]  0.35 - 0.32 ==  0.03
+> [5]  0.44 - 0.41 ==  0.03
+> [6]  0.46 - 0.49 == -0.03
+> [10] 0.79 - 0.72 ==  0.07
+> ── Failure (test-f_simulation_enrichment_rates.R:132:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$selectedPopulations)) not equal to c(...).
+> 14/48 mismatches (average diff: 0.02)
+> [4]  0.57 - 0.55 ==  0.02
+> [6]  0.33 - 0.30 ==  0.03
+> [8]  0.14 - 0.13 ==  0.01
+> [10] 0.85 - 0.87 == -0.02
+> [12] 0.62 - 0.63 == -0.01
+> [14] 0.45 - 0.44 ==  0.01
+> [18] 0.75 - 0.77 == -0.02
+> [20] 0.66 - 0.62 ==  0.04
+> [26] 0.70 - 0.71 == -0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:134:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$numberOfPopulations[2, ] not equal to c(...).
+> 9/12 mismatches (average diff: 0.0239)
+> [1]  1.35 - 1.36 == -0.0101
+> [2]  1.35 - 1.33 ==  0.0200
+> [3]  1.26 - 1.24 ==  0.0202
+> [4]  1.14 - 1.12 ==  0.0104
+> [5]  1.34 - 1.31 ==  0.0300
+> [6]  1.42 - 1.44 == -0.0211
+> [7]  1.36 - 1.35 ==  0.0110
+> [9]  1.27 - 1.30 == -0.0329
+> [10] 1.35 - 1.41 == -0.0598
+> ── Failure (test-f_simulation_enrichment_rates.R:135:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$expectedNumberOfSubjects not equal to c(...).
+> 12/12 mismatches (average diff: 4.02)
+> [1] 665 - 670 ==  -4.32
+> [2] 669 - 672 ==  -2.37
+> [3] 626 - 620 ==   5.93
+> [4] 564 - 574 == -10.29
+> [5] 556 - 557 ==  -1.08
+> [6] 517 - 514 ==   2.23
+> [7] 435 - 439 ==  -4.66
+> [8] 416 - 418 ==  -2.19
+> [9] 380 - 385 ==  -5.43
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:136:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$sampleSizes)) not equal to c(...).
+> 24/48 mismatches (average diff: 2.46)
+> [2]  422 - 425 == -2.29
+> [4]  410 - 413 == -2.34
+> [6]  365 - 359 ==  5.93
+> [8]  319 - 327 == -7.93
+> [10] 349 - 356 == -7.30
+> [12] 304 - 303 ==  1.50
+> [14] 240 - 244 == -3.79
+> [16] 218 - 220 == -1.78
+> [18] 252 - 254 == -1.98
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:138:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$conditionalPowerAchieved[2, ] not equal to c(...).
+> 10/12 mismatches (average diff: 0.0121)
+> [1] 0.468 - 0.476 == -7.38e-03
+> [2] 0.489 - 0.496 == -6.72e-03
+> [3] 0.596 - 0.541 ==  5.49e-02
+> [4] 0.580 - 0.565 ==  1.51e-02
+> [5] 0.673 - 0.656 ==  1.69e-02
+> [6] 0.691 - 0.692 == -1.17e-03
+> [7] 0.760 - 0.750 ==  1.02e-02
+> [8] 0.782 - 0.782 == -4.70e-06
+> [9] 0.785 - 0.788 == -2.59e-03
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:176:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$iterations[2, ] not equal to c(100, 100, 98, 98, 100, 97, 94, 87, 84, 89, 77, 61).
+> 11/12 mismatches (average diff: 1.82)
+> [2]   99 - 100 == -1
+> [3]  100 -  98 ==  2
+> [4]   99 -  98 ==  1
+> [5]   99 - 100 == -1
+> [6]   95 -  97 == -2
+> [7]   97 -  94 ==  3
+> [8]   84 -  87 == -3
+> [9]   87 -  84 ==  3
+> [10]  87 -  89 == -2
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:177:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$rejectAtLeastOne not equal to c(...).
+> 8/12 mismatches (average diff: 0.0375)
+> [2]  0.05 - 0.03 ==  0.02
+> [3]  0.10 - 0.15 == -0.05
+> [4]  0.20 - 0.21 == -0.01
+> [5]  0.21 - 0.19 ==  0.02
+> [6]  0.33 - 0.31 ==  0.02
+> [7]  0.48 - 0.51 == -0.03
+> [8]  0.74 - 0.62 ==  0.12
+> [10] 0.81 - 0.78 ==  0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:178:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$rejectedPopulationsPerStage)) not equal to c(...).
+> 33/48 mismatches (average diff: 0.0236)
+> [4]  0.02 - 0.01 ==  0.01
+> [6]  0.02 - 0.00 ==  0.02
+> [9]  0.01 - 0.00 ==  0.01
+> [10] 0.16 - 0.17 == -0.01
+> [11] 0.05 - 0.03 ==  0.02
+> [13] 0.02 - 0.03 == -0.01
+> [14] 0.07 - 0.10 == -0.03
+> [15] 0.06 - 0.02 ==  0.04
+> [16] 0.04 - 0.03 ==  0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:180:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$earlyStop[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+> 11/12 mismatches (average diff: 0.0182)
+> [2]  0.01 - 0.00 ==  0.01
+> [3]  0.00 - 0.02 == -0.02
+> [4]  0.01 - 0.02 == -0.01
+> [5]  0.01 - 0.00 ==  0.01
+> [6]  0.05 - 0.03 ==  0.02
+> [7]  0.03 - 0.06 == -0.03
+> [8]  0.16 - 0.13 ==  0.03
+> [9]  0.13 - 0.16 == -0.03
+> [10] 0.13 - 0.11 ==  0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:181:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$successPerStage[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+> 11/12 mismatches (average diff: 0.0182)
+> [2]  0.01 - 0.00 ==  0.01
+> [3]  0.00 - 0.02 == -0.02
+> [4]  0.01 - 0.02 == -0.01
+> [5]  0.01 - 0.00 ==  0.01
+> [6]  0.05 - 0.03 ==  0.02
+> [7]  0.03 - 0.06 == -0.03
+> [8]  0.16 - 0.13 ==  0.03
+> [9]  0.13 - 0.16 == -0.03
+> [10] 0.13 - 0.11 ==  0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:182:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$successPerStage[2, ] not equal to c(...).
+> 8/12 mismatches (average diff: 0.025)
+> [2]  0.04 - 0.03 ==  0.01
+> [3]  0.10 - 0.13 == -0.03
+> [5]  0.20 - 0.19 ==  0.01
+> [8]  0.58 - 0.49 ==  0.09
+> [9]  0.72 - 0.69 ==  0.03
+> [10] 0.68 - 0.67 ==  0.01
+> [11] 0.69 - 0.68 ==  0.01
+> [12] 0.56 - 0.57 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:183:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$selectedPopulations)) not equal to c(...).
+> 21/48 mismatches (average diff: 0.0267)
+> [2]  0.46 - 0.44 ==  0.02
+> [4]  0.30 - 0.31 == -0.01
+> [8]  0.07 - 0.09 == -0.02
+> [10] 0.69 - 0.71 == -0.02
+> [14] 0.20 - 0.24 == -0.04
+> [16] 0.12 - 0.14 == -0.02
+> [18] 0.70 - 0.68 ==  0.02
+> [20] 0.61 - 0.59 ==  0.02
+> [22] 0.46 - 0.48 == -0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:186:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$expectedNumberOfSubjects not equal to c(...).
+> 11/12 mismatches (average diff: 2.73)
+> [2]  298 - 300 == -1.5
+> [3]  300 - 297 ==  3.0
+> [4]  298 - 297 ==  1.5
+> [5]  298 - 300 == -1.5
+> [6]  292 - 296 == -3.0
+> [7]  296 - 291 ==  4.5
+> [8]  276 - 280 == -4.5
+> [9]  280 - 276 ==  4.5
+> [10] 280 - 284 == -3.0
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:187:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$sampleSizes)) not equal to c(...).
+> 24/48 mismatches (average diff: 0.988)
+> [2]  129 - 128 ==  0.780
+> [4]  123 - 123 == -0.272
+> [6]  116 - 116 == -0.103
+> [8]  114 - 115 == -0.824
+> [10] 138 - 139 == -0.508
+> [12] 129 - 129 ==  0.381
+> [14] 119 - 121 == -1.916
+> [16] 117 - 117 == -0.704
+> [18] 142 - 143 == -0.192
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:189:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$conditionalPowerAchieved[2, ] not equal to c(...).
+> 12/12 mismatches (average diff: 0.0226)
+> [1] 0.0733 - 0.0831 == -0.00975
+> [2] 0.1141 - 0.1224 == -0.00829
+> [3] 0.1243 - 0.1690 == -0.04470
+> [4] 0.2116 - 0.1934 ==  0.01816
+> [5] 0.1993 - 0.2087 == -0.00936
+> [6] 0.3316 - 0.2878 ==  0.04379
+> [7] 0.4383 - 0.4270 ==  0.01133
+> [8] 0.4773 - 0.4072 ==  0.07000
+> [9] 0.5943 - 0.5749 ==  0.01940
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:228:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$iterations[2, ] not equal to c(57, 60, 73, 78, 91, 90, 86, 84, 80, 79, 75, 63).
+> 2/12 mismatches (average diff: 3)
+> [1] 53 - 57 == -4
+> [4] 76 - 78 == -2
+> ── Failure (test-f_simulation_enrichment_rates.R:229:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$rejectAtLeastOne not equal to c(...).
+> 1/12 mismatches
+> [4] 0.35 - 0.38 == -0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:230:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$rejectedPopulationsPerStage)) not equal to c(...).
+> 3/48 mismatches (average diff: 0.0133)
+> [8]  0.01 - 0.02 == -0.01
+> [31] 0.03 - 0.04 == -0.01
+> [32] 0.32 - 0.34 == -0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:231:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$futilityPerStage[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.035)
+> [1] 0.47 - 0.43 == 0.04
+> [4] 0.21 - 0.18 == 0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:232:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$earlyStop[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [1] 0.47 - 0.43 == 0.04
+> [4] 0.24 - 0.22 == 0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:233:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$successPerStage[1, ] not equal to c(0, 0, 0.01, 0.04, 0, 0.02, 0.09, 0.12, 0.17, 0.2, 0.24, 0.37).
+> 1/12 mismatches
+> [4] 0.03 - 0.04 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:234:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$successPerStage[2, ] not equal to c(...).
+> 1/12 mismatches
+> [4] 0.32 - 0.34 == -0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:235:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$selectedPopulations)) not equal to c(...).
+> 5/48 mismatches (average diff: 0.018)
+> [2]  0.46 - 0.47 == -0.01
+> [8]  0.12 - 0.15 == -0.03
+> [26] 0.27 - 0.30 == -0.03
+> [28] 0.45 - 0.46 == -0.01
+> [32] 0.75 - 0.76 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:237:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$numberOfPopulations[2, ] not equal to c(...).
+> 3/12 mismatches (average diff: 0.0217)
+> [1] 1.38 - 1.35 ==  0.0265
+> [2] 1.22 - 1.23 == -0.0167
+> [4] 1.14 - 1.17 == -0.0219
+> ── Failure (test-f_simulation_enrichment_rates.R:238:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$expectedNumberOfSubjects not equal to c(...).
+> 12/12 mismatches (average diff: 2.36)
+> [1] 429 - 453 == -2.40e+01
+> [2] 448 - 448 == -1.88e-06
+> [3] 543 - 541 ==  2.23e+00
+> [4] 482 - 484 == -2.03e+00
+> [5] 535 - 535 ==  8.26e-07
+> [6] 511 - 511 ==  2.39e-06
+> [7] 449 - 449 == -4.38e-06
+> [8] 411 - 411 == -3.66e-06
+> [9] 363 - 363 ==  4.98e-06
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:239:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$sampleSizes)) not equal to c(...).
+> 22/48 mismatches (average diff: 0.998)
+> [2]  457 - 459 == -1.80e+00
+> [4]  400 - 397 ==  2.60e+00
+> [6]  409 - 407 ==  2.26e+00
+> [8]  323 - 318 ==  5.55e+00
+> [10] 365 - 365 ==  2.68e-06
+> [12] 324 - 324 ==  1.04e-06
+> [14] 263 - 263 ==  3.40e-06
+> [16] 233 - 233 == -4.43e-06
+> [18] 230 - 230 ==  4.79e-06
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:241:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$conditionalPowerAchieved[2, ] not equal to c(...).
+> 4/12 mismatches (average diff: 0.00492)
+> [1] 0.184 - 0.177 ==  0.006437
+> [2] 0.204 - 0.206 == -0.002052
+> [3] 0.211 - 0.222 == -0.010798
+> [4] 0.294 - 0.294 == -0.000376
+>
+> [ FAIL 33 | WARN 0 | SKIP 191 | PASS 2138 ]
+> Error: Test failures
+> Execution halted
+> autopkgtest [23:44:26]: test run-unit-test: -----------------------]
+> autopkgtest [23:44:26]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+> run-unit-test        FAIL non-zero exit status 1
+> autopkgtest [23:44:26]: @@@@@@@@@@@@@@@@@@@@ summary
+> run-unit-test        FAIL non-zero exit status 1
+> *[master][~/packages/rpact/r-cran-rpact]$ grep -irn getSimulationEnrichmentRates
+> MD5:208:08c0f1018482665e5bab39c22c9c096d *man/getSimulationEnrichmentRates.Rd
+> NEWS.md:5:* Simulation tools for enrichment design testing means, rates, and hazard ratios: function getSimulationEnrichmentMeans(), getSimulationEnrichmentRates(), getSimulationEnrichmentSimulation() available for simulation of enrichment designs;
+> man/SimulationResultsEnrichmentRates.Rd:11:Use \code{\link{getSimula
+
+From friedrich.pahlke at rpact.com  Mon Jan 10 09:38:54 2022
+From: friedrich.pahlke at rpact.com (Friedrich Pahlke (RPACT))
+Date: Mon, 10 Jan 2022 10:38:54 +0100
+Subject: Re: Rpact fails its test on i386
+In-Reply-To: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net>
+References: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net>
+Message-ID: <eb248c82-c145-1a30-0fc5-ecb9b54725d1@rpact.com>
+
+Hi Nilesh,
+
+Thanks again for the bug report.
+
+These tests must be ignored on i386 as the seed leads to different random numbers in our function on i386.
+We released rpact 3.2.1 last week and in this version these tests on i386 will be automatically ignored.
+
+Best,
+Friedrich
+
+  Friedrich Pahlke, Ph.D.
+  RPACT
+
+  phone  +49 451 1217116
+  mobile +49 151 72928193
+  fax    +49 451 1216993
+  e-mail friedrich.pahlke at rpact.com
+
+  CEOs: Prof. Dr. Gernot Wassmer, Dr. Friedrich Pahlke
+  VAT-ID (USt-ID): DE312258359
+  District Court Luebeck
+_______________________________________________________
+  RPACT - R Programming for Adaptive Clinical Trials
+  www.rpact.com
+
+Am 30.12.2021 um 20:37 schrieb Nilesh Patra:
+> Hi Friedrich,
+>
+> Rpact version 3.2.0 fails its tests on i386 (and only this one) with some float precision errors.
+> Usually propagating a `-ffloat-store` in PKG_CXXFLAGS fixed the issue when it surfaced in other packages earlier, but that
+> does not seem to help here.
+>
+> Could you take a look? Should these tests be ignored on i386?
+>
+> Let me know.
+>
+> regards,
+> Nilesh
+>
+>
+> ══ Failed tests ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+> ── Failure (test-f_simulation_enrichment_rates.R:125:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$iterations[2, ] not equal to c(99, 100, 99, 96, 100, 95, 91, 91, 83, 79, 79, 63).
+> 2/12 mismatches (average diff: 3)
+> [9]  82 - 83 == -1
+> [10] 84 - 79 ==  5
+> ── Failure (test-f_simulation_enrichment_rates.R:126:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$rejectAtLeastOne not equal to c(...).
+> 8/12 mismatches (average diff: 0.0212)
+> [1]  0.03 - 0.04 == -0.01
+> [2]  0.03 - 0.04 == -0.01
+> [3]  0.12 - 0.15 == -0.03
+> [4]  0.39 - 0.36 ==  0.03
+> [5]  0.44 - 0.41 ==  0.03
+> [6]  0.51 - 0.54 == -0.03
+> [9]  0.95 - 0.94 ==  0.01
+> [10] 0.95 - 0.93 ==  0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:127:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$rejectedPopulationsPerStage)) not equal to c(...).
+> 16/48 mismatches (average diff: 0.0225)
+> [2]  0.02 - 0.03 == -0.01
+> [10] 0.37 - 0.36 ==  0.01
+> [12] 0.30 - 0.31 == -0.01
+> [13] 0.02 - 0.03 == -0.01
+> [17] 0.17 - 0.16 ==  0.01
+> [19] 0.14 - 0.18 == -0.04
+> [20] 0.61 - 0.55 ==  0.06
+> [26] 0.00 - 0.01 == -0.01
+> [28] 0.02 - 0.03 == -0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:129:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$earlyStop[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [9]  0.18 - 0.17 ==  0.01
+> [10] 0.16 - 0.21 == -0.05
+> ── Failure (test-f_simulation_enrichment_rates.R:130:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$successPerStage[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [9]  0.18 - 0.17 ==  0.01
+> [10] 0.16 - 0.21 == -0.05
+> ── Failure (test-f_simulation_enrichment_rates.R:131:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$successPerStage[2, ] not equal to c(...).
+> 7/12 mismatches (average diff: 0.03)
+> [1]  0.02 - 0.03 == -0.01
+> [2]  0.03 - 0.04 == -0.01
+> [3]  0.11 - 0.14 == -0.03
+> [4]  0.35 - 0.32 ==  0.03
+> [5]  0.44 - 0.41 ==  0.03
+> [6]  0.46 - 0.49 == -0.03
+> [10] 0.79 - 0.72 ==  0.07
+> ── Failure (test-f_simulation_enrichment_rates.R:132:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$selectedPopulations)) not equal to c(...).
+> 14/48 mismatches (average diff: 0.02)
+> [4]  0.57 - 0.55 ==  0.02
+> [6]  0.33 - 0.30 ==  0.03
+> [8]  0.14 - 0.13 ==  0.01
+> [10] 0.85 - 0.87 == -0.02
+> [12] 0.62 - 0.63 == -0.01
+> [14] 0.45 - 0.44 ==  0.01
+> [18] 0.75 - 0.77 == -0.02
+> [20] 0.66 - 0.62 ==  0.04
+> [26] 0.70 - 0.71 == -0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:134:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$numberOfPopulations[2, ] not equal to c(...).
+> 9/12 mismatches (average diff: 0.0239)
+> [1]  1.35 - 1.36 == -0.0101
+> [2]  1.35 - 1.33 ==  0.0200
+> [3]  1.26 - 1.24 ==  0.0202
+> [4]  1.14 - 1.12 ==  0.0104
+> [5]  1.34 - 1.31 ==  0.0300
+> [6]  1.42 - 1.44 == -0.0211
+> [7]  1.36 - 1.35 ==  0.0110
+> [9]  1.27 - 1.30 == -0.0329
+> [10] 1.35 - 1.41 == -0.0598
+> ── Failure (test-f_simulation_enrichment_rates.R:135:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$expectedNumberOfSubjects not equal to c(...).
+> 12/12 mismatches (average diff: 4.02)
+> [1] 665 - 670 ==  -4.32
+> [2] 669 - 672 ==  -2.37
+> [3] 626 - 620 ==   5.93
+> [4] 564 - 574 == -10.29
+> [5] 556 - 557 ==  -1.08
+> [6] 517 - 514 ==   2.23
+> [7] 435 - 439 ==  -4.66
+> [8] 416 - 418 ==  -2.19
+> [9] 380 - 385 ==  -5.43
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:136:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult2$sampleSizes)) not equal to c(...).
+> 24/48 mismatches (average diff: 2.46)
+> [2]  422 - 425 == -2.29
+> [4]  410 - 413 == -2.34
+> [6]  365 - 359 ==  5.93
+> [8]  319 - 327 == -7.93
+> [10] 349 - 356 == -7.30
+> [12] 304 - 303 ==  1.50
+> [14] 240 - 244 == -3.79
+> [16] 218 - 220 == -1.78
+> [18] 252 - 254 == -1.98
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:138:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult2$conditionalPowerAchieved[2, ] not equal to c(...).
+> 10/12 mismatches (average diff: 0.0121)
+> [1] 0.468 - 0.476 == -7.38e-03
+> [2] 0.489 - 0.496 == -6.72e-03
+> [3] 0.596 - 0.541 ==  5.49e-02
+> [4] 0.580 - 0.565 ==  1.51e-02
+> [5] 0.673 - 0.656 ==  1.69e-02
+> [6] 0.691 - 0.692 == -1.17e-03
+> [7] 0.760 - 0.750 ==  1.02e-02
+> [8] 0.782 - 0.782 == -4.70e-06
+> [9] 0.785 - 0.788 == -2.59e-03
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:176:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$iterations[2, ] not equal to c(100, 100, 98, 98, 100, 97, 94, 87, 84, 89, 77, 61).
+> 11/12 mismatches (average diff: 1.82)
+> [2]   99 - 100 == -1
+> [3]  100 -  98 ==  2
+> [4]   99 -  98 ==  1
+> [5]   99 - 100 == -1
+> [6]   95 -  97 == -2
+> [7]   97 -  94 ==  3
+> [8]   84 -  87 == -3
+> [9]   87 -  84 ==  3
+> [10]  87 -  89 == -2
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:177:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$rejectAtLeastOne not equal to c(...).
+> 8/12 mismatches (average diff: 0.0375)
+> [2]  0.05 - 0.03 ==  0.02
+> [3]  0.10 - 0.15 == -0.05
+> [4]  0.20 - 0.21 == -0.01
+> [5]  0.21 - 0.19 ==  0.02
+> [6]  0.33 - 0.31 ==  0.02
+> [7]  0.48 - 0.51 == -0.03
+> [8]  0.74 - 0.62 ==  0.12
+> [10] 0.81 - 0.78 ==  0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:178:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$rejectedPopulationsPerStage)) not equal to c(...).
+> 33/48 mismatches (average diff: 0.0236)
+> [4]  0.02 - 0.01 ==  0.01
+> [6]  0.02 - 0.00 ==  0.02
+> [9]  0.01 - 0.00 ==  0.01
+> [10] 0.16 - 0.17 == -0.01
+> [11] 0.05 - 0.03 ==  0.02
+> [13] 0.02 - 0.03 == -0.01
+> [14] 0.07 - 0.10 == -0.03
+> [15] 0.06 - 0.02 ==  0.04
+> [16] 0.04 - 0.03 ==  0.01
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:180:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$earlyStop[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+> 11/12 mismatches (average diff: 0.0182)
+> [2]  0.01 - 0.00 ==  0.01
+> [3]  0.00 - 0.02 == -0.02
+> [4]  0.01 - 0.02 == -0.01
+> [5]  0.01 - 0.00 ==  0.01
+> [6]  0.05 - 0.03 ==  0.02
+> [7]  0.03 - 0.06 == -0.03
+> [8]  0.16 - 0.13 ==  0.03
+> [9]  0.13 - 0.16 == -0.03
+> [10] 0.13 - 0.11 ==  0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:181:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$successPerStage[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+> 11/12 mismatches (average diff: 0.0182)
+> [2]  0.01 - 0.00 ==  0.01
+> [3]  0.00 - 0.02 == -0.02
+> [4]  0.01 - 0.02 == -0.01
+> [5]  0.01 - 0.00 ==  0.01
+> [6]  0.05 - 0.03 ==  0.02
+> [7]  0.03 - 0.06 == -0.03
+> [8]  0.16 - 0.13 ==  0.03
+> [9]  0.13 - 0.16 == -0.03
+> [10] 0.13 - 0.11 ==  0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:182:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$successPerStage[2, ] not equal to c(...).
+> 8/12 mismatches (average diff: 0.025)
+> [2]  0.04 - 0.03 ==  0.01
+> [3]  0.10 - 0.13 == -0.03
+> [5]  0.20 - 0.19 ==  0.01
+> [8]  0.58 - 0.49 ==  0.09
+> [9]  0.72 - 0.69 ==  0.03
+> [10] 0.68 - 0.67 ==  0.01
+> [11] 0.69 - 0.68 ==  0.01
+> [12] 0.56 - 0.57 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:183:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$selectedPopulations)) not equal to c(...).
+> 21/48 mismatches (average diff: 0.0267)
+> [2]  0.46 - 0.44 ==  0.02
+> [4]  0.30 - 0.31 == -0.01
+> [8]  0.07 - 0.09 == -0.02
+> [10] 0.69 - 0.71 == -0.02
+> [14] 0.20 - 0.24 == -0.04
+> [16] 0.12 - 0.14 == -0.02
+> [18] 0.70 - 0.68 ==  0.02
+> [20] 0.61 - 0.59 ==  0.02
+> [22] 0.46 - 0.48 == -0.02
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:186:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$expectedNumberOfSubjects not equal to c(...).
+> 11/12 mismatches (average diff: 2.73)
+> [2]  298 - 300 == -1.5
+> [3]  300 - 297 ==  3.0
+> [4]  298 - 297 ==  1.5
+> [5]  298 - 300 == -1.5
+> [6]  292 - 296 == -3.0
+> [7]  296 - 291 ==  4.5
+> [8]  276 - 280 == -4.5
+> [9]  280 - 276 ==  4.5
+> [10] 280 - 284 == -3.0
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:187:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult3$sampleSizes)) not equal to c(...).
+> 24/48 mismatches (average diff: 0.988)
+> [2]  129 - 128 ==  0.780
+> [4]  123 - 123 == -0.272
+> [6]  116 - 116 == -0.103
+> [8]  114 - 115 == -0.824
+> [10] 138 - 139 == -0.508
+> [12] 129 - 129 ==  0.381
+> [14] 119 - 121 == -1.916
+> [16] 117 - 117 == -0.704
+> [18] 142 - 143 == -0.192
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:189:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult3$conditionalPowerAchieved[2, ] not equal to c(...).
+> 12/12 mismatches (average diff: 0.0226)
+> [1] 0.0733 - 0.0831 == -0.00975
+> [2] 0.1141 - 0.1224 == -0.00829
+> [3] 0.1243 - 0.1690 == -0.04470
+> [4] 0.2116 - 0.1934 ==  0.01816
+> [5] 0.1993 - 0.2087 == -0.00936
+> [6] 0.3316 - 0.2878 ==  0.04379
+> [7] 0.4383 - 0.4270 ==  0.01133
+> [8] 0.4773 - 0.4072 ==  0.07000
+> [9] 0.5943 - 0.5749 ==  0.01940
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:228:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$iterations[2, ] not equal to c(57, 60, 73, 78, 91, 90, 86, 84, 80, 79, 75, 63).
+> 2/12 mismatches (average diff: 3)
+> [1] 53 - 57 == -4
+> [4] 76 - 78 == -2
+> ── Failure (test-f_simulation_enrichment_rates.R:229:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$rejectAtLeastOne not equal to c(...).
+> 1/12 mismatches
+> [4] 0.35 - 0.38 == -0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:230:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$rejectedPopulationsPerStage)) not equal to c(...).
+> 3/48 mismatches (average diff: 0.0133)
+> [8]  0.01 - 0.02 == -0.01
+> [31] 0.03 - 0.04 == -0.01
+> [32] 0.32 - 0.34 == -0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:231:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$futilityPerStage[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.035)
+> [1] 0.47 - 0.43 == 0.04
+> [4] 0.21 - 0.18 == 0.03
+> ── Failure (test-f_simulation_enrichment_rates.R:232:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$earlyStop[1, ] not equal to c(...).
+> 2/12 mismatches (average diff: 0.03)
+> [1] 0.47 - 0.43 == 0.04
+> [4] 0.24 - 0.22 == 0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:233:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$successPerStage[1, ] not equal to c(0, 0, 0.01, 0.04, 0, 0.02, 0.09, 0.12, 0.17, 0.2, 0.24, 0.37).
+> 1/12 mismatches
+> [4] 0.03 - 0.04 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:234:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$successPerStage[2, ] not equal to c(...).
+> 1/12 mismatches
+> [4] 0.32 - 0.34 == -0.02
+> ── Failure (test-f_simulation_enrichment_rates.R:235:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$selectedPopulations)) not equal to c(...).
+> 5/48 mismatches (average diff: 0.018)
+> [2]  0.46 - 0.47 == -0.01
+> [8]  0.12 - 0.15 == -0.03
+> [26] 0.27 - 0.30 == -0.03
+> [28] 0.45 - 0.46 == -0.01
+> [32] 0.75 - 0.76 == -0.01
+> ── Failure (test-f_simulation_enrichment_rates.R:237:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$numberOfPopulations[2, ] not equal to c(...).
+> 3/12 mismatches (average diff: 0.0217)
+> [1] 1.38 - 1.35 ==  0.0265
+> [2] 1.22 - 1.23 == -0.0167
+> [4] 1.14 - 1.17 == -0.0219
+> ── Failure (test-f_simulation_enrichment_rates.R:238:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$expectedNumberOfSubjects not equal to c(...).
+> 12/12 mismatches (average diff: 2.36)
+> [1] 429 - 453 == -2.40e+01
+> [2] 448 - 448 == -1.88e-06
+> [3] 543 - 541 ==  2.23e+00
+> [4] 482 - 484 == -2.03e+00
+> [5] 535 - 535 ==  8.26e-07
+> [6] 511 - 511 ==  2.39e-06
+> [7] 449 - 449 == -4.38e-06
+> [8] 411 - 411 == -3.66e-06
+> [9] 363 - 363 ==  4.98e-06
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:239:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> unlist(as.list(simResult4$sampleSizes)) not equal to c(...).
+> 22/48 mismatches (average diff: 0.998)
+> [2]  457 - 459 == -1.80e+00
+> [4]  400 - 397 ==  2.60e+00
+> [6]  409 - 407 ==  2.26e+00
+> [8]  323 - 318 ==  5.55e+00
+> [10] 365 - 365 ==  2.68e-06
+> [12] 324 - 324 ==  1.04e-06
+> [14] 263 - 263 ==  3.40e-06
+> [16] 233 - 233 == -4.43e-06
+> [18] 230 - 230 ==  4.79e-06
+> ...
+> ── Failure (test-f_simulation_enrichment_rates.R:241:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+> simResult4$conditionalPowerAchieved[2, ] not equal to c(...).
+> 4/12 mismatches (average diff: 0.00492)
+> [1] 0.184 - 0.177 ==  0.006437
+> [2] 0.204 - 0.206 == -0.002052
+> [3] 0.211 - 0.222 == -0.010798
+> [4] 0.294 - 0.294 == -0.000376
+>
+> [ FAIL 33 | WARN 0 | SKIP 191 | PASS 2138 ]
+> Error: Test failures
+> Execution halted
+> autopkgtest [23:44:26]: test run-unit-test: -----------------------]
+> autopkgtest [23:44:26]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+> run-unit-test        FAIL non-zero exit status 1
+> autopkgtest [23:44:26]: @@@@@@@@@@@@@@@@@@@@ summary
+> run-unit-test        FAIL non-zero exit status 1
+> *[master][~/packages/rpact/r-cran-rpact]$ grep -irn getSimulationEnrichmentRates
+> MD5:208:08c0f1018482665e5bab39c22c9c096d *man/getSimulationEnrichmentRates.Rd
+> NEWS.md:5:* Simulation tools for enrichment design testing means, rates, and hazard ratios: function getSimulationEnrichmentMeans(), getSimulationEnrichmentRates(), getSimulationEnrichmentSimulation() available for simulation of enrichment designs;
+> man/SimulationResultsEnrichmentRates.Rd:11:Use \code{\link{getSimula
+
+From nilesh at riseup.net  Mon Jan 10 10:04:44 2022
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Mon, 10 Jan 2022 15:34:44 +0530
+Subject: Re: Rpact fails its test on i386
+In-Reply-To: <eb248c82-c145-1a30-0fc5-ecb9b54725d1@rpact.com>
+References: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net> <eb248c82-c145-1a30-0fc5-ecb9b54725d1@rpact.com>
+Message-ID: <4ba0100b-1838-df63-d521-6e31dc34ed62@riseup.net>
+
+Hi Friedrich
+
+On 1/10/22 3:08 PM, Friedrich Pahlke (RPACT) wrote:
+> Hi Nilesh,
+>
+> Thanks again for the bug report.
+>
+> These tests must be ignored on i386 as the seed leads to different random numbers in our function on i386.
+> We released rpact 3.2.1 last week and in this version these tests on i386 will be automatically ignored.
+
+Thanks for the quick reply and a quick resolution on the issue. I uploaded the latest version of the package to the
+archive. Thanks again for the quick help.
+
+Happy new year!
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Mon Jan 24 20:39:51 2022
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 24 Jan 2022 21:39:51 +0100
+Subject: compilation failed for package 'RandomFields'
+Message-ID: <Ye8Ol1C4pGmETAJr@an3as.eu>
+
+Hi,
+
+when trying to update r-cran-randomfields I get the following error:
+
+g++ -std=gnu++14 -I"/usr/share/R/include" -DNDEBUG  -I'/usr/lib/R/site-library/RandomFieldsUtils/include'   -fopenmp   -fpic  -g -O2 -ffile-prefix-map=/build/r-base-PT7Nxy/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c Brown.cc -o Brown.o
+In file included from RF.h:1898,
+                 from questions.h:31,
+                 from Brown.cc:34:
+Brown.cc: In function 'void OptimArea(model*)':
+Machine.h:185:11: error: 'ERR0' was not declared in this scope; did you mean 'ERR7'?
+  185 |           ERR0("argument value recognized as distribution family although it should not. Maybe the error is caused by a non-existing variable."); \
+      |           ^~~~
+Machine.h:195:31: note: in expansion of macro 'PARAMALLOC'
+  195 | #define PALLOC(IDX, ROW, COL) PARAMALLOC(cov, IDX, ROW, COL)
+      |                               ^~~~~~~~~~
+Brown.cc:600:3: note: in expansion of macro 'PALLOC'
+  600 |   PALLOC(BR_OPTIMAREA, 1, minradius+1);
+      |   ^~~~~~
+Brown.cc: In function 'int prepareBRoptim(model*)':
+Machine.h:185:11: error: 'ERR0' was not declared in this scope; did you mean 'ERR7'?
+  185 |           ERR0("argument value recognized as distribution family although it should not. Maybe the error is caused by a non-existing variable."); \
+      |           ^~~~
+Machine.h:195:31: note: in expansion of macro 'PARAMALLOC'
+  195 | #define PALLOC(IDX, ROW, COL) PARAMALLOC(cov, IDX, ROW, COL)
+      |                               ^~~~~~~~~~
+Brown.cc:712:3: note: in expansion of macro 'PALLOC'
+  712 |   PALLOC(BR_OPTIMAREA, 1, minradius + 1);
+      |   ^~~~~~
+Brown.cc: In function 'int structBRuser(model*, model**)':
+Machine.h:185:11: error: 'ERR0' was not declared in this scope; did you mean 'ERR7'?
+  185 |           ERR0("argument value recognized as distribution family although it should not. Maybe the error is caused by a non-existing variable."); \
+      |           ^~~~
+Brown.cc:1050:7: note: in expansion of macro 'PARAMALLOC'
+ 1050 |       PARAMALLOC(cov->key, BR_OPTIMAREA, cov->nrow[BR_OPTIMAREA],
+      |       ^~~~~~~~~~
+Brown.cc: In function 'int init_brnormed(model*, gen_storage*)':
+Machine.h:185:11: error: 'ERR0' was not declared in this scope; did you mean 'ERR7'?
+  185 |           ERR0("argument value recognized as distribution family although it should not. Maybe the error is caused by a non-existing variable."); \
+      |           ^~~~
+Machine.h:195:31: note: in expansion of macro 'PARAMALLOC'
+  195 | #define PALLOC(IDX, ROW, COL) PARAMALLOC(cov, IDX, ROW, COL)
+      |                               ^~~~~~~~~~
+Brown.cc:1749:5: note: in expansion of macro 'PALLOC'
+ 1749 |     PALLOC(NORMED_PROB, total, 1);
+      |     ^~~~~~
+make[1]: *** [/usr/lib/R/etc/Makeconf:175: Brown.o] Error 1
+
+You can read the full build log on Salsa-CI[1].
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-randomfields/-/jobs/2396798
+
+-- 
+http://fam-tille.de
+
+From nilesh at tchncs.de  Wed Jan 26 19:47:26 2022
+From: nilesh at tchncs.de (Nilesh Patra)
+Date: Thu, 27 Jan 2022 01:17:26 +0530
+Subject: smcfcs fails its (1 imputation per core) tests
+Message-ID: <ee8321cc-0bd0-f1fb-98e6-9fe8b9d0d082@tchncs.de>
+
+Hi Jonathan,
+
+smcfcs version 1.6.1 seems to fail one of it's test with the log pasted below.
+Same is seen in our CI as well[1].
+Could you please consider taking a look?
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-smcfcs/-/jobs/2401741
+
+Regards,
+Nilesh
+
+── Failure (test_parallel.r:24:3): smcfcs.parallel works with 1 imputation per core ───────────────────────────
+`{ ... }` threw an error.
+Message: 2 nodes produced errors; first error: Event indicator for coxph must be coded 0/1 for censoring/event.
+Class:   simpleError/error/condition
+Backtrace:
+     █
+  1. ├─testthat::expect_error(...) test_parallel.r:24:2
+  2. │ └─testthat:::quasi_capture(...)
+  3. │   ├─testthat:::.capture(...)
+  4. │   │ └─base::withCallingHandlers(...)
+  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  6. └─smcfcs::smcfcs.parallel(...) test_parallel.r:36:4
+  7.   └─parallel::parLapply(...)
+  8.     ├─base::do.call(...)
+  9.     └─parallel::clusterApply(...)
+ 10.       └─parallel:::staticClusterApply(cl, fun, length(x), argfun)
+ 11.         └─parallel:::checkForRemoteErrors(val)
+
+[ FAIL 1 | WARN 0 | SKIP 15 | PASS 27 ]
+Error: Test failures
+In addition: Warning messages:
+1: closing unused connection 6 (<-localhost:11108)
+2: closing unused connection 5 (<-localhost:11108)
+Execution halted
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+

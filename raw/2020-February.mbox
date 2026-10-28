@@ -1,0 +1,287 @@
+From ginggs at debian.org  Sat Feb  1 09:10:49 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Sat, 1 Feb 2020 11:10:49 +0200
+Subject: Re: Bug#949658: Different tests for r-cran-recipes - "wrong" test prevents migration of r-cran-testthat
+In-Reply-To: <20200126082658.GE27204@an3as.eu>
+References: <20200124091949.GU6895@an3as.eu> <89004dfa-8a0b-5d4e-8d8c-04209d3b9b62@debian.org> <CAM8zJQsTp4aZ5H_AYE96LH5Z7YqP6NWXiE383RfS7vsysL398A@mail.gmail.com> <20200126082658.GE27204@an3as.eu>
+Message-ID: <CAM8zJQuA3rQL_WR6QVHtvTdWV4dOe2QzD+GRQsp3G7SqRFQ_vg@mail.gmail.com>
+
+Hi Andreas
+
+On Sun, 26 Jan 2020 at 10:27, Andreas Tille <tille at debian.org> wrote:
+> I fail to see how this will finally help since the strange regression
+> of
+>
+>    autopkgtest for r-cran-recipes/0.1.9+dfsg-2: amd64: Regression ♻ , arm64: Test in progress
+>
+> for r-cran-testthat seems to remain.  So r-cran-testthat will not
+> migrate and the specified versioned Depends will not be fullfilled.
+
+I see r-cran-testthat migrated yesterday [1].
+So whichever package that was causing r-cran-recipes to pass in
+unstable, has now migrated to testing, allowing it to pass there.
+Looking at britney's migrations jobs for r-cran-recipes [2], the first
+passing test with r-cran-testthat/2.3.1-1 occurred at 2020-01-30
+06:43:35 UTC.
+The debci log for that test [3], shows the following were among the
+changes in test packages since the last test run:
+
+@@ -136,7 +136,7 @@
+ r-cran-rcppeigen 0.3.3.7.0-1
+ r-cran-rcpproll 0.3.0-1
+ r-cran-recipes 0.1.9+dfsg-2
+-r-cran-rlang 0.4.1-1
++r-cran-rlang 0.4.3-1
+ r-cran-robustbase 0.93-5-2
+ r-cran-rpart 4.1-15-2
+ r-cran-rprojroot 1.3-2-2
+@@ -150,7 +150,7 @@
+ r-cran-survival 3.1-8-1
+ r-cran-testthat 2.3.1-1
+ r-cran-tibble 2.1.3-2
+-r-cran-tidyr 1.0.0-1
++r-cran-tidyr 1.0.2-1
+ r-cran-tidyselect 0.2.5-1
+ r-cran-timedate 3043.102-1+b1
+ r-cran-utf8 1.1.4-1+b1
+
+So I suspect either r-cran-rlang or r-cran-tidyr was the culprit here.
+I think r-cran-recipes missed a versioned dependency or test
+dependency, or r-cran-testthat missed a breaks.
+
+Regards
+Graham
+
+[1] https://alioth-lists.debian.net/pipermail/r-pkg-team/2020-January/009852.html
+[2] https://ci.debian.net/user/britney/jobs?package=r-cran-recipes&suite[]=testing&arch[]=amd64
+[3] https://ci.debian.net/data/packages/testing/amd64/r/r-cran-recipes/4145364.log
+
+From andreas at an3as.eu  Thu Feb  6 15:29:27 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 6 Feb 2020 16:29:27 +0100
+Subject: Test suite issue for BiocStyle
+Message-ID: <20200206152927.GL3889@an3as.eu>
+
+Hi,
+
+I'm trying to package for Debian.  When running the test suite I get:
+
+$ LC_ALL=C R --no-save <tests/run_tests.R
+
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> BiocGenerics:::testPackage("BiocStyle")
+Writing to file maketitle_test_1.tex
+Processing code chunks with options ...
+ 1 : keep.source term tex (label = style, maketitle_test_1.Rnw:5)
+
+You can now run (pdf)latex on 'maketitle_test_1.tex'
+Timing stopped at: 1.27 0.472 1.729
+Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
+  Running 'texi2dvi' on 'maketitle_test_1.tex' failed.
+LaTeX errors:
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+! Argument of \Hy@scantitle has an extra }.
+<inserted text> 
+                \par 
+l.166 \renewcommand{\title}
+                           [1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+! Paragraph ended before \Hy@scantitle was complete.
+<to be read again> 
+                   \par 
+l.166 \renewcommand{\title}
+                           [1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+! Illegal parameter number in definition of \@.
+<to be read again> 
+                   1
+l.166 \renewcommand{\title}[1]{\def\@bioctitle{#1
+                                                 }\@oldtitle{#1}}
+! Use of \@ doesn't match its definition.
+l.166 ...command{\title}[1]{\def\@bioctitle{#1}\@o
+                                                  ldtitle{#1}}
+If you say, e.g., `\def\a1{...}', then you must always
+put `1' after `\a', since control sequence names are
+! You can't use `macro parameter character #' in horizontal mode.
+l.166 ...title}[1]{\def\@bioctitle{#1}\@oldtitle{#
+                                                  1}}
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+
+So I tried to check other things:
+
+  $ R CMD Sweave LatexStyle2.Rnw
+  $ pdflatex LatexStyle2.tex
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./LatexStyle2.tex
+LaTeX2e <2019-10-01> patch level 3
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo))
+(/usr/lib/R/site-library/BiocStyle/resources/tex/Bioconductor.sty
+
+LaTeX Warning: You have requested package `/usr/lib/R/site-library/BiocStyle/resources/tex/Bioconductor',
+               but the package provides `Bioconductor'.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifluatex.sty)))
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hycolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/xcolor-patch.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hopatch.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/uniquecounter.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifxetex.sty))
+
+Package geometry Warning: Over-specification in `h'-direction.
+    `width' (384.1122pt) is ignored.
+
+(/usr/share/texlive/texmf-dist/tex/latex/bera/beramono.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.164 \let\@bi
+              octitle\@empty
+? 
+
+So this boils down to an issue in file
+
+   inst/resources/tex/Bioconductor.sty
+
+...
+163 %% Title
+164 \let\@bioctitle\@empty
+165 \let\@oldtitle\title
+166 \renewcommand{\title}[1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+...
+
+I admit line 164 looks not really suspicious to me - so may be
+something is wrong before that line.
+
+Could you please have a look?
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From michael.crusoe at gmail.com  Mon Feb 17 17:18:53 2020
+From: michael.crusoe at gmail.com (Michael Crusoe)
+Date: Mon, 17 Feb 2020 18:18:53 +0100
+Subject: Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna
+Message-ID: <CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>
+
+r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies of it.
+
+gbp clone git at salsa.debian.org:r-pkg-team/r-cran-statnet.common.git
+
+gbp clone git at salsa.debian.org:r-pkg-team/r-cran-network.git
+
+gbp clone git at salsa.debian.org:r-pkg-team/r-cran-sna.git
+
+Thanks!
+
+-- 
+Michael R. Crusoe
+
+From michael.crusoe at gmail.com  Mon Feb 17 20:02:26 2020
+From: michael.crusoe at gmail.com (Michael Crusoe)
+Date: Mon, 17 Feb 2020 21:02:26 +0100
+Subject: Re: Request for sponsorship: r-cran-statsnet.common, r-cran-network, r-cran-sna
+In-Reply-To: <CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>
+References: <CAD=WrcKjwW5cw6qFdkJHz2+oaYJq1-+Zgg6_gncORHuLTMO5mg@mail.gmail.com>
+Message-ID: <CAD=WrcKm+YFqX+KWTdUVXi_Znk3yAS7j_Xne=bCC=QzDy7rEYg@mail.gmail.com>
+
+Thanks, Andreas Tile!
+
+On Mon, Feb 17, 2020 at 6:18 PM Michael Crusoe <michael.crusoe at gmail.com> wrote:
+
+> r-cran-sna is suggested by r-cran-blockmodeling, the other two packages are dependencies of it.
+>
+>
+> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-statnet.common.git
+>
+>
+> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-network.git
+>
+>
+> gbp clone git at salsa.debian.org:r-pkg-team/r-cran-sna.git
+>
+>
+> Thanks!
+>
+>
+> --
+> Michael R. Crusoe
+
+-- 
+Michael R. Crusoe
+

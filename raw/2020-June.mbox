@@ -1,0 +1,226 @@
+From rodrigorsdc at gmail.com  Mon Jun  1 23:45:37 2020
+From: rodrigorsdc at gmail.com (Rodrigo Carvalho)
+Date: Mon, 1 Jun 2020 20:45:37 -0300
+Subject: [RFS] r-gran-ecosolver
+Message-ID: <CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>
+
+Hi,
+I have pushed a new R package into salsa[1].
+Could you review it?
+The ITP bug is #961835
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver
+
+thanks,
+Rodrigo
+
+From andreas at fam-tille.de  Tue Jun  2 07:01:38 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 2 Jun 2020 09:01:38 +0200
+Subject: Re: [RFS] r-gran-ecosolver
+In-Reply-To: <CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>
+References: <CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com>
+Message-ID: <20200602070138.GS22880@an3as.eu>
+
+Hi Rodrigo,
+
+thanks for your work on this package.
+
+On Mon, Jun 01, 2020 at 08:45:37PM -0300, Rodrigo Carvalho wrote:
+> Hi,
+> I have pushed a new R package into salsa[1].
+> Could you review it?
+> The ITP bug is #961835
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver
+
+As Dylan said in his last mail, please use
+
+   prepare_missing_cran_package ECOSolveR
+
+to create this package.  On one hand it will save you a lot of time on
+the other hand the repository created should be valid regarding
+pristine-tar.  I simply get
+
+r-cran-ecosolver(master) $ gbp buildpackage
+gbp:info: Building with (cowbuilder) for sid
+gbp:info: Tarballs 'r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz' not found at '../tarballs/'
+gbp:info: Creating ../build-area/r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz
+gbp:error: Can not find pristine tar commit for archive 'r-cran-ecosolver_0.5.3+dfsg.orig.tar.gz'
+
+which I never observed when using prepare_missing_cran_package.  While
+it would be probably easy to fix I'd suggest you follow the hint above
+to learn how to do things easily and correct.
+
+Kind regards and thanks for your involvement in any case
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From rodrigorsdc at gmail.com  Wed Jun  3 02:08:22 2020
+From: rodrigorsdc at gmail.com (Rodrigo Carvalho)
+Date: Tue, 2 Jun 2020 23:08:22 -0300
+Subject: Re: [RFS] r-gran-ecosolver
+In-Reply-To: <20200602070138.GS22880@an3as.eu>
+References: <CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com> <20200602070138.GS22880@an3as.eu>
+Message-ID: <CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>
+
+Hi Andreas,
+
+Em ter., 2 de jun. de 2020 às 04:01, Andreas Tille
+<andreas at fam-tille.de> escreveu:
+>
+> Hi Rodrigo,
+>
+> thanks for your work on this package.
+>
+> On Mon, Jun 01, 2020 at 08:45:37PM -0300, Rodrigo Carvalho wrote:
+> > Hi,
+> > I have pushed a new R package into salsa[1].
+> > Could you review it?
+> > The ITP bug is #961835
+> >
+> > [1] https://salsa.debian.org/r-pkg-team/r-cran-ecosolver
+>
+> As Dylan said in his last mail, please use
+>
+>    prepare_missing_cran_package ECOSolveR
+>
+
+I did what you asked. Can you check if it's all ok?
+
+thanks
+Rodrigo
+
+From andreas at fam-tille.de  Wed Jun  3 06:42:51 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 3 Jun 2020 08:42:51 +0200
+Subject: Re: [RFS] r-gran-ecosolver
+In-Reply-To: <CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>
+References: <CAOeBkLqKHSmY2my4YTPSiX+tYCofn56fbzKrO9Vi48+QTWP-eQ@mail.gmail.com> <20200602070138.GS22880@an3as.eu> <CAOeBkLq3gBbbD26UBjy5obABfZpfTXSV_u0q4tkDCyD8Si5RzA@mail.gmail.com>
+Message-ID: <20200603064251.GX22880@an3as.eu>
+
+Hi Rodrigo,
+
+On Tue, Jun 02, 2020 at 11:08:22PM -0300, Rodrigo Carvalho wrote:
+> > As Dylan said in his last mail, please use
+> >
+> >    prepare_missing_cran_package ECOSolveR
+> 
+> I did what you asked. Can you check if it's all ok?
+
+Yes, looks way better and I hope you agree that the amount
+of work on your side is lower as well. ;-)
+
+Just uploaded to new.
+
+Thanks for your work on this
+
+      Andreas. 
+
+-- 
+http://fam-tille.de
+
+From maechler at r-project.org  Thu Jun 11 19:50:03 2020
+From: maechler at r-project.org (Martin Maechler)
+Date: Thu, 11 Jun 2020 21:50:03 +0200
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <20200530052144.GR1820@an3as.eu>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com> <24273.932.973463.750953@rob.eddelbuettel.com> <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com> <CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com> <20200530052144.GR1820@an3as.eu>
+Message-ID: <CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>
+
+In the mean time,  the maintainer  Antoine Lucas  has released
+gmp_0.6-0  to CRAN .. where I had previously changed all occurrences
+of  'GPL'  to 'GPL-3'.
+I hope this will be helpful for you when debian-packaging r-cran-gmp.
+
+Best regards,
+Martin
+
+On Sat, May 30, 2020 at 7:23 AM Andreas Tille <tille at debian.org> wrote:
+>
+> On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:
+> > (similar to myself) they are mathematicians and researchers
+> > who want to do science and development for the public good, and not
+> > spend time on boring lawyer's stuff  (;-)..
+>
+> I'm physicist and can perfectly understand.  I'm doing Debian packaging
+> since more than 20 years and can confirm that editing the copyright file
+> is the most boring stuff in this.  Wait, even more boring is getting a
+> package rejected by ftpmaster due to a license conflict is even more
+> boring.  This is what will happen as Dylan said in his mail.  So if you
+> ask me changing just the number takes less time than writing lots of
+> e-mails about it. ;-)
+>
+> Kind regards and thanks a lot for your open words
+>
+>       Andreas.
+>
+> --
+> http://fam-tille.de
+>
+
+-- 
+Martin Maechler,
+Seminar fuer Statistik, ETH Zurich
+
+From andreas at an3as.eu  Thu Jun 11 21:30:17 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 11 Jun 2020 23:30:17 +0200
+Subject: Re: [RFS] r-cran-gmp
+In-Reply-To: <CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>
+References: <CAOeBkLqgO=VK2cEv2JRDNqbDMwO1Ar2hFtgtupe+J58akNRgRg@mail.gmail.com> <CA+6XHwTZ5d4=WHWD1f2keJb+9McqYHhfXEBjUe+QGK72Wi-j2w@mail.gmail.com> <24273.932.973463.750953@rob.eddelbuettel.com> <CAOeBkLoFzQ9-eL3muX0itD-8EKNnmNThFfV+w00ZgmB91eb8jQ@mail.gmail.com> <CAPRP4-dwe2qqFh8h91kBUH95qtDf-9mx4y3s5R=bjy4oxqHdWQ@mail.gmail.com> <20200530052144.GR1820@an3as.eu> <CAPRP4-eC+2QqGRXxhn-ruFcA4WyT8WNxjVDMSTtLKd+Hc3fyrQ@mail.gmail.com>
+Message-ID: <20200611213017.GL5717@an3as.eu>
+
+Hi Martin,
+
+thanks for the notification.  I've uploaded the package to Debian
+new queue.
+
+Kind regards
+
+      Andreas.
+
+On Thu, Jun 11, 2020 at 09:50:03PM +0200, Martin Maechler wrote:
+> In the mean time,  the maintainer  Antoine Lucas  has released
+> gmp_0.6-0  to CRAN .. where I had previously changed all occurrences
+> of  'GPL'  to 'GPL-3'.
+> I hope this will be helpful for you when debian-packaging r-cran-gmp.
+> 
+> Best regards,
+> Martin
+> 
+> On Sat, May 30, 2020 at 7:23 AM Andreas Tille <tille at debian.org> wrote:
+> >
+> > On Fri, May 29, 2020 at 09:59:44PM +0200, Martin Maechler wrote:
+> > > (similar to myself) they are mathematicians and researchers
+> > > who want to do science and development for the public good, and not
+> > > spend time on boring lawyer's stuff  (;-)..
+> >
+> > I'm physicist and can perfectly understand.  I'm doing Debian packaging
+> > since more than 20 years and can confirm that editing the copyright file
+> > is the most boring stuff in this.  Wait, even more boring is getting a
+> > package rejected by ftpmaster due to a license conflict is even more
+> > boring.  This is what will happen as Dylan said in his mail.  So if you
+> > ask me changing just the number takes less time than writing lots of
+> > e-mails about it. ;-)
+> >
+> > Kind regards and thanks a lot for your open words
+> >
+> >       Andreas.
+> >
+> > --
+> > http://fam-tille.de
+> >
+> 
+> 
+> -- 
+> Martin Maechler,
+> Seminar fuer Statistik, ETH Zurich
+> 
+
+-- 
+http://fam-tille.de
+

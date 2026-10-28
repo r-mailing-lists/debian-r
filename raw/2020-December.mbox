@@ -1,0 +1,427 @@
+From edd at debian.org  Thu Dec  3 02:22:04 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 2 Dec 2020 20:22:04 -0600
+Subject: Re: mathjaxr
+In-Reply-To: <24514.25868.577501.531711@rob.eddelbuettel.com>
+References: <24513.2816.350026.25270@rob.eddelbuettel.com> <20201127170601.GB31595@an3as.eu> <24513.13802.166883.681006@rob.eddelbuettel.com> <20201128062955.GH31595@an3as.eu> <24514.25868.577501.531711@rob.eddelbuettel.com>
+Message-ID: <24520.19404.814792.514054@rob.eddelbuettel.com>
+
+Some more follow-up after emails (both individually and jointly) with Joerg
+(for ftpmasters), Duncan (for upstream package rgl imposing the
+build-depends) and Wolfgang (upstream mathjaxr supplying it).
+
+Everybody is aware of the problem; easiest fix may be to put sources back
+into the package along with the minified versions that are installed.
+
+Until then, not using mathjax in rgl is the best way forward.  If
+clubSandwich is held back the same way I would consider doing the same there.
+
+Cheers, Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Thu Dec 17 08:11:54 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 17 Dec 2020 09:11:54 +0100
+Subject: brio test works fine on amd64 but times out on arm64 and ppc64el
+Message-ID: <20201217081154.GC29771@an3as.eu>
+
+Hi Jim,
+
+the R packaging team has packaged for Debian.  While on amd64
+architecture all seems to be fine the CI test has uncovered issues on
+arm64[1] and ppc64el[2] architecture (see at the very end of the log
+files both
+
+pkg-r-autopkgtest    PASS
+autopkgtest [12:23:30]: @@@@@@@@@@@@@@@@@@@@ summary
+run-unit-test        FAIL timed out
+pkg-r-autopkgtest    PASS
+
+I have access to some arm64 hardware later and I can try to provide
+some more detailed information if needed.
+
+Kind regards
+
+       Andreas.
+
+[1] https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-cran-brio/7063140/log.gz
+[2] https://ci.debian.net/data/autopkgtest/testing/ppc64el/r/r-cran-brio/7277379/log.gz
+
+-- 
+http://fam-tille.de
+
+From hello at shayandoust.me  Fri Dec 18 16:51:18 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Fri, 18 Dec 2020 16:51:18 +0000
+Subject: Sponsored upload for r-cran-bma
+Message-ID: <5caa6cbc-f0d9-8012-11da-fba74c617482@shayandoust.me>
+
+Hello,
+
+I believe [r-cran-bma] is ready for a sponsored upload. Do let me know if
+anything needs changing.
+
+Kind regards,
+Shayan Doust
+
+[r-cran-bma]: https://salsa.debian.org/r-pkg-team/r-cran-bma
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Fri Dec 18 17:53:03 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 18 Dec 2020 18:53:03 +0100
+Subject: Re: Sponsored upload for r-cran-bma
+In-Reply-To: <5caa6cbc-f0d9-8012-11da-fba74c617482@shayandoust.me>
+References: <5caa6cbc-f0d9-8012-11da-fba74c617482@shayandoust.me>
+Message-ID: <20201218175303.GB12879@an3as.eu>
+
+Hi Shayan,
+
+uploaded.  Thanks for your preparation, Andreas.
+
+On Fri, Dec 18, 2020 at 04:51:18PM +0000, Shayan Doust wrote:
+> Hello,
+> 
+> I believe [r-cran-bma] is ready for a sponsored upload. Do let me know if
+> anything needs changing.
+> 
+> Kind regards,
+> Shayan Doust
+> 
+> 
+> 
+> [r-cran-bma]: https://salsa.debian.org/r-pkg-team/r-cran-bma
+
+pub   RSA 4096/19D02395 2019-09-04 Shayan Doust (Personal EMAIL) <hello at shayandoust.me>
+> sub   RSA 4096/00484410 2020-06-26
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Dec 22 13:08:30 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 22 Dec 2020 14:08:30 +0100
+Subject: r-cran-partykit fails autopkgtest on arm64 - but I can't reproduce this
+Message-ID: <20201222130830.GI8708@an3as.eu>
+
+Hi Arm team,
+
+according to
+
+    https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-cran-partykit/8967298/log.gz
+
+the autopkgtest on arm64 is failing.  I tried to run the test on
+my pinebook.  But here it is passing.
+
+Any clue what might be wrong here?
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Dec 23 09:35:19 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 23 Dec 2020 10:35:19 +0100
+Subject: Two test failures in plotly
+Message-ID: <20201223093519.GK20503@an3as.eu>
+
+Hi,
+
+I tried to upgrade the Debian package of plotly but the test
+suite has thrown two failures:
+
+-- FAILURE (test-ggplot-sf.R:43:3): geom_sf() geometry collection. -------------
+l$data[[4]]$x not equivalent to c(5.5, 7, 7, 6, 5.5, 5.5).
+6/6 mismatches (average diff: 1.33)
+[1] 7.0 - 5.5 ==  1.5
+[2] 6.0 - 7.0 == -1.0
+[3] 5.5 - 7.0 == -1.5
+[4] 7.0 - 6.0 ==  1.0
+[5] 7.0 - 5.5 ==  1.5
+[6] 7.0 - 5.5 ==  1.5
+
+-- FAILURE (test-ggplot-sf.R:44:3): geom_sf() geometry collection. -------------
+l$data[[4]]$y not equivalent to c(0, 0, -0.5, -0.5, 0, 0).
+6/6 mismatches (average diff: 0.5)
+[1] -0.5 -  0.0 == -0.5
+[2] -0.5 -  0.0 == -0.5
+[3]  0.0 - -0.5 ==  0.5
+[4]  0.0 - -0.5 ==  0.5
+[5] -0.5 -  0.0 == -0.5
+[6] -0.5 -  0.0 == -0.5
+
+It seems to check ggplot and I can confirm that ggplot2 is at version
+3.3.2 (and thus up to date).
+
+Any idea what might be wrong here?
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From cpsievert1 at gmail.com  Wed Dec 23 19:07:04 2020
+From: cpsievert1 at gmail.com (Carson Sievert)
+Date: Wed, 23 Dec 2020 13:07:04 -0600
+Subject: Re: Two test failures in plotly
+In-Reply-To: <20201223093519.GK20503@an3as.eu>
+References: <20201223093519.GK20503@an3as.eu>
+Message-ID: <CAMYFQhoTUyH_5LYHpECvVFK6-bj=Eky7kvrFdZ0p5xiwfH6J9Q@mail.gmail.com>
+
+This issue is fixed in the development version of plotly which will be submitted to CRAN as soon as they're back from vacation (Jan 4th).
+
+Best,
+
+-Carson
+
+On Wed, Dec 23, 2020 at 3:35 AM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi,
+>
+>
+>
+> I tried to upgrade the Debian package of plotly but the test
+>
+> suite has thrown two failures:
+>
+>
+>
+> -- FAILURE (test-ggplot-sf.R:43:3): geom_sf() geometry collection. -------------
+>
+> l$data[[4]]$x not equivalent to c(5.5, 7, 7, 6, 5.5, 5.5).
+>
+> 6/6 mismatches (average diff: 1.33)
+>
+> [1] 7.0 - 5.5 ==  1.5
+>
+> [2] 6.0 - 7.0 == -1.0
+>
+> [3] 5.5 - 7.0 == -1.5
+>
+> [4] 7.0 - 6.0 ==  1.0
+>
+> [5] 7.0 - 5.5 ==  1.5
+>
+> [6] 7.0 - 5.5 ==  1.5
+>
+>
+>
+> -- FAILURE (test-ggplot-sf.R:44:3): geom_sf() geometry collection. -------------
+>
+> l$data[[4]]$y not equivalent to c(0, 0, -0.5, -0.5, 0, 0).
+>
+> 6/6 mismatches (average diff: 0.5)
+>
+> [1] -0.5 -  0.0 == -0.5
+>
+> [2] -0.5 -  0.0 == -0.5
+>
+> [3]  0.0 - -0.5 ==  0.5
+>
+> [4]  0.0 - -0.5 ==  0.5
+>
+> [5] -0.5 -  0.0 == -0.5
+>
+> [6] -0.5 -  0.0 == -0.5
+>
+>
+>
+> It seems to check ggplot and I can confirm that ggplot2 is at version
+>
+> 3.3.2 (and thus up to date).
+>
+>
+>
+> Any idea what might be wrong here?
+>
+>
+>
+> Kind regards
+>
+>
+>
+>      Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+-- 
+Carson Sievert, PhD
+Software Engineer at RStudio
+Website | Twitter | GitHub
+
+From andreas at fam-tille.de  Wed Dec 23 20:17:27 2020
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 23 Dec 2020 21:17:27 +0100
+Subject: Re: Two test failures in plotly
+In-Reply-To: <CAMYFQhoTUyH_5LYHpECvVFK6-bj=Eky7kvrFdZ0p5xiwfH6J9Q@mail.gmail.com>
+References: <20201223093519.GK20503@an3as.eu> <CAMYFQhoTUyH_5LYHpECvVFK6-bj=Eky7kvrFdZ0p5xiwfH6J9Q@mail.gmail.com>
+Message-ID: <20201223201727.GN20503@an3as.eu>
+
+Thanks a lot for the quick response.  Seasonal greetings, Andreas.
+
+On Wed, Dec 23, 2020 at 01:07:04PM -0600, Carson Sievert wrote:
+> This issue is fixed in the development version of plotly which will be
+> submitted to CRAN as soon as they're back from vacation (Jan 4th).
+> 
+> Best,
+> 
+> -Carson
+> 
+> On Wed, Dec 23, 2020 at 3:35 AM Andreas Tille <andreas at an3as.eu> wrote:
+> 
+> > Hi,
+> >
+> > I tried to upgrade the Debian package of plotly but the test
+> > suite has thrown two failures:
+> >
+> > -- FAILURE (test-ggplot-sf.R:43:3): geom_sf() geometry collection.
+> > -------------
+> > l$data[[4]]$x not equivalent to c(5.5, 7, 7, 6, 5.5, 5.5).
+> > 6/6 mismatches (average diff: 1.33)
+> > [1] 7.0 - 5.5 ==  1.5
+> > [2] 6.0 - 7.0 == -1.0
+> > [3] 5.5 - 7.0 == -1.5
+> > [4] 7.0 - 6.0 ==  1.0
+> > [5] 7.0 - 5.5 ==  1.5
+> > [6] 7.0 - 5.5 ==  1.5
+> >
+> > -- FAILURE (test-ggplot-sf.R:44:3): geom_sf() geometry collection.
+> > -------------
+> > l$data[[4]]$y not equivalent to c(0, 0, -0.5, -0.5, 0, 0).
+> > 6/6 mismatches (average diff: 0.5)
+> > [1] -0.5 -  0.0 == -0.5
+> > [2] -0.5 -  0.0 == -0.5
+> > [3]  0.0 - -0.5 ==  0.5
+> > [4]  0.0 - -0.5 ==  0.5
+> > [5] -0.5 -  0.0 == -0.5
+> > [6] -0.5 -  0.0 == -0.5
+> >
+> > It seems to check ggplot and I can confirm that ggplot2 is at version
+> > 3.3.2 (and thus up to date).
+> >
+> > Any idea what might be wrong here?
+> >
+> > Kind regards
+> >
+> >      Andreas.
+> >
+> > --
+> > http://fam-tille.de
+> >
+> 
+> 
+> -- 
+> Carson Sievert, PhD
+> Software Engineer at RStudio
+> Website <https://cpsievert.me> | Twitter <https://twitter.com/cpsievert> |
+> GitHub <https://github.com/cpsievert>
+
+-- 
+http://fam-tille.de
+
+From npatra974 at gmail.com  Sat Dec 26 13:00:19 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Sat, 26 Dec 2020 18:30:19 +0530
+Subject: [RFS] r-cran-vctrs
+Message-ID: <CAJN192-mt_KJjsoZGFedT4eim4N3Aa6H73esMTQ8XD+5o87SOw@mail.gmail.com>
+
+gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-vctrs
+
+OR
+
+dcut dm --uid npatra974 at gmail.com --allow r-cran-vctrs
+
+Thanks and Regards
+Nilesh
+
+From steffen_moeller at gmx.de  Sat Dec 26 13:36:15 2020
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Sat, 26 Dec 2020 14:36:15 +0100
+Subject: done Re: [RFS] r-cran-vctrs
+In-Reply-To: <CAJN192-mt_KJjsoZGFedT4eim4N3Aa6H73esMTQ8XD+5o87SOw@mail.gmail.com>
+References: <CAJN192-mt_KJjsoZGFedT4eim4N3Aa6H73esMTQ8XD+5o87SOw@mail.gmail.com>
+Message-ID: <ee61b2b6-5917-2aae-19f1-3f83446a12a3@gmx.de>
+
+  
+  
+    Thanks!
+
+    
+
+    Am 26.12.20 um 14:00 schrieb Nilesh
+      Patra:
+
+    
+
+    > dcut
+>       dm --uid npatra974 at gmail.com --allow
+>       r-cran-vctrs
+
+  
+
+From npatra974 at gmail.com  Mon Dec 28 08:38:46 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Mon, 28 Dec 2020 14:08:46 +0530
+Subject: [RFS] r-cran-segmented
+Message-ID: <CAJN1929eD8ACXkQRVctqiy52YmRifp8roBGQQt-f4=b-mirBfQ@mail.gmail.com>
+
+gbp clone --pristine-tar https://salsa.debian.org/r-pkg-team/r-cran-segmented
+
+OR
+
+dcut dm --uid npatra974 at gmail.com --allow r-cran-segmented
+
+Thanks and Regards
+Nilesh
+
+From steffen_moeller at gmx.de  Mon Dec 28 13:38:41 2020
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Mon, 28 Dec 2020 14:38:41 +0100
+Subject: done Re: [RFS] r-cran-segmented
+In-Reply-To: <CAJN1929eD8ACXkQRVctqiy52YmRifp8roBGQQt-f4=b-mirBfQ@mail.gmail.com>
+References: <CAJN1929eD8ACXkQRVctqiy52YmRifp8roBGQQt-f4=b-mirBfQ@mail.gmail.com>
+Message-ID: <239af565-566c-026c-b3d1-d6bbc784f268@gmx.de>
+
+  
+  
+    Thanks!
+
+    
+
+    Am 28.12.20 um 09:38 schrieb Nilesh
+      Patra:
+
+    
+
+    >
+>
+>
+>
+>       dcut dm --uid npatra974 at gmail.com --allow
+>         r-cran-segmented
+>
+>
+
+  
+

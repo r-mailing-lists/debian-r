@@ -1,0 +1,1284 @@
+From daissi at debian.org  Thu Jul  9 05:45:08 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 9 Jul 2020 07:45:08 +0200
+Subject: Re: False positive lintian tag: requires-r-api
+In-Reply-To: <CAFHYt55_b=5zOiqcUjiEXCACt=4dToAzbu31p1MHd3nCM7kOJA@mail.gmail.com>
+References: <63208758-5c3d-1c95-cba4-1e1e6e32e3eb@gmx.de> <20200708131632.GD10933@an3as.eu> <CA+6XHwQs=bYDsRwm9g08mmQZnjpo5FLiubY1LP_xcuN168MZgA@mail.gmail.com> <CAFHYt55_b=5zOiqcUjiEXCACt=4dToAzbu31p1MHd3nCM7kOJA@mail.gmail.com>
+Message-ID: <CA+6XHwQ6M9=Kp-gHW5s9x8RAg9fNJM0643Si8pZBJchJSJ_BEg@mail.gmail.com>
+
+Hi Felix,
+
+Thanks for your prompt answer!
+
+Le jeu. 9 juil. 2020 à 02:34, Felix Lechner
+<felix.lechner at lease-up.com> a écrit :
+> Yes. At least for the package r-cran-getopt, the package depends on
+> r-api-X.X, (4.0 for arch all) but the regular expression includes no
+> period (yet has a plus):
+>
+> Please just let me know which characters you would like to allow. No MR needed.
+
+By looking into the history of r-base (which provides the virtual
+r-api-xx package), we have: r-api-3, r-api-3.4, r-api-3.5 and
+r-api-4.0. Only the last one should be in the Debian archive right
+now. I think it would be fine if lintian could detect both formats
+r-api-X and r-api-X.X where X is numeric.
+
+Thanks again!
+
+Best,
+Dylan
+
+From felix.lechner at lease-up.com  Thu Jul  9 14:48:12 2020
+From: felix.lechner at lease-up.com (Felix Lechner)
+Date: Thu, 9 Jul 2020 07:48:12 -0700
+Subject: Re: False positive lintian tag: requires-r-api
+In-Reply-To: <CA+6XHwQ6M9=Kp-gHW5s9x8RAg9fNJM0643Si8pZBJchJSJ_BEg@mail.gmail.com>
+References: <63208758-5c3d-1c95-cba4-1e1e6e32e3eb@gmx.de> <20200708131632.GD10933@an3as.eu> <CA+6XHwQs=bYDsRwm9g08mmQZnjpo5FLiubY1LP_xcuN168MZgA@mail.gmail.com> <CAFHYt55_b=5zOiqcUjiEXCACt=4dToAzbu31p1MHd3nCM7kOJA@mail.gmail.com> <CA+6XHwQ6M9=Kp-gHW5s9x8RAg9fNJM0643Si8pZBJchJSJ_BEg@mail.gmail.com>
+Message-ID: <CAFHYt553XMuMPx1u7XBHHPMnF2Z6+POBknRzUhV6FqbRHsosuw@mail.gmail.com>
+
+Hi Dylan,
+
+On Wed, Jul 8, 2020 at 10:45 PM Dylan Aïssi <daissi at debian.org> wrote:
+>
+> it would be fine if lintian could detect both formats
+> r-api-X and r-api-X.X where X is numeric.
+
+To give your teams the greatest possible flexibility I allowed in the
+extension all characters that are legal for package names. API version
+numbers that are carried into the package names may now also contain
+plus and minus (as well as the entire alphabet). From my experience,
+the prefix 'r-api-' will ensure that it works the way you expect.
+
+    https://salsa.debian.org/lintian/lintian/-/commit/c4a141e83625b3d424bcf3d31f575aab4c1c2fa0
+
+Please write again if something does not work, after all (or stops
+working). Please also feel free to contribute additional tags for R or
+any of your other products.
+
+Kind regards
+Felix Lechner
+
+From daissi at debian.org  Thu Jul  9 16:03:38 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 9 Jul 2020 18:03:38 +0200
+Subject: Re: False positive lintian tag: requires-r-api
+In-Reply-To: <CAFHYt553XMuMPx1u7XBHHPMnF2Z6+POBknRzUhV6FqbRHsosuw@mail.gmail.com>
+References: <63208758-5c3d-1c95-cba4-1e1e6e32e3eb@gmx.de> <20200708131632.GD10933@an3as.eu> <CA+6XHwQs=bYDsRwm9g08mmQZnjpo5FLiubY1LP_xcuN168MZgA@mail.gmail.com> <CAFHYt55_b=5zOiqcUjiEXCACt=4dToAzbu31p1MHd3nCM7kOJA@mail.gmail.com> <CA+6XHwQ6M9=Kp-gHW5s9x8RAg9fNJM0643Si8pZBJchJSJ_BEg@mail.gmail.com> <CAFHYt553XMuMPx1u7XBHHPMnF2Z6+POBknRzUhV6FqbRHsosuw@mail.gmail.com>
+Message-ID: <CA+6XHwSfCWxqXUf4JR-zKwFr_Z-yvuvxHi0htiaOjnkP8kaGCQ@mail.gmail.com>
+
+Hi Felix,
+
+Le jeu. 9 juil. 2020 à 16:49, Felix Lechner
+<felix.lechner at lease-up.com> a écrit :
+> To give your teams the greatest possible flexibility I allowed in the
+> extension all characters that are legal for package names. API version
+> numbers that are carried into the package names may now also contain
+> plus and minus (as well as the entire alphabet). From my experience,
+> the prefix 'r-api-' will ensure that it works the way you expect.
+
+Thanks a lot!
+
+> Please write again if something does not work, after all (or stops
+> working). Please also feel free to contribute additional tags for R or
+> any of your other products.
+
+Yep, I will think about this one: https://bugs.debian.org/660165
+
+Best,
+Dylan
+
+From plessy at debian.org  Fri Jul 10 02:06:43 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 10 Jul 2020 11:06:43 +0900
+Subject: How about a metapackage for pulling frequent build and check dependencies ?
+Message-ID: <20200710020115.GA19518@kumo.plessy.net>
+
+Hello Dirk and everybody,
+
+sometimes I need to create a Debian container in which I will install
+all the CRAN and Bioconductor packages that I need from source.
+
+I often end up installing libxml2-dev, libcurl4-openssl-dev, libssl-dev,
+and texlive by hand.  And each time, it takes me a minute of distraction
+in order to find the name of the package to install.
+
+I wonder if it would be useful to have a "r-suggested" or "r-extra"
+metapackage in Debian that would depend on them.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                              Akano, Uruma, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,           https://mastodon.technology/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Fri Jul 10 02:41:18 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 9 Jul 2020 21:41:18 -0500
+Subject: Re: How about a metapackage for pulling frequent build and check dependencies ?
+In-Reply-To: <20200710020115.GA19518@kumo.plessy.net>
+References: <20200710020115.GA19518@kumo.plessy.net>
+Message-ID: <24327.54606.887746.799231@rob.eddelbuettel.com>
+
+Salut Charles,
+
+On 10 July 2020 at 11:06, Charles Plessy wrote:
+| Hello Dirk and everybody,
+| 
+| sometimes I need to create a Debian container in which I will install
+| all the CRAN and Bioconductor packages that I need from source.
+
+There are existing solutions that look at a package (in the CRAN/BioC sense)
+and bundle all it needs into a container. I keep forgetting the names but they
+are mentioned in the paper by Daniel Nuest (with me and a lots of others):
+  https://arxiv.org/abs/2001.10641
+
+| I often end up installing libxml2-dev, libcurl4-openssl-dev, libssl-dev,
+| and texlive by hand.  And each time, it takes me a minute of distraction
+| in order to find the name of the package to install.
+| 
+| I wonder if it would be useful to have a "r-suggested" or "r-extra"
+| metapackage in Debian that would depend on them.
+
+On just those four? Maybe.
+
+Maybe we could even add them to r-base-dev, come to think about it. Or, as
+you say, make a 'r-base-extra-dev'. (Or, as I sometimes do for pragmatic
+reasons, you use Ubuntu with the Rutter PPAs giving you ~ 4500 r-cran-*
+binaries that just work. May be the better approach actually...)
+
+And there is another issue with those four and some others. RStudio now
+offers binaries for "everything" incl four Linux distros (but Debian, very
+strange) and those are "just binary CRAN installs" i.e. NOT package in our
+sense with a dependency graph. So ... sometimes you will miss depends. I
+blogged a little about it and have two test containers (for Ubuntu 18.04 and
+20.04 if you want to play). Blog post is at
+  https://dirk.eddelbuettel.com/blog/2020/07/03/#028_rocker_rspm
+
+Bye, Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Fri Jul 10 21:05:24 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 10 Jul 2020 23:05:24 +0200
+Subject: r-bioc-complexheatmap: Error: C stack usage in test suite
+Message-ID: <20200710210524.GF18202@an3as.eu>
+
+Hi,
+
+I intend to package r-bioc-complexheatmap.  The Build-Dependency
+r-cran-getoptlong is in new as well as the Test-Depends r-cran-gridtext
+are in new.  With these packages it is possible it is possible to
+reproduce the error of the test suite:
+
+...
+---------------------
+
+Attaching package: ‘dendextend’
+
+>.
+> The following object is masked from ‘package:stats’:
+
+    cutree
+
+m = matrix(rnorm(100), 10)
+> dend1 = as.dendrogram(hclust(dist(m)))
+> dend1 = adjust_dend_by_x(dend1, sort(runif(10)))
+>.
+> m = matrix(rnorm(50), nr = 5)
+> dend2 = as.dendrogram(hclust(dist(m)))
+>.
+> dend3 = as.dendrogram(hclust(dist(m[1:2, ])))
+>.
+>.
+> dend_merge = merge_dendrogram(dend3,.
++ <---->list(set(dend1, "branches_col", "red"),.
++ <----><------> set(dend2, "branches_col", "blue"))
++ )
+>.
+> grid.dendrogram(dend_merge, test = TRUE, facing = "bottom")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "top")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "left")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "right")
+>.
+> grid.dendrogram(dend_merge, test = TRUE, facing = "bottom", order = "reverse")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "top", order = "reverse")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "left", order = "reverse")
+> grid.dendrogram(dend_merge, test = TRUE, facing = "right", order = "reverse")
+>.
+>.
+> m = matrix(rnorm(100), 10)
+> dend1 = as.dendrogram(hclust(dist(m)))
+> dend1 = adjust_dend_by_x(dend1, unit(1:10, "cm"))
+> grid.dendrogram(dend1, test = TRUE)
+>.
+> dl = cut_dendrogram(dend1, k = 3)
+> grid.dendrogram(dl$upper, test = TRUE)
+>.
+>.
+> m1 = matrix(rnorm(100), nr = 10)
+> m2 = matrix(rnorm(80), nr = 8)
+> m3 = matrix(rnorm(50), nr = 5)
+> dend1 = as.dendrogram(hclust(dist(m1)))
+> dend2 = as.dendrogram(hclust(dist(m2)))
+> dend3 = as.dendrogram(hclust(dist(m3)))
+> dend_p = as.dendrogram(hclust(dist(rbind(colMeans(m1), colMeans(m2), colMeans(m3)))))
+> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+> grid.dendrogram(dend_m, test = T)
+>.
+> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3), only_parent = TRUE)
+> grid.dendrogram(dend_m, test = T)
+>.
+> require(dendextend)
+> dend1 = color_branches(dend1, k = 1, col = "red")
+> dend2 = color_branches(dend2, k = 1, col = "blue")
+> dend3 = color_branches(dend3, k = 1, col = "green")
+> dend_p = color_branches(dend_p, k = 1, col = "orange")
+> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+> grid.dendrogram(dend_m, test = T)
+>.
+>.
+> m = matrix(rnorm(120), nc = 12)
+> colnames(m) = letters[1:12]
+> fa = rep(c("a", "b", "c"), times = c(2, 4, 6))
+> dend = cluster_within_group(m, fa)
+> grid.dendrogram(dend, test = TRUE)
+>.
+>.
+> #  stack overflow problem
+> m = matrix(1, nrow = 1000, ncol = 10)
+> m[1, 2] = 2
+> dend = as.dendrogram(hclust(dist(m)))
+> grid.dendrogram(dend, test = T)
+Error: C stack usage  7969380 is too close to the limit
+Execution halted
+autopkgtest [20:30:07]: test run-unit-test: -----------------------]
+
+Any idea how to fix this?
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From hello at shayandoust.me  Thu Jul 16 00:52:55 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Thu, 16 Jul 2020 01:52:55 +0100
+Subject: Hello r-pkg-team
+Message-ID: <640d9a70-158c-e896-9f0d-d8d9d1b34bff@shayandoust.me>
+
+Hello,
+
+A more of an introductory email after joining this team. My name is
+Shayan Doust, and for the past few months, have been packaging for the
+Debian Med team.
+
+I've decided to join this team alongside with what I have been doing in
+Debian so far as I am currently learning R. As well as introducing new
+packages which I am using (some of which are not yet available as a
+package), It'd be great to offer a helping hand. Not forgetting that
+this will be a great learning experience for handling anything R-related :).
+
+Hope to see you all in the mailing list!
+
+Kind regards,
+Shayan Doust
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From daissi at debian.org  Thu Jul 16 06:58:42 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 16 Jul 2020 08:58:42 +0200
+Subject: Re: Hello r-pkg-team
+In-Reply-To: <640d9a70-158c-e896-9f0d-d8d9d1b34bff@shayandoust.me>
+References: <640d9a70-158c-e896-9f0d-d8d9d1b34bff@shayandoust.me>
+Message-ID: <CA+6XHwS0LLSqKZ1GtJOJ4KmOpijouU4Cp1ydoBT_+Qhx3g05oQ@mail.gmail.com>
+
+Hi Shayan,
+
+Le jeu. 16 juil. 2020 à 03:01, Shayan Doust <hello at shayandoust.me> a écrit :
+> A more of an introductory email after joining this team. My name is
+> Shayan Doust, and for the past few months, have been packaging for the
+> Debian Med team.
+
+Welcome to the team! If you have questions do not hesitate to ask them.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Thu Jul 16 07:17:43 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 16 Jul 2020 09:17:43 +0200
+Subject: Re: Hello r-pkg-team
+In-Reply-To: <640d9a70-158c-e896-9f0d-d8d9d1b34bff@shayandoust.me>
+References: <640d9a70-158c-e896-9f0d-d8d9d1b34bff@shayandoust.me>
+Message-ID: <20200716071742.GJ18202@an3as.eu>
+
+Hi Shayan,
+
+On Thu, Jul 16, 2020 at 01:52:55AM +0100, Shayan Doust wrote:
+> A more of an introductory email after joining this team. My name is
+> Shayan Doust, and for the past few months, have been packaging for the
+> Debian Med team.
+
+:-)
+ 
+> I've decided to join this team alongside with what I have been doing in
+> Debian so far as I am currently learning R. As well as introducing new
+> packages which I am using (some of which are not yet available as a
+> package), It'd be great to offer a helping hand. Not forgetting that
+> this will be a great learning experience for handling anything R-related :).
+
+I think the most interesting fact to learn is that you never should
+start packaging something manually.  Just use
+
+   prepare_missing_cran_package CRANNAME
+
+from dh-r package and check the dir
+
+   ../CRAN_prospective
+
+afterwards.  It should contain a git repository with your target package
+(and all its dependencies).  If you want more details I'd recommend one
+of the two "R packaging BOF" videos you can find here
+
+   https://people.debian.org/~tille/talks/
+
+Welcome in the team
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Jul 16 14:25:48 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 16 Jul 2020 16:25:48 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200710210524.GF18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu>
+Message-ID: <20200716142548.GM18202@an3as.eu>
+
+Hi,
+
+I can confirm that the run-unit-test script works when executed with
+the package installed.  I tried to provide some xserver via
+
+diff --git a/debian/tests/control b/debian/tests/control
+index d706a90..e72e807 100644
+--- a/debian/tests/control
++++ b/debian/tests/control
+@@ -1,5 +1,5 @@
+ Tests: run-unit-test
+-Depends: @, r-cran-testthat, r-cran-dendextend
++Depends: @, r-cran-testthat, r-cran-dendextend, r-cran-gridtext, xvfb, xauth
+ Restrictions: allow-stderr
+ 
+ 
+diff --git a/debian/tests/run-unit-test b/debian/tests/run-unit-test
+index 193d5e0..7ab30b6 100644
+--- a/debian/tests/run-unit-test
++++ b/debian/tests/run-unit-test
+@@ -10,6 +10,14 @@ fi
+ cd $AUTOPKGTEST_TMP
+ cp -a /usr/share/doc/$debname/tests/* $AUTOPKGTEST_TMP
+ gunzip -r *
++
++Xvfb :5 -screen 0 1600x1200x24 -ac +extension GLX +render -noreset -v  -fbdir $AUTOPKGTEST_TMP/ &
++XVFB_PID=$!
++echo $XVFB_PID
++export DISPLAY=:5
++export XAUTHORITY=/dev/null
++trap "kill $XVFB_PID" 0 INT QUIT ABRT PIPE TERM
++
+ for testfile in *.R; do
+     echo "BEGIN TEST $testfile"
+     LC_ALL=C.UTF-8 R --no-save < $testfile
+
+but it keeps on failing in pbuilder chroot.
+
+Any hints are welcome
+
+     Andreas.
+
+On Fri, Jul 10, 2020 at 11:05:24PM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> I intend to package r-bioc-complexheatmap.  The Build-Dependency
+> r-cran-getoptlong is in new as well as the Test-Depends r-cran-gridtext
+> are in new.  With these packages it is possible it is possible to
+> reproduce the error of the test suite:
+> 
+> 
+> ...
+> ---------------------
+> 
+> 
+> Attaching package: ‘dendextend’
+> 
+> >.
+> > The following object is masked from ‘package:stats’:
+> 
+>     cutree
+> 
+> m = matrix(rnorm(100), 10)
+> > dend1 = as.dendrogram(hclust(dist(m)))
+> > dend1 = adjust_dend_by_x(dend1, sort(runif(10)))
+> >.
+> > m = matrix(rnorm(50), nr = 5)
+> > dend2 = as.dendrogram(hclust(dist(m)))
+> >.
+> > dend3 = as.dendrogram(hclust(dist(m[1:2, ])))
+> >.
+> >.
+> > dend_merge = merge_dendrogram(dend3,.
+> + <---->list(set(dend1, "branches_col", "red"),.
+> + <----><------> set(dend2, "branches_col", "blue"))
+> + )
+> >.
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "bottom")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "top")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "left")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "right")
+> >.
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "bottom", order = "reverse")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "top", order = "reverse")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "left", order = "reverse")
+> > grid.dendrogram(dend_merge, test = TRUE, facing = "right", order = "reverse")
+> >.
+> >.
+> > m = matrix(rnorm(100), 10)
+> > dend1 = as.dendrogram(hclust(dist(m)))
+> > dend1 = adjust_dend_by_x(dend1, unit(1:10, "cm"))
+> > grid.dendrogram(dend1, test = TRUE)
+> >.
+> > dl = cut_dendrogram(dend1, k = 3)
+> > grid.dendrogram(dl$upper, test = TRUE)
+> >.
+> >.
+> > m1 = matrix(rnorm(100), nr = 10)
+> > m2 = matrix(rnorm(80), nr = 8)
+> > m3 = matrix(rnorm(50), nr = 5)
+> > dend1 = as.dendrogram(hclust(dist(m1)))
+> > dend2 = as.dendrogram(hclust(dist(m2)))
+> > dend3 = as.dendrogram(hclust(dist(m3)))
+> > dend_p = as.dendrogram(hclust(dist(rbind(colMeans(m1), colMeans(m2), colMeans(m3)))))
+> > dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+> > grid.dendrogram(dend_m, test = T)
+> >.
+> > dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3), only_parent = TRUE)
+> > grid.dendrogram(dend_m, test = T)
+> >.
+> > require(dendextend)
+> > dend1 = color_branches(dend1, k = 1, col = "red")
+> > dend2 = color_branches(dend2, k = 1, col = "blue")
+> > dend3 = color_branches(dend3, k = 1, col = "green")
+> > dend_p = color_branches(dend_p, k = 1, col = "orange")
+> > dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+> > grid.dendrogram(dend_m, test = T)
+> >.
+> >.
+> > m = matrix(rnorm(120), nc = 12)
+> > colnames(m) = letters[1:12]
+> > fa = rep(c("a", "b", "c"), times = c(2, 4, 6))
+> > dend = cluster_within_group(m, fa)
+> > grid.dendrogram(dend, test = TRUE)
+> >.
+> >.
+> > #  stack overflow problem
+> > m = matrix(1, nrow = 1000, ncol = 10)
+> > m[1, 2] = 2
+> > dend = as.dendrogram(hclust(dist(m)))
+> > grid.dendrogram(dend, test = T)
+> Error: C stack usage  7969380 is too close to the limit
+> Execution halted
+> autopkgtest [20:30:07]: test run-unit-test: -----------------------]
+> 
+> 
+> Any idea how to fix this?
+> 
+> Kind regards
+> 
+>        Andreas.
+> 
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Thu Jul 16 14:34:38 2020
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Thu, 16 Jul 2020 16:34:38 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200716142548.GM18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu>
+Message-ID: <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de>
+
+https://stackoverflow.com/questions/1710853/how-to-run-r-on-a-server-without-x11-and-avoid-broken-dependencies/1710952#1710952
+
+On 16.07.20 16:25, Andreas Tille wrote:
+> Hi,
+>
+> I can confirm that the run-unit-test script works when executed with
+> the package installed.  I tried to provide some xserver via
+>
+>
+> diff --git a/debian/tests/control b/debian/tests/control
+> index d706a90..e72e807 100644
+> --- a/debian/tests/control
+> +++ b/debian/tests/control
+> @@ -1,5 +1,5 @@
+>  Tests: run-unit-test
+> -Depends: @, r-cran-testthat, r-cran-dendextend
+> +Depends: @, r-cran-testthat, r-cran-dendextend, r-cran-gridtext, xvfb, xauth
+>  Restrictions: allow-stderr
+>
+>
+> diff --git a/debian/tests/run-unit-test b/debian/tests/run-unit-test
+> index 193d5e0..7ab30b6 100644
+> --- a/debian/tests/run-unit-test
+> +++ b/debian/tests/run-unit-test
+> @@ -10,6 +10,14 @@ fi
+>  cd $AUTOPKGTEST_TMP
+>  cp -a /usr/share/doc/$debname/tests/* $AUTOPKGTEST_TMP
+>  gunzip -r *
+> +
+> +Xvfb :5 -screen 0 1600x1200x24 -ac +extension GLX +render -noreset -v  -fbdir $AUTOPKGTEST_TMP/ &
+> +XVFB_PID=$!
+> +echo $XVFB_PID
+> +export DISPLAY=:5
+> +export XAUTHORITY=/dev/null
+> +trap "kill $XVFB_PID" 0 INT QUIT ABRT PIPE TERM
+> +
+>  for testfile in *.R; do
+>      echo "BEGIN TEST $testfile"
+>      LC_ALL=C.UTF-8 R --no-save < $testfile
+>
+>
+> but it keeps on failing in pbuilder chroot.
+>
+> Any hints are welcome
+>
+>      Andreas.
+>
+>
+> On Fri, Jul 10, 2020 at 11:05:24PM +0200, Andreas Tille wrote:
+>> Hi,
+>>
+>> I intend to package r-bioc-complexheatmap.  The Build-Dependency
+>> r-cran-getoptlong is in new as well as the Test-Depends r-cran-gridtext
+>> are in new.  With these packages it is possible it is possible to
+>> reproduce the error of the test suite:
+>>
+>>
+>> ...
+>> ---------------------
+>>
+>>
+>> Attaching package: ‘dendextend’
+>>
+>>> .
+>>> The following object is masked from ‘package:stats’:
+>>     cutree
+>>
+>> m = matrix(rnorm(100), 10)
+>>> dend1 = as.dendrogram(hclust(dist(m)))
+>>> dend1 = adjust_dend_by_x(dend1, sort(runif(10)))
+>>> .
+>>> m = matrix(rnorm(50), nr = 5)
+>>> dend2 = as.dendrogram(hclust(dist(m)))
+>>> .
+>>> dend3 = as.dendrogram(hclust(dist(m[1:2, ])))
+>>> .
+>>> .
+>>> dend_merge = merge_dendrogram(dend3,.
+>> + <---->list(set(dend1, "branches_col", "red"),.
+>> + <----><------> set(dend2, "branches_col", "blue"))
+>> + )
+>>> .
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "bottom")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "top")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "left")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "right")
+>>> .
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "bottom", order = "reverse")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "top", order = "reverse")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "left", order = "reverse")
+>>> grid.dendrogram(dend_merge, test = TRUE, facing = "right", order = "reverse")
+>>> .
+>>> .
+>>> m = matrix(rnorm(100), 10)
+>>> dend1 = as.dendrogram(hclust(dist(m)))
+>>> dend1 = adjust_dend_by_x(dend1, unit(1:10, "cm"))
+>>> grid.dendrogram(dend1, test = TRUE)
+>>> .
+>>> dl = cut_dendrogram(dend1, k = 3)
+>>> grid.dendrogram(dl$upper, test = TRUE)
+>>> .
+>>> .
+>>> m1 = matrix(rnorm(100), nr = 10)
+>>> m2 = matrix(rnorm(80), nr = 8)
+>>> m3 = matrix(rnorm(50), nr = 5)
+>>> dend1 = as.dendrogram(hclust(dist(m1)))
+>>> dend2 = as.dendrogram(hclust(dist(m2)))
+>>> dend3 = as.dendrogram(hclust(dist(m3)))
+>>> dend_p = as.dendrogram(hclust(dist(rbind(colMeans(m1), colMeans(m2), colMeans(m3)))))
+>>> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+>>> grid.dendrogram(dend_m, test = T)
+>>> .
+>>> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3), only_parent = TRUE)
+>>> grid.dendrogram(dend_m, test = T)
+>>> .
+>>> require(dendextend)
+>>> dend1 = color_branches(dend1, k = 1, col = "red")
+>>> dend2 = color_branches(dend2, k = 1, col = "blue")
+>>> dend3 = color_branches(dend3, k = 1, col = "green")
+>>> dend_p = color_branches(dend_p, k = 1, col = "orange")
+>>> dend_m = merge_dendrogram(dend_p, list(dend1, dend2, dend3))
+>>> grid.dendrogram(dend_m, test = T)
+>>> .
+>>> .
+>>> m = matrix(rnorm(120), nc = 12)
+>>> colnames(m) = letters[1:12]
+>>> fa = rep(c("a", "b", "c"), times = c(2, 4, 6))
+>>> dend = cluster_within_group(m, fa)
+>>> grid.dendrogram(dend, test = TRUE)
+>>> .
+>>> .
+>>> #  stack overflow problem
+>>> m = matrix(1, nrow = 1000, ncol = 10)
+>>> m[1, 2] = 2
+>>> dend = as.dendrogram(hclust(dist(m)))
+>>> grid.dendrogram(dend, test = T)
+>> Error: C stack usage  7969380 is too close to the limit
+>> Execution halted
+>> autopkgtest [20:30:07]: test run-unit-test: -----------------------]
+>>
+>>
+>> Any idea how to fix this?
+>>
+>> Kind regards
+>>
+>>        Andreas.
+>>
+>>
+>> --
+>> http://fam-tille.de
+>>
+>>
+
+From andreas at an3as.eu  Sat Jul 18 12:57:46 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 18 Jul 2020 14:57:46 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de>
+Message-ID: <20200718125746.GD18202@an3as.eu>
+
+On Thu, Jul 16, 2020 at 04:34:38PM +0200, Steffen Möller wrote:
+> https://stackoverflow.com/questions/1710853/how-to-run-r-on-a-server-without-x11-and-avoid-broken-dependencies/1710952#1710952
+
+This is basically what I tried and was in parallel commited by Dylan.
+However, I do not think that the missing X server is the source
+of the problem.  I've tried to run the test suite at the Linux
+console (where no X server exists and it worked).  It is only
+
+   test-dendrogram.R
+
+that triggers the failure when running in an autopkgtest chroot but
+it is fine on the installed system.  I'd love to at least understand
+the issue before ignoring this error.
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From hello at shayandoust.me  Mon Jul 20 12:56:51 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Mon, 20 Jul 2020 13:56:51 +0100
+Subject: Sponsored upload request for r-cran-dslabs
+Message-ID: <5ed49aef-f61e-940e-d5d3-de2da564e31c@shayandoust.me>
+
+Hello,
+
+Can someone kindly check r-cran-dslabs[1]. I believe it may be ready for
+a sponsored upload (not much intervention needed for this 'simple'
+dataset library after the automated process of generating this package :)).
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-dslabs
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Tue Jul 21 15:05:15 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 21 Jul 2020 17:05:15 +0200
+Subject: Re: Sponsored upload request for r-cran-dslabs
+In-Reply-To: <5ed49aef-f61e-940e-d5d3-de2da564e31c@shayandoust.me>
+References: <5ed49aef-f61e-940e-d5d3-de2da564e31c@shayandoust.me>
+Message-ID: <20200721150515.GC18202@an3as.eu>
+
+Hi Shayan,
+
+On Mon, Jul 20, 2020 at 01:56:51PM +0100, Shayan Doust wrote:
+> Can someone kindly check r-cran-dslabs[1]. I believe it may be ready for
+> a sponsored upload (not much intervention needed for this 'simple'
+> dataset library after the automated process of generating this package :)).
+
+Actually about 90% of the R packages are that simple, 8% have JS issues
+and only 2% make real work (according to my "felt" statistics ;-) ).
+
+I've uploaded after prefixing the short description with "GNU R" which
+is kind of a standard in short descriptions.
+
+Thanks for your work on this
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Jul 21 15:13:51 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 21 Jul 2020 17:13:51 +0200
+Subject: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200718125746.GD18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu>
+Message-ID: <20200721151351.GD18202@an3as.eu>
+
+Hi Zuguang,
+
+the Debian R team is trying to package ComplexHeatmap for Debian.  When
+we run the test suite in a restricted environment (no remote access, no
+X server only the packages specified in DESCRIPTION available) it turns
+out that the test
+
+$ R --no-save < test-dendrogram.R
+...
+> #  stack overflow problem
+> m = matrix(1, nrow = 1000, ncol = 10)
+> m[1, 2] = 2
+> dend = as.dendrogram(hclust(dist(m)))
+> grid.dendrogram(dend, test = T)
+Error: C stack usage  7969380 is too close to the limit
+Execution halted
+
+fails.  This is not the case if the resulting package is installed on a
+normal machine - but in the CI environment which is restricted this
+failure appears reproducibly.
+
+Do you have any idea what might cause this issue?
+
+Kind regards
+
+         Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Tue Jul 21 16:51:05 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 21 Jul 2020 11:51:05 -0500
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200721151351.GD18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu>
+Message-ID: <24343.7417.395709.367228@rob.eddelbuettel.com>
+
+On 21 July 2020 at 17:13, Andreas Tille wrote:
+| Hi Zuguang,
+| 
+| the Debian R team is trying to package ComplexHeatmap for Debian.  When
+| we run the test suite in a restricted environment (no remote access, no
+| X server only the packages specified in DESCRIPTION available) it turns
+| out that the test
+| 
+| 
+| $ R --no-save < test-dendrogram.R
+| ...
+| > #  stack overflow problem
+| > m = matrix(1, nrow = 1000, ncol = 10)
+| > m[1, 2] = 2
+| > dend = as.dendrogram(hclust(dist(m)))
+| > grid.dendrogram(dend, test = T)
+| Error: C stack usage  7969380 is too close to the limit
+| Execution halted
+
+You almost surely want the xvfb wrapper here as grid likely opens a device.
+
+| fails.  This is not the case if the resulting package is installed on a
+| normal machine - but in the CI environment which is restricted this
+| failure appears reproducibly.
+| 
+| Do you have any idea what might cause this issue?
+
+An obvious error in the package is unconditional use in the test file of the
+suggested package:
+
+edd@rob:/tmp/downloaded_packages/ComplexHeatmap/tests$ R --no-save < test-dendrogram.R 
+
+[... stuff omitted ...]
+
+R> library(GetoptLong)
+R> 
+R> if(!exists("cut_dendrogram")) {
++       cut_dendrogram = ComplexHeatmap:::cut_dendrogram
++ }
+R> 
+R> library(dendextend)
+Error in library(dendextend) : there is no package called ‘dendextend’
+Execution halted
+edd@rob:/tmp/downloaded_packages/ComplexHeatmap/tests
+
+Dirk
+ 
+| Kind regards
+| 
+|          Andreas.
+| 
+| -- 
+| http://fam-tille.de
+| 
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From tille at debian.org  Tue Jul 21 19:49:58 2020
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 21 Jul 2020 21:49:58 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <24343.7417.395709.367228@rob.eddelbuettel.com>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu> <24343.7417.395709.367228@rob.eddelbuettel.com>
+Message-ID: <20200721194958.GE18202@an3as.eu>
+
+Hi Dirk,
+
+On Tue, Jul 21, 2020 at 11:51:05AM -0500, Dirk Eddelbuettel wrote:
+> | $ R --no-save < test-dendrogram.R
+> | ...
+> | > #  stack overflow problem
+> | > m = matrix(1, nrow = 1000, ncol = 10)
+> | > m[1, 2] = 2
+> | > dend = as.dendrogram(hclust(dist(m)))
+> | > grid.dendrogram(dend, test = T)
+> | Error: C stack usage  7969380 is too close to the limit
+> | Execution halted
+> 
+> You almost surely want the xvfb wrapper here as grid likely opens a device.
+
+I've tried with xvfb and without - there is no difference.  All other
+tests are running nicely without xvfb.  I even tried the test on the
+Linux console where no X server is running on my local machine and there
+the error above did not happen.
+ 
+> | fails.  This is not the case if the resulting package is installed on a
+> | normal machine - but in the CI environment which is restricted this
+> | failure appears reproducibly.
+> | 
+> | Do you have any idea what might cause this issue?
+> 
+> An obvious error in the package is unconditional use in the test file of the
+> suggested package:
+> 
+> edd@rob:/tmp/downloaded_packages/ComplexHeatmap/tests$ R --no-save < test-dendrogram.R 
+> 
+> [... stuff omitted ...]
+> 
+> R> library(GetoptLong)
+> R> 
+> R> if(!exists("cut_dendrogram")) {
+> +       cut_dendrogram = ComplexHeatmap:::cut_dendrogram
+> + }
+> R> 
+> R> library(dendextend)
+> Error in library(dendextend) : there is no package called ‘dendextend’
+> Execution halted
+
+This error does not occure since r-cran-dendextend is inside the Test-Depends
+and installed inside the minimum chroot.  So the problem is not connected
+to a lack of the dendextend package.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Tue Jul 21 19:53:39 2020
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 21 Jul 2020 21:53:39 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <1595359255678.49535@dkfz-heidelberg.de>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu> <1595359255678.49535@dkfz-heidelberg.de>
+Message-ID: <20200721195339.GF18202@an3as.eu>
+
+Hi Zuguang Gu,
+
+On Tue, Jul 21, 2020 at 07:19:02PM +0000, Gu, Zuguang wrote:
+> Thanks for your email! 
+> 
+> Yes, that was a bug and I think I have fixed it in the recent versions. You can see all the tests are passed in the following links:
+> 
+> https://travis-ci.org/github/jokergoo/ComplexHeatmap
+> http://bioconductor.org/checkResults/devel/bioc-LATEST/ComplexHeatmap/
+
+Ahhh, thanks for confirming.
+ 
+> A recent feedback from users says the error of "Error: C stack usage" still occurs for huge matrix where the values are all identical (this is a very rare case), which means this bug might have not been completely fixed yet.
+> 
+> What should I do now? Should I just comment these lines that cause errors in the script? Which version of the package are you testing? The Bioconductor release version or development version?
+
+In Debian we always are packaging released BioConductor versions (so
+currently I'm talking about version  2.4.2).  It would help if you
+could issue a 2.4.3 bugfix release.  Alternatively you could send me
+a patch I could add to the packaging but I guess other users would
+profit from a bugfix release as well.
+
+Thanks a lot for your quick response
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From z.gu at dkfz-heidelberg.de  Tue Jul 21 19:19:02 2020
+From: z.gu at dkfz-heidelberg.de (Gu, Zuguang)
+Date: Tue, 21 Jul 2020 19:19:02 +0000
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200721151351.GD18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu>
+Message-ID: <1595359255678.49535@dkfz-heidelberg.de>
+
+Hi Andreas,
+
+Thanks for your email! 
+
+Yes, that was a bug and I think I have fixed it in the recent versions. You can see all the tests are passed in the following links:
+
+https://travis-ci.org/github/jokergoo/ComplexHeatmap
+http://bioconductor.org/checkResults/devel/bioc-LATEST/ComplexHeatmap/
+
+A recent feedback from users says the error of "Error: C stack usage" still occurs for huge matrix where the values are all identical (this is a very rare case), which means this bug might have not been completely fixed yet.
+
+What should I do now? Should I just comment these lines that cause errors in the script? Which version of the package are you testing? The Bioconductor release version or development version?
+
+Regards,
+Zuguang Gu
+
+________________________________________
+From: Andreas Tille <andreas at an3as.eu>
+Sent: 21 July 2020 17:13
+To: debian-r at lists.debian.org; Gu, Zuguang
+Subject: r-bioc-complexheatmap: Error: C stack usage in test suite
+
+Hi Zuguang,
+
+the Debian R team is trying to package ComplexHeatmap for Debian.  When
+we run the test suite in a restricted environment (no remote access, no
+X server only the packages specified in DESCRIPTION available) it turns
+out that the test
+
+$ R --no-save < test-dendrogram.R
+...
+> #  stack overflow problem
+> m = matrix(1, nrow = 1000, ncol = 10)
+> m[1, 2] = 2
+> dend = as.dendrogram(hclust(dist(m)))
+> grid.dendrogram(dend, test = T)
+Error: C stack usage  7969380 is too close to the limit
+Execution halted
+
+fails.  This is not the case if the resulting package is installed on a
+normal machine - but in the CI environment which is restricted this
+failure appears reproducibly.
+
+Do you have any idea what might cause this issue?
+
+Kind regards
+
+         Andreas.
+
+--
+http://fam-tille.de
+
+From edd at debian.org  Tue Jul 21 20:26:46 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Tue, 21 Jul 2020 15:26:46 -0500
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200721194958.GE18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu> <24343.7417.395709.367228@rob.eddelbuettel.com> <20200721194958.GE18202@an3as.eu>
+Message-ID: <24343.20358.163858.333851@rob.eddelbuettel.com>
+
+On 21 July 2020 at 21:49, Andreas Tille wrote:
+| On Tue, Jul 21, 2020 at 11:51:05AM -0500, Dirk Eddelbuettel wrote:
+| > | $ R --no-save < test-dendrogram.R
+| > | ...
+| > | > #  stack overflow problem
+| > | > m = matrix(1, nrow = 1000, ncol = 10)
+| > | > m[1, 2] = 2
+| > | > dend = as.dendrogram(hclust(dist(m)))
+| > | > grid.dendrogram(dend, test = T)
+| > | Error: C stack usage  7969380 is too close to the limit
+| > | Execution halted
+| > 
+| > You almost surely want the xvfb wrapper here as grid likely opens a device.
+| 
+| I've tried with xvfb and without - there is no difference.  All other
+| tests are running nicely without xvfb.  I even tried the test on the
+| Linux console where no X server is running on my local machine and there
+| the error above did not happen.
+
+Yes. It also generates a different (earlier) error when there is graphics
+device to be had.  (That said, the same logic that made us wrap R CMD build
+and INSTALL with xvfb-run makes me think we want it for tests.)
+
+|  
+| > | fails.  This is not the case if the resulting package is installed on a
+| > | normal machine - but in the CI environment which is restricted this
+| > | failure appears reproducibly.
+| > | 
+| > | Do you have any idea what might cause this issue?
+| > 
+| > An obvious error in the package is unconditional use in the test file of the
+| > suggested package:
+| > 
+| > edd@rob:/tmp/downloaded_packages/ComplexHeatmap/tests$ R --no-save < test-dendrogram.R 
+| > 
+| > [... stuff omitted ...]
+| > 
+| > R> library(GetoptLong)
+| > R> 
+| > R> if(!exists("cut_dendrogram")) {
+| > +       cut_dendrogram = ComplexHeatmap:::cut_dendrogram
+| > + }
+| > R> 
+| > R> library(dendextend)
+| > Error in library(dendextend) : there is no package called ‘dendextend’
+| > Execution halted
+| 
+| This error does not occure since r-cran-dendextend is inside the Test-Depends
+| and installed inside the minimum chroot.  So the problem is not connected
+| to a lack of the dendextend package.
+
+I think you misread/misunderstood what I wrote. I told the package author to
+not test unconditionally for a conditional package. "One day" CRAN and
+BioConductor will be more strict about that.
+
+It's your call to install all suggested packages for regressions tests. I
+consider that to be a mistake, but I made that case often enough in the past
+to not any appetite now to repeat it.
+
+Dirk
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From hello at shayandoust.me  Sat Jul 25 15:52:23 2020
+From: hello at shayandoust.me (Shayan Doust)
+Date: Sat, 25 Jul 2020 16:52:23 +0100
+Subject: Sponsored upload for r-cran-suppdists
+Message-ID: <ab11cce1-6f0f-ba2e-bce4-d47385edb900@shayandoust.me>
+
+Hello,
+
+I believe r-cran-suppdists[1] is ready for a sponsored upload. This
+choice of package is for another prospective package, to which this is
+its dependency.
+
+Kind regards,
+Shayan Doust
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-suppdists
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: 0x6D7D441919D02395.asc
+Desc: application/pgp-keys
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: OpenPGP digital signature
+
+From z.gu at dkfz-heidelberg.de  Mon Jul 27 08:07:10 2020
+From: z.gu at dkfz-heidelberg.de (Gu, Zuguang)
+Date: Mon, 27 Jul 2020 08:07:10 +0000
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <20200721195339.GF18202@an3as.eu>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu> <1595359255678.49535@dkfz-heidelberg.de> <20200721195339.GF18202@an3as.eu>
+Message-ID: <1595837352745.63986@dkfz-heidelberg.de>
+
+Hi Andreas,
+
+I have updated the ComplexHeatmap package on Bioconductor. The version is increased to 2.4.3. You can find the link here: 
+
+https://bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html
+
+Cheers,
+Zuguang
+
+________________________________________
+From: Andreas Tille <tille at debian.org>
+Sent: 21 July 2020 21:53
+To: Gu, Zuguang
+Cc: debian-r at lists.debian.org
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+
+Hi Zuguang Gu,
+
+On Tue, Jul 21, 2020 at 07:19:02PM +0000, Gu, Zuguang wrote:
+> Thanks for your email!
+>
+> Yes, that was a bug and I think I have fixed it in the recent versions. You can see all the tests are passed in the following links:
+>
+> https://travis-ci.org/github/jokergoo/ComplexHeatmap
+> http://bioconductor.org/checkResults/devel/bioc-LATEST/ComplexHeatmap/
+
+Ahhh, thanks for confirming.
+
+> A recent feedback from users says the error of "Error: C stack usage" still occurs for huge matrix where the values are all identical (this is a very rare case), which means this bug might have not been completely fixed yet.
+>
+> What should I do now? Should I just comment these lines that cause errors in the script? Which version of the package are you testing? The Bioconductor release version or development version?
+
+In Debian we always are packaging released BioConductor versions (so
+currently I'm talking about version  2.4.2).  It would help if you
+could issue a 2.4.3 bugfix release.  Alternatively you could send me
+a patch I could add to the packaging but I guess other users would
+profit from a bugfix release as well.
+
+Thanks a lot for your quick response
+
+      Andreas.
+
+--
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Jul 27 09:32:20 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 27 Jul 2020 11:32:20 +0200
+Subject: Re: Sponsored upload for r-cran-suppdists
+In-Reply-To: <ab11cce1-6f0f-ba2e-bce4-d47385edb900@shayandoust.me>
+References: <ab11cce1-6f0f-ba2e-bce4-d47385edb900@shayandoust.me>
+Message-ID: <20200727093220.GR8994@an3as.eu>
+
+Hi Shayan,
+uploaded - thanks for your work on this
+       Andreas.
+
+On Sat, Jul 25, 2020 at 04:52:23PM +0100, Shayan Doust wrote:
+> Hello,
+> 
+> I believe r-cran-suppdists[1] is ready for a sponsored upload. This
+> choice of package is for another prospective package, to which this is
+> its dependency.
+> 
+> Kind regards,
+> Shayan Doust
+> 
+> [1]: https://salsa.debian.org/r-pkg-team/r-cran-suppdists
+
+pub   RSA 4096/19D02395 2019-09-04 Shayan Doust (Personal EMAIL) <hello at shayandoust.me>
+> sub   RSA 4096/00484410 2020-06-26
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Jul 27 09:42:32 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 27 Jul 2020 11:42:32 +0200
+Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+In-Reply-To: <1595837352745.63986@dkfz-heidelberg.de>
+References: <20200710210524.GF18202@an3as.eu> <20200716142548.GM18202@an3as.eu> <9257b141-2e43-ffd5-a0fe-4467604a4c8a@gmx.de> <20200718125746.GD18202@an3as.eu> <20200721151351.GD18202@an3as.eu> <1595359255678.49535@dkfz-heidelberg.de> <20200721195339.GF18202@an3as.eu> <1595837352745.63986@dkfz-heidelberg.de>
+Message-ID: <20200727094232.GS8994@an3as.eu>
+
+Hi Zuguang,
+
+On Mon, Jul 27, 2020 at 08:07:10AM +0000, Gu, Zuguang wrote:
+> I have updated the ComplexHeatmap package on Bioconductor. The version is increased to 2.4.3. You can find the link here: 
+
+Thanks a lot I've uploaded this version to the Debian new queue.
+
+Kind regards
+
+        Andreas.
+ 
+> https://bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html
+> 
+> Cheers,
+> Zuguang
+> 
+> ________________________________________
+> From: Andreas Tille <tille at debian.org>
+> Sent: 21 July 2020 21:53
+> To: Gu, Zuguang
+> Cc: debian-r at lists.debian.org
+> Subject: Re: r-bioc-complexheatmap: Error: C stack usage in test suite
+> 
+> Hi Zuguang Gu,
+> 
+> On Tue, Jul 21, 2020 at 07:19:02PM +0000, Gu, Zuguang wrote:
+> > Thanks for your email!
+> >
+> > Yes, that was a bug and I think I have fixed it in the recent versions. You can see all the tests are passed in the following links:
+> >
+> > https://travis-ci.org/github/jokergoo/ComplexHeatmap
+> > http://bioconductor.org/checkResults/devel/bioc-LATEST/ComplexHeatmap/
+> 
+> Ahhh, thanks for confirming.
+> 
+> > A recent feedback from users says the error of "Error: C stack usage" still occurs for huge matrix where the values are all identical (this is a very rare case), which means this bug might have not been completely fixed yet.
+> >
+> > What should I do now? Should I just comment these lines that cause errors in the script? Which version of the package are you testing? The Bioconductor release version or development version?
+> 
+> In Debian we always are packaging released BioConductor versions (so
+> currently I'm talking about version  2.4.2).  It would help if you
+> could issue a 2.4.3 bugfix release.  Alternatively you could send me
+> a patch I could add to the packaging but I guess other users would
+> profit from a bugfix release as well.
+> 
+> Thanks a lot for your quick response
+> 
+>       Andreas.
+> 
+> --
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+

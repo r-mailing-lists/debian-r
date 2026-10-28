@@ -1,0 +1,1377 @@
+From daissi at debian.org  Thu Aug  5 13:03:24 2021
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 5 Aug 2021 15:03:24 +0200
+Subject: Bug#991919: transition: r-api-bioc-3.13
+Message-ID: <CA+6XHwQ7C_wQ-ZLkv6VV3uHcTP7DoBFnzNByKmk_2BZni4UqWQ@mail.gmail.com>
+
+Package: release.debian.org
+Severity: normal
+User: release.debian.org at packages.debian.org
+Usertags: transition
+X-Debbugs-CC: debian-r at lists.debian.org, debian-med at lists.debian.org
+
+Hi,
+Bioconductor 3.13 was released in May [1]. All r-bioc-* packages need
+a manual upgrade (after the release of bullseye).
+
+[1] https://bioconductor.org/news/bioc_3_13_release/
+
+Please set up a tracker manually, since this is a transition of a
+virtual package name.
+
+Ben file:
+-----------------------------------------------------------------------------
+title = "r-api-bioc-3.13";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.13";
+is_bad = .depends ~ "r-api-bioc-3.12";
+-----------------------------------------------------------------------------
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Fri Aug 13 14:10:07 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 13 Aug 2021 16:10:07 +0200
+Subject: New version of r-cran-rmarkdown does not build
+Message-ID: <20210813141007.GZ25911@an3as.eu>
+
+Hi,
+
+I just had a quick view and not much time for investigating but when trying
+to build the new version of r-cran-rmarkdown I get:
+
+        R CMD INSTALL -l /build/r-cran-rmarkdown-2.10\+dfsg/debian/r-cran-rmarkdown/usr/lib/R/site-library --clean . "--built-timestamp='Fri, 13 Aug 2021 16:02:08 +0200'"
+* installing *source* package 'rmarkdown' ...
+files 'inst/rmd/h/bootstrap/css/bootstrap-theme.css', 'inst/rmd/h/bootstrap/css/bootstrap-theme.css.map', 'inst/rmd/h/bootstrap/css/bootstrap-theme.min.css', 'inst/rmd/h/bootstrap/css/bootstrap.css', 'inst/rmd/h/bootstrap/css/bootstrap.css.map', 'inst/rmd/h/bootstrap/css/bootstrap.min.css', 'inst/rmd/h/bootstrap/fonts/glyphicons-halflings-regular.eot', 'inst/rmd/h/bootstrap/fonts/glyphicons-halflings-regular.svg', 'inst/rmd/h/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'inst/rmd/h/bootstrap/fonts/glyphicons-halflings-regular.woff', 'inst/rmd/h/bootstrap/fonts/glyphicons-halflings-regular.woff2', 'inst/rmd/h/bootstrap/js/bootstrap.js', 'inst/rmd/h/bootstrap/js/bootstrap.min.js', 'inst/rmd/h/bootstrap/shim/html5shiv.min.js', 'inst/rmd/h/bootstrap/shim/respond.min.js', 'inst/rmd/h/fontawesome/css/all.css', 'inst/rmd/h/fontawesome/css/v4-shims.css', 'inst/rmd/h/highlightjs/highlight.js', 'inst/rmd/h/jqueryui/README', 'inst/rmd/h/jqueryui/images/ui-icons_444444_256x240.png', 'inst/rmd/h/jqueryui/images/ui-icons_555555_256x240.png', 'inst/rmd/h/jqueryui/images/ui-icons_777620_256x240.png', 'inst/rmd/h/jqueryui/images/ui-icons_777777_256x240.png', 'inst/rmd/h/jqueryui/images/ui-icons_cc0000_256x240.png', 'inst/rmd/h/jqueryui/images/ui-icons_ffffff_256x240.png', 'inst/rmd/h/jqueryui/index.html', 'inst/rmd/h/jqueryui/jquery-ui.css', 'inst/rmd/h/jqueryui/jquery-ui.js', 'inst/rmd/h/jqueryui/jquery-ui.min.css', 'inst/rmd/h/jqueryui/jquery-ui.min.js', 'inst/rmd/h/jqueryui/jquery-ui.structure.css', 'inst/rmd/h/jqueryui/jquery-ui.structure.min.css', 'inst/rmd/h/jqueryui/jquery-ui.theme.css', 'inst/rmd/h/jqueryui/jquery-ui.theme.min.css', 'inst/rmd/ioslides/default.html', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/OpenSans.ttf', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/OpenSansItalic.ttf', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/OpenSansSemibold.ttf', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/OpenSansSemiboldItalic.ttf', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/SourceCodePro.ttf', 'inst/rmd/ioslides/ioslides-13.5.1/fonts/fonts.css', 'inst/rmd/ioslides/ioslides-13.5.1/images/google_developers_icon_128.png', 'inst/rmd/ioslides/ioslides-13.5.1/js/hammer.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/modernizr.custom.45394.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/order.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/polyfills/classList.min.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/polyfills/dataset.min.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/polyfills/history.min.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/prettify/lang-r.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/prettify/lang-tex.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/prettify/lang-yaml.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/prettify/prettify.css', 'inst/rmd/ioslides/ioslides-13.5.1/js/prettify/prettify.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/require-1.0.8.min.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/slide-controller.js', 'inst/rmd/ioslides/ioslides-13.5.1/js/slide-deck.js', 'inst/rmd/ioslides/ioslides-13.5.1/theme/css/default.css', 'inst/rmd/ioslides/ioslides-13.5.1/theme/css/phone.css', 'inst/rmd/ioslides/ioslides_presentation.lua', 'tests/testthat/test-ioslides.R' are missing
+Error in if (any(diff)) { : missing value where TRUE/FALSE needed
+* removing '/build/r-cran-rmarkdown-2.10+dfsg/debian/r-cran-rmarkdown/usr/lib/R/site-library/rmarkdown'
+dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rmarkdown-2.10\+dfsg/debian/r-cran-rmarkdown/usr/lib/R/site-library --clean . "--built-timestamp='Fri, 13 Aug 2021 16:02:08 +0200'" returned exit code 1
+make: *** [debian/rules:6: binary] Error 25
+
+Sorry, my spare cycles to investigate deeper ended now.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From edd at debian.org  Fri Aug 13 14:35:39 2021
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 13 Aug 2021 09:35:39 -0500
+Subject: Re: New version of r-cran-rmarkdown does not build
+In-Reply-To: <20210813141007.GZ25911@an3as.eu>
+References: <20210813141007.GZ25911@an3as.eu>
+Message-ID: <24854.33595.793166.409878@rob.eddelbuettel.com>
+
+On 13 August 2021 at 16:10, Andreas Tille wrote:
+| I just had a quick view and not much time for investigating but when trying
+| to build the new version of r-cran-rmarkdown I get:
+
+[...]
+
+FYI, it is in a perfectly pristine state at CRAN across all their systems
+(including Debian, see [1]). On my main machine where I tend to upgrade CRAN
+packages from source on a daily basis (via a script in littler aka
+r-cran-littler) I seem to have updated this one too on August 6 when it was
+released and had no issues.
+
+It's somewhat tricky as reusing JS from other packages is of course "at least
+in principle" the right approach but in practice it creates these issues and
+a possible different experience for users.  
+
+Dirk
+
+[1] https://cloud.r-project.org/web/checks/check_results_rmarkdown.html
+
+-- 
+https://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From daissi at debian.org  Sun Aug 15 08:01:21 2021
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sun, 15 Aug 2021 10:01:21 +0200
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <20210805041845.GM25911@an3as.eu>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu>
+Message-ID: <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com>
+
+Hi Steffen, hi Andreas,
+
+Le jeu. 5 août 2021 à 06:18, Andreas Tille <andreas at an3as.eu> a écrit :
+> Sure.  We need a transition.  Dylan (in CC) was kind enough to trigger
+> this in the past and we should do so right after the release (I'm
+> announcing here pseudo-VAC due to personal reasons on one hand as well
+> as DebConf business - so please do not trust too much on my contribution
+> on this transition.
+>
+> We do not habe better automatism than routne-update and the transition
+> coordination webpage listing a sensible sequence to do this, thought.
+
+The transition tracker is on at
+https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+
+We are now waiting for the green-light from the release team (at
+https://bugs.debian.org/991919) to start the transition of
+bioconductor packages.
+
+Best,
+Dylan
+
+From tille at debian.org  Sun Aug 15 11:17:29 2021
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 15 Aug 2021 13:17:29 +0200
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com>
+Message-ID: <20210815111729.GH25911@an3as.eu>
+
+Hi,
+
+On Sun, Aug 15, 2021 at 10:01:21AM +0200, Dylan Aïssi wrote:
+> 
+> The transition tracker is on at
+> https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+> 
+> We are now waiting for the green-light from the release team (at
+> https://bugs.debian.org/991919) to start the transition of
+> bioconductor packages.
+
+Thanks for triggering this.  Meanwhile I'm starting upgrading
+r-cran-packages from the end of the alphabeth (as traveling
+connection permits).
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From steffen_moeller at gmx.de  Sun Aug 15 16:20:06 2021
+From: steffen_moeller at gmx.de (=?utf-8?q?Steffen_M=C3=B6ller?=)
+Date: Sun, 15 Aug 2021 18:20:06 +0200
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <20210815111729.GH25911@an3as.eu>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <20210815111729.GH25911@an3as.eu>
+Message-ID: <24fcc5d0-0695-434e-1c54-73108d020ad8@gmx.de>
+
+On 15.08.21 13:17, Andreas Tille wrote:
+> Hi,
+>
+> On Sun, Aug 15, 2021 at 10:01:21AM +0200, Dylan Aïssi wrote:
+> > The transition tracker is on at
+> > https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+> >
+> > We are now waiting for the green-light from the release team (at
+> > https://bugs.debian.org/991919) to start the transition of
+> > bioconductor packages.
+>
+> Thanks for triggering this.  Meanwhile I'm starting upgrading
+> r-cran-packages from the end of the alphabeth (as traveling
+> connection permits).
+
+Also many thanks from my side.  That page should reduce some pain.
+
+What is the situation like for the users of bullseye when they want to
+run something from BioConductor that we do not have packaged or have
+outdated in the archive. If they get it right then they will have to
+install BioConductor from scratch. Right?
+
+Best,
+Steffen
+
+From andreas at an3as.eu  Tue Aug 17 08:19:10 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 17 Aug 2021 10:19:10 +0200
+Subject: Autopkgtest in r-cran-processx
+Message-ID: <20210817081910.GE29969@an3as.eu>
+
+Hi,
+
+while trying to upgrade r-cran-processx[1] I get:
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure (test-err.R:252:3): errors from subprocess ───────────────────────
+`err` is not an S3 object
+
+── 2. Failure (test-err.R:253:3): errors from subprocess ───────────────────────
+err$parent is not an S3 object
+
+── 3. Failure (test-err.R:254:3): errors from subprocess ───────────────────────
+is.null(err$parent$trace) is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Error: Test failures
+Execution halted
+
+when running its test suite.
+
+Any hint how to fix this?
+
+Kind regards
+
+     Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-processx
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Aug 17 11:25:57 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 17 Aug 2021 13:25:57 +0200
+Subject: Test suite error in webfakes
+Message-ID: <20210817112557.GF29969@an3as.eu>
+
+Hi Gábor,
+
+I intend to package webfakes for Debian to enable a full test suite in
+some of our packages.  Unfortunately the webfakes test suite itself
+has some issue when running it inside a restricted environment (with
+no internet access and no graphical interface) as it is done as default
+in CI in Debian.  There is a full test log[1] which shows in line 745:
+
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Error (test-app-process.R:14:3): error if cannot start ──────────────────────
+Error: Unexpected message from webfakes app subprocess. Report a bug please.
+Backtrace:
+    █
+ 1. ├─testthat::expect_error(...) test-app-process.R:14:2
+ 2. │ └─testthat:::expect_condition_matching(...)
+ 3. │   └─testthat:::quasi_capture(...)
+ 4. │     ├─testthat:::.capture(...)
+ 5. │     │ └─base::withCallingHandlers(...)
+ 6. │     └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 7. └─webfakes::new_app_process(app, start = TRUE)
+ 8.   └─self$start()
+── Failure (test-mw-static.R:67:3): set_headers callback ───────────────────────
+resp$status_code (`actual`) not equal to 200L (`expected`).
+  `actual`: 404
+`expected`: 200
+── Failure (test-mw-static.R:68:3): set_headers callback ───────────────────────
+resp$type (`actual`) not equal to "application/gzip" (`expected`).
+`actual`:   "text/plain"      
+`expected`: "application/gzip"
+── Failure (test-mw-static.R:70:3): set_headers callback ───────────────────────
+headers$foo (`actual`) not equal to "bar" (`expected`).
+`actual` is NULL
+`expected` is a character vector ('bar')
+── Error (test-mw-static.R:71:3): set_headers callback ─────────────────────────
+Error: cannot open the connection
+Backtrace:
+    █
+ 1. ├─testthat::expect_equal(...) test-mw-static.R:71:2
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─webfakes:::read_bin(test_path("fixtures", "static2", "static.tar.gz"))
+ 5.   └─base::readBin(path, "raw", file.info(path)$size)
+ 6.     └─base::file(con, "rb")
+[ FAIL 5 | WARN 1 | SKIP 7 | PASS 291 ]
+Error: Test failures
+Execution halted
+
+If you confirm that the failures are due to a lack of internet
+connection it would be great if you could make these optional.
+Alternatively it is possible to declare that this package needs internet
+access to run the full test suite in case you consider it not sensible
+to do those tests optional.
+
+Kind regards
+
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-webfakes/-/jobs/1821991
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Aug 17 12:00:59 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 17 Aug 2021 14:00:59 +0200
+Subject: Re: Test suite error in webfakes
+In-Reply-To: <CABtg=Kmp0KPcDKm6YkSW5xe6zZfUvYUAKCRNeBZBsa+6Akn+rA@mail.gmail.com>
+References: <20210817112557.GF29969@an3as.eu> <CABtg=Kmp0KPcDKm6YkSW5xe6zZfUvYUAKCRNeBZBsa+6Akn+rA@mail.gmail.com>
+Message-ID: <20210817120059.GG29969@an3as.eu>
+
+Thanks a lot for your quick response, Andreas.
+
+On Tue, Aug 17, 2021 at 01:49:07PM +0200, Gábor Csárdi wrote:
+> Hi,
+> 
+> the webfakes test suite does not need internet, so this must be something else.
+> I have opened an issue here: https://github.com/r-lib/webfakes/issues/79
+> 
+> Gabor
+> 
+> On Tue, Aug 17, 2021 at 1:25 PM Andreas Tille <andreas at an3as.eu> wrote:
+> >
+> > Hi Gábor,
+> >
+> > I intend to package webfakes for Debian to enable a full test suite in
+> > some of our packages.  Unfortunately the webfakes test suite itself
+> > has some issue when running it inside a restricted environment (with
+> > no internet access and no graphical interface) as it is done as default
+> > in CI in Debian.  There is a full test log[1] which shows in line 745:
+> >
+> >
+> > ══ Failed tests ════════════════════════════════════════════════════════════════
+> > ── Error (test-app-process.R:14:3): error if cannot start ──────────────────────
+> > Error: Unexpected message from webfakes app subprocess. Report a bug please.
+> > Backtrace:
+> >     █
+> >  1. ├─testthat::expect_error(...) test-app-process.R:14:2
+> >  2. │ └─testthat:::expect_condition_matching(...)
+> >  3. │   └─testthat:::quasi_capture(...)
+> >  4. │     ├─testthat:::.capture(...)
+> >  5. │     │ └─base::withCallingHandlers(...)
+> >  6. │     └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+> >  7. └─webfakes::new_app_process(app, start = TRUE)
+> >  8.   └─self$start()
+> > ── Failure (test-mw-static.R:67:3): set_headers callback ───────────────────────
+> > resp$status_code (`actual`) not equal to 200L (`expected`).
+> >   `actual`: 404
+> > `expected`: 200
+> > ── Failure (test-mw-static.R:68:3): set_headers callback ───────────────────────
+> > resp$type (`actual`) not equal to "application/gzip" (`expected`).
+> > `actual`:   "text/plain"
+> > `expected`: "application/gzip"
+> > ── Failure (test-mw-static.R:70:3): set_headers callback ───────────────────────
+> > headers$foo (`actual`) not equal to "bar" (`expected`).
+> > `actual` is NULL
+> > `expected` is a character vector ('bar')
+> > ── Error (test-mw-static.R:71:3): set_headers callback ─────────────────────────
+> > Error: cannot open the connection
+> > Backtrace:
+> >     █
+> >  1. ├─testthat::expect_equal(...) test-mw-static.R:71:2
+> >  2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+> >  3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+> >  4. └─webfakes:::read_bin(test_path("fixtures", "static2", "static.tar.gz"))
+> >  5.   └─base::readBin(path, "raw", file.info(path)$size)
+> >  6.     └─base::file(con, "rb")
+> > [ FAIL 5 | WARN 1 | SKIP 7 | PASS 291 ]
+> > Error: Test failures
+> > Execution halted
+> >
+> >
+> > If you confirm that the failures are due to a lack of internet
+> > connection it would be great if you could make these optional.
+> > Alternatively it is possible to declare that this package needs internet
+> > access to run the full test suite in case you consider it not sensible
+> > to do those tests optional.
+> >
+> > Kind regards
+> >
+> >     Andreas.
+> >
+> >
+> > [1] https://salsa.debian.org/r-pkg-team/r-cran-webfakes/-/jobs/1821991
+> >
+> > --
+> > http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu Aug 26 05:45:35 2021
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 26 Aug 2021 07:45:35 +0200
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <20210815111729.GH25911@an3as.eu>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <20210815111729.GH25911@an3as.eu>
+Message-ID: <20210826054535.GA31766@an3as.eu>
+
+Hi Dylan,
+
+On Sun, Aug 15, 2021 at 01:17:29PM +0200, Andreas Tille wrote:
+> Hi,
+> 
+> On Sun, Aug 15, 2021 at 10:01:21AM +0200, Dylan Aïssi wrote:
+> > 
+> > The transition tracker is on at
+> > https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+> > 
+> > We are now waiting for the green-light from the release team (at
+> > https://bugs.debian.org/991919) to start the transition of
+> > bioconductor packages.
+> 
+> Thanks for triggering this.  Meanwhile I'm starting upgrading
+> r-cran-packages from the end of the alphabeth (as traveling
+> connection permits).
+
+The transition page seems to be setup by the release team.  When
+do you plan to start the transition?
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Thu Aug 26 07:49:22 2021
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 26 Aug 2021 09:49:22 +0200
+Subject: Re: Bug#991919: Bioconductor API Bump to 3.13
+In-Reply-To: <20210826054535.GA31766@an3as.eu>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <20210815111729.GH25911@an3as.eu> <CA+6XHwQ7C_wQ-ZLkv6VV3uHcTP7DoBFnzNByKmk_2BZni4UqWQ@mail.gmail.com> <20210826054535.GA31766@an3as.eu>
+Message-ID: <a3258d8a-c858-797b-e7f9-9a0d2801b813@debian.org>
+
+Hi Andreas,
+
+On 26-08-2021 07:45, Andreas Tille wrote:
+> Hi Dylan,
+> 
+> On Sun, Aug 15, 2021 at 01:17:29PM +0200, Andreas Tille wrote:
+>> Hi,
+>>
+>> On Sun, Aug 15, 2021 at 10:01:21AM +0200, Dylan Aïssi wrote:
+>>>
+>>> The transition tracker is on at
+>>> https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+>>>
+>>> We are now waiting for the green-light from the release team (at
+>>> https://bugs.debian.org/991919) to start the transition of
+>>> bioconductor packages.
+>>
+>> Thanks for triggering this.  Meanwhile I'm starting upgrading
+>> r-cran-packages from the end of the alphabeth (as traveling
+>> connection permits).
+> 
+> The transition page seems to be setup by the release team.  When
+> do you plan to start the transition?
+
+If this question is to the release team, than the following question we
+asked earlier requires an answer:
+> What's the status wrt. to the reverse dependencies. Do those that are
+> binNMU-able build against the new version?
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From daissi at debian.org  Thu Aug 26 09:01:13 2021
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Thu, 26 Aug 2021 11:01:13 +0200
+Subject: Re: Bug#991919: Bioconductor API Bump to 3.13
+In-Reply-To: <a3258d8a-c858-797b-e7f9-9a0d2801b813@debian.org>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <20210815111729.GH25911@an3as.eu> <CA+6XHwQ7C_wQ-ZLkv6VV3uHcTP7DoBFnzNByKmk_2BZni4UqWQ@mail.gmail.com> <20210826054535.GA31766@an3as.eu> <a3258d8a-c858-797b-e7f9-9a0d2801b813@debian.org>
+Message-ID: <CA+6XHwT=O0BUjUCr-6CCyLOWetmt6W8fWB1XmYyQsw550XD_BA@mail.gmail.com>
+
+Hi,
+
+Le jeu. 26 août 2021 à 09:49, Paul Gevers <elbrus at debian.org> a écrit :
+>
+> If this question is to the release team, than the following question we
+> asked earlier requires an answer:
+> > What's the status wrt. to the reverse dependencies. Do those that are
+> > binNMU-able build against the new version?
+>
+
+No, all these reverse dependencies need a manual upgrade with the new
+upstream releases, they are not binNMU-able.
+The Debian R Packages team will upgrade to the new upstream releases
+all of the reverse dependencies.
+
+Best,
+Dylan
+
+From tille at debian.org  Thu Aug 26 10:58:32 2021
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 26 Aug 2021 12:58:32 +0200
+Subject: Re: Bug#991919: Bioconductor API Bump to 3.13
+In-Reply-To: <CA+6XHwT=O0BUjUCr-6CCyLOWetmt6W8fWB1XmYyQsw550XD_BA@mail.gmail.com>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <20210815111729.GH25911@an3as.eu> <CA+6XHwQ7C_wQ-ZLkv6VV3uHcTP7DoBFnzNByKmk_2BZni4UqWQ@mail.gmail.com> <20210826054535.GA31766@an3as.eu> <a3258d8a-c858-797b-e7f9-9a0d2801b813@debian.org> <CA+6XHwT=O0BUjUCr-6CCyLOWetmt6W8fWB1XmYyQsw550XD_BA@mail.gmail.com>
+Message-ID: <20210826105832.GC31766@an3as.eu>
+
+Hi,
+
+On Thu, Aug 26, 2021 at 11:01:13AM +0200, Dylan Aïssi wrote:
+> > If this question is to the release team, than the following question we
+> > asked earlier requires an answer:
+> > > What's the status wrt. to the reverse dependencies. Do those that are
+> > > binNMU-able build against the new version?
+> 
+> No, all these reverse dependencies need a manual upgrade with the new
+> upstream releases, they are not binNMU-able.
+> The Debian R Packages team will upgrade to the new upstream releases
+> all of the reverse dependencies.
+
+Actually most of the Bioc dependencies will need a version upgrade
+anyway.  So we need manual intervention in any case and the r-pkg
+team will do so.
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Aug 26 11:05:51 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 26 Aug 2021 13:05:51 +0200
+Subject: Please use consistent spelling of rmatrix version in seuratobject
+Message-ID: <20210826110551.GD31766@an3as.eu>
+
+Hi,
+
+I intend to upgrade the Debian package of seuratobject to match the
+latest upstream version of this package and seurat.  Unfortunately
+I stumbled upon the fact that inside the DESCRIPTION file you specify
+
+   Matrix (>= 1.3.3)
+
+while the Matrix package is using the 1.3-x versioning scheme.  I'm
+perfectly aware that the R world has the agreement that '.' and '-' sign
+are sorting equally in version numbers.  But this is not true in other
+versioning schemes.  So we get problems with the Debian packages where
+1.3.3 is considered higher than 1.3-4  and the versioned dependencies
+inside Debian will be broken.
+
+You could support our work if you would follow the same spelling as
+matrix is using in the version and simply apply the following patch:
+
+diff --git a/DESCRIPTION b/DESCRIPTION
+index eb5b94d..b91b07a 100644
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -30,7 +30,7 @@ Encoding: UTF-8
+ LazyData: true
+ RoxygenNote: 7.1.1
+ Depends: R (>= 4.0.0)
+-Imports: grDevices, grid, Matrix (>= 1.3.3), methods, Rcpp (>= 1.0.5),
++Imports: grDevices, grid, Matrix (>= 1.3-3), methods, Rcpp (>= 1.0.5),
+         rlang (>= 0.4.7), stats, tools, utils
+ Suggests: testthat
+ Collate: 'RcppExports.R' 'utils.R' 'zzz.R' 'generics.R' 'assay.R'
+
+Thanks a lot for your support
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Aug 29 05:14:25 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 29 Aug 2021 07:14:25 +0200
+Subject: Test failure in Rdpack
+Message-ID: <20210829051425.GB31766@an3as.eu>
+
+Hi Georgi,
+
+I tried to update Georgi in Debian to version 2.1.2.  Unfortunately I get
+a test suite error:
+
+  ══ Failed tests ════════════════════════════════════════════════════════════════
+  ── Error (test-bib.R:5:5): bib works fine ──────────────────────────────────────
+  Error: argument "encoding" is missing, with no default
+  Backtrace:
+      █
+   1. └─rbibutils::readBib(fn_rb) test-bib.R:5:4
+
+Could you please have a look.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From georgi.boshnakov at manchester.ac.uk  Sun Aug 29 10:22:36 2021
+From: georgi.boshnakov at manchester.ac.uk (Georgi Boshnakov)
+Date: Sun, 29 Aug 2021 10:22:36 +0000
+Subject: RE: Test failure in Rdpack
+In-Reply-To: <LOYP265MB201575E884473A8EDE33B6CAAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+References: <20210829051425.GB31766@an3as.eu> <LOYP265MB20154FF565A862F0DFB77CEDAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB201575E884473A8EDE33B6CAAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+Message-ID: <LOYP265MB2015B44DB4BDEF6DC568DE18AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+
+Hi Andreas,
+
+I found your github repo and figured out what is wrong. The test error occurs with rbibutils versions < 2.1.1 (it seems to be 2.0 in your setting).
+
+It can be fixed by replacing  line 5 in tests/testthat/test-bib.R (the one throwing the error) with
+
+bibs_rb <- if(packageVersion("rbibutils") >= '2.1.1')
+                      readBib(fn_rb) else readBib(fn_rb, encoding = "UTF-8")
+
+I have updated this on my github repo at https://github.com/GeoBosh/Rdpack .
+
+Alternatively, if you intend to update package rbibutils, the error in Rdpack will disappear.
+
+Thanks for maintaining the debian repositories.
+
+Kind regards,
+Georgi
+
+=================
+From: Georgi Boshnakov 
+Sent: 29 August 2021 09:35
+To: Andreas Tille <andreas at an3as.eu>; Debian R <debian-r at lists.debian.org>
+Subject: RE: Test failure in Rdpack
+
+Hi Andreas,
+
+Sorry for the previous email, accidently send it prematurely from my mobile.
+
+Thanks for the report. This may be difficult for me to debug, as it passes the CRAN checks on Debian. I have also just checked it on debian with various compilers using rhub::check() with no errors.
+
+Any chance of passing the session information - in a fresh R session: 
+
+library("Rdpack")
+sessionInfo()
+
+Thanks,
+Georgi
+
+From: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk> 
+Sent: 29 August 2021 09:24
+To: Andreas Tille <mailto:andreas at an3as.eu>; Debian R <mailto:debian-r at lists.debian.org>
+Subject: Re: Test failure in Rdpack
+
+Hi Andreas,
+
+Thanks for the report. Any chance of passing 
+
+Get https://aka.ms/AAb9ysg
+________________________________________
+From: Andreas Tille <mailto:andreas at an3as.eu>
+Sent: Sunday, August 29, 2021 6:14:25 AM
+To: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>; Debian R <mailto:debian-r at lists.debian.org>
+Subject: Test failure in Rdpack 
+ 
+Hi Georgi,
+
+I tried to update Georgi in Debian to version 2.1.2.  Unfortunately I get
+a test suite error:
+
+  ══ Failed tests ════════════════════════════════════════════════════════════════
+  ── Error (test-bib.R:5:5): bib works fine ──────────────────────────────────────
+  Error: argument "encoding" is missing, with no default
+  Backtrace:
+      █
+   1. └─rbibutils::readBib(fn_rb) test-bib.R:5:4
+
+Could you please have a look.
+
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Aug 29 13:40:36 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 29 Aug 2021 15:40:36 +0200
+Subject: Re: Test failure in Rdpack
+In-Reply-To: <LOYP265MB2015B44DB4BDEF6DC568DE18AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+References: <20210829051425.GB31766@an3as.eu> <LOYP265MB20154FF565A862F0DFB77CEDAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB201575E884473A8EDE33B6CAAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB2015B44DB4BDEF6DC568DE18AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+Message-ID: <20210829134036.GC31766@an3as.eu>
+
+Hi Georgi,
+
+thanks for your quick reply.
+
+On Sun, Aug 29, 2021 at 10:22:36AM +0000, Georgi Boshnakov wrote:
+> Hi Andreas,
+> 
+> I found your github repo and figured out what is wrong. The test error occurs with rbibutils versions < 2.1.1 (it seems to be 2.0 in your setting).
+
+Ahhh, I admit I have realised that rbibutils is not up to date - I'm on it
+to update this.  For sure we intend to update everything now since Debian
+freeze is over.  I think to be safe on Rdpack it makes sense to use a
+versioned Depends which had pointed me to the issue immediately.
+ 
+> It can be fixed by replacing  line 5 in tests/testthat/test-bib.R (the one throwing the error) with
+> 
+> bibs_rb <- if(packageVersion("rbibutils") >= '2.1.1')
+>                       readBib(fn_rb) else readBib(fn_rb, encoding = "UTF-8")
+> 
+> I have updated this on my github repo at https://github.com/GeoBosh/Rdpack .
+> 
+> Alternatively, if you intend to update package rbibutils, the error in Rdpack will disappear.
+
+Yup.  This will happen soon.
+ 
+> Thanks for maintaining the debian repositories.
+
+You are welcome.
+
+Kind regards
+
+       Andreas.
+
+> Kind regards,
+> Georgi
+> 
+> =================
+> From: Georgi Boshnakov 
+> Sent: 29 August 2021 09:35
+> To: Andreas Tille <andreas at an3as.eu>; Debian R <debian-r at lists.debian.org>
+> Subject: RE: Test failure in Rdpack
+> 
+> 
+> Hi Andreas,
+> 
+> Sorry for the previous email, accidently send it prematurely from my mobile.
+> 
+> Thanks for the report. This may be difficult for me to debug, as it passes the CRAN checks on Debian. I have also just checked it on debian with various compilers using rhub::check() with no errors.
+> 
+> Any chance of passing the session information - in a fresh R session: 
+> 
+> library("Rdpack")
+> sessionInfo()
+> 
+> Thanks,
+> Georgi
+> 
+> 
+> From: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk> 
+> Sent: 29 August 2021 09:24
+> To: Andreas Tille <mailto:andreas at an3as.eu>; Debian R <mailto:debian-r at lists.debian.org>
+> Subject: Re: Test failure in Rdpack
+> 
+> Hi Andreas,
+> 
+> Thanks for the report. Any chance of passing 
+> 
+> Get https://aka.ms/AAb9ysg
+> ________________________________________
+> From: Andreas Tille <mailto:andreas at an3as.eu>
+> Sent: Sunday, August 29, 2021 6:14:25 AM
+> To: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>; Debian R <mailto:debian-r at lists.debian.org>
+> Subject: Test failure in Rdpack 
+>  
+> Hi Georgi,
+> 
+> I tried to update Georgi in Debian to version 2.1.2.  Unfortunately I get
+> a test suite error:
+> 
+>   ══ Failed tests ════════════════════════════════════════════════════════════════
+>   ── Error (test-bib.R:5:5): bib works fine ──────────────────────────────────────
+>   Error: argument "encoding" is missing, with no default
+>   Backtrace:
+>       █
+>    1. └─rbibutils::readBib(fn_rb) test-bib.R:5:4
+> 
+> Could you please have a look.
+> 
+> Kind regards
+> 
+>        Andreas.
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Aug 29 13:49:30 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 29 Aug 2021 15:49:30 +0200
+Subject: Help for new version of r-cran-rcppparallel needed
+Message-ID: <20210829134930.GD31766@an3as.eu>
+
+Hi,
+
+it seems upstream now permits linking against lokal tbb.  I have tried
+to guess what needs to be done in my last commit[1] but this is not
+sufficient since the build fails with
+
+...
+make[1]: Entering directory '/build/r-cran-rcppparallel-5.1.4+dfsg/src'
+(tbb) Using system (Intel / OneAPI) TBB library.
+(tbb) TBB_LIB = /usr/lib/x86_64-linux-gnu
+(tbb) TBB_INC = /usr/include
+g++ -std=gnu++14 -I"/usr/share/R/include" -DNDEBUG -I../inst/include -I/usr/include    -std=gnu++11 -DRCPP_PARALLEL_USE_TBB=1 -DTBB_SUPPRESS_DEPRECATED_MESSAGES=1 -fpic  -g -O2 -ffile-prefix-map=/build/r-base-kpovBh/r-base-4.1.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c init.cpp -o init.o
+g++ -std=gnu++14 -I"/usr/share/R/include" -DNDEBUG -I../inst/include -I/usr/include    -std=gnu++11 -DRCPP_PARALLEL_USE_TBB=1 -DTBB_SUPPRESS_DEPRECATED_MESSAGES=1 -fpic  -g -O2 -ffile-prefix-map=/build/r-base-kpovBh/r-base-4.1.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c options.cpp -o options.o
+g++ -std=gnu++14 -shared -L/usr/lib/R/lib -Wl,-z,relro -o RcppParallel.so init.o options.o -Wl,-L,/usr/lib/x86_64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -ltbb -ltbbmalloc -L/usr/lib/R/lib -lR
+make[1]: Leaving directory '/build/r-cran-rcppparallel-5.1.4+dfsg/src'
+make[1]: Entering directory '/build/r-cran-rcppparallel-5.1.4+dfsg/src'
+make[1]: Leaving directory '/build/r-cran-rcppparallel-5.1.4+dfsg/src'
+installing via 'install.libs.R' to /build/r-cran-rcppparallel-5.1.4+dfsg/debian/r-cran-rcppparallel/usr/lib/R/site-library/00LOCK-r-cran-rcppparallel-5.1.4+dfsg/00new/RcppParallel
+Error in file.symlink(tbbLibs, tbbDest) : no files to link from
+* removing '/build/r-cran-rcppparallel-5.1.4+dfsg/debian/r-cran-rcppparallel/usr/lib/R/site-library/RcppParallel'
+
+Any hint what to do next?
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rcppparallel/-/commit/004715069aadfc09ad2c742cb74255f9e7269ac5
+
+-- 
+http://fam-tille.de
+
+From georgi.boshnakov at manchester.ac.uk  Sun Aug 29 14:02:45 2021
+From: georgi.boshnakov at manchester.ac.uk (Georgi Boshnakov)
+Date: Sun, 29 Aug 2021 14:02:45 +0000
+Subject: RE: Test failure in Rdpack
+In-Reply-To: <20210829134036.GC31766@an3as.eu>
+References: <20210829051425.GB31766@an3as.eu> <LOYP265MB20154FF565A862F0DFB77CEDAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB201575E884473A8EDE33B6CAAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB2015B44DB4BDEF6DC568DE18AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <20210829134036.GC31766@an3as.eu>
+Message-ID: <LOYP265MB2015D5033BEEF085E98CBEE1AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+
+Hi Andreas,
+
+> I think to be safe on Rdpack it makes sense to use a versioned Depends...
+
+I actually have versioned depends but to an earlier version of rbibutils, while sufficient time has passed for the recent versions to propagate enough. This is achieved by having a couple of versioned lines in the package code, similar to the one I suggested for the test file (that is why the examples do not cause trouble).  But when I added the test later I apparently forgot about 'encoding' being without default in the past and you suffered:).
+
+Best wishes,
+Georgi
+
+-----Original Message-----
+From: Andreas Tille <andreas at an3as.eu> 
+Sent: 29 August 2021 14:41
+To: Georgi Boshnakov <georgi.boshnakov at manchester.ac.uk>
+Cc: Debian R <debian-r at lists.debian.org>
+Subject: Re: Test failure in Rdpack
+
+Hi Georgi,
+
+thanks for your quick reply.
+
+On Sun, Aug 29, 2021 at 10:22:36AM +0000, Georgi Boshnakov wrote:
+> Hi Andreas,
+> 
+> I found your github repo and figured out what is wrong. The test error occurs with rbibutils versions < 2.1.1 (it seems to be 2.0 in your setting).
+
+Ahhh, I admit I have realised that rbibutils is not up to date - I'm on it to update this.  For sure we intend to update everything now since Debian freeze is over.  I think to be safe on Rdpack it makes sense to use a versioned Depends which had pointed me to the issue immediately.
+ 
+> It can be fixed by replacing  line 5 in tests/testthat/test-bib.R (the 
+> one throwing the error) with
+> 
+> bibs_rb <- if(packageVersion("rbibutils") >= '2.1.1')
+>                       readBib(fn_rb) else readBib(fn_rb, encoding = 
+> "UTF-8")
+> 
+> I have updated this on my github repo at https://github.com/GeoBosh/Rdpack .
+> 
+> Alternatively, if you intend to update package rbibutils, the error in Rdpack will disappear.
+
+Yup.  This will happen soon.
+ 
+> Thanks for maintaining the debian repositories.
+
+You are welcome.
+
+Kind regards
+
+       Andreas.
+
+> Kind regards,
+> Georgi
+> 
+> =================
+> From: Georgi Boshnakov
+> Sent: 29 August 2021 09:35
+> To: Andreas Tille <andreas at an3as.eu>; Debian R 
+> <debian-r at lists.debian.org>
+> Subject: RE: Test failure in Rdpack
+> 
+> 
+> Hi Andreas,
+> 
+> Sorry for the previous email, accidently send it prematurely from my mobile.
+> 
+> Thanks for the report. This may be difficult for me to debug, as it passes the CRAN checks on Debian. I have also just checked it on debian with various compilers using rhub::check() with no errors.
+> 
+> Any chance of passing the session information - in a fresh R session: 
+> 
+> library("Rdpack")
+> sessionInfo()
+> 
+> Thanks,
+> Georgi
+> 
+> 
+> From: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>
+> Sent: 29 August 2021 09:24
+> To: Andreas Tille <mailto:andreas at an3as.eu>; Debian R 
+> <mailto:debian-r at lists.debian.org>
+> Subject: Re: Test failure in Rdpack
+> 
+> Hi Andreas,
+> 
+> Thanks for the report. Any chance of passing
+> 
+> Get https://aka.ms/AAb9ysg
+> ________________________________________
+> From: Andreas Tille <mailto:andreas at an3as.eu>
+> Sent: Sunday, August 29, 2021 6:14:25 AM
+> To: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>; 
+> Debian R <mailto:debian-r at lists.debian.org>
+> Subject: Test failure in Rdpack
+>  
+> Hi Georgi,
+> 
+> I tried to update Georgi in Debian to version 2.1.2.  Unfortunately I 
+> get a test suite error:
+> 
+>   ══ Failed tests 
+> ════════════════════════════════════════════════════════════════
+>   ── Error (test-bib.R:5:5): bib works fine 
+> ──────────────────────────────────────
+>   Error: argument "encoding" is missing, with no default
+>   Backtrace:
+>       █
+>    1. └─rbibutils::readBib(fn_rb) test-bib.R:5:4
+> 
+> Could you please have a look.
+> 
+> Kind regards
+> 
+>        Andreas.
+> 
+> --
+> http://fam-tille.de
+> 
+> 
+
+--
+http://fam-tille.de
+
+From andreas at fam-tille.de  Sun Aug 29 15:32:26 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sun, 29 Aug 2021 17:32:26 +0200
+Subject: Re: Test failure in Rdpack
+In-Reply-To: <LOYP265MB2015D5033BEEF085E98CBEE1AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+References: <20210829051425.GB31766@an3as.eu> <LOYP265MB20154FF565A862F0DFB77CEDAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB201575E884473A8EDE33B6CAAECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <LOYP265MB2015B44DB4BDEF6DC568DE18AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM> <20210829134036.GC31766@an3as.eu> <LOYP265MB2015D5033BEEF085E98CBEE1AECA9@LOYP265MB2015.GBRP265.PROD.OUTLOOK.COM>
+Message-ID: <20210829153226.GF31766@an3as.eu>
+
+Thanks a lot for your support, Andreas.
+
+On Sun, Aug 29, 2021 at 02:02:45PM +0000, Georgi Boshnakov wrote:
+> Hi Andreas,
+> 
+> > I think to be safe on Rdpack it makes sense to use a versioned Depends...
+> 
+> I actually have versioned depends but to an earlier version of rbibutils, while sufficient time has passed for the recent versions to propagate enough. This is achieved by having a couple of versioned lines in the package code, similar to the one I suggested for the test file (that is why the examples do not cause trouble).  But when I added the test later I apparently forgot about 'encoding' being without default in the past and you suffered:).
+> 
+> Best wishes,
+> Georgi
+> 
+> 
+> 
+> -----Original Message-----
+> From: Andreas Tille <andreas at an3as.eu> 
+> Sent: 29 August 2021 14:41
+> To: Georgi Boshnakov <georgi.boshnakov at manchester.ac.uk>
+> Cc: Debian R <debian-r at lists.debian.org>
+> Subject: Re: Test failure in Rdpack
+> 
+> Hi Georgi,
+> 
+> thanks for your quick reply.
+> 
+> On Sun, Aug 29, 2021 at 10:22:36AM +0000, Georgi Boshnakov wrote:
+> > Hi Andreas,
+> > 
+> > I found your github repo and figured out what is wrong. The test error occurs with rbibutils versions < 2.1.1 (it seems to be 2.0 in your setting).
+> 
+> Ahhh, I admit I have realised that rbibutils is not up to date - I'm on it to update this.  For sure we intend to update everything now since Debian freeze is over.  I think to be safe on Rdpack it makes sense to use a versioned Depends which had pointed me to the issue immediately.
+>  
+> > It can be fixed by replacing  line 5 in tests/testthat/test-bib.R (the 
+> > one throwing the error) with
+> > 
+> > bibs_rb <- if(packageVersion("rbibutils") >= '2.1.1')
+> >                       readBib(fn_rb) else readBib(fn_rb, encoding = 
+> > "UTF-8")
+> > 
+> > I have updated this on my github repo at https://github.com/GeoBosh/Rdpack .
+> > 
+> > Alternatively, if you intend to update package rbibutils, the error in Rdpack will disappear.
+> 
+> Yup.  This will happen soon.
+>  
+> > Thanks for maintaining the debian repositories.
+> 
+> You are welcome.
+> 
+> Kind regards
+> 
+>        Andreas.
+> 
+> > Kind regards,
+> > Georgi
+> > 
+> > =================
+> > From: Georgi Boshnakov
+> > Sent: 29 August 2021 09:35
+> > To: Andreas Tille <andreas at an3as.eu>; Debian R 
+> > <debian-r at lists.debian.org>
+> > Subject: RE: Test failure in Rdpack
+> > 
+> > 
+> > Hi Andreas,
+> > 
+> > Sorry for the previous email, accidently send it prematurely from my mobile.
+> > 
+> > Thanks for the report. This may be difficult for me to debug, as it passes the CRAN checks on Debian. I have also just checked it on debian with various compilers using rhub::check() with no errors.
+> > 
+> > Any chance of passing the session information - in a fresh R session: 
+> > 
+> > library("Rdpack")
+> > sessionInfo()
+> > 
+> > Thanks,
+> > Georgi
+> > 
+> > 
+> > From: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>
+> > Sent: 29 August 2021 09:24
+> > To: Andreas Tille <mailto:andreas at an3as.eu>; Debian R 
+> > <mailto:debian-r at lists.debian.org>
+> > Subject: Re: Test failure in Rdpack
+> > 
+> > Hi Andreas,
+> > 
+> > Thanks for the report. Any chance of passing
+> > 
+> > Get https://aka.ms/AAb9ysg
+> > ________________________________________
+> > From: Andreas Tille <mailto:andreas at an3as.eu>
+> > Sent: Sunday, August 29, 2021 6:14:25 AM
+> > To: Georgi Boshnakov <mailto:georgi.boshnakov at manchester.ac.uk>; 
+> > Debian R <mailto:debian-r at lists.debian.org>
+> > Subject: Test failure in Rdpack
+> >  
+> > Hi Georgi,
+> > 
+> > I tried to update Georgi in Debian to version 2.1.2.  Unfortunately I 
+> > get a test suite error:
+> > 
+> >   ══ Failed tests 
+> > ════════════════════════════════════════════════════════════════
+> >   ── Error (test-bib.R:5:5): bib works fine 
+> > ──────────────────────────────────────
+> >   Error: argument "encoding" is missing, with no default
+> >   Backtrace:
+> >       █
+> >    1. └─rbibutils::readBib(fn_rb) test-bib.R:5:4
+> > 
+> > Could you please have a look.
+> > 
+> > Kind regards
+> > 
+> >        Andreas.
+> > 
+> > --
+> > http://fam-tille.de
+> > 
+> > 
+> 
+> --
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From nilesh at nileshpatra.info  Tue Aug 31 07:06:55 2021
+From: nilesh at nileshpatra.info (Nilesh Patra)
+Date: Tue, 31 Aug 2021 12:36:55 +0530
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com>
+Message-ID: <E5DA9532-38B3-4B7F-B833-E559EDB03D9B@nileshpatra.info>
+
+Hi Dylan,
+
+On 15 August 2021 1:31:21 pm IST, "Dylan Aïssi" <daissi at debian.org> wrote:
+>Hi Steffen, hi Andreas,
+>
+>Le jeu. 5 août 2021 à 06:18, Andreas Tille <andreas at an3as.eu> a écrit :
+>> Sure.  We need a transition.  Dylan (in CC) was kind enough to trigger
+>> this in the past and we should do so right after the release (I'm
+>> announcing here pseudo-VAC due to personal reasons on one hand as well
+>> as DebConf business - so please do not trust too much on my contribution
+>> on this transition.
+>>
+>> We do not habe better automatism than routne-update and the transition
+>> coordination webpage listing a sensible sequence to do this, thought.
+>
+>The transition tracker is on at
+>https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+>
+>We are now waiting for the green-light from the release team (at
+>https://bugs.debian.org/991919) to start the transition of
+>bioconductor packages.
+
+I just happened to see this commit[1]. Has the transition begun?
+If so, can I do anything to help?
+
+[1]: https://salsa.debian.org/release-team/transition-data/-/commit/bdfbab308eff19bcd346a1829e7feb3d98da0444
+
+Nilesh
+
+-- 
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
+
+From daissi at debian.org  Tue Aug 31 07:28:59 2021
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Tue, 31 Aug 2021 09:28:59 +0200
+Subject: Re: Bioconductor API Bump to 3.13
+In-Reply-To: <E5DA9532-38B3-4B7F-B833-E559EDB03D9B@nileshpatra.info>
+References: <70c32bc7-7045-cb4e-b880-a69f145aee8a@gmx.de> <20210805041845.GM25911@an3as.eu> <CA+6XHwSs0k+u9y6ZKe0xOC4sEqN7Z3EoGOTE9RaO2jZ2sRw3oA@mail.gmail.com> <E5DA9532-38B3-4B7F-B833-E559EDB03D9B@nileshpatra.info>
+Message-ID: <CA+6XHwRTGrNXOBwUn7mDP-KQZ2FaiSSBeRMQV=-0qHutA0tkug@mail.gmail.com>
+
+Hi Nilesh,
+
+Le mar. 31 août 2021 à 09:07, Nilesh Patra <nilesh at nileshpatra.info> a écrit :
+>
+> I just happened to see this commit[1]. Has the transition begun?
+> If so, can I do anything to help?
+>
+
+Yep :-) See https://bugs.debian.org/991919#44
+
+I don't have too much free time. So, Feel free to upload all packages
+you can with routine-update.
+You can follow the order of this list
+> https://release.debian.org/transitions/html/r-api-bioc-3.13.html
+
+But, remember some bioc packages are not present in this list. In this
+case, this diagram can help you
+> https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/BioC_dependency-tree.ditaa
+
+Best,
+Dylan
+
+From tille at debian.org  Tue Aug 31 08:45:05 2021
+From: tille at debian.org (Andreas Tille)
+Date: Tue, 31 Aug 2021 10:45:05 +0200
+Subject: Bug#993349: r-cran-bh is at version 1.74.0-1 but DESCRIPTION remains at 1.66.0
+Message-ID: <163039950574.2665469.12689434322724732826.reportbug@energija.fam-tille.de>
+
+Package: r-cran-bh
+Version: 1.74.0-1
+Severity: important
+Tags: patch
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Hi,
+
+I intend to upgrade r-cran-openmx and when trying to build I get:
+
+   Error: package 'BH' 1.66.0-1 was found, but >= 1.69.0.1 is required by '.'
+
+I guess this is since the DESCRIPTION file does not properly declares
+the version number.
+
+I attached a patch which also includes a versioned Depends on libboost-dev.
+
+Kind regards
+
+    Andreas.
+
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -1,7 +1,7 @@
+ Package: BH
+ Type: Package
+ Title: Boost C++ Header Files -- Metapackage
+-Version: 1.66.0-1
++Version: 1.74.0-1
+ Date: 2018-02-12
+ Author: Dirk Eddelbuettel, John W. Emerson and Michael J. Kane
+ Maintainer: Dirk Eddelbuettel <edd at debian.org>
+--- a/debian/control
++++ b/debian/control
+@@ -11,7 +11,7 @@ Homepage: https://cran.r-project.org/package=BH
+ Package: r-cran-bh
+ Architecture: all
+ Multi-Arch: foreign
+-Depends: ${misc:Depends}, libboost-dev
++Depends: ${misc:Depends}, libboost-dev (>= 1.74.0)
+ Description: (Virtual) GNU R package to provide BH
+  The CRAN package BH provides a (large) subset of Boost.  This package tricks
+  R into believing BH is installed when we just depend on the distribution's
+
+-- System Information:
+Debian Release: 11.0
+  APT prefers testing
+  APT policy: (501, 'testing'), (50, 'buildd-unstable'), (50, 'unstable'), (5, 'experimental'), (1, 'buildd-experimental')
+Architecture: amd64 (x86_64)
+
+Kernel: Linux 5.10.0-8-amd64 (SMP w/4 CPU threads)
+Locale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE=de_DE:de
+Shell: /bin/sh linked to /bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+Versions of packages r-cran-bh depends on:
+ii  libboost-dev  1.74.0.3
+
+r-cran-bh recommends no packages.
+
+r-cran-bh suggests no packages.
+
+-- no debconf information
+
+From andreas at an3as.eu  Tue Aug 31 15:14:46 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 31 Aug 2021 17:14:46 +0200
+Subject: Help for test of pkgload
+Message-ID: <20210831151446.GU31766@an3as.eu>
+
+Hi Jim,
+
+I've updated the Debian package for pkgload.  When running the test suite
+I get:
+
+== Failed tests ================================================================
+-- Failure (test-dll.r:17:3): unload() unloads DLLs from packages loaded with library() --
+require(testDllLoad) is not TRUE
+`actual`:   FALSE
+`expected`: TRUE 
+-- Error (test-dll.r:21:3): unload() unloads DLLs from packages loaded with library() --
+Error: could not find function "nulltest"
+Backtrace:
+    x
+ 1. \-testthat::expect_true(is.null(nulltest())) test-dll.r:21:2
+ 2.   \-testthat::quasi_label(enquo(object), label, arg = "object")
+ 3.     \-rlang::eval_bare(expr, quo_get_env(quo))
+-- Error (test-dll.r:44:3): load_all() compiles and loads DLLs -----------------
+Error: Could not find tools necessary to compile a package
+Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+Backtrace:
+    x
+ 1. \-pkgload::load_all("testDllLoad", reset = TRUE, quiet = TRUE) test-dll.r:44:2
+ 2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+ 3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+-- Error (test-dll.r:82:3): Specific functions from DLLs listed in NAMESPACE can be called --
+Error: Could not find tools necessary to compile a package
+Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+Backtrace:
+    x
+ 1. \-pkgload::load_all("testDllLoad", quiet = TRUE) test-dll.r:82:2
+ 2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+ 3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+-- Error (test-dll.r:108:3): load_all() can compile and load DLLs linked to Rcpp --
+Error: Could not find tools necessary to compile a package
+Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+Backtrace:
+    x
+ 1. \-pkgload::load_all("testDllRcpp", reset = TRUE, quiet = TRUE) test-dll.r:108:2
+ 2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+ 3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+[ FAIL 5 | WARN 2 | SKIP 0 | PASS 301 ]
+Error: Test failures
+Execution halted
+
+There might be a chance that this is caused by the fact that not all
+required packages are at the latest version (we are working on this).
+
+Any idea how to fix these test failures?
+
+Kind regards
+
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From james.hester at rstudio.com  Tue Aug 31 15:59:28 2021
+From: james.hester at rstudio.com (Jim Hester)
+Date: Tue, 31 Aug 2021 11:59:28 -0400
+Subject: Re: Help for test of pkgload
+In-Reply-To: <20210831151446.GU31766@an3as.eu>
+References: <20210831151446.GU31766@an3as.eu>
+Message-ID: <CABJxDDHE-sDAchSJF+jJod=D_+0zdha=UowY87wZSJDY8pkY8g@mail.gmail.com>
+
+pkgbuild gives this error
+
+> Error: Could not find tools necessary to compile a package
+
+When the R environment is set up in such a way that `R CMD SHLIB
+foo.c` cannot create a basic C executable.
+
+Possible culprits might be an invalid compiler location defined in the
+site or user makevars file.
+(https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Customizing-package-compilation)
+
+pkgbuild and pkgload have not had a new release in some time and have
+been relatively stable overall in the past few years, it is surprising
+to me that if previous versions were working in your test environment
+the new version would have changed behavior.
+
+Sorry I cannot pinpoint the exact cause from this report, let me know
+if there is anything else I could do to help,
+
+Jim
+
+On Tue, Aug 31, 2021 at 11:14 AM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi Jim,
+>
+> I've updated the Debian package for pkgload.  When running the test suite
+> I get:
+>
+>
+> == Failed tests ================================================================
+> -- Failure (test-dll.r:17:3): unload() unloads DLLs from packages loaded with library() --
+> require(testDllLoad) is not TRUE
+> `actual`:   FALSE
+> `expected`: TRUE
+> -- Error (test-dll.r:21:3): unload() unloads DLLs from packages loaded with library() --
+> Error: could not find function "nulltest"
+> Backtrace:
+>     x
+>  1. \-testthat::expect_true(is.null(nulltest())) test-dll.r:21:2
+>  2.   \-testthat::quasi_label(enquo(object), label, arg = "object")
+>  3.     \-rlang::eval_bare(expr, quo_get_env(quo))
+> -- Error (test-dll.r:44:3): load_all() compiles and loads DLLs -----------------
+> Error: Could not find tools necessary to compile a package
+> Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+> Backtrace:
+>     x
+>  1. \-pkgload::load_all("testDllLoad", reset = TRUE, quiet = TRUE) test-dll.r:44:2
+>  2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+>  3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+> -- Error (test-dll.r:82:3): Specific functions from DLLs listed in NAMESPACE can be called --
+> Error: Could not find tools necessary to compile a package
+> Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+> Backtrace:
+>     x
+>  1. \-pkgload::load_all("testDllLoad", quiet = TRUE) test-dll.r:82:2
+>  2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+>  3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+> -- Error (test-dll.r:108:3): load_all() can compile and load DLLs linked to Rcpp --
+> Error: Could not find tools necessary to compile a package
+> Call `pkgbuild::check_build_tools(debug = TRUE)` to diagnose the problem.
+> Backtrace:
+>     x
+>  1. \-pkgload::load_all("testDllRcpp", reset = TRUE, quiet = TRUE) test-dll.r:108:2
+>  2.   \-pkgbuild::compile_dll(path, quiet = quiet)
+>  3.     \-pkgbuild::check_build_tools(quiet = TRUE)
+> [ FAIL 5 | WARN 2 | SKIP 0 | PASS 301 ]
+> Error: Test failures
+> Execution halted
+>
+>
+> There might be a chance that this is caused by the fact that not all
+> required packages are at the latest version (we are working on this).
+>
+> Any idea how to fix these test failures?
+>
+> Kind regards
+>
+>    Andreas.
+>
+> --
+> http://fam-tille.de
+

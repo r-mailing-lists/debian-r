@@ -1,0 +1,109 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2025-08",
+  "messages": [
+    {
+      "id": "msg-24a0ae794fb2",
+      "message_id": "<aI1j590LbrmVDK6F@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2025-08-02T01:03:35Z",
+      "subject": "[VAC] August",
+      "subject_clean": "[VAC] August",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everybody,\n\nwith the freeze we have regrown a big backlog of outdated r-cran-*\npackages (in my opinion there is not gain uploading to experimental\nsince the only way to move them to unstable is to upload again).  Last\nyear, I have made a large contribution for keeping these packages up to\ndate and just in case I wanted to let you know that I will only restart\nto do so in September.\n\nActually, before putting a serious effort in the backlog cleaning, maybe\nwe can take the opportunity to have a serious discussion in September\nabout the sustainability of our model, the possibility to remove most\npackage that are not in the dependency graph of non-R packages (given\nhow easy it is to install trusted source or binary pacages from third\nparties such as the ones distributed by Dirk and others), the\nopportunity to automate even further, the difficulty to support\nother architectures than amd64 and arm64 with our limited resources,\nand a possible switch to dgit?\n\nHave a nice … month!\n\nCharles\n\n--\nCharles Plessy                         Nagahama, Yomitan, Okinawa, Japan\nDebian Med packaging team         http://www.debian.org/devel/debian-med\nTooting from work,               https://fediscience.org/@charles_plessy\nTooting from home,                 https://framapiaf.org/@charles_plessy",
+      "body_snippet": "Hi everybody,\n\nwith the freeze we have regrown a big backlog of outdated r-cran-*\npackages (in my opinion there is not gain uploading to experimental\nsince the only way to move them to unstable is to ",
+      "thread_id": "thread-24a0ae794fb2",
+      "thread_depth": 0,
+      "month": "2025-08"
+    },
+    {
+      "id": "msg-bdfe8ed4dce8",
+      "message_id": "<26767.61700.847573.119421@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2025-08-03T23:30:12Z",
+      "subject": "Re: [VAC] August",
+      "subject_clean": "[VAC] August",
+      "in_reply_to": "<aI1j590LbrmVDK6F@bubu.igloo>",
+      "references": [
+        "<aI1j590LbrmVDK6F@bubu.igloo>"
+      ],
+      "body_plain": "Hi Charles,\n\nOn 2 August 2025 at 10:03, Charles Plessy wrote:\n| Hi everybody,\n| \n| with the freeze we have regrown a big backlog of outdated r-cran-*\n| packages (in my opinion there is not gain uploading to experimental\n| since the only way to move them to unstable is to upload again).  Last\n| year, I have made a large contribution for keeping these packages up to\n| date and just in case I wanted to let you know that I will only restart\n| to do so in September.\n| \n| Actually, before putting a serious effort in the backlog cleaning, maybe\n| we can take the opportunity to have a serious discussion in September\n| about the sustainability of our model, the possibility to remove most\n| package that are not in the dependency graph of non-R packages (given\n| how easy it is to install trusted source or binary pacages from third\n| parties such as the ones distributed by Dirk and others), the\n| opportunity to automate even further, the difficulty to support\n| other architectures than amd64 and arm64 with our limited resources,\n| and a possible switch to dgit?\n\nGood idea -- I would be in favour of a discussion as it may be worthwhile to\ncompare 'goals' and both 'hits' and possible 'misses'. When I drafted the\n'Debian R Policy' document some twenty-two years ago [1] I didn't quite see\nthis far into a world where we have 22k CRAN packages which may be impossible\nto integrate into Debian via the the official channels.\n\nWhat we have right now is very valid and suitable for many deployments. And\nwhile impressive at over 1k packages from CRAN (when I last counted) it still\ncannot truly serve for 'serious' R deployment given 22k packages at CRAN and\nhence 21k misses. So we could chat about possible alternatives. \n\nCheers, Dirk\n\n[1] https://lists.debian.org/debian-devel/2003/12/msg02332.html\n \n| Have a nice … month!\n\nEnjoy your time off!\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Hi Charles,\n\nOn 2 August 2025 at 10:03, Charles Plessy wrote:\n| Hi everybody,\n| \n| with the freeze we have regrown a big backlog of outdated r-cran-*\n| packages (in my opinion there is not gain upload",
+      "thread_id": "thread-24a0ae794fb2",
+      "thread_depth": 1,
+      "month": "2025-08"
+    },
+    {
+      "id": "msg-325dce5d7483",
+      "message_id": "<a97e507d-9bfd-4d01-9221-73dc9849d612@zoho.com>",
+      "from_name": "Rebecca N. Palmer",
+      "from_email_hash": "189fa07239991c8374c7b1fc777265d95c68e7c7cde49e662d697c6b30bb2d01",
+      "date": "2025-08-15T16:05:46Z",
+      "subject": "fixing #1102548: r-cran-dendextend autopkgtest fail",
+      "subject_clean": "fixing #1102548: r-cran-dendextend autopkgtest fail",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Control: tags -1 fixed-upstream\n\nThis is because this test implicitly requires DendSer, which isn't in \nDebian:\n\nhttps://github.com/talgalili/dendextend/issues/154\n\nUpstream 1.19.1 skips the test when this is not available.\n\nOf the R team's currently open RC bugs, this is the only one where a new \nupstream version is likely to help.  (While the above implies that \nr-cran-dextend is not actually broken for users, it's still RC in the \nsense of not allowing r-cran-dextend in testing.)\n\nHence, I propose to update r-cran-dextend (and re-add r-cran-plotly's \ntest-Depends that I removed because of this, #1104338) soon, not wait \nfor the general post-release mass-update.",
+      "body_snippet": "Control: tags -1 fixed-upstream\n\nThis is because this test implicitly requires DendSer, which isn't in \nDebian:\n\nhttps://github.com/talgalili/dendextend/issues/154\n\nUpstream 1.19.1 skips the test when",
+      "thread_id": "thread-325dce5d7483",
+      "thread_depth": 0,
+      "month": "2025-08"
+    },
+    {
+      "id": "msg-58c4bd8d1d7a",
+      "message_id": "<1db957d3-becc-4d5e-b0b6-e9223ff0810d@debian.org>",
+      "from_name": "Michael R. Crusoe",
+      "from_email_hash": "e3915a1e1aa137713f8a52293d0876c3c928bc7dcfe266b4287738e1ffe89243",
+      "date": "2025-08-27T15:19:50Z",
+      "subject": "Bug#1112222: ITP: r-bioc-biocmake -- CMake for Bioconductor",
+      "subject_clean": "Bug#1112222: ITP: r-bioc-biocmake -- CMake for Bioconductor",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: wnpp\nSeverity: wishlist\nX-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org\n\nSubject: ITP: r-bioc-biocmake -- CMake for Bioconductor\nPackage: wnpp\nOwner: Michael R. Crusoe <crusoe at debian.org>\nSeverity: wishlist\n\n* Package name    : r-bioc-biocmake\n  Version         : 1.0.1\n  Upstream Author : Aaron Lun\n* URL             : https://bioconductor.org/packages/biocmake/\n* License         : expat\n  Programming Lang: GNU R\n  Description     : CMake for Bioconductor\n Manages the use of CMake for building Bioconductor packages.\n\nRemark: This package is maintained by Debian R Packages Maintainers at\n   https://salsa.debian.org/r-pkg-team/r-bioc-biocmake\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature.asc\nDesc: OpenPGP digital signature",
+      "body_snippet": "Package: wnpp\nSeverity: wishlist\nX-Debbugs-Cc: debian-r at lists.debian.org, crusoe at debian.org\n\nSubject: ITP: r-bioc-biocmake -- CMake for Bioconductor\nPackage: wnpp\nOwner: Michael R. Crusoe <cruso",
+      "thread_id": "thread-58c4bd8d1d7a",
+      "thread_depth": 0,
+      "month": "2025-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-24a0ae794fb2",
+      "subject": "[VAC] August",
+      "message_count": 2,
+      "participants": [
+        "Charles Plessy",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2025-08-02T01:03:35Z",
+      "last_reply": "2025-08-03T23:30:12Z",
+      "root_message_id": "msg-24a0ae794fb2"
+    },
+    {
+      "id": "thread-325dce5d7483",
+      "subject": "fixing #1102548: r-cran-dendextend autopkgtest fail",
+      "message_count": 1,
+      "participants": [
+        "Rebecca N. Palmer"
+      ],
+      "started": "2025-08-15T16:05:46Z",
+      "last_reply": "2025-08-15T16:05:46Z",
+      "root_message_id": "msg-325dce5d7483"
+    },
+    {
+      "id": "thread-58c4bd8d1d7a",
+      "subject": "Bug#1112222: ITP: r-bioc-biocmake -- CMake for Bioconductor",
+      "message_count": 1,
+      "participants": [
+        "Michael R. Crusoe"
+      ],
+      "started": "2025-08-27T15:19:50Z",
+      "last_reply": "2025-08-27T15:19:50Z",
+      "root_message_id": "msg-58c4bd8d1d7a"
+    }
+  ]
+}

@@ -1,0 +1,3573 @@
+From elbrus at debian.org  Sat Jul  1 05:48:16 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sat, 1 Jul 2023 07:48:16 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de>
+Message-ID: <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org>
+
+Hi Andreas,
+
+On 30-06-2023 21:35, Andreas Tille wrote:
+> I'm not sure that we are in the right status to ask for a transition bug
+
+Anytime is good to ask for a transition, particularly when the 
+transition is already ongoing.
+
+>    https://lists.debian.org/debian-r/2023/06/msg00025.html
+>      In the end of this mail three options are listed which I simply
+>      repeat here for your comfort:
+>
+>     1. implement the r-graphics-api-*
+>        This might be a bit complex since for the moment I do not know
+>        any means how to detect the packages that need this dependency
+>        (and how we can implement this into dh-update-R)  So this might
+>        become technically complex in the first case
+>
+>     2. Just do a full r-api transition
+>        This would work but affects more packages than strictly
+>        necessary.  My gut feeling says we will be able to finish this
+>        earlier than 1. despite technically not perfect
+>
+>     3. Blindly ignore the fact that we need a transition and follow
+>        the hackish workaround by using random versioned Depends as
+>        suggested by Nilesh for r-cran-epi.
+
+> While I would love to hear the opinion of the release team what kind of
+> transition (1. or 2.) should be prefered (if this is possible now at all
+> since the affected package r-base 4.3.1 is in the archive since some
+> time and also the most urgent packages are rebuild manually) or whether
+> we need to fight manually through this mess (option 3.)  I confirm that
+> I agree with Johannes Ranke to prefer option 1. and do it "right" to be
+> safe for the next time.
+
+I don't think it should surprise anyone that we prefer it to be done 
+right. Our preference is for option 1. However, if you can't get the 
+pieces for that option in place in a reasonable time (say, a week or 
+two, take some time to try), then we prefer to get *this* transition out 
+of the way by means of option 2. I don't think it's in anybodies 
+interest to waste time on option 3.
+
+> Sorry that this transition bug is that complex.  I would have loved if
+> it would went more coordinated but unfortunately that's not in my hands
+> and I simply try to reassemble the pieces.
+
+Thanks for communicating with us, much appreciated.
+
+I'll try to set a placeholder transition tracker up soon; for now, by 
+lack of something better, will reflect option 2. We can update that once 
+we have the pieces for option 1.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Sat Jul  1 11:45:11 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 1 Jul 2023 13:45:11 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org>
+Message-ID: <ZKARx2ZgMzEPewp7@an3as.eu>
+
+Hi Paul,
+
+Am Sat, Jul 01, 2023 at 07:48:16AM +0200 schrieb Paul Gevers:
+> Anytime is good to ask for a transition, particularly when the transition is
+> already ongoing.
+
+:-)
+ 
+> I don't think it should surprise anyone that we prefer it to be done right.
+> Our preference is for option 1.
+
+Thanks for confirming.
+
+> However, if you can't get the pieces for
+> that option in place in a reasonable time (say, a week or two, take some
+> time to try),
+
+I think my piece is ready.  We just need to decide about a proper name
+of the virtual package.  I'll inject this into my proof of concept
+change of dh-r.  Than Dirk needs to upload another r-base package
+containing the r-graphics-api-VERSION.  This should not be a hard thing
+to do - Dirk just stayed silent about this change since we are
+discussing it.
+
+> then we prefer to get *this* transition out of the way by
+> means of option 2.
+
+I personally think that we are in a good situation in the beginning of
+the release cycle to do things right, which means option 1.  But it
+depends from the r-base maintainer to cooperate here.
+
+> I don't think it's in anybodies interest to waste time on
+> option 3.
+
+ACK.  I told Bas so who had spent quite some time to file bugs against
+lots of r-cran-* packages which are all a consequence of the
+not-yet-transition.
+ 
+> > Sorry that this transition bug is that complex.  I would have loved if
+> > it would went more coordinated but unfortunately that's not in my hands
+> > and I simply try to reassemble the pieces.
+> 
+> Thanks for communicating with us, much appreciated.
+
+Its always a pleasure to communicate with you. ;-)
+ 
+> I'll try to set a placeholder transition tracker up soon; for now, by lack
+> of something better, will reflect option 2. We can update that once we have
+> the pieces for option 1.
+
+Thanks a lot
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Sat Jul  1 12:14:09 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 01 Jul 2023 14:14:09 +0200
+Subject: Bug#1040038: r-base-core: Please provide r-graphics-api-*
+Message-ID: <168821364959.959582.9036306938953401613.reportbug@sputnik>
+
+Package: r-base-core
+Version: 4.3.1-1.1
+Severity: important
+Tags: patch
+X-Debbugs-Cc: debian-r at lists.debian.org, 1040001 at bugs.debian.org
+
+Hi,
+
+to support R graphics ABI changes it makes sense to provide this feature
+to r-base-core to limit the needed transition to the minimum that is
+needed.  This was discussed extensively on the Debian R mailing list.
+The transition (see bug #1040001 in CC) should happen just to the
+packages that need to be part of the transition which can only be done
+by marking the affected packages.
+
+The attached patch will implement the requested feature.  There is also
+a patch to dh-r which can be uploadede immediately to do the needed
+things in debhelper.
+
+Kind regards
+    Andreas.
+
+-- System Information:
+Debian Release: trixie/sid
+  APT prefers unstable
+  APT policy: (500, 'unstable'), (500, 'testing'), (50, 'buildd-unstable'), (1, 'experimental')
+Architecture: amd64 (x86_64)
+
+Kernel: Linux 6.3.0-1-amd64 (SMP w/8 CPU threads; PREEMPT)
+Kernel taint flags: TAINT_WARN
+Locale: LANG=de_DE.UTF-8, LC_CTYPE=de_DE.UTF-8 (charmap=UTF-8), LANGUAGE not set
+Shell: /bin/sh linked to /usr/bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+Versions of packages r-base-core depends on:
+ii  ca-certificates              20230311
+ii  libblas3 [libblas.so.3]      3.11.0-2
+ii  libbz2-1.0                   1.0.8-5+b1
+ii  libc6                        2.36-9
+ii  libcairo2                    1.16.0-7
+ii  libcurl4                     7.88.1-10
+ii  libglib2.0-0                 2.74.6-2
+ii  libgomp1                     13.1.0-6
+ii  libicu72                     72.1-3
+ii  libjpeg62-turbo              1:2.1.5-2
+ii  liblapack3 [liblapack.so.3]  3.11.0-2
+ii  liblzma5                     5.4.1-0.2
+ii  libpango-1.0-0               1.50.14+ds-1
+ii  libpangocairo-1.0-0          1.50.14+ds-1
+ii  libpaper-utils               1.1.29
+ii  libpcre2-8-0                 10.42-1
+ii  libpng16-16                  1.6.40-1
+ii  libreadline8                 8.2-1.3
+ii  libtcl8.6                    8.6.13+dfsg-2
+ii  libtiff6                     4.5.1-1
+ii  libtirpc3                    1.3.3+ds-1
+ii  libtk8.6                     8.6.13-2
+ii  libx11-6                     2:1.8.6-1
+ii  libxt6                       1:1.2.1-1.1
+ii  ucf                          3.0043+nmu1
+ii  unzip                        6.0-28
+ii  xdg-utils                    1.1.3-4.1
+ii  zip                          3.0-13
+ii  zlib1g                       1:1.2.13.dfsg-1
+
+Versions of packages r-base-core recommends:
+ii  r-base-dev     4.3.1-1.1
+ii  r-doc-html     4.3.1-1
+ii  r-recommended  4.3.1-1.1
+
+Versions of packages r-base-core suggests:
+pn  elpa-ess                <none>
+pn  r-base-html             <none>
+pn  r-doc-info | r-doc-pdf  <none>
+ii  r-mathlib               4.3.1-1.1
+
+-- no debconf information
+diff --git a/debian/changelog b/debian/changelog
+index 2c23d966f..16d401c7b 100644
+--- a/debian/changelog
++++ b/debian/changelog
+@@ -1,3 +1,10 @@
++r-base (4.3.1-1.1) UNRELEASED; urgency=medium
++
++  * Non-maintainer upload.
++  * Add r-graphics-api
++
++ -- Andreas Tille <tille at debian.org>  Sat, 01 Jul 2023 13:45:57 +0200
++
+ r-base (4.3.1-1) unstable; urgency=medium
+ 
+   * New upstream release
+diff --git a/debian/control b/debian/control
+index 37d0cd042..d18e50c85 100644
+--- a/debian/control
++++ b/debian/control
+@@ -49,7 +49,7 @@ Package: r-base-core
+ Architecture: any
+ Depends: ${misc:Depends}, zip, unzip, libpaper-utils, xdg-utils, ${shlibs:Depends}, ucf (>= 3.0), ca-certificates
+ Replaces: r-base (<= 1.4.1-1), r-recommended (<< 1.9.0), r-gnome (<= 2.3.1), r-cran-rcompgen (<= 0.1-17-1), r-base-latex (<= 2.9.2-4)
+-Provides:  r-gnome, r-cran-rcompgen, r-base-latex, r-api-4.0
++Provides:  r-gnome, r-cran-rcompgen, r-base-latex, r-api-4.0, r-graphics-api-4.3
+ Conflicts:  r-gnome, r-cran-rcompgen, r-base-latex
+ Recommends: r-recommended, r-base-dev, r-doc-html
+ Suggests: elpa-ess, r-doc-info | r-doc-pdf, r-mathlib, r-base-html
+diff --git a/debian/r-cran.mk b/debian/r-cran.mk
+index 7e54a19d7..965ec24db 100644
+--- a/debian/r-cran.mk
++++ b/debian/r-cran.mk
+@@ -65,6 +65,7 @@ endif
+ #			awk '/^Version/ {print $$2}')
+ rversion	:= $(shell dpkg-query -W -f='$${Version}' r-base-dev)
+ rapiversion	:= $(shell dpkg-query -W -f='$${Provides}' r-base-core | grep -o 'r-api[^, ]*')
++rgraphicsapiversion	:= $(shell dpkg-query -W -f='$${Provides}' r-base-core | grep -o 'r-graphics-api[^, ]*')
+ 
+ ## we use these results for the to-be-installed-in directory
+ debRlib		:= $(CURDIR)/debian/$(package)/$(debRdir)
+@@ -101,7 +102,7 @@ R_any_arch:
+ 		dh_installdirs		$(debRdir)
+                 ##
+                 ## support ${R:Depends} via debian/${package}.substvars
+-		echo "R:Depends=r-base-core (>= ${rversion}), ${rapiversion}" >> debian/$(package).substvars
++		echo "R:Depends=r-base-core (>= ${rversion}), ${rapiversion}, ${rgraphicsapiversion}" >> debian/$(package).substvars
+                 ##
+                 ## call R to install the sources we're looking at
+                 ## use this inside xvfb-run if this wrapper is installed
+
+From tille at debian.org  Sat Jul  1 12:29:20 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 1 Jul 2023 14:29:20 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <ZKARx2ZgMzEPewp7@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org> <ZKARx2ZgMzEPewp7@an3as.eu>
+Message-ID: <ZKAcIKe84UIp0BNo@an3as.eu>
+
+Hi again,
+
+just a status update:
+
+Am Sat, Jul 01, 2023 at 01:45:11PM +0200 schrieb Andreas Tille:
+> 
+> I think my piece is ready.  We just need to decide about a proper name
+> of the virtual package.  I'll inject this into my proof of concept
+> change of dh-r.  Than Dirk needs to upload another r-base package
+> containing the r-graphics-api-VERSION.  This should not be a hard thing
+> to do - Dirk just stayed silent about this change since we are
+> discussing it.
+
+I've filed Bug#1040038 with the patch for r-graphics-api and updated
+branch r-api-graphic branch of dh-r[1] to match the suggested patch
+immediately once uploaded.
+ 
+Kind regards
+   Andreas. 
+
+[1] https://salsa.debian.org/r-pkg-team/dh-r/-/tree/r-api-graphic?ref_type=heads 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Sat Jul  1 20:29:11 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 1 Jul 2023 22:29:11 +0200
+Subject: Re: Bug#1040038: r-base-core: Please provide r-graphics-api-*
+In-Reply-To: <ZKBLMAsNIUArat8Q@an3as.eu>
+References: <168821364959.959582.9036306938953401613.reportbug@sputnik> <CAM8zJQuSBiL0BhUB9mJRYn5bLnaVnP=V4QkfmDewRrC-CZq4Ww@mail.gmail.com> <ZKBLMAsNIUArat8Q@an3as.eu>
+Message-ID: <ZKCMlwjJL0lzZU+X@an3as.eu>
+
+Hi again,
+
+Am Sat, Jul 01, 2023 at 05:50:08PM +0200 schrieb Andreas Tille:
+> 
+> That's a pretty good point.  Dirk, do you want me to adapt the
+> patch or will you do the search and replace?  I'll adapt dh-r
+> accordingly to the proper string.
+
+I've attached a patch implementing Grahams suggestion.  Dh-r is adapted
+as well.  It would be great if you could raise your opinion about this
+patch until Monday.
+ 
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+diff --git a/debian/changelog b/debian/changelog
+index 2c23d966f..c9d4db356 100644
+--- a/debian/changelog
++++ b/debian/changelog
+@@ -1,3 +1,11 @@
++r-base (4.3.1-1.1) UNRELEASED; urgency=medium
++
++  * Non-maintainer upload.
++  * Add r-ge-version-16
++    Closes: #1040038
++
++ -- Andreas Tille <tille at debian.org>  Sat, 01 Jul 2023 13:45:57 +0200
++
+ r-base (4.3.1-1) unstable; urgency=medium
+ 
+   * New upstream release
+diff --git a/debian/control b/debian/control
+index 37d0cd042..3d3b126a6 100644
+--- a/debian/control
++++ b/debian/control
+@@ -49,7 +49,7 @@ Package: r-base-core
+ Architecture: any
+ Depends: ${misc:Depends}, zip, unzip, libpaper-utils, xdg-utils, ${shlibs:Depends}, ucf (>= 3.0), ca-certificates
+ Replaces: r-base (<= 1.4.1-1), r-recommended (<< 1.9.0), r-gnome (<= 2.3.1), r-cran-rcompgen (<= 0.1-17-1), r-base-latex (<= 2.9.2-4)
+-Provides:  r-gnome, r-cran-rcompgen, r-base-latex, r-api-4.0
++Provides:  r-gnome, r-cran-rcompgen, r-base-latex, r-api-4.0, r-ge-version-16
+ Conflicts:  r-gnome, r-cran-rcompgen, r-base-latex
+ Recommends: r-recommended, r-base-dev, r-doc-html
+ Suggests: elpa-ess, r-doc-info | r-doc-pdf, r-mathlib, r-base-html
+diff --git a/debian/r-cran.mk b/debian/r-cran.mk
+index 7e54a19d7..eb8f5f880 100644
+--- a/debian/r-cran.mk
++++ b/debian/r-cran.mk
+@@ -65,6 +65,7 @@ endif
+ #			awk '/^Version/ {print $$2}')
+ rversion	:= $(shell dpkg-query -W -f='$${Version}' r-base-dev)
+ rapiversion	:= $(shell dpkg-query -W -f='$${Provides}' r-base-core | grep -o 'r-api[^, ]*')
++rgraphicsapiversion	:= $(shell dpkg-query -W -f='$${Provides}' r-base-core | grep -o 'r-ge-version[^, ]*')
+ 
+ ## we use these results for the to-be-installed-in directory
+ debRlib		:= $(CURDIR)/debian/$(package)/$(debRdir)
+@@ -101,7 +102,7 @@ R_any_arch:
+ 		dh_installdirs		$(debRdir)
+                 ##
+                 ## support ${R:Depends} via debian/${package}.substvars
+-		echo "R:Depends=r-base-core (>= ${rversion}), ${rapiversion}" >> debian/$(package).substvars
++		echo "R:Depends=r-base-core (>= ${rversion}), ${rapiversion}, ${rgraphicsapiversion}" >> debian/$(package).substvars
+                 ##
+                 ## call R to install the sources we're looking at
+                 ## use this inside xvfb-run if this wrapper is installed
+
+From tille at debian.org  Sat Jul  1 15:50:08 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 1 Jul 2023 17:50:08 +0200
+Subject: Re: Bug#1040038: r-base-core: Please provide r-graphics-api-*
+In-Reply-To: <CAM8zJQuSBiL0BhUB9mJRYn5bLnaVnP=V4QkfmDewRrC-CZq4Ww@mail.gmail.com>
+References: <168821364959.959582.9036306938953401613.reportbug@sputnik> <CAM8zJQuSBiL0BhUB9mJRYn5bLnaVnP=V4QkfmDewRrC-CZq4Ww@mail.gmail.com>
+Message-ID: <ZKBLMAsNIUArat8Q@an3as.eu>
+
+Hi Graham,
+
+Am Sat, Jul 01, 2023 at 03:26:44PM +0000 schrieb Graham Inggs:
+> Your patch has 'rgraphicsapiversion' and 'r-graphics-api-4.3'.
+> 
+> Upstream [1] refer to it as follows:
+> 
+> The graphics engine version, R_GE_version, has been bumped to 16
+>       and so packages that provide graphics devices should be
+>       reinstalled.
+> 
+> I think it would be less confusing to use their terms (and version), e.g.:
+> 'rgraphicsengineversion' and 'r-ge-version-16'.
+
+That's a pretty good point.  Dirk, do you want me to adapt the
+patch or will you do the search and replace?  I'll adapt dh-r
+accordingly to the proper string.
+
+Kind regards and thanks for the hint
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From pabs at debian.org  Sun Jul  2 02:54:03 2023
+From: pabs at debian.org (Paul Wise)
+Date: Sun, 02 Jul 2023 10:54:03 +0800
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <ZKAcIKe84UIp0BNo@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org> <ZKARx2ZgMzEPewp7@an3as.eu> <ZKAcIKe84UIp0BNo@an3as.eu>
+Message-ID: <31294c4a3355651fb431e4506d8d3ce7e935b479.camel@debian.org>
+
+On Sat, 2023-07-01 at 14:29 +0200, Andreas Tille wrote:
+
+> I've filed Bug#1040038 with the patch for r-graphics-api and updated
+> branch r-api-graphic branch of dh-r[1] to match the suggested patch
+> immediately once uploaded.
+
+I've sent a suggestion to bug #1040038 for not hard-coding the API
+number and extracting it from the header instead. Dirk also posted
+an R-native version of what I suggested to the bug too.
+
+The dh-r r-api-graphic branch also hard-codes the list of packages that
+should get the graphics API dependency but that list will need manual
+maintenance as packages add/drop use of R_GE_checkVersionOrDie.
+
+The objdump tool can export the list of dynamically imported symbols,
+that can be searched for use of R_GE_checkVersionOrDie and then if it
+is, assume that it is called with R_GE_version and add the dependency.
+
+   $ objdump -T debian/*/usr/lib/R/site-library/*/libs/*.so | grep R_GE_checkVersionOrDie
+   0000000000000000      DF *UND*       0000000000000000  Base        R_GE_checkVersionOrDie
+
+-- 
+bye,
+pabs
+
+https://wiki.debian.org/PaulWise
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From owner at bugs.debian.org  Sun Jul  2 02:57:03 2023
+From: owner at bugs.debian.org (Debian Bug Tracking System)
+Date: Sun, 02 Jul 2023 02:57:03 +0000
+Subject: Bug#1040001: Info received (Bug#1040001: transition: r-base)
+References: <31294c4a3355651fb431e4506d8d3ce7e935b479.camel@debian.org>
+Message-ID: <handler.1040001.B1040001.16882664621754341.ackinfo@bugs.debian.org>
+
+Thank you for the additional information you have supplied regarding
+this Bug report.
+
+This is an automatically generated reply to let you know your message
+has been received.
+
+Your message is being forwarded to the package maintainers and other
+interested parties for their attention; they will reply in due course.
+
+Your message has been sent to the package maintainer(s):
+ Debian Release Team <debian-release at lists.debian.org>
+
+If you wish to submit further information on this problem, please
+send it to 1040001 at bugs.debian.org.
+
+Please do not send mail to owner at bugs.debian.org unless you wish
+to report a problem with the Bug-tracking system.
+
+-- 
+1040001: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1040001
+Debian Bug Tracking System
+Contact owner at bugs.debian.org with problems
+
+From nilesh at debian.org  Sun Jul  2 09:20:48 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sun, 2 Jul 2023 14:50:48 +0530
+Subject: Bug#1040132: RM: r-cran-treescape -- ROM; Unmaintained, replaced with treespace
+Message-ID: <20230702092048.t45j342s6ceyalrr@office.mailbox.org>
+
+Package: ftp.debian.org
+Control: affects -1 + src:r-cran-treescape
+X-Debbugs-Cc: r-cran-treescape at packages.debian.org, debian-r at lists.debian.org, tille at debian.org
+User: ftp.debian.org at packages.debian.org
+Usertags: remove
+Severity: normal
+
+This package is un-maintained upstream, removed from CRAN and has been replaced
+with treespace (debian package is r-cran-treespace) as is clearly
+mentioned by upstream[1]. It is now failing its autopkgtests and it
+isn't worth anyone's time to try fixing it.
+
+This is a leaf package.
+
+Please remove it from the archive.
+
+[1]: https://cran.r-project.org/web/packages/treescape/index.html
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Sun Jul  2 19:56:42 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 2 Jul 2023 21:56:42 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <c778bddd-1d5a-96f2-99b0-462d898946ce@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <25760.15482.532156.210106@rob.eddelbuettel.com> <c778bddd-1d5a-96f2-99b0-462d898946ce@debian.org>
+Message-ID: <ZKHWepodOvnCyqhH@an3as.eu>
+
+Hi Paul,
+
+Am Sat, Jul 01, 2023 at 05:21:16PM +0200 schrieb Paul Gevers:
+> > So per upstream ("R Core" for short), this is clearly on the package
+> > side. There is no ABI/API incompatibility: R offers graphics functions new
+> > functionality, to use it one needs a rebuild _if a package decides to stop
+> > and die on mismatch_.
+
+I'd like to point out that "one needs a rebuild" is something else if
+one installs a CRAN package manually or if we upload a Debian package.
+A Debian package has to "survive" a set of tests (and here we
+continuously disagree but right now in this actual case it has proven to
+be necessary) and pass a migration procedure in a dependency tree of
+packages which is just more complex than "just rebuild".
+
+> > I so filed three bug reports last weekend against three such packages
+
+... and I told you that this list of three packages was incomplete.  By
+chance I had rebuild two other packages that needed the rebuild and some
+autopkgtest I was running uncovered that vdiffr simply slipped through
+your attention.  That's perfectly human - and since its human I'm in
+favour of a technical solution which avoids such manual digging inside
+the package pool.
+
+Besides this such technical things to my experience these issues always
+go with some well known pattern of "social friction" which is
+demotivating for all sides.  I'd like to reduce these friction points
+to a minimum if there is some technical solution.
+
+> > requesting a simple rebuild as that is in fact all it takes. (And
+> > missed one that was added.)  These were quickly rebuilt.
+> 
+> While this may be true, in Debian we require that such packages express this
+> relation. I understand that that's what we achieve with the proposal of
+> Andreas. "Just rebuilding" is often the wrong solution (in Debian) if it
+> doesn't express the relation properly.
+
+Fully ACK.
+ 
+> > So let me know what you think.  If the release team thinks we must rebuild
+> > across 1100 r-* packages (of which likely 400-500 are Architecture: any)
+> > then I will of course work with you.
+> 
+> I recognize that at this moment we might not need it to straighten things
+> out, because of all the new version uploads, but I believe it's the right
+> solution for the future, as this seems to be a recurring topic.
+
+IMHO its not a solved case.  The R pkg team is creating a list of packages
+that are not up to date and a list of bugs which you can see in the second
+table of [1].  This page lists
+
+$ grep serious outdated_r-packages.txt | grep -c 4.3.1 
+45
+
+serious bugs that are all caused by the non-transition while we should
+have done one.  That's pretty annoying for the people who need to do the
+work (in this case basically me).
+
+I would really welcome if we do it the right way even now, specifically
+since there is a patch for bug #1040038 that implements a solution that
+should help for now and in future.
+
+Kind regards
+     Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/outdated_r-packages.txt
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Mon Jul  3 17:24:19 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Mon, 3 Jul 2023 17:24:19 +0000
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <ZKHWepodOvnCyqhH@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <25760.15482.532156.210106@rob.eddelbuettel.com> <c778bddd-1d5a-96f2-99b0-462d898946ce@debian.org> <ZKHWepodOvnCyqhH@an3as.eu>
+Message-ID: <CAM8zJQumP4qPPX8gpiauaZG0QOq2u3FwQxKOmLC7L+LdMQ8T-A@mail.gmail.com>
+
+Hi Andreas
+
+On Sun, 2 Jul 2023 at 19:57, Andreas Tille <tille at debian.org> wrote:
+> 45
+>
+> serious bugs that are all caused by the non-transition while we should
+> have done one.  That's pretty annoying for the people who need to do the
+> work (in this case basically me).
+
+IMHO, those autopkgtests regression bugs are useful.  At least
+#1039651 (in r-cran-gnm) and #1039653 (in r-cran-irkernel) appear
+unrelated to the R_GE_version issue.
+
+In addition, r-cran-bookdown [1] appears to break r-cran-flextable's
+autopkgtests and r-cran-checkmate [2] fails its own autopkgtests on
+armel, armhf and i386.  These do not have bugs filed yet.
+
+Regards
+Graham
+
+[1] https://tracker.debian.org/pkg/r-cran-bookdown
+[2] https://tracker.debian.org/pkg/r-cran-checkmate
+
+From tille at debian.org  Mon Jul  3 19:49:41 2023
+From: tille at debian.org (Andreas Tille)
+Date: Mon, 3 Jul 2023 21:49:41 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <CAM8zJQumP4qPPX8gpiauaZG0QOq2u3FwQxKOmLC7L+LdMQ8T-A@mail.gmail.com>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <25760.15482.532156.210106@rob.eddelbuettel.com> <c778bddd-1d5a-96f2-99b0-462d898946ce@debian.org> <ZKHWepodOvnCyqhH@an3as.eu> <CAM8zJQumP4qPPX8gpiauaZG0QOq2u3FwQxKOmLC7L+LdMQ8T-A@mail.gmail.com>
+Message-ID: <ZKMmVQmH501+Y65H@an3as.eu>
+
+Hi Graham,
+
+Am Mon, Jul 03, 2023 at 05:24:19PM +0000 schrieb Graham Inggs:
+> On Sun, 2 Jul 2023 at 19:57, Andreas Tille <tille at debian.org> wrote:
+> > 45
+> >
+> > serious bugs that are all caused by the non-transition while we should
+> > have done one.  That's pretty annoying for the people who need to do the
+> > work (in this case basically me).
+> 
+> IMHO, those autopkgtests regression bugs are useful.  At least
+> #1039651 (in r-cran-gnm) and #1039653 (in r-cran-irkernel) appear
+> unrelated to the R_GE_version issue.
+
+Thank you for your uploads with fixes.
+ 
+> In addition, r-cran-bookdown [1] appears to break r-cran-flextable's
+> autopkgtests and r-cran-checkmate [2] fails its own autopkgtests on
+> armel, armhf and i386.  These do not have bugs filed yet.
+
+I can imagine that there might be further bugs that are not filed yet.
+But that's not my point.  I think if we would do a proper transition we
+can solve those issues caused by R_GE_version in one rush.  All
+remaining things can be done manually if needed.
+
+I really wish we could make any progress in this direction.
+
+Kind regards
+     Andreas.
+ 
+> [1] https://tracker.debian.org/pkg/r-cran-bookdown
+> [2] https://tracker.debian.org/pkg/r-cran-checkmate
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Jul  4 14:52:46 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 4 Jul 2023 16:52:46 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <31294c4a3355651fb431e4506d8d3ce7e935b479.camel@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <db1985b6-3b51-c0f0-4e44-929cba9154c2@debian.org> <ZKARx2ZgMzEPewp7@an3as.eu> <ZKAcIKe84UIp0BNo@an3as.eu> <31294c4a3355651fb431e4506d8d3ce7e935b479.camel@debian.org>
+Message-ID: <ZKQyPiDi+z+PFT0m@an3as.eu>
+
+Hi Paul,
+
+Am Sun, Jul 02, 2023 at 10:54:03AM +0800 schrieb Paul Wise:
+>    $ objdump -T debian/*/usr/lib/R/site-library/*/libs/*.so | grep R_GE_checkVersionOrDie
+>    0000000000000000      DF *UND*       0000000000000000  Base        R_GE_checkVersionOrDie
+
+Thanks for the hint.  Its implemented as suggested as per
+
+   https://salsa.debian.org/r-pkg-team/dh-r/-/commit/7ad36007e575a4ec28c673ad1eae57e93ad5189e
+
+I would love to merge this with master and release a new dh-r once
+r-base exports the graphics ABI.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Jul  5 15:49:50 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 5 Jul 2023 17:49:50 +0200
+Subject: Re: transition: r-base
+Message-ID: <ZKWRHiVPEupGL/ig@an3as.eu>
+
+Hi,
+
+the just uploaded r-base 4.3.1-2 implements r-graphics-engine-* which is
+respected by dh-r 20230705 (also just uploaded).  It would be great if
+you could setup transition tracker.
+
+Am I understanding things correctly that I can now start uploading those
+r-cran-* packages featuring bugs
+   autopkgtest failure with r-base (4.3.1-1)
+even if the tracker is not yet setup?
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Wed Jul  5 16:07:12 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 5 Jul 2023 16:07:12 +0000
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <ZKWRHiVPEupGL/ig@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu>
+Message-ID: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com>
+
+Hi Andreas
+
+On Wed, 5 Jul 2023 at 15:51, Andreas Tille <andreas at an3as.eu> wrote:
+> the just uploaded r-base 4.3.1-2 implements r-graphics-engine-* which is
+> respected by dh-r 20230705 (also just uploaded).  It would be great if
+> you could setup transition tracker.
+
+I don't think it's possible to set up a tracker for this first
+"transition", as no packages currently depend on r-graphics-engine-*.
+
+> Am I understanding things correctly that I can now start uploading those
+> r-cran-* packages featuring bugs
+>    autopkgtest failure with r-base (4.3.1-1)
+> even if the tracker is not yet setup?
+
+Please wait until r-base and dh-r are built and in the installed state
+on all architectures.
+
+Regards
+Graham
+
+From tille at debian.org  Thu Jul  6 07:56:31 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 09:56:31 +0200
+Subject: Re: Bug#1040001: transition: r-base
+In-Reply-To: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com>
+Message-ID: <ZKZzr3i6qQJ87bxL@an3as.eu>
+
+Hi,
+
+Am Wed, Jul 05, 2023 at 04:07:12PM +0000 schrieb Graham Inggs:
+> I don't think it's possible to set up a tracker for this first
+> "transition", as no packages currently depend on r-graphics-engine-*.
+
+Right, this makes perfectly sense.
+ 
+> Please wait until r-base and dh-r are built and in the installed state
+> on all architectures.
+
+I've now re-uploaded all 6 packages that are known to be affected by the
+graphics ABI change (and verified that it is set properly).  I'll
+continue now closing the open bugs. 
+
+Kind regards
+    Andreas.
+
+PS: @Dirk I do not mind much whether I'm mentioned in changelogs for
+    patches[1] but if you might happen to blame me about doing things
+    wrong again please keep in mind that I sometimes do things right.
+    Thank you.
+
+[1] https://metadata.ftp-master.debian.org/changelogs//main/r/r-base/r-base_4.3.1-2_changelog
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu Jul  6 14:44:13 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 16:44:13 +0200
+Subject: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <ZKZzr3i6qQJ87bxL@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu>
+Message-ID: <ZKbTPTQWK5mN5AwP@an3as.eu>
+
+Hi again,
+
+Am Thu, Jul 06, 2023 at 09:56:31AM +0200 schrieb Andreas Tille:
+> 
+> I've now re-uploaded all 6 packages that are known to be affected by the
+> graphics ABI change (and verified that it is set properly).  I'll
+> continue now closing the open bugs. 
+
+After rebuilding quite some packages with
+
+   autopkgtest failure with r-base (4.3.1-1)
+
+it came to my mind (probably to late) that since we do not have any real
+transition those uploads will probably not help very much since these
+are not generated with dependencies that are conflicting with the
+versions in testing and thus the autopkgtests running against packages
+in testing will keep on failing.  Is there any chance to fix this via
+hinting by release team or should I rather add some "artificial" versioned
+Depends just to enable the whole set of r-cran-* packages to testing.
+
+I'm also wondering whether I should upload the old r-bioc-* packages to
+finally get the full R stack fit for testing before I'll start the
+next BioC transition.  Alternatively it would probably OK to remove all
+RC buggy r-bioc-* packages from testing since we need to upload new
+versions of these packages anyway in the pending BioC transition (I'll
+file an according bug report soon).
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Thu Jul  6 17:08:04 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 6 Jul 2023 19:08:04 +0200
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <ZKbTPTQWK5mN5AwP@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu>
+Message-ID: <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org>
+
+Hi Andreas,
+
+On 06-07-2023 16:44, Andreas Tille wrote:
+> Am Thu, Jul 06, 2023 at 09:56:31AM +0200 schrieb Andreas Tille:
+> Is there any chance to fix this via
+> hinting by release team or should I rather add some "artificial" versioned
+> Depends just to enable the whole set of r-cran-* packages to testing.
+
+Yes, we'll take care of that where it looks sane to do so (examples of 
+that are r-cran-epi); I'll manually schedule the "combined" tests, such 
+that they disappear from the excuses if they then pass.
+
+> Alternatively it would probably OK to remove all
+> RC buggy r-bioc-* packages from testing since we need to upload new
+> versions of these packages anyway in the pending BioC transition (I'll
+> file an according bug report soon).
+
+If you're OK to temporarily remove r-bioc-*, than I think it's the 
+fastest and easiest way out, albeit not the prettiest.
+
+Please all involved, hold any uploads in the r-* world until we get 
+r-base migrated unless it's needed (and we acked it).
+
+Paul
+
+PS: in a private discussion I had today, we noticed that r-* packages 
+often (always?) have a dependency on r-base-core with a lower limited 
+version equal to the r-base-core that was used during the build. With 
+the appropriate API in Provides of r-base-core, this should no longer be 
+necessary and ease migrations in the future. We should probably file a 
+bug against dh-r (I guess) to fix that dependency. Or did we conclude 
+that wrong?
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From elbrus at debian.org  Thu Jul  6 18:28:45 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Thu, 6 Jul 2023 20:28:45 +0200
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org>
+Message-ID: <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org>
+
+Hi,
+
+On 06-07-2023 19:08, Paul Gevers wrote:
+> Yes, we'll take care of that where it looks sane to do so (examples of
+> that are r-cran-epi); I'll manually schedule the "combined" tests, such
+> that they disappear from the excuses if they then pass.
+
+I'm seeing in several tests where things seem to work when r-cran-tibble 
+from unstable is involved and fail if the version from unstable is used; 
+e.g. here: https://ci.debian.net/packages/r/r-cran-rsample/testing/amd64/
+
+Is there something special about r-cran-tibble? It didn't grow a 
+dependency on r-graphics-engine according to 
+https://buildd.debian.org/status/fetch.php?pkg=r-cran-tibble&arch=amd64&ver=3.2.1%2Bdfsg-2&stamp=1688629916&raw=0 
+so it doesn't seem to be involved in that part of the discussion.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From tille at debian.org  Thu Jul  6 19:02:14 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 21:02:14 +0200
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org>
+Message-ID: <ZKcPtr5t6MJlhjQx@an3as.eu>
+
+Hi Paul,
+
+Am Thu, Jul 06, 2023 at 07:08:04PM +0200 schrieb Paul Gevers:
+> Yes, we'll take care of that where it looks sane to do so (examples of that
+> are r-cran-epi); I'll manually schedule the "combined" tests, such that they
+> disappear from the excuses if they then pass.
+
+OK.  Thanks a lot for this service.  Do you think the remaining serious
+tests are blockers?  Should these be closed manually?
+ 
+> > Alternatively it would probably OK to remove all
+> > RC buggy r-bioc-* packages from testing since we need to upload new
+> > versions of these packages anyway in the pending BioC transition (I'll
+> > file an according bug report soon).
+> 
+> If you're OK to temporarily remove r-bioc-*, than I think it's the fastest
+> and easiest way out, albeit not the prettiest.
+
+For sure it is not pretty, but since once week I'm fighting to non-pretty
+things and I'm really happy about fast and easy solutions. ;-)
+I have just filed a transition bug for r-bioc-* where we can discuss
+issues belonging to this transition.
+ 
+> Please all involved, hold any uploads in the r-* world until we get r-base
+> migrated unless it's needed (and we acked it).
+
+OK, I'll refrain from any upload of r-* packages (I'll answer your other
+mail about r-cran-tibble separately).
+ 
+> Paul
+> 
+> PS: in a private discussion I had today, we noticed that r-* packages often
+> (always?) have a dependency on r-base-core with a lower limited version
+> equal to the r-base-core that was used during the build. With the
+> appropriate API in Provides of r-base-core, this should no longer be
+> necessary and ease migrations in the future.
+
+Could you please give some example to make sure I understand correctly?
+
+> We should probably file a bug
+> against dh-r (I guess) to fix that dependency. Or did we conclude that
+> wrong?
+
+I'm not sure so please explain in more detail.  dh-r was designed to put
+the lowest restriction regarding the versions.  I remember some
+discussion some time ago that Dirk thought we should put stronger
+restrictions (and he is sometimes adding version restrictions manually
+that are not helpful for backporting).  If I will be sure I understand
+your point exactly I can check the code and the relevant discussion.
+(Feel free to file a bug report about this and we can discuss it there
+if you think this makes more sense.)
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jul  6 19:03:31 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 7 Jul 2023 00:33:31 +0530
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org>
+Message-ID: <20230706190331.4qdi5cl7irpy75pb@office.mailbox.org>
+
+Hi Paul,
+
+On Thu, Jul 06, 2023 at 08:28:45PM +0200, Paul Gevers wrote:
+> On 06-07-2023 19:08, Paul Gevers wrote:
+> > Yes, we'll take care of that where it looks sane to do so (examples of
+> > that are r-cran-epi); I'll manually schedule the "combined" tests, such
+> > that they disappear from the excuses if they then pass.
+> 
+> I'm seeing in several tests where things seem to work when r-cran-tibble
+> from unstable is involved and fail if the version from unstable is used;
+> e.g. here: https://ci.debian.net/packages/r/r-cran-rsample/testing/amd64/
+> 
+> Is there something special about r-cran-tibble? It didn't grow a dependency
+> on r-graphics-engine according to https://buildd.debian.org/status/fetch.php?pkg=r-cran-tibble&arch=amd64&ver=3.2.1%2Bdfsg-2&stamp=1688629916&raw=0
+> so it doesn't seem to be involved in that part of the discussion.
+
+I think we are hitting this issue here: https://github.com/tidyverse/dplyr/issues/6793
+The comment says "Looks like some package in the stack sets R_forceSymbols(dll, TRUE)" and that package is tibble
+
+| $ grep -rnw R_forceSymbols
+| src/init.c:19:  R_forceSymbols(dll, TRUE);
+
+Since you are building with R from unstable and tibble from testing
+(built with an older R), it chokes and works when both are new.
+This attribute has got something to do with R extensions' entry
+points / dll compatibilty, but I simply do not have enough background
+with r-core to comment beyond this point, I'm afraid.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sebastien at debian.org  Thu Jul  6 19:13:46 2023
+From: sebastien at debian.org (=?utf-8?q?S=C3=A9bastien_Villemot?=)
+Date: Thu, 06 Jul 2023 21:13:46 +0200
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <ZKcPtr5t6MJlhjQx@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu>
+Message-ID: <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org>
+
+Le jeudi 06 juillet 2023 à 21:02 +0200, Andreas Tille a écrit :
+> Am Thu, Jul 06, 2023 at 07:08:04PM +0200 schrieb Paul Gevers:
+> > PS: in a private discussion I had today, we noticed that r-* packages often
+> > (always?) have a dependency on r-base-core with a lower limited version
+> > equal to the r-base-core that was used during the build. With the
+> > appropriate API in Provides of r-base-core, this should no longer be
+> > necessary and ease migrations in the future.
+> 
+> Could you please give some example to make sure I understand correctly?
+> 
+> > We should probably file a bug
+> > against dh-r (I guess) to fix that dependency. Or did we conclude that
+> > wrong?
+> 
+> I'm not sure so please explain in more detail.  dh-r was designed to put
+> the lowest restriction regarding the versions.  I remember some
+> discussion some time ago that Dirk thought we should put stronger
+> restrictions (and he is sometimes adding version restrictions manually
+> that are not helpful for backporting).  If I will be sure I understand
+> your point exactly I can check the code and the relevant discussion.
+> (Feel free to file a bug report about this and we can discuss it there
+> if you think this makes more sense.)
+
+It comes from this line:
+https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L272
+
+More precisely the “r-base-core (>= $rbase_version)” part, which
+imposes an unnecessarily tight restriction on the r-base-core version.
+
+-- 
+⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot
+⣾⠁⢠⠒⠀⣿⡁  Debian Developer
+⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name
+⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From tille at debian.org  Thu Jul  6 19:18:32 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 21:18:32 +0200
+Subject: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org>
+Message-ID: <ZKcTiIPDm9SngbUG@an3as.eu>
+
+Hi,
+
+Am Thu, Jul 06, 2023 at 08:28:45PM +0200 schrieb Paul Gevers:
+> On 06-07-2023 19:08, Paul Gevers wrote:
+> > Yes, we'll take care of that where it looks sane to do so (examples of
+> > that are r-cran-epi); I'll manually schedule the "combined" tests, such
+> > that they disappear from the excuses if they then pass.
+> 
+> I'm seeing in several tests where things seem to work when r-cran-tibble
+                                                   ^^^^
+> from unstable is involved and fail if the version from unstable is used;
+       ^^^^^^^^                 ^^^^                     ^^^^^^^^
+
+Are you sure there is no typo in your sentence?  At least I fail to
+understand.  I assume the latter "unstable" should be "testing", right?
+
+> e.g. here: https://ci.debian.net/packages/r/r-cran-rsample/testing/amd64/
+
+I can only say that tibble is used by a lot of packages directly as
+dependency (69 in my locally stored repositories - may be some more).
+In addition there are further dependencies of higher order.
+ 
+> Is there something special about r-cran-tibble? It didn't grow a dependency
+> on r-graphics-engine according to https://buildd.debian.org/status/fetch.php?pkg=r-cran-tibble&arch=amd64&ver=3.2.1%2Bdfsg-2&stamp=1688629916&raw=0
+> so it doesn't seem to be involved in that part of the discussion.
+
+I confirm it shouldn't be involved into the r-graphics-engine issue.
+May be there is some other "hidden" transition needed which is connected
+to some interface of tibble?  Dirk, can you shed some light into this?
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Thu Jul  6 19:22:49 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 7 Jul 2023 00:52:49 +0530
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu> <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org>
+Message-ID: <20230706192249.ptk45xkgxyqpuxbi@office.mailbox.org>
+
+On Thu, Jul 06, 2023 at 09:13:46PM +0200, Sébastien Villemot wrote:
+> > I'm not sure so please explain in more detail.  dh-r was designed to put
+> > the lowest restriction regarding the versions.  I remember some
+> > discussion some time ago that Dirk thought we should put stronger
+> > restrictions (and he is sometimes adding version restrictions manually
+> > that are not helpful for backporting).  If I will be sure I understand
+> > your point exactly I can check the code and the relevant discussion.
+> > (Feel free to file a bug report about this and we can discuss it there
+> > if you think this makes more sense.)
+> 
+> It comes from this line:
+> https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L272
+> 
+> More precisely the “r-base-core (>= $rbase_version)” part, which
+> imposes an unnecessarily tight restriction on the r-base-core version.
+
+Andreas, if you remember, the code pointed out by Sébastien is
+the exact same reason we had to t-p-u r-cran-shiny during freeze, See
+
+	https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1035428#15
+	https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1035428#40
+	https://tracker.debian.org/news/1431956/accepted-r-cran-shiny-174dfsg-2deb12u1-source-into-testing-proposed-updates/
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From edd at debian.org  Thu Jul  6 19:24:57 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 6 Jul 2023 14:24:57 -0500
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <20230706190331.4qdi5cl7irpy75pb@office.mailbox.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <20230706190331.4qdi5cl7irpy75pb@office.mailbox.org>
+Message-ID: <25767.5385.617433.348199@rob.eddelbuettel.com>
+
+On 7 July 2023 at 00:33, Nilesh Patra wrote:
+| I think we are hitting this issue here: https://github.com/tidyverse/dplyr/issues/6793
+| The comment says "Looks like some package in the stack sets R_forceSymbols(dll, TRUE)" and that package is tibble
+| 
+| | $ grep -rnw R_forceSymbols
+| | src/init.c:19:  R_forceSymbols(dll, TRUE);
+
+That mechanism should not spill from one package to the next.
+
+What we have here is that (R) packages with compiled code can (optionally)
+declare in NAMESPACE whether or not 'symbols' (ie the entrypoints for the
+compiled code) should be a registered symbol (to R), or (as they used to be)
+strings.  That is then used in the first argument to .Call() as in eg
+.Call(myfunc) as opposed to .Call("myfunc").  It has small efficiency
+gains. Most packages do that now.
+
+Now, another (less frequently-used) option is in the intialization file run
+at package to also say R_forceSymbols in which case the second ("string")
+form is no longer allowed.  Few packages do that.
+
+So if tibble does this now, it should only affect tibble itself -- unless of
+course a dependent package calls directly into the native code of tibble
+(possible, but rare).
+
+So I sum in should not spill. I could be wrong but if there were general
+spillage it would affect all R use of compiled packages and it very clearly
+does not.  So in short, this force symbol resolution should only affect the
+symbols from the one shared (per-package) library it is set for.
+
+| Since you are building with R from unstable and tibble from testing
+| (built with an older R), it chokes and works when both are new.
+
+Not sure I agree. That should still work. Quick check in Docker (using the
+r-base image I maintain) shows it does:
+
+  root@f39da83dba5a:/# dpkg -l r-base-core r-cran-tibble | tail -2
+  ii  r-base-core    4.3.1-2      amd64        GNU R core of statistical computation and graphics system
+  ii  r-cran-tibble  3.1.8+dfsg-1 amd64        GNU R Simple Data Frames
+  root@f39da83dba5a:/# Rscript -e 'library(tibble); print(as_tibble(mtcars))'
+  # A tibble: 32 × 11
+       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+   1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+   2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+   3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+   4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+   5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+   6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+   7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+   8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+   9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+  10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+  # … with 22 more rows
+  root@f39da83dba5a:/# 
+
+It's simpy that testing has an older one and (esp in the tidyverse) things
+change quickly and packages want to be in consistent cohort.
+
+| This attribute has got something to do with R extensions' entry
+| points / dll compatibilty, but I simply do not have enough background
+| with r-core to comment beyond this point, I'm afraid.
+
+Hope the above helped a little.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From nilesh at debian.org  Thu Jul  6 20:02:41 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Fri, 7 Jul 2023 01:32:41 +0530
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <25767.5385.617433.348199@rob.eddelbuettel.com>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <20230706190331.4qdi5cl7irpy75pb@office.mailbox.org> <25767.5385.617433.348199@rob.eddelbuettel.com>
+Message-ID: <20230706200241.koaotzkteszefqp3@office.mailbox.org>
+
+On Thu, Jul 06, 2023 at 02:24:57PM -0500, Dirk Eddelbuettel wrote:
+> [...]
+
+I understood some of it (not completely, possibly because of lack of
+background with R extensions), but thanks a lot for taking the
+time to explain it to me!
+
+> So if tibble does this now, it should only affect tibble itself -- unless of
+> course a dependent package calls directly into the native code of tibble
+> (possible, but rare).
+
+I found some code in vctrs which do some tibble specific stuff, like
+
+	https://sources.debian.org/src/r-cran-vctrs/0.6.3-1/src/type-tibble.c/
+
+But I don't think there are calls for native code anywhere. No idea
+where this comes from, then.
+
+> | Since you are building with R from unstable and tibble from testing
+> | (built with an older R), it chokes and works when both are new.
+> 
+> Not sure I agree. That should still work. Quick check in Docker (using the
+> r-base image I maintain) shows it does:
+> <snip> 
+>   root@f39da83dba5a:/# dpkg -l r-base-core r-cran-tibble | tail -2
+
+Very weird. That means you're unable to repro the failure in
+
+	https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-rsample/35451568/log.gz
+
+Right? Would you have an idea on the github dplyr issue then? The log
+seems to be the same as we see in the CI
+
+	https://github.com/tidyverse/dplyr/issues/6793
+
+> It's simpy that testing has an older one and (esp in the tidyverse) things
+> change quickly and packages want to be in consistent cohort.
+
+But AFAICS, in both the scenarios (with and without failure) it is
+essentially running with the same version of tidyverse, so ideally
+pulling tibble from unstable and mixing it with an older tidyverse
+should break, right? (It's the opposite here and I'm quite confused).
+
+> | This attribute has got something to do with R extensions' entry
+> | points / dll compatibilty, but I simply do not have enough background
+> | with r-core to comment beyond this point, I'm afraid.
+> 
+> Hope the above helped a little.
+
+Yes, thanks again.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Thu Jul  6 20:09:10 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 22:09:10 +0200
+Subject: To strict version restrictions injected by dh-r (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu> <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org>
+Message-ID: <ZKcfZq92EquOQwz9@an3as.eu>
+
+Hi Sébastien,
+
+Am Thu, Jul 06, 2023 at 09:13:46PM +0200 schrieb Sébastien Villemot:
+> > I'm not sure so please explain in more detail.  dh-r was designed to put
+> > the lowest restriction regarding the versions.  I remember some
+> > discussion some time ago that Dirk thought we should put stronger
+> > restrictions (and he is sometimes adding version restrictions manually
+> > that are not helpful for backporting).  If I will be sure I understand
+> > your point exactly I can check the code and the relevant discussion.
+> > (Feel free to file a bug report about this and we can discuss it there
+> > if you think this makes more sense.)
+> 
+> It comes from this line:
+> https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L272
+> 
+> More precisely the “r-base-core (>= $rbase_version)” part, which
+> imposes an unnecessarily tight restriction on the r-base-core version.
+
+Got it, thanks for the explanation.  This restriction existed since the
+early stage of dh-r development
+
+   https://salsa.debian.org/r-pkg-team/dh-r/-/commit/22fd80b9#L174
+
+by Gordon Ball (in CC but not really active in R pkg team any more) at
+2016-09-04 12:28:57 +0200 .  I'm guessing this restriction was obtained
+from the cdbs helper that existed before the dh support was created by
+Gordon and he simply took over what existed there.  The according line
+in the initial commit of dh-r is
+
+   say $svs "R:Depends=r-base-core (>= $rversion), $rapiversion";
+
+which supports my thesis.  So I went back in history and found the
+discussion of bug #704805 where several people were finally able to
+convince Dirk that r-api is a good idea.
+
+In r-base changelog we find:
+
+r-base (3.2.0-3) unstable; urgency=low
+  
+  * debian/control: The r-base-core package now 'Provides: r-api-3' which
+    can be used to have r-cran-* depend on a particular API vintage.
+                                                        (Closes: #704805)
+    
+  * debiab/r-cran.mk: Have the build-time API vintage encoded as a Depends
+    (with thanks to Julian Gilbey, Charles Plessy, and others for the patch)
+
+  * debian/control: Set Standards-Version: to current version
+  
+ -- Dirk Eddelbuettel <edd at debian.org>  Mon, 11 May 2015 06:08:12 -0500
+
+which contains the change in /usr/share/R/debian/r-cran.mk
+
+@@ -96,7 +98,7 @@
+                dh_installdirs          $(debRdir)
+                 ##
+                 ## support ${R:Depends} via debian/${package}.substvars
+-               echo "R:Depends=r-base-core (>= ${rversion})" >> debian/$(package).substvars
++               echo "R:Depends=r-base-core (>= ${rversion}), ${rapiversion}" >> debian/$(package).substvars
+                 ##
+                 ## call R to install the sources we're looking at
+                 ## use this inside xvfb-run if this wrapper is installed
+
+between this file from r-base (3.2.0-2)
+
+So this seems a historic leftover to me probably since Dirk has the
+opinion that this version restriction is needed.
+
+I'd consider it sensible if you open a bug against dh-r where we can
+document the change you are suggesting.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Thu Jul  6 20:13:30 2023
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 6 Jul 2023 22:13:30 +0200
+Subject: Re: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing (Was: Bug#1040001: transition: r-base)
+In-Reply-To: <20230706192249.ptk45xkgxyqpuxbi@office.mailbox.org>
+References: <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu> <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org> <20230706192249.ptk45xkgxyqpuxbi@office.mailbox.org>
+Message-ID: <ZKcgalMdA+PyueZh@an3as.eu>
+
+Am Fri, Jul 07, 2023 at 12:52:49AM +0530 schrieb Nilesh Patra:
+> 
+> Andreas, if you remember, the code pointed out by Sébastien is
+> the exact same reason we had to t-p-u r-cran-shiny during freeze, See
+> 
+> 	https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1035428#15
+> 	https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1035428#40
+> 	https://tracker.debian.org/news/1431956/accepted-r-cran-shiny-174dfsg-2deb12u1-source-into-testing-proposed-updates/
+
+Nilesh, you somehow work like my "external memory".  I just answered the
+issue and IMHO Sébastian is correct but this line has a long history ...
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From sebastien at debian.org  Fri Jul  7 06:28:25 2023
+From: sebastien at debian.org (=?utf-8?q?S=C3=A9bastien_Villemot?=)
+Date: Fri, 07 Jul 2023 08:28:25 +0200
+Subject: Re: Bug#1040001: To strict version restrictions injected by dh-r (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <ZKcfZq92EquOQwz9@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu> <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org> <ZKcfZq92EquOQwz9@an3as.eu>
+Message-ID: <20ef018cddc10484d8158a4235c8056a166c2cbb.camel@debian.org>
+
+Le jeudi 06 juillet 2023 à 22:09 +0200, Andreas Tille a écrit :
+> Am Thu, Jul 06, 2023 at 09:13:46PM +0200 schrieb Sébastien Villemot:
+> > > I'm not sure so please explain in more detail.  dh-r was designed to put
+> > > the lowest restriction regarding the versions.  I remember some
+> > > discussion some time ago that Dirk thought we should put stronger
+> > > restrictions (and he is sometimes adding version restrictions manually
+> > > that are not helpful for backporting).  If I will be sure I understand
+> > > your point exactly I can check the code and the relevant discussion.
+> > > (Feel free to file a bug report about this and we can discuss it there
+> > > if you think this makes more sense.)
+> > 
+> > It comes from this line:
+> > https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L272
+> > 
+> > More precisely the “r-base-core (>= $rbase_version)” part, which
+> > imposes an unnecessarily tight restriction on the r-base-core version.
+> 
+> Got it, thanks for the explanation.
+[…]
+> I'd consider it sensible if you open a bug against dh-r where we can
+> document the change you are suggesting.
+
+Done in #1040515.
+
+-- 
+⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot
+⣾⠁⢠⠒⠀⣿⡁  Debian Developer
+⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name
+⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: This is a digitally signed message part
+
+From andreas at an3as.eu  Fri Jul  7 07:20:39 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 7 Jul 2023 09:20:39 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14>
+Message-ID: <ZKe8x3W6eQm36fmg@an3as.eu>
+
+Control: severity -1 wishlist
+
+Hi Christopher,
+
+thanks you for the suggestion to enhance routine-update.
+
+Am Thu, Jul 06, 2023 at 09:03:23PM +0100 schrieb Christopher Obbard:
+> routine-update adds a file under the path "debian/salsa-ci.yml".
+
+Yes, this is intended.
+ 
+> According to the salsa-ci-team[1], the default recommendation is to
+> set the pipeline URL in the project settings rather than to use a
+> standaline debian/salsa-ci.yml file.
+> 
+> Therefore, please remove the addition of this file and instead
+> please print a warning if this file exists for manual intervention to
+> change the pipeline to the recommended suggestion by the Salsa CI team.
+
+I confirm routine-update is going beyond the recommendation but in those
+teams where I'm working (in CC) we have this de-facto standard to use
+this file.  Before I change the behaviour of routine-update I would like
+to discuss this inside these teams and ask for opinions.
+
+That's why I also have set the severity of this bug to wishlist (not
+because I consider it of minor interest but rather to express that the
+behaviour which you want to be changed is perfectly intended but should
+be discussed here in this bug report).
+
+Kind regards
+    Andreas.
+ 
+> [1]: https://salsa.debian.org/salsa-ci-team/pipeline/#basic-use
+
+-- 
+http://fam-tille.de
+
+From jspricke at debian.org  Fri Jul  7 07:48:45 2023
+From: jspricke at debian.org (Jochen Sprickerhof)
+Date: Fri, 7 Jul 2023 09:48:45 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <ZKe8x3W6eQm36fmg@an3as.eu>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14> <ZKe8x3W6eQm36fmg@an3as.eu>
+Message-ID: <ZKfDXcm2Wv6cGJsg@vis.fritz.box>
+
+Hi Andreas,
+
+* Andreas Tille <andreas at an3as.eu> [2023-07-07 09:20]:
+> Am Thu, Jul 06, 2023 at 09:03:23PM +0100 schrieb Christopher Obbard:
+> > routine-update adds a file under the path "debian/salsa-ci.yml".
+>
+>
+> Yes, this is intended.
+>
+> > According to the salsa-ci-team[1], the default recommendation is to
+> > set the pipeline URL in the project settings rather than to use a
+> > standaline debian/salsa-ci.yml file.
+> >
+> > Therefore, please remove the addition of this file and instead
+> > please print a warning if this file exists for manual intervention to
+> > change the pipeline to the recommended suggestion by the Salsa CI team.
+>
+>
+> I confirm routine-update is going beyond the recommendation but in those
+> teams where I'm working (in CC) we have this de-facto standard to use
+> this file.  Before I change the behaviour of routine-update I would like
+> to discuss this inside these teams and ask for opinions.
+
+I don't think we have a de-facto standard on that file in 
+debian-science, at least I removed it from my packages a long time ago 
+already and I agree with Christopher that routine-update should do the 
+same. There is no benefit in having a file with the same content in 
+every repo and every Debian package if we can avoid it.
+
+Cheers Jochen
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Fri Jul  7 09:24:06 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 7 Jul 2023 11:24:06 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <ZKfDXcm2Wv6cGJsg@vis.fritz.box>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14> <ZKe8x3W6eQm36fmg@an3as.eu> <ZKfDXcm2Wv6cGJsg@vis.fritz.box>
+Message-ID: <ZKfZtnlPLeiREyoZ@an3as.eu>
+
+Hi Jochen,
+
+Am Fri, Jul 07, 2023 at 09:48:45AM +0200 schrieb Jochen Sprickerhof:
+> > I confirm routine-update is going beyond the recommendation but in those
+> > teams where I'm working (in CC) we have this de-facto standard to use
+> > this file.  Before I change the behaviour of routine-update I would like
+> > to discuss this inside these teams and ask for opinions.
+> 
+> I don't think we have a de-facto standard on that file in debian-science, at
+> least I removed it from my packages a long time ago already and I agree with
+> Christopher that routine-update should do the same. There is no benefit in
+> having a file with the same content in every repo and every Debian package
+> if we can avoid it.
+
+Thanks for your opinion about this.  What I mean with de facto standard:  We
+have about 2000 repositories configured to check debian/salsa-ci.yml.  I have
+not yet found a way to set the according field via gitlab API to something
+else.  If this is scriptable I'd happily remove debian/salsa-ci.yml.  For the
+moment I state two votes against salsa-ci.yml. ;-)
+
+Kind regards
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From bob.dybian at gmail.com  Fri Jul  7 09:32:21 2023
+From: bob.dybian at gmail.com (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 7 Jul 2023 11:32:21 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <ZKfZtnlPLeiREyoZ@an3as.eu>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14> <ZKe8x3W6eQm36fmg@an3as.eu> <ZKfDXcm2Wv6cGJsg@vis.fritz.box> <ZKfZtnlPLeiREyoZ@an3as.eu>
+Message-ID: <CA+6XHwRZy5S4dYP9p6cwnLX6_1nmB3nTqKQ+C8VnkU8TAkyyjA@mail.gmail.com>
+
+Hi Andreas,
+
+Le ven. 7 juil. 2023 à 11:24, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> Thanks for your opinion about this.  What I mean with de facto standard:  We
+> have about 2000 repositories configured to check debian/salsa-ci.yml.  I have
+> not yet found a way to set the according field via gitlab API to something
+> else.  If this is scriptable I'd happily remove debian/salsa-ci.yml.  For the
+> moment I state two votes against salsa-ci.yml. ;-)
+>
+
+We have a tool in Debian for that gitlab-rulez [1].
+I haven't tried it on salsa yet, but it should work as we use it with our
+gitlab instance.
+
+Best regards,
+Dylan
+
+[1] https://tracker.debian.org/pkg/gitlab-rulez
+
+From jspricke at debian.org  Fri Jul  7 10:04:29 2023
+From: jspricke at debian.org (Jochen Sprickerhof)
+Date: Fri, 7 Jul 2023 12:04:29 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <ZKfZtnlPLeiREyoZ@an3as.eu>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14> <ZKe8x3W6eQm36fmg@an3as.eu> <ZKfDXcm2Wv6cGJsg@vis.fritz.box> <ZKfZtnlPLeiREyoZ@an3as.eu>
+Message-ID: <ZKfjLe6/y9qzxap3@vis.fritz.box>
+
+* Andreas Tille <andreas at an3as.eu> [2023-07-07 11:24]:
+> Thanks for your opinion about this.  What I mean with de facto standard:  We
+> have about 2000 repositories configured to check debian/salsa-ci.yml.  I have
+> not yet found a way to set the according field via gitlab API to something
+> else.  If this is scriptable I'd happily remove debian/salsa-ci.yml.  For the
+> moment I state two votes against salsa-ci.yml. ;-)
+
+echo "SALSA_TOKEN=<token>" >> ~/.devscripts
+echo 'SALSA_CI_CONFIG_PATH="recipes/debian.yml@salsa-ci-team/pipeline"' >> ~/.devscripts
+sudo apt install devscripts
+salsa update_safe --group science-team --all
+
+Cheers Jochen
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From elbrus at debian.org  Sat Jul  8 20:35:17 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sat, 8 Jul 2023 22:35:17 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <ZKcTiIPDm9SngbUG@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu>
+Message-ID: <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org>
+
+Hi,
+
+On 06-07-2023 21:18, Andreas Tille wrote:
+> Am Thu, Jul 06, 2023 at 08:28:45PM +0200 schrieb Paul Gevers:
+> > On 06-07-2023 19:08, Paul Gevers wrote:
+> > I'm seeing in several tests where things seem to work when r-cran-tibble
+>
+>                                                     ^^^^
+> > from unstable is involved and fail if the version from unstable is used;
+>
+>         ^^^^^^^^                 ^^^^                     ^^^^^^^^
+>
+> Are you sure there is no typo in your sentence?  At least I fail to
+> understand.  I assume the latter "unstable" should be "testing", right?
+
+Indeed, I think the pattern is that if we test in testing, with r-cran 
+from unstable and r-cran-tibble from testing it fails, but with r-cran 
+from unstable and r-cran-tibble from unstable, it works.
+
+I'm working my through the list and the ppc64el ci workers have a bit 
+of backlog; we're getting somewhere, but I'm think I'm still also seeing 
+different failure modes than the graphics engine, tibble and dplyr.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From gordon at chronitis.net  Sat Jul  8 20:47:16 2023
+From: gordon at chronitis.net (Gordon Ball)
+Date: Sat, 8 Jul 2023 22:47:16 +0200
+Subject: Re: To strict version restrictions injected by dh-r (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <ZKcfZq92EquOQwz9@an3as.eu>
+References: <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKWRHiVPEupGL/ig@an3as.eu> <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <ZKcPtr5t6MJlhjQx@an3as.eu> <a7e45a6c1741e78b0022e799aac78472fc6fadb6.camel@debian.org> <ZKcfZq92EquOQwz9@an3as.eu>
+Message-ID: <668a16dd-048e-500a-1fc3-c6c6e9ae08e3@chronitis.net>
+
+Hi Andreas
+
+On 06/07/2023 22:09, Andreas Tille wrote:
+> > It comes from this line:
+> > https://salsa.debian.org/r-pkg-team/dh-r/-/blob/master/dh/R.pm#L272
+> >
+> > More precisely the “r-base-core (>= $rbase_version)” part, which
+> > imposes an unnecessarily tight restriction on the r-base-core version.
+>
+> Got it, thanks for the explanation.  This restriction existed since the
+> early stage of dh-r development
+>
+>     https://salsa.debian.org/r-pkg-team/dh-r/-/commit/22fd80b9#L174
+>
+> by Gordon Ball (in CC but not really active in R pkg team any more) at
+> 2016-09-04 12:28:57 +0200 .  I'm guessing this restriction was obtained
+> from the cdbs helper that existed before the dh support was created by
+> Gordon and he simply took over what existed there.  The according line
+> in the initial commit of dh-r is
+
+I'm pretty sure I cargo-culted it from the previous CDBS helper when 
+writing dh-r. I assumed it was meant to allow for non-backwards 
+compatible bytecode, but I'm not sure I investigated the exact semantics 
+it was meant to be enforcing. I concur that it sounds like the 
+`$rapiversion` dependency is probably sufficient.
+
+(Yes, I'm afraid I don't really have an ongoing interest in R - I used 
+it a lot in academia, but it hasn't really featured in professional life 
+since then).
+
+Gordon
+
+From tille at debian.org  Sun Jul  9 14:20:35 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sun, 9 Jul 2023 16:20:35 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org>
+Message-ID: <ZKrCM/DiwweiuUyL@an3as.eu>
+
+Am Sat, Jul 08, 2023 at 10:35:17PM +0200 schrieb Paul Gevers:
+> Indeed, I think the pattern is that if we test in testing, with r-cran from
+> unstable and r-cran-tibble from testing it fails, but with r-cran from
+> unstable and r-cran-tibble from unstable, it works.
+> 
+> I'm working my through the list and the ppc64el ci workers have a bit of
+> backlog; we're getting somewhere, but I'm think I'm still also seeing
+> different failure modes than the graphics engine, tibble and dplyr.
+
+I admit the only chance I personally see to clarify this question is to
+open an issue at the tibble git repository[1].  May be we also need
+something like an r-cran-tibble-api?
+
+Kind regards
+    Andreas.
+
+[1] https://github.com/tidyverse/tibble
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Sun Jul  9 15:40:14 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 9 Jul 2023 17:40:14 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <ZKrCM/DiwweiuUyL@an3as.eu>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu>
+Message-ID: <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org>
+
+Hi,
+
+On 09-07-2023 16:20, Andreas Tille wrote:
+> > I'm working my through the list and the ppc64el ci workers have a bit of
+> > backlog; we're getting somewhere, but I'm think I'm still also seeing
+> > different failure modes than the graphics engine, tibble and dplyr.
+>
+>
+> I admit the only chance I personally see to clarify this question is to
+> open an issue at the tibble git repository[1].  May be we also need
+> something like an r-cran-tibble-api?
+
+Did we already discuss that r-cran-ps also seems to be impacted by the 
+r-base change of the symbols thingy, as can be seen in r-cran-xopen [1]. 
+In unstable r-cran-xopen works. If I take r-cran-ps, r-cran-xopen and 
+r-base from unstable and test in testing, r-cran-xopen works. If I only 
+take r-base and r-cran-ps from unstable and test in testing, 
+r-cran-xopen works. Can somebody with R understanding confirm?
+
+ 33s Error in `not_null(.Call("psll_connections", p))`: DLL requires 
+the use of native symbols
+
+ 33s Backtrace:
+ 33s   1. testthat::test_that(...)
+ 33s        at test.R:4:0
+ 33s   2. testthat:::test_code(desc, code, env = parent.frame(), 
+reporter = reporter)
+
+ 33s   3. reporter$start_test(context = reporter$.context, test = test)
+ 33s   4. testthat:::o_apply(self$reporters, "start_test", context, test)
+ 33s   5. base::lapply(objects, f)
+ 33s   6. testthat (local) FUN(X[[i]], ...)
+ 33s   7. x$start_test(...)
+ 33s   8. ps::ps_connections(ps_handle())
+ 33s   9. ps:::psl_connections(p)
+ 33s  10. ps:::not_null(.Call("psll_connections", p))
+
+Same for r-cran-fnn, which impacts r-cran-uwof [2].
+
+I think what we should do is add a versioned Breaks in r-base on 
+<packages-involved-in:r-graphics-engine>, r-cran-ps, r-cran-tibble, 
+r-cran-dplyr, r-cran-fnn. I think that's the right thing to do for 
+bookworm to trixie upgrades (and current trixie to trixie with the new 
+r-base). Has anyone see other packages throwing that "DLL requires the 
+use of native symbols" error? I spotted the ones below [3, 4, 5, 6], but 
+I haven't identified which package brings in the issue. I first thought 
+it would be from the package itself, but for some (r-cran-spacetime and 
+r-cran-stars) their versions in unstable fail their own testsuite in 
+testing. Would it hint at the same problem for the packages, or just for 
+their tests? I suspect the former, then they should also need to be 
+added to the Breaks list.
+
+Paul
+
+[1] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-xopen/35575366/log.gz
+[2] 
+https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-uwot/35590669/log.gz
+[3] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-intervals/35575046/log.gz
+[4] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-maldiquant/35575320/log.gz
+[5] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-spacetime/35575371/log.gz
+[6] 
+https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-stars/35583884/log.gz
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Sun Jul  9 16:41:33 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 9 Jul 2023 11:41:33 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org>
+Message-ID: <25770.58173.289476.955957@rob.eddelbuettel.com>
+
+Paul,
+
+On 9 July 2023 at 17:40, Paul Gevers wrote:
+| Did we already discuss that r-cran-ps also seems to be impacted by the 
+| r-base change of the symbols thingy, as can be seen in r-cran-xopen [1].
+
+Correct me if I am wrong but the "symbols thingy" was not a change in R 4.2.*
+to R 4.3.*. It was a change by some packages opting into different behavior.
+
+| In unstable r-cran-xopen works. If I take r-cran-ps, r-cran-xopen and 
+| r-base from unstable and test in testing, r-cran-xopen works. If I only 
+| take r-base and r-cran-ps from unstable and test in testing, 
+| r-cran-xopen works. Can somebody with R understanding confirm?
+| 
+|   33s Error in `not_null(.Call("psll_connections", p))`: DLL requires 
+| the use of native symbols
+|   33s Backtrace:
+|   33s   1. testthat::test_that(...)
+|   33s        at test.R:4:0
+|   33s   2. testthat:::test_code(desc, code, env = parent.frame(), 
+| reporter = reporter)
+|   33s   3. reporter$start_test(context = reporter$.context, test = test)
+|   33s   4. testthat:::o_apply(self$reporters, "start_test", context, test)
+|   33s   5. base::lapply(objects, f)
+|   33s   6. testthat (local) FUN(X[[i]], ...)
+|   33s   7. x$start_test(...)
+|   33s   8. ps::ps_connections(ps_handle())
+|   33s   9. ps:::psl_connections(p)
+|   33s  10. ps:::not_null(.Call("psll_connections", p))
+
+Tis would be a bug in r-cran-ps and I think a Breaks may be warranted.  We
+are apparently between version 1.7.2 and 1.7.5 of package (r-cran-)ps but I
+see no smoking gun in https://github.com/r-lib/ps/blob/main/NEWS.md that
+would have caused this.
+
+Looking further, `git blame` indicates that the package had
+`registation=TRUE` for five years / all its existence, see line 2 here
+  https://github.com/r-lib/ps/blame/357f9c01f5db95b67ce9e230282391bc835afca4/R/ps.R
+
+It also used 'forceSymbols' for the same five years (lines 99 to 101 here
+  https://github.com/r-lib/ps/blame/357f9c01f5db95b67ce9e230282391bc835afca4/src/init.c
+
+So I think the issue here may not be coming from ps. I has not changed how it
+refers to its symbols.  Same R API, same usage.
+
+As the last entry here is into the (unexported) ps:::not_null we can look
+into it. It just indexes with map_lgl which is a local function (from R/utils)
+and calls psll_connection, a local compiled function in the package.  Given
+that ps always had 'native symbols', maybe testthat changed?
+
+However, it does not force symbols :-/  Lines 20 and 21 use the two required
+initialization but not the optional symbol forcing that eg ps has. 
+  https://github.com/r-lib/testthat/blob/main/src/init.c
+
+So I got nothing here. Cause is unclear to me.
+
+| Same for r-cran-fnn, which impacts r-cran-uwof [2].
+| 
+| I think what we should do is add a versioned Breaks in r-base on 
+| <packages-involved-in:r-graphics-engine>, r-cran-ps, r-cran-tibble, 
+| r-cran-dplyr, r-cran-fnn. I think that's the right thing to do for 
+
+I think it would be best to work out to corresponding package pairings and
+apply the Breaks to them. If we can.
+
+| bookworm to trixie upgrades (and current trixie to trixie with the new 
+| r-base). Has anyone see other packages throwing that "DLL requires the 
+| use of native symbols" error? I spotted the ones below [3, 4, 5, 6], but 
+| I haven't identified which package brings in the issue. I first thought 
+| it would be from the package itself, but for some (r-cran-spacetime and 
+| r-cran-stars) their versions in unstable fail their own testsuite in
+
+For spacetime and stars I suspect (based on past experience) possible
+interaction from the underlying graphics libraries.
+
+| testing. Would it hint at the same problem for the packages, or just for 
+| their tests? I suspect the former, then they should also need to be 
+| added to the Breaks list.
+| 
+| Paul
+| 
+| [1] 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-xopen/35575366/log.gz
+| [2] 
+| https://ci.debian.net/data/autopkgtest/testing/i386/r/r-cran-uwot/35590669/log.gz
+| [3] 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-intervals/35575046/log.gz
+| [4] 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-maldiquant/35575320/log.gz
+| [5] 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-spacetime/35575371/log.gz
+| [6] 
+| https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-stars/35583884/log.gz
+
+If I am not mistaken all of these were already in the Excuses list before we
+made addition of the r-graphics-engine-* tag (which was taken care of for R
+4.3.* already, having it may help if another change happens like that).
+
+So it short, the vast majority of R packages is now fine.  A persistent
+subset is not under the testing regime of autopkgtest.  Unfortunately I find
+the reports a little hard to read and am hence not very efficient at
+pinpointing underlying causes. Above you pointed eg at [2] for uwot, I see no
+error in there :-/
+
+Obviously, I too want my package r-base in testing and I will help. But I
+feel that pinning a large Breaks list on it seems a little inefficient /
+unfair if the package was not causing the change. We can do if there is (as
+we r-graphics-engine-*) an overwhelming feel "that we must".  
+
+I hope some of this helped. I am sorry I cannot help much further, and I am
+equally sorry my package is held up in the middle of this -- a "cost" of
+having a mildly popular package I suppose.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Sun Jul  9 16:50:29 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 9 Jul 2023 11:50:29 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25770.58173.289476.955957@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com>
+Message-ID: <25770.58709.964135.245053@rob.eddelbuettel.com>
+
+On 9 July 2023 at 11:41, Dirk Eddelbuettel wrote:
+| For spacetime and stars I suspect (based on past experience) possible
+| interaction from the underlying graphics libraries.
+
+Absent-minded typing error: "geospatial", of course. Not "graphics". 
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Sun Jul  9 18:11:59 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 9 Jul 2023 20:11:59 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25770.58173.289476.955957@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com>
+Message-ID: <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org>
+
+Hi Dirk,
+
+Thanks.
+
+On 09-07-2023 18:41, Dirk Eddelbuettel wrote:
+> On 9 July 2023 at 17:40, Paul Gevers wrote:
+> | Did we already discuss that r-cran-ps also seems to be impacted by the
+> | r-base change of the symbols thingy, as can be seen in r-cran-xopen [1].
+>
+> Correct me if I am wrong but the "symbols thingy" was not a change in R 4.2.*
+> to R 4.3.*. It was a change by some packages opting into different behavior.
+
+I don't understand this then. For several packages we're seeing failures 
+in testing even if we only use r-base from unstable and everything else 
+from testing to run the test. They pass with a rebuild r-cran-fnn and/or 
+a rebuild and updated r-cran-ps, and/or r-cran-tibble. (Sorry, in my 
+previous message I think I added r-cran-dplyr by mistake, misremembered).
+
+> |   33s  10. ps:::not_null(.Call("psll_connections", p))
+>
+> Tis would be a bug in r-cran-ps and I think a Breaks may be warranted.
+
+Ok, let's remember this.
+
+> Given
+> that ps always had 'native symbols', maybe testthat changed?
+
+But I think (I would need to check for the autopkgtest fallback) in none 
+of the tests, the version of testthat in testing changed between passing 
+and failing tests. Would testthat embed something during the build of 
+the binaries (from the name, I would assume not)?
+
+> | Same for r-cran-fnn, which impacts r-cran-uwof [2].
+> |
+> | I think what we should do is add a versioned Breaks in r-base on
+> | <packages-involved-in:r-graphics-engine>, r-cran-ps, r-cran-tibble,
+> | r-cran-dplyr, r-cran-fnn. I think that's the right thing to do for
+>
+> I think it would be best to work out to corresponding package pairings and
+> apply the Breaks to them. If we can.
+
+Sure, lets add the Breaks to the place where it belongs.
+
+> For spacetime and stars I suspect (based on past experience) possible
+> interaction from the underlying graphics libraries.
+
+Good to hear, didn't check yet, but will shortly (geospatial).
+
+> If I am not mistaken all of these were already in the Excuses list before we
+> made addition of the r-graphics-engine-* tag (which was taken care of for R
+> 4.3.* already, having it may help if another change happens like that).
+
+Sure, I'd hope the r-graphics-engine-* Provides only reduced issue, so 
+I'm currently considering them to be different. But I might be proven 
+wrong easily.
+
+> Unfortunately I find
+> the reports a little hard to read and am hence not very efficient at
+> pinpointing underlying causes. Above you pointed eg at [2] for uwot, I see no
+> error in there :-/
+
+Well, that log has two tests. The first second one passes, the first one 
+has:
+
+ 51s > library(testthat)
+ 51s > library(uwot)
+ 51s Loading required package: Matrix
+ 53s >
+ 53s > test_check("uwot")
+ 53s Error in FNN::get.knn(X, k) : DLL requires the use of native symbols
+ 53s Calls: test_check ... eval -> create_data -> find_nn -> FNN_nn -> 
+<Anonymous>
+
+ 53s Execution halted
+
+> Obviously, I too want my package r-base in testing and I will help. But I
+> feel that pinning a large Breaks list on it seems a little inefficient /
+> unfair if the package was not causing the change. We can do if there is (as
+> we r-graphics-engine-*) an overwhelming feel "that we must".
+
+I want the Breaks in the right location. If we locate a more logical 
+location than r-base, that's where it should go. At least the packages 
+involved in the r-graphics-engine would do nice, as it's really the 
+change in r-base that broke them (will not be needed anymore after the 
+release of trixie as now we have the Provides): r-cran-cairo, 
+r-cran-magick, r-cran-ragg, r-cran-svglite, r-cran-tikzdevice and 
+r-cran-vdiffr.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Sun Jul  9 19:09:52 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 9 Jul 2023 14:09:52 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org>
+Message-ID: <25771.1536.908239.439432@rob.eddelbuettel.com>
+
+Hi Paul,
+
+On 9 July 2023 at 20:11, Paul Gevers wrote:
+| On 09-07-2023 18:41, Dirk Eddelbuettel wrote:
+| > On 9 July 2023 at 17:40, Paul Gevers wrote:
+| > | Did we already discuss that r-cran-ps also seems to be impacted by the
+| > | r-base change of the symbols thingy, as can be seen in r-cran-xopen [1].
+| > 
+| > Correct me if I am wrong but the "symbols thingy" was not a change in R 4.2.*
+| > to R 4.3.*. It was a change by some packages opting into different behavior.
+| 
+| I don't understand this then. For several packages we're seeing failures 
+| in testing even if we only use r-base from unstable and everything else 
+| from testing to run the test. They pass with a rebuild r-cran-fnn and/or 
+| a rebuild and updated r-cran-ps, and/or r-cran-tibble. (Sorry, in my 
+| previous message I think I added r-cran-dplyr by mistake, misremembered).
+
+It would be useful to break this down into concrete reproducible examples.
+
+| > |   33s  10. ps:::not_null(.Call("psll_connections", p))
+| > 
+| > Tis would be a bug in r-cran-ps and I think a Breaks may be warranted.
+| 
+| Ok, let's remember this.
+| 
+| > Given
+| > that ps always had 'native symbols', maybe testthat changed?
+| 
+| But I think (I would need to check for the autopkgtest fallback) in none 
+| of the tests, the version of testthat in testing changed between passing 
+| and failing tests. Would testthat embed something during the build of 
+| the binaries (from the name, I would assume not)?
+
+I don't think it would do anything _explicit_.
+
+I think what we are seeing is simply 'fragility from some packages with
+larger tails'. If you install 'testthat' (presumably just to run tests) you
+end up with with 30+ packages loaded (without considering Suggests:). It is
+similar with other 'tidyverse' packages (dplyr, tibble, vctrs, ...) are all
+part of that.
+ 
+| > | Same for r-cran-fnn, which impacts r-cran-uwof [2].
+
+I just looked at FNN, it is very narrow package at its core, it gets a bit of
+tail via the Suggests of chemometrics.
+
+| > | I think what we should do is add a versioned Breaks in r-base on
+| > | <packages-involved-in:r-graphics-engine>, r-cran-ps, r-cran-tibble,
+| > | r-cran-dplyr, r-cran-fnn. I think that's the right thing to do for
+| > 
+| > I think it would be best to work out to corresponding package pairings and
+| > apply the Breaks to them. If we can.
+| 
+| Sure, lets add the Breaks to the place where it belongs.
+| 
+| > For spacetime and stars I suspect (based on past experience) possible
+| > interaction from the underlying graphics libraries.
+| 
+| Good to hear, didn't check yet, but will shortly (geospatial).
+
+It's a complex block. spacetime is one of the older ones using 'sp' (and then
+'raster' via Suggests), 'stars' is newer using 'sf'. Sometimes these prefer /
+work better with a consistent rebuild.
+ 
+| > If I am not mistaken all of these were already in the Excuses list before we
+| > made addition of the r-graphics-engine-* tag (which was taken care of for R
+| > 4.3.* already, having it may help if another change happens like that).
+| 
+| Sure, I'd hope the r-graphics-engine-* Provides only reduced issue, so 
+| I'm currently considering them to be different. But I might be proven 
+| wrong easily.
+
+I don't think it had a net effect this.  The 
+| 
+| > Unfortunately I find
+| > the reports a little hard to read and am hence not very efficient at
+| > pinpointing underlying causes. Above you pointed eg at [2] for uwot, I see no
+| > error in there :-/
+| 
+| Well, that log has two tests. The first second one passes, the first one 
+| has:
+|   51s > library(testthat)
+|   51s > library(uwot)
+|   51s Loading required package: Matrix
+|   53s >
+|   53s > test_check("uwot")
+|   53s Error in FNN::get.knn(X, k) : DLL requires the use of native symbols
+|   53s Calls: test_check ... eval -> create_data -> find_nn -> FNN_nn -> 
+| <Anonymous>
+|   53s Execution halted
+
+But uwot itself does not force symbols:
+
+  https://github.com/jlmelville/uwot/blob/master/src/RcppExports.cpp#L228-L231
+
+and I mentioned, using just those two lines in common. So the forceSymbols
+comes from somewhere else.
+
+Ok, I rechecked.  R 4.3.0 has this
+
+    * Attempting to use a character string naming a foreign function
+      entry point in a foreign function call in a package will now
+      signal an error if the packages has called R_forceSymbols to
+      specify that symbols must be used.
+
+It used to _ignore_ the combinatation of calling R_forceSymbols _and_ use of
+non-symbols / quoted identifiers.  Now it errors: if you have R_forceSymbols
+each .Call() will require symbols (not strings).
+
+So this is where R 4.3.[01] will possibly break with some older packages.
+But the fix is simple because when R 4.3.0 came out all packages at CRAN
+complied. We need to have current packages that correspond to the R 4.3.0
+standard.
+
+(If one were super picky one could call this an ABI/API change and reason for
+forcing _all_ packages to be rebuild. I never advocated for that but I am
+getting tired of this process. But we need to throw that bomb at some point
+just say 'fsck it' and rebuild _all_ packages. Feels like overkill but so is
+wasting weeks on this.
+
+| > Obviously, I too want my package r-base in testing and I will help. But I
+| > feel that pinning a large Breaks list on it seems a little inefficient /
+| > unfair if the package was not causing the change. We can do if there is (as
+| > we r-graphics-engine-*) an overwhelming feel "that we must".
+| 
+| I want the Breaks in the right location. If we locate a more logical 
+| location than r-base, that's where it should go. At least the packages 
+| involved in the r-graphics-engine would do nice, as it's really the 
+| change in r-base that broke them (will not be needed anymore after the
+
+(Well, it didn't. It offers a higher API version and it gives packages a
+choice to die on that. The six identified package choose to call
+R_GE_checkVersionOrDie so they impose a run-time equality on the R engine
+they built with. My point is that the accept-vs-break comes from the package,
+not from R.)
+
+Dirk
+
+| release of trixie as now we have the Provides): r-cran-cairo, 
+| r-cran-magick, r-cran-ragg, r-cran-svglite, r-cran-tikzdevice and 
+| r-cran-vdiffr.
+| 
+| Paul
+| x[DELETED ATTACHMENT OpenPGP_signature, application/pgp-signature]
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Sun Jul  9 20:08:20 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 9 Jul 2023 22:08:20 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25771.1536.908239.439432@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com>
+Message-ID: <b37e2db9-214e-be89-14b0-e854048e2f44@debian.org>
+
+Hi,
+
+On 09-07-2023 21:09, Dirk Eddelbuettel wrote:
+> | I don't understand this then. For several packages we're seeing failures
+> | in testing even if we only use r-base from unstable and everything else
+> | from testing to run the test. They pass with a rebuild r-cran-fnn and/or
+> | a rebuild and updated r-cran-ps, and/or r-cran-tibble. (Sorry, in my
+> | previous message I think I added r-cran-dplyr by mistake, misremembered).
+>
+> It would be useful to break this down into concrete reproducible examples.
+
+Several in the set that I explicitly tested:
+r-cran-stars (needs r-cran-tibble and r-cran-interval)
+r-cran-spacetime (needs r-cran-interval)
+r-cran-uwot (needs r-cran-fnn)
+r-cran-xopen (needs r-cran-ps)
+
+> So this is where R 4.3.[01] will possibly break with some older packages.
+> But the fix is simple because when R 4.3.0 came out all packages at CRAN
+> complied. We need to have current packages that correspond to the R 4.3.0
+> standard.
+
+And Andreas already ensured (nearly) everything is rebuild by now, so 
+that part is done. To be clear, I think I understand it when you say 
+this is not caused by r-base, but rather by those packages that need 
+rebuilding with the new r-base. However, to ensure those packages are 
+upgraded alongside r-base, r-base needs to force that. And that's why 
+there is the Breaks.
+
+I think the list is now:
+r-cran-cairo (<= 1.6-0-1)
+r-cran-fnn (<= 1.1.3.1-1)
+r-cran-magick (<= 2.7.3+dfsg-3)
+r-cran-ps (<= 1.7.2-1)
+r-cran-ragg (<= 1.2.5-1)
+r-cran-svglite (<= 2.1.1-1)
+r-cran-tibble (<= 3.1.8+dfsg-1)
+r-cran-tikzdevice (<= 0.12.4-1)
+r-cran-vdiffr (<= 1.0.5-1)
+
+> they built with. My point is that the accept-vs-break comes from the package,
+> not from R.)
+
+Sure, but the package in testing and stable can't (easily) tell that 
+anymore in their relationships as they are already shipped, so packages 
+moving into testing should solve it. I think only r-base is in the 
+position to add the right Breaks.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Mon Jul 10 08:16:44 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 10 Jul 2023 10:16:44 +0200
+Subject: Re: Bug#1040500: routine-update: Don't create d/salsa-ci.yml file
+In-Reply-To: <ZKfjLe6/y9qzxap3@vis.fritz.box>
+References: <168867380379.270832.13567894573222399035.reportbug@obbardc-t14> <ZKe8x3W6eQm36fmg@an3as.eu> <ZKfDXcm2Wv6cGJsg@vis.fritz.box> <ZKfZtnlPLeiREyoZ@an3as.eu> <ZKfjLe6/y9qzxap3@vis.fritz.box>
+Message-ID: <ZKu+bFfZ42Fzjovx@an3as.eu>
+
+Hi Jochen,
+
+Am Fri, Jul 07, 2023 at 12:04:29PM +0200 schrieb Jochen Sprickerhof:
+> 
+> echo "SALSA_TOKEN=<token>" >> ~/.devscripts
+> echo 'SALSA_CI_CONFIG_PATH="recipes/debian.yml@salsa-ci-team/pipeline"' >> ~/.devscripts
+> sudo apt install devscripts
+> salsa update_safe --group science-team --all
+
+Thanks for this code.  The only problem is that the salsa command does
+not work for everybody - specifically not for me, despite I'm using the
+token which works for any other task on salsa (including creating new
+repositories, pushing etc.)  I simply get
+
+$ salsa update_safe --group science-team --all
+Error GETing https://salsa.debian.org/api/v4/groups/science-team?with_custom_attributes=0&with_projects=0 (HTTP 401): Unauthorized {"error":"invalid_token","error_description":"Toke... at /usr/share/perl5/Devscripts/Salsa.pm line 396.
+
+I would love to get this working for me but previous attempts to sort
+this out failed.  I know it works for a couple of other DDs.
+
+The other thing is the setting this for all might be slightly dangerous
+since we have a couple of configured debian/salsa-ci.yml files in Debian
+Med and Pkg R teams.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Mon Jul 10 20:06:09 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Mon, 10 Jul 2023 22:06:09 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25771.1536.908239.439432@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com>
+Message-ID: <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org>
+
+Hi Dirk,
+
+On 09-07-2023 21:09, Dirk Eddelbuettel wrote:
+> So this is where R 4.3.[01] will possibly break with some older packages.
+> But the fix is simple because when R 4.3.0 came out all packages at CRAN
+> complied. We need to have current packages that correspond to the R 4.3.0
+> standard.
+>
+> (If one were super picky one could call this an ABI/API change and reason for
+> forcing _all_ packages to be rebuild. I never advocated for that but I am
+> getting tired of this process. But we need to throw that bomb at some point
+> just say 'fsck it' and rebuild _all_ packages. Feels like overkill but so is
+> wasting weeks on this.
+
+Reading this a second time, I think your proposal is to acknowledge that 
+r-base sometimes introduces unanticipated changes, and if we want to be 
+on the safe side, we should rebuild everything when the minor version 
+bumps. I guess that's more or less (I'm not sure how different r is in 
+that respect) what other interpretation based languages like python, 
+ruby, php and perl are doing too. r-base already has a "handle" for 
+that: r-api-*. We *could* decide to just bump that on every minor bump 
+of r-base and that would mean a transition every time that happens 
+(mostly like those other languages except ruby, python and php also have 
+a "defaults" package to explicitly switch from one version to the next), 
+but at least our tools would help there. Apart from the potential 
+overkill, the major (current) drawback is that for arch:all binaries, we 
+still need source-full uploads as binNMU's don't work for them.
+
+Is that what you are proposing? (For next time maybe?)
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Tue Jul 11 00:43:37 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 10 Jul 2023 19:43:37 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org>
+Message-ID: <25772.42425.527488.881831@rob.eddelbuettel.com>
+
+Paul,
+
+Here is a case in point from looking at the current excluses list (which is
+by now indeed a little shorter).
+
+One package that jumps out is r-cran-maldiquant. We are at version 1.22, with
+Debian build 1.22-1.
+
+But one second at the CRAN site and the page for the package shows that it is
+upstream at 1.22.1, since March, with a sole entry in NEWS being
+
+  CHANGES IN MALDIquant VERSION 1.22.1 [2023-03-20]:
+  --------------------------------------------------
+
+  * Use symbols instead of names in `.Call` for faster lookup of C functions.
+
+So there it is.
+
+Someone simply didn't update our Debian package, so it lacks this change and
+fingers point at r-base when the fault, if there is one, is to let our
+package slip behind a compilation and code standard established at CRAN for
+the R 4.3.0 relese in April.
+
+I still have hopes that we can let technical excellence rule and not require
+blunt instruments such as forced recompilation.
+
+Because with slips like this, even forcing recompilation of over 1000+
+sources packages times 10+ architectures (for binary-any) will not help
+against stale code, and hence mismatched expectations in the language engine
+(r-base) and its client packages. 
+
+Best,  Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Tue Jul 11 00:51:33 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 10 Jul 2023 19:51:33 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25772.42425.527488.881831@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com>
+Message-ID: <25772.42901.459134.470401@rob.eddelbuettel.com>
+
+On 10 July 2023 at 19:43, Dirk Eddelbuettel wrote:
+| Someone simply didn't update our Debian package, so it lacks this change and
+| fingers point at r-base when the fault, if there is one, is to let our
+| package slip behind a compilation and code standard established at CRAN for
+| the R 4.3.0 relese in April.
+| 
+| I still have hopes that we can let technical excellence rule and not require
+| blunt instruments such as forced recompilation.
+| 
+| Because with slips like this, even forcing recompilation of over 1000+
+| sources packages times 10+ architectures (for binary-any) will not help
+| against stale code, and hence mismatched expectations in the language engine
+| (r-base) and its client packages. 
+
+I should have double-checked. 1.22.1-1 is in unstable, so that is good, and
+hence works with R 4.3.[01].  So what tripped me up is the (known, and
+expected, if "you know") failure in the (hence not all that informative)
+autopkgtest of trying R 4.3.1 with the outdated maldiquant 1.22 (not 1.22.1).
+
+I am not versed well-enough in the mechanics of release details. If the only
+way to get r-base into testing consists of having a Breaks for
+r-cran-maldiquant (<< 1.22.1) then I guess that is what we need to do.
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Tue Jul 11 18:36:17 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Tue, 11 Jul 2023 20:36:17 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25772.42425.527488.881831@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com>
+Message-ID: <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org>
+
+Hi Dirk,
+
+On 11-07-2023 02:43, Dirk Eddelbuettel wrote:
+> I still have hopes that we can let technical excellence rule and not require
+> blunt instruments such as forced recompilation.
+
+I'm totally on board for technical excellence, although I think we have 
+different things in mind when we say that.
+
+In Debian, with more QA than we ever had before, we're finding a class 
+of issues that often went unnoticed years ago. One of these things is 
+that partial upgrades can leave you in a bad state. So more and more we 
+see that packages "have to" add Breaks to tell apt that when you want to 
+upgrade package X, you also have to upgrade package Y if you happen to 
+have that installed. As package Y can not tell that, package X has to 
+add the Breaks on the broken version of Y. As an example, see the list 
+of Breaks in libc6 [1]. While partial upgrades aren't officially 
+supported, we rely on them nevertheless (even if only for QA (piuparts, 
+autopkgtest)), and as a Release Team member I consider that class of 
+fixes technical excellence: ensuring as best as we can that the user 
+that upgrades a package keeps a working system.
+
+While a rebuild of everything combined with bumping the "api" would 
+achieve that, I'm much more in favor of targeted Breaks, like we have 
+been discussing here. It's typically more work, but it's more correct.
+
+For the future, with the recent change in dh-r, r-base will be much less 
+impacted by this "problem" as the new uploads of reverse dependencies 
+can migrate *before* r-base, and hence this class of issues will 
+disappear once that happens (autopkgtest failures are retried after a 
+day). So unless somebody investigates the issues in time, the retry will 
+pass after the migration and the issue will no longer block r-base. I 
+can live with that, but I find it a shame nevertheless.
+
+So, what do you say: technical excellence and you add the Breaks? Or we 
+let this slip in? I prefer the former, I can live with the latter.
+
+Paul
+
+[1] https://tracker.debian.org/media/packages/g/glibc/control-2.37-5
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Wed Jul 12 14:02:52 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 12 Jul 2023 09:02:52 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org>
+Message-ID: <25774.45708.234602.948157@rob.eddelbuettel.com>
+
+Hi Paul,
+
+On 11 July 2023 at 20:36, Paul Gevers wrote:
+| On 11-07-2023 02:43, Dirk Eddelbuettel wrote:
+| I'm totally on board for technical excellence, although I think we have 
+| different things in mind when we say that.
+| 
+| In Debian, with more QA than we ever had before, we're finding a class 
+| of issues that often went unnoticed years ago. One of these things is
+
+Of course I am not against testing auto-upgrades. I imagine nobody is.
+
+What I am not happy about is that we fell into a hole we would not need to be
+in, ideally.  Please hear me out on this:
+
+ - R has an annual release cycle at the end of April
+ - During that cycle the 'next' release (in VCS) is referred to as r-devel.
+ - CRAN checks all packages at all uploads, as well as periodically, against
+   r-devel.
+ - When a change is needed because something would break once r-devel becomes
+   'r-release' they contact the package author and request the change, this
+   is a hard requirement and non-compliant package are thrown off CRAN. No
+ - breakage allowed!
+ - What I showed with maldiquant was that its upstream made the change in
+   March still well before the R 4.3.0 release requiring it
+ - So we could have (we had the freeze, more below) had the package which
+   would have passed both 'r-release' then and 'r-devel then' (which is
+   'r-release now') and everything would pass. Even under our tests.
+
+That is an ideal I would really like us to move towards with the CRAN
+packages in Debian. As CRAN makes it so easy for us to 'always build / build
+@HEAD' we really should take the fullest advantage of it.
+
+So I typically roll up my packages the day or week of a CRAN change. (And
+maintain 2 x 21k binaries off CRAN in r2u, but that is a different story.)
+As it happens, not everybody does, sometimes we have freezes, and other
+things happen. Also the number of CRAN packages increases of course and the
+net-net of that is that we then have to spend precious manual time picking up
+the pieces.
+
+Clearly not ideal, but better than having installation bugs.
+ 
+| that partial upgrades can leave you in a bad state. So more and more we 
+| see that packages "have to" add Breaks to tell apt that when you want to 
+| upgrade package X, you also have to upgrade package Y if you happen to 
+| have that installed. As package Y can not tell that, package X has to 
+| add the Breaks on the broken version of Y. As an example, see the list 
+| of Breaks in libc6 [1]. While partial upgrades aren't officially
+
+Thanks for that. An impressively long list!
+
+| supported, we rely on them nevertheless (even if only for QA (piuparts, 
+| autopkgtest)), and as a Release Team member I consider that class of 
+| fixes technical excellence: ensuring as best as we can that the user 
+| that upgrades a package keeps a working system.
+
+Yes.
+ 
+| While a rebuild of everything combined with bumping the "api" would 
+| achieve that, I'm much more in favor of targeted Breaks, like we have 
+| been discussing here. It's typically more work, but it's more correct.
+
+Fully agreed.
+
+| For the future, with the recent change in dh-r, r-base will be much less 
+| impacted by this "problem" as the new uploads of reverse dependencies 
+| can migrate *before* r-base, and hence this class of issues will
+
+I don't think so. The recent change helps with the (approximately a handful
+or two CRAN packages) setting the graphics engine check (out of a total of
+maybe 1300 CRAN/BioC packages at Debian leaving the many others unaffected).
+
+| disappear once that happens (autopkgtest failures are retried after a 
+| day). So unless somebody investigates the issues in time, the retry will
+
+We will get the same breakage next time will CRAN assumes (and ensures !!)
+everything is current at HEAD, we usually have slippage for various reasons
+so in practice I fear ... here we are and remain.
+
+| pass after the migration and the issue will no longer block r-base. I 
+| can live with that, but I find it a shame nevertheless.
+
+Yep. We should aim to have 'less shame, more technical excellence'. 
+ 
+| So, what do you say: technical excellence and you add the Breaks? Or we 
+| let this slip in? I prefer the former, I can live with the latter.
+
+I can add the Breaks as a 'best of the worse alternative'. And, I presume, I
+can remove the existing four-year breaks? [1]
+
+Cheers,  Dirk
+
+[1] 
+edd@rob:~/deb/r-base(master)$ git blame debian/control | grep -A24 Breaks
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  55) Breaks: r-bioc-graph (<< 1.62.0-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  56)         r-cran-bbmle (<< 1.0.20-5~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  57)         r-cran-biocmanager (<< 1.30.4+dfsg-2~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  58)         r-cran-caret (<< 6.0-84-2~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  59)         r-cran-cmprsk (<< 2.2-8-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  60)         r-cran-coin (<< 1.3-0-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  61)         r-cran-dendextend (<< 1.12.0+dfsg-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  62)         r-cran-fields (<< 9.8-3-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  63)         r-cran-filehash (<< 2.4-2-2~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  64)         r-cran-future (<< 1.14.0+dfsg-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  65)         r-cran-genetics (<< 1.3.8.1.2-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  66)         r-cran-haplo.stats (<< 1.7.9-4~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  67)         r-cran-igraph (<< 1.2.4.1-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  68)         r-cran-lava (<< 1.6.5-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  69)         r-cran-libcoin (<< 1.0-4-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  70)         r-cran-msm (<< 1.6.7-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  71)         r-cran-permute (<< 0.9-5-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  72)         r-cran-phangorn (<< 2.5.5-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  73)         r-cran-popepi (<< 0.4.7-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  74)         r-cran-recipes (<< 0.1.6-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  75)         r-cran-sp (<< 1:1.3-1-2~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  76)         r-cran-spam (<< 2.2-2-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  77)         r-cran-units (<< 0.6-3-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  78)         r-cran-vegan (<< 2.5-5+dfsg-1~),
+52de7d776d (Dirk Eddelbuettel 2019-08-08 19:11:55 -0500  79)         r-cran-zelig (<< 5.1.6.1-1~)
+edd@rob:~/deb/r-base(master)$ 
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Wed Jul 12 17:47:05 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 12 Jul 2023 19:47:05 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25774.45708.234602.948157@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com>
+Message-ID: <d361336a-4758-8f20-5cae-163807b88388@debian.org>
+
+Hi,
+
+On 12-07-2023 16:02, Dirk Eddelbuettel wrote:
+> I can add the Breaks as a 'best of the worse alternative'. And, I presume, I
+> can remove the existing four-year breaks? [1]
+
+Yes, you only need to carry the Breaks until in the next release. So 
+every Breaks that's present in the r-base package in bookworm can be 
+removed from the r-base package in unstable.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From edd at debian.org  Wed Jul 12 19:07:10 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 12 Jul 2023 14:07:10 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <d361336a-4758-8f20-5cae-163807b88388@debian.org>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org>
+Message-ID: <25774.63966.105862.782106@rob.eddelbuettel.com>
+
+Hi Paul,
+
+On 12 July 2023 at 19:47, Paul Gevers wrote:
+| On 12-07-2023 16:02, Dirk Eddelbuettel wrote:
+| > I can add the Breaks as a 'best of the worse alternative'. And, I presume, I
+| > can remove the existing four-year breaks? [1]
+| 
+| Yes, you only need to carry the Breaks until in the next release. So 
+| every Breaks that's present in the r-base package in bookworm can be 
+| removed from the r-base package in unstable.
+
+Good point and much less ugly then :)
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Thu Jul 13 11:14:30 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 13 Jul 2023 11:14:30 +0000
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25774.63966.105862.782106@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org> <25774.63966.105862.782106@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com>
+
+Hi Dirk
+
+On Wed, 12 Jul 2023 at 19:07, Dirk Eddelbuettel <edd at debian.org> wrote:
+> On 12 July 2023 at 19:47, Paul Gevers wrote:
+> | On 12-07-2023 16:02, Dirk Eddelbuettel wrote:
+> | > I can add the Breaks as a 'best of the worse alternative'. And, I presume, I
+> | > can remove the existing four-year breaks? [1]
+> |
+> | Yes, you only need to carry the Breaks until in the next release. So
+> | every Breaks that's present in the r-base package in bookworm can be
+> | removed from the r-base package in unstable.
+>
+> Good point and much less ugly then :)
+
+I'll prepare a patch dropping the old and adding the new Breaks.
+
+Regards
+Graham
+
+From edd at debian.org  Thu Jul 13 16:25:24 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 13 Jul 2023 11:25:24 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org> <25774.63966.105862.782106@rob.eddelbuettel.com> <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com>
+Message-ID: <25776.9588.832166.200341@rob.eddelbuettel.com>
+
+Hi Graham,
+
+On 13 July 2023 at 11:14, Graham Inggs wrote:
+| On Wed, 12 Jul 2023 at 19:07, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > On 12 July 2023 at 19:47, Paul Gevers wrote:
+| > | Yes, you only need to carry the Breaks until in the next release. So
+| > | every Breaks that's present in the r-base package in bookworm can be
+| > | removed from the r-base package in unstable.
+| >
+| > Good point and much less ugly then :)
+| 
+| I'll prepare a patch dropping the old and adding the new Breaks.
+
+Sounds good, and thanks for the assist! I should be able to provide a pretty
+quick turn-around.
+
+Onwards!
+
+Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Thu Jul 13 18:59:48 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Thu, 13 Jul 2023 18:59:48 +0000
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25776.9588.832166.200341@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org> <25774.63966.105862.782106@rob.eddelbuettel.com> <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com> <25776.9588.832166.200341@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsDSo_nzZJ0ni3PDckGEUKjp=5Vwc5ABUuZMsV=whCkOw@mail.gmail.com>
+
+Hi Dirk
+
+On Thu, 13 Jul 2023 at 16:25, Dirk Eddelbuettel <edd at debian.org> wrote:
+> Sounds good, and thanks for the assist! I should be able to provide a pretty
+> quick turn-around.
+
+I believe the attached patch should do the trick.  It's basically
+Paul's list from message #210, plus r-cran-interval and
+r-cran-maldiquant.  I've also used a << relationship against the
+versions in unstable, and appended a tilde at the end.  I believe this
+will work better for derivatives and make backports easier.
+
+Regards
+Graham
+--- a/debian/control
++++ b/debian/control
+@@ -52,31 +52,17 @@
+ Provides: r-api-4.0, r-graphics-engine-${graphicsengine:Version}
+ Recommends: r-recommended, r-base-dev, r-doc-html
+ Suggests: elpa-ess, r-doc-info | r-doc-pdf, r-mathlib, r-base-html
+-Breaks: r-bioc-graph (<< 1.62.0-1~),
+-        r-cran-bbmle (<< 1.0.20-5~),
+-        r-cran-biocmanager (<< 1.30.4+dfsg-2~),
+-        r-cran-caret (<< 6.0-84-2~),
+-        r-cran-cmprsk (<< 2.2-8-1~),
+-        r-cran-coin (<< 1.3-0-1~),
+-        r-cran-dendextend (<< 1.12.0+dfsg-1~),
+-        r-cran-fields (<< 9.8-3-1~),
+-        r-cran-filehash (<< 2.4-2-2~),
+-        r-cran-future (<< 1.14.0+dfsg-1~),
+-        r-cran-genetics (<< 1.3.8.1.2-1~),
+-        r-cran-haplo.stats (<< 1.7.9-4~),
+-        r-cran-igraph (<< 1.2.4.1-1~),
+-        r-cran-lava (<< 1.6.5-1~),
+-        r-cran-libcoin (<< 1.0-4-1~),
+-        r-cran-msm (<< 1.6.7-1~),
+-        r-cran-permute (<< 0.9-5-1~),
+-        r-cran-phangorn (<< 2.5.5-1~),
+-        r-cran-popepi (<< 0.4.7-1~),
+-        r-cran-recipes (<< 0.1.6-1~),
+-        r-cran-sp (<< 1:1.3-1-2~),
+-        r-cran-spam (<< 2.2-2-1~),
+-        r-cran-units (<< 0.6-3-1~),
+-        r-cran-vegan (<< 2.5-5+dfsg-1~),
+-        r-cran-zelig (<< 5.1.6.1-1~)
++Breaks: r-cran-cairo (<< 1.6-0-4~),
++        r-cran-intervals (<< 0.15.3-1~),
++        r-cran-fnn (<< 1.1.3.2-1~),
++        r-cran-magick (<< 2.7.4+dfsg-2~),
++        r-cran-maldiquant (<< 1.22.1-1~),
++        r-cran-ps (<< 1.7.5-1~),
++        r-cran-ragg (<< 1.2.5-3~),
++        r-cran-svglite (<< 2.1.1-3~),
++        r-cran-tibble (<< 3.2.1+dfsg-2~),
++        r-cran-tikzdevice (<< 0.12.4-3~),
++        r-cran-vdiffr (<< 1.0.5-3~)
+ Description: GNU R core of statistical computation and graphics system
+  R is a system for statistical computation and graphics.  It consists 
+  of a language plus a run-time environment with graphics, a debugger, 
+
+From edd at debian.org  Thu Jul 13 19:29:43 2023
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Thu, 13 Jul 2023 14:29:43 -0500
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <CAM8zJQsDSo_nzZJ0ni3PDckGEUKjp=5Vwc5ABUuZMsV=whCkOw@mail.gmail.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKZzr3i6qQJ87bxL@an3as.eu> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <ZKbTPTQWK5mN5AwP@an3as.eu> <7a25e1c8-cea2-b27d-f314-cadb99a6bf80@debian.org> <77bedf38-92e7-36b5-79e8-476509677b5f@debian.org> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org> <25774.63966.105862.782106@rob.eddelbuettel.com> <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com> <25776.9588.832166.200341@rob.eddelbuettel.com> <CAM8zJQsDSo_nzZJ0ni3PDckGEUKjp=5Vwc5ABUuZMsV=whCkOw@mail.gmail.com>
+Message-ID: <25776.20647.775045.43076@rob.eddelbuettel.com>
+
+Graham,
+
+On 13 July 2023 at 18:59, Graham Inggs wrote:
+| I believe the attached patch should do the trick.  It's basically
+| Paul's list from message #210, plus r-cran-interval and
+| r-cran-maldiquant.  I've also used a << relationship against the
+| versions in unstable, and appended a tilde at the end.  I believe this
+| will work better for derivatives and make backports easier.
+
+Almost done building, will upload shortly.
+
+Thanks, Dirk
+
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From elbrus at debian.org  Mon Jul 17 06:20:09 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Mon, 17 Jul 2023 08:20:09 +0200
+Subject: Re: Bug#1040001: Role of tibble? (Was: Bug#1040001: Seeking advise how to proceed with the transition / move R stack to testing)
+In-Reply-To: <25776.20647.775045.43076@rob.eddelbuettel.com>
+References: <CAM8zJQvXJ_Q1t4pcLyFGTPjd2roAwNUcmCNTy3rd=CWSXBhuUg@mail.gmail.com> <ZKcTiIPDm9SngbUG@an3as.eu> <cc671fd9-031d-cbf3-6159-c01cbeda8117@debian.org> <ZKrCM/DiwweiuUyL@an3as.eu> <474ef5df-17ff-d2d5-42ac-c2afbcbf10ca@debian.org> <25770.58173.289476.955957@rob.eddelbuettel.com> <347dff77-2ae3-5e3b-fa0e-76771da3d932@debian.org> <25771.1536.908239.439432@rob.eddelbuettel.com> <3d967226-33ed-ab7b-9e7b-304213d67e90@debian.org> <25772.42425.527488.881831@rob.eddelbuettel.com> <1d059ccf-93a3-e8c9-ef34-f30e4bfb5288@debian.org> <25774.45708.234602.948157@rob.eddelbuettel.com> <d361336a-4758-8f20-5cae-163807b88388@debian.org> <25774.63966.105862.782106@rob.eddelbuettel.com> <CAM8zJQsXqEqY5ZDepNU9bmi1nV1nBzTZ3vVHkuMrJV-OiUZ5HA@mail.gmail.com> <25776.9588.83216 6.200341@rob.eddelbuettel.com> <CAM8zJQsDSo_nzZJ0ni3PDckGEUKjp=5Vwc5ABUuZMsV=whCkOw@mail.gmail.com> <168815373117.2562305.8163323805634372692.reportbug@energija.fam-tille.de> <25776.20647.775045.43076@rob.eddelbuettel.com>
+Message-ID: <f33ca1a4-937e-cf2e-c1c9-37ccc5d77dff@debian.org>
+
+Hi,
+
+On 13-07-2023 21:29, Dirk Eddelbuettel wrote:
+> Almost done building, will upload shortly.
+
+And with a tiny bit of help, it migrated yesterday. Hence closing this bug.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Mon Jul 17 14:08:53 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 17 Jul 2023 16:08:53 +0200
+Subject: Fwd[: Bug#1040498: transition: r-bioc-biocgenerics
+Message-ID: <ZLVLdV8D9Gj3G77U@an3as.eu>
+
+Hi,
+
+the BioC transition can be started now.  I'm kind of offline-ish for a
+couple of hours today and a bit tired.  May be I'll start tomorrow.  For
+those who do not want to wait feel free to start with the first levels.
+
+We should coordinate at
+
+   https://matrix.to/#/#debian-med:matrix.org
+
+to avoid race conditions.
+
+Kind regards
+    Andreas.
+
+----- Weitergeleitete Nachricht von Paul Gevers <elbrus at debian.org> -----
+
+Date: Mon, 17 Jul 2023 09:13:55 +0200
+From: Paul Gevers <elbrus at debian.org>
+To: Andreas Tille <tille at debian.org>, 1040498 at bugs.debian.org
+Subject: Re: Bug#1040498: transition: r-bioc-biocgenerics
+
+Control: tags -1 confirmed
+
+Hi Andreas,
+
+On 06-07-2023 20:55, Andreas Tille wrote:
+> BioConductor has released version 3.17 when we were in Freeze.  Once we
+> have settled the r-base graphics API transition I would like to start the
+> BioConductor transition bumping r-api-bioc-3.16 to r-api-bioc-3.17.
+
+Please go ahead.
+
+Paul
+
+----- Ende weitergeleitete Nachricht -----
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Jul 17 14:25:04 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 17 Jul 2023 16:25:04 +0200
+Subject: Re: Fwd: Bug#1040498: transition: r-bioc-biocgenerics
+In-Reply-To: <ZLVLdV8D9Gj3G77U@an3as.eu>
+References: <ZLVLdV8D9Gj3G77U@an3as.eu>
+Message-ID: <ZLVPQGFEsomAZNjE@an3as.eu>
+
+Additional hint:
+
+The transition tracker is here
+
+   https://release.debian.org/transitions/html/r-api-bioc-3.17.html
+
+and I have just uploaded
+
+   r-bioc-biocgenerics_0.46.0-1
+
+with
+
+   Provides: r-api-bioc-3.17
+
+(Now I need some break for some hours ;-) - I'm back from 85km cycling
+tour.)
+
+Kind regards
+    Andreas.
+
+Am Mon, Jul 17, 2023 at 04:08:53PM +0200 schrieb Andreas Tille:
+> Hi,
+> 
+> the BioC transition can be started now.  I'm kind of offline-ish for a
+> couple of hours today and a bit tired.  May be I'll start tomorrow.  For
+> those who do not want to wait feel free to start with the first levels.
+> 
+> We should coordinate at
+> 
+>    https://matrix.to/#/#debian-med:matrix.org
+> 
+> to avoid race conditions.
+> 
+> Kind regards
+>     Andreas.
+> 
+> ----- Weitergeleitete Nachricht von Paul Gevers <elbrus at debian.org> -----
+> 
+> Date: Mon, 17 Jul 2023 09:13:55 +0200
+> From: Paul Gevers <elbrus at debian.org>
+> To: Andreas Tille <tille at debian.org>, 1040498 at bugs.debian.org
+> Subject: Re: Bug#1040498: transition: r-bioc-biocgenerics
+> 
+> Control: tags -1 confirmed
+> 
+> Hi Andreas,
+> 
+> On 06-07-2023 20:55, Andreas Tille wrote:
+> > BioConductor has released version 3.17 when we were in Freeze.  Once we
+> > have settled the r-base graphics API transition I would like to start the
+> > BioConductor transition bumping r-api-bioc-3.16 to r-api-bioc-3.17.
+> 
+> Please go ahead.
+> 
+> Paul
+> 
+> 
+> 
+> 
+> ----- Ende weitergeleitete Nachricht -----
+> 
+> -- 
+> http://fam-tille.de
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Jul 21 08:35:57 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 21 Jul 2023 10:35:57 +0200
+Subject: Help for Bioconductor transition needed: using Debian packaged libraries in r-bioc-rhdf5filters
+Message-ID: <ZLpDbTt0pZ66CGOZ@an3as.eu>
+
+Hi,
+
+I've just pushed r-bioc-rhdf5filters to salsa[1].  We are replacing code
+copies of several compression related libs by the Debian equivalents.
+Seems upstream added zstd and thus I added libzstd-dev to Build-Depends
+and tried to fix the according patch.  But it went more complex.  The
+issues are occuring when trying to build 
+
+    src/blosc
+
+where upstream provides in src/blosc/lib three versioned code copies
+
+    src/blosc/lib/blosc-1.20.1
+    src/blosc/lib/lz4-1.9.4
+    src/blosc/lib/snappy-1.1.1
+
+My first means was (not commited yet)
+
+diff --git a/debian/control b/debian/control
+index 1a28bdb..76b3258 100644
+--- a/debian/control
++++ b/debian/control
+@@ -15,6 +15,8 @@ Build-Depends: debhelper-compat (= 13),
+                libbz2-dev,
+                libblosc-dev,
+                libhdf5-dev,
++               liblz4-dev,
++               libsnappy-dev,
+                libzstd-dev
+ Testsuite: autopkgtest-pkg-r
+ 
+
+but further patching attempts did no good here.  The plain build log of
+the package in Salsa does not say much since the actual build error of R
+is suppressed.  You can see the real issue behind the failures when you
+do
+
+   R CMD INSTALL -l `pwd`/debian/r-bioc-rhdf5filters/usr/lib/R/site-library .
+
+For the moment I try to checkout other packages of the transition.  It
+would help if someone could have a look here.
+
+Kind regards
+    Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-rhdf5filters
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Jul 21 09:06:28 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 21 Jul 2023 11:06:28 +0200
+Subject: transition: r-bioc-biocgenerics - blocked by new package r-bioc-s4arrays
+Message-ID: <ZLpKlKc85iD0JIZ8@an3as.eu>
+
+Control: block -1 by 1041598
+
+Hi,
+
+it has turned out that there is a new dependency for the new version of
+package r-bioc-delayedarray.  The new package r-bioc-s4arrays is
+uploaded to new but I record the ITP bug here as a blocker to record
+that issue.
+
+Usually ftpmaster is helpful and quick in such situations.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at debian.org  Sat Jul 22 11:21:08 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sat, 22 Jul 2023 16:51:08 +0530
+Subject: Re: Help for Bioconductor transition needed: using Debian packaged libraries in r-bioc-rhdf5filters
+In-Reply-To: <ZLpDbTt0pZ66CGOZ@an3as.eu>
+References: <ZLpDbTt0pZ66CGOZ@an3as.eu>
+Message-ID: <20230722112108.pfmjqghpyuiitu46@office.mailbox.org>
+
+On Fri, Jul 21, 2023 at 10:35:57AM +0200, Andreas Tille wrote:
+> I've just pushed r-bioc-rhdf5filters to salsa[1].  We are replacing code
+> copies of several compression related libs by the Debian equivalents.
+> Seems upstream added zstd and thus I added libzstd-dev to Build-Depends
+> and tried to fix the according patch.  But it went more complex.  The
+> issues are occuring when trying to build 
+
+Pushed a fix to salsa please test before upload and please add my work
+to d/ch.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From elbrus at debian.org  Sat Jul 22 19:45:50 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sat, 22 Jul 2023 21:45:50 +0200
+Subject: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+Message-ID: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org>
+
+Source: lme4
+Version: 1.1-31-1
+Severity: serious
+Control: close -1 1.1-34-1
+X-Debbugs-CC: debian-r at lists.debian.org
+Tags: sid trixie
+User: release.debian.org at packages.debian.org
+Usertags: out-of-sync
+
+Dear maintainer(s),
+
+The Release Team considers packages that are out-of-sync between testing 
+and unstable for more than 30 days as having a Release Critical bug in 
+testing [1]. Your package src:lme4 has been trying to migrate for 32 
+days [2]. Hence, I am filing this bug.
+
+The version in unstable causes 3 autopkgtest failures when tested in 
+testing, all on i386. The failures are due to autopkgtest timeout after 
+2:47 h, while normally these tests run in minutes, so this suggests the 
+tests hang. In unstable, r-cran-afex and r-cran-mertools pass (so this 
+is probably a (set of) package(s) in unstable that also needs to migrate 
+together with lme4), but r-cran-mlmrev also times out in unstable.
+
+If a package is out of sync between unstable and testing for a longer 
+period, this usually means that bugs in the package in testing cannot be 
+fixed via unstable. Additionally, blocked packages can have impact on 
+other packages, which makes preparing for the release more difficult. 
+Finally, it often exposes issues with the package and/or
+its (reverse-)dependencies. We expect maintainers to fix issues that 
+hamper the migration of their package in a timely manner.
+
+This bug will trigger auto-removal when appropriate. As with all new 
+bugs, there will be at least 30 days before the package is auto-removed.
+
+I have immediately closed this bug with the version in unstable, so if 
+that version or a later version migrates, this bug will no longer affect 
+testing. I have also tagged this bug to only affect sid and trixie, so 
+it doesn't affect (old-)stable.
+
+If you believe your package is unable to migrate to testing due to 
+issues beyond your control, don't hesitate to contact the Release Team.
+
+Paul
+
+[1] https://lists.debian.org/debian-devel-announce/2023/06/msg00001.html
+[2] https://qa.debian.org/excuses.php?package=lme4
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From elbrus at debian.org  Sun Jul 23 07:55:02 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 23 Jul 2023 09:55:02 +0200
+Subject: Re: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+In-Reply-To: <25788.18097.336040.544443@rob.eddelbuettel.com>
+References: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org> <25788.18097.336040.544443@rob.eddelbuettel.com>
+Message-ID: <3d32eb93-854d-f6b5-3633-702c7f78ec34@debian.org>
+
+Hi Dirk,
+
+On 22-07-2023 23:14, Dirk Eddelbuettel wrote:
+> It could be an issue as simple as CRAN (and
+> upstream) no longer checking on i386 though it usually does not fail there.
+
+This is what I suspected, but it needs to be resolved in Debian by 
+somebody, somehow. lme4 is a key package, removing it from i386 isn't 
+going to be easy if at all possible. If you don't want to investigate 
+yourself, maybe contact the i386 porter (bunk) and ask his help. Another 
+option is to file bugs for your reverse dependencies if you believe they 
+are at fault. At least r-cran-mlmrev isn't a key package so with an RC 
+bug filed against it, it will be autoremoved in due time.
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at debian.org  Sun Jul 23 13:12:02 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sun, 23 Jul 2023 18:42:02 +0530
+Subject: Re: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+In-Reply-To: <25789.6605.664905.537073@rob.eddelbuettel.com>
+References: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org> <25788.18097.336040.544443@rob.eddelbuettel.com> <3d32eb93-854d-f6b5-3633-702c7f78ec34@debian.org> <25789.6605.664905.537073@rob.eddelbuettel.com>
+Message-ID: <20230723131202.w5gr2ouiohqfk6wb@office.mailbox.org>
+
+On Sun, 23 Jul 2023 07:15:09 -0500 Dirk Eddelbuettel <edd at debian.org> wrote
+> Is this is not an example of a release manager override? The affectect
+> packages all work together in unstable and could migrate.
+
+How do you conclude that?
+The versions of affected packages are same in unstable and testing. They
+fail in i386 with a newer version of lme4.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From ginggs at debian.org  Sun Jul 23 15:07:28 2023
+From: ginggs at debian.org (Graham Inggs)
+Date: Sun, 23 Jul 2023 15:07:28 +0000
+Subject: Re: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+In-Reply-To: <20230723131202.w5gr2ouiohqfk6wb@office.mailbox.org>
+References: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org> <25788.18097.336040.544443@rob.eddelbuettel.com> <3d32eb93-854d-f6b5-3633-702c7f78ec34@debian.org> <25789.6605.664905.537073@rob.eddelbuettel.com> <20230723131202.w5gr2ouiohqfk6wb@office.mailbox.org>
+Message-ID: <CAM8zJQsECpn-Gif32KXrzMAS7FE6u=_EMfYe97smLAZJ6EkOqA@mail.gmail.com>
+
+Hi
+
+On Sun, 23 Jul 2023 at 13:11, Nilesh Patra <nilesh at debian.org> wrote:
+> How do you conclude that?
+> The versions of affected packages are same in unstable and testing. They
+> fail in i386 with a newer version of lme4.
+
+For what it's worth, r-cran-afex[1] and r-cran-mertools[2] **are**
+passing in unstable.  So perhaps whatever package fixed this condition
+has been uploaded, but not yet migrated.
+
+Yet r-cran-mlmrev[3] still seems to have the timeout issue in unstable.
+
+Regards
+Graham
+
+[1] https://ci.debian.net/packages/r/r-cran-afex/unstable/i386/
+[2] https://ci.debian.net/packages/r/r-cran-mertools/unstable/i386/
+[3] https://ci.debian.net/packages/r/r-cran-mlmrev/unstable/i386/
+
+From elbrus at debian.org  Sun Jul 23 15:26:44 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 23 Jul 2023 17:26:44 +0200
+Subject: Re: Bug#1041738: src:lme4: fails to migrate to testing for too long: causes timeout in autopkgtests on i386
+In-Reply-To: <25789.12358.270024.487239@rob.eddelbuettel.com>
+References: <35ebdfa3-37ad-c943-c79f-6b27d85a8363@debian.org> <25788.18097.336040.544443@rob.eddelbuettel.com> <3d32eb93-854d-f6b5-3633-702c7f78ec34@debian.org> <25789.6605.664905.537073@rob.eddelbuettel.com> <20230723131202.w5gr2ouiohqfk6wb@office.mailbox.org> <25789.12358.270024.487239@rob.eddelbuettel.com>
+Message-ID: <1eee62a0-09b2-8a02-3d3e-94643dcc2ee9@debian.org>
+
+Hi,
+
+On 23-07-2023 15:51, Dirk Eddelbuettel wrote:
+> But if you all think we are better auto-removing lme4 over i386 fails _of
+> packages using it_ as opposed to fails in itself then I cannot stop you.
+
+As I mentioned already, we can't even do that easily because lme4 is 
+currently a key package, and key packages are not autoremoved [1].
+
+Paul
+
+[1] https://release.debian.org/key-packages.html
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From elbrus at debian.org  Wed Jul 26 15:29:39 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Wed, 26 Jul 2023 17:29:39 +0200
+Subject: The R ecosystem in Debian, versioned Depends and Breaks and autopkgtest
+Message-ID: <da5e1350-1e1c-9c10-9a21-a40c7a403651@debian.org>
+
+Hi R-Team,
+
+I was about to file the bug below, but after a second thought I realised 
+what I'm seeing seems to be a pattern that might be better to be 
+discussed outside of the BTS against the packages that trigger these 
+issues. It appears to me that CRAN doesn't document which older packages 
+break with certain uploads, something that's becoming more important in 
+Debian these days for packages involved in autopkgtesting. Three out of 
+4 packages I mention below aren't broken in unstable, so apparently 
+rmatrix (like recently lme4) can break packages in testing that with 
+*some other package* from unstable would pass. Likewise, I suspect that 
+there's an other package missing an update in unstable that would fix 
+the forth package. Are there ideas how to track these kind of versioned 
+dependencies (and/or Breaks) better (and more automated)?
+
+As a note, you probably know that I've been (semi-automated) filing a 
+lot of autopkgtest regression bugs and out-of-sync bugs in the last 
+couple of years. For the former class (autopkgtest regression) I had 
+been ignoring r-* packages because the situation already seemed messy to 
+me, but now with several out-of-sync issues in key packages, I feel that 
+I can no longer ignore that problem. So, this message is mostly to 
+trigger discussion about how to improve the r-* ecosystem in Debian with 
+respect to versioned dependencies and autopkgtest. Any comments or ideas?
+
+Paul
+
+Title: src:rmatrix: fails to migrate to testing for too long: triggers 
+autopkgtest failures
+
+Source: rmatrix
+Version: 1.5-3-1
+Severity: serious
+Control: close -1 1.6-0-1
+X-Debbugs-CC: debian-r at lists.debian.org
+Tags: sid trixie
+User: release.debian.org at packages.debian.org
+Usertags: out-of-sync
+Control: affects -1 src:r-cran-ggeffects src:r-cran-insight
+Control: affects -1 src:r-cran-performance src:r-cran-tmb
+
+Dear maintainer(s),
+
+The Release Team considers packages that are out-of-sync between testing 
+and unstable for more than 30 days as having a Release Critical bug in 
+testing [1]. Your package src:rmatrix has been trying to migrate for 31 
+days [2]. Hence, I am filing this bug. The version in unstable triggers 
+autopkgtest failures for r-cran-ggeffects (recently updated and passes 
+in unstable), r-cran-insight (passes in unstable), r-cran-performance 
+(recently updated and passes in unstable) and r-cran-tmb (new upstream 
+version available).
+
+If a package is out of sync between unstable and testing for a longer 
+period, this usually means that bugs in the package in testing cannot be 
+fixed via unstable. Additionally, blocked packages can have impact on 
+other packages, which makes preparing for the release more difficult. 
+Finally, it often exposes issues with the package and/or
+its (reverse-)dependencies. We expect maintainers to fix issues that 
+hamper the migration of their package in a timely manner.
+
+I have immediately closed this bug with the version in unstable, so if 
+that version or a later version migrates, this bug will no longer affect 
+testing. I have also tagged this bug to only affect sid and trixie, so 
+it doesn't affect (old-)stable.
+
+rmatrix is a key package, so this bug isn't going to affect the package. 
+I sincerely hope it will trigger appropriate actions.
+
+Paul
+
+[1] https://lists.debian.org/debian-devel-announce/2023/06/msg00001.html
+[2] https://qa.debian.org/excuses.php?package=rmatrix
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Thu Jul 27 12:22:06 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 27 Jul 2023 14:22:06 +0200
+Subject: Please give preference to this package (Was: r-bioc-densvis_1.10.2+dfsg-1_amd64.changes is NEW)
+In-Reply-To: <E1qOvnq-008Y9S-4N@fasolo.debian.org>
+References: <E1qOvnq-008Y9S-4N@fasolo.debian.org>
+Message-ID: <ZMJhbk4OhYSjHEdi@an3as.eu>
+
+Hi ftpmasters,
+
+this package is needed to complete the Transitions r-api-bioc-3.17[1]
+since it is a new dependency of package r-bioc-scater.
+
+Thanks a lot in advance for processing this package quickly
+    Andreas.
+
+[1] https://release.debian.org/transitions/html/r-api-bioc-3.17.html
+
+Am Thu, Jul 27, 2023 at 07:52:54AM +0000 schrieb Debian FTP Masters:
+> binary:r-bioc-densvis is NEW.
+> binary:r-bioc-densvis is NEW.
+> source:r-bioc-densvis is NEW.
+> 
+> Your package has been put into the NEW queue, which requires manual action
+> from the ftpteam to process. The upload was otherwise valid (it had a good
+> OpenPGP signature and file hashes are valid), so please be patient.
+> 
+> Packages are routinely processed through to the archive, and do feel
+> free to browse the NEW queue[1].
+> 
+> If there is an issue with the upload, you will receive an email from a
+> member of the ftpteam.
+> 
+> If you have any questions, you may reply to this email.
+> 
+> [1]: https://ftp-master.debian.org/new.html
+>      or https://ftp-master.debian.org/backports-new.html for *-backports
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+> 
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sat Jul 29 10:51:50 2023
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 29 Jul 2023 12:51:50 +0200
+Subject: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <168866974488.1111055.5863523819930753468.reportbug@sputnik>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik>
+Message-ID: <ZMTvRlUGXVA4xkcm@an3as.eu>
+
+Hi,
+
+all r-bioc-* packages except
+
+   r-bioc-bitseq
+
+which is not maintained upstream and should probably be removed (as in
+the last transition) and
+
+   r-bioc-scater
+   r-bioc-deseq
+   r-bioc-isoformswitchanalyzer
+
+are uploaded.  The latter three have new dependencies which are uploaded
+to new.  Since all four exceptions are in sid only we could consider the
+transition done and the majority of r-bioc-* packages can migrate to
+testing.  We can wait for new processing for those three remaining
+packages which does not really affect all other r-bioc-* packages.
+
+If you agree it might make sense to not touch r-bioc-* packages to let
+the testing migration happen.
+
+Kind regards
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Sat Jul 29 17:44:32 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sat, 29 Jul 2023 19:44:32 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZMTvRlUGXVA4xkcm@an3as.eu>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu>
+Message-ID: <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org>
+
+Hi Andreas,
+
+On 29-07-2023 12:51, Andreas Tille wrote:
+> all r-bioc-* packages except
+>
+>     r-bioc-bitseq
+>
+> which is not maintained upstream and should probably be removed (as in
+> the last transition) and
+>
+>     r-bioc-scater
+>     r-bioc-deseq
+>     r-bioc-isoformswitchanalyzer
+>
+> are uploaded.  The latter three have new dependencies which are uploaded
+> to new.  Since all four exceptions are in sid only we could consider the
+> transition done and the majority of r-bioc-* packages can migrate to
+> testing.  We can wait for new processing for those three remaining
+> packages which does not really affect all other r-bioc-* packages.
+
+Well, I didn't check everything yet (hint is at [1]) but at least the 
+autopkgtest regression in r-bioc-rhdf5filters (see [2] to find that in 
+unstable it fails too) should really be solved. For several of the other 
+packages, you see that the right versioned (test) dependencies aren't 
+declared, so the test pass in unstable, but fails to pull in the right 
+dependencies when tested in the migration scenario. Also, but that's 
+more my fault than yours, there are a bunch of packages in testing that 
+fail their tests there because their *test* dependencies aren't in 
+testing. Those should be pulled in by the migration scenario, but I hope 
+none of the three packages mentioned above are needed for other tests, 
+because then the tests will keep failing until NEW is cleared.
+
+> If you agree it might make sense to not touch r-bioc-* packages to let
+> the testing migration happen.
+
+Well, any fix for triggered autopkgtest failure due to the lack of the 
+right constraints (versioned (test) dependencies and/or breaks) might 
+actually help speed up the process, because it will need less hand-holding.
+
+Paul
+
+PS: I'm not seeing the uploads of r-bioc-isoformswitchanalyzer and 
+r-bioc-scater yet
+
+[1] https://people.debian.org/~elbrus/ci/regressions.html (grey is only 
+in unstable)
+
+[2] https://ci.debian.net/packages/r/r-bioc-rhdf5filters/
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at debian.org  Sat Jul 29 18:14:17 2023
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sat, 29 Jul 2023 23:44:17 +0530
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org>
+Message-ID: <20230729181417.w4fab55t4ltsd4yx@office.mailbox.org>
+
+On Sat, Jul 29, 2023 at 07:44:32PM +0200, Paul Gevers wrote:
+> Well, I didn't check everything yet (hint is at [1]) but at least the
+> autopkgtest regression in r-bioc-rhdf5filters (see [2] to find that in
+> unstable it fails too) should really be solved.
+
+I've fixed hdf5filters and uploaded to unstable. This was a fallout with
+the patch I had supplied earlier. Thanks for pointing it out.
+
+Best,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Sat Jul 29 19:52:39 2023
+From: tille at debian.org (Andreas Tille)
+Date: Sat, 29 Jul 2023 21:52:39 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org>
+Message-ID: <ZMVuByxlXaP2LiNc@an3as.eu>
+
+Hi Paul,
+
+Am Sat, Jul 29, 2023 at 07:44:32PM +0200 schrieb Paul Gevers:
+> 
+> Well, I didn't check everything yet (hint is at [1])
+
+Thanks for the hint - this was the point I wanted to make with my mail.
+
+> but at least the
+> autopkgtest regression in r-bioc-rhdf5filters (see [2] to find that in
+> unstable it fails too) should really be solved..
+
+Thanks to Nilesh for fixing it.
+
+> For several of the other
+> packages, you see that the right versioned (test) dependencies aren't
+> declared, so the test pass in unstable, but fails to pull in the right
+> dependencies when tested in the migration scenario.
+
+I enhanced dh-r to inject the versioned Depends declared by upstream as
+long as these are packaged.  That's no guarantee that our tests will
+work but hopefully a first step to enhance the situation.
+
+> Also, but that's more my
+> fault than yours, there are a bunch of packages in testing that fail their
+> tests there because their *test* dependencies aren't in testing. Those
+> should be pulled in by the migration scenario, but I hope none of the three
+> packages mentioned above are needed for other tests, because then the tests
+> will keep failing until NEW is cleared.
+> 
+> > If you agree it might make sense to not touch r-bioc-* packages to let
+> > the testing migration happen.
+> 
+> Well, any fix for triggered autopkgtest failure due to the lack of the right
+> constraints (versioned (test) dependencies and/or breaks) might actually
+> help speed up the process, because it will need less hand-holding.
+
+I'm just hoping for the team since I'm busy with real life and will be
+absolutely offline from tomorrow noon for at least 24 hours.
+ 
+> PS: I'm not seeing the uploads of r-bioc-isoformswitchanalyzer and
+> r-bioc-scater yet
+
+IT can't be uploaded since the new version will not build due to the
+missing dependencies that need to clear new.  I see no sense in
+rebuilding the old versions since they do not fit the bioconductor
+version of all other r-bioc-* packages.  I intended to express with
+my mail that those packages are not and can not be uploaded.
+
+Kind regards
+    Andreas.
+
+> [1] https://people.debian.org/~elbrus/ci/regressions.html (grey is only in
+> unstable)
+> [2] https://ci.debian.net/packages/r/r-bioc-rhdf5filters/
+
+-- 
+http://fam-tille.de
+
+From elbrus at debian.org  Sun Jul 30 06:02:30 2023
+From: elbrus at debian.org (Paul Gevers)
+Date: Sun, 30 Jul 2023 08:02:30 +0200
+Subject: Re: Bug#1040498: Should we consider the transition ready (Was: Bug#1040498: transition: r-bioc-biocgenerics)
+In-Reply-To: <ZMVuByxlXaP2LiNc@an3as.eu>
+References: <168866974488.1111055.5863523819930753468.reportbug@sputnik> <ZMTvRlUGXVA4xkcm@an3as.eu> <1494c0f6-3e0e-36f7-8145-23e873391d49@debian.org> <ZMVuByxlXaP2LiNc@an3as.eu>
+Message-ID: <84d004ca-7641-40db-8346-250a082970df@debian.org>
+
+Hi Andreas,
+
+On 29-07-2023 21:52, Andreas Tille wrote:
+> IT can't be uploaded since the new version will not build due to the
+> missing dependencies that need to clear new.
+
+As I understand it, you don't need to wait with *uploading*, the 
+buildd's will just wait building until the build dependencies cleared 
+NEW. So, just upload and forget about it (unless you're worried about 
+"using" the version number already, but that was not your argument).
+
+Paul
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+

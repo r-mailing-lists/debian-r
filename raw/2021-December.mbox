@@ -1,0 +1,2738 @@
+From andreas at an3as.eu  Wed Dec  1 06:46:11 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 1 Dec 2021 07:46:11 +0100
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hyi3AmMYOJns7KSG4WmD+4mkZrCi_ew3RxThS-tbiz3zw@mail.gmail.com>
+References: <9afaca2b-a78f-ec6f-a58b-bf27d9cc0ecd@debian.org> <YaXldB3+L4P5nvbK@an3as.eu> <CANtt_hyi3AmMYOJns7KSG4WmD+4mkZrCi_ew3RxThS-tbiz3zw@mail.gmail.com>
+Message-ID: <YacaMwAWUiAXKodI@an3as.eu>
+
+Dear Robert,
+
+Am Tue, Nov 30, 2021 at 09:18:18PM -0800 schrieb Robert J. Hijmans:
+> Dear Andreas,
+> 
+> raster 3-5.2 depends on terra; but it does not specify which version of
+> terra. I believe it needs to be terra 1.4-11 to not get this error.
+
+Is it *exactly* this version or >= 1.4-11?  We had once packaged terra
+just for raster startung with 1.4-11 and than moved on upgrading it to
+the current version 1.4-22.
+
+> From what you sent I cannot see which version of terra is installed, but I
+> am guessing it is an earlier version. Is that something you can check?
+
+There was never any earlier version than 1.4-11 in Debian.  The Debian
+bug report links to a full log of the test[1] which installs
+
+...
+Get:117 http://deb.debian.org/debian testing/main amd64 r-cran-terra amd64 1.4-11-2 [2,358 kB]
+Get:118 http://deb.debian.org/debian unstable/main amd64 r-cran-raster amd64 3.5-2-1 [3,063 kB]
+...
+
+> I can dig a bit more if needed, please let me know.
+
+Your help would be really appreciated
+
+    Andreas.
+
+[1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-satellite/16823806/log.gz
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Wed Dec  1 10:59:45 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Wed, 01 Dec 2021 16:29:45 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YZ08BdKrE5bAxcxW@ramacher.at>
+References: <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <YZ08BdKrE5bAxcxW@ramacher.at>
+Message-ID: <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net>
+
+On 24 November 2021 12:37:49 am IST, Sebastian Ramacher <sramacher at debian.org> wrote:
+>Control: tags -1 = confirmed
+>
+>On 2021-11-23 23:32:46, Nilesh Patra wrote:
+>> Hi Sebastian,
+>> 
+>> On Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:
+>> > > Hi,
+>> > > Bioconductor 3.14 was released [1].
+>> > > 
+>> > > [1] https://bioconductor.org/news/bioc_3_14_release/
+>> > > 
+>> > > Like for previous r-api-bioc transitions, all reverse dependencies
+>> > > need a manual upgrade to the new upstream releases, they are not
+>> > > binNMU-able. The Debian R Packages team will do so.
+>> > > 
+>> > > Please set up a tracker manually, since this is a transition of a
+>> > > virtual package name.
+>> > 
+>> > Let's do this one after gsl
+>> 
+>> Sorry to get on your nerves, but since it has been a little more than two weeks since
+>> you sent this email, is there any update on gsl transition, or is it nearing completion or so?
+>> Can bioc start sometime soon?
+>
+>Please go ahead. If the two transitions need to be untangled, I'll
+>temporarily remove r-bioc-dirichletmultinomial and r-bioc-tfbstools from
+>testing.
+
+Hi Sebastian,
+
+One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+
+For now, could you please set it to ignore? We will deal with it post migration.
+
+Regards,
+Nilesh
+
+From ginggs at debian.org  Wed Dec  1 11:33:15 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 1 Dec 2021 13:33:15 +0200
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net>
+Message-ID: <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com>
+
+Hi Nilesh
+
+On Wed, 1 Dec 2021 at 13:03, Nilesh Patra <nilesh at riseup.net> wrote:
+> One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+
+There's at least one more regression; in gffread, caused by
+r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+migrate.
+
+Regards
+Graham
+
+[1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+
+From andreas at fam-tille.de  Wed Dec  1 14:43:17 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 1 Dec 2021 15:43:17 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net>
+References: <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net>
+Message-ID: <YaeKBekg/cuhh/nC@an3as.eu>
+
+Hi,
+
+Am Wed, Dec 01, 2021 at 04:29:45PM +0530 schrieb Nilesh Patra:
+> 
+> One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration.
+
+Its not "only" on i386 if I'm correctly but it randomly happens on different
+architectures.  I've now deactivated the according test so its passing its
+autopkgtest now (if I'm not totally misleaded).
+
+Kind regards
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Wed Dec  1 16:06:00 2021
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 1 Dec 2021 17:06:00 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com>
+Message-ID: <YaedaPUMrrDPzv84@an3as.eu>
+
+Hi Graham,
+
+Am Wed, Dec 01, 2021 at 01:33:15PM +0200 schrieb Graham Inggs:
+> On Wed, 1 Dec 2021 at 13:03, Nilesh Patra <nilesh at riseup.net> wrote:
+> > One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+> 
+> There's at least one more regression; in gffread, caused by
+> r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+> migrate.
+
+I absolutely fail to understand why the excuses mechanism is actually
+blaming r-bioc-gviz to be responsible to cause that autopkgtest error.
+I even fail to understand why it ends up in an error while there are
+warnings only.  I've re-triggered gffread CI test in Salsa[2] which is
+passing.
+
+Any idea what might be wrong here?
+
+Kind regards
+
+       Andreas.
+ 
+> [1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+[2] https://salsa.debian.org/med-team/gffread/-/jobs/2236429
+
+-- 
+http://fam-tille.de
+
+From sramacher at debian.org  Wed Dec  1 16:13:24 2021
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Wed, 1 Dec 2021 17:13:24 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YaedaPUMrrDPzv84@an3as.eu>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu>
+Message-ID: <YaefJBSXo6VcNm85@ramacher.at>
+
+On 2021-12-01 17:06:00 +0100, Andreas Tille wrote:
+> Hi Graham,
+> 
+> Am Wed, Dec 01, 2021 at 01:33:15PM +0200 schrieb Graham Inggs:
+> > On Wed, 1 Dec 2021 at 13:03, Nilesh Patra <nilesh at riseup.net> wrote:
+> > > One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+> > 
+> > There's at least one more regression; in gffread, caused by
+> > r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+> > migrate.
+> 
+> I absolutely fail to understand why the excuses mechanism is actually
+> blaming r-bioc-gviz to be responsible to cause that autopkgtest error.
+> I even fail to understand why it ends up in an error while there are
+> warnings only.  I've re-triggered gffread CI test in Salsa[2] which is
+> passing.
+> 
+> Any idea what might be wrong here?
+
+The tests print warnings on stderr. Output on stderr is considered a
+test failure if the allow-stderr restriction is not set.
+
+Cheers
+
+> 
+> Kind regards
+> 
+>        Andreas.
+>  
+> > [1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+> [2] https://salsa.debian.org/med-team/gffread/-/jobs/2236429
+> 
+> -- 
+> http://fam-tille.de
+
+-- 
+Sebastian Ramacher
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From sramacher at debian.org  Wed Dec  1 17:28:06 2021
+From: sramacher at debian.org (Sebastian Ramacher)
+Date: Wed, 1 Dec 2021 18:28:06 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net>
+Message-ID: <YaewpoPfw7PgQoiE@ramacher.at>
+
+On 2021-12-01 22:46:45 +0530, Nilesh Patra wrote:
+> On 1 December 2021 9:36:00 pm IST, Andreas Tille <tille at debian.org> wrote:
+> >Hi Graham,
+> >
+> >Am Wed, Dec 01, 2021 at 01:33:15PM +0200 schrieb Graham Inggs:
+> >> On Wed, 1 Dec 2021 at 13:03, Nilesh Patra <nilesh at riseup.net> wrote:
+> >> > One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+> >> 
+> >> There's at least one more regression; in gffread, caused by
+> >> r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+> >> migrate.
+> >
+> >I absolutely fail to understand why the excuses mechanism is actually
+> >blaming r-bioc-gviz to be responsible to cause that autopkgtest error.
+> >I even fail to understand why it ends up in an error while there are
+> >warnings only.  I've re-triggered gffread CI test in Salsa[2] which is
+> >passing.
+> >
+> >Any idea what might be wrong here?
+> >
+> >Kind regards
+> >
+> >       Andreas.
+> > 
+> >> [1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+> >[2] https://salsa.debian.org/med-team/gffread/-/jobs/2236429
+> >
+> 
+> Because the version from testing 0.12.1-4 is failing which does not have allow-stderr restriction.
+> 
+> The new version 0.12.7 you uploaded has it. The new version is blocked from migrating because of libgclib.
+> libgclib is further blocked from migrating because of ABI breakage. And this change is in NEW.
+> 
+> So we are moving in circles. Why are simple changes so slow so god damn difficult to do at times?!
+> 
+> I guess a not very good workaround would be to add an explicit breaks for gffread (<< 0.12.1-4~)  in r-bioc-gviz that would tell Britney the right thing to do. More ideas welcome.
+
+Let's not do that. As this only produces a warning this won't be an
+issue for users. I think this can be solved with the appopriate hint.
+
+The point of Graham's mail was that r-bioc-biocparallel was not the only
+package that would have needed a hint. If you want to speed this up, we
+need a full list of packages that need to be urgented or need their
+autopkgtest regressions investigated.
+
+Cheers
+
+> 
+> Nilesh
+
+-- 
+Sebastian Ramacher
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From tille at debian.org  Wed Dec  1 17:31:12 2021
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 1 Dec 2021 18:31:12 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YaefJBSXo6VcNm85@ramacher.at>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <YaefJBSXo6VcNm85@ramacher.at>
+Message-ID: <YaexYHCucm796le4@an3as.eu>
+
+Hi Sebastian,
+
+Am Wed, Dec 01, 2021 at 05:13:24PM +0100 schrieb Sebastian Ramacher:
+> On 2021-12-01 17:06:00 +0100, Andreas Tille wrote:
+> > > 
+> > > There's at least one more regression; in gffread, caused by
+> > > r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+> > > migrate.
+> > 
+> > I absolutely fail to understand why the excuses mechanism is actually
+> > blaming r-bioc-gviz to be responsible to cause that autopkgtest error.
+> > I even fail to understand why it ends up in an error while there are
+> > warnings only.  I've re-triggered gffread CI test in Salsa[2] which is
+> > passing.
+> > 
+> > Any idea what might be wrong here?
+> 
+> The tests print warnings on stderr. Output on stderr is considered a
+> test failure if the allow-stderr restriction is not set.
+
+But this is set[3].  If not Salsa-CI should fail.  Moreover, the issue
+is not connected at all to any r-bioc-* package since those packages
+do not trigger any warning (which is actually issued by libgclib (may
+be an upload of this package has triggered any failure - but it remains
+unclear why).
+
+Kind regards
+
+       Andreas.
+ 
+> > > [1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+> > [2] https://salsa.debian.org/med-team/gffread/-/jobs/2236429
+[3] https://salsa.debian.org/med-team/gffread/-/blob/master/debian/tests/control
+
+-- 
+http://fam-tille.de
+
+From tille at debian.org  Wed Dec  1 17:35:02 2021
+From: tille at debian.org (Andreas Tille)
+Date: Wed, 1 Dec 2021 18:35:02 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YaewpoPfw7PgQoiE@ramacher.at>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net> <YaewpoPfw7PgQoiE@ramacher.at>
+Message-ID: <YaeyRtoT11sphIjx@an3as.eu>
+
+Am Wed, Dec 01, 2021 at 06:28:06PM +0100 schrieb Sebastian Ramacher:
+> On 2021-12-01 22:46:45 +0530, Nilesh Patra wrote:
+> > Because the version from testing 0.12.1-4 is failing which does not have allow-stderr restriction.
+> > 
+> > The new version 0.12.7 you uploaded has it. The new version is blocked from migrating because of libgclib.
+> > libgclib is further blocked from migrating because of ABI breakage. And this change is in NEW.
+> > 
+> > So we are moving in circles. Why are simple changes so slow so god damn difficult to do at times?!
+> > 
+> > I guess a not very good workaround would be to add an explicit breaks for gffread (<< 0.12.1-4~)  in r-bioc-gviz that would tell Britney the right thing to do. More ideas welcome.
+> 
+> Let's not do that. As this only produces a warning this won't be an
+> issue for users. I think this can be solved with the appopriate hint.
+> 
+> The point of Graham's mail was that r-bioc-biocparallel was not the only
+> package that would have needed a hint. If you want to speed this up, we
+> need a full list of packages that need to be urgented or need their
+> autopkgtest regressions investigated.
+
+Well, if its only gffread (despite I have no idea why this test fails on
+debci while passing for me locally and on Salca CI) we can easily
+droping all r-bioc-* packages from its test.  The test is just checking
+*all* packages in Debian that are featuring a gff file and just reads
+those files.  Droping r-bioc-* packages leaves a sufficient amount of
+other files to test ... and the warnings are happening not for a single
+r-bioc-* package but for other ones.
+
+But may be if you can work around this with some hinting that is the
+easier solution here.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Wed Dec  1 17:16:45 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Wed, 01 Dec 2021 22:46:45 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YaedaPUMrrDPzv84@an3as.eu>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu>
+Message-ID: <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net>
+
+On 1 December 2021 9:36:00 pm IST, Andreas Tille <tille at debian.org> wrote:
+>Hi Graham,
+>
+>Am Wed, Dec 01, 2021 at 01:33:15PM +0200 schrieb Graham Inggs:
+>> On Wed, 1 Dec 2021 at 13:03, Nilesh Patra <nilesh at riseup.net> wrote:
+>> > One i386 autopkgtest failure for r-bioc-biocparallel is stalling the entire migration. Rest stuff looks okay.
+>> 
+>> There's at least one more regression; in gffread, caused by
+>> r-bioc-gviz [1].  Please check that each r-bioc* package is ready to
+>> migrate.
+>
+>I absolutely fail to understand why the excuses mechanism is actually
+>blaming r-bioc-gviz to be responsible to cause that autopkgtest error.
+>I even fail to understand why it ends up in an error while there are
+>warnings only.  I've re-triggered gffread CI test in Salsa[2] which is
+>passing.
+>
+>Any idea what might be wrong here?
+>
+>Kind regards
+>
+>       Andreas.
+> 
+>> [1] https://qa.debian.org/excuses.php?package=r-bioc-gviz
+>[2] https://salsa.debian.org/med-team/gffread/-/jobs/2236429
+>
+
+Because the version from testing 0.12.1-4 is failing which does not have allow-stderr restriction.
+
+The new version 0.12.7 you uploaded has it. The new version is blocked from migrating because of libgclib.
+libgclib is further blocked from migrating because of ABI breakage. And this change is in NEW.
+
+So we are moving in circles. Why are simple changes so slow so god damn difficult to do at times?!
+
+I guess a not very good workaround would be to add an explicit breaks for gffread (<< 0.12.1-4~)  in r-bioc-gviz that would tell Britney the right thing to do. More ideas welcome.
+
+Nilesh
+
+From nilesh at riseup.net  Wed Dec  1 17:23:35 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Wed, 01 Dec 2021 22:53:35 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <9940E06A-6DB3-4B62-BFF3-D63D78E35D23@riseup.net>
+Message-ID: <8DD16B5D-37F8-4F3B-858C-4AC998660EEE@riseup.net>
+
+>I guess a not very good workaround would be to add an explicit breaks for gffread (<< 0.12.1-4~)  in r-bioc-gviz that would tell Britney the right thing to do. More ideas welcome.
+
+Edit/correction: breaks on gffread (<< 0.12.7-1~)
+
+From nilesh at riseup.net  Wed Dec  1 21:00:21 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Thu, 02 Dec 2021 02:30:21 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <YaexYHCucm796le4@an3as.eu>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <YaefJBSXo6VcNm85@ramacher.at> <YaexYHCucm796le4@an3as.eu>
+Message-ID: <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net>
+
+On 1 December 2021 11:01:12 pm IST, Andreas Tille <tille at debian.org> wrote:
+>But this is set[3].  If not Salsa-CI should fail.
+
+You are testing it on a different version than in testing that's why it passes. If you want to validate, trigger CI on the upload commit for 0.12.1-4
+
+>Moreover, the issue
+>is not connected at all to any r-bioc-* package since those packages
+>do not trigger any warning (which is actually issued by libgclib (may
+>be an upload of this package has triggered any failure - but it remains
+>unclear why).
+
+Actually, it started issuing a warning with regards to some white space/tab problem. Something else changed and it is already failing in testing.
+But yes, it has little to do with any bioconductor package here.
+
+On 1 December 2021 11:04:13 pm IST, Andreas Tille <tille at debian.org> wrote:
+>But may be if you can work around this with some hinting that is the
+>easier solution here
+
+Yep. That'd be awesome.
+
+But we should make a list of all such packages and ping for Graham/Sebastian to propagate the hints accordingly. Probably that's what Graham wanted to say in the first place.
+
+Regards,
+Nilesh
+
+From ginggs at debian.org  Wed Dec  1 21:18:17 2021
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 1 Dec 2021 23:18:17 +0200
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <YaefJBSXo6VcNm85@ramacher.at> <YaexYHCucm796le4@an3as.eu> <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net>
+Message-ID: <CAM8zJQsHWEfO+56kJOJ9gEg9ok1U5nJa8SyGO6DBr3n7fse9JA@mail.gmail.com>
+
+Hi Nliesh
+
+On Wed, 1 Dec 2021 at 23:00, Nilesh Patra <nilesh at riseup.net> wrote:
+> But we should make a list of all such packages and ping for Graham/Sebastian to propagate the hints accordingly. Probably that's what Graham wanted to say in the first place.
+
+I've already added hints marking r-bioc-biocparallel/1.28.2-2 urgent
+and gffread/0.12.1-4 as a bad test, so please do let us know if there
+are others.
+
+Regards
+Graham
+
+From andreas at fam-tille.de  Wed Dec  1 21:39:54 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Wed, 1 Dec 2021 22:39:54 +0100
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <YaefJBSXo6VcNm85@ramacher.at> <YaexYHCucm796le4@an3as.eu> <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net>
+Message-ID: <Yafrqqsf/ujs7WC8@an3as.eu>
+
+Am Thu, Dec 02, 2021 at 02:30:21AM +0530 schrieb Nilesh Patra:
+> 
+> Actually, it started issuing a warning with regards to some white space/tab problem. Something else changed and it is already failing in testing.
+
+The warning string comes from libgclib - so the change comes from there.
+
+> But yes, it has little to do with any bioconductor package here.
+
+Definitely.  I wished libgclib would pass new quickly.
+
+Kind regards
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Wed Dec  1 22:43:38 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Thu, 2 Dec 2021 04:13:38 +0530
+Subject: Re: Bug#998057: transition: r-api-bioc-3.14
+In-Reply-To: <CAM8zJQsHWEfO+56kJOJ9gEg9ok1U5nJa8SyGO6DBr3n7fse9JA@mail.gmail.com>
+References: <YYgDAGsfg4o22yav@ramacher.at> <YZ0sxu3tKCfJbvhb@debian> <CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com> <YZ08BdKrE5bAxcxW@ramacher.at> <534C759D-7E28-450B-8D6A-FDF6D8C5BFCA@riseup.net> <CAM8zJQs2siHtsBwnRSizoKkZnHyB-mxjxhQmYvxZzbXBLaw5RA@mail.gmail.com> <YaedaPUMrrDPzv84@an3as.eu> <YaefJBSXo6VcNm85@ramacher.at> <YaexYHCucm796le4@an3as.eu> <24047AA8-3644-45EA-A451-04BA3AF776D1@riseup.net> <CAM8zJQsHWEfO+56kJOJ9gEg9ok1U5nJa8SyGO6DBr3n7fse9JA@mail.gmail.com>
+Message-ID: <fb66880d-14ad-6e90-388a-4c90bf29ec82@riseup.net>
+
+Hi Graham,
+
+On 12/2/21 2:48 AM, Graham Inggs wrote:
+> I've already added hints marking r-bioc-biocparallel/1.28.2-2 urgent
+> and gffread/0.12.1-4 as a bad test, so please do let us know if there
+> are others.
+
+Yes, I could spot some more.
+
+Please set these to ignore, or Let me know if I should rather workaround to do new uploads with versioned deps. :-
+
+* r-bioc-rsamtools -- blocked due to biocparallel in testing
+* r-bioc-biobase -- blocked due to r-bioc-multiassayexperiment in testing
+* r-bioc-bluster -- blocked due to r-bioc-scran in testing
+* r-bioc-genomicranges -- blocked due to r-bioc-multiassayexperiment in testing
+* r-bioc-iranges -- blocked due to r-bioc-multiassayexperiment in testing
+* r-bioc-rhdf5lib -- blocked due to r-bioc-rhdf5 in testing
+* r-bioc-rhdf5filters -- blocked due to r-bioc-rhdf5 in testing
+* r-bioc-s4vectors -- blocked due to r-bioc-multiassayexperiment in testing
+* r-bioc-summarizedexperiment -- blocked due to r-bioc-multiassayexperiment in testing
+
+Please push urgency for these (just uploaded) :-
+
+* r-bioc-scuttle version 1.4.0+dfsg-2
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at an3as.eu  Thu Dec  2 07:16:04 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 2 Dec 2021 08:16:04 +0100
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com>
+References: <9afaca2b-a78f-ec6f-a58b-bf27d9cc0ecd@debian.org> <YaXldB3+L4P5nvbK@an3as.eu> <CANtt_hyi3AmMYOJns7KSG4WmD+4mkZrCi_ew3RxThS-tbiz3zw@mail.gmail.com> <YacaMwAWUiAXKodI@an3as.eu> <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com>
+Message-ID: <YahytL/N+2OL/5Mz@an3as.eu>
+
+Hi Robert,
+
+Am Wed, Dec 01, 2021 at 10:59:45PM -0800 schrieb Robert J. Hijmans:
+> On Tue, Nov 30, 2021 at 10:46 PM Andreas Tille <andreas at an3as.eu> wrote:
+> 
+> > > raster 3-5.2 depends on terra; but it does not specify which version of
+> > > terra. I believe it needs to be terra 1.4-11 to not get this error.
+> >
+> > Is it *exactly* this version or >= 1.4-11?  We had once packaged terra
+> > just for raster startung with 1.4-11 and than moved on upgrading it to
+> > the current version 1.4-22.
+> 
+> Sorry about being not very precise, I should have said >= 1.4-11
+> 1.4-22 is even better
+
+OK.
+ 
+> I now wonder whether it is the order of installation. Can you install
+> raster *after* installing terra? That might help in getting the namespaces
+> work as they should.
+
+The Debian autopkgtest procedure is to install *all* needed dependencies
+but in a random order (so there is no way I'm aware of to specify one
+package before others are installed).  Could you please be more verbose
+in how far you consider the sequence in which the R code is installed is
+relevant for the test?  I mean after installing all the R packages the
+files and directories are equal in any case since the files in /usr are
+identical to the content inside the packages no matter in what sequence
+the code was installed.
+
+> If not, I will try to make some dockers to see if I can reproduce this.
+ 
+This would be really helpful. 
+
+Kind regards
+
+     Andreas.
+ 
+> > > From what you sent I cannot see which version of terra is installed, but
+> > I
+> > > am guessing it is an earlier version. Is that something you can check?
+> >
+> > There was never any earlier version than 1.4-11 in Debian.  The Debian
+> > bug report links to a full log of the test[1] which installs
+> >
+> > ...
+> > Get:117 http://deb.debian.org/debian testing/main amd64 r-cran-terra
+> > amd64 1.4-11-2 [2,358 kB]
+> > Get:118 http://deb.debian.org/debian unstable/main amd64 r-cran-raster
+> > amd64 3.5-2-1 [3,063 kB]
+> > ...
+> >
+> > > I can dig a bit more if needed, please let me know.
+> >
+> > Your help would be really appreciated
+> >
+> >     Andreas.
+> >
+> >
+> > [1]
+> > https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-satellite/16823806/log.gz
+> >
+> > --
+> > http://fam-tille.de
+> >
+
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From r.hijmans at gmail.com  Thu Dec  2 06:59:45 2021
+From: r.hijmans at gmail.com (Robert J. Hijmans)
+Date: Wed, 1 Dec 2021 22:59:45 -0800
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <YacaMwAWUiAXKodI@an3as.eu>
+References: <9afaca2b-a78f-ec6f-a58b-bf27d9cc0ecd@debian.org> <YaXldB3+L4P5nvbK@an3as.eu> <CANtt_hyi3AmMYOJns7KSG4WmD+4mkZrCi_ew3RxThS-tbiz3zw@mail.gmail.com> <YacaMwAWUiAXKodI@an3as.eu>
+Message-ID: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com>
+
+On Tue, Nov 30, 2021 at 10:46 PM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Dear Robert,
+>
+>
+>
+> Am Tue, Nov 30, 2021 at 09:18:18PM -0800 schrieb Robert J. Hijmans:
+>
+> > Dear Andreas,
+>
+> >
+>
+> > raster 3-5.2 depends on terra; but it does not specify which version of
+>
+> > terra. I believe it needs to be terra 1.4-11 to not get this error.
+>
+>
+>
+> Is it *exactly* this version or >= 1.4-11?  We had once packaged terra
+>
+> just for raster startung with 1.4-11 and than moved on upgrading it to
+>
+> the current version 1.4-22.
+
+Sorry about being not very precise, I should have said >= 1.4-11 
+1.4-22 is even better
+
+I now wonder whether it is the order of installation. Can you install raster *after* installing terra? That might help in getting the namespaces work as they should.
+
+If not, I will try to make some dockers to see if I can reproduce this.  
+
+> > From what you sent I cannot see which version of terra is installed, but I
+>
+> > am guessing it is an earlier version. Is that something you can check?
+>
+>
+>
+> There was never any earlier version than 1.4-11 in Debian.  The Debian
+>
+> bug report links to a full log of the test[1] which installs
+>
+>
+>
+> ...
+>
+> Get:117 http://deb.debian.org/debian testing/main amd64 r-cran-terra amd64 1.4-11-2 [2,358 kB]
+>
+> Get:118 http://deb.debian.org/debian unstable/main amd64 r-cran-raster amd64 3.5-2-1 [3,063 kB]
+>
+> ...
+>
+>
+>
+> > I can dig a bit more if needed, please let me know.
+>
+>
+>
+> Your help would be really appreciated
+>
+>
+>
+>     Andreas.
+>
+>
+>
+>
+>
+> [1] https://ci.debian.net/data/autopkgtest/testing/amd64/r/r-cran-satellite/16823806/log.gz
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From nilesh at debian.org  Sat Dec  4 20:35:21 2021
+From: nilesh at debian.org (Nilesh Patra)
+Date: Sun, 5 Dec 2021 02:05:21 +0530
+Subject: Re: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com>
+Message-ID: <YavRCYfDifzcUTSx@debian>
+
+Hi Robert,
+
+Would you have some update on this?
+
+Actually, I was able to reproduce the problem even the R-upstream way -- logs pasted below, and hence this does not look
+like an issue just for us. Any help is appreciated.
+
+Regards,
+Nilesh
+
+```
+> library('raster')
+Loading required package: sp
+> print(sessionInfo())
+R version 4.1.2 (2021-11-01)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Debian GNU/Linux bookworm/sid
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] raster_3.5-2 sp_1.4-5    
+
+loaded via a namespace (and not attached):
+[1] compiler_4.1.2   Rcpp_1.0.7       codetools_0.2-18 grid_4.1.2      
+[5] lattice_0.20-45  terra_1.4-11    
+> print(.libPaths())
+[1] "/home/nilesh/R/x86_64-pc-linux-gnu-library/4.1"
+[2] "/usr/local/lib/R/site-library"                 
+[3] "/usr/lib/R/site-library"                       
+[4] "/usr/lib/R/library"  
+> library('testthat')
+> test_check('satellite')
+Loading required package: satellite
+══ Skipped tests ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+• empty test (12)
+
+══ Failed tests ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+── Error (test-extend.R:9:1): (code run outside of `test_that()`) ───────────────────────────
+Error in `(function (classes, fdef, mtable) 
+{
+    methods <- .findInheritedMethods(classes, fdef, mtable)
+    if (length(methods) == 1L) 
+        return(methods[[1L]])
+    else if (length(methods) == 0L) {
+        cnames <- paste0("\"", vapply(classes, as.character, 
+            ""), "\"", collapse = ", ")
+        stop(gettextf("unable to find an inherited method for function %s for signature %s", 
+            sQuote(fdef@generic), sQuote(cnames)), domain = NA)
+    }
+    else stop("Internal error in finding inherited methods; didn't return a unique method", 
+        domain = NA)
+})(list(structure("Satellite", package = "satellite")), new("standardGeneric", 
+    .Data = function (x, y, ...) 
+    standardGeneric("extend"), generic = structure("extend", package = "terra"), 
+    package = "terra", group = list(), valueClass = character(0), 
+    signature = c("x", "y"), default = NULL, skeleton = (function (x, 
+        y, ...) 
+    stop("invalid call in method dispatch to 'extend' (no default method)", 
+        domain = NA))(x, y, ...)), <environment>)`: unable to find an inherited method for function ‘extend’ for signature ‘"Satellite"’
+Backtrace:
+    █
+ 1. └─terra::extend(sat, ext_ggs) test-extend.R:9:0
+ 2.   └─(function (classes, fdef, mtable) ...
+
+[ FAIL 1 | WARN 0 | SKIP 12 | PASS 139 ]
+
+```
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Sun Dec  5 06:50:31 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 5 Dec 2021 07:50:31 +0100
+Subject: fs 1.5.1 testsuite throws errors
+Message-ID: <YaxhN1ObFz/4SNUr@an3as.eu>
+
+Hi Jim
+
+I tried to package the latest fs for Debian but unfortunately some tests are
+failing:
+
+══ Failed tests ════════════════════════════════════════════════════════════════
+── Failure (test-access.R:14:7): file_access: checks for file read and write ability ──
+file_access("foo/bar", "read") not equal to c(`foo/bar` = FALSE).
+1 element mismatch
+── Failure (test-access.R:15:7): file_access: checks for file read and write ability ──
+file_access("foo/bar", "write") not equal to c(`foo/bar` = FALSE).
+1 element mismatch
+── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+`dir_ls(".", recurse = TRUE)` did not throw an error.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_error(dir_ls(".", recurse = TRUE), class = "EACCES") test-list.R:83:6
+── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+`dir_ls(fail = FALSE, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:84:6
+── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+`dir_ls("foo2", fail = FALSE, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:88:6
+── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+`dir_map(".", fun = identity, recurse = TRUE)` did not throw an error.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_error(...) test-list.R:116:6
+── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+`dir_map(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:117:6
+── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+`dir_map("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:121:6
+── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+`dir_walk(".", fun = identity, recurse = TRUE)` did not throw an error.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_error(...) test-list.R:166:6
+── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+`dir_walk(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:167:6
+── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+`dir_walk("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:171:6
+── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+`dir_info(".", fun = identity, recurse = TRUE)` did not throw an error.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_error(...) test-list.R:197:6
+── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+`dir_info(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:198:6
+── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+`dir_info("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+Backtrace:
+    █
+ 1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+ 2. │ └─base::force(code) helper.R:22:2
+ 3. └─testthat::expect_warning(...) test-list.R:202:6
+
+[ FAIL 14 | WARN 0 | SKIP 3 | PASS 3439 ]
+
+Please note:  For the Debian package we are using the Debian packaged
+libuv.  In case you might suspect an issue here for the said tests
+please let us know so we can dig into this direction.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From james.f.hester at gmail.com  Sun Dec  5 14:28:04 2021
+From: james.f.hester at gmail.com (Jim Hester)
+Date: Sun, 5 Dec 2021 09:28:04 -0500
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <YaxhN1ObFz/4SNUr@an3as.eu>
+References: <YaxhN1ObFz/4SNUr@an3as.eu>
+Message-ID: <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com>
+
+Andreas,
+
+As of fs 1.51 I am no longer the maintainer of the R package. Gábor Csárdi is the new maintainer (cc'd).
+
+That being said I am not sure why you would be getting these test failures, except perhaps if the file system the debian test system runs on is not a normal one and behaves differently than expected.
+
+Hopefully you and Gábor can figure it out!
+
+Jim
+
+On Sun, Dec 5, 2021, 1:50 AM Andreas Tille <andreas at an3as.eu> wrote:
+
+> Hi Jim
+>
+>
+>
+> I tried to package the latest fs for Debian but unfortunately some tests are
+>
+> failing:
+>
+>
+>
+> ══ Failed tests ════════════════════════════════════════════════════════════════
+>
+> ── Failure (test-access.R:14:7): file_access: checks for file read and write ability ──
+>
+> file_access("foo/bar", "read") not equal to c(`foo/bar` = FALSE).
+>
+> 1 element mismatch
+>
+> ── Failure (test-access.R:15:7): file_access: checks for file read and write ability ──
+>
+> file_access("foo/bar", "write") not equal to c(`foo/bar` = FALSE).
+>
+> 1 element mismatch
+>
+> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>
+> `dir_ls(".", recurse = TRUE)` did not throw an error.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_error(dir_ls(".", recurse = TRUE), class = "EACCES") test-list.R:83:6
+>
+> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>
+> `dir_ls(fail = FALSE, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:84:6
+>
+> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>
+> `dir_ls("foo2", fail = FALSE, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:88:6
+>
+> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>
+> `dir_map(".", fun = identity, recurse = TRUE)` did not throw an error.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_error(...) test-list.R:116:6
+>
+> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>
+> `dir_map(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:117:6
+>
+> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>
+> `dir_map("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:121:6
+>
+> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>
+> `dir_walk(".", fun = identity, recurse = TRUE)` did not throw an error.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_error(...) test-list.R:166:6
+>
+> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>
+> `dir_walk(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:167:6
+>
+> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>
+> `dir_walk("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:171:6
+>
+> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>
+> `dir_info(".", fun = identity, recurse = TRUE)` did not throw an error.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_error(...) test-list.R:197:6
+>
+> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>
+> `dir_info(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:198:6
+>
+> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>
+> `dir_info("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>
+> Backtrace:
+>
+>     █
+>
+>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>
+>  2. │ └─base::force(code) helper.R:22:2
+>
+>  3. └─testthat::expect_warning(...) test-list.R:202:6
+>
+>
+>
+> [ FAIL 14 | WARN 0 | SKIP 3 | PASS 3439 ]
+>
+>
+>
+>
+>
+> Please note:  For the Debian package we are using the Debian packaged
+>
+> libuv.  In case you might suspect an issue here for the said tests
+>
+> please let us know so we can dig into this direction.
+>
+>
+>
+> Kind regards
+>
+>
+>
+>       Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+>
+
+From csardi.gabor at gmail.com  Sun Dec  5 15:01:17 2021
+From: csardi.gabor at gmail.com (=?utf-8?b?R8OhYm9yIENzw6FyZGk=?=)
+Date: Sun, 5 Dec 2021 16:01:17 +0100
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com>
+References: <YaxhN1ObFz/4SNUr@an3as.eu> <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com>
+Message-ID: <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com>
+
+Hi Andreas,
+
+can you please open an issue at https://github.com/r-lib/fs/issues?
+
+Thanks!
+Gabor
+
+On Sun, Dec 5, 2021 at 3:28 PM Jim Hester <james.f.hester at gmail.com> wrote:
+>
+> Andreas,
+>
+> As of fs 1.51 I am no longer the maintainer of the R package. Gábor Csárdi is the new maintainer (cc'd).
+>
+> That being said I am not sure why you would be getting these test failures, except perhaps if the file system the debian test system runs on is not a normal one and behaves differently than expected.
+>
+> Hopefully you and Gábor can figure it out!
+>
+> Jim
+>
+> On Sun, Dec 5, 2021, 1:50 AM Andreas Tille <andreas at an3as.eu> wrote:
+>>
+>> Hi Jim
+>>
+>> I tried to package the latest fs for Debian but unfortunately some tests are
+>> failing:
+>>
+>> ══ Failed tests ════════════════════════════════════════════════════════════════
+>> ── Failure (test-access.R:14:7): file_access: checks for file read and write ability ──
+>> file_access("foo/bar", "read") not equal to c(`foo/bar` = FALSE).
+>> 1 element mismatch
+>> ── Failure (test-access.R:15:7): file_access: checks for file read and write ability ──
+>> file_access("foo/bar", "write") not equal to c(`foo/bar` = FALSE).
+>> 1 element mismatch
+>> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>> `dir_ls(".", recurse = TRUE)` did not throw an error.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_error(dir_ls(".", recurse = TRUE), class = "EACCES") test-list.R:83:6
+>> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>> `dir_ls(fail = FALSE, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:84:6
+>> ── Failure (test-list.R:78:5): dir_ls: warns if fail == FALSE ──────────────────
+>> `dir_ls("foo2", fail = FALSE, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:78:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:88:6
+>> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>> `dir_map(".", fun = identity, recurse = TRUE)` did not throw an error.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_error(...) test-list.R:116:6
+>> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>> `dir_map(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:117:6
+>> ── Failure (test-list.R:111:5): dir_map: warns if fail == FALSE ────────────────
+>> `dir_map("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:111:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:121:6
+>> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>> `dir_walk(".", fun = identity, recurse = TRUE)` did not throw an error.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_error(...) test-list.R:166:6
+>> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>> `dir_walk(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:167:6
+>> ── Failure (test-list.R:161:5): dir_walk: warns if fail == FALSE ───────────────
+>> `dir_walk("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:161:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:171:6
+>> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>> `dir_info(".", fun = identity, recurse = TRUE)` did not throw an error.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_error(...) test-list.R:197:6
+>> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>> `dir_info(fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:198:6
+>> ── Failure (test-list.R:192:5): dir_info: warns if fail == FALSE ───────────────
+>> `dir_info("foo2", fail = FALSE, fun = identity, recurse = TRUE)` did not produce any warnings.
+>> Backtrace:
+>>     █
+>>  1. ├─fs:::with_dir_tree(...) test-list.R:192:4
+>>  2. │ └─base::force(code) helper.R:22:2
+>>  3. └─testthat::expect_warning(...) test-list.R:202:6
+>>
+>> [ FAIL 14 | WARN 0 | SKIP 3 | PASS 3439 ]
+>>
+>>
+>> Please note:  For the Debian package we are using the Debian packaged
+>> libuv.  In case you might suspect an issue here for the said tests
+>> please let us know so we can dig into this direction.
+>>
+>> Kind regards
+>>
+>>       Andreas.
+>>
+>> --
+>> http://fam-tille.de
+
+From andreas at an3as.eu  Sun Dec  5 17:24:41 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 5 Dec 2021 18:24:41 +0100
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com>
+References: <YaxhN1ObFz/4SNUr@an3as.eu> <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com> <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com>
+Message-ID: <Yaz12XlCZXWzVXpV@an3as.eu>
+
+Hi Gábor
+
+Am Sun, Dec 05, 2021 at 04:01:17PM +0100 schrieb Gábor Csárdi:
+> can you please open an issue at https://github.com/r-lib/fs/issues?
+
+Done
+    https://github.com/r-lib/fs/issues/359
+ 
+> Thanks!
+
+You are welcome - thanks for caring
+
+    Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at onenetbeyond.org  Sun Dec  5 18:28:47 2021
+From: nilesh at onenetbeyond.org (Nilesh Patra)
+Date: Sun, 5 Dec 2021 23:58:47 +0530
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <Yaz12XlCZXWzVXpV@an3as.eu>
+References: <YaxhN1ObFz/4SNUr@an3as.eu> <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com> <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com> <Yaz12XlCZXWzVXpV@an3as.eu>
+Message-ID: <c2f3a765-096c-6023-141e-0d8581628c97@onenetbeyond.org>
+
+Hello sars,
+
+On 12/5/21 10:54 PM, Andreas Tille wrote:
+> Hi Gábor
+>
+> Am Sun, Dec 05, 2021 at 04:01:17PM +0100 schrieb Gábor Csárdi:
+> > can you please open an issue at https://github.com/r-lib/fs/issues?
+>
+>
+> Done
+>      https://github.com/r-lib/fs/issues/359
+
+Andreas, actually salsa CI passes[1]
+However, I was able to reproduce autopkgtest failure.
+Now, I went ahead and tried with the previous version as well (1.5.0) which is _also_ failing
+in for me locally, _but clearly_, it is passing on debci, here[2].
+
+I would also like to mention that on running the commands manually, it works perfect for me.
+Looks like its a local issue for you and me, or maybe file system in chroot behaves differently.
+I uploaded the new upstream version, lets see if it chokes. I will report in either case.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-fs/-/jobs/2247970
+[2]: https://ci.debian.net/packages/r/r-cran-fs/unstable/amd64/
+
+Meow,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at onenetbeyond.org  Tue Dec  7 04:29:17 2021
+From: nilesh at onenetbeyond.org (Nilesh Patra)
+Date: Tue, 7 Dec 2021 09:59:17 +0530
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <c2f3a765-096c-6023-141e-0d8581628c97@onenetbeyond.org>
+References: <YaxhN1ObFz/4SNUr@an3as.eu> <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com> <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com> <Yaz12XlCZXWzVXpV@an3as.eu> <c2f3a765-096c-6023-141e-0d8581628c97@onenetbeyond.org>
+Message-ID: <c32ec535-19b6-6a89-84ce-1cc5036d2dbf@onenetbeyond.org>
+
+On 12/5/21 11:58 PM, Nilesh Patra wrote:
+> Looks like its a local issue for you and me, or maybe file system in chroot behaves differently.
+> I uploaded the new upstream version, lets see if it chokes. I will report in either case.
+
+Hi Andreas, it works on debci[3] for all arches so all good.
+You might want to close the bug report
+
+> [1]: https://salsa.debian.org/r-pkg-team/r-cran-fs/-/jobs/2247970
+> [2]: https://ci.debian.net/packages/r/r-cran-fs/unstable/amd64/
+
+[3]: https://qa.debian.org/excuses.php?package=r-cran-fs
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at fam-tille.de  Tue Dec  7 06:34:09 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Tue, 7 Dec 2021 07:34:09 +0100
+Subject: Re: fs 1.5.1 testsuite throws errors
+In-Reply-To: <c32ec535-19b6-6a89-84ce-1cc5036d2dbf@onenetbeyond.org>
+References: <YaxhN1ObFz/4SNUr@an3as.eu> <CAD6tx96aQKyXHmD9FEeG24KnR+z=p_BGrO2wJSXdG10BES3UoA@mail.gmail.com> <CABtg=Knx+vQMSR+dh1+etnF9Xy49wa0xS3JSGHGyhoi9PvSUEw@mail.gmail.com> <Yaz12XlCZXWzVXpV@an3as.eu> <c2f3a765-096c-6023-141e-0d8581628c97@onenetbeyond.org> <c32ec535-19b6-6a89-84ce-1cc5036d2dbf@onenetbeyond.org>
+Message-ID: <Ya8AYcnfXLnfpSjs@an3as.eu>
+
+Hi Nilesh,
+
+Am Tue, Dec 07, 2021 at 09:59:17AM +0530 schrieb Nilesh Patra:
+> On 12/5/21 11:58 PM, Nilesh Patra wrote:
+> > Looks like its a local issue for you and me, or maybe file system in chroot behaves differently.
+> > I uploaded the new upstream version, lets see if it chokes. I will report in either case.
+> 
+> Hi Andreas, it works on debci[3] for all arches so all good.
+> You might want to close the bug report
+
+Thanks for the reminder.  Upstream has just closed it.  The explanation
+is that the tests will fail when run as root which is exactly the case
+in my pbuilder chroot.  I've added a remark in the test script as a
+reminder for the future - may be we should even code some warning message
+inside the script when run as root?
+
+Kind regards
+
+     Andreas.
+ 
+> > [1]: https://salsa.debian.org/r-pkg-team/r-cran-fs/-/jobs/2247970
+> > [2]: https://ci.debian.net/packages/r/r-cran-fs/unstable/amd64/
+> [3]: https://qa.debian.org/excuses.php?package=r-cran-fs
+> 
+> Regards,
+> Nilesh
+> 
+
+-- 
+http://fam-tille.de
+
+From r.hijmans at gmail.com  Thu Dec  9 04:32:46 2021
+From: r.hijmans at gmail.com (Robert J. Hijmans)
+Date: Wed, 8 Dec 2021 20:32:46 -0800
+Subject: Re: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <YavRCYfDifzcUTSx@debian>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian>
+Message-ID: <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com>
+
+I do not know what "the R upstream way" means. The only way that I can imagine this would happen is if you install the current version raster with an older version of terra. You can do that because the raster package does not specify the version of terra it needs. At installation, the namespace for the raster package is fixed. If you then install the current version of terra, there is a namespace conflict, and the raster package should be reinstalled. I will send a new version of raster, that specifies the version of terra it needs, to CRAN tomorrow.  Perhaps that will help.Robert
+
+On Sat, Dec 4, 2021 at 12:35 PM Nilesh Patra <nilesh at debian.org> wrote:
+
+> Hi Robert,
+>
+>
+>
+> Would you have some update on this?
+>
+>
+>
+> Actually, I was able to reproduce the problem even the R-upstream way -- logs pasted below, and hence this does not look
+>
+> like an issue just for us. Any help is appreciated.
+>
+>
+>
+> Regards,
+>
+> Nilesh
+>
+>
+>
+> ```
+>
+> > library('raster')
+>
+> Loading required package: sp
+>
+> > print(sessionInfo())
+>
+> R version 4.1.2 (2021-11-01)
+>
+> Platform: x86_64-pc-linux-gnu (64-bit)
+>
+> Running under: Debian GNU/Linux bookworm/sid
+>
+>
+>
+> Matrix products: default
+>
+> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+>
+> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+>
+>
+>
+> locale:
+>
+>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C
+>
+>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8
+>
+>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8
+>
+>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C
+>
+>  [9] LC_ADDRESS=C               LC_TELEPHONE=C
+>
+> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C
+>
+>
+>
+> attached base packages:
+>
+> [1] stats     graphics  grDevices utils     datasets  methods   base
+>
+>
+>
+> other attached packages:
+>
+> [1] raster_3.5-2 sp_1.4-5
+>
+>
+>
+> loaded via a namespace (and not attached):
+>
+> [1] compiler_4.1.2   Rcpp_1.0.7       codetools_0.2-18 grid_4.1.2
+>
+> [5] lattice_0.20-45  terra_1.4-11
+>
+> > print(.libPaths())
+>
+> [1] "/home/nilesh/R/x86_64-pc-linux-gnu-library/4.1"
+>
+> [2] "/usr/local/lib/R/site-library"
+>
+> [3] "/usr/lib/R/site-library"
+>
+> [4] "/usr/lib/R/library"
+>
+> > library('testthat')
+>
+> > test_check('satellite')
+>
+> Loading required package: satellite
+>
+> ══ Skipped tests ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+>
+> • empty test (12)
+>
+>
+>
+> ══ Failed tests ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+>
+> ── Error (test-extend.R:9:1): (code run outside of `test_that()`) ───────────────────────────
+>
+> Error in `(function (classes, fdef, mtable)
+>
+> {
+>
+>     methods <- .findInheritedMethods(classes, fdef, mtable)
+>
+>     if (length(methods) == 1L)
+>
+>         return(methods[[1L]])
+>
+>     else if (length(methods) == 0L) {
+>
+>         cnames <- paste0("\"", vapply(classes, as.character,
+>
+>             ""), "\"", collapse = ", ")
+>
+>         stop(gettextf("unable to find an inherited method for function %s for signature %s",
+>
+>             sQuote(fdef@generic), sQuote(cnames)), domain = NA)
+>
+>     }
+>
+>     else stop("Internal error in finding inherited methods; didn't return a unique method",
+>
+>         domain = NA)
+>
+> })(list(structure("Satellite", package = "satellite")), new("standardGeneric",
+>
+>     .Data = "" (x, y, ...)
+>
+>     standardGeneric("extend"), generic = structure("extend", package = "terra"),
+>
+>     package = "terra", group = list(), valueClass = character(0),
+>
+>     signature = c("x", "y"), default = NULL, skeleton = (function (x,
+>
+>         y, ...)
+>
+>     stop("invalid call in method dispatch to 'extend' (no default method)",
+>
+>         domain = NA))(x, y, ...)), <environment>)`: unable to find an inherited method for function ‘extend’ for signature ‘"Satellite"’
+>
+> Backtrace:
+>
+>     █
+>
+>  1. └─terra::extend(sat, ext_ggs) test-extend.R:9:0
+>
+>  2.   └─(function (classes, fdef, mtable) ...
+>
+>
+>
+> [ FAIL 1 | WARN 0 | SKIP 12 | PASS 139 ]
+>
+>
+>
+> ```
+>
+
+From tille at debian.org  Thu Dec  9 09:28:06 2021
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 9 Dec 2021 10:28:06 +0100
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com>
+Message-ID: <YbHMJvMCqe6LdaUa@an3as.eu>
+
+Hi Robert,
+
+Am Wed, Dec 08, 2021 at 08:32:46PM -0800 schrieb Robert J. Hijmans:
+> I do not know what "the R upstream way" means.
+
+I mean that on CRAN all R packages are usually tested in different setups
+and it happened before that those tests are passing while we observed some
+issues in the Debian setup.
+
+> The only way that I can
+> imagine this would happen is if you install the current version raster with
+> an older version of terra. You can do that because the raster package does
+> not specify the version of terra it needs. At installation, the namespace
+> for the raster package is fixed. If you then install the current version of
+> terra, there is a namespace conflict, and the raster package should be
+> reinstalled. I will send a new version of raster, that specifies the
+> version of terra it needs, to CRAN tomorrow.  Perhaps that will help.
+
+We can try so even if the Debian setup ensures the minimum version of
+terra you specified.  Just ping here if there is a new version and we
+will try.
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Thu Dec  9 09:43:56 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Thu, 09 Dec 2021 15:13:56 +0530
+Subject: Re: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com>
+Message-ID: <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net>
+
+On 9 December 2021 10:02:46 am IST, "Robert J. Hijmans" <r.hijmans at gmail.com> wrote:
+>The only way that I can
+>imagine this would happen is if you install the current version raster with
+>an older version of terra.
+
+We have 1.4-22 in Debian, which is also the latest on cran. So I don't think the version thingy specifically with terra should be a problem.
+Does it need a specific version of terra and not the latest?
+
+And excuse my lack of knowledge, but if you check the logs below, the version of lapack is 3.10.0 and I've seen things breaking with changes in lapack versions. Could that cause some problems here?
+
+>You can do that because the raster package does
+>not specify the version of terra it needs. At installation, the namespace
+>for the raster package is fixed. If you then install the current version of
+>terra, there is a namespace conflict, and the raster package should be
+>reinstalled.
+
+I took care of all the adjustments. Tried with newer terra from cran (and not from the Debian archive) as well, the result is same for me.
+
+>I will send a new version of raster, that specifies the
+>version of terra it needs, to CRAN tomorrow.  Perhaps that will help.
+
+We will see. Thanks for the help though.
+
+Regards,
+Nilesh
+
+From r.hijmans at gmail.com  Fri Dec 10 18:13:41 2021
+From: r.hijmans at gmail.com (Robert J. Hijmans)
+Date: Fri, 10 Dec 2021 10:13:41 -0800
+Subject: Re: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net>
+Message-ID: <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com>
+
+There is a new version of "raster" on CRAN. This version specifies the version of terra that is required. 
+
+The problem is one of conflicting package namespaces. I am confident it is related to the order of installation and the versions of the packages. It can only be created if you install raster in the presence of an older version of terra, and install a newer version of terra after that. I know you say you tried that but I have not seen the sessionInfo()s to be sure about that.
+
+The new release of raster should first update terra if indeed it finds an older version. So let's hope I am right.
+
+Robert 
+
+On Thu, Dec 9, 2021 at 1:45 AM Nilesh Patra <nilesh at riseup.net> wrote:
+
+> On 9 December 2021 10:02:46 am IST, "Robert J. Hijmans" <r.hijmans at gmail.com> wrote:
+>
+> >The only way that I can
+>
+> >imagine this would happen is if you install the current version raster with
+>
+> >an older version of terra.
+>
+>
+>
+> We have 1.4-22 in Debian, which is also the latest on cran. So I don't think the version thingy specifically with terra should be a problem.
+>
+> Does it need a specific version of terra and not the latest?
+>
+>
+>
+> And excuse my lack of knowledge, but if you check the logs below, the version of lapack is 3.10.0 and I've seen things breaking with changes in lapack versions. Could that cause some problems here?
+>
+>
+>
+> >You can do that because the raster package does
+>
+> >not specify the version of terra it needs. At installation, the namespace
+>
+> >for the raster package is fixed. If you then install the current version of
+>
+> >terra, there is a namespace conflict, and the raster package should be
+>
+> >reinstalled.
+>
+>
+>
+> I took care of all the adjustments. Tried with newer terra from cran (and not from the Debian archive) as well, the result is same for me.
+>
+>
+>
+> >I will send a new version of raster, that specifies the
+>
+> >version of terra it needs, to CRAN tomorrow.  Perhaps that will help.
+>
+>
+>
+> We will see. Thanks for the help though.
+>
+>
+>
+> Regards,
+>
+> Nilesh
+
+From nilesh at riseup.net  Fri Dec 10 18:40:13 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Sat, 11 Dec 2021 00:10:13 +0530
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net> <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com>
+Message-ID: <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net>
+
+On 12/10/21 11:43 PM, Robert J. Hijmans wrote:
+> There is a new version of "raster" on CRAN. This version specifies the version of terra that is required.
+>
+> The problem is one of conflicting package namespaces. I am confident it is related to the order of installation and the versions of the packages. It can only be created if you install raster in the presence of an older version of terra, and install a newer version of terra after that. I know you say you tried that but I have not seen the sessionInfo()s to be sure about that.
+>
+> The new release of raster should first update terra if indeed it finds an older version. So let's hope I am right.
+
+I just uploaded the new version (3.5-9) and it seems to fix the problem locally. We will see if it works on the debci
+infrastructure as well. I will report whatever it says. Thanks a lot for the help.
+
+I have one request, though. I know "." and "-" sorts equally in the R userland, but they convey different meaning in the Debian
+land, so if you could change the version changes to terra with "-", it'd be really appreciated. In particular please consider
+applying the below patch.
+
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -3,7 +3,7 @@
+ Title: Geographic Data Analysis and Modeling
+ Version: 3.5-9
+ Date: 2021-12-09
+-Imports: Rcpp, methods, terra (>= 1.4.11)
++Imports: Rcpp, methods, terra (>= 1.4-11)
+ LinkingTo: Rcpp
+ Depends: sp (>= 1.4.5), R (>= 3.5.0)
+ Suggests: rgdal (>= 1.5-23), rgeos (>= 0.5-3), ncdf4, igraph, tcltk,
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at riseup.net  Sat Dec 11 06:44:55 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Sat, 11 Dec 2021 12:14:55 +0530
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net> <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com> <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net>
+Message-ID: <07224aaa-c4fe-31fd-1950-ceb283930709@riseup.net>
+
+control: notfixed -1 r-cran-raster/3.5-9-1
+
+Hi Robert,
+
+On 12/11/21 12:10 AM, Nilesh Patra wrote:
+> On 12/10/21 11:43 PM, Robert J. Hijmans wrote:
+> > The new release of raster should first update terra if indeed it finds an older version. So let's hope I am right.
+>
+>
+> I just uploaded the new version (3.5-9) and it seems to fix the problem locally. We will see if it works on the debci
+> infrastructure as well. I will report whatever it says. Thanks a lot for the help.
+
+Tests are still failing, see here[1]. It is not a problem of terra version, as it seems, it is installed in the
+way pretty much every other package is. I face the same stuff locally as well now.
+Would you have some other fix in mind?
+
+[1]: https://qa.debian.org/excuses.php?package=r-cran-raster
+
+Regards,
+Nilesh
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From nilesh at riseup.net  Sat Dec 11 09:03:40 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Sat, 11 Dec 2021 14:33:40 +0530
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <07224aaa-c4fe-31fd-1950-ceb283930709@riseup.net>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net> <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com> <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net> <07224aaa-c4fe-31fd-1950-ceb283930709@riseup.net>
+Message-ID: <e4b632fc-723c-cf32-beba-a86af24268f8@riseup.net>
+
+On 12/11/21 12:14 PM, Nilesh Patra wrote:
+> control: notfixed -1 r-cran-raster/3.5-9-1
+>
+> Hi Robert,
+>
+> On 12/11/21 12:10 AM, Nilesh Patra wrote:
+> > On 12/10/21 11:43 PM, Robert J. Hijmans wrote:
+> > > The new release of raster should first update terra if indeed it finds an older version. So let's hope I am right.
+> >
+> >
+> > I just uploaded the new version (3.5-9) and it seems to fix the problem locally. We will see if it works on the debci
+> > infrastructure as well. I will report whatever it says. Thanks a lot for the help.
+>
+>
+> Tests are still failing, see here[1]. It is not a problem of terra version, as it seems, it is installed in the
+> way pretty much every other package is. I face the same stuff locally as well now.
+> Would you have some other fix in mind?
+
+When I try running tests as root, the error vanishes. I have no idea what's up :(
+
+========== ROOT =============================
+
+# bash ./debian/tests/run-unit-test
+BEGIN TEST testthat.R
+
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(satellite)
+
+Loading required package: raster
+Loading required package: sp
+> ### functions to create test data sets -----
+>
+> ### Utility functions to quickly create test data sets for various sensors
+> ### Florian Detsch, last modified on 2017-07-24
+>
+> tst_obj <- function(type = c("LC08", "LC8", "LE07", "LE7", "LT05")) {
+
++   if (type[1] == "LC08")
++     tst_obj_lc08()
++   else if (type[1] == "LC8")
++     tst_obj_lc8()
++   else if (type[1] == "LE07")
++     tst_obj_le07()
++   else if (type[1] == "LE7")
++     tst_obj_le7()
++   else if (type[1] == "LT05")
++     tst_obj_lt05()
++   else
++     stop("Sensor test data not available, yet.\n")
++ }
+> ### collection 1 level-1 -----
+>
+> ## landsat 8
+> tst_obj_lc08 <- function() {
+
++   path <- system.file("extdata", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LC08*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 7
+> tst_obj_le07 <- function() {
+
++   path <- system.file("extdata", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LE07*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 5
+> tst_obj_lt05 <- function() {
+
++   path <- system.file("testdata/LT05", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LT05*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ### precollection level-1 -----
+>
+> ## landsat 8
+> tst_obj_lc8 <- function() {
+
++   path <- system.file("testdata/LC8", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LC8*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 7
+> tst_obj_le7 <- function() {
+
++   path <- system.file("testdata/LE7", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LE7*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ### perform tests -----
+>
+> test_check("satellite")
+
+== Skipped tests ============================================================================================================================================================================================================================
+* empty test (12)
+
+[ FAIL 0 | WARN 0 | SKIP 12 | PASS 145 ]
+>
+
+======== NORMAL USER =====================
+
+$ bash ./debian/tests/run-unit-test
+BEGIN TEST testthat.R
+
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(satellite)
+
+Loading required package: raster
+Loading required package: sp
+Warning messages:
+1: multiple methods tables found for 'crop'
+2: multiple methods tables found for 'extend'
+> ### functions to create test data sets -----
+>
+> ### Utility functions to quickly create test data sets for various sensors
+> ### Florian Detsch, last modified on 2017-07-24
+>
+> tst_obj <- function(type = c("LC08", "LC8", "LE07", "LE7", "LT05")) {
+
++   if (type[1] == "LC08")
++     tst_obj_lc08()
++   else if (type[1] == "LC8")
++     tst_obj_lc8()
++   else if (type[1] == "LE07")
++     tst_obj_le07()
++   else if (type[1] == "LE7")
++     tst_obj_le7()
++   else if (type[1] == "LT05")
++     tst_obj_lt05()
++   else
++     stop("Sensor test data not available, yet.\n")
++ }
+> ### collection 1 level-1 -----
+>
+> ## landsat 8
+> tst_obj_lc08 <- function() {
+
++   path <- system.file("extdata", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LC08*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 7
+> tst_obj_le07 <- function() {
+
++   path <- system.file("extdata", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LE07*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 5
+> tst_obj_lt05 <- function() {
+
++   path <- system.file("testdata/LT05", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LT05*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ### precollection level-1 -----
+>
+> ## landsat 8
+> tst_obj_lc8 <- function() {
+
++   path <- system.file("testdata/LC8", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LC8*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ## landsat 7
+> tst_obj_le7 <- function() {
+
++   path <- system.file("testdata/LE7", package = "satellite")
++   files <- list.files(path, pattern = glob2rx("LE7*.TIF"), full.names = TRUE)
++   satellite(files)
++ }
+> ### perform tests -----
+>
+> test_check("satellite")
+
+== Skipped tests ============================================================================================================================================================================================================================
+* empty test (12)
+
+== Failed tests =============================================================================================================================================================================================================================
+-- Error (test-extend.R:9:1): (code run outside of `test_that()`) ---------------------------
+Error in `(function (classes, fdef, mtable)
+{
+    methods <- .findInheritedMethods(classes, fdef, mtable)
+    if (length(methods) == 1L)
+        return(methods[[1L]])
+    else if (length(methods) == 0L) {
+        cnames <- paste0("\"", vapply(classes, as.character,
+            ""), "\"", collapse = ", ")
+        stop(gettextf("unable to find an inherited method for function %s for signature %s",
+            sQuote(fdef@generic), sQuote(cnames)), domain = NA)
+    }
+    else stop("Internal error in finding inherited methods; didn't return a unique method",
+        domain = NA)
+})(list(structure("Satellite", package = "satellite")), new("standardGeneric",
+    .Data = function (x, y, ...)
+    standardGeneric("extend"), generic = structure("extend", package = "terra"),
+    package = "terra", group = list(), valueClass = character(0),
+    signature = c("x", "y"), default = NULL, skeleton = (function (x,
+        y, ...)
+    stop("invalid call in method dispatch to 'extend' (no default method)",
+        domain = NA))(x, y, ...)), <environment>)`: unable to find an inherited method for function 'extend' for signature '"Satellite"'
+Backtrace:
+    x
+ 1. \-terra::extend(sat, ext_ggs) test-extend.R:9:0
+ 2.   \-(function (classes, fdef, mtable) ...
+
+[ FAIL 1 | WARN 0 | SKIP 12 | PASS 139 ]
+Error: Test failures
+Execution halted
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+
+From andreas at fam-tille.de  Sat Dec 11 15:23:04 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Sat, 11 Dec 2021 16:23:04 +0100
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <e4b632fc-723c-cf32-beba-a86af24268f8@riseup.net>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net> <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com> <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net> <07224aaa-c4fe-31fd-1950-ceb283930709@riseup.net> <e4b632fc-723c-cf32-beba-a86af24268f8@riseup.net>
+Message-ID: <YbTCWNtEVEP4CrwE@an3as.eu>
+
+Am Sat, Dec 11, 2021 at 02:33:40PM +0530 schrieb Nilesh Patra:
+> On 12/11/21 12:14 PM, Nilesh Patra wrote:
+> > Tests are still failing, see here[1]. It is not a problem of terra version, as it seems, it is installed in the
+> > way pretty much every other package is. I face the same stuff locally as well now.
+> > Would you have some other fix in mind?
+> 
+> When I try running tests as root, the error vanishes. I have no idea what's up :(
+
+Well, root has write permissions to /usr.  I'd suggest to check the md5 sum
+of the files of the package after running the test as root.
+
+Kind regards
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Sun Dec 12 09:54:28 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Sun, 12 Dec 2021 15:24:28 +0530
+Subject: Re: Bug#1000339: r-cran-raster breaks r-cran-satellite autopkgtest: unable to find an inherited method for function 'extend'
+In-Reply-To: <YbTCWNtEVEP4CrwE@an3as.eu>
+References: <CANtt_hzUHfV43m536Fzc2r_s_Gg2Xrzz8Qv75WNWjUzTrGeenQ@mail.gmail.com> <YavRCYfDifzcUTSx@debian> <CANtt_hyvsYi146gwL+X7J0O4AkbkhMUMzy4V809uVA3qAuUtJg@mail.gmail.com> <B4F7416C-E1FD-43E7-8603-1C83099CA953@riseup.net> <CANtt_hzym3uoOxpp1u39nXqgehz8a6=f7wC-KNi00zvsKxkbOA@mail.gmail.com> <8d7b7ed4-a3b4-27e2-8874-1e433a8ae432@riseup.net> <07224aaa-c4fe-31fd-1950-ceb283930709@riseup.net> <e4b632fc-723c-cf32-beba-a86af24268f8@riseup.net> <YbTCWNtEVEP4CrwE@an3as.eu>
+Message-ID: <6331D878-5EF0-42B4-9C9A-47A76C632F48@riseup.net>
+
+On 11 December 2021 8:53:04 pm IST, Andreas Tille <andreas at fam-tille.de> wrote:
+>Am Sat, Dec 11, 2021 at 02:33:40PM +0530 schrieb Nilesh Patra:
+>> On 12/11/21 12:14 PM, Nilesh Patra wrote:
+>> > Tests are still failing, see here[1]. It is not a problem of terra version, as it seems, it is installed in the
+>> > way pretty much every other package is. I face the same stuff locally as well now.
+>> > Would you have some other fix in mind?
+>> 
+>> When I try running tests as root, the error vanishes. I have no idea what's up :(
+>
+>Well, root has write permissions to /usr.  I'd suggest to check the md5 sum
+>of the files of the package after running the test as root.
+
+I am pretty sure it is unrelated to the '/usr' thingy. I had uploaded r-cran-satellite with minimal changes, and it passes debci now.
+
+I guess a headache that took care of itself. The excuses for raster are now green.
+
+https://qa.debian.org/excuses.php?package=r-cran-raster
+
+Thanks a lot, Robert for taking out the time to help us and fix the problems with cran-satellite.
+
+Regards,
+Nilesh
+
+From tille at debian.org  Thu Dec 16 09:47:07 2021
+From: tille at debian.org (Andreas Tille)
+Date: Thu, 16 Dec 2021 10:47:07 +0100
+Subject: Bug#1001789: r-cran-gplots: package 'gplots' was installed before R 4.0.0: please re-install it
+Message-ID: <163964802736.1138080.15737030347980943465.reportbug@energija.fam-tille.de>
+
+Package: r-cran-gplots
+Version: 3.1.1-1
+Severity: grave
+Justification: renders package unusable
+X-Debbugs-Cc: debian-r at lists.debian.org
+
+Hi,
+
+seems r-cran-gplots has sliped trough in the Transition r-base for 4.0.0
+(bug #955211).  This is strange since current r-cran-gplots was uploaded
+at 2020-11-29 while the transition bug was closed 2020-10-31 - but anyway
+gplots claims to be installed "installed before R 4.0.0" when running on
+stable=bullseye (not on testing / unstable):
+
+$ R -e 'library(gplots)'
+
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(gplots)
+Error: package or namespace load failed for 'gplots':
+ package 'gplots' was installed before R 4.0.0: please re-install it
+Execution halted
+
+Kind regards
+
+     Andreas.
+
+-- System Information:
+Debian Release: 11.1
+  APT prefers stable-security
+  APT policy: (500, 'stable-security'), (500, 'stable'), (50, 'unstable')
+Architecture: amd64 (x86_64)
+Foreign Architectures: i386
+
+Kernel: Linux 5.10.0-9-amd64 (SMP w/4 CPU threads)
+Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8), LANGUAGE not set
+Shell: /bin/sh linked to /bin/dash
+Init: systemd (via /run/systemd/system)
+LSM: AppArmor: enabled
+
+Versions of packages r-cran-gplots depends on:
+ii  r-base-core [r-api-4.0]  4.0.4-1
+ii  r-cran-catools           1.18.1-1
+ii  r-cran-gdata             2.18.0-3
+ii  r-cran-gtools            3.8.2-1+b1
+ii  r-cran-kernsmooth        2.23-18-1
+
+r-cran-gplots recommends no packages.
+
+r-cran-gplots suggests no packages.
+
+-- no debconf information
+
+From flying-sheep at web.de  Sun Dec 19 19:19:27 2021
+From: flying-sheep at web.de (Philipp A.)
+Date: Sun, 19 Dec 2021 20:19:27 +0100
+Subject: Re: Please vendor version tarball for destiny on bioconductor page
+In-Reply-To: <20210914164751.GQ19450@an3as.eu>
+References: <203b42db-37c7-4a46-0f07-efdd038a3d86@tchncs.de> <20210914065240.GM19450@an3as.eu> <DM6PR12MB4092371AF57444648B4FA1A6F9DA9@DM6PR12MB4092.namprd12.prod.outlook.com> <CAANT7+WCzzCbOW6Rw2uRum+k3YkOZRvkO+g5z6B-5-ZFE2m+ZQ@mail.gmail.com> <71801b19-be7b-b8b9-62e7-d5f198491c7b@nileshpatra.info> <20210914164751.GQ19450@an3as.eu>
+Message-ID: <CAN8d9gn_Vw+MmK1e5ojCrEm63W-Bqj4zN54tHWeqCFRt13jqog@mail.gmail.com>
+
+Hi! Destiny is back on track, I hope you didn’t remove it!
+
+Am Di., 14. Sept. 2021 um 18:47 Uhr schrieb Andreas Tille <andreas at an3as.eu>:
+
+> Hi,
+>
+>
+>
+> On Tue, Sep 14, 2021 at 06:45:51PM +0530, Nilesh Patra wrote:
+>
+> > On 9/14/21 5:43 PM, Vincent Carey wrote:
+>
+> > > I spent some time with the destiny package this morning.  It is the first package I've come across that composes
+>
+> > > vignettes as jupyter notebooks.  This is interesting and it is nice that R can support this.  To make progress, I found that I
+>
+> > > needed to enhance my latex/font setup with tinytex::tlmgr_install for these packages
+>
+> >
+>
+> > Interesting.
+>
+> >
+>
+> > > [..]
+>
+> > > which seems solvable but I am out of time.
+>
+> >
+>
+> > I admit, I do not get that error on building it as a Debian package
+>
+> >
+>
+> > > It is mainly up to the destiny developer/maintainer to solve these problems, and as Lori Kern noted
+>
+> > > the package is currently slated for removal.
+>
+> >
+>
+> > ACK.
+>
+> >
+>
+> > > If you are willing to work with the source to get it to build for your use, you can clone the source
+>
+> > > from git (not github) at https://git.bioconductor.org/packages/destiny <https://git.bioconductor.org/packages/destiny>, until it is removed.
+>
+> >
+>
+> > Thanks for that link, Vincent!
+>
+> >
+>
+> > @Andreas, I cloned that repository, and made a tarball with `$git archive` and on importing that one,
+>
+> > it builds for me.
+>
+> > ...
+>
+> > So I guess we will need to patch in a "git_branch: RELEASE_3_13" manually.
+>
+> > Let me know what you think.
+>
+>
+>
+> If you ask me what you did sounds sensible if there would be a good
+>
+> reason to keep that package.  Currently it is suggested by scater and
+>
+> monocle since it is used in the according tests.  Given that
+>
+> Bioconductor maintainers confirmed that it is marked for removal and
+>
+> obviously unmaintained I'd be rather in favour to patch out the according
+>
+> tests of the other packages and remove it from Debian.
+>
+>
+>
+> Kind regards
+>
+>
+>
+>       Andreas.
+>
+>
+>
+> --
+>
+> http://fam-tille.de
+
+From andreas at fam-tille.de  Mon Dec 20 08:18:27 2021
+From: andreas at fam-tille.de (Andreas Tille)
+Date: Mon, 20 Dec 2021 09:18:27 +0100
+Subject: Re: Please vendor version tarball for destiny on bioconductor page
+In-Reply-To: <CAN8d9gn_Vw+MmK1e5ojCrEm63W-Bqj4zN54tHWeqCFRt13jqog@mail.gmail.com>
+References: <203b42db-37c7-4a46-0f07-efdd038a3d86@tchncs.de> <20210914065240.GM19450@an3as.eu> <DM6PR12MB4092371AF57444648B4FA1A6F9DA9@DM6PR12MB4092.namprd12.prod.outlook.com> <CAANT7+WCzzCbOW6Rw2uRum+k3YkOZRvkO+g5z6B-5-ZFE2m+ZQ@mail.gmail.com> <71801b19-be7b-b8b9-62e7-d5f198491c7b@nileshpatra.info> <20210914164751.GQ19450@an3as.eu> <CAN8d9gn_Vw+MmK1e5ojCrEm63W-Bqj4zN54tHWeqCFRt13jqog@mail.gmail.com>
+Message-ID: <YcA8U4pnmITI2r81@an3as.eu>
+
+Hi Philipp,
+
+Am Sun, Dec 19, 2021 at 08:19:27PM +0100 schrieb Philipp A.:
+> Hi! Destiny is back on track, I hope you didn’t remove it!
+
+Thanks for working on this.  I confirm it was not removed and
+it is updated now in Debian unstable.
+
+Kind regards
+   Andreas.
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Mon Dec 20 08:20:58 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Mon, 20 Dec 2021 13:50:58 +0530
+Subject: Re: Please vendor version tarball for destiny on bioconductor page
+In-Reply-To: <YcA8U4pnmITI2r81@an3as.eu>
+References: <203b42db-37c7-4a46-0f07-efdd038a3d86@tchncs.de> <20210914065240.GM19450@an3as.eu> <DM6PR12MB4092371AF57444648B4FA1A6F9DA9@DM6PR12MB4092.namprd12.prod.outlook.com> <CAANT7+WCzzCbOW6Rw2uRum+k3YkOZRvkO+g5z6B-5-ZFE2m+ZQ@mail.gmail.com> <71801b19-be7b-b8b9-62e7-d5f198491c7b@nileshpatra.info> <20210914164751.GQ19450@an3as.eu> <CAN8d9gn_Vw+MmK1e5ojCrEm63W-Bqj4zN54tHWeqCFRt13jqog@mail.gmail.com> <YcA8U4pnmITI2r81@an3as.eu>
+Message-ID: <4a4e27cb-ac8d-98c0-1303-e8ac5c0ccf33@riseup.net>
+
+On 12/20/21 1:48 PM, Andreas Tille wrote:
+> Hi Philipp,
+>
+> Am Sun, Dec 19, 2021 at 08:19:27PM +0100 schrieb Philipp A.:
+> > Hi! Destiny is back on track, I hope you didn’t remove it!
+>
+>
+> Thanks for working on this.  I confirm it was not removed and
+> it is updated now in Debian unstable.
+
+Should I close this bug? https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994286
+
+From andreas at an3as.eu  Mon Dec 20 09:00:19 2021
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 20 Dec 2021 10:00:19 +0100
+Subject: Re: Please vendor version tarball for destiny on bioconductor page
+In-Reply-To: <4a4e27cb-ac8d-98c0-1303-e8ac5c0ccf33@riseup.net>
+References: <203b42db-37c7-4a46-0f07-efdd038a3d86@tchncs.de> <20210914065240.GM19450@an3as.eu> <DM6PR12MB4092371AF57444648B4FA1A6F9DA9@DM6PR12MB4092.namprd12.prod.outlook.com> <CAANT7+WCzzCbOW6Rw2uRum+k3YkOZRvkO+g5z6B-5-ZFE2m+ZQ@mail.gmail.com> <71801b19-be7b-b8b9-62e7-d5f198491c7b@nileshpatra.info> <20210914164751.GQ19450@an3as.eu> <CAN8d9gn_Vw+MmK1e5ojCrEm63W-Bqj4zN54tHWeqCFRt13jqog@mail.gmail.com> <YcA8U4pnmITI2r81@an3as.eu> <4a4e27cb-ac8d-98c0-1303-e8ac5c0ccf33@riseup.net>
+Message-ID: <YcBGIyynK+SdRTrA@an3as.eu>
+
+Am Mon, Dec 20, 2021 at 01:50:58PM +0530 schrieb Nilesh Patra:
+> > Thanks for working on this.  I confirm it was not removed and
+> > it is updated now in Debian unstable.
+> 
+> Should I close this bug? https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994286
+
+Done.  Thanks for pointing this out
+
+     Andreas. 
+
+-- 
+http://fam-tille.de
+
+From nilesh at riseup.net  Thu Dec 30 19:37:14 2021
+From: nilesh at riseup.net (Nilesh Patra)
+Date: Fri, 31 Dec 2021 01:07:14 +0530
+Subject: Rpact fails its test on i386
+Message-ID: <c08355a8-fed3-7424-3f3a-48c893d6858e@riseup.net>
+
+Hi Friedrich,
+
+Rpact version 3.2.0 fails its tests on i386 (and only this one) with some float precision errors.
+Usually propagating a `-ffloat-store` in PKG_CXXFLAGS fixed the issue when it surfaced in other packages earlier, but that
+does not seem to help here.
+
+Could you take a look? Should these tests be ignored on i386?
+
+Let me know.
+
+regards,
+Nilesh
+
+══ Failed tests ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+── Failure (test-f_simulation_enrichment_rates.R:125:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$iterations[2, ] not equal to c(99, 100, 99, 96, 100, 95, 91, 91, 83, 79, 79, 63).
+2/12 mismatches (average diff: 3)
+[9]  82 - 83 == -1
+[10] 84 - 79 ==  5
+── Failure (test-f_simulation_enrichment_rates.R:126:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$rejectAtLeastOne not equal to c(...).
+8/12 mismatches (average diff: 0.0212)
+[1]  0.03 - 0.04 == -0.01
+[2]  0.03 - 0.04 == -0.01
+[3]  0.12 - 0.15 == -0.03
+[4]  0.39 - 0.36 ==  0.03
+[5]  0.44 - 0.41 ==  0.03
+[6]  0.51 - 0.54 == -0.03
+[9]  0.95 - 0.94 ==  0.01
+[10] 0.95 - 0.93 ==  0.02
+── Failure (test-f_simulation_enrichment_rates.R:127:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult2$rejectedPopulationsPerStage)) not equal to c(...).
+16/48 mismatches (average diff: 0.0225)
+[2]  0.02 - 0.03 == -0.01
+[10] 0.37 - 0.36 ==  0.01
+[12] 0.30 - 0.31 == -0.01
+[13] 0.02 - 0.03 == -0.01
+[17] 0.17 - 0.16 ==  0.01
+[19] 0.14 - 0.18 == -0.04
+[20] 0.61 - 0.55 ==  0.06
+[26] 0.00 - 0.01 == -0.01
+[28] 0.02 - 0.03 == -0.01
+...
+── Failure (test-f_simulation_enrichment_rates.R:129:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$earlyStop[1, ] not equal to c(...).
+2/12 mismatches (average diff: 0.03)
+[9]  0.18 - 0.17 ==  0.01
+[10] 0.16 - 0.21 == -0.05
+── Failure (test-f_simulation_enrichment_rates.R:130:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$successPerStage[1, ] not equal to c(...).
+2/12 mismatches (average diff: 0.03)
+[9]  0.18 - 0.17 ==  0.01
+[10] 0.16 - 0.21 == -0.05
+── Failure (test-f_simulation_enrichment_rates.R:131:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$successPerStage[2, ] not equal to c(...).
+7/12 mismatches (average diff: 0.03)
+[1]  0.02 - 0.03 == -0.01
+[2]  0.03 - 0.04 == -0.01
+[3]  0.11 - 0.14 == -0.03
+[4]  0.35 - 0.32 ==  0.03
+[5]  0.44 - 0.41 ==  0.03
+[6]  0.46 - 0.49 == -0.03
+[10] 0.79 - 0.72 ==  0.07
+── Failure (test-f_simulation_enrichment_rates.R:132:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult2$selectedPopulations)) not equal to c(...).
+14/48 mismatches (average diff: 0.02)
+[4]  0.57 - 0.55 ==  0.02
+[6]  0.33 - 0.30 ==  0.03
+[8]  0.14 - 0.13 ==  0.01
+[10] 0.85 - 0.87 == -0.02
+[12] 0.62 - 0.63 == -0.01
+[14] 0.45 - 0.44 ==  0.01
+[18] 0.75 - 0.77 == -0.02
+[20] 0.66 - 0.62 ==  0.04
+[26] 0.70 - 0.71 == -0.01
+...
+── Failure (test-f_simulation_enrichment_rates.R:134:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$numberOfPopulations[2, ] not equal to c(...).
+9/12 mismatches (average diff: 0.0239)
+[1]  1.35 - 1.36 == -0.0101
+[2]  1.35 - 1.33 ==  0.0200
+[3]  1.26 - 1.24 ==  0.0202
+[4]  1.14 - 1.12 ==  0.0104
+[5]  1.34 - 1.31 ==  0.0300
+[6]  1.42 - 1.44 == -0.0211
+[7]  1.36 - 1.35 ==  0.0110
+[9]  1.27 - 1.30 == -0.0329
+[10] 1.35 - 1.41 == -0.0598
+── Failure (test-f_simulation_enrichment_rates.R:135:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$expectedNumberOfSubjects not equal to c(...).
+12/12 mismatches (average diff: 4.02)
+[1] 665 - 670 ==  -4.32
+[2] 669 - 672 ==  -2.37
+[3] 626 - 620 ==   5.93
+[4] 564 - 574 == -10.29
+[5] 556 - 557 ==  -1.08
+[6] 517 - 514 ==   2.23
+[7] 435 - 439 ==  -4.66
+[8] 416 - 418 ==  -2.19
+[9] 380 - 385 ==  -5.43
+...
+── Failure (test-f_simulation_enrichment_rates.R:136:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult2$sampleSizes)) not equal to c(...).
+24/48 mismatches (average diff: 2.46)
+[2]  422 - 425 == -2.29
+[4]  410 - 413 == -2.34
+[6]  365 - 359 ==  5.93
+[8]  319 - 327 == -7.93
+[10] 349 - 356 == -7.30
+[12] 304 - 303 ==  1.50
+[14] 240 - 244 == -3.79
+[16] 218 - 220 == -1.78
+[18] 252 - 254 == -1.98
+...
+── Failure (test-f_simulation_enrichment_rates.R:138:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult2$conditionalPowerAchieved[2, ] not equal to c(...).
+10/12 mismatches (average diff: 0.0121)
+[1] 0.468 - 0.476 == -7.38e-03
+[2] 0.489 - 0.496 == -6.72e-03
+[3] 0.596 - 0.541 ==  5.49e-02
+[4] 0.580 - 0.565 ==  1.51e-02
+[5] 0.673 - 0.656 ==  1.69e-02
+[6] 0.691 - 0.692 == -1.17e-03
+[7] 0.760 - 0.750 ==  1.02e-02
+[8] 0.782 - 0.782 == -4.70e-06
+[9] 0.785 - 0.788 == -2.59e-03
+...
+── Failure (test-f_simulation_enrichment_rates.R:176:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$iterations[2, ] not equal to c(100, 100, 98, 98, 100, 97, 94, 87, 84, 89, 77, 61).
+11/12 mismatches (average diff: 1.82)
+[2]   99 - 100 == -1
+[3]  100 -  98 ==  2
+[4]   99 -  98 ==  1
+[5]   99 - 100 == -1
+[6]   95 -  97 == -2
+[7]   97 -  94 ==  3
+[8]   84 -  87 == -3
+[9]   87 -  84 ==  3
+[10]  87 -  89 == -2
+...
+── Failure (test-f_simulation_enrichment_rates.R:177:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$rejectAtLeastOne not equal to c(...).
+8/12 mismatches (average diff: 0.0375)
+[2]  0.05 - 0.03 ==  0.02
+[3]  0.10 - 0.15 == -0.05
+[4]  0.20 - 0.21 == -0.01
+[5]  0.21 - 0.19 ==  0.02
+[6]  0.33 - 0.31 ==  0.02
+[7]  0.48 - 0.51 == -0.03
+[8]  0.74 - 0.62 ==  0.12
+[10] 0.81 - 0.78 ==  0.03
+── Failure (test-f_simulation_enrichment_rates.R:178:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult3$rejectedPopulationsPerStage)) not equal to c(...).
+33/48 mismatches (average diff: 0.0236)
+[4]  0.02 - 0.01 ==  0.01
+[6]  0.02 - 0.00 ==  0.02
+[9]  0.01 - 0.00 ==  0.01
+[10] 0.16 - 0.17 == -0.01
+[11] 0.05 - 0.03 ==  0.02
+[13] 0.02 - 0.03 == -0.01
+[14] 0.07 - 0.10 == -0.03
+[15] 0.06 - 0.02 ==  0.04
+[16] 0.04 - 0.03 ==  0.01
+...
+── Failure (test-f_simulation_enrichment_rates.R:180:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$earlyStop[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+11/12 mismatches (average diff: 0.0182)
+[2]  0.01 - 0.00 ==  0.01
+[3]  0.00 - 0.02 == -0.02
+[4]  0.01 - 0.02 == -0.01
+[5]  0.01 - 0.00 ==  0.01
+[6]  0.05 - 0.03 ==  0.02
+[7]  0.03 - 0.06 == -0.03
+[8]  0.16 - 0.13 ==  0.03
+[9]  0.13 - 0.16 == -0.03
+[10] 0.13 - 0.11 ==  0.02
+...
+── Failure (test-f_simulation_enrichment_rates.R:181:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$successPerStage[1, ] not equal to c(0, 0, 0.02, 0.02, 0, 0.03, 0.06, 0.13, 0.16, 0.11, 0.23, 0.39).
+11/12 mismatches (average diff: 0.0182)
+[2]  0.01 - 0.00 ==  0.01
+[3]  0.00 - 0.02 == -0.02
+[4]  0.01 - 0.02 == -0.01
+[5]  0.01 - 0.00 ==  0.01
+[6]  0.05 - 0.03 ==  0.02
+[7]  0.03 - 0.06 == -0.03
+[8]  0.16 - 0.13 ==  0.03
+[9]  0.13 - 0.16 == -0.03
+[10] 0.13 - 0.11 ==  0.02
+...
+── Failure (test-f_simulation_enrichment_rates.R:182:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$successPerStage[2, ] not equal to c(...).
+8/12 mismatches (average diff: 0.025)
+[2]  0.04 - 0.03 ==  0.01
+[3]  0.10 - 0.13 == -0.03
+[5]  0.20 - 0.19 ==  0.01
+[8]  0.58 - 0.49 ==  0.09
+[9]  0.72 - 0.69 ==  0.03
+[10] 0.68 - 0.67 ==  0.01
+[11] 0.69 - 0.68 ==  0.01
+[12] 0.56 - 0.57 == -0.01
+── Failure (test-f_simulation_enrichment_rates.R:183:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult3$selectedPopulations)) not equal to c(...).
+21/48 mismatches (average diff: 0.0267)
+[2]  0.46 - 0.44 ==  0.02
+[4]  0.30 - 0.31 == -0.01
+[8]  0.07 - 0.09 == -0.02
+[10] 0.69 - 0.71 == -0.02
+[14] 0.20 - 0.24 == -0.04
+[16] 0.12 - 0.14 == -0.02
+[18] 0.70 - 0.68 ==  0.02
+[20] 0.61 - 0.59 ==  0.02
+[22] 0.46 - 0.48 == -0.02
+...
+── Failure (test-f_simulation_enrichment_rates.R:186:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$expectedNumberOfSubjects not equal to c(...).
+11/12 mismatches (average diff: 2.73)
+[2]  298 - 300 == -1.5
+[3]  300 - 297 ==  3.0
+[4]  298 - 297 ==  1.5
+[5]  298 - 300 == -1.5
+[6]  292 - 296 == -3.0
+[7]  296 - 291 ==  4.5
+[8]  276 - 280 == -4.5
+[9]  280 - 276 ==  4.5
+[10] 280 - 284 == -3.0
+...
+── Failure (test-f_simulation_enrichment_rates.R:187:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult3$sampleSizes)) not equal to c(...).
+24/48 mismatches (average diff: 0.988)
+[2]  129 - 128 ==  0.780
+[4]  123 - 123 == -0.272
+[6]  116 - 116 == -0.103
+[8]  114 - 115 == -0.824
+[10] 138 - 139 == -0.508
+[12] 129 - 129 ==  0.381
+[14] 119 - 121 == -1.916
+[16] 117 - 117 == -0.704
+[18] 142 - 143 == -0.192
+...
+── Failure (test-f_simulation_enrichment_rates.R:189:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult3$conditionalPowerAchieved[2, ] not equal to c(...).
+12/12 mismatches (average diff: 0.0226)
+[1] 0.0733 - 0.0831 == -0.00975
+[2] 0.1141 - 0.1224 == -0.00829
+[3] 0.1243 - 0.1690 == -0.04470
+[4] 0.2116 - 0.1934 ==  0.01816
+[5] 0.1993 - 0.2087 == -0.00936
+[6] 0.3316 - 0.2878 ==  0.04379
+[7] 0.4383 - 0.4270 ==  0.01133
+[8] 0.4773 - 0.4072 ==  0.07000
+[9] 0.5943 - 0.5749 ==  0.01940
+...
+── Failure (test-f_simulation_enrichment_rates.R:228:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$iterations[2, ] not equal to c(57, 60, 73, 78, 91, 90, 86, 84, 80, 79, 75, 63).
+2/12 mismatches (average diff: 3)
+[1] 53 - 57 == -4
+[4] 76 - 78 == -2
+── Failure (test-f_simulation_enrichment_rates.R:229:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$rejectAtLeastOne not equal to c(...).
+1/12 mismatches
+[4] 0.35 - 0.38 == -0.03
+── Failure (test-f_simulation_enrichment_rates.R:230:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult4$rejectedPopulationsPerStage)) not equal to c(...).
+3/48 mismatches (average diff: 0.0133)
+[8]  0.01 - 0.02 == -0.01
+[31] 0.03 - 0.04 == -0.01
+[32] 0.32 - 0.34 == -0.02
+── Failure (test-f_simulation_enrichment_rates.R:231:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$futilityPerStage[1, ] not equal to c(...).
+2/12 mismatches (average diff: 0.035)
+[1] 0.47 - 0.43 == 0.04
+[4] 0.21 - 0.18 == 0.03
+── Failure (test-f_simulation_enrichment_rates.R:232:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$earlyStop[1, ] not equal to c(...).
+2/12 mismatches (average diff: 0.03)
+[1] 0.47 - 0.43 == 0.04
+[4] 0.24 - 0.22 == 0.02
+── Failure (test-f_simulation_enrichment_rates.R:233:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$successPerStage[1, ] not equal to c(0, 0, 0.01, 0.04, 0, 0.02, 0.09, 0.12, 0.17, 0.2, 0.24, 0.37).
+1/12 mismatches
+[4] 0.03 - 0.04 == -0.01
+── Failure (test-f_simulation_enrichment_rates.R:234:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$successPerStage[2, ] not equal to c(...).
+1/12 mismatches
+[4] 0.32 - 0.34 == -0.02
+── Failure (test-f_simulation_enrichment_rates.R:235:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult4$selectedPopulations)) not equal to c(...).
+5/48 mismatches (average diff: 0.018)
+[2]  0.46 - 0.47 == -0.01
+[8]  0.12 - 0.15 == -0.03
+[26] 0.27 - 0.30 == -0.03
+[28] 0.45 - 0.46 == -0.01
+[32] 0.75 - 0.76 == -0.01
+── Failure (test-f_simulation_enrichment_rates.R:237:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$numberOfPopulations[2, ] not equal to c(...).
+3/12 mismatches (average diff: 0.0217)
+[1] 1.38 - 1.35 ==  0.0265
+[2] 1.22 - 1.23 == -0.0167
+[4] 1.14 - 1.17 == -0.0219
+── Failure (test-f_simulation_enrichment_rates.R:238:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$expectedNumberOfSubjects not equal to c(...).
+12/12 mismatches (average diff: 2.36)
+[1] 429 - 453 == -2.40e+01
+[2] 448 - 448 == -1.88e-06
+[3] 543 - 541 ==  2.23e+00
+[4] 482 - 484 == -2.03e+00
+[5] 535 - 535 ==  8.26e-07
+[6] 511 - 511 ==  2.39e-06
+[7] 449 - 449 == -4.38e-06
+[8] 411 - 411 == -3.66e-06
+[9] 363 - 363 ==  4.98e-06
+...
+── Failure (test-f_simulation_enrichment_rates.R:239:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+unlist(as.list(simResult4$sampleSizes)) not equal to c(...).
+22/48 mismatches (average diff: 0.998)
+[2]  457 - 459 == -1.80e+00
+[4]  400 - 397 ==  2.60e+00
+[6]  409 - 407 ==  2.26e+00
+[8]  323 - 318 ==  5.55e+00
+[10] 365 - 365 ==  2.68e-06
+[12] 324 - 324 ==  1.04e-06
+[14] 263 - 263 ==  3.40e-06
+[16] 233 - 233 == -4.43e-06
+[18] 230 - 230 ==  4.79e-06
+...
+── Failure (test-f_simulation_enrichment_rates.R:241:2): 'getSimulationEnrichmentRates': gMax = 2 ──
+simResult4$conditionalPowerAchieved[2, ] not equal to c(...).
+4/12 mismatches (average diff: 0.00492)
+[1] 0.184 - 0.177 ==  0.006437
+[2] 0.204 - 0.206 == -0.002052
+[3] 0.211 - 0.222 == -0.010798
+[4] 0.294 - 0.294 == -0.000376
+
+[ FAIL 33 | WARN 0 | SKIP 191 | PASS 2138 ]
+Error: Test failures
+Execution halted
+autopkgtest [23:44:26]: test run-unit-test: -----------------------]
+autopkgtest [23:44:26]: test run-unit-test:  - - - - - - - - - - results - - - - - - - - - -
+run-unit-test        FAIL non-zero exit status 1
+autopkgtest [23:44:26]: @@@@@@@@@@@@@@@@@@@@ summary
+run-unit-test        FAIL non-zero exit status 1
+*[master][~/packages/rpact/r-cran-rpact]$ grep -irn getSimulationEnrichmentRates
+MD5:208:08c0f1018482665e5bab39c22c9c096d *man/getSimulationEnrichmentRates.Rd
+NEWS.md:5:* Simulation tools for enrichment design testing means, rates, and hazard ratios: function getSimulationEnrichmentMeans(), getSimulationEnrichmentRates(), getSimulationEnrichmentSimulation() available for simulation of enrichment designs;
+man/SimulationResultsEnrichmentRates.Rd:11:Use \code{\link{getSimula
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: OpenPGP_signature
+Desc: OpenPGP digital signature
+

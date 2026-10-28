@@ -1,0 +1,3007 @@
+From daissi at debian.org  Fri Apr  3 13:40:40 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 3 Apr 2020 15:40:40 +0200
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <24190.20333.642873.934726@rob.eddelbuettel.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com>
+Message-ID: <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com>
+
+Hi all,
+
+Le ven. 27 mars 2020 à 20:09, Dirk Eddelbuettel <edd at debian.org> a écrit :
+>
+> The preparations for R 4.0.0 have started. Peter Dalgaard, upstream's release
+> manager, cut the first alpha release today.  The detailed plan is as always
+> available [1] (and has been for a bit). As always, there is a long and
+> impressive list of changes [2].
+>
+> We have four weeks until April 24 when it will be released.
+>
+
+Bioconductor 3.11 is planned to be released on April 28 [1]. In
+addition to the r-api-4.0 migration, we will have in parallel to deal
+with the migration from r-api-bioc-3.10 to r-api-bioc-3.11. Due to the
+changes in R 4.0.0, packages from the previous Bioconductor (i.e.
+3.10) are probably not compatible. So, I guess between April 24 and
+28, we should not focus to rebuild on Bioconductor packages as we will
+have to update them 4 days later.
+
+Best,
+Dylan
+
+[1] https://bioconductor.org/developers/release-schedule/
+
+From plessy at debian.org  Fri Apr  3 14:42:57 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 3 Apr 2020 23:42:57 +0900
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com>
+Message-ID: <20200403144257.GA10441@bubu.plessy.net>
+
+Le Fri, Apr 03, 2020 at 03:40:40PM +0200, Dylan Aïssi a écrit :
+> 
+> Bioconductor 3.11 is planned to be released on April 28 [1]. In
+> addition to the r-api-4.0 migration, we will have in parallel to deal
+> with the migration from r-api-bioc-3.10 to r-api-bioc-3.11. Due to the
+> changes in R 4.0.0, packages from the previous Bioconductor (i.e.
+> 3.10) are probably not compatible. So, I guess between April 24 and
+> 28, we should not focus to rebuild on Bioconductor packages as we will
+> have to update them 4 days later.
+
+Hi Dylan,
+
+thanks for the heads-up, your guess is completely correct.
+
+Some bioconductor 3.10 will surely fail to build against R 4.0.0, and
+indeed their version from 3.11 is expected to correct that, as Bioc 3.11
+has been developed against r-devel for the past 6 months.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From edd at debian.org  Fri Apr  3 14:57:03 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 3 Apr 2020 09:57:03 -0500
+Subject: Re: R 4.0.0 coming in four weeks
+In-Reply-To: <20200403144257.GA10441@bubu.plessy.net>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com> <20200403144257.GA10441@bubu.plessy.net>
+Message-ID: <24199.20159.269971.703706@rob.eddelbuettel.com>
+
+Just FYI, the transition bug report is still un-ACK'ed at
+https://bugs.debian.org/955211
+
+If an when we get going, can we actually do it in bulk behind the scenes
+given that a) all packages need it and b) we should be at all source uploads
+anyway?
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Fri Apr  3 18:07:00 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Fri, 3 Apr 2020 20:07:00 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <87y2rkh9ij.fsf@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>
+
+Hi Dirk
+
+On Sat, 28 Mar 2020 at 15:57, Dirk Eddelbuettel <edd at debian.org> wrote:
+> R does change internals every now and then with the annual releases; this is
+> a major one which will require rebuilds of all packages.
+
+I've set up a transition tracker [1] where we can see the magnitude of
+the transition.
+Packages marked [arch:all] will need uploads by the team / maintainer,
+the rest can be handled by binNMU.
+
+> R 4.0.0 will be released on April 24. The upstream team always follows a
+> well-publicised schedule
+
+>>From the schedule [2]:
+
+* Tuesday 2020-03-24: START
+* Friday 2020-03-27: GRAND-FEATURE FREEZE (4.0.0 alpha)
+* Friday 2020-04-10: FEATURE FREEZE (4.0.0 beta)
+* Friday 2020-04-17: CODE FREEZE (4.0.0 RC)
+* Tuesday 2020-04-21: PRERELEASE
+* Friday 2020-04-24: RELEASE (4.0.0)
+
+I read on the debian-r mailing list that a parallel transition of
+Bioconductor will also be needed [3].
+Would there be any point to starting the r-base transition much before
+the release of Bioconductor (2020-04-28)?
+Please keep this bug in replies.
+
+Regards
+Graham
+
+[1] https://release.debian.org/transitions/html/r-api-4.0.html
+[2] https://developer.r-project.org
+[3] https://lists.debian.org/debian-r/2020/04/msg00000.html
+
+From edd at debian.org  Fri Apr  3 18:27:23 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 3 Apr 2020 13:27:23 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com>
+Message-ID: <24199.32779.699757.301854@rob.eddelbuettel.com>
+
+Hi Graham,
+
+On 3 April 2020 at 20:07, Graham Inggs wrote:
+| Hi Dirk
+| 
+| On Sat, 28 Mar 2020 at 15:57, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > R does change internals every now and then with the annual releases; this is
+| > a major one which will require rebuilds of all packages.
+| 
+| I've set up a transition tracker [1] where we can see the magnitude of
+| the transition.
+
+Thank you.
+
+I am still (as always) lost by the process. Does that mean an upload to
+unstable is now ok?  Or not?  I am unsure what "hand shake" from the ftp /
+release team I should be waiting for.
+
+| Packages marked [arch:all] will need uploads by the team / maintainer,
+| the rest can be handled by binNMU.
+
+Can the tracker sort by
+ - maintainer
+ - binary type
+to help ?
+ 
+| > R 4.0.0 will be released on April 24. The upstream team always follows a
+| > well-publicised schedule
+| 
+| >From the schedule [2]:
+| 
+| * Tuesday 2020-03-24: START
+| * Friday 2020-03-27: GRAND-FEATURE FREEZE (4.0.0 alpha)
+| * Friday 2020-04-10: FEATURE FREEZE (4.0.0 beta)
+| * Friday 2020-04-17: CODE FREEZE (4.0.0 RC)
+| * Tuesday 2020-04-21: PRERELEASE
+| * Friday 2020-04-24: RELEASE (4.0.0)
+| 
+| I read on the debian-r mailing list that a parallel transition of
+| Bioconductor will also be needed [3].
+| Would there be any point to starting the r-base transition much before
+| the release of Bioconductor (2020-04-28)?
+
+I do not know. I am much less involved in matters BioC but follow R business
+relatively closely. It all starts with my r-base package, after that we
+"merely" have to walk the dependency tree.
+
+Someone with more BioC clues (Charles?) may know better if you should for new
+upstreams from BioC or update what is in testing -- which I would upgrade as
+they /will/ fail to run / install / migrate due to r-3.5 and r-4.0 tags.
+
+| Please keep this bug in replies.
+
+Sure.
+
+Cheers, Dirk
+
+| Regards
+| Graham
+| 
+| 
+| [1] https://release.debian.org/transitions/html/r-api-4.0.html
+| [2] https://developer.r-project.org
+| [3] https://lists.debian.org/debian-r/2020/04/msg00000.html
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From ginggs at debian.org  Fri Apr  3 19:32:17 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Fri, 3 Apr 2020 21:32:17 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24199.32779.699757.301854@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQsRRR1VS=9JnxU1rVwQYf2yobbe6z2e1tXM6rXy1Lqwcw@mail.gmail.com>
+
+Hi Dirk
+
+On Fri, 3 Apr 2020 at 20:27, Dirk Eddelbuettel <edd at debian.org> wrote:
+> I am still (as always) lost by the process. Does that mean an upload to
+> unstable is now ok?  Or not?  I am unsure what "hand shake" from the ftp /
+> release team I should be waiting for.
+
+Please not yet.  Once r-base is uploaded to unstable, no other R
+package will be able to migrate to testing until r-base itself
+migrates, and r-base itself will not be able to migrate until every R
+package has been rebuilt successfully (or removed from testing).
+
+When we are ready, someone from the release team will give you the
+go-ahead in reply to this bug.
+
+> Can the tracker sort by
+>  - maintainer
+>  - binary type
+> to help ?
+
+I don't believe so.
+
+Besides the bioconductor packages (92 of them according to the
+tracker), how much other breakage do you expect?
+I seem to recall upstream has some nice CI pages, would you please
+link to them here?
+
+Regards
+Graham
+
+From edd at debian.org  Fri Apr  3 20:00:57 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 3 Apr 2020 15:00:57 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <CAM8zJQsRRR1VS=9JnxU1rVwQYf2yobbe6z2e1tXM6rXy1Lqwcw@mail.gmail.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <CAM8zJQsRRR1VS=9JnxU1rVwQYf2yobbe6z2e1tXM6rXy1Lqwcw@mail.gmail.com>
+Message-ID: <24199.38393.221256.44809@rob.eddelbuettel.com>
+
+Hi Graham,
+
+On 3 April 2020 at 21:32, Graham Inggs wrote:
+| Hi Dirk
+| 
+| On Fri, 3 Apr 2020 at 20:27, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > I am still (as always) lost by the process. Does that mean an upload to
+| > unstable is now ok?  Or not?  I am unsure what "hand shake" from the ftp /
+| > release team I should be waiting for.
+| 
+| Please not yet.  Once r-base is uploaded to unstable, no other R
+| package will be able to migrate to testing until r-base itself
+| migrates, and r-base itself will not be able to migrate until every R
+| package has been rebuilt successfully (or removed from testing).
+| 
+| When we are ready, someone from the release team will give you the
+| go-ahead in reply to this bug.
+
+Indeed -- so sounds good. A human heads-up is best, and now that you
+reiterate it I seem to recall having received those in the past.
+
+| > Can the tracker sort by
+| >  - maintainer
+| >  - binary type
+| > to help ?
+| 
+| I don't believe so.
+| 
+| Besides the bioconductor packages (92 of them according to the
+| tracker), how much other breakage do you expect?
+
+None, ex ante, but I can't speak for all packages. Some can be behind.
+
+I happen to know that 'team dplyr' at RStudio is planning a release and I saw
+in (my upstream work for Rcpp) reverse-depends checking for Rcpp (new version
+pending at CRAN) that a few packages are currently borked.
+
+| I seem to recall upstream has some nice CI pages, would you please
+| link to them here?
+
+Sure. Just how we have eg bugs.debian.org/NUMBERHERE we have a general
+per-package page at CRAN so
+
+   http://cloud.r-project.org/package=Rcpp
+
+links to Rcpp's page, and it has a link to results which has a "mechanical"
+URL as well albeit less clean:
+
+   https://cloud.r-project.org/web/checks/check_results_Rcpp.html
+
+We can s/Rcpp/AnyPackage/ here. Note that this may need capitalization so
+translation back from Debian packages is 'tricky' (but we have URL info in
+most debian/control files now).  So eg my RcppArmadillo package has
+
+   https://cloud.r-project.org/web/checks/check_results_RcppArmadillo.html
+
+There are some R packages that scrabe this info on a per-maintainer
+basis. foghorn is one. I have a simpler function checkCRANStatus() in my dang
+package (not in Debian, it's just a minor grabbag of random utilities).
+
+Hth, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From daissi at debian.org  Fri Apr  3 20:05:18 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Fri, 3 Apr 2020 22:05:18 +0200
+Subject: Bioconductor transition
+In-Reply-To: <20200403144257.GA10441@bubu.plessy.net>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com> <20200403144257.GA10441@bubu.plessy.net>
+Message-ID: <CA+6XHwQufhL=AKTeDmPewrZKkGx5Y67XFm2mL1Fc9y6SHEBozQ@mail.gmail.com>
+
+Hi,
+
+Le ven. 3 avr. 2020 à 16:43, Charles Plessy <plessy at debian.org> a écrit :
+>
+> thanks for the heads-up, your guess is completely correct.
+>
+> Some bioconductor 3.10 will surely fail to build against R 4.0.0, and
+> indeed their version from 3.11 is expected to correct that, as Bioc 3.11
+> has been developed against r-devel for the past 6 months.
+>
+
+Thanks Charles for this confirmation. :-)
+
+@Graham Should we already fill a bug against "release.debian.org" for
+the r-api-bioc transition like it was done for the previous bioc
+transition [1] ?
+
+Best,
+Dylan
+
+[1] https://bugs.debian.org/944310
+
+From ginggs at debian.org  Fri Apr  3 20:53:32 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Fri, 3 Apr 2020 22:53:32 +0200
+Subject: Re: Bioconductor transition
+In-Reply-To: <CA+6XHwQufhL=AKTeDmPewrZKkGx5Y67XFm2mL1Fc9y6SHEBozQ@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com> <20200403144257.GA10441@bubu.plessy.net> <CA+6XHwQufhL=AKTeDmPewrZKkGx5Y67XFm2mL1Fc9y6SHEBozQ@mail.gmail.com>
+Message-ID: <CAM8zJQvqX5xzJ5kum_=NFXDnazT1WODC1r_nnTk4Cc2mWH6Enw@mail.gmail.com>
+
+Hi Dylan
+
+On Fri, 3 Apr 2020 at 22:06, Dylan Aïssi <daissi at debian.org> wrote:
+> @Graham Should we already fill a bug against "release.debian.org" for
+> the r-api-bioc transition like it was done for the previous bioc
+> transition [1] ?
+
+I don't think we need a separate bug for the r-api-bioc transition
+because happen within the r-base transition.
+Would you please update #955211 with an updated version of the
+r-api-bioc ben file?
+
+Regards
+Graham
+
+From sebastic at xs4all.nl  Sat Apr  4 08:15:22 2020
+From: sebastic at xs4all.nl (Sebastiaan Couwenberg)
+Date: Sat, 4 Apr 2020 10:15:22 +0200
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24199.32779.699757.301854@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com>
+Message-ID: <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>
+
+On 4/3/20 8:27 PM, Dirk Eddelbuettel wrote:
+> Can the tracker sort by
+>  - maintainer
+>  - binary type
+> to help ?
+
+With the attached script you can create a dd-list from the tracker.
+
+ transition-dd-list.pl -u
+https://release.debian.org/transitions/html/r-api-4.0.html
+
+Kind Regards,
+
+Bas
+
+-- 
+ GPG Key ID: 4096R/6750F10AE88D4AF1
+Fingerprint: 8182 DE41 7056 408D 6146  50D1 6750 F10A E88D 4AF1
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: transition-dd-list.pl
+Desc: Perl program
+
+From andreas at an3as.eu  Sat Apr  4 08:32:45 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sat, 4 Apr 2020 10:32:45 +0200
+Subject: Any volunteer for RC critical bugs in our packages?
+Message-ID: <20200404083245.GF24125@an3as.eu>
+
+Hi,
+
+as per our sentinel script at this page
+
+   https://salsa.debian.org/r-pkg-team/maintenance-utilities/-/blob/master/outdated_r-packages.txt
+
+we have some RC bugs:
+
+ r-cran-gwidgetstcltk          | 953225 | serious   | r-cran-gwidgetstcltk not installable: typo in versioned Depends?                                           | Debian R Packages Maintainers
+ r-cran-ranger                 | 949361 | serious   | r-cran-ranger: autopkgtest regression on some architectures                                                | Debian R Packages Maintainers
+ r-cran-ranger                 | 954258 | serious   | src:r-cran-ranger: fails to migrate to testing for too long                                                | Debian R Packages Maintainers
+ r-cran-rmarkdown              | 942469 | serious   | r-cran-rmarkdown: directory to symlink conversion not correctly handled on upgrade                         | Debian R Packages Maintainers
+ r-cran-rmarkdown              | 955561 | serious   | src:r-cran-rmarkdown: fails to migrate to testing for too long                                             | Debian R Packages Maintainers
+ r-cran-sf                     | 955167 | serious   | r-cran-sf: autopkgtest regression                                                                          | Debian R Packages Maintainers
+ r-cran-svglite                | 955316 | serious   | r-cran-svglite autopkgtest fails: there is no package called 'xml2'                                        | Debian R Packages Main
+
+I'm currently focussing on Debian Med Covid-19 hackathon[1] so will
+not focus on single R packages (besides injecting new packages that
+are relevant for the Hackathon).  I'd consider it a good idea if we
+clean up this list to ease testing migration in the transition
+process.
+
+Thanks a lot for any takers
+
+      Andreas.
+
+[1] https://salsa.debian.org/med-team/community/2020-covid19-hackathon/-/wikis/Covid-19-hackathon
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Sat Apr  4 11:28:17 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sat, 4 Apr 2020 13:28:17 +0200
+Subject: Re: Bioconductor transition
+In-Reply-To: <CAM8zJQvqX5xzJ5kum_=NFXDnazT1WODC1r_nnTk4Cc2mWH6Enw@mail.gmail.com>
+References: <24190.20333.642873.934726@rob.eddelbuettel.com> <CA+6XHwTmPV8nJCRuy0md7EVmnPxyrPENBBCJSRH82LWxkHto7A@mail.gmail.com> <20200403144257.GA10441@bubu.plessy.net> <CA+6XHwQufhL=AKTeDmPewrZKkGx5Y67XFm2mL1Fc9y6SHEBozQ@mail.gmail.com> <CAM8zJQvqX5xzJ5kum_=NFXDnazT1WODC1r_nnTk4Cc2mWH6Enw@mail.gmail.com>
+Message-ID: <CA+6XHwTXNe+J2KwdVuDggBXs+Qs+O-pLM0Rf3cC3VMwads9Pww@mail.gmail.com>
+
+Hi,
+
+Le ven. 3 avr. 2020 à 22:49, Graham Inggs <ginggs at debian.org> a écrit :
+>
+> Would you please update #955211 with an updated version of the
+> r-api-bioc ben file?
+>
+
+Please find below a ben file for the r-api-bioc transition. This
+"part" of the r-base transition doesn't need only a rebuild of
+packages but also an upgrade with new upstream versions.
+
+Ben file:
+
+title = "r-api-bioc-3.11";
+is_affected = .depends ~ /r-api-bioc/;
+is_good = .depends ~ "r-api-bioc-3.11";
+is_bad = .depends ~ "r-api-bioc-3.10";
+
+Best,
+Dylan
+
+From edd at debian.org  Sat Apr  4 18:40:39 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sat, 4 Apr 2020 13:40:39 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl>
+Message-ID: <24200.54439.142307.819143@rob.eddelbuettel.com>
+
+On 4 April 2020 at 10:15, Sebastiaan Couwenberg wrote:
+| On 4/3/20 8:27 PM, Dirk Eddelbuettel wrote:
+| > Can the tracker sort by
+| >  - maintainer
+| >  - binary type
+| > to help ?
+| 
+| With the attached script you can create a dd-list from the tracker.
+| 
+|  transition-dd-list.pl -u
+| https://release.debian.org/transitions/html/r-api-4.0.html
+
+Excellent, thank you!  I needed to add libmojolicious-perl but that was it.
+
+Cheers, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From andreas at an3as.eu  Mon Apr  6 18:32:12 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 6 Apr 2020 20:32:12 +0200
+Subject: [covid-19] Autoconf solved but now there is a C issue (Was: Help with r-bioc-rgadem needed)
+In-Reply-To: <20200406163423.GE1178765@azazel.net>
+References: <20200406155905.GF7599@an3as.eu> <20200406163423.GE1178765@azazel.net>
+Message-ID: <20200406183212.GH7599@an3as.eu>
+
+Hi Jeremy,
+
+On Mon, Apr 06, 2020 at 05:34:23PM +0100, Jeremy Sowden wrote:
+> On 2020-04-06, at 17:59:05 +0200, Andreas Tille wrote:
+> >    dh_autoreconf -O--buildsystem=R
+> > autoheader: warning: missing template: HAVE_OPENMP
+> > autoheader: Use AC_DEFINE([HAVE_OPENMP], [], [Description])
+> > autoreconf: /usr/bin/autoheader failed with exit status: 1
+> > dh_autoreconf: error: autoreconf -f -i returned exit code 1
+> > make: *** [debian/rules:4: binary] Error 25
+> > dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+> 
+> Similar to some of the problems with mpqc yesterday.  Patch attached.
+
+Thanks a lot for your patch (commited to Git[1]) which solved the
+autoconf issue.  Unfortunately there is another issue now:
+
+ecking for stdint.h... yes
+checking for unistd.h... yes
+checking dispatch/dispatch.h usability... no
+checking dispatch/dispatch.h presence... no
+checking for dispatch/dispatch.h... no
+checking whether OpenMP will work in a package... yes
+configure: creating ./config.status
+config.status: creating src/Makevars
+config.status: creating src/config.h
+** libs
+make[1]: Entering directory '/build/r-bioc-rgadem-2.34.1/src'
+gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG    -fopenmp -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-j1tBvV/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c Gadem_Analysis.c -o Gadem_Analysis.o
+Gadem_Analysis.c: In function 'GADEM_Analysis':
+Gadem_Analysis.c:618:7: warning: implicit declaration of function 'DO_APPLY' [-Wimplicit-function-declaration]
+  618 |       DO_APPLY(populationCalculation(maxSeqLen, numEM, fitness+ii,
+      |       ^~~~~~~~
+Gadem_Analysis.c:618:16: error: invalid use of void expression
+  618 |       DO_APPLY(populationCalculation(maxSeqLen, numEM, fitness+ii,
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  619 |                                      startPWMfound, minminSites, maxpFactor[ii],
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  620 |                                      numSeq, numSeqEM, seq, rseq, seqLen, Iseq,
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  621 |                                      bfreq0, posWeight, weightType,
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  622 |                                      pvalueCutoff, emSeqLen,
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~
+  623 |                                      pwm[ii], pwmLen[ii], epwm[ii], opwm[ii],
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  624 |                                      pwmConsensus[ii], scoreCutoff+ii, sdyad[ii], ii),
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[1]: *** [/usr/lib/R/etc/Makeconf:168: Gadem_Analysis.o] Error 1
+
+Thanks a lot for your help anyway
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-bioc-rgadem
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Mon Apr  6 19:17:19 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Mon, 6 Apr 2020 21:17:19 +0200
+Subject: Help to enable test suite precondition for covid-19 relevant R package
+Message-ID: <20200406191719.GJ7599@an3as.eu>
+
+Hi,
+
+the cran package r-cran-gganimate requires r-cran-gifski to run its test
+suite.  I've prepared the latter in Git[1].  To build the package a rust
+compiler is needed which I provided via Build-Depends: cargo.  Unfortunately
+there will be some Rust modules needed which the build process tries to
+download:
+
+...
+gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG    -pthread -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-j1tBvV/r-base-3.6.3=. -fstack-protector-strong -Wformat -W
+/usr/bin/cargo build --release --manifest-path=myrustlib/Cargo.toml
+    Updating crates.io index
+warning: spurious network error (2 tries remaining): failed to resolve address for github.com: Temporary failure in name resolution; class=Net (12)
+warning: spurious network error (1 tries remaining): failed to resolve address for github.com: Temporary failure in name resolution; class=Net (12)
+error: failed to fetch `https://github.com/rust-lang/crates.io-index`
+
+Caused by:
+  failed to resolve address for github.com: Temporary failure in name resolution; class=Net (12)
+make[1]: *** [Makevars:12: myrustlib/target/release/libmyrustlib.a] Error 101
+...
+
+Since I have no idea about rust:  How can I find out what extra module
+is needed and do we possibly have a package of it I could use as
+Build-Depends?
+
+Kind regards
+
+      Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-gifski
+
+-- 
+http://fam-tille.de
+
+From jnqnfe at gmail.com  Mon Apr  6 19:51:57 2020
+From: jnqnfe at gmail.com
+Date: Mon, 06 Apr 2020 20:51:57 +0100
+Subject: Re: Help to enable test suite precondition for covid-19 relevant R package
+In-Reply-To: <20200406191719.GJ7599@an3as.eu>
+References: <20200406191719.GJ7599@an3as.eu>
+Message-ID: <86ff5ed44c3125ea17904aea7f3377867ed08c9f.camel@gmail.com>
+
+On Mon, 2020-04-06 at 21:17 +0200, Andreas Tille wrote:
+> Hi,
+> 
+> the cran package r-cran-gganimate requires r-cran-gifski to run its
+> test
+> suite.  I've prepared the latter in Git[1].  To build the package a
+> rust
+> compiler is needed which I provided via Build-Depends:
+> cargo.  Unfortunately
+> there will be some Rust modules needed which the build process tries
+> to
+> download:
+> 
+> ...
+> gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG    -pthread
+> -fvisibility=hidden -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-
+> j1tBvV/r-base-3.6.3=. -fstack-protector-strong -Wformat -W
+> /usr/bin/cargo build --release --manifest-path=myrustlib/Cargo.toml
+>     Updating crates.io index
+> warning: spurious network error (2 tries remaining): failed to
+> resolve address for github.com: Temporary failure in name resolution;
+> class=Net (12)
+> warning: spurious network error (1 tries remaining): failed to
+> resolve address for github.com: Temporary failure in name resolution;
+> class=Net (12)
+> error: failed to fetch `https://github.com/rust-lang/crates.io-index`
+> 
+> Caused by:
+>   failed to resolve address for github.com: Temporary failure in name
+> resolution; class=Net (12)
+> make[1]: *** [Makevars:12: myrustlib/target/release/libmyrustlib.a]
+> Error 101
+> ...
+> 
+> Since I have no idea about rust:  How can I find out what extra
+> module
+> is needed and do we possibly have a package of it I could use as
+> Build-Depends?
+> 
+> Kind regards
+> 
+>       Andreas.
+> 
+> 
+> [1] https://salsa.debian.org/r-pkg-team/r-cran-gifski
+> 
+
+without looking at any of the packages, at all, you say you're
+unfamiliar with Rust, so perhaps the following hints will be helpful:
+ 1. you can use the Rustc compiler (rustc) directly unless you actually
+need to make use of a Cargo project file (Cargo.toml).
+ 2. `cargo` has an `--offline` option to run without network access.
+Cargo is built around the concept of "crates" (libraries) being
+available on crates.io, which projects can depend upon by specifying
+dependencies in Cargo.toml (though it is also possible to have
+dependencies hosted elsewhere), and which cargo can automatically
+download, compile and link when building your project. Cargo can thus
+have a need to retrieve an updated index of available crates (just like
+apt update), requiring internet access, as well as needing internet
+access to fetch depended upon crates that you have not already got
+cached. You can however as I just mentioned run it in offline mode
+whereby it tries to proceed with cached dependencies only.
+
+From jeremy at azazel.net  Mon Apr  6 19:53:12 2020
+From: jeremy at azazel.net (Jeremy Sowden)
+Date: Mon, 6 Apr 2020 20:53:12 +0100
+Subject: Re: [covid-19] Autoconf solved but now there is a C issue (Was: Help with r-bioc-rgadem needed)
+In-Reply-To: <20200406183212.GH7599@an3as.eu>
+References: <20200406155905.GF7599@an3as.eu> <20200406163423.GE1178765@azazel.net> <20200406183212.GH7599@an3as.eu>
+Message-ID: <20200406195312.GF1178765@azazel.net>
+
+On 2020-04-06, at 20:32:12 +0200, Andreas Tille wrote:
+> Hi Jeremy,
+>
+> On Mon, Apr 06, 2020 at 05:34:23PM +0100, Jeremy Sowden wrote:
+> > On 2020-04-06, at 17:59:05 +0200, Andreas Tille wrote:
+> > >    dh_autoreconf -O--buildsystem=R
+> > > autoheader: warning: missing template: HAVE_OPENMP
+> > > autoheader: Use AC_DEFINE([HAVE_OPENMP], [], [Description])
+> > > autoreconf: /usr/bin/autoheader failed with exit status: 1
+> > > dh_autoreconf: error: autoreconf -f -i returned exit code 1
+> > > make: *** [debian/rules:4: binary] Error 25
+> > > dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+> >
+> > Similar to some of the problems with mpqc yesterday.  Patch attached.
+>
+> Thanks a lot for your patch (commited to Git[1]) which solved the
+> autoconf issue.  Unfortunately there is another issue now:
+>
+>
+> ecking for stdint.h... yes
+> checking for unistd.h... yes
+> checking dispatch/dispatch.h usability... no
+> checking dispatch/dispatch.h presence... no
+> checking for dispatch/dispatch.h... no
+> checking whether OpenMP will work in a package... yes
+> configure: creating ./config.status
+> config.status: creating src/Makevars
+> config.status: creating src/config.h
+> ** libs
+> make[1]: Entering directory '/build/r-bioc-rgadem-2.34.1/src'
+> gcc -std=gnu99 -I"/usr/share/R/include" -DNDEBUG    -fopenmp -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-j1tBvV/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c Gadem_Analysis.c -o Gadem_Analysis.o
+> Gadem_Analysis.c: In function 'GADEM_Analysis':
+> Gadem_Analysis.c:618:7: warning: implicit declaration of function 'DO_APPLY' [-Wimplicit-function-declaration]
+>   618 |       DO_APPLY(populationCalculation(maxSeqLen, numEM, fitness+ii,
+>       |       ^~~~~~~~
+> Gadem_Analysis.c:618:16: error: invalid use of void expression
+>   618 |       DO_APPLY(populationCalculation(maxSeqLen, numEM, fitness+ii,
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   619 |                                      startPWMfound, minminSites, maxpFactor[ii],
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   620 |                                      numSeq, numSeqEM, seq, rseq, seqLen, Iseq,
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   621 |                                      bfreq0, posWeight, weightType,
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   622 |                                      pvalueCutoff, emSeqLen,
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~
+>   623 |                                      pwm[ii], pwmLen[ii], epwm[ii], opwm[ii],
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   624 |                                      pwmConsensus[ii], scoreCutoff+ii, sdyad[ii], ii),
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> make[1]: *** [/usr/lib/R/etc/Makeconf:168: Gadem_Analysis.o] Error 1
+>
+>
+> Thanks a lot for your help anyway
+
+Patch attached.
+
+J.
+>From d3b5c1358bcf8463719c0175d759f74819e74f8e Mon Sep 17 00:00:00 2001
+From: Jeremy Sowden <jeremy at azazel.net>
+Date: Mon, 6 Apr 2020 20:41:54 +0100
+Subject: [PATCH] The definition of DO_APPLY in src/config.h.in is clobbered by
+ autoheader, so add it in Gadem_Analysis.c where it is used.
+
+---
+ src/Gadem_Analysis.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/src/Gadem_Analysis.c b/src/Gadem_Analysis.c
+index a604afeb0479..0e868b56918a 100755
+--- a/src/Gadem_Analysis.c
++++ b/src/Gadem_Analysis.c
+@@ -25,6 +25,32 @@
+ 
+ #include "config.h"
+ 
++#ifdef HAVE_DISPATCH_DISPATCH_H
++  #include <dispatch/dispatch.h>
++  #define DO_APPLY(task, n_times, counter_name) \
++    R_CheckUserInterrupt(); \
++    dispatch_apply(n_times, \
++                   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),       \
++                   ^(size_t counter_name) { task; });
++  
++#else // not HAVE_DISPATCH_DISPATCH_H
++  #ifdef HAVE_OPENMP
++    #include <omp.h>
++    #define DO_APPLY(task, n_times, counter_name) \
++      R_CheckUserInterrupt(); \
++      _Pragma("omp parallel for") \
++      for (int counter_name = 0; counter_name < n_times; ++counter_name) { \
++        task; \
++      }
++  #else // not HAVE_OPENMP
++    #define DO_APPLY(task, n_times, counter_name) \
++      for (int counter_name = 0; counter_name < n_times; ++counter_name) { \
++        R_CheckUserInterrupt(); \
++        task; \
++      }
++  #endif // HAVE_OPENMP
++#endif // HAVE_DISPATCH_DISPATCH_H
++
+ /*---------------------------------------------------------------------------
+ // v1.3.1: last modifications 5/14/2011
+ // added user-input background model
+-- 
+2.25.1
+
+-------------- next part --------------
+An attachment was scrubbed...
+Name: signature.asc
+Desc: PGP signature
+
+From andreas at an3as.eu  Tue Apr  7 06:43:37 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 7 Apr 2020 08:43:37 +0200
+Subject: Re: [covid-19] Autoconf solved but now there is a C issue (Was: Help with r-bioc-rgadem needed)
+In-Reply-To: <20200406195312.GF1178765@azazel.net>
+References: <20200406155905.GF7599@an3as.eu> <20200406163423.GE1178765@azazel.net> <20200406183212.GH7599@an3as.eu> <20200406195312.GF1178765@azazel.net>
+Message-ID: <20200407064337.GL7599@an3as.eu>
+
+On Mon, Apr 06, 2020 at 08:53:12PM +0100, Jeremy Sowden wrote:
+> > Thanks a lot for your help anyway
+> 
+> Patch attached.
+
+Thank you so much again, Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Apr  7 07:27:32 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 7 Apr 2020 09:27:32 +0200
+Subject: Re: Help to enable test suite precondition for covid-19 relevant R package
+In-Reply-To: <86ff5ed44c3125ea17904aea7f3377867ed08c9f.camel@gmail.com>
+References: <20200406191719.GJ7599@an3as.eu> <86ff5ed44c3125ea17904aea7f3377867ed08c9f.camel@gmail.com>
+Message-ID: <20200407072732.GN7599@an3as.eu>
+
+Hi,
+
+thanks a lot for these helpful hints.
+
+On Mon, Apr 06, 2020 at 08:51:57PM +0100, jnqnfe at gmail.com wrote:
+> 
+> without looking at any of the packages, at all, you say you're
+> unfamiliar with Rust, so perhaps the following hints will be helpful:
+>  1. you can use the Rustc compiler (rustc) directly unless you actually
+> need to make use of a Cargo project file (Cargo.toml).
+
+I was simply following what upstream code was specifying as requriement
+(which probably makes perfectly sense when not using a Debian chroot
+that has no remote access).
+
+>  2. `cargo` has an `--offline` option to run without network access.
+> Cargo is built around the concept of "crates" (libraries) being
+> available on crates.io, which projects can depend upon by specifying
+> dependencies in Cargo.toml (though it is also possible to have
+> dependencies hosted elsewhere), and which cargo can automatically
+> download, compile and link when building your project. Cargo can thus
+> have a need to retrieve an updated index of available crates (just like
+> apt update), requiring internet access, as well as needing internet
+> access to fetch depended upon crates that you have not already got
+> cached. You can however as I just mentioned run it in offline mode
+> whereby it tries to proceed with cached dependencies only.
+
+I'll keep a record of these helpful hints in Git of that package.  It
+turned out that I can use r-cran-av as an alternative which for the
+intended purpose works out of the box.  So I'll delay this for the
+future if there might be some need, thought. 
+
+Thanks again
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Apr  7 10:02:23 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 7 Apr 2020 12:02:23 +0200
+Subject: Automake issues in BioConductor rGADEM - patches available in Debian
+Message-ID: <20200407100223.GU7599@an3as.eu>
+
+Hi Arnaud,
+
+I intend to package rGADEM for Debian GNU Linux.  When doing so I was
+stumbling upon some build issues that were fixed due to the help of
+Jeremy Sowden.  Please find the patches here for your kind inspection:
+
+   https://salsa.debian.org/r-pkg-team/r-bioc-rgadem/-/blob/master/debian/patches/openmp_autoheader_fix.patch
+
+   https://salsa.debian.org/r-pkg-team/r-bioc-rgadem/-/blob/master/debian/patches/0001-The-definition-of-DO_APPLY-in-src-config.h.in-is-clo.patch
+
+Kind regards
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Tue Apr  7 13:55:51 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 7 Apr 2020 15:55:51 +0200
+Subject: R-cran-isoband regression of autopkgtest on arm64
+Message-ID: <20200407135551.GX7599@an3as.eu>
+
+Hi folks,
+
+has anybody an idea why autopkgtest of r-cran-isoband fails on arm64?
+
+   https://ci.debian.net/data/autopkgtest/testing/arm64/r/r-cran-isoband/4859548/log.gz
+
+says:
+
+autopkgtest [09:05:26]: test pkg-r-autopkgtest: [-----------------------
+Test: Try to load the R library isoband
+
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: aarch64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library('isoband')
+> 
+> 
+autopkgtest [09:05:27]: test pkg-r-autopkgtest: -----------------------]
+autopkgtest [09:05:27]: test pkg-r-autopkgtest:  - - - - - - - - - - results - - - - - - - - - -
+pkg-r-autopkgtest    PASS
+autopkgtest [09:05:27]: @@@@@@@@@@@@@@@@@@@@ summary
+run-unit-test        FAIL non-zero exit status 1
+pkg-r-autopkgtest    PASS
+
+Any hint would be welcome
+
+        Andreas.
+
+-- 
+http://fam-tille.de
+
+From daissi at debian.org  Tue Apr  7 14:02:57 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Tue, 7 Apr 2020 16:02:57 +0200
+Subject: Re: R-cran-isoband regression of autopkgtest on arm64
+In-Reply-To: <20200407135551.GX7599@an3as.eu>
+References: <20200407135551.GX7599@an3as.eu>
+Message-ID: <CA+6XHwQ2kpm2=HBpfmSRf_HjO5mdq7pjLuWKv6zfw2etVT-ybQ@mail.gmail.com>
+
+Hi Andreas,
+
+Le mar. 7 avr. 2020 à 15:56, Andreas Tille <andreas at an3as.eu> a écrit :
+>
+> has anybody an idea why autopkgtest of r-cran-isoband fails on arm64?
+>
+
+The useful part of the log is:
+
+> library(testthat)
+> library(isoband)
+>
+> test_check("isoband")
+── 1. Failure: Catch unit tests pass (@test-cpp.R#3)  ──────────────────────────
+C++ unit tests:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ is a Catch v1.9.6 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Crop to unit box | test-clip-lines.cpp
+  Double intersections
+-------------------------------------------------------------------------------
+test-clip-lines.cpp:176
+...............................................................................
+
+test-clip-lines.cpp:212: FAILED:
+  CATCH_CHECK( result == in_middle )
+with expansion:
+  0 == 4
+
+test-clip-lines.cpp:213: FAILED:
+  CATCH_CHECK( near_equal(crop1.x, 0) )
+with expansion:
+  false
+
+test-clip-lines.cpp:214: FAILED:
+  CATCH_CHECK( near_equal(crop1.y, 0) )
+with expansion:
+  false
+
+test-clip-lines.cpp:215: FAILED:
+  CATCH_CHECK( near_equal(crop2.x, 1) )
+with expansion:
+  false
+
+test-clip-lines.cpp:216: FAILED:
+  CATCH_CHECK( near_equal(crop2.y, 1) )
+with expansion:
+  false
+
+===============================================================================
+test cases:   5 |   4 passed | 1 failed
+assertions: 290 | 285 passed | 5 failed
+
+But, I don't know how to fix this.
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Wed Apr  8 10:02:03 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 8 Apr 2020 12:02:03 +0200
+Subject: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <E1jLwGO-000Glv-Qp@fasolo.debian.org>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org>
+Message-ID: <20200408100203.GH7599@an3as.eu>
+
+Hi Jeroen,
+
+since I know you are very responsive about R packaging in Debian I'd
+like to simply forward this issue to you.  While I could remove the said
+mp3 file and edit the tests to exclude this one I think its more in the
+interest of all users if you could find a different sample with a free
+license.  If you need suggestions I'd happily ask here in the Debian
+community.
+
+Thanks a lot
+
+      Andreas.
+
+On Tue, Apr 07, 2020 at 10:00:08PM +0000, Scott Kitterman wrote:
+> 
+> The license of inst/samples/Synapsis-Wonderland.mp3 is
+> http://creativecommons.org/licenses/by-nc-nd/4.0 which is non-free.  This will
+> need to be removed from the tarball and a +dsfg reupload done.  I did not
+> check the package further.
+> 
+> Scott K
+>  
+> 
+> 
+> 
+> ===
+> 
+> Please feel free to respond to this email if you don't understand why
+> your files were rejected, or if you upload new files which address our
+> concerns.
+> 
+> 
+> _______________________________________________
+> R-pkg-team mailing list
+> R-pkg-team at alioth-lists.debian.net
+> https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+-- 
+http://fam-tille.de
+
+From jeroen at berkeley.edu  Wed Apr  8 23:17:15 2020
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Thu, 9 Apr 2020 01:17:15 +0200
+Subject: Re: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <20200408100203.GH7599@an3as.eu>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org> <20200408100203.GH7599@an3as.eu>
+Message-ID: <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com>
+
+On Wed, Apr 8, 2020 at 12:02 PM Andreas Tille <andreas at an3as.eu> wrote:
+>
+> Hi Jeroen,
+>
+> since I know you are very responsive about R packaging in Debian I'd
+> like to simply forward this issue to you.  While I could remove the said
+> mp3 file and edit the tests to exclude this one I think its more in the
+> interest of all users if you could find a different sample with a free
+> license.  If you need suggestions I'd happily ask here in the Debian
+> community.
+
+Hmm I didn't realize this was considered non-free by some. The license
+states that it is free to share — copy and redistribute the material
+in any medium or format.
+
+I'll think about it next time I work on this pkg.
+
+From plessy at debian.org  Thu Apr  9 04:50:06 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 9 Apr 2020 13:50:06 +0900
+Subject: Re: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org> <20200408100203.GH7599@an3as.eu> <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com>
+Message-ID: <20200409045006.olvpztf27mvne3on@kumo.plessy.net>
+
+Le Thu, Apr 09, 2020 at 01:17:15AM +0200, Jeroen Ooms a écrit :
+> On Wed, Apr 8, 2020 at 12:02 PM Andreas Tille <andreas at an3as.eu> wrote:
+> >
+> > since I know you are very responsive about R packaging in Debian I'd
+> > like to simply forward this issue to you.  While I could remove the said
+> > mp3 file and edit the tests to exclude this one I think its more in the
+> > interest of all users if you could find a different sample with a free
+> > license.  If you need suggestions I'd happily ask here in the Debian
+> > community.
+> 
+> Hmm I didn't realize this was considered non-free by some. The license
+> states that it is free to share — copy and redistribute the material
+> in any medium or format.
+
+Dear Jeroen,
+
+thanks for your prompt answer !
+
+Debian has a special emphasis on software freedom, but even for other
+projects, a non-commercial license like the CC-4-BY-NC-ND can be
+problematic.  For instance, a Linux CD image containing your package can
+not be sold, a freelancer can not organise a paid course in which the
+mp3 file of your package would be used in a way or another, etc.  Thus,
+a Free replacement of the mp3 file would be very useful.
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy                              Akano, Uruma, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,           https://mastodon.technology/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From jeroen at berkeley.edu  Thu Apr  9 09:30:27 2020
+From: jeroen at berkeley.edu (Jeroen Ooms)
+Date: Thu, 9 Apr 2020 11:30:27 +0200
+Subject: Re: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <20200409045006.olvpztf27mvne3on@kumo.plessy.net>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org> <20200408100203.GH7599@an3as.eu> <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com> <20200409045006.olvpztf27mvne3on@kumo.plessy.net>
+Message-ID: <CABFfbXtHcOg47J02xReZptdrMJenUptocHsysKF-4i96j=zuNQ@mail.gmail.com>
+
+On Thu, Apr 9, 2020 at 6:50 AM Charles Plessy <plessy at debian.org> wrote:
+>
+> Le Thu, Apr 09, 2020 at 01:17:15AM +0200, Jeroen Ooms a écrit :
+> > On Wed, Apr 8, 2020 at 12:02 PM Andreas Tille <andreas at an3as.eu> wrote:
+> > >
+> > > since I know you are very responsive about R packaging in Debian I'd
+> > > like to simply forward this issue to you.  While I could remove the said
+> > > mp3 file and edit the tests to exclude this one I think its more in the
+> > > interest of all users if you could find a different sample with a free
+> > > license.  If you need suggestions I'd happily ask here in the Debian
+> > > community.
+> >
+> > Hmm I didn't realize this was considered non-free by some. The license
+> > states that it is free to share — copy and redistribute the material
+> > in any medium or format.
+>
+> Dear Jeroen,
+>
+> thanks for your prompt answer !
+>
+> Debian has a special emphasis on software freedom, but even for other
+> projects, a non-commercial license like the CC-4-BY-NC-ND can be
+> problematic.  For instance, a Linux CD image containing your package can
+> not be sold, a freelancer can not organise a paid course in which the
+> mp3 file of your package would be used in a way or another, etc.  Thus,
+> a Free replacement of the mp3 file would be very useful.
+
+I'm confused now. So does Debian not accept CC-BY licenses
+all-together or is this license is considered non-free only because of
+the NC part? Or the ND part? Or because of the mp3 format?
+
+From andreas at an3as.eu  Thu Apr  9 09:51:06 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 9 Apr 2020 11:51:06 +0200
+Subject: Re: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <CABFfbXtHcOg47J02xReZptdrMJenUptocHsysKF-4i96j=zuNQ@mail.gmail.com>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org> <20200408100203.GH7599@an3as.eu> <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com> <20200409045006.olvpztf27mvne3on@kumo.plessy.net> <CABFfbXtHcOg47J02xReZptdrMJenUptocHsysKF-4i96j=zuNQ@mail.gmail.com>
+Message-ID: <20200409095106.GL13853@an3as.eu>
+
+On Thu, Apr 09, 2020 at 11:30:27AM +0200, Jeroen Ooms wrote:
+> > Debian has a special emphasis on software freedom, but even for other
+> > projects, a non-commercial license like the CC-4-BY-NC-ND can be
+> > problematic.  For instance, a Linux CD image containing your package can
+> > not be sold, a freelancer can not organise a paid course in which the
+> > mp3 file of your package would be used in a way or another, etc.  Thus,
+> > a Free replacement of the mp3 file would be very useful.
+> 
+> I'm confused now. So does Debian not accept CC-BY licenses
+> all-together or is this license is considered non-free only because of
+> the NC part? Or the ND part? Or because of the mp3 format?
+
+I did a short
+
+$ grep 'License: CC-BY*' /usr/share/doc/*/copyright | sed -e 's/^.*License: *//' -e 's/ or.*//' | sort | uniq
+CC-BY
+CC-BY-2.5
+CC-BY-3.0
+CC-BY-3.0-famfamfam
+CC-BY-3.0-US
+CC-BY-4.0
+CC-BY-SA
+CC-BY-SA-2.0-IT
+CC-BY-SA-2.5
+CC-BY-SA-3.0
+CC-BY-SA-3.0 
+CC-BY-SA-3.0+
+CC-BY-SA3.0
+CC-BY-SA-3.0-Unported
+CC-BY-SA-3.0-US
+CC-BY-SA-4.0
+
+on my system to find several example licenses that are acceptable.  Mp3
+is OK since what I did right now is to remove your sample and symlink to 
+
+   /usr/share/doc/libmp3-tag-perl/examples/empty_10sec.mp3
+
+of package libmp3-tag-perl.  This makes some of the original tests fail
+which I excluded.  If I did not misunderstood the licenses the -N[CD]
+parts are preventing us from doing changes which is again Debian policy.
+ 
+Kind regards
+
+       Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Thu Apr  9 14:11:53 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Thu, 9 Apr 2020 16:11:53 +0200
+Subject: transformr for Debian minor issue in documentation [Comments regarding r-cran-transformr_0.1.1-1_amd64.changes]
+Message-ID: <20200409141153.GF16894@an3as.eu>
+
+Hi Thomas,
+
+I have packaged transformr for Debian.  Our ftpmaster has found a file
+LICENSE.note which mentions Mapbox.  In his and my opinion this can be
+droped since we did not found the files mentioned there.
+
+Please correct me if I'm wrong and the code is somehow hidden and needs
+to be specified also in the debian/copyright.
+
+Kind regards
+
+      Andreas.
+
+----- Forwarded message from Scott Kitterman <ftpmaster at ftp-master.debian.org> -----
+
+Date: Tue, 07 Apr 2020 21:16:44 +0000
+From: Scott Kitterman <ftpmaster at ftp-master.debian.org>
+To: Andreas Tille <tille at debian.org>, Debian R Packages Maintainers <r-pkg-team at alioth-lists.debian.net>
+Cc: Debian FTP Masters <ftpmaster at ftp-master.debian.org>
+Subject: Comments regarding r-cran-transformr_0.1.1-1_amd64.changes
+
+You might consider discussing with upstream that the file LICENSE.note states
+that there is an embedded copy of "the C++ library earcut developed by
+Mapbox".  As nearly as I can determine, that is not true, so the license
+information in LICENSE.note isn't relevant to the package.  Assuming it's not
+hidden somewhere I didn't find it, the file should probably be removed.  If it
+still in the package, then please add the license information from it to your
+debian/copyright.
+
+Scott K
+
+_______________________________________________
+R-pkg-team mailing list
+R-pkg-team at alioth-lists.debian.net
+https://alioth-lists.debian.net/cgi-bin/mailman/listinfo/r-pkg-team
+
+----- End forwarded message -----
+
+-- 
+http://fam-tille.de
+
+From plessy at debian.org  Fri Apr 10 22:43:47 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 11 Apr 2020 07:43:47 +0900
+Subject: Re: Non-free mp3 sample in av (Was: r-cran-av_0.5.0-1_amd64.changes REJECTED)
+In-Reply-To: <CABFfbXtHcOg47J02xReZptdrMJenUptocHsysKF-4i96j=zuNQ@mail.gmail.com>
+References: <E1jLwGO-000Glv-Qp@fasolo.debian.org> <20200408100203.GH7599@an3as.eu> <CABFfbXtjGf379VKn=Z1CyzESwtaQwd2ydoTexhLSUOHgnpr0gw@mail.gmail.com> <20200409045006.olvpztf27mvne3on@kumo.plessy.net> <CABFfbXtHcOg47J02xReZptdrMJenUptocHsysKF-4i96j=zuNQ@mail.gmail.com>
+Message-ID: <20200410224347.GA25948@bubu.plessy.net>
+
+Hello again,
+
+Le Thu, Apr 09, 2020 at 11:30:27AM +0200, Jeroen Ooms a écrit :
+> 
+> I'm confused now. So does Debian not accept CC-BY licenses
+> all-together or is this license is considered non-free only because of
+> the NC part? Or the ND part? Or because of the mp3 format?
+
+The NC and ND parts are problematic and the MP3 format is fine.
+
+No Derivative is clearly non-Free in Debian.  I understand that some
+people might argue that in the particular case of a MP3 file used for
+test purposes, it is not essential to be able to make derivatives, but
+in any case Debian does not make exceptions.
+
+Non Commercial is also non-Free in Debian.  In my previous email, I
+tried to illustrate how non-profit clauses in licenses create unexpected
+problems to distributors and users.  To people who would like to reduce
+the risk of seing others making large profits with their work without
+sharing back, we recommend the use of copyleft licenses.  It is not a
+perfect protection, but it allows a whole ecosystem of services to
+flourish.
+
+As Andreas illustrated, CC-BY licenses are commonly found in Debian for
+data or media files.  I would like to add that, unfortunately, Debian
+only accepts CC-BY licenses version 3 or higher.  While there is no
+reason to select older license versions now for new works, there are
+still files licensed under CC-BY 2 or 1 that are around (for instance
+some old open-access publications), and we (in Debian) can not use them.
+So please (all readers) be careful to avoid them :)
+
+I hope it clarifies !
+
+Have a nice week-end,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From npatra974 at gmail.com  Sun Apr 12 13:35:12 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Sun, 12 Apr 2020 19:05:12 +0530
+Subject: [RFS] r-cran-parallelmap
+Message-ID: <CAJN192_0Kzj7jK7qe67Yi-PuaMGNr3KTdL+AC9PcuKdjJVzmeQ@mail.gmail.com>
+
+Hi,
+Currently r-cran-parallelmap reports failing tests. I have fixed it, and build + autopkgtests pass.
+Pushed the changes to team repo here [1].
+
+Needs review and sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-cran-parallelmap
+
+Thanks and regards
+Nilesh
+
+From daissi at debian.org  Sun Apr 12 14:07:52 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sun, 12 Apr 2020 16:07:52 +0200
+Subject: Re: [RFS] r-cran-parallelmap
+In-Reply-To: <CAJN192_0Kzj7jK7qe67Yi-PuaMGNr3KTdL+AC9PcuKdjJVzmeQ@mail.gmail.com>
+References: <CAJN192_0Kzj7jK7qe67Yi-PuaMGNr3KTdL+AC9PcuKdjJVzmeQ@mail.gmail.com>
+Message-ID: <CA+6XHwTBhDJ8p1h4pF+6e8wN_osZK3ecC2Zek0LEj806W4w9jA@mail.gmail.com>
+
+Hi Nilesh,
+
+Le dim. 12 avr. 2020 à 15:51, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Currently r-cran-parallelmap reports failing tests. I have fixed it, and build + autopkgtests pass.
+> Pushed the changes to team repo here [1].
+> Needs review and sponsorship.
+
+Done! Thanks!
+
+Best,
+Dylan
+
+From plessy at debian.org  Tue Apr 14 00:35:53 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 14 Apr 2020 09:35:53 +0900
+Subject: How to install r-base 3.6.3.20200409-1 from experimental?
+Message-ID: <20200414003553.GF25948@bubu.plessy.net>
+
+Hello everybody,
+
+I tried to make a chroot with the beta version of R 4.0.0 in
+experimental, but could not install it because r-base depends on
+r-recommended, which depends on packages that have not been rebuilt yet.
+
+Apart from making a dummy r-recommended package, is there a workaround?
+
+Also, does that suggest that r-recommended should recommend the CRAN
+package that it currently depends on ?, or that r-base should recommend
+and not depend on r-recommended ?
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From edd at debian.org  Tue Apr 14 00:59:39 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 13 Apr 2020 19:59:39 -0500
+Subject: Re: How to install r-base 3.6.3.20200409-1 from experimental?
+In-Reply-To: <20200414003553.GF25948@bubu.plessy.net>
+References: <20200414003553.GF25948@bubu.plessy.net>
+Message-ID: <24213.2811.7680.514594@rob.eddelbuettel.com>
+
+Salut Charles,
+
+On 14 April 2020 at 09:35, Charles Plessy wrote:
+| I tried to make a chroot with the beta version of R 4.0.0 in
+| experimental, but could not install it because r-base depends on
+| r-recommended, which depends on packages that have not been rebuilt yet.
+
+The old narrow trick is to
+
+  - not install r-base which is a meta package and wrapper
+
+  - just install r-base-core
+
+  - let go of r-recommended so no issue with the 3.5 tagged packages
+
+  - one quick bulk call to install.r (or equivalent) installing packages
+    boot, class, codetools, ... rpart, survival, spatial
+ 
+| Apart from making a dummy r-recommended package, is there a workaround?
+
+See above.
+
+Otherwise, not really because I have been too lazy to move my base.tgz for
+pbuilder / create an alternate for experimental. So so far that version of R
+4.0.0 is 'alone'.
+
+As a pragmatic measure I would recommend either
+
+  - Docker: you can use rocker/r-base aka r-base (our Rocker Project produces
+    the 'official' R image) and just live with the fact that they get
+    uninstalled and just call install.r to locally install them
+
+  - my Ubuntu PPAs have 18.04 and 20.04 sets (because it _is_ a lot easier to
+    toss source uploads at launchpad)
+
+I actually made two very quick videos this weekend that show their use:
+
+  http://dirk.eddelbuettel.com/blog/2020/04/11#024_rocker_r_4_0_0_testing
+
+  http://dirk.eddelbuettel.com/blog/2020/04/12#025_rocker_r_4_0_0_testing_Ubuntu_20_04
+
+(and also via Twitter if that is your thing).
+ 
+| Also, does that suggest that r-recommended should recommend the CRAN
+| package that it currently depends on ?, or that r-base should recommend
+| and not depend on r-recommended ?
+
+Nothing sinister here. I just didn't think it was worth my while to promote
+experimental to a full distro.  Once I upload r-base to unstable, I will
+_immediately_ follow with ten or so recommended packages. And as stated, a
+chroot or Docker image can easily complement with a quick local install of
+the base and required packages.  Or if you were to be insist on "but I can
+only run .deb package" then you can of course build yourself a set of local
+NMU rebuilds. My salsa sources are all current, and the PPA uploads used. But
+I wouldn't think it is worth it.
+
+My money is on Docker for these quick tests.
+
+Hope this helps, happy to take it offline for follow-ups.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Tue Apr 14 01:23:57 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Mon, 13 Apr 2020 20:23:57 -0500
+Subject: Re: How to install r-base 3.6.3.20200409-1 from experimental?
+In-Reply-To: <24213.2811.7680.514594@rob.eddelbuettel.com>
+References: <20200414003553.GF25948@bubu.plessy.net> <24213.2811.7680.514594@rob.eddelbuettel.com>
+Message-ID: <24213.4269.657153.814083@rob.eddelbuettel.com>
+
+Charles,
+
+As a quick test, I fired up the Rocker r-base container (which is based on
+testing) and did (and remember we're always root in Docker)
+
+ echo "deb http://deb.debian.org/debian experimental main" > /etc/apt/sources.list.d/experimental.list
+ apt-get update
+ apt-get install -t experimental r-base-core
+ R -q -e 'install.packages(c("boot", "class", "cluster", "codetools", "foreign", "KernSmooth", "lattice", "littler", "MASS", "Matrix", "mgcv", "nlme", "nnet", "rpart", "spatial", "survival"))'
+
+and that is essentially the same as having the r-cran-* packages from
+r-recommended.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Tue Apr 14 02:34:15 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Tue, 14 Apr 2020 11:34:15 +0900
+Subject: Re: How to install r-base 3.6.3.20200409-1 from experimental?
+In-Reply-To: <24213.2811.7680.514594@rob.eddelbuettel.com>
+References: <20200414003553.GF25948@bubu.plessy.net> <24213.2811.7680.514594@rob.eddelbuettel.com>
+Message-ID: <20200414023415.v7ut2fypuvaeql2r@kumo.plessy.net>
+
+Salut Dirk,
+
+Le Mon, Apr 13, 2020 at 07:59:39PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> The old narrow trick is to
+> 
+>   - not install r-base which is a meta package and wrapper
+>   - just install r-base-core
+
+Thanks a lot for refreshing my memory, this is exactly what I needed !
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy                              Akano, Uruma, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,           https://mastodon.technology/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From andreas at an3as.eu  Tue Apr 14 16:10:11 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 14 Apr 2020 18:10:11 +0200
+Subject: Help needed for calling Java class from R
+Message-ID: <20200414161011.GD22823@an3as.eu>
+
+Hi,
+
+in the COVID-19 packaging effort I need r-cran-rcdk as a predependency.
+I have injected it into r-pkg-team Git[1].  It is using the rjava interface
+and depends from r-cran-rcdklibs (which has a dependency from libcdk-java).
+When I try to build I get:
+
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Error: package or namespace load failed for 'rcdk':
+ .onLoad failed in loadNamespace() for 'rcdk', details:
+  call: .jnew("org/openscience/cdk/formula/rules/NitrogenRule")
+  error: java.lang.NoClassDefFoundError: org/openscience/cdk/exception/CDKException
+Error: loading failed
+Execution halted
+ERROR: loading failed
+* removing '/build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library/rcdk'
+dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library --clean . "--built-timestamp='Mon, 23 Mar 2020 21:27:30 +0100'" returned exit code 1
+make: *** [debian/rules:4: binary] Error 25
+dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+I: copying local configuration
+E: Failed autobuilding of package
+
+I verified in the pbuilder chroot that the missing class exists in CLASSPATH:
+
+root:/# grep NitrogenRule /usr/share/java/*
+Binary file /usr/share/java/cdk-formula-2.3.jar matches
+Binary file /usr/share/java/cdk-formula.jar matches
+
+Any idea how I can make sure that this class can be really found?
+
+Kind regards
+
+       Andreas.
+
+[1] https://salsa.debian.org/r-pkg-team/r-cran-rcdk
+
+-- 
+http://fam-tille.de
+
+From fw at deneb.enyo.de  Tue Apr 14 16:52:56 2020
+From: fw at deneb.enyo.de (Florian Weimer)
+Date: Tue, 14 Apr 2020 18:52:56 +0200
+Subject: Re: Help needed for calling Java class from R
+In-Reply-To: <20200414161011.GD22823@an3as.eu>
+References: <20200414161011.GD22823@an3as.eu>
+Message-ID: <877dyim2l3.fsf@mid.deneb.enyo.de>
+
+* Andreas Tille:
+
+> Hi,
+>
+> in the COVID-19 packaging effort I need r-cran-rcdk as a predependency.
+> I have injected it into r-pkg-team Git[1].  It is using the rjava interface
+> and depends from r-cran-rcdklibs (which has a dependency from libcdk-java).
+> When I try to build I get:
+>
+>
+> ** installing vignettes
+> ** testing if installed package can be loaded from temporary location
+> Error: package or namespace load failed for 'rcdk':
+>  .onLoad failed in loadNamespace() for 'rcdk', details:
+>   call: .jnew("org/openscience/cdk/formula/rules/NitrogenRule")
+>   error: java.lang.NoClassDefFoundError: org/openscience/cdk/exception/CDKException
+> Error: loading failed
+> Execution halted
+> ERROR: loading failed
+> * removing '/build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library/rcdk'
+> dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library --clean . "--built-timestamp='Mon, 23 Mar 2020 21:27:30 +0100'" returned exit code 1
+> make: *** [debian/rules:4: binary] Error 25
+> dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+> I: copying local configuration
+> E: Failed autobuilding of package
+>
+>
+> I verified in the pbuilder chroot that the missing class exists in CLASSPATH:
+>
+> root:/# grep NitrogenRule /usr/share/java/*
+> Binary file /usr/share/java/cdk-formula-2.3.jar matches
+> Binary file /usr/share/java/cdk-formula.jar matches
+
+Please check if /usr/share/java/cdk-interfaces.jar is on the
+classpath.  The missing class is
+org.openscience.cdk.exception.CDKException (apparently a
+superinterface of org.openscience.cdk.formula.rules.NitrogenRule), and
+it's contained in that JAR file.
+
+From andreas at an3as.eu  Tue Apr 14 17:53:54 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 14 Apr 2020 19:53:54 +0200
+Subject: Re: Help needed for calling Java class from R
+In-Reply-To: <877dyim2l3.fsf@mid.deneb.enyo.de>
+References: <20200414161011.GD22823@an3as.eu> <877dyim2l3.fsf@mid.deneb.enyo.de>
+Message-ID: <20200414175354.GF22823@an3as.eu>
+
+On Tue, Apr 14, 2020 at 06:52:56PM +0200, Florian Weimer wrote:
+> * Andreas Tille:
+> > ERROR: loading failed
+> > * removing '/build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library/rcdk'
+> > dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library --clean . "--built-timestamp='Mon, 23 Mar 2020 21:27:30 +0100'" returned exit code 1
+> > make: *** [debian/rules:4: binary] Error 25
+> > dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+> > I: copying local configuration
+> > E: Failed autobuilding of package
+> >
+> >
+> > I verified in the pbuilder chroot that the missing class exists in CLASSPATH:
+> >
+> > root:/# grep NitrogenRule /usr/share/java/*
+> > Binary file /usr/share/java/cdk-formula-2.3.jar matches
+> > Binary file /usr/share/java/cdk-formula.jar matches
+> 
+> Please check if /usr/share/java/cdk-interfaces.jar is on the
+> classpath.  The missing class is
+> org.openscience.cdk.exception.CDKException (apparently a
+> superinterface of org.openscience.cdk.formula.rules.NitrogenRule), and
+> it's contained in that JAR file.
+
+This is a good hint.  So I tried:
+
+$ git diff
+diff --git a/debian/rules b/debian/rules
+index 529c38a..bde1d1b 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -1,5 +1,6 @@
+ #!/usr/bin/make -f
+ 
++export CLASSPATH=/usr/share/java/cdk-interfaces.jar:/usr/share/java/cdk-silent.jar
++
+ %:
+        dh $@ --buildsystem R
+
+and while the first error vanished that way I get the next one:
+
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Error: package or namespace load failed for 'rcdk':
+ .onLoad failed in loadNamespace() for 'rcdk', details:
+  call: .jcall("org/openscience/cdk/silent/SilentChemObjectBuilder", 
+  error: RcallMethod: cannot determine object class
+Error: loading failed
+Execution halted
+ERROR: loading failed
+* removing '/build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library/rcdk'
+dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library --clean . "--built-timestamp='Mon, 23 Mar 2020 21:27:30 +0100'" returned exit code 1
+make: *** [debian/rules:6: binary] Error 25
+dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+
+root:/# grep SilentChemObjectBuilder /usr/share/java/*
+Binary file /usr/share/java/cdk-silent-2.3.jar matches
+Binary file /usr/share/java/cdk-silent.jar matches
+
+Seems I did not really understood the trick to set CLASSPATH. :-(
+
+Kind regards and thanks so far
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From fw at deneb.enyo.de  Tue Apr 14 18:49:44 2020
+From: fw at deneb.enyo.de (Florian Weimer)
+Date: Tue, 14 Apr 2020 20:49:44 +0200
+Subject: Re: Help needed for calling Java class from R
+In-Reply-To: <20200414175354.GF22823@an3as.eu>
+References: <20200414161011.GD22823@an3as.eu> <877dyim2l3.fsf@mid.deneb.enyo.de> <20200414175354.GF22823@an3as.eu>
+Message-ID: <87o8rtlx6f.fsf@mid.deneb.enyo.de>
+
+* Andreas Tille:
+
+> On Tue, Apr 14, 2020 at 06:52:56PM +0200, Florian Weimer wrote:
+>> * Andreas Tille:
+>> > ERROR: loading failed
+>> > * removing '/build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library/rcdk'
+>> > dh_auto_install: error: R CMD INSTALL -l /build/r-cran-rcdk-3.5.0/debian/r-cran-rcdk/usr/lib/R/site-library --clean . "--built-timestamp='Mon, 23 Mar 2020 21:27:30 +0100'" returned exit code 1
+>> > make: *** [debian/rules:4: binary] Error 25
+>> > dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+>> > I: copying local configuration
+>> > E: Failed autobuilding of package
+>> >
+>> >
+>> > I verified in the pbuilder chroot that the missing class exists in CLASSPATH:
+>> >
+>> > root:/# grep NitrogenRule /usr/share/java/*
+>> > Binary file /usr/share/java/cdk-formula-2.3.jar matches
+>> > Binary file /usr/share/java/cdk-formula.jar matches
+>> 
+>> Please check if /usr/share/java/cdk-interfaces.jar is on the
+>> classpath.  The missing class is
+>> org.openscience.cdk.exception.CDKException (apparently a
+>> superinterface of org.openscience.cdk.formula.rules.NitrogenRule), and
+>> it's contained in that JAR file.
+>
+> This is a good hint.  So I tried:
+>
+>
+> $ git diff
+> diff --git a/debian/rules b/debian/rules
+> index 529c38a..bde1d1b 100755
+> --- a/debian/rules
+> +++ b/debian/rules
+> @@ -1,5 +1,6 @@
+>  #!/usr/bin/make -f
+>  
+> +export CLASSPATH=/usr/share/java/cdk-interfaces.jar:/usr/share/java/cdk-silent.jar
+> +
+>  %:
+>         dh $@ --buildsystem R
+>
+>
+> and while the first error vanished that way I get the next one:
+>
+>
+> *** installing help indices
+> ** building package indices
+> ** installing vignettes
+> ** testing if installed package can be loaded from temporary location
+> Error: package or namespace load failed for 'rcdk':
+>  .onLoad failed in loadNamespace() for 'rcdk', details:
+>   call: .jcall("org/openscience/cdk/silent/SilentChemObjectBuilder", 
+>   error: RcallMethod: cannot determine object class
+
+Meh.  Does R have exceptions?  It would be nice to translate the
+underlying exception from
+
+  if (clnam)
+    cls = findClass(env, clnam, oClassLoader);
+  else
+    cls = objectClass(env,o);
+  if (!cls)
+    error_return("RcallMethod: cannot determine object class");
+
+into an R exception with a nice backtrace, then we might see *why* the
+class fails to load (like the missing superinterface before).
+
+We can try to actually load the class using the classpath you used and
+some Java tools:
+
+# jshell --class-path /usr/share/java/cdk-interfaces.jar:/e/java/cdk-silent.jar
+|  Welcome to JShell -- Version 11.0.7-ea
+|  For an introduction type: /help intro
+
+jshell> org.openscience.cdk.silent.SilentChemObjectBuilder.class.newInstance()
+|  Exception java.lang.NoClassDefFoundError: org/openscience/cdk/DynamicFactory$CreationModifier
+|        at Class.getDeclaredConstructors0 (Native Method)
+|        at Class.privateGetDeclaredConstructors (Class.java:3137)
+|        at Class.getConstructor0 (Class.java:3342)
+|        at Class.newInstance (Class.java:556)
+|        at (#1:1)
+|  Caused by: java.lang.ClassNotFoundException: org.openscience.cdk.DynamicFactory$CreationModifier
+|        at BuiltinClassLoader.loadClass (BuiltinClassLoader.java:581)
+|        at ClassLoaders$AppClassLoader.loadClass (ClassLoaders.java:178)
+|        at ClassLoader.loadClass (ClassLoader.java:522)
+|        ...
+
+That error goes away if I add /usr/share/java/cdk-core.jar to the
+classpath.  Hopefully that gets past this point.  (The jshell command
+will still fail, but now because JDK can load the class and sees that
+the constructor has private access and cannot be called.  Hopefully
+that's not relevant in the real scenario.)
+
+There's probably some better way to deal with this using Maven, but I
+really dislike Maven and have carefully avoided to learn much about it
+so far, sorry. 8-(
+
+From andreas at an3as.eu  Tue Apr 14 20:50:28 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Tue, 14 Apr 2020 22:50:28 +0200
+Subject: Re: Help needed for calling Java class from R
+In-Reply-To: <87o8rtlx6f.fsf@mid.deneb.enyo.de>
+References: <20200414161011.GD22823@an3as.eu> <877dyim2l3.fsf@mid.deneb.enyo.de> <20200414175354.GF22823@an3as.eu> <87o8rtlx6f.fsf@mid.deneb.enyo.de>
+Message-ID: <20200414205028.GI22823@an3as.eu>
+
+Hi Florian,
+
+On Tue, Apr 14, 2020 at 08:49:44PM +0200, Florian Weimer wrote:
+> 
+> Meh.  Does R have exceptions?  It would be nice to translate the
+> underlying exception from
+> 
+>   if (clnam)
+>     cls = findClass(env, clnam, oClassLoader);
+>   else
+>     cls = objectClass(env,o);
+>   if (!cls)
+>     error_return("RcallMethod: cannot determine object class");
+> 
+> into an R exception with a nice backtrace, then we might see *why* the
+> class fails to load (like the missing superinterface before).
+
+I have no idea about this.
+ 
+> We can try to actually load the class using the classpath you used and
+> some Java tools:
+> 
+> # jshell --class-path /usr/share/java/cdk-interfaces.jar:/e/java/cdk-silent.jar
+> |  Welcome to JShell -- Version 11.0.7-ea
+> |  For an introduction type: /help intro
+> 
+> jshell> org.openscience.cdk.silent.SilentChemObjectBuilder.class.newInstance()
+> |  Exception java.lang.NoClassDefFoundError: org/openscience/cdk/DynamicFactory$CreationModifier
+> |        at Class.getDeclaredConstructors0 (Native Method)
+> |        at Class.privateGetDeclaredConstructors (Class.java:3137)
+> |        at Class.getConstructor0 (Class.java:3342)
+> |        at Class.newInstance (Class.java:556)
+> |        at (#1:1)
+> |  Caused by: java.lang.ClassNotFoundException: org.openscience.cdk.DynamicFactory$CreationModifier
+> |        at BuiltinClassLoader.loadClass (BuiltinClassLoader.java:581)
+> |        at ClassLoaders$AppClassLoader.loadClass (ClassLoaders.java:178)
+> |        at ClassLoader.loadClass (ClassLoader.java:522)
+> |        ...
+> 
+> That error goes away if I add /usr/share/java/cdk-core.jar to the
+> classpath.  Hopefully that gets past this point.  (The jshell command
+> will still fail, but now because JDK can load the class and sees that
+> the constructor has private access and cannot be called.  Hopefully
+> that's not relevant in the real scenario.)
+
+So far your hints were helpful.  It turned out that finally the
+CLASSPATH does not need to set only in d/rules for building the package
+but way more importantly inside r-cran-rcdklibs package.  It was shipping
+a binary JAR cdk-2.3.jar.  Since this had to be replaced by the Debian
+packaged libcdk-java I symlinked now to all JARs that are shipped
+with libcdk-java into the install dir from rcdklibs:
+
+  https://salsa.debian.org/r-pkg-team/r-cran-rcdklibs/-/blob/master/debian/rules
+
+You see I need also vecmath.jar in addition - and more ...
+
+The CLASSPATH is created when loading rcdklibs in
+
+  https://salsa.debian.org/r-pkg-team/r-cran-rcdklibs/-/blob/master/R/rcdklibs.R
+
+line 10.  It simply attaches each JAR file that is found in
+
+  $(debRdir)/$(cranNameOrig)/cont/  (see rules file)
+
+So far I'm now able to build the r-cran-rcdk package.  However, in the
+autopkgtest more classes are needed.  The output is:
+
+...
+1 Test Suite : 
+rcdk rcdk Unit Tests - 31 test functions, 31 errors, 0 failures
+ERROR in test.charges: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.get.hcount: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.is.aromatic: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.depictiongenerator: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.fp: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.fp.substructures.binary: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.fp.substructures.count: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.frag1: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.frag2: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.frag3: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.aromaticity.match: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.match1: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.match2: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.match3: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.match4: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.mcs1: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.mcs2: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.mcs3: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.get.properties: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.set.props: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.atom.count: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.desc.calc: Error in .jcall("org/guha/rcdk/descriptors/DescriptorUtilities", "[Ljava/lang/String;",  : 
+  java.util.ServiceConfigurationError: org.openscience.cdk.qsar.IMolecularDescriptor: Provider org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor could not be instantiated
+ERROR in test.desc.cats: Error in .jcall("org/guha/rcdk/descriptors/DescriptorUtilities", "[Ljava/lang/String;",  : 
+  java.util.ServiceConfigurationError: org.openscience.cdk.qsar.IMolecularDescriptor: Provider org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor could not be instantiated
+ERROR in test.desc.names: Error in .jcall("org/guha/rcdk/descriptors/DescriptorUtilities", "[Ljava/lang/String;",  : 
+  java.util.ServiceConfigurationError: org.openscience.cdk.qsar.IMolecularDescriptor: Provider org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor could not be instantiated
+ERROR in test.exact.natural.mass: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.formula: Error in load.molecules(formula_file) : 
+  java.lang.NoClassDefFoundError: com/google/common/io/CharStreams
+ERROR in test.get.largest: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.is.connected: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.is.neutral: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.get.smiles: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+ERROR in test.get.smiles2: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+  java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+
+... and I'm now wondering what other JARs I need to symlink (if I
+do not really want to symlink every *.jar inside /usr/share/java
+which would probably work but sounds a bit like overkill.  Hmmm,
+thinking I could also symlink the whole dir to /usr/share/java
+and tried:
+
+$ git diff
+diff --git a/debian/rules b/debian/rules
+index 045412f..6a6e650 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -9,9 +9,10 @@ JARS=vecmath.jar
+ 
+ override_dh_link:
+        dh_link
+-       for jar in `dpkg -L libcdk-java | grep  /usr/share/java/ | grep -v [0-9]\.[0-9]\.jar` ; do \
+-           dh_link $${jar} $(debRdir)/$(cranNameOrig)/cont/`basename $${jar}` ; \
+-       done
+-       for jar in $(JARS) ; do \
+-           dh_link /usr/share/java/$${jar} $(debRdir)/$(cranNameOrig)/cont/$${jar} ; \
+-       done
++       dh_link /usr/share/java $(debRdir)/$(cranNameOrig)/cont
++#      for jar in `dpkg -L libcdk-java | grep  /usr/share/java/ | grep -v [0-9]\.[0-9]\.jar` ; do \
++#          dh_link $${jar} $(debRdir)/$(cranNameOrig)/cont/`basename $${jar}` ; \
++#      done
++#      for jar in $(JARS) ; do \
++#          dh_link /usr/share/java/$${jar} $(debRdir)/$(cranNameOrig)/cont/$${jar} ; \
++#      done
+
+but this did not changed the error above unfortunately. :-(
+
+Any further hints?
+
+Kind regards
+
+     Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Wed Apr 15 10:13:49 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Wed, 15 Apr 2020 12:13:49 +0200
+Subject: Re: Help needed for calling Java class from R
+In-Reply-To: <20200414205028.GI22823@an3as.eu>
+References: <20200414161011.GD22823@an3as.eu> <877dyim2l3.fsf@mid.deneb.enyo.de> <20200414175354.GF22823@an3as.eu> <87o8rtlx6f.fsf@mid.deneb.enyo.de> <20200414205028.GI22823@an3as.eu>
+Message-ID: <20200415101349.GO22823@an3as.eu>
+
+Hi again,
+
+On Tue, Apr 14, 2020 at 10:50:28PM +0200, Andreas Tille wrote:
+> 1 Test Suite : 
+> rcdk rcdk Unit Tests - 31 test functions, 31 errors, 0 failures
+> ERROR in test.charges: Error in .jnew("org/openscience/cdk/smiles/SmilesParser", get.chem.object.builder()) : 
+>   java.lang.NoClassDefFoundError: com/google/common/collect/Multimap
+
+I inspected the cdk-2.3.jar from upstream and found out that it is
+bundling way more classes.  It also contains the missing
+
+    com/google/common/collect/Multimap
+
+which happens to be in the Debian packaged guava.jar.  I went forward
+with checking what else is in cdk-2.3.jar and added several other missing
+JARs as symlink to the dir where r-cran-rcdk is building its CLASSPATH from.
+
+I'm a bit concerned since in META-INF/DEPENDENCIES is
+
+   Apache Jena, including the Jena IRI library
+
+which is not packaged yet.  But so far I was successful with bringing
+down the number of test suite errors.  However, there are some remaining
+ones I can not directly attach to missing classes.  Here is the output
+of the test suite:
+
+Running unit tests
+$pkg
+[1] "rcdk"
+
+$getwd
+[1] "/tmp/autopkgtest.4IabgP/autopkgtest_tmp"
+
+$pathToUnitTests
+[1] "/usr/lib/R/site-library/rcdk/unitTests"
+
+Loading required package: rcdklibs
+
+Executing test function test.charges  ...  done successfully.
+
+Executing test function test.get.hcount  ...  done successfully.
+
+Executing test function test.is.aromatic  ...  done successfully.
+
+Executing test function test.depictiongenerator  ... Timing stopped at: 0.005 0.004 0.004
+Error in .jnew("org.openscience.cdk.depict.DepictionGenerator") : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.fp  ... Timing stopped at: 1.429 0.016 0.403
+Error in .jnew("org/openscience/cdk/fingerprint/ShortestPathFingerprinter",  : 
+  java.lang.NoClassDefFoundError: org/apache/commons/math3/random/RandomGenerator
+ done successfully.
+
+Executing test function test.fp.substructures.binary  ...  done successfully.
+
+Executing test function test.fp.substructures.count  ...  done successfully.
+
+Executing test function test.frag1  ...  done successfully.
+
+Executing test function test.frag2  ...  done successfully.
+
+Executing test function test.frag3  ...  done successfully.
+
+Executing test function test.aromaticity.match  ... Timing stopped at: 0.013 0 0.004
+Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.match1  ... Timing stopped at: 0.012 0 0.004
+Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.match2  ... Timing stopped at: 0.004 0 0.003
+Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.match3  ... Timing stopped at: 0.018 0 0.005
+Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.match4  ... Timing stopped at: 0.02 0.004 0.006
+Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ done successfully.
+
+Executing test function test.mcs1  ... Timing stopped at: 0.028 0 0.008
+Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ done successfully.
+
+Executing test function test.mcs2  ... Timing stopped at: 0.024 0 0.006
+Error in .jcall("org.guha.rcdk.util.Misc", "[[I", "getMcsAsAtomIndexMapping",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ done successfully.
+
+Executing test function test.mcs3  ... Timing stopped at: 0.024 0 0.007
+Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ done successfully.
+
+Executing test function test.get.properties  ... WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by RJavaTools to method java.util.Collections$UnmodifiableCollection$1.next()
+WARNING: Please consider reporting this to the maintainers of RJavaTools
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+ done successfully.
+
+Executing test function test.set.props  ...  done successfully.
+
+Executing test function test.atom.count  ...  done successfully.
+
+Executing test function test.desc.calc  ... org.openscience.cdk.io.cml.CMLHandler WARN: Detected unknown convention: cdk:substructureList
+ done successfully.
+
+Executing test function test.desc.cats  ... [1] "protein"        "hybrid"         "constitutional" "topological"   
+[5] "electronic"     "geometrical"   
+Timing stopped at: 0.078 0.004 0.029
+Error in checkEquals(5, length(cats)) : Mean relative difference: 0.2
+
+ done successfully.
+
+Executing test function test.desc.names  ...  done successfully.
+
+Executing test function test.exact.natural.mass  ...  done successfully.
+
+Executing test function test.formula  ... Timing stopped at: 0.161 0.012 0.067
+Error in load.molecules(formula_file) : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/aromaticity/CDKHueckelAromaticityDetector
+ done successfully.
+
+Executing test function test.get.largest  ...  done successfully.
+
+Executing test function test.is.connected  ...  done successfully.
+
+Executing test function test.is.neutral  ...  done successfully.
+
+Executing test function test.get.smiles  ...  done successfully.
+
+Executing test function test.get.smiles2  ... Timing stopped at: 0.003 0 0.003
+Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ done successfully.
+
+------------------- UNIT TEST SUMMARY ---------------------
+
+RUNIT TEST PROTOCOL -- Wed Apr 15 09:40:11 2020 
+*********************************************** 
+Number of test functions: 31 
+Number of errors: 12 
+Number of failures: 1 
+
+ 
+1 Test Suite : 
+rcdk rcdk Unit Tests - 31 test functions, 12 errors, 1 failure
+ERROR in test.depictiongenerator: Error in .jnew("org.openscience.cdk.depict.DepictionGenerator") : 
+  java.lang.ClassNotFoundException
+ERROR in test.fp: Error in .jnew("org/openscience/cdk/fingerprint/ShortestPathFingerprinter",  : 
+  java.lang.NoClassDefFoundError: org/apache/commons/math3/random/RandomGenerator
+ERROR in test.aromaticity.match: Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ERROR in test.match1: Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ERROR in test.match2: Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ERROR in test.match3: Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ERROR in test.match4: Error in .jfindClass(as.character(class)) : 
+  java.lang.ClassNotFoundException
+ERROR in test.mcs1: Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ERROR in test.mcs2: Error in .jcall("org.guha.rcdk.util.Misc", "[[I", "getMcsAsAtomIndexMapping",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+ERROR in test.mcs3: Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+FAILURE in test.desc.cats: Error in checkEquals(5, length(cats)) : Mean relative difference: 0.2
+
+ERROR in test.formula: Error in load.molecules(formula_file) : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/aromaticity/CDKHueckelAromaticityDetector
+ERROR in test.get.smiles2: Error in .jcall("org.guha.rcdk.util.Misc", "Lorg/openscience/cdk/interfaces/IAtomContainer;",  : 
+  java.lang.NoClassDefFoundError: org/openscience/cdk/smsd/Isomorphism
+Error: 
+
+unit testing failed (#test failures: 1, #R errors: 12)
+
+Execution halted
+
+Since there are several NoClassDefFoundError concerning cdk itself I'd
+like to re-ask here again.  In vain I also tried to simply symlink
+everything that is in /usr/share/java due to given Build-Depends and
+tried the test suite again.  This leads to *more* errors than I have
+with the hand crafted list in
+
+   https://salsa.debian.org/r-pkg-team/r-cran-rcdklibs/-/blob/master/debian/rules
+
+and the errors are slightly different.  I wonder whether there might be
+some light of inspiration enhance my poking in the dark a bit.
+
+Thanks for any help so far
+
+      Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Fri Apr 17 15:02:55 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Fri, 17 Apr 2020 17:02:55 +0200
+Subject: Re: r-cran-svglite autopkgtest fails: Error: symbol font
+Message-ID: <20200417150255.GJ5846@an3as.eu>
+
+Control: tags -1 upstream
+Control: forwarded -1 Lionel Henry <lionel at rstudio.com>
+Control: tags -1 help
+
+Hi Lionel,
+
+the Debian packaged version of svglite received a bug report[1] about a
+failing test.
+
+I can reproduce this by:
+
+r-cran-svglite/tests(master) $ LC_ALL=C R --no-save < testthat.R
+
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(svglite)
+> 
+> test_check("svglite")
+-- 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)  -----------
+StartTag: invalid element name [68]
+Backtrace:
+ 1. svglite::xmlSVG(...)
+ 3. xml2:::read_xml.character(plot)
+ 4. xml2:::read_xml.raw(...)
+
+== testthat results  ===========================================================
+[ OK: 93 | SKIPPED: 5 | WARNINGS: 0 | FAILED: 1 ]
+1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30) 
+
+Error: testthat unit tests failed
+Execution halted
+
+Do you have any hint how to fix this test?  May be its some missing
+font package we should add to the dependencies?
+
+Kind regards
+
+      Andreas.
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955316#10
+
+-- 
+http://fam-tille.de
+
+From lionel at rstudio.com  Fri Apr 17 15:38:02 2020
+From: lionel at rstudio.com (Lionel Henry)
+Date: Fri, 17 Apr 2020 17:38:02 +0200
+Subject: Re: r-cran-svglite autopkgtest fails: Error: symbol font
+In-Reply-To: <20200417150255.GJ5846@an3as.eu>
+References: <20200417150255.GJ5846@an3as.eu>
+Message-ID: <CAJf4E3pmnxLcgG_sx5mQeQ3ZP37=VpHMAztTwWgq7WryHrd47Q@mail.gmail.com>
+
+Hello.
+
+Sorry I don't have any hints.
+By the way Thomas Lin Pedersen (cc'd) is now the maintainer of svglite.
+
+Best,
+Lionel
+
+On 4/17/20, Andreas Tille <andreas at an3as.eu> wrote:
+> Control: tags -1 upstream
+> Control: forwarded -1 Lionel Henry <lionel at rstudio.com>
+> Control: tags -1 help
+>
+> Hi Lionel,
+>
+> the Debian packaged version of svglite received a bug report[1] about a
+> failing test.
+>
+> I can reproduce this by:
+>
+>
+> r-cran-svglite/tests(master) $ LC_ALL=C R --no-save < testthat.R
+>
+> R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+> Copyright (C) 2020 The R Foundation for Statistical Computing
+> Platform: x86_64-pc-linux-gnu (64-bit)
+>
+> R is free software and comes with ABSOLUTELY NO WARRANTY.
+> You are welcome to redistribute it under certain conditions.
+> Type 'license()' or 'licence()' for distribution details.
+>
+> R is a collaborative project with many contributors.
+> Type 'contributors()' for more information and
+> 'citation()' on how to cite R or R packages in publications.
+>
+> Type 'demo()' for some demos, 'help()' for on-line help, or
+> 'help.start()' for an HTML browser interface to help.
+> Type 'q()' to quit R.
+>
+>> library(testthat)
+>> library(svglite)
+>>
+>> test_check("svglite")
+> -- 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)
+> -----------
+> StartTag: invalid element name [68]
+> Backtrace:
+>  1. svglite::xmlSVG(...)
+>  3. xml2:::read_xml.character(plot)
+>  4. xml2:::read_xml.raw(...)
+>
+> == testthat results
+> ===========================================================
+> [ OK: 93 | SKIPPED: 5 | WARNINGS: 0 | FAILED: 1 ]
+> 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)
+>
+> Error: testthat unit tests failed
+> Execution halted
+>
+>
+>
+> Do you have any hint how to fix this test?  May be its some missing
+> font package we should add to the dependencies?
+>
+> Kind regards
+>
+>       Andreas.
+>
+>
+> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955316#10
+>
+> --
+> http://fam-tille.de
+>
+
+From thomas.pedersen at rstudio.com  Fri Apr 17 15:45:44 2020
+From: thomas.pedersen at rstudio.com (Thomas Pedersen)
+Date: Fri, 17 Apr 2020 17:45:44 +0200
+Subject: Re: r-cran-svglite autopkgtest fails: Error: symbol font
+In-Reply-To: <CAJf4E3pmnxLcgG_sx5mQeQ3ZP37=VpHMAztTwWgq7WryHrd47Q@mail.gmail.com>
+References: <CAJf4E3pmnxLcgG_sx5mQeQ3ZP37=VpHMAztTwWgq7WryHrd47Q@mail.gmail.com>
+Message-ID: <1D75EC67-8535-4AC1-8910-6B31737B4053@rstudio.com>
+
+I’ll look into it in the coming week
+
+Best
+Thomas
+
+> Den 17. apr. 2020 kl. 17.38 skrev Lionel Henry <lionel at rstudio.com>:
+> 
+> ﻿Hello.
+> 
+> Sorry I don't have any hints.
+> By the way Thomas Lin Pedersen (cc'd) is now the maintainer of svglite.
+> 
+> Best,
+> Lionel
+> 
+>> On 4/17/20, Andreas Tille <andreas at an3as.eu> wrote:
+>> Control: tags -1 upstream
+>> Control: forwarded -1 Lionel Henry <lionel at rstudio.com>
+>> Control: tags -1 help
+>> 
+>> Hi Lionel,
+>> 
+>> the Debian packaged version of svglite received a bug report[1] about a
+>> failing test.
+>> 
+>> I can reproduce this by:
+>> 
+>> 
+>> r-cran-svglite/tests(master) $ LC_ALL=C R --no-save < testthat.R
+>> 
+>> R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+>> Copyright (C) 2020 The R Foundation for Statistical Computing
+>> Platform: x86_64-pc-linux-gnu (64-bit)
+>> 
+>> R is free software and comes with ABSOLUTELY NO WARRANTY.
+>> You are welcome to redistribute it under certain conditions.
+>> Type 'license()' or 'licence()' for distribution details.
+>> 
+>> R is a collaborative project with many contributors.
+>> Type 'contributors()' for more information and
+>> 'citation()' on how to cite R or R packages in publications.
+>> 
+>> Type 'demo()' for some demos, 'help()' for on-line help, or
+>> 'help.start()' for an HTML browser interface to help.
+>> Type 'q()' to quit R.
+>> 
+>>> library(testthat)
+>>> library(svglite)
+>>> 
+>>> test_check("svglite")
+>> -- 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)
+>> -----------
+>> StartTag: invalid element name [68]
+>> Backtrace:
+>> 1. svglite::xmlSVG(...)
+>> 3. xml2:::read_xml.character(plot)
+>> 4. xml2:::read_xml.raw(...)
+>> 
+>> == testthat results
+>> ===========================================================
+>> [ OK: 93 | SKIPPED: 5 | WARNINGS: 0 | FAILED: 1 ]
+>> 1. Error: symbol font family is 'Symbol' (@test-text-fonts.R#30)
+>> 
+>> Error: testthat unit tests failed
+>> Execution halted
+>> 
+>> 
+>> 
+>> Do you have any hint how to fix this test?  May be its some missing
+>> font package we should add to the dependencies?
+>> 
+>> Kind regards
+>> 
+>>      Andreas.
+>> 
+>> 
+>> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955316#10
+>> 
+>> --
+>> http://fam-tille.de
+>> 
+
+From edd at debian.org  Fri Apr 24 23:35:58 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 24 Apr 2020 18:35:58 -0500
+Subject: R 4.0.0 is here, transition is stalled
+Message-ID: <24227.30686.443590.638158@rob.eddelbuettel.com>
+
+All,
+
+So we have a shiny new R 4.0.0 (and I updated Debian packages in
+experimental, Ubuntu PPA builds from it, and a Rocker container based on it).
+
+But the transition seems stalled.  I am a little worried because there is one
+(for GNU GSL) which has been in "real soon now mode" for half a year.
+
+Would it be polite to nudge, or not?  What is the best process?
+
+Cheers, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sat Apr 25 02:24:11 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 25 Apr 2020 11:24:11 +0900
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <24227.30686.443590.638158@rob.eddelbuettel.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com>
+Message-ID: <20200425022411.m6zrigcz5fpi3y6t@kumo.plessy.net>
+
+Le Fri, Apr 24, 2020 at 06:35:58PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> So we have a shiny new R 4.0.0 (and I updated Debian packages in
+> experimental, Ubuntu PPA builds from it, and a Rocker container based on it).
+> 
+> But the transition seems stalled.  I am a little worried because there is one
+> (for GNU GSL) which has been in "real soon now mode" for half a year.
+> 
+> Would it be polite to nudge, or not?  What is the best process?
+
+Hi Dirk,
+
+I had a look at the experimental builds and it reveals a regression on
+PowerPC architecture, one of which (ppc64el) is a release architecture.
+
+https://buildd.debian.org/status/package.php?p=r-base&suite=experimental
+
+Unfortunately, the build error is rather cryptic: the step `installing
+'sysdata.rda'` just never completes and then the build is "killed with
+signal TERM after 150 minutes of inactivity".
+
+Since it would be a blocker anyway, maybe it is worth investigating
+before contacting the Release team ?
+
+Have a nice week-end,
+
+Charles
+
+-- 
+Charles Plessy                              Akano, Uruma, Okinawa, Japan
+Debian Med packaging team         http://www.debian.org/devel/debian-med
+Tooting from work,           https://mastodon.technology/@charles_plessy
+Tooting from home,                 https://framapiaf.org/@charles_plessy
+
+From edd at debian.org  Sat Apr 25 02:47:26 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 24 Apr 2020 21:47:26 -0500
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <20200425022411.m6zrigcz5fpi3y6t@kumo.plessy.net>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200425022411.m6zrigcz5fpi3y6t@kumo.plessy.net>
+Message-ID: <24227.42174.773661.999670@rob.eddelbuettel.com>
+
+Hi Charles,
+
+On 25 April 2020 at 11:24, Charles Plessy wrote:
+| I had a look at the experimental builds and it reveals a regression on
+| PowerPC architecture, one of which (ppc64el) is a release architecture.
+| 
+| https://buildd.debian.org/status/package.php?p=r-base&suite=experimental
+| 
+| Unfortunately, the build error is rather cryptic: the step `installing
+| 'sysdata.rda'` just never completes and then the build is "killed with
+| signal TERM after 150 minutes of inactivity".
+| 
+| Since it would be a blocker anyway, maybe it is worth investigating
+| before contacting the Release team ?
+
+Fair enough but look at the history on that platform at
+
+   https://buildd.debian.org/status/logs.php?pkg=r-base&arch=ppc64el
+
+which shows
+
+  i)   years of no issues
+  ii)  two random failures after 3.6.1-7 and before 3.6.2-2
+  iii) four more builds
+  iv)  four failures for the recent two alphas, beta and rc
+
+and no entry in debian/changelog so we changed nothing. Hm.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From plessy at debian.org  Sat Apr 25 03:25:26 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Sat, 25 Apr 2020 12:25:26 +0900
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <24227.42174.773661.999670@rob.eddelbuettel.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200425022411.m6zrigcz5fpi3y6t@kumo.plessy.net> <24227.42174.773661.999670@rob.eddelbuettel.com>
+Message-ID: <20200425032526.GA18946@bubu.plessy.net>
+
+Le Fri, Apr 24, 2020 at 09:47:26PM -0500, Dirk Eddelbuettel a écrit :
+> 
+>    https://buildd.debian.org/status/logs.php?pkg=r-base&arch=ppc64el
+> 
+> which shows
+> 
+>   i)   years of no issues
+>   ii)  two random failures after 3.6.1-7 and before 3.6.2-2
+>   iii) four more builds
+>   iv)  four failures for the recent two alphas, beta and rc
+
+Hi Dirk,
+
+I had a look and found that the two build failures of 3.6.1 and 3.6.2
+were addressed in https://bugs.debian.org/946836.  This is good news
+because the bug log shows recent interest on all sides to solve build
+issues on PowerPC.
+
+The transition can not complete until either R 4.0.0 builds on PowerPC
+or all the r-* packages are removed from Testing by the Release team.  I
+think it would be useful if somebody (you ?) would check with the R
+developers if the build failures looks like easy to resolve.  This is
+something that I expect the Release team would want to know anyway.
+
+Cheers,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From edd at debian.org  Sat Apr 25 03:38:07 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Fri, 24 Apr 2020 22:38:07 -0500
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <20200425032526.GA18946@bubu.plessy.net>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200425022411.m6zrigcz5fpi3y6t@kumo.plessy.net> <24227.42174.773661.999670@rob.eddelbuettel.com> <20200425032526.GA18946@bubu.plessy.net>
+Message-ID: <24227.45215.668458.793379@rob.eddelbuettel.com>
+
+Salut Charles,
+
+On 25 April 2020 at 12:25, Charles Plessy wrote:
+| I had a look and found that the two build failures of 3.6.1 and 3.6.2
+| were addressed in https://bugs.debian.org/946836.  This is good news
+| because the bug log shows recent interest on all sides to solve build
+| issues on PowerPC.
+
+That is PowerPC. My reading of
+
+  https://buildd.debian.org/status/package.php?p=r-base&suite=experimental#problem-1
+
+is that ppc64el (release) and powerpc (non-release) and ppc64 (non-release)
+are in fact distinct.
+
+Moreover, the bug #946836 you mention was a _hard_ compilation failure, not
+this weird timeout after 150 mins of trying to byte compile (or whatever goes
+into sysdata.rda).  So no cigar :-/
+ 
+| The transition can not complete until either R 4.0.0 builds on PowerPC
+| or all the r-* packages are removed from Testing by the Release team.  I
+| think it would be useful if somebody (you ?) would check with the R
+| developers if the build failures looks like easy to resolve.  This is
+| something that I expect the Release team would want to know anyway.
+
+Yes. I followed the wiki and requested an account on ppc64el hosted in
+Brazil. We'll see how it goes.
+
+A+,  Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From johannes.ranke at jrwb.de  Sat Apr 25 08:30:58 2020
+From: johannes.ranke at jrwb.de (Johannes Ranke)
+Date: Sat, 25 Apr 2020 10:30:58 +0200
+Subject: R 4.0.0 for bullseye and buster
+Message-ID: <4226020.ubvjxC1tA2@ryz>
+
+Dear all,
+
+I set up new repositories on CRAN for R 4.0.0 and the recommended packages. As 
+the transition will probably still take a while, I also created a repo for 
+bullseye. If you would like to use R 4.0.0 from these repos, you first need to 
+remove r-base-core which will remove all the Debian packaged extensions, then 
+install r-base and update your locally installed packages as described here
+
+  https://cran.r-project.org/bin/linux/debian/#debian-bullseye-testing
+
+I am not currently supporting R 4.0.0 on stretch, as I am not using it. Let me 
+know if you need it.
+
+Kind regards,
+
+Johannes
+
+P.S.: I forgot to update the repo line for buster at first, the fix is on its 
+way. It has to be buster-cran40 of course.
+
+From plessy at debian.org  Sun Apr 26 08:08:11 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Sun, 26 Apr 2020 17:08:11 +0900
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <24227.30686.443590.638158@rob.eddelbuettel.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com>
+Message-ID: <20200426080811.GE8016@bubu.plessy.net>
+
+Le Fri, Apr 24, 2020 at 06:35:58PM -0500, Dirk Eddelbuettel a écrit :
+> 
+> But the transition seems stalled.  I am a little worried because there is one
+> (for GNU GSL) which has been in "real soon now mode" for half a year.
+
+Hi Dirk and everybody,
+
+I had a look at the collisions listed on the r-api-4.0 transition page:
+
+ * auto-gsl through r-bioc-dirichletmultinomial, r-cran-gsl, r-cran-rcppgsl
+
+As you are the maintainer, maybe you can instruct the Release team which
+you think should go first ?
+
+ * auto-hdf5 through r-bioc-rhdf5, r-bioc-rhdf5lib, r-cran-hdf5
+
+A hdf5 transition was just completed and the current one in the tracker
+is about the next one.  Hopefully it means we go first.
+
+ * auto-icu through r-cran-stringi
+
+I also do not see mention of this one in bugs.debian.org or in
+debian-release at l.d.o; let's cross the fingers we can go first.
+
+ * auto-netcdf through r-cran-ncdf4, r-cran-rnetcdf
+
+The transition is ongoing, and only two package are holding it: vtk7 and
+qgis, for build issues on mips64el and mipsel.  Nevertheless, I see that
+the buildds are running now, so let's cross fingers.
+
+ * auto-nodejs through r-cran-v8
+
+Not started, and no visible dicussions…
+
+ * python3.7-rm through r-cran-fastcluster
+
+The transition is ongoing and one of the packages holding it is
+python-biopython, because of a build failure on mipsel which is caused
+by the clustalo tool (#956324).  Members of the Debian Med team,
+if we want to accelerate the R transition, we need to move the clustalo
+bug out of the way :)
+
+> Would it be polite to nudge, or not?  What is the best process?
+
+Yes, I think that it would be worth contacting the Release team about
+the auto-gsl transition.  Would you like to hold it before the R one is
+completed ?
+
+Have a nice Sunday,
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From npatra974 at gmail.com  Sun Apr 26 11:17:39 2020
+From: npatra974 at gmail.com (Nilesh Patra)
+Date: Sun, 26 Apr 2020 16:47:39 +0530
+Subject: [RFS] r-bioc-pcamethods
+Message-ID: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com>
+
+Hi, currently r-bioc-pcamethods reports failing tests. I have fixed it and build + Autopkgtests pass.Pushed to team repo[1]; Needs review + sponsorship.
+
+[1]: https://salsa.debian.org/r-pkg-team/r-bioc-pcamethods
+
+Thanks and regards
+Nilesh 
+
+From edd at debian.org  Sun Apr 26 12:43:23 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Sun, 26 Apr 2020 07:43:23 -0500
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <20200426080811.GE8016@bubu.plessy.net>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200426080811.GE8016@bubu.plessy.net>
+Message-ID: <24229.33259.444446.735905@rob.eddelbuettel.com>
+
+Hi Charles,
+
+On 26 April 2020 at 17:08, Charles Plessy wrote:
+| Le Fri, Apr 24, 2020 at 06:35:58PM -0500, Dirk Eddelbuettel a écrit :
+| > 
+| > But the transition seems stalled.  I am a little worried because there is one
+| > (for GNU GSL) which has been in "real soon now mode" for half a year.
+| 
+| Hi Dirk and everybody,
+| 
+| I had a look at the collisions listed on the r-api-4.0 transition page:
+| 
+|  * auto-gsl through r-bioc-dirichletmultinomial, r-cran-gsl, r-cran-rcppgsl
+| 
+| As you are the maintainer, maybe you can instruct the Release team which
+| you think should go first ?
+
+GSL, obviously. Version 2.6 was packaged seven months ago:
+https://salsa.debian.org/edd/gsl/-/commit/c45f77e1efe6b567cf1dff9815ab085251d0612f
+ 
+|  * auto-hdf5 through r-bioc-rhdf5, r-bioc-rhdf5lib, r-cran-hdf5
+| 
+| A hdf5 transition was just completed and the current one in the tracker
+| is about the next one.  Hopefully it means we go first.
+|
+|  * auto-icu through r-cran-stringi
+| 
+| I also do not see mention of this one in bugs.debian.org or in
+| debian-release at l.d.o; let's cross the fingers we can go first.
+
+Ok, let's keep an eye on these.
+ 
+|  * auto-netcdf through r-cran-ncdf4, r-cran-rnetcdf
+| 
+| The transition is ongoing, and only two package are holding it: vtk7 and
+| qgis, for build issues on mips64el and mipsel.  Nevertheless, I see that
+| the buildds are running now, so let's cross fingers.
+
+Ok, good news.
+ 
+|  * auto-nodejs through r-cran-v8
+| 
+| Not started, and no visible dicussions…
+| 
+|  * python3.7-rm through r-cran-fastcluster
+| 
+| The transition is ongoing and one of the packages holding it is
+| python-biopython, because of a build failure on mipsel which is caused
+| by the clustalo tool (#956324).  Members of the Debian Med team,
+| if we want to accelerate the R transition, we need to move the clustalo
+| bug out of the way :)
+
+:) 
+ 
+| > Would it be polite to nudge, or not?  What is the best process?
+| 
+| Yes, I think that it would be worth contacting the Release team about
+| the auto-gsl transition.  Would you like to hold it before the R one is
+| completed ?
+
+Do be clear, by "hold" you mean have it occur later?  No, I think GSL should
+go first. (But that is a weak preference. They both need to happen sooner
+rather than later and strict order is irrelevant as long as both happen.)
+
+In the meantime I may switch more of my use of R via Debian testing (which is
+mostly in CI tests, frequently via Docker) to using the updated 4.0.0 base
+container in our rocker/r-base:4.0.0 and install packages directly from CRAN
+as needed as I have just done for Rcpp:
+https://github.com/RcppCore/Rcpp/commit/1812cdad8c8779aeec8c4d5778f1a37ee89587d8
+
+Thanks for the very helpful emailing and keeping an eye on the transitions.
+As for ppc64el, I have not yet heard back from Brazil about the VM account.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From daissi at debian.org  Sun Apr 26 12:43:00 2020
+From: daissi at debian.org (=?utf-8?q?Dylan_A=C3=AFssi?=)
+Date: Sun, 26 Apr 2020 14:43:00 +0200
+Subject: Re: [RFS] r-bioc-pcamethods
+In-Reply-To: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com>
+References: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com>
+Message-ID: <CA+6XHwSXddsZYRFAsXGgrD6CeDC7RRHNWH+OQ1=AJTVsKYtREA@mail.gmail.com>
+
+Hi,
+
+Le dim. 26 avr. 2020 à 13:33, Nilesh Patra <npatra974 at gmail.com> a écrit :
+>
+> Hi, currently r-bioc-pcamethods reports failing tests. I have fixed it and build + Autopkgtests pass.
+> Pushed to team repo[1]; Needs review + sponsorship.
+>
+
+Done and thanks!
+
+Best,
+Dylan
+
+From andreas at an3as.eu  Sun Apr 26 12:47:47 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 26 Apr 2020 14:47:47 +0200
+Subject: Re: [RFS] r-bioc-pcamethods
+In-Reply-To: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com>
+References: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com>
+Message-ID: <20200426124747.GF1150@an3as.eu>
+
+On Sun, Apr 26, 2020 at 04:47:39PM +0530, Nilesh Patra wrote:
+> Hi, currently r-bioc-pcamethods reports failing tests. I have fixed it and
+> build + Autopkgtests pass.
+> Pushed to team repo[1]; Needs review + sponsorship.
+> 
+> [1]: https://salsa.debian.org/r-pkg-team/r-bioc-pcamethods
+
+Uploaded, thanks Andreas.
+
+-- 
+http://fam-tille.de
+
+From andreas at an3as.eu  Sun Apr 26 12:58:43 2020
+From: andreas at an3as.eu (Andreas Tille)
+Date: Sun, 26 Apr 2020 14:58:43 +0200
+Subject: Re: [RFS] r-bioc-pcamethods
+In-Reply-To: <20200426124747.GF1150@an3as.eu>
+References: <CAJN1929W3xgzUDuFYfimHGGPa4-fSTaa1VR05UvO0p2o-z2M1Q@mail.gmail.com> <20200426124747.GF1150@an3as.eu>
+Message-ID: <20200426125843.GG1150@an3as.eu>
+
+I lost. :-(
+
+On Sun, Apr 26, 2020 at 02:47:47PM +0200, Andreas Tille wrote:
+> On Sun, Apr 26, 2020 at 04:47:39PM +0530, Nilesh Patra wrote:
+> > Hi, currently r-bioc-pcamethods reports failing tests. I have fixed it and
+> > build + Autopkgtests pass.
+> > Pushed to team repo[1]; Needs review + sponsorship.
+> > 
+> > [1]: https://salsa.debian.org/r-pkg-team/r-bioc-pcamethods
+> 
+> Uploaded, thanks Andreas.
+> 
+> -- 
+> http://fam-tille.de
+> 
+> 
+
+-- 
+http://fam-tille.de
+
+From ginggs at debian.org  Wed Apr 29 17:23:24 2020
+From: ginggs at debian.org (Graham Inggs)
+Date: Wed, 29 Apr 2020 19:23:24 +0200
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <24229.33259.444446.735905@rob.eddelbuettel.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200426080811.GE8016@bubu.plessy.net> <24229.33259.444446.735905@rob.eddelbuettel.com>
+Message-ID: <CAM8zJQvm2qp3TgXKskF0ixvzQWX2jnoqmyKts8ieW6t7p5H9kQ@mail.gmail.com>
+
+Hi Dirk
+
+On Sun, 26 Apr 2020 at 14:43, Dirk Eddelbuettel <edd at debian.org> wrote:
+> | As you are the maintainer, maybe you can instruct the Release team which
+> | you think should go first ?
+>
+> GSL, obviously. Version 2.6 was packaged seven months ago:
+> https://salsa.debian.org/edd/gsl/-/commit/c45f77e1efe6b567cf1dff9815ab085251d0612f
+
+Please file a bug requesting a transition slot for gsl.
+
+> Thanks for the very helpful emailing and keeping an eye on the transitions.
+> As for ppc64el, I have not yet heard back from Brazil about the VM account.
+
+As a DD, you should already have access [1] to plummer.debian.org, the
+ppc64el porterbox, so maybe no need for a VM account elsewhere.
+
+Please update #955211 with the news that R 4.0.0 has been released.
+Also, if anyone has an ETA on Bioconductor, it would be good to add
+that too.
+
+Regards
+Graham
+
+[1] https://wiki.debian.org/PorterBoxHowToUse
+
+From plessy at debian.org  Wed Apr 29 17:34:29 2020
+From: plessy at debian.org (Charles Plessy)
+Date: Thu, 30 Apr 2020 02:34:29 +0900
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <CAM8zJQvm2qp3TgXKskF0ixvzQWX2jnoqmyKts8ieW6t7p5H9kQ@mail.gmail.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200426080811.GE8016@bubu.plessy.net> <24229.33259.444446.735905@rob.eddelbuettel.com> <CAM8zJQvm2qp3TgXKskF0ixvzQWX2jnoqmyKts8ieW6t7p5H9kQ@mail.gmail.com>
+Message-ID: <20200429173429.GA1411@bubu.plessy.net>
+
+Le Wed, Apr 29, 2020 at 07:23:24PM +0200, Graham Inggs a écrit :
+> 
+> Also, if anyone has an ETA on Bioconductor, it would be good to add
+> that too.
+
+Hi Graham and everybody,
+
+Bioconductor 3.11 was released two days ago.
+
+https://bioconductor.org/news/bioc_3_11_release/
+
+Have a nice day,
+
+Charles
+
+-- 
+Charles Plessy
+Debian Med packaging team,
+http://www.debian.org/devel/debian-med
+Akano, Uruma, Okinawa, Japan
+
+From edd at debian.org  Wed Apr 29 17:34:45 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 29 Apr 2020 12:34:45 -0500
+Subject: Re: R 4.0.0 is here, transition is stalled
+In-Reply-To: <CAM8zJQvm2qp3TgXKskF0ixvzQWX2jnoqmyKts8ieW6t7p5H9kQ@mail.gmail.com>
+References: <24227.30686.443590.638158@rob.eddelbuettel.com> <20200426080811.GE8016@bubu.plessy.net> <24229.33259.444446.735905@rob.eddelbuettel.com> <CAM8zJQvm2qp3TgXKskF0ixvzQWX2jnoqmyKts8ieW6t7p5H9kQ@mail.gmail.com>
+Message-ID: <24233.47797.836672.521662@rob.eddelbuettel.com>
+
+Hi Graham,
+
+On 29 April 2020 at 19:23, Graham Inggs wrote:
+| Hi Dirk
+| 
+| On Sun, 26 Apr 2020 at 14:43, Dirk Eddelbuettel <edd at debian.org> wrote:
+| > | As you are the maintainer, maybe you can instruct the Release team which
+| > | you think should go first ?
+| >
+| > GSL, obviously. Version 2.6 was packaged seven months ago:
+| > https://salsa.debian.org/edd/gsl/-/commit/c45f77e1efe6b567cf1dff9815ab085251d0612f
+| 
+| Please file a bug requesting a transition slot for gsl.
+
+Hm. Are you saying I never did? That ... would be possible. Maybe I just
+assumed it would flow automatically.
+ 
+| > Thanks for the very helpful emailing and keeping an eye on the transitions.
+| > As for ppc64el, I have not yet heard back from Brazil about the VM account.
+| 
+| As a DD, you should already have access [1] to plummer.debian.org, the
+| ppc64el porterbox, so maybe no need for a VM account elsewhere.
+
+I may well have read the Debian wiki page wrong. But no mas, it was a good
+experience to set up an account at minipower / unicamp and I am working on a
+8-core box. First use of OpenStack too. It's nice.
+ 
+| Please update #955211 with the news that R 4.0.0 has been released.
+
+Can do, but we are also held back by the ppc64el issue. Though we identified
+it now -- and Charles was partially right about the long double issue
+there. While _previous_ patch to header affected (as in: "reenabled")
+compilation, we are now seeing this infinite loop on something the byte
+compiler does for calibration / machine architecture. Clearly a powerpc
+issue. Clearly upstream too.
+
+| Also, if anyone has an ETA on Bioconductor, it would be good to add
+| that too.
+
+I think BioConductor 3.11 (for R 4.0.0) got released upstream yesterday. I
+would not know about r-bioc-* transition though.
+
+Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+From edd at debian.org  Wed Apr 29 18:23:16 2020
+From: edd at debian.org (Dirk Eddelbuettel)
+Date: Wed, 29 Apr 2020 13:23:16 -0500
+Subject: Re: Bug#955211: release.debian.org: Transition r-base for 4.0.0
+In-Reply-To: <24200.54439.142307.819143@rob.eddelbuettel.com>
+References: <87y2rkh9ij.fsf@rob.eddelbuettel.com> <CAM8zJQsZjn+-MmJWxcNkHGQwKrHxT5y=h+d9dNVF3z+9ZMhePg@mail.gmail.com> <24199.32779.699757.301854@rob.eddelbuettel.com> <b1125f74-0e8b-afad-4fcf-031700b4d937@xs4all.nl> <24200.54439.142307.819143@rob.eddelbuettel.com>
+Message-ID: <24233.50708.369377.282729@rob.eddelbuettel.com>
+
+All,
+
+R 4.0.0 was released as scheduled on Friday, source packages have been in
+experimental since Friday too.
+
+There is one build failure on ppc64el but we now know what causes it so a bug
+fix from upstream should be forthcoming shortly.  The bug can also be
+circumvented by (on that platform only) configuring with --disable-long-double.
+
+As such, we're ready, so I may I would like to nudge you towards considering
+a start for this transition.  R is reasonably widely used language that is
+very well supported in Debian, and it would be good to have this updated
+upstream version be part of Debian testing and the next release.
+
+Cheers, Dirk
+
+-- 
+http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+

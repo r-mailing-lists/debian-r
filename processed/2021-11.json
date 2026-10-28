@@ -1,0 +1,682 @@
+{
+  "list": "debian-r",
+  "description": "",
+  "month": "2021-11",
+  "messages": [
+    {
+      "id": "msg-f9de9f3ed2d2",
+      "message_id": "<cef8f2c8-616a-6ff4-87ee-d0c53acbcf0f@onenetbeyond.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "cad34914333bf23570c8a678187b6a073de01940b614086b96f9a03cde49333d",
+      "date": "2021-11-01T16:11:10Z",
+      "subject": "Re: New Bioconductor transitions?",
+      "subject_clean": "New Bioconductor transitions?",
+      "in_reply_to": "<CA+6XHwTH8bkBn3FfVm7KLVi6t-tRo8fFsk22jL-2zz-HVVBUjQ@mail.gmail.com>",
+      "references": [
+        "<086e7ba1-362f-e623-964d-a730eb56985e@onenetbeyond.org>",
+        "<YXuLJsmY6ZVf8nGy@an3as.eu>",
+        "<CA+6XHwTH8bkBn3FfVm7KLVi6t-tRo8fFsk22jL-2zz-HVVBUjQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 10/29/21 1:51 PM, Dylan Aïssi wrote:\n> @Dirk Do you plan to upload new r-base in the next days?\n\nLooks like it is done[1]\nAlthough I'd have been a lot happier had this been more coordinated.\n\nBut since this looks like a patch release, I hope it to be less painful to transition.\n\n[1]: https://tracker.debian.org/news/1272345/accepted-r-base-412-1-source-into-unstable/\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: OpenPGP_signature\nDesc: OpenPGP digital signature",
+      "body_snippet": "On 10/29/21 1:51 PM, Dylan Aïssi wrote:\n> @Dirk Do you plan to upload new r-base in the next days?\n\nLooks like it is done[1]\nAlthough I'd have been a lot happier had this been more coordinated.\n\nBut s",
+      "thread_id": "thread-f9de9f3ed2d2",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-00b24d0d610a",
+      "message_id": "<55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-11-01T16:46:22Z",
+      "subject": "libeditreadline and r-base-dev",
+      "subject_clean": "libeditreadline and r-base-dev",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am currently\n          helping LinuxCNC to get closer to our distribution and they\n          have a dependency on\n\n        \n\n    $ apt-cache\n          show libeditreadline-dev\n        \n\n        Package: libeditreadline-dev\n        \n\n        Source: libedit\n        \n\n        Version: 3.1-20210910-1\n        \n\n        Installed-Size: 28\n        \n\n        Maintainer: LLVM Packaging Team\n        <pkg-llvm-team at lists.alioth.debian.org>\n        \n\n        Architecture: amd64\n        \n\n        Depends: libedit-dev\n        \n\n        Conflicts: libreadline-dev, libreadline-gplv2-dev,\n        libreadline5-dev\n        \n\n        Description-en: BSD editline and history libraries (shim\n        development files)\n        \n\n        GNU readline changed its license from GPL-2 to GPL-3 with\n        version 6,\n        \n\n        which excludes GPL-2-only programs from using current readline\n        versions.\n        \n\n        editline resembles readline functionally and with regards to its\n        API.\n        \n\n        .\n        \n\n        This is a development shim library that can be used to link a\n        GPL-2-only\n        \n\n        program that depends on readline with editline.\n\n      \n\n    which clashes with\n        libreadline-dev and hence with r-base-dev and dh-r:\n\n        \n\n      The following\n          packages will be REMOVED:\n        \n\n         dh-r libreadline-dev r-base-dev\n        \n\n        The following NEW packages will be installed:\n        \n\n         libeditreadline-dev\n        \n\n        0 upgraded, 1 newly installed, 3 to remove and 0 not upgraded.\n\n    Anyone with any idea about\n        it?\n\n    Cheers,\n\n        Steffen",
+      "body_snippet": "I am currently\n          helping LinuxCNC to get closer to our distribution and they\n          have a dependency on\n\n        \n\n    $ apt-cache\n          show libeditreadline-dev\n        \n\n        Pack",
+      "thread_id": "thread-00b24d0d610a",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-f185098056c1",
+      "message_id": "<YYGi2612oRgRBmnP@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-11-02T20:43:07Z",
+      "subject": "Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+        "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>"
+      ],
+      "body_plain": "Hi\n\nAm Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> \n> On 31.10.21 19:14, Nilesh Patra wrote:\n> > On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > > Hello, I think this goes out to Andreas.\n> > > \n> > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> > > on the NEW queue and somewhere deep in me I recall to have seen it on\n> > > there but it seems gone. It is not in the archive though and I do not\n> > > recall a rejection email to the list.\n> > \n> > Right, I just did a quick check, and it does not seem to be rejected\n> > \n> > $ ssh -t coccia.debian.org 'ls -1\n> > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc\n> > -l' 2>/dev/null\n> > 0\n\nWell, I usually CC the ITP bug in my response to a reject - so feel\nfree to see here:\n\n   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867\n\n> > I manually checked in the dir as well, but I don't see any reject\n> > reason for jquerylib :/ @Andreas, did your dput job fail somehow?\n> > Was this uploaded properly?\n> \n> I just found there is a new upstream version. I'll upload it and then\n> likely see it in new.\n\nThat will be not successfully, thought.  My idea was to remove jquery\n1.x and 2.x from the package and symlink to the Debian packaged version\nof jquerylib 3.x. \n\nUnfortunately I did not managed to do this up to now.  Feel free to\nbeat me in it - but simply uploading a new version to new will just\nannoy ftpmaster.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi\n\nAm Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> \n> On 31.10.21 19:14, Nilesh Patra wrote:\n> > On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > > Hello, I think this goes out to A",
+      "thread_id": "thread-f185098056c1",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-86364f9ad42c",
+      "message_id": "<YYGjsG3mwoKvQts3@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-11-02T20:46:40Z",
+      "subject": "Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+        "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>"
+      ],
+      "body_plain": "Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> \n> I just found there is a new upstream version. I'll upload it and then\n> likely see it in new.\n\nBTW, you just created a new changelog entry which is wrong (as far\nas I understood ftpmaster) for several reasons ... and for the obvious\none that the wnpp bug is not closed.  Please always stick to the\n\npackage (version-1) unstable; urgency=medium\n\n  * Initial release (closes: #wnppbug)\n\n -- maintainer  date\n\nscheme for initial uploads.  By definition there is no *packaging*\nchange to something that was never inside Debian.\n\nKind regards\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> \n> I just found there is a new upstream version. I'll upload it and then\n> likely see it in new.\n\nBTW, you just created a new changel",
+      "thread_id": "thread-86364f9ad42c",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-86325cbf61f3",
+      "message_id": "<YYIwJ5NT35vKAn6Y@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-11-03T06:45:59Z",
+      "subject": "Re: libeditreadline and r-base-dev",
+      "subject_clean": "libeditreadline and r-base-dev",
+      "in_reply_to": "<55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>",
+      "references": [
+        "<55a1be27-9327-795b-12c2-ea9844506f24@gmx.de>"
+      ],
+      "body_plain": "Am Mon, Nov 01, 2021 at 05:46:22PM +0100 schrieb Steffen Möller:\n> I am currently helping LinuxCNC to get closer to our distribution and\n> they have a dependency on\n> \n> $ apt-cache show libeditreadline-dev\n> Conflicts: libreadline-dev, libreadline-gplv2-dev, libreadline5-dev\n             ^^^^^^^^^^^^^^^\n\nIt should feature also some\n\n  Provides: libreadline-dev\n  Replaces: libreadline-dev\n\n... in case this is a drop in replacement.  Otherwise I can not see any\nway to keep those packages that simply depend either directly or\nindirectly from libreadline-dev.\n\nKind regards\n\n      Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Am Mon, Nov 01, 2021 at 05:46:22PM +0100 schrieb Steffen Möller:\n> I am currently helping LinuxCNC to get closer to our distribution and\n> they have a dependency on\n> \n> $ apt-cache show libeditreadli",
+      "thread_id": "thread-00b24d0d610a",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-02f35701385e",
+      "message_id": "<YYJsH9MT3hAJUAPC@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "f66320c7f8a2ff759eb558c68e66f0da7089ea7b60f46df2ab9d243a51bfe8e2",
+      "date": "2021-11-03T11:01:51Z",
+      "subject": "Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<YYGi2612oRgRBmnP@an3as.eu>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+        "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+        "<YYGi2612oRgRBmnP@an3as.eu>"
+      ],
+      "body_plain": "Hi again Steffen,\n\nI'd strongly recommend to ask for rejection of your upload to NEW\nto not create extra hassle for ftpmaster.\n\nKind regards\n     Andreas.\n\nAm Tue, Nov 02, 2021 at 09:43:07PM +0100 schrieb Andreas Tille:\n> Hi\n> \n> Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> > \n> > On 31.10.21 19:14, Nilesh Patra wrote:\n> > > On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > > > Hello, I think this goes out to Andreas.\n> > > > \n> > > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> > > > on the NEW queue and somewhere deep in me I recall to have seen it on\n> > > > there but it seems gone. It is not in the archive though and I do not\n> > > > recall a rejection email to the list.\n> > > \n> > > Right, I just did a quick check, and it does not seem to be rejected\n> > > \n> > > $ ssh -t coccia.debian.org 'ls -1\n> > > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc\n> > > -l' 2>/dev/null\n> > > 0\n> \n> Well, I usually CC the ITP bug in my response to a reject - so feel\n> free to see here:\n> \n>    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867\n> \n> > > I manually checked in the dir as well, but I don't see any reject\n> > > reason for jquerylib :/ @Andreas, did your dput job fail somehow?\n> > > Was this uploaded properly?\n> > \n> > I just found there is a new upstream version. I'll upload it and then\n> > likely see it in new.\n> \n> That will be not successfully, thought.  My idea was to remove jquery\n> 1.x and 2.x from the package and symlink to the Debian packaged version\n> of jquerylib 3.x. \n> \n> Unfortunately I did not managed to do this up to now.  Feel free to\n> beat me in it - but simply uploading a new version to new will just\n> annoy ftpmaster.\n> \n> Kind regards\n> \n>       Andreas.\n> \n> -- \n> http://fam-tille.de\n> \n> \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi again Steffen,\n\nI'd strongly recommend to ask for rejection of your upload to NEW\nto not create extra hassle for ftpmaster.\n\nKind regards\n     Andreas.\n\nAm Tue, Nov 02, 2021 at 09:43:07PM +0100 sch",
+      "thread_id": "thread-f185098056c1",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-dc2cbc72870f",
+      "message_id": "<077399ba-15de-6641-6171-2e7ceece517f@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-11-03T11:11:27Z",
+      "subject": "Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<YYJsH9MT3hAJUAPC@an3as.eu>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+        "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+        "<YYGi2612oRgRBmnP@an3as.eu>",
+        "<YYJsH9MT3hAJUAPC@an3as.eu>"
+      ],
+      "body_plain": "Many thanks and sorry, should have checked the ITP.\n\nSteffen\n\nOn 03.11.21 12:01, Andreas Tille wrote:\n> Hi again Steffen,\n>\n> I'd strongly recommend to ask for rejection of your upload to NEW\n> to not create extra hassle for ftpmaster.\n>\n> Kind regards\n>       Andreas.\n>\n> Am Tue, Nov 02, 2021 at 09:43:07PM +0100 schrieb Andreas Tille:\n> > Hi\n> >\n> > Am Sun, Oct 31, 2021 at 07:16:44PM +0100 schrieb Steffen Möller:\n> > > On 31.10.21 19:14, Nilesh Patra wrote:\n> > > > On 10/31/21 11:30 PM, Steffen Möller wrote:\n> > > > > Hello, I think this goes out to Andreas.\n> > > > >\n> > > > > https://salsa.debian.org/r-pkg-team/r-cran-jquerylib/ states that it was\n> > > > > on the NEW queue and somewhere deep in me I recall to have seen it on\n> > > > > there but it seems gone. It is not in the archive though and I do not\n> > > > > recall a rejection email to the list.\n> > > >\n> > > > Right, I just did a quick check, and it does not seem to be rejected\n> > > >\n> > > > $ ssh -t coccia.debian.org 'ls -1\n> > > > /srv/ftp-master.debian.org/queue/reject/r-cran-* | grep jquery | wc\n> > > > -l' 2>/dev/null\n> > > > 0\n> >\n> > Well, I usually CC the ITP bug in my response to a reject - so feel\n> > free to see here:\n> >\n> >     https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=994867\n> >\n> > > > I manually checked in the dir as well, but I don't see any reject\n> > > > reason for jquerylib :/ @Andreas, did your dput job fail somehow?\n> > > > Was this uploaded properly?\n> > >\n> > > I just found there is a new upstream version. I'll upload it and then\n> > > likely see it in new.\n> >\n> > That will be not successfully, thought.  My idea was to remove jquery\n> > 1.x and 2.x from the package and symlink to the Debian packaged version\n> > of jquerylib 3.x.\n> >\n> > Unfortunately I did not managed to do this up to now.  Feel free to\n> > beat me in it - but simply uploading a new version to new will just\n> > annoy ftpmaster.\n> >\n> > Kind regards\n> >\n> >        Andreas.\n> >\n> > --\n> > http://fam-tille.de",
+      "body_snippet": "Many thanks and sorry, should have checked the ITP.\n\nSteffen\n\nOn 03.11.21 12:01, Andreas Tille wrote:\n> Hi again Steffen,\n>\n> I'd strongly recommend to ask for rejection of your upload to NEW\n> to not",
+      "thread_id": "thread-f185098056c1",
+      "thread_depth": 2,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-0337a04a6443",
+      "message_id": "<YYQXiBk0J7tJJab4@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-11-04T17:25:28Z",
+      "subject": "Re: Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue Re: What happened to r-cran-jquerylib ?",
+      "in_reply_to": "<077399ba-15de-6641-6171-2e7ceece517f@gmx.de>",
+      "references": [
+        "<b7955549-253d-f219-442c-852a5d8af9f0@gmx.de>",
+        "<75582e15-03a6-b5e9-bcac-982c28b931f6@onenetbeyond.org>",
+        "<8ec1feec-8d4d-5742-dee1-9ad11582b0ae@gmx.de>",
+        "<YYGi2612oRgRBmnP@an3as.eu>",
+        "<YYJsH9MT3hAJUAPC@an3as.eu>",
+        "<077399ba-15de-6641-6171-2e7ceece517f@gmx.de>"
+      ],
+      "body_plain": "Hi Steffen,\n\nAm Wed, Nov 03, 2021 at 12:11:27PM +0100 schrieb Steffen Möller:\n> Many thanks and sorry, should have checked the ITP.\n\nI've pushed something that might pass ftpmaster inspection to Git.\nSince its a really weak solution I'd be happy if you could at least\ntest it with your application before we do another upload to new.\n\nKind regards\n   Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Steffen,\n\nAm Wed, Nov 03, 2021 at 12:11:27PM +0100 schrieb Steffen Möller:\n> Many thanks and sorry, should have checked the ITP.\n\nI've pushed something that might pass ftpmaster inspection to Git.\n",
+      "thread_id": "thread-f185098056c1",
+      "thread_depth": 3,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-70100b238b03",
+      "message_id": "<618a8b17.1c69fb81.7c5ab.578b@mx.google.com>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-09T14:52:04Z",
+      "subject": "Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "> I've pushed something that might pass ftpmaster inspection to Git.\nSince its a really weak solution I'd be happy if you could at least\ntest it with your application before we do another upload to new.\n\nLooks like you already uploaded by now, but Steffen, gentle ping?\nCan you test pigx-rnaseq once against it?\n\nNilesh",
+      "body_snippet": "> I've pushed something that might pass ftpmaster inspection to Git.\nSince its a really weak solution I'd be happy if you could at least\ntest it with your application before we do another upload to ne",
+      "thread_id": "thread-70100b238b03",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-540fa326afce",
+      "message_id": "<YYqTGGDk2LvgfMxn@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-11-09T15:26:16Z",
+      "subject": "Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "in_reply_to": "<618a8b17.1c69fb81.7c5ab.578b@mx.google.com>",
+      "references": [
+        "<618a8b17.1c69fb81.7c5ab.578b@mx.google.com>"
+      ],
+      "body_plain": "Hi Nilesh,\n\nAm Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:\n> > I've pushed something that might pass ftpmaster inspection to Git.\n> Since its a really weak solution I'd be happy if you could at least\n> test it with your application before we do another upload to new.\n\nI was running it against the tests of other packages that are now\nneeding jquerylib.\n\n> Looks like you already uploaded by now, but Steffen, gentle ping?\n\nIt was me who uploaded now.\n\n> Can you test pigx-rnaseq once against it?\n\nThat would be definitely helpful\n\n     Andreas. \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh,\n\nAm Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:\n> > I've pushed something that might pass ftpmaster inspection to Git.\n> Since its a really weak solution I'd be happy if you",
+      "thread_id": "thread-70100b238b03",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-f32a903ce98c",
+      "message_id": "<279298f1-6ce0-3f3a-8aa9-d3c6395bbf7e@gmx.de>",
+      "from_name": "Steffen Möller",
+      "from_email_hash": "35fab68b1893c7357bda4da59bc7c42745e4e468a5133611cf49d34a0c697ab5",
+      "date": "2021-11-09T15:43:02Z",
+      "subject": "Re: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "in_reply_to": "<YYqTGGDk2LvgfMxn@an3as.eu>",
+      "references": [
+        "<618a8b17.1c69fb81.7c5ab.578b@mx.google.com>",
+        "<YYqTGGDk2LvgfMxn@an3as.eu>"
+      ],
+      "body_plain": "On 09.11.21 16:26, Andreas Tille wrote:\n> Hi Nilesh,\n>\n> Am Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:\n> > > I've pushed something that might pass ftpmaster inspection to Git.\n> >\n> > Since its a really weak solution I'd be happy if you could at least\n> > test it with your application before we do another upload to new.\n>\n> I was running it against the tests of other packages that are now\n> needing jquerylib.\n>\n> > Looks like you already uploaded by now, but Steffen, gentle ping?\n>\n> It was me who uploaded now.\n>\n> > Can you test pigx-rnaseq once against it?\n>\n> That would be definitely helpful\n\nGo ahead for now. Need to fix other problems with pigx-rnaseq before I\ncan evaluate anything with it.\n\nBest,\nSteffen",
+      "body_snippet": "On 09.11.21 16:26, Andreas Tille wrote:\n> Hi Nilesh,\n>\n> Am Tue, Nov 09, 2021 at 08:22:04PM +0530 schrieb Nilesh Patra:\n> > > I've pushed something that might pass ftpmaster inspection to Git.\n> >\n> >",
+      "thread_id": "thread-70100b238b03",
+      "thread_depth": 2,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-fea8b862cb56",
+      "message_id": "<20211109165227.21B14203B5@bendel.debian.org>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-09T16:52:08Z",
+      "subject": "Re: Fwd: Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "subject_clean": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "in_reply_to": "<bb951475-2dc0-56c6-87de-5d4653057df8@onenetbeyond.org>",
+      "references": [
+        "<bb951475-2dc0-56c6-87de-5d4653057df8@onenetbeyond.org>"
+      ],
+      "body_plain": "Quoting Steffen Moller:\n> Go ahead for now. Need to fix other problems with pigx-rnaseq before I\n> can evaluate anything with it.\n\nACK.\nThanks for letting us know.\n\nNilesh",
+      "body_snippet": "Quoting Steffen Moller:\n> Go ahead for now. Need to fix other problems with pigx-rnaseq before I\n> can evaluate anything with it.\n\nACK.\nThanks for letting us know.\n\nNilesh",
+      "thread_id": "thread-fea8b862cb56",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-09625bdd943f",
+      "message_id": "<d8f66a35-b017-4296-9caa-1146b72c5660.Zora@ahcxlight.com>",
+      "from_name": "Zora Cao",
+      "from_email_hash": "4c39c609c8900802ca32bf7c904d101c228a1cfea529020d36c6a90bc18c14f3",
+      "date": "2021-11-10T10:33:44Z",
+      "subject": "LED Lights",
+      "subject_clean": "LED Lights",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear\nHello,I am Zora who is from Chenxin lighting company.\nOn the website, I find we do same line ,and we have 20 years' solid experience in the lighting industry.\nAnd our main products are ceiling lights, down lights, ceiling lights and so on. Now our popular products are smart lights.\nIf you have any interests or need,I will send the catalogue for you.\nLooking forward to your reply!\n\nYour business partner\n\nZora Cao\nAnhui Chenxin Lighting Electrical Appliance Co.,Ltd\nWechat:Levenon1226 Whatsapp:+86-17858999110\nTel:+86-551-65856715 Cell:+86-17858999110\nWebsite:https://ahcxlight.en.alibaba.com",
+      "body_snippet": "Dear\nHello,I am Zora who is from Chenxin lighting company.\nOn the website, I find we do same line ,and we have 20 years' solid experience in the lighting industry.\nAnd our main products are ceiling li",
+      "thread_id": "thread-09625bdd943f",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-fc2425dcbcdb",
+      "message_id": "<YY/P0bjzJNSn3GhZ@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-13T14:46:41Z",
+      "subject": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "subject_clean": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI was trying to exclude tests in r-bioc-organismdbi, because it needs homo.sapiens\nto run tests which is not packaged, and probably never will be.\nI did the following:\n\n* Removed d/tests\n* Remove \"Testsuite: autopkgtest-pkg-r\" line from d/control\n* Removed unitTests directory from being installed.\n\nHowever, _even after this_ pkg-r-autopkgtest launches and attempts running tests.\nHow do I stop this from happening?\n\nAny help is welcome.\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi,\n\nI was trying to exclude tests in r-bioc-organismdbi, because it needs homo.sapiens\nto run tests which is not packaged, and probably never will be.\nI did the following:\n\n* Removed d/tests\n* Remove",
+      "thread_id": "thread-fc2425dcbcdb",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-415ed358752d",
+      "message_id": "<YY/2bbOmI2VJBztb@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-11-13T17:31:25Z",
+      "subject": "Re: How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "subject_clean": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "in_reply_to": "<YY/P0bjzJNSn3GhZ@debian>",
+      "references": [
+        "<YY/P0bjzJNSn3GhZ@debian>"
+      ],
+      "body_plain": "Hi Nilesh\n\nAm Sat, Nov 13, 2021 at 08:16:41PM +0530 schrieb Nilesh Patra:\n> Hi,\n> to run tests which is not packaged, and probably never will be.\n> I did the following:\n> \n> * Removed d/tests\n> * Remove \"Testsuite: autopkgtest-pkg-r\" line from d/control\n> * Removed unitTests directory from being installed.\n> \n> However, _even after this_ pkg-r-autopkgtest launches and attempts running tests.\n> How do I stop this from happening?\n\nHmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test\nfrom running.  No idea why this does not work.\n\nHere are some examples for alternative solutions to work around not\n(yet) packaged data / code:\n\n   https://salsa.debian.org/r-pkg-team/r-bioc-affy/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n   https://salsa.debian.org/r-pkg-team/r-bioc-bluster/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n   https://salsa.debian.org/r-pkg-team/r-bioc-purecn/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n\nIn file autopkgtest-pkg-r.hook you can place code that is executed as in\nthe usual run-unit-test script but without the beginning that copies the\ndata to the temporary dir.\n\nHope this helps\n\n        Andreas.\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Nilesh\n\nAm Sat, Nov 13, 2021 at 08:16:41PM +0530 schrieb Nilesh Patra:\n> Hi,\n> to run tests which is not packaged, and probably never will be.\n> I did the following:\n> \n> * Removed d/tests\n> * Remo",
+      "thread_id": "thread-fc2425dcbcdb",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-45bdd327b507",
+      "message_id": "<YZAYMIO0cIi7wUrW@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-13T19:55:28Z",
+      "subject": "Re: How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "subject_clean": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "in_reply_to": "<YY/2bbOmI2VJBztb@an3as.eu>",
+      "references": [
+        "<YY/2bbOmI2VJBztb@an3as.eu>"
+      ],
+      "body_plain": "On 11/13/21 11:01 PM, Andreas Tille wrote:\n> Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test\n> from running.  No idea why this does not work.\n\nThis is extremely annoying; pkg-r-autopkgtests should not run. Clearly, this looks like a bug.\nSo I filed Bug#999622 against dh-r w/ severity important. Feel free to lower severity if needed. \n\n> Here are some examples for alternative solutions to work around not\n> (yet) packaged data / code:\n> \n>     https://salsa.debian.org/r-pkg-team/r-bioc-affy/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n>     https://salsa.debian.org/r-pkg-team/r-bioc-bluster/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n>     https://salsa.debian.org/r-pkg-team/r-bioc-purecn/-/blob/master/debian/tests/autopkgtest-pkg-r.hook\n> \n> In file autopkgtest-pkg-r.hook you can place code that is executed as in\n> the usual run-unit-test script but without the beginning that copies the\n> data to the temporary dir.\n\nThank you very much, that helps a lot! I fixed/worked-around and uploaded.\n\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On 11/13/21 11:01 PM, Andreas Tille wrote:\n> Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test\n> from running.  No idea why this does not work.\n\nThis is extremely annoying; pkg-r-au",
+      "thread_id": "thread-fc2425dcbcdb",
+      "thread_depth": 2,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-439e96a9d905",
+      "message_id": "<cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>",
+      "from_name": "Sébastien Villemot",
+      "from_email_hash": "fc0d5e1d81e926dc38b70fb3b61822c55a1e6deddded57e9de160de1a3796fb0",
+      "date": "2021-11-13T20:00:28Z",
+      "subject": "Re: How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "subject_clean": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "in_reply_to": "<YZAYMIO0cIi7wUrW@debian>",
+      "references": [
+        "<YZAYMIO0cIi7wUrW@debian>"
+      ],
+      "body_plain": "Hi,\n\nLe dimanche 14 novembre 2021 à 01:25 +0530, Nilesh Patra a écrit :\n> On 11/13/21 11:01 PM, Andreas Tille wrote:\n> > Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test\n> > from running.  No idea why this does not work.\n> \n> This is extremely annoying; pkg-r-autopkgtests should not run. Clearly, this looks like a bug.\n> So I filed Bug#999622 against dh-r w/ severity important. Feel free to lower severity if needed. \n\nNote that it may simply be the consequence of autodep8 adding the tests\nautomatically, based on package name:\nhttps://salsa.debian.org/ci-team/autodep8/-/blob/master/support/r/detect\n\nBest,\n\n-- \n⢀⣴⠾⠻⢶⣦⠀  Sébastien Villemot\n⣾⠁⢠⠒⠀⣿⡁  Debian Developer\n⢿⡄⠘⠷⠚⠋⠀  https://sebastien.villemot.name\n⠈⠳⣄⠀⠀⠀⠀  https://www.debian.org\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: This is a digitally signed message part",
+      "body_snippet": "Hi,\n\nLe dimanche 14 novembre 2021 à 01:25 +0530, Nilesh Patra a écrit :\n> On 11/13/21 11:01 PM, Andreas Tille wrote:\n> > Hmmmm, removing Testsuite: autopkgtest-pkg-r should prevent the test\n> > from r",
+      "thread_id": "thread-fc2425dcbcdb",
+      "thread_depth": 3,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-3b4a8151d603",
+      "message_id": "<24976.9773.784301.307276@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2021-11-13T20:55:09Z",
+      "subject": "Re: How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "subject_clean": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "in_reply_to": "<cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>",
+      "references": [
+        "<YZAYMIO0cIi7wUrW@debian>",
+        "<cee897a1a87de01758ee1b92743b2b7f8262a325.camel@debian.org>"
+      ],
+      "body_plain": "The 'R CMD check' command, which is at the inner layer of tests, runs any\nfiles ending in .R found in the tests/ directory -- that is how every known\ntestrunner package (RUnit, testthat, tinytest, svUnit, ...) run tests.\n\nAnd note that R itself, as well as a package of recommend or well-known\npackages (such as data.table) rely only on this. No unit test runner needed.\n\nSo I would probably start by renaming / removing / hiding the files in\ntests/*.\n\nGood luck,  Dirk\n\n-- \nhttps://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "The 'R CMD check' command, which is at the inner layer of tests, runs any\nfiles ending in .R found in the tests/ directory -- that is how every known\ntestrunner package (RUnit, testthat, tinytest, svU",
+      "thread_id": "thread-fc2425dcbcdb",
+      "thread_depth": 4,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-79f0468dc270",
+      "message_id": "<YZTifnrHbbfK9q7e@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-11-17T11:07:42Z",
+      "subject": "Re: ITP: r-cran-rgooglemaps -- Overlays on Static Maps",
+      "subject_clean": "ITP: r-cran-rgooglemaps -- Overlays on Static Maps",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Magnus,\n\nI stumbled upon your ITP when I wanted to inject this myself.  I added\nyou to the pkg-r-team - please be so kind to remove your private\nrepository on Salsa to avoid confusion.  In any case I've added you as\nUploader.  I'd recommend you subscribe to the team list[1] and bounce\nyour ITPs there.  I also intend to package r-cran-ggmap (as\npredependency for r-cran-choroplethr) but I'd like to wait whether\nftpmaster might have issues with Google services before I keep on with\nthis.\n\nKind regards\n\n      Andreas.\n\n[1] https://lists.debian.org/debian-r/\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Magnus,\n\nI stumbled upon your ITP when I wanted to inject this myself.  I added\nyou to the pkg-r-team - please be so kind to remove your private\nrepository on Salsa to avoid confusion.  In any case",
+      "thread_id": "thread-79f0468dc270",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-dc8dfadbadb0",
+      "message_id": "<YZ0sxu3tKCfJbvhb@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-23T18:02:46Z",
+      "subject": "Re: Bug#998057: transition: r-api-bioc-3.14",
+      "subject_clean": "Bug#998057: transition: r-api-bioc-3.14",
+      "in_reply_to": "<YYgDAGsfg4o22yav@ramacher.at>",
+      "references": [
+        "<CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com>",
+        "<YYgDAGsfg4o22yav@ramacher.at>"
+      ],
+      "body_plain": "Hi Sebastian,\n\nOn Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:\n> > Hi,\n> > Bioconductor 3.14 was released [1].\n> > \n> > [1] https://bioconductor.org/news/bioc_3_14_release/\n> > \n> > Like for previous r-api-bioc transitions, all reverse dependencies\n> > need a manual upgrade to the new upstream releases, they are not\n> > binNMU-able. The Debian R Packages team will do so.\n> > \n> > Please set up a tracker manually, since this is a transition of a\n> > virtual package name.\n> \n> Let's do this one after gsl\n\nSorry to get on your nerves, but since it has been a little more than two weeks since\nyou sent this email, is there any update on gsl transition, or is it nearing completion or so?\nCan bioc start sometime soon?\n\nLet me know.\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "Hi Sebastian,\n\nOn Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:\n> > Hi,\n> > Bioconductor 3.14 was released [1].\n> > \n> > [1] https://bioconductor.org/news/bioc_3_1",
+      "thread_id": "thread-dc8dfadbadb0",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-7575f549cfb9",
+      "message_id": "<YZ08BdKrE5bAxcxW@ramacher.at>",
+      "from_name": "Sebastian Ramacher",
+      "from_email_hash": "fa3fc438b202a30ccff87c6abc87634757e0684db428f50c29272c1eafa7c55c",
+      "date": "2021-11-23T19:07:49Z",
+      "subject": "Re: Bug#998057: transition: r-api-bioc-3.14",
+      "subject_clean": "Bug#998057: transition: r-api-bioc-3.14",
+      "in_reply_to": "<YZ0sxu3tKCfJbvhb@debian>",
+      "references": [
+        "<CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com>",
+        "<YYgDAGsfg4o22yav@ramacher.at>",
+        "<YZ0sxu3tKCfJbvhb@debian>"
+      ],
+      "body_plain": "Control: tags -1 = confirmed\n\nOn 2021-11-23 23:32:46, Nilesh Patra wrote:\n> Hi Sebastian,\n> \n> On Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:\n> > > Hi,\n> > > Bioconductor 3.14 was released [1].\n> > > \n> > > [1] https://bioconductor.org/news/bioc_3_14_release/\n> > > \n> > > Like for previous r-api-bioc transitions, all reverse dependencies\n> > > need a manual upgrade to the new upstream releases, they are not\n> > > binNMU-able. The Debian R Packages team will do so.\n> > > \n> > > Please set up a tracker manually, since this is a transition of a\n> > > virtual package name.\n> > \n> > Let's do this one after gsl\n> \n> Sorry to get on your nerves, but since it has been a little more than two weeks since\n> you sent this email, is there any update on gsl transition, or is it nearing completion or so?\n> Can bioc start sometime soon?\n\nPlease go ahead. If the two transitions need to be untangled, I'll\ntemporarily remove r-bioc-dirichletmultinomial and r-bioc-tfbstools from\ntesting.\n\nCheers\n\n> \n> Let me know.\n> \n> Regards,\n> Nilesh\n\n-- \nSebastian Ramacher",
+      "body_snippet": "Control: tags -1 = confirmed\n\nOn 2021-11-23 23:32:46, Nilesh Patra wrote:\n> Hi Sebastian,\n> \n> On Sun, 7 Nov 2021 17:46:56 +0100 Sebastian Ramacher <sramacher at debian.org> wrote:\n> > > Hi,\n> > > Bio",
+      "thread_id": "thread-dc8dfadbadb0",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-989c89ec5251",
+      "message_id": "<YZ5RQVodMdmSH0B5@debian>",
+      "from_name": "Nilesh Patra",
+      "from_email_hash": "00e496f88598d8c5db4a9b2a96dcf90efbcbf6cf17c6fd1d54d12a938924b216",
+      "date": "2021-11-24T14:50:41Z",
+      "subject": "Bioc-transition has started (Was: Re: Bug#998057: transition: r-api-bioc-3.14)",
+      "subject_clean": "Bioc-transition has started (Was: Re: Bug#998057: transition: r-api-bioc-3.14)",
+      "in_reply_to": "<YZ08BdKrE5bAxcxW@ramacher.at>",
+      "references": [
+        "<CA+6XHwS0xD8vBZheJ5geX3FFXuNg_VSvkymPfbBxyQa36aPM_w@mail.gmail.com>",
+        "<YYgDAGsfg4o22yav@ramacher.at>",
+        "<YZ0sxu3tKCfJbvhb@debian>",
+        "<YZ08BdKrE5bAxcxW@ramacher.at>"
+      ],
+      "body_plain": "On Tue, Nov 23, 2021 at 08:07:49PM +0100, Sebastian Ramacher wrote:\n> Please go ahead.\n\nThanks a lot.\n\n@All,\n\nme and Andreas have kick started the transition. Right now, we are at dependency\nlevel 2.\nShould you have free cycles, do not hesitate to chime in.\nHere is the tracker for $more info[1]\n\n[1]: https://release.debian.org/transitions/html/r-api-bioc-3.14.html\n\nRegards,\nNilesh\n\n-------------- next part --------------\nAn attachment was scrubbed...\nName: signature.asc\nDesc: PGP signature",
+      "body_snippet": "On Tue, Nov 23, 2021 at 08:07:49PM +0100, Sebastian Ramacher wrote:\n> Please go ahead.\n\nThanks a lot.\n\n@All,\n\nme and Andreas have kick started the transition. Right now, we are at dependency\nlevel 2.\n",
+      "thread_id": "thread-dc8dfadbadb0",
+      "thread_depth": 2,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-7d79a112d37c",
+      "message_id": "<YZ9fID+FyQX/WP4e@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "ab075941c22f2fbbd1316821ef8188ebb6dd72d786db971a8d133fd6f7f3531f",
+      "date": "2021-11-25T10:02:08Z",
+      "subject": "Please specify version of ade4 with same characters in phyloseq",
+      "subject_clean": "Please specify version of ade4 with same characters in phyloseq",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Paul,\n\nI'm just upgrading the Debian packaging of BioConductor phyloseq to\nversion 1.38.0.  In the DESCRIPTION file you are specifying\n\n   Imports: ade4 (>= 1.7.4)\n\nAde4 authors are using a version scheme 1.7-18 (latest version) so they\nuse a '-' sign for the micro version specification.  I'm perfectly aware\nthat in R version number separators '.' and '-' are sorting equally.\nHowever, this leads to sorting issues in the Debian packaging\ndependencies.  You would do us a great favour if you simply stick to\nthe same separating characters as the authors have choosen.  In other\nwords, this patch\n\ndiff --git a/DESCRIPTION b/DESCRIPTION\nindex 457fcc8..35b6c57 100644\n--- a/DESCRIPTION\n+++ b/DESCRIPTION\n@@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,\n     Susan Holmes <susan at stat.stanford.edu>, with\n     contributions from Gregory Jordan and Scott Chamberlain\n License: AGPL-3\n-Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),\n+Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),\n         BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=\n         2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach\n         (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=\n\nwould safe us some extra work.\n\nThanks a lot for your cooperation\n\n      Andreas.\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Paul,\n\nI'm just upgrading the Debian packaging of BioConductor phyloseq to\nversion 1.38.0.  In the DESCRIPTION file you are specifying\n\n   Imports: ade4 (>= 1.7.4)\n\nAde4 authors are using a version",
+      "thread_id": "thread-7d79a112d37c",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-c12cffb522c7",
+      "message_id": "<CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2021-11-27T10:20:33Z",
+      "subject": "r-bioc-dropletutils: what happened here?",
+      "subject_clean": "r-bioc-dropletutils: what happened here?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI looked at the recent upload of r-bioc-dropletutils and noticed it\ndropped the changelog entry of the previous upload.  It looks like\nsomething went wrong with 'routine-update: New upstream version' [1].\n\n>>From what I can see the previous version was properly uploaded [2] and\ntagged [3].  Did I miss something?\n\nRegards\nGraham\n\n[1] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/d1bc580fc9c57df549eea64a807fb5fc330124a7\n[2] https://tracker.debian.org/news/1270068/accepted-r-bioc-dropletutils-1123ds-2-source-into-unstable/\n[3] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/tags/debian%2F1.12.3+ds-2",
+      "body_snippet": "Hi\n\nI looked at the recent upload of r-bioc-dropletutils and noticed it\ndropped the changelog entry of the previous upload.  It looks like\nsomething went wrong with 'routine-update: New upstream versi",
+      "thread_id": "thread-c12cffb522c7",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-2fd7bc76f99a",
+      "message_id": "<YaJgoA6VCYmCaMJM@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-11-27T16:45:20Z",
+      "subject": "Re: r-bioc-dropletutils: what happened here?",
+      "subject_clean": "r-bioc-dropletutils: what happened here?",
+      "in_reply_to": "<CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>",
+      "references": [
+        "<CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Graham,\n\nAm Sat, Nov 27, 2021 at 12:20:33PM +0200 schrieb Graham Inggs:\n> I looked at the recent upload of r-bioc-dropletutils and noticed it\n> dropped the changelog entry of the previous upload. It looks like\n> something went wrong with 'routine-update: New upstream version' [1].\n\n> >From what I can see the previous version was properly uploaded [2] and\n> tagged [3].  Did I miss something?\n\nFor whatever reason I've found\n\nr-bioc-dropletutils (1.14.1+ds-1) unstable; urgency=medium\n\n  * Team upload\n  * Exclude test-hashing.R on s390x as well\n\n -- Graham Inggs <ginggs at debian.org>  Sun, 24 Oct 2021 10:56:07 +0000\n\nas changelog entry and my changes endet up in 1.14.1+ds-2.  So I manually\ndid[4] since I did not see any 1.14.1+ds-1 upload ... which was obviously\nthe wrong fix.\n\nI fixed now the changelog entries to make some sense in some way.  I\nhave no idea whether we can blame routine-update about this.  It is\nhard to reproduce.\n\nThanks for pointing this out anyway\n\n     Andreas.\n\n> [1] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/d1bc580fc9c57df549eea64a807fb5fc330124a7\n> [2] https://tracker.debian.org/news/1270068/accepted-r-bioc-dropletutils-1123ds-2-source-into-unstable/\n> [3] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/tags/debian%2F1.12.3+ds-2\n\n[4] https://salsa.debian.org/r-pkg-team/r-bioc-dropletutils/-/commit/32b28328c7edddadeb64481f7ccbc6ef69a6c67c \n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Graham,\n\nAm Sat, Nov 27, 2021 at 12:20:33PM +0200 schrieb Graham Inggs:\n> I looked at the recent upload of r-bioc-dropletutils and noticed it\n> dropped the changelog entry of the previous upload. I",
+      "thread_id": "thread-c12cffb522c7",
+      "thread_depth": 1,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-76614d8f34ea",
+      "message_id": "<CAM8zJQvzii3ci3b-B-=5S+Pd-vNnwEyLWahgNh6FtZ11X3s5_w@mail.gmail.com>",
+      "from_name": "Graham Inggs",
+      "from_email_hash": "37905cbf02713951cabbbd404008062115037048ee79eaa570a435f2dcc6d80c",
+      "date": "2021-11-28T08:15:30Z",
+      "subject": "Re: r-bioc-dropletutils: what happened here?",
+      "subject_clean": "r-bioc-dropletutils: what happened here?",
+      "in_reply_to": "<YaJgoA6VCYmCaMJM@an3as.eu>",
+      "references": [
+        "<CAM8zJQtXKgwKBNWnrUz8qgJ=tG3YYtZFWkCFM8YppsHyG4n-1g@mail.gmail.com>",
+        "<YaJgoA6VCYmCaMJM@an3as.eu>"
+      ],
+      "body_plain": "Hi Andreas\n\nOn Sat, 27 Nov 2021 at 18:45, Andreas Tille <tille at debian.org> wrote:\n> I fixed now the changelog entries to make some sense in some way.  I\n> have no idea whether we can blame routine-update about this.  It is\n> hard to reproduce.\n\nOK, thank you!\n\nIn this case, there's no need for an immediate upload.\n\nIf a bug had been closed by the missing changelog entry, then we would\nhave needed an upload to un-confuse the BTS.\n\nRegards\nGraham",
+      "body_snippet": "Hi Andreas\n\nOn Sat, 27 Nov 2021 at 18:45, Andreas Tille <tille at debian.org> wrote:\n> I fixed now the changelog entries to make some sense in some way.  I\n> have no idea whether we can blame routine-",
+      "thread_id": "thread-c12cffb522c7",
+      "thread_depth": 2,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-718714473721",
+      "message_id": "<YaUu06wNsgTV+fYn@an3as.eu>",
+      "from_name": "Andreas Tille",
+      "from_email_hash": "206a78bece3e29051e1ae94ad2e8083d96cfc2349adf15109b8da7f1061d2977",
+      "date": "2021-11-29T19:49:39Z",
+      "subject": "Re: Please specify version of ade4 with same characters in phyloseq",
+      "subject_clean": "Please specify version of ade4 with same characters in phyloseq",
+      "in_reply_to": "<CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com>",
+      "references": [
+        "<YZ9fID+FyQX/WP4e@an3as.eu>",
+        "<CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Paul,\n\nAm Mon, Nov 29, 2021 at 09:29:37AM -0800 schrieb Paul Joseph McMurdie:\n> Andreas,\n> Sure, that's no problem. As you know it might take a little while to\n> percolate into the release branch, but I am happy to make the change now\n> and get that process started.\n\nThanks a lot.  There is no need to hurry up since I've just patched for\nthe current version and whenever you release the next version I'll simply\ndrop that patch.\n\nThanks a lot for your cooperation\n\n      Andreas.\n \n> On Thu, Nov 25, 2021 at 2:02 AM Andreas Tille <andreas at an3as.eu> wrote:\n> \n> > Hi Paul,\n> >\n> > I'm just upgrading the Debian packaging of BioConductor phyloseq to\n> > version 1.38.0.  In the DESCRIPTION file you are specifying\n> >\n> >    Imports: ade4 (>= 1.7.4)\n> >\n> > Ade4 authors are using a version scheme 1.7-18 (latest version) so they\n> > use a '-' sign for the micro version specification.  I'm perfectly aware\n> > that in R version number separators '.' and '-' are sorting equally.\n> > However, this leads to sorting issues in the Debian packaging\n> > dependencies.  You would do us a great favour if you simply stick to\n> > the same separating characters as the authors have choosen.  In other\n> > words, this patch\n> >\n> > diff --git a/DESCRIPTION b/DESCRIPTION\n> > index 457fcc8..35b6c57 100644\n> > --- a/DESCRIPTION\n> > +++ b/DESCRIPTION\n> > @@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,\n> >      Susan Holmes <susan at stat.stanford.edu>, with\n> >      contributions from Gregory Jordan and Scott Chamberlain\n> >  License: AGPL-3\n> > -Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),\n> > +Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),\n> >          BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=\n> >          2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach\n> >          (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=\n> >\n> > would safe us some extra work.\n> >\n> > Thanks a lot for your cooperation\n> >\n> >       Andreas.\n> >\n> >\n> > --\n> > http://fam-tille.de\n> >\n\n-- \nhttp://fam-tille.de",
+      "body_snippet": "Hi Paul,\n\nAm Mon, Nov 29, 2021 at 09:29:37AM -0800 schrieb Paul Joseph McMurdie:\n> Andreas,\n> Sure, that's no problem. As you know it might take a little while to\n> percolate into the release branch, ",
+      "thread_id": "thread-718714473721",
+      "thread_depth": 0,
+      "month": "2021-11"
+    },
+    {
+      "id": "msg-cb03e734cb55",
+      "message_id": "<CAOng_O9QFOeVVs3QAWTBeD6dgJ2S7GYveKZB4X+K8099JoQA4Q@mail.gmail.com>",
+      "from_name": "Paul Joseph McMurdie",
+      "from_email_hash": "9de4f5b952e81543eb0d8de506b07ada530e62a18657ad5b9fa0e3f742b84d06",
+      "date": "2021-11-29T22:40:27Z",
+      "subject": "Re: Please specify version of ade4 with same characters in phyloseq",
+      "subject_clean": "Please specify version of ade4 with same characters in phyloseq",
+      "in_reply_to": "<YaUu06wNsgTV+fYn@an3as.eu>",
+      "references": [
+        "<YZ9fID+FyQX/WP4e@an3as.eu>",
+        "<CAOng_O9ZSi+c94gwFH5p67ioc3-sQcBq2JRxKQ7SmHbTHncDSg@mail.gmail.com>",
+        "<YaUu06wNsgTV+fYn@an3as.eu>"
+      ],
+      "body_plain": "Sounds good. I already made and pushed the change.Best,\n.....\n\"Joey\"\n\nPaul J. McMurdie\n\nOn Mon, Nov 29, 2021 at 11:49 AM Andreas Tille <tille at debian.org> wrote:\n\n> Hi Paul,\n>\n>\n>\n> Am Mon, Nov 29, 2021 at 09:29:37AM -0800 schrieb Paul Joseph McMurdie:\n>\n> > Andreas,\n>\n> > Sure, that's no problem. As you know it might take a little while to\n>\n> > percolate into the release branch, but I am happy to make the change now\n>\n> > and get that process started.\n>\n>\n>\n> Thanks a lot.  There is no need to hurry up since I've just patched for\n>\n> the current version and whenever you release the next version I'll simply\n>\n> drop that patch.\n>\n>\n>\n> Thanks a lot for your cooperation\n>\n>\n>\n>       Andreas.\n>\n>\n>\n> > On Thu, Nov 25, 2021 at 2:02 AM Andreas Tille <andreas at an3as.eu> wrote:\n>\n> >\n>\n> > > Hi Paul,\n>\n> > >\n>\n> > > I'm just upgrading the Debian packaging of BioConductor phyloseq to\n>\n> > > version 1.38.0.  In the DESCRIPTION file you are specifying\n>\n> > >\n>\n> > >    Imports: ade4 (>= 1.7.4)\n>\n> > >\n>\n> > > Ade4 authors are using a version scheme 1.7-18 (latest version) so they\n>\n> > > use a '-' sign for the micro version specification.  I'm perfectly aware\n>\n> > > that in R version number separators '.' and '-' are sorting equally.\n>\n> > > However, this leads to sorting issues in the Debian packaging\n>\n> > > dependencies.  You would do us a great favour if you simply stick to\n>\n> > > the same separating characters as the authors have choosen.  In other\n>\n> > > words, this patch\n>\n> > >\n>\n> > > diff --git a/DESCRIPTION b/DESCRIPTION\n>\n> > > index 457fcc8..35b6c57 100644\n>\n> > > --- a/DESCRIPTION\n>\n> > > +++ b/DESCRIPTION\n>\n> > > @@ -10,7 +10,7 @@ Author: Paul J. McMurdie <joey711 at gmail.com>,\n>\n> > >      Susan Holmes <susan at stat.stanford.edu>, with\n>\n> > >      contributions from Gregory Jordan and Scott Chamberlain\n>\n> > >  License: AGPL-3\n>\n> > > -Imports: ade4 (>= 1.7.4), ape (>= 5.0), Biobase (>= 2.36.2),\n>\n> > > +Imports: ade4 (>= 1.7-4), ape (>= 5.0), Biobase (>= 2.36.2),\n>\n> > >          BiocGenerics (>= 0.22.0), biomformat (>= 1.0.0), Biostrings (>=\n>\n> > >          2.40.0), cluster (>= 2.0.4), data.table (>= 1.10.4), foreach\n>\n> > >          (>= 1.4.3), ggplot2 (>= 2.1.0), igraph (>= 1.0.1), methods (>=\n>\n> > >\n>\n> > > would safe us some extra work.\n>\n> > >\n>\n> > > Thanks a lot for your cooperation\n>\n> > >\n>\n> > >       Andreas.\n>\n> > >\n>\n> > >\n>\n> > > --\n>\n> > > http://fam-tille.de\n>\n> > >\n>\n>\n>\n> --\n>\n> http://fam-tille.de",
+      "body_snippet": "Sounds good. I already made and pushed the change.Best,\n.....\n\"Joey\"\n\nPaul J. McMurdie\n\nOn Mon, Nov 29, 2021 at 11:49 AM Andreas Tille <tille at debian.org> wrote:\n\n> Hi Paul,\n>\n>\n>\n> Am Mon, Nov 29, ",
+      "thread_id": "thread-718714473721",
+      "thread_depth": 1,
+      "month": "2021-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-f9de9f3ed2d2",
+      "subject": "New Bioconductor transitions?",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2021-11-01T16:11:10Z",
+      "last_reply": "2021-11-01T16:11:10Z",
+      "root_message_id": "msg-f9de9f3ed2d2"
+    },
+    {
+      "id": "thread-00b24d0d610a",
+      "subject": "libeditreadline and r-base-dev",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Steffen Möller"
+      ],
+      "started": "2021-11-01T16:46:22Z",
+      "last_reply": "2021-11-03T06:45:59Z",
+      "root_message_id": "msg-00b24d0d610a"
+    },
+    {
+      "id": "thread-f185098056c1",
+      "subject": "What happened to r-cran-jquerylib ?",
+      "message_count": 4,
+      "participants": [
+        "Andreas Tille",
+        "Steffen Möller"
+      ],
+      "started": "2021-11-02T20:43:07Z",
+      "last_reply": "2021-11-04T17:25:28Z",
+      "root_message_id": "msg-f185098056c1"
+    },
+    {
+      "id": "thread-86364f9ad42c",
+      "subject": "What happened to r-cran-jquerylib ?",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-11-02T20:46:40Z",
+      "last_reply": "2021-11-02T20:46:40Z",
+      "root_message_id": "msg-86364f9ad42c"
+    },
+    {
+      "id": "thread-70100b238b03",
+      "subject": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Nilesh Patra",
+        "Steffen Möller"
+      ],
+      "started": "2021-11-09T14:52:04Z",
+      "last_reply": "2021-11-09T15:43:02Z",
+      "root_message_id": "msg-70100b238b03"
+    },
+    {
+      "id": "thread-fea8b862cb56",
+      "subject": "Please reject r-cran-jquerylib on New Queue (Was: What happened to r-cran-jquerylib?)",
+      "message_count": 1,
+      "participants": [
+        "Nilesh Patra"
+      ],
+      "started": "2021-11-09T16:52:08Z",
+      "last_reply": "2021-11-09T16:52:08Z",
+      "root_message_id": "msg-fea8b862cb56"
+    },
+    {
+      "id": "thread-09625bdd943f",
+      "subject": "LED Lights",
+      "message_count": 1,
+      "participants": [
+        "Zora Cao"
+      ],
+      "started": "2021-11-10T10:33:44Z",
+      "last_reply": "2021-11-10T10:33:44Z",
+      "root_message_id": "msg-09625bdd943f"
+    },
+    {
+      "id": "thread-fc2425dcbcdb",
+      "subject": "How to ask pkg-r-autopkgtests to \"not\" run tests?",
+      "message_count": 5,
+      "participants": [
+        "Andreas Tille",
+        "Dirk Eddelbuettel",
+        "Nilesh Patra",
+        "Sébastien Villemot"
+      ],
+      "started": "2021-11-13T14:46:41Z",
+      "last_reply": "2021-11-13T20:55:09Z",
+      "root_message_id": "msg-fc2425dcbcdb"
+    },
+    {
+      "id": "thread-79f0468dc270",
+      "subject": "ITP: r-cran-rgooglemaps -- Overlays on Static Maps",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-11-17T11:07:42Z",
+      "last_reply": "2021-11-17T11:07:42Z",
+      "root_message_id": "msg-79f0468dc270"
+    },
+    {
+      "id": "thread-dc8dfadbadb0",
+      "subject": "Bug#998057: transition: r-api-bioc-3.14",
+      "message_count": 3,
+      "participants": [
+        "Nilesh Patra",
+        "Sebastian Ramacher"
+      ],
+      "started": "2021-11-23T18:02:46Z",
+      "last_reply": "2021-11-24T14:50:41Z",
+      "root_message_id": "msg-dc8dfadbadb0"
+    },
+    {
+      "id": "thread-7d79a112d37c",
+      "subject": "Please specify version of ade4 with same characters in phyloseq",
+      "message_count": 1,
+      "participants": [
+        "Andreas Tille"
+      ],
+      "started": "2021-11-25T10:02:08Z",
+      "last_reply": "2021-11-25T10:02:08Z",
+      "root_message_id": "msg-7d79a112d37c"
+    },
+    {
+      "id": "thread-c12cffb522c7",
+      "subject": "r-bioc-dropletutils: what happened here?",
+      "message_count": 3,
+      "participants": [
+        "Andreas Tille",
+        "Graham Inggs"
+      ],
+      "started": "2021-11-27T10:20:33Z",
+      "last_reply": "2021-11-28T08:15:30Z",
+      "root_message_id": "msg-c12cffb522c7"
+    },
+    {
+      "id": "thread-718714473721",
+      "subject": "Please specify version of ade4 with same characters in phyloseq",
+      "message_count": 2,
+      "participants": [
+        "Andreas Tille",
+        "Paul Joseph McMurdie"
+      ],
+      "started": "2021-11-29T19:49:39Z",
+      "last_reply": "2021-11-29T22:40:27Z",
+      "root_message_id": "msg-718714473721"
+    }
+  ]
+}
