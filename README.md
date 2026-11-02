@@ -19,4 +19,4 @@ Debian's archive is a page per message, filed by month, with no mbox to download
 
 ## Viewer
 
-Browse these archives at [r-mailing-lists.thecoatlessprofessor.com](https://r-mailing-lists.thecoatlessprofessor.com/lists/debian-r/)
+Browse these archives at [archives.rstats.dev](https://archives.rstats.dev/lists/debian-r/)
