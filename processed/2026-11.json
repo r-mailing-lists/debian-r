@@ -91,6 +91,22 @@
       "thread_id": "thread-e825042fdccc",
       "thread_depth": 3,
       "month": "2026-11"
+    },
+    {
+      "id": "msg-2382b7a63dcb",
+      "message_id": "<179576623063.1857692.13094566429153260504.reportbug@bubu.igloo>",
+      "from_name": "Charles Plessy",
+      "from_email_hash": "83d7ac91fd2c07e9495ceadeb4386807881d0c625673f0aedac7d4809cd3c425",
+      "date": "2026-11-27T07:57:10Z",
+      "subject": "Bug#1155525: transition: r-api-bioc-3.24",
+      "subject_clean": "Bug#1155525: transition: r-api-bioc-3.24",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Package: release.debian.org\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org\nUser: release.debian.org at packages.debian.org\nUsertags: transition\n\nDear Release team,\n\nBioconductor 3.24 was released this week and we have 6 months until\ntheir next release to do the transition.\n\nI expect it to be easier than the 3.23 one because we cleared a lot of\nbitrot at that time.\n\nOne unsolved problem is the riscv64 architecture which has some deep\nincompatibility with some computations done in R.  I am usually solving\nit by transiently restricting autopkgtests to amd64 only provided that\nthey passed on other architectures before.  With this workaround, I do\nnot expect the incompatibility to be a problem beyond the extra\nuploads needed.\n\nhttps://wiki.debian.org/R/riscv64\nhttps://wiki.debian.org/R/riscv64/DebianIssues\n\nBen file:\n\ntitle = \"r-api-bioc-3.24\";\nis_affected = .depends ~ /r-api-bioc/ | .source ~ /r-bioc-/\nis_good = .depends ~ \"r-api-bioc-3.24\";\nis_bad = .depends ~ \"r-api-bioc-3.23\";\n\nI am on business trip next week so I will not be able to contribute to\nthe transition until around December 9th.\n\nHave a nice day,\n\nCharles",
+      "body_snippet": "Package: release.debian.org\nSeverity: normal\nX-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org\nUser: release.debian.org at packages.debian.org\nUsertags: transition\n\nDear Release team,\n\n",
+      "thread_id": "thread-2382b7a63dcb",
+      "thread_depth": 0,
+      "month": "2026-11"
     }
   ],
   "threads": [
@@ -116,6 +132,17 @@
       "started": "2026-11-19T17:42:29Z",
       "last_reply": "2026-11-20T20:46:12Z",
       "root_message_id": "msg-e825042fdccc"
+    },
+    {
+      "id": "thread-2382b7a63dcb",
+      "subject": "Bug#1155525: transition: r-api-bioc-3.24",
+      "message_count": 1,
+      "participants": [
+        "Charles Plessy"
+      ],
+      "started": "2026-11-27T07:57:10Z",
+      "last_reply": "2026-11-27T07:57:10Z",
+      "root_message_id": "msg-2382b7a63dcb"
     }
   ]
 }

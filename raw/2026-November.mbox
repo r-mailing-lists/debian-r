@@ -252,3 +252,47 @@ Am Fri, Nov 20, 2026 at 07:54:16PM +0100 schrieb Joenio Marques da Costa:
 -- 
 https://fam-tille.de
 
+From plessy at debian.org  Fri Nov 27 07:57:10 2026
+From: plessy at debian.org (Charles Plessy)
+Date: Fri, 27 Nov 2026 16:57:10 +0900
+Subject: Bug#1155525: transition: r-api-bioc-3.24
+Message-ID: <179576623063.1857692.13094566429153260504.reportbug@bubu.igloo>
+
+Package: release.debian.org
+Severity: normal
+X-Debbugs-Cc: debian-r at lists.debian.org, plessy at debian.org
+User: release.debian.org at packages.debian.org
+Usertags: transition
+
+Dear Release team,
+
+Bioconductor 3.24 was released this week and we have 6 months until
+their next release to do the transition.
+
+I expect it to be easier than the 3.23 one because we cleared a lot of
+bitrot at that time.
+
+One unsolved problem is the riscv64 architecture which has some deep
+incompatibility with some computations done in R.  I am usually solving
+it by transiently restricting autopkgtests to amd64 only provided that
+they passed on other architectures before.  With this workaround, I do
+not expect the incompatibility to be a problem beyond the extra
+uploads needed.
+
+https://wiki.debian.org/R/riscv64
+https://wiki.debian.org/R/riscv64/DebianIssues
+
+Ben file:
+
+title = "r-api-bioc-3.24";
+is_affected = .depends ~ /r-api-bioc/ | .source ~ /r-bioc-/
+is_good = .depends ~ "r-api-bioc-3.24";
+is_bad = .depends ~ "r-api-bioc-3.23";
+
+I am on business trip next week so I will not be able to contribute to
+the transition until around December 9th.
+
+Have a nice day,
+
+Charles
+
